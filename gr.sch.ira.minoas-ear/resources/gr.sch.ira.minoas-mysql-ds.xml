@@ -8,7 +8,7 @@ http://www.mysql.com/downloads/api-jdbc-stable.html
 <datasources>
   <local-tx-datasource>
     <jndi-name>gr.sch.ira.minoasDatasource</jndi-name>
-    <connection-url>jdbc:mysql://kote.slavikos.net:3306/minoas</connection-url>
+    <connection-url>jdbc:mysql://storage.slavikos.net:3306/minoas</connection-url>
     <driver-class>com.mysql.jdbc.Driver</driver-class>
     <user-name>slavikos</user-name>
     <password>slavikos</password>
