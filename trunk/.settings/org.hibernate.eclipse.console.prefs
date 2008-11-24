@@ -1,0 +1,4 @@
+#Thu Jun 12 10:22:11 EEST 2008
+default.configuration=gr.sch.ira.minoas-ejb
+eclipse.preferences.version=1
+hibernate3.enabled=true
