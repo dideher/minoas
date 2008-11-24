@@ -13,6 +13,7 @@ import javax.persistence.NoResultException;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.annotations.faces.Converter;
+import org.jboss.seam.annotations.intercept.BypassInterceptors;
 
 /**
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
@@ -21,6 +22,7 @@ import org.jboss.seam.annotations.faces.Converter;
 @Converter
 @Name("secondmentTypeConverter")
 @Transactional
+@BypassInterceptors
 public class SecondmentTypeConverter extends DatabaseAwareBaseConverter {
 
 	

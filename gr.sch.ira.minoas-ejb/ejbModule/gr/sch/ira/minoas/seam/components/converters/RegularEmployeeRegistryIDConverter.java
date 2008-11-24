@@ -10,6 +10,7 @@ import javax.faces.context.FacesContext;
 
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.faces.Converter;
+import org.jboss.seam.annotations.intercept.BypassInterceptors;
 
 /**
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
@@ -17,9 +18,10 @@ import org.jboss.seam.annotations.faces.Converter;
  */
 @Converter
 @Name("employeeRegistryIDConverter")
+@BypassInterceptors
 public class RegularEmployeeRegistryIDConverter extends BaseConverter  {
 
-;
+
 
 	/**
 	 * @see javax.faces.convert.Converter#getAsObject(javax.faces.context.FacesContext,

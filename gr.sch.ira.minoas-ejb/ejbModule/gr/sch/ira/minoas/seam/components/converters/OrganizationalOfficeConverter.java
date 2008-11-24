@@ -11,6 +11,7 @@ import javax.faces.context.FacesContext;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.annotations.faces.Converter;
+import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.jboss.seam.framework.EntityController;
 
 /**
@@ -19,6 +20,7 @@ import org.jboss.seam.framework.EntityController;
  */
 @Converter
 @Name("organizationalOfficeConverter")
+@BypassInterceptors
 @Transactional
 public class OrganizationalOfficeConverter extends EntityController  {
 

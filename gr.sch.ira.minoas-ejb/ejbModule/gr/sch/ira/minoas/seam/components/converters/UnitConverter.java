@@ -12,6 +12,7 @@ import javax.persistence.NoResultException;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.annotations.faces.Converter;
+import org.jboss.seam.annotations.intercept.BypassInterceptors;
 
 /**
  * @author slavikos
@@ -20,6 +21,7 @@ import org.jboss.seam.annotations.faces.Converter;
 @Converter
 @Name("unitConverter")
 @Transactional
+@BypassInterceptors
 public class UnitConverter extends DatabaseAwareBaseConverter {
 
 	/**

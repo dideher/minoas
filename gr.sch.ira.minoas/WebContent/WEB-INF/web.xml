@@ -41,9 +41,10 @@
  
  <servlet>
     <servlet-name>Document Store Servlet</servlet-name>
-    <servlet-class>org.jboss.seam.pdf.DocumentStoreServlet</servlet-class>
+    <servlet-class>org.jboss.seam.document.DocumentStoreServlet</servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
+ 
  <servlet-mapping>
   <servlet-name>Seam Resource Servlet</servlet-name>
   <url-pattern>/seam/resource/*</url-pattern>
