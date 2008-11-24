@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE datasources
+    PUBLIC "-//JBoss//DTD JBOSS JCA Config 1.5//EN"
+    "http://www.jboss.org/j2ee/dtd/jboss-ds_1_5.dtd">
+
+
+<datasources>
+
+	<local-tx-datasource>
+		<jndi-name>gr.sch.ira.minoasDatasource</jndi-name>
+		<connection-url>jdbc:hsqldb:hsql://localhost:2701</connection-url>
+		<driver-class>org.hsqldb.jdbcDriver</driver-class>
+		<user-name>sa</user-name>
+		<password></password>
+        <!-- 
+        <check-valid-connection-sql>SELECT 1</check-valid-connection-sql>
+        <new-connection-sql>SELECT 1</new-connection-sql>
+         -->
+        <min-pool-size>2</min-pool-size>
+        <max-pool-size>10</max-pool-size>
+		<metadata>
+			<type-mapping>Hypersonic SQL</type-mapping>
+		</metadata>
+        <depends>jboss:service=Hypersonic,database=minoas</depends>
+    </local-tx-datasource>
+
+	<mbean code="org.jboss.jdbc.HypersonicDatabase"
+	  name="jboss:service=Hypersonic,database=minoas">
+	  <attribute name="Port">2701</attribute>
+	  <attribute name="Silent">true</attribute>
+	  <attribute name="Database">default</attribute>
+	  <attribute name="Trace">false</attribute>
+	  <attribute name="No_system_exit">true</attribute>
+	</mbean>
+  
+</datasources>
