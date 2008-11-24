@@ -263,22 +263,6 @@
   location="/opt/jboss/jboss-4.2.2.GA/server/default/deploy/jboss-aop-jdk50.deployer/jboss-aspect-library-jdk50.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-jboss-ejb3.jar"
   location="/opt/jboss/jboss-4.2.2.GA/server/default/deploy/ejb3.deployer/jboss-ejb3.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-jbpm-jpdl.jar"
-  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas-ear/EarContent/jbpm-jpdl.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-drools-core.jar"
-  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas-ear/EarContent/drools-core.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-mvel14.jar"
-  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas-ear/EarContent/mvel14.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-drools-compiler.jar"
-  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas-ear/EarContent/drools-compiler.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-jboss-seam.jar"
-  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas-ear/EarContent/jboss-seam.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-jboss-el.jar"
-  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas-ear/EarContent/jboss-el.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-antlr-runtime.jar"
-  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas-ear/EarContent/antlr-runtime.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-richfaces-api-3.2.2.GA.jar"
-  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas-ear/EarContent/richfaces-api-3.2.2.GA.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-commons-beanutils.jar"
   location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas/WebContent/WEB-INF/lib/commons-beanutils.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-commons-digester.jar"
