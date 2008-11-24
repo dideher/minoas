@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pageflow-definition
+    xmlns="http://jboss.com/products/seam/pageflow"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://jboss.com/products/seam/pageflow http://jboss.com/products/seam/pageflow-2.0.xsd"
+    name="school-incoming-secondments">
+  
+    <start-page name="searchSchoolPage" view-id="/schools.xhtml">
+		<description>Αποσπάσης Σε Σχολική Μονάδα - Αναζήτηση Σχολικής Μονάδας</description>
+		<redirect />
+		<transition to="secondmentSearchResultPage" name="school-selected">
+			<action expression="#{schoolSearch.selectSchool}"></action>
+            <action expression="#{secondmentSearch.searchSchoolIncomingSecondments}" />
+		</transition>
+	</start-page>
+	
+	<page name="secondmentSearchResultPage" view-id="/secondmentSearchResult.xhtml" back="enabled">
+		<description>Αποσπάσης Σε Σχολική Μονάδα - #{activeSchool.title}</description>
+		<redirect />
+	</page>
+	
+	
+	<page name="home" view-id="/home.xhtml">
+		<end-conversation/>
+		<redirect />
+	</page>
+	
+</pageflow-definition>

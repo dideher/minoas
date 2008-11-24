@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich"
+      xmlns:a4j="http://richfaces.org/a4j">
+
+<ui:component>
+
+	<h:form>
+		<rich:dataTable id="employeeList" var="employee"
+			value="#{employeesSearchResult}" rows="15" border="0"
+			onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+			onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+			width="100%" rendered="#{employeesSearchResult.size gt 0}">
+			<f:facet name="header">
+				<h:outputText
+					value="Λίστα Εκπαιδευτικού Προσωπικού - Συνολικά #{employeesSearchResult.size} Άτομα" />
+			</f:facet>
+			<rich:column>
+				<f:facet name="header">
+					<h:outputText value="ΑΦΜ" />
+				</f:facet>
+				<h:outputText value="#{employee.vatNumber}" />
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">
+					<h:outputText value="Α.Μ." />
+				</f:facet>
+				<h:outputText value="#{employee}"
+					converter="employeeRegistryIDConverter" />
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">
+					<h:outputText value="Ονοματεπώνυμο" />
+				</f:facet>
+				<a4j:commandLink action="employee-selected">
+					<h:outputText value="#{employee.lastName} #{employee.firstName}" />
+				</a4j:commandLink>
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">
+					<h:outputText value="Πατρώνυμο" />
+				</f:facet>
+				<h:outputText value="#{employee.fatherName}" />
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">
+					<h:outputText value="Ειδικότητα" />
+				</f:facet>
+				<h:outputText id="specializationText"
+					value="#{employee.currentEmployment.specialization.id}">
+					<rich:toolTip for="specializationText"
+						value="#{employee.currentEmployment.specialization.title}" />
+				</h:outputText>
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">
+					<h:outputText value="Έτος Γέννησης" />
+				</f:facet>
+				<h:outputText value="#{employee.dateOfBirth}">
+					<s:convertDateTime type="date" pattern="yyyy" />
+				</h:outputText>
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">
+					<h:outputText value="Τύπος" />
+				</f:facet>
+				<h:outputText value="#{employee}" converter="employeeTypeConverter" />
+			</rich:column>
+			<f:facet name="footer">
+				<rich:datascroller align="left" for="employeeList" maxPages="20"
+					id="sc1" renderIfSinglePage="false">
+					<f:facet name="first">
+						<h:outputText value="Πρώτη" />
+					</f:facet>
+					<f:facet name="last">
+						<h:outputText value="Τελευταία" />
+					</f:facet>
+					<f:facet name="pages">
+						<h:outputText value="#{pageIndex} απο #{pages}" />
+					</f:facet>
+				</rich:datascroller>
+			</f:facet>
+		</rich:dataTable>
+	</h:form>
+</ui:component>
+
+</html>

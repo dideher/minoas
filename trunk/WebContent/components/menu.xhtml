@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+	
+	<ui:component>
+		<rich:panelMenu mode="ajax">
+	<rich:panelMenuGroup label="Διαχείριση Μίνωα">
+		<rich:panelMenu mode="ajax">
+			<rich:panelMenuItem>
+				<s:link value="Σχολικά Έτη" action="#{schoolYearAdmin.search()}"
+					view="/schoolYears.xhtml" />
+			</rich:panelMenuItem>
+			<rich:panelMenuItem>
+				<s:link value="Εισαγωγή Σχολικής Μονάδας"
+					action="#{schoolYearAdmin.search()}" view="/schoolYears.xhtml" />
+			</rich:panelMenuItem>
+
+			<rich:panelMenuGroup label="Ασφάλεια και Πρόσβαση">
+				<rich:panelMenu>
+					<rich:panelMenuItem>
+						<s:link value="Διαχείριση Χρηστών"
+							action="#{principalAdmin.search()}" view="/principals.xhtml" />
+					</rich:panelMenuItem>
+					<rich:panelMenuItem>
+						<s:link value="Διαχείριση Ρόλων" view="/roles.xhtml" />
+					</rich:panelMenuItem>
+					<rich:panelMenuItem>
+						<s:link value="Διαχείριση Ομάδων" view="/roleGroups.xhtml" />
+					</rich:panelMenuItem>
+				</rich:panelMenu>
+			</rich:panelMenuGroup>
+		</rich:panelMenu>
+	</rich:panelMenuGroup>
+	<rich:panelMenuGroup label="Σχολικές Μονάδες">
+		<rich:panelMenu mode="ajax">
+			<rich:panelMenuItem>
+				<s:link value="Καρτέλα Μονάδας" action="#{schoolSearch.beginSchoolSearchConversation}"/>
+			</rich:panelMenuItem>
+		</rich:panelMenu>
+	</rich:panelMenuGroup>
+	<rich:panelMenuGroup label="Προσωπικό">
+		<rich:panelMenu>
+			<rich:panelMenuItem>
+				<s:link value="Καρτέλα Εκπαιδευτικού" action="#{employeeManagement.beginEmployeeManagementConversation}" />
+			</rich:panelMenuItem>
+		</rich:panelMenu>
+	</rich:panelMenuGroup>
+	<rich:panelMenuGroup label="Διδακτικά Κενά">
+		<rich:panelMenu mode="ajax">
+			<rich:panelMenuItem>
+				<s:link value="Εισαγωγή Νέου Κενού"
+					action="#{voidManagement.beginCreateTeachingVoid()}" />
+			</rich:panelMenuItem>
+			<rich:panelMenuItem>
+				<s:link value="Διαχείριση Κενών Μονάδας"
+					action="#{voidManagement.beginSchoolVoidManagement()}" />
+			</rich:panelMenuItem>
+			<rich:panelMenuGroup label="Προβολή Ενεργών Κενών ...."
+				expandMode="ajax">
+				<rich:panelMenuItem>
+					<s:link value="Εισαγωγή Νέου Κενού"
+						action="#{voidManagement.beginCreateTeachingVoid()}" />
+				</rich:panelMenuItem>
+				<rich:panelMenuItem>
+					<s:link value="Διαχείριση Κενών Μονάδας"
+						action="#{voidManagement.beginSchoolVoidManagement()}" />
+				</rich:panelMenuItem>
+			</rich:panelMenuGroup>
+		</rich:panelMenu>
+
+	</rich:panelMenuGroup>
+
+</rich:panelMenu>
+	</ui:component>
+
+</html>

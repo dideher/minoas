@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:rich="http://richfaces.org/rich">
+
+<ui:component>
+	<rich:dataTable id="existingRoleListing" rendered="#{rolesList.rowCount gt 0}" var="role" value="#{rolesList}">
+		<f:facet name="header">
+			<h:outputText value="Διαθέσιμοι Ρόλοι" />
+		</f:facet>
+		<rich:column>
+			<f:facet name="header">
+			Όνομα Ρόλου
+			</f:facet>
+			<h:outputText value="#{role.id}" />
+		</rich:column>
+		<rich:column>
+			<f:facet name="header">
+			Περιγραφή Ρόλου
+			</f:facet>
+			<h:outputText value="#{role.title}" />
+		</rich:column>
+		<f:facet name="footer">
+			<rich:datascroller align="left" for="existingRoleListing"
+					id="sc1" />
+		</f:facet>
+	</rich:dataTable>
+
+
+
+</ui:component>
+
+</html>

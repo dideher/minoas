@@ -1,0 +1,60 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+                             "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:component xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      xmlns:a4j="http://richfaces.org/a4j">
+
+	<rich:dataTable id="schoolList" value="#{schools}" var="school"
+		rows="15" border="0"
+		onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+		onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+		width="100%">
+		<f:facet name="header">
+			<h:outputLabel value="Λίστα Σχολικών Μονάδων" />
+		</f:facet>
+
+		<rich:column>
+			<f:facet name="header">Κωδ. Υπουργείου</f:facet>
+			<h:outputText value="#{school.ministryCode}" />
+		</rich:column>
+
+		<rich:column>
+			<f:facet name="header">Τίτλος Μονάδας</f:facet>
+			<a4j:commandLink action="school-selected">
+				<h:outputText value="#{school.title}" />
+			</a4j:commandLink>
+		</rich:column>
+		<rich:column>
+			<f:facet name="header">Μόρια</f:facet>
+			<h:outputText value="#{school.points}" />
+		</rich:column>
+		<rich:column>
+			<f:facet name="header">Περιοχή</f:facet>
+			<h:outputText value="#{school.regionCode}' ΗΡΑΚΛΕΙΟΥ" />
+		</rich:column>
+		<rich:column>
+			<f:facet name="header">Διεύθυνση</f:facet>
+			<h:outputText
+				value="#{school.address.address} #{school.address.number} - #{school.address.postCode} - #{school.address.city}" />
+		</rich:column>
+
+
+		<f:facet name="footer">
+			<rich:datascroller align="left" for="schoolList" maxPages="20"
+				renderIfSinglePage="false" id="sc1" />
+		</f:facet>
+
+	</rich:dataTable>
+
+
+
+
+
+
+</ui:component>
+

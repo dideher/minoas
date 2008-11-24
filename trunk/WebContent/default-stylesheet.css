@@ -1,0 +1,281 @@
+/*
+Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 2.5 License
+*/
+body {
+	margin: 0;
+	padding: 0;
+	background: #AAE74A url(img/img04.gif) repeat-x;
+}
+
+body,th,td,input,textarea {
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-size: 13px;
+	color: #666666;
+}
+
+p,ol,ul {
+	line-height: 170%;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+/* Header */
+#header {
+	width: 960px;
+	height: 100px;
+	margin: 0 auto;
+}
+
+#logo {
+	float: left;
+	height: 100px;
+	margin-left: 10px;
+	background: url(img/img01.jpg) no-repeat left center;
+}
+
+#logo h1,#logo p {
+	text-transform: lowercase;
+}
+
+#logo h1 {
+	margin: 0;
+	padding: 25px 0 0 85px;
+	letter-spacing: -2px;
+	font-size: 3em;
+	font-weight: normal;
+	color: #000000;
+}
+
+#logo h1 a {
+	color: #000000;
+}
+
+#logo p {
+	margin: -10px 0 0 2px;
+	padding: 0 0 0 85px;
+	text-transform: lowercase;
+}
+
+#search {
+	float: right;
+	width: 280px;
+}
+
+#search form {
+	margin: 0;
+	padding: 63px 0 0 0;
+}
+
+#search fieldset {
+	margin: 0;
+	padding: 0;
+	border: none;
+}
+
+#search #s,#search #x {
+	float: left;
+}
+
+#search #s {
+	width: 188px;
+	margin: 2px 6px 0 0;
+	padding: 2px 5px;
+	background: url(img/img02.gif) repeat-x;
+	border: 1px solid #ACACAC;
+}
+
+#search #x {
+	width: 67px;
+	height: 28px;
+	padding: 0;
+	background: #006BFF url(img/img03.gif) no-repeat;
+	border: none;
+	text-transform: lowercase;
+	color: #FFFFFF;
+}
+
+/* Menu */
+#menu {
+	width: 962px;
+	height: 50px;
+	margin: 0 auto;
+}
+
+#menu ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+#menu li {
+	display: block;
+	float: left;
+}
+
+#menu a {
+	display: block;
+	float: left;
+	height: 38px;
+	padding: 8px 20px 0 20px;
+	text-decoration: none;
+	text-transform: lowercase;
+	color: #000000;
+}
+
+#menu a:hover {
+	text-decoration: underline;
+}
+
+#menu .current_page_item {
+	background: url(img/img05.gif) no-repeat;
+}
+
+#menu .current_page_item a {
+	background: url(img/img06.gif) no-repeat right top;
+	font-weight: bold;
+}
+
+/* Page */
+#page {
+	width: 962px;
+	margin: 0 auto;
+	background: #FFFFFF url(img/img07.gif) repeat-y;
+}
+
+/* Content */
+#content {
+	float: right;
+	width: 700px;
+	padding: 11px 11px 0 5px;
+	background: url(img/img09.gif) no-repeat;
+}
+
+#content a {
+	color: #FF8900;
+}
+
+.pagetitle {
+	height: 33px;
+	margin: 0;
+	padding: 8px 0 0 15px;
+	background: url(img/img13.gif) no-repeat;
+	font-size: 1.4em;
+	color: #FFFFFF;
+}
+
+#content #rss-posts {
+	display: block;
+	margin: -30px 15px 0px 0px;
+	padding: 0 20px 0 0;
+	background: url(img/rss.gif) no-repeat right center;
+	text-align: right;
+	font-weight: bold;
+	color: #FFFFFF;
+}
+
+.post {
+	padding: 15px 15px 0 15px;
+}
+
+.title {
+	margin: 0;
+	font-size: 2.4em;
+	font-weight: normal;
+}
+
+.byline {
+	margin: 0 0 20px 0;
+}
+
+.meta {
+	border-top: 1px dotted #CCCCCC;
+	text-align: right;
+}
+
+.meta .more,.meta .comments {
+	padding-left: 15px;
+	background: url(img/img14.gif) no-repeat left center;
+}
+
+/* Sidebar */
+#sidebar {
+	float: left;
+	width: 230px;
+	padding: 11px 5px 0 11px;
+	background: url(img/img08.gif) no-repeat;
+}
+
+#sidebar ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+#sidebar li {
+	margin-bottom: 20px;
+}
+
+#sidebar li ul {
+	padding: 10px 15px;
+}
+
+#sidebar li li {
+	margin: 0;
+	padding-left: 15px;
+	background: url(img/img12.gif) no-repeat left center;
+}
+
+#sidebar h2 {
+	height: 33px;
+	margin: 0;
+	padding: 8px 0 0 15px;
+	background: url(img/img11.gif) no-repeat;
+	font-size: 1.4em;
+	color: #FFFFFF;
+}
+
+#sidebar a {
+	text-decoration: none;
+	color: #0065FF;
+}
+
+#sidebar a:hover {
+	text-decoration: underline;
+}
+
+/* Footer */
+#footer {
+	width: 962px;
+	margin: 0 auto;
+	padding: 30px 0;
+	background: url(img/img10.gif) no-repeat;
+}
+
+#footer p {
+	margin: 0;
+	text-align: center;
+	color: #FFFFFF;
+}
+
+#footer a {
+	color: #FFFFFF;
+}
+
+.rich-message-marker img {
+	padding-right: 7px;
+}
+
+.rich-message-label {
+	color: red;
+}
+
+.fieldValueText {
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	color: black;
+}

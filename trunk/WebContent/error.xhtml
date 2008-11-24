@@ -1,0 +1,36 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	 xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+
+<ui:composition template="#{theme.template}">
+<ui:define name="body">
+		<rich:panel headerClass="clean-error">
+			<f:facet name="header">
+				<h:outputText value="Mύνημα Σφάλματος απο τον Μίνωα ...." />
+			</f:facet>
+			<h:panelGrid columns="1">
+				<h:messages globalOnly="true" layout="table" styleClass="clean-error" />
+				<f:facet name="footer">
+					<h:panelGroup>
+						<s:link value="Επιστροφή" action="return" />
+					</h:panelGroup>
+				</f:facet>
+			</h:panelGrid>
+			
+		</rich:panel>
+
+	</ui:define>
+
+
+    
+    
+        
+
+</ui:composition>
+</html>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<pageflow-definition xmlns="http://jboss.com/products/seam/pageflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.com/products/seam/pageflow http://jboss.com/products/seam/pageflow-2.0.xsd"
+	name="secondment-search">
+	
+	<start-state name="start">
+		<transition to="hasActiveEmployee"></transition>
+	</start-state>
+	
+	<decision name="hasActiveEmployee" expression="#{activeEmployee ne null}">
+		<transition name="true" to="secondmentPrepared" />
+		<transition name="false" to="employeeSearchPage" />
+	</decision>
+	
+	<page view-id="/employees.xhtml" name="employeeSearchPage">
+		<description>Νέα Απόσπαση - Αναζήτηση Εκπαιδευτικού</description>
+		<redirect />
+		<transition name="search" to="employeeSearchPage">
+        	<action expression="#{employeeSearch.search}" />
+        </transition>
+        
+    	<transition name="searchByVATNumber" to="employeeSearchPage">
+        	<action expression="#{employeeSearch.searchByVATNumber}" />
+    	</transition>
+    	<transition name="searchByRegistryID" to="employeeSearchPage">
+        	<action expression="#{employeeSearch.searchByRegistryID}" />
+    	</transition>
+    
+    	<transition to="secondmentPrepared" name="employee-selected">
+        	<action expression="#{employeeSearch.select()}" />
+        	<action expression="#{employeeRecord.search()}" />
+    	</transition>
+	</page>
+	
+	<decision name="secondmentPrepared" expression="#{employeeManagement.prepareNewSecondmet}">
+		<transition name="success" to="newSecondmentPage" />
+		<transition name="failure" to="employeeSearchPage" />
+	</decision>
+	
+	<page view-id="/new-secondment.xhtml" name="newSecondmentPage">
+		<description>Νέα Απόσπαση Εκπαιδευτικού #{employeeUtil.prettyFormat(activeEmployee)}</description>
+    	<redirect/>
+    	<transition to="saveSecondment" name="save-new-secondment" />
+    		
+    	
+   		<transition name="cancel" to="home">
+   			<action expression="#{employeeManagement.cancelNewSecondment}" />
+   		</transition>
+   </page> 
+   
+   <decision name="saveSecondment" expression="#{employeeManagement.saveSecondment}">
+   		<transition name="success" to="successPage" />
+		<transition name="failure" to="newSecondmentPage" />
+   </decision>
+   
+   <page view-id="/new-secondment-success.xhtml" name="successPage">
+   		<end-conversation/>
+   		<redirect />
+   		<transition to="home" name="done" />
+   </page>
+   
+   <page view-id="/home.xhtml" name="home">
+  		<end-conversation before-redirect="yes"/>
+  		<redirect />
+  		
+  	</page>
+  
+  </pageflow-definition>

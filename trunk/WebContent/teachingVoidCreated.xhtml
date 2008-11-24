@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:s="http://jboss.com/products/seam/taglib">
+
+	<ui:component>
+
+	
+		<h:form>
+		<rich:panel>
+			<f:facet name="header">Επιτυχής Εισαγωγή Διδακτικού Κενού...</f:facet>
+			<h:outputText value="Η εισαγωγή του διδακτικού κενού ειδικότητας " />
+			<h:outputLabel value="#{teachingVoid.specialisation.title}" styleClass="name"/> <h:outputText value=" και συνολικού αριθμού διδακτικών ωρών " /> <h:outputLabel value="#{teachingVoid.requiredHours}" /> <h:outputText value="ήταν επιτυχής. Επιλέξτε απο τις παρακάτω διαθέσιμες ενέργειες για να συνεχίσεται." />
+			<br />
+			<rich:spacer height="20" />
+			<rich:toolBar >
+				<rich:toolBarGroup location="center">
+					<s:link value="Δημιουργεία Επιπλέον Κενού" action="createTeachingVoid" />
+					<s:link value="Δημιουργεία Κενού σε άλλη Σχολική μονάδα" action="changeSchool" />
+					<s:link value="Διαχείρηση Κενών Σχολικής Μονάδας" action="manageSchoolVoids" />
+					
+				</rich:toolBarGroup>
+			</rich:toolBar>
+			
+		</rich:panel>
+		</h:form>
+	
+
+</ui:component>
+
+</html>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root-container name="secondments-search" width="757" height="386">
+  <node name="start-page" x="279" y="15" width="132" height="36">
+    <edge>
+      <label x="5" y="-10"/>
+    </edge>
+    <edge>
+      <label x="5" y="-10"/>
+    </edge>
+  </node>
+  <node name="searchSchoolPage-incoming" x="238" y="131" width="132" height="36">
+    <edge>
+      <label x="5" y="-10"/>
+    </edge>
+  </node>
+  <node name="secondmentSearchResultPage-incoming" x="474" y="72" width="132" height="36">
+    <edge>
+      <label x="5" y="-10"/>
+    </edge>
+  </node>
+  <node name="secondmentSearchResultPage-active" x="122" y="203" width="132" height="36">
+    <edge>
+      <label x="5" y="-10"/>
+    </edge>
+  </node>
+  <node name="home" x="0" y="0" width="132" height="36"/>
+  <node name="secondmentListPDF" x="0" y="0" width="132" height="36"/>
+</root-container>

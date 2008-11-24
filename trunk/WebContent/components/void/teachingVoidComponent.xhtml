@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:s="http://jboss.com/products/seam/taglib">
+
+<ui:component>
+	<rich:panel>
+		<f:facet name="header">Στοιχεία Διδακτικού Κενού ...</f:facet>
+		<h:panelGrid columns="1">
+				<h:panelGrid columns="4">
+					<h:outputText for="voidSpecialization" value="Ειδικότητα :" />
+					<h:panelGroup>
+						<h:inputText value="#{teachingVoid.specialisation}"
+							id="voidSpecialization" required="true" maxlength="6" size="6">
+							<f:converter converterId="specializationConverter" />
+						</h:inputText>
+						<rich:suggestionbox height="150" width="250" border="1"
+							tokens=",[" rules="none" for="voidSpecialization"
+							suggestionAction="#{specializationFinder.suggestSpecialization}"
+							var="result" fetchValue="#{result.id}"
+							nothingLabel="Δεν βρέθηκε η ειδικότητα">
+							<h:column>
+								<h:outputText value="#{result.id}" />
+							</h:column>
+							<h:column>
+								<h:outputText value="#{result.title}" />
+							</h:column>
+						</rich:suggestionbox>
+					</h:panelGroup>
+					<h:outputText for="teachingHours"
+						value="Απαιτούμενες Διδακτικές Ώρες (Συνολικά)" />
+					<h:inputText id="teachingHours"
+						value="#{teachingVoid.requiredHours}" size="4" maxlength="4">
+						<f:validateLongRange minimum="1" maximum="1200" />
+					</h:inputText>
+				</h:panelGrid>
+
+				<rich:dataTable cellpadding="0" cellspacing="0"
+					rendered="#{teachingVoid.teachingResources != null and teachingVoid.teachingResources.size > 0}"
+					width="700" border="0" var="teachingResource"
+					value="#{teachingVoid.teachingResources}">
+
+					<f:facet name="header">
+						<h:outputText value="Κατανομή Διδακτικού Κενού" />
+					</f:facet>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Διδασκόμενες Ώρες" />
+						</f:facet>
+						<h:inputText id="teachingHours" size="4" maxlength="4"
+							value="#{teachingResource.teachingHours}" />
+					</rich:column>
+
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Τύπος Προσωπικού" />
+						</f:facet>
+						<h:selectOneMenu id="teachingType"
+							value="#{teachingResource.teacherType}">
+							<s:enumItem enumValue="PERMANENT" label="Μόνιμο Προσωπικό" />
+							<s:enumItem enumValue="REPLACEMENT" label="Αναπληρωτής" />
+							<s:enumItem enumValue="HOURLYBASED" label="Ωρομίσθιος" />
+						</h:selectOneMenu>
+					</rich:column>
+
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Ενέργεια ..." />
+						</f:facet>
+						<a4j:commandLink value="Διαγραφή" action="removeTeachingHours"
+							reRender="voidView" />
+					</rich:column>
+				</rich:dataTable>
+			</h:panelGrid>
+	</rich:panel>
+</ui:component>
+</html> 

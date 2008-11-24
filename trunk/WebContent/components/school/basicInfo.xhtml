@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:rich="http://richfaces.org/rich">
+
+<ui:component>
+	<h:panelGrid columns="2">
+		<h:panelGroup>
+			<h:panelGrid columns="2">
+				<h:outputLabel value="Κωδ. Υπουργείου" for="schoolCode" />
+				<h:outputText id="schoolCode" value="#{activeSchool.ministryCode}"
+					styleClass="fieldValueText" />
+
+				<h:outputLabel value="Τίτλος" for="schoolTitle" />
+				<h:outputText id="schoolTitle" value="#{activeSchool.title}"
+					styleClass="fieldValueText" />
+
+				<h:outputLabel value="Περιοχή" for="schoolRegion" />
+				<h:outputText id="schoolRegion"
+					value="#{activeSchool.regionCode}' ΗΡΑΚΛΕΙΟΥ" styleClass="fieldValueText" />
+
+				<h:outputLabel value="Μόρια" for="schoolMoria" />
+				<h:outputText id="schoolMoria" value="#{activeSchool.points}"
+					styleClass="fieldValueText" />
+			</h:panelGrid>
+		</h:panelGroup>
+		<h:panelGroup>
+			<ui:include src="/components/general/address.xhtml">
+				<ui:param name="address" value="#{activeSchool.address}"/>
+			</ui:include>
+		</h:panelGroup>
+		
+	</h:panelGrid>
+</ui:component>
+
+</html>

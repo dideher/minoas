@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+	
+	<ui:component>
+	<a4j:form id="menuform">
+		<rich:toolBar>
+			
+			<rich:dropDownMenu disabled="#{!identity.loggedIn}">
+				<f:facet name="label">
+					<h:panelGroup>
+						<h:outputText value="Σχολική Μονάδα" />
+					</h:panelGroup>
+				</f:facet>
+				<rich:menuGroup value="Καρτέλα Μονάδας">
+					<rich:menuItem value="Προβολή Καρτέλας" action="#{conversationHelper.beginSchoolRecordConversation}" submitMode="ajax" ajaxSingle="true" />
+					<rich:menuItem value="Επιλογή άλλης Μονάδας" action="select-other-school" disabled="#{activeSchool eq null}" submitMode="ajax" ajaxSingle="true" />
+					<rich:menuSeparator />
+					<rich:menuItem value="Κλείσιμο Καρτέλας" action="close-school-record" disabled="#{activeSchool eq null}" submitMode="ajax" ajaxSingle="true" />
+				</rich:menuGroup>
+				
+				
+			</rich:dropDownMenu>
+			<rich:dropDownMenu disabled="#{!identity.loggedIn}">
+				<f:facet name="label">
+					<h:panelGroup>
+						<h:outputText value="Προσωπικό" />
+					</h:panelGroup>
+				</f:facet>
+				<rich:menuGroup value="Καρτέλα Εκπαιδευτικού">
+					<rich:menuItem value="Προβολή Καρτέλας ..." action="#{conversationHelper.beginEmployeeRecordConversation}" ajaxSingle="true" submitMode="ajax"/>
+					<rich:menuItem value="Επιλογή άλλου Εκπαιδευτικού ..."  action="select-other-employee" disabled="#{activeEmployee eq null}" ajaxSingle="true" submitMode="ajax" />
+					<rich:menuSeparator />
+					<rich:menuItem value="Κλείσιμο Καρτέλας" action="close-employee-record" disabled="#{activeEmployee eq null}" submitMode="ajax" ajaxSingle="true" />
+				</rich:menuGroup>
+				<rich:menuGroup value="Αποσπάσεις">
+					
+					<rich:menuItem value="Εισαγωγή" submitMode="ajax" ajaxSingle="true" action="#{conversationHelper.beginNewSecondmentConversation}" />
+					
+				</rich:menuGroup>
+			</rich:dropDownMenu>
+			<rich:dropDownMenu disabled="#{!identity.loggedIn}">
+				<f:facet name="label">
+					<h:panelGroup>
+						<h:outputText value="Αποσπάσεις" />
+					</h:panelGroup>
+				</f:facet>
+				<rich:menuGroup value="Προβολές">
+					<rich:menuItem submitMode="ajax" value="Ενεργές Αποσπάσεις" action="#{conversationHelper.beginSecondmentSearchActiveConversation}" immediate="true" >
+						
+						 
+						<!-- <s:link value="Ενεργές Αποσπάσεις" action="search-active-secondments" propagation="nest" pageflow="secondments-search"></s:link>  -->
+					</rich:menuItem>
+					<rich:menuSeparator />
+					<rich:menuItem submitMode="ajax" value="Αποσπάσεις Σε Σχολική Μονάδα" action="#{conversationHelper.beginSecondmentSearchSchoolIncomingConversation}" immediate="true">
+					</rich:menuItem>
+					<rich:menuItem submitMode="none" value="Αποσπάσεις Απο Σχολική Μονάδα">
+					</rich:menuItem>
+					<rich:menuSeparator />
+					<rich:menuItem value="Αποσπάσεις Εντός ΠΥΣΔΕ" disabled="true" />
+					<rich:menuItem value="Αποσπάσεις σε άλλο ΠΥΣΔΕ" disabled="true" />
+					<rich:menuItem value="Αποσπάσεις στο Ηράκλειο" disabled="true" />
+				</rich:menuGroup>
+			</rich:dropDownMenu>
+			<rich:dropDownMenu disabled="#{!identity.loggedIn}">
+				<f:facet name="label">
+					<h:panelGroup>
+						<h:outputText value="Διαχείριση Μίνωα" />
+					</h:panelGroup>
+				</f:facet>
+				<rich:menuItem submitMode="ajax">
+					<s:link value="Σχολικά Έτη" action="#{schoolYearAdmin.search()}"
+					view="/schoolYears.xhtml" />
+				</rich:menuItem>
+				<rich:menuGroup value="Ασφάλεια και Πρόσβαση">
+					<rich:menuItem submitMode="ajax">
+						<s:link value="Διαχείριση Χρηστών"
+							action="#{principalAdmin.search()}" view="/principals.xhtml" />
+					</rich:menuItem>
+					<rich:menuItem submitMode="ajax">
+						<s:link value="Διαχείριση Ρόλων" view="/roles.xhtml" />
+					</rich:menuItem>
+					<rich:menuItem submitMode="ajax">
+						<s:link value="Διαχείριση Ομάδων" view="/roleGroups.xhtml" />
+					</rich:menuItem>
+				</rich:menuGroup>
+			</rich:dropDownMenu>
+			<rich:toolBarGroup location="right" itemSeparator="line">
+				<s:link value="Κεντρική Σελίδα" view="/home.xhtml"
+					propagation="none" disabled="#{!identity.loggedIn}"
+					styleClass="current_page_item" />
+				<s:link value="Αποσύνδεση" action="#{identity.logout}"
+					view="/home.xhtml" styleClass="current_page_item" />
+			</rich:toolBarGroup>
+		</rich:toolBar>
+	</a4j:form>
+</ui:component>
+
+</html>

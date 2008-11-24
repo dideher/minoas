@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<ui:component>
+	<h:form id="login">
+	<h:panelGrid columns="7" rowClasses="prop" columnClasses="name,value">
+		<h:outputLabel for="username">Ονόμα Χρήστη</h:outputLabel>
+		<h:inputText id="username" value="#{identity.username}" />
+		<h:outputLabel for="password">Κωδικός Χρήστη</h:outputLabel>
+		<h:inputSecret id="password" value="#{identity.password}" />
+		<h:outputLabel for="rememberMe">Θυμήσου με</h:outputLabel>
+		<h:selectBooleanCheckbox id="rememberMe"
+			value="#{identity.rememberMe}" />
+		<h:commandButton value="Εισαγωγή" action="#{identity.login}" />
+	</h:panelGrid>
+	</h:form>
+</ui:component>
+
+</html>

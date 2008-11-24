@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich">
+
+<ui:composition template="#{theme.template}">
+	<ui:define name="body">
+	
+
+			<rich:simpleTogglePanel switchType="Ajax">
+				<f:facet name="header">
+					<h:outputText
+						value="Καρτέλα Σχολικής Μονάδας #{selectedSchool.title}" />
+				</f:facet>
+
+				<ui:include src="/components/school/basicInfo.xhtml" />
+			</rich:simpleTogglePanel>
+
+
+
+			<rich:tabPanel mode="Ajax">
+				<rich:tab>
+					<f:facet name="label">
+						<h:outputText value="Δύναμη Καθηγητών" />
+					</f:facet>
+					<ui:include src="/components/school/schoolEmployeesList.xhtml" />
+				</rich:tab>
+				<rich:tab>
+					<f:facet name="label">
+						<h:outputText value="Διδακτικές Ώρες" />
+					</f:facet>
+
+					<ui:include
+						src="/components/school/schoolTeachingRequirementsList.xhtml" />
+				</rich:tab>
+			</rich:tabPanel>
+
+		
+
+		
+	</ui:define>
+
+</ui:composition>
+
+</html>

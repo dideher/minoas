@@ -1,0 +1,250 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:a4j="http://richfaces.org/a4j">
+
+<ui:composition template="#{theme.template}">
+	<ui:define name="body">
+		<rich:panel headerClass="pageTitle">
+			<f:facet name="header">
+				<h:outputText styleClass="pagetitle"
+			value="Καταχώρηση Απόσπασης Εκπαιδευτικού  #{employeeUtil.prettyFormat(activeEmployee)}" />
+		
+			</f:facet>
+			<h:form>
+				<rich:panel rendered="${employeeActiveSecondment ne null}"
+					headerClass="clean-ok-title" bodyClass="clean-ok">
+					<f:facet name="header">
+						<h:outputText value="Προσοχή, Υπάρχει Ενεργή Απόσπαση" />
+					</f:facet>
+
+					<h:panelGrid columns="1">
+						<h:panelGroup>
+							<h:outputText value="Για τον εκπαιδευτικό" />
+							<h:outputText styleClass="fieldValueText"
+								value=" #{employeeUtil.prettyFormat(activeEmployee)} " />
+							<h:outputText
+								value="υπάρχει ήδει ενεργή απόσπαση για το τρέχον σχολικό έτος. Για περισσότερες πληροφορίες για την ενεργή απόσπαση " />
+							<a4j:commandLink reRender="secondmentInfoPanelOutputPanel"
+								oncomplete="javascript:Richfaces.showModalPanel('secondmentInfoPanel');">
+								<h:outputText value="πατήστε εδώ." />
+							</a4j:commandLink>
+						</h:panelGroup>
+						<h:panelGroup>
+						</h:panelGroup>
+						<h:panelGroup>
+							<h:outputText
+								value="Αν θα συνεχίσεται και καταχωρήσεται νέα απόσπαση, η τρέχουσα θα ανδρανοποιηθεί και θα αντικατασταθεί απο την νεα." />
+						</h:panelGroup>
+						<f:facet name="footer">
+							<s:button action="cancel" value="Ακύρωση Καταχώρησης" />
+						</f:facet>
+					</h:panelGrid>
+
+				</rich:panel>
+
+				<a4j:outputPanel>
+					<h:panelGrid columns="3">
+
+						<h:panelGroup>
+							<h:panelGrid columns="1">
+								<h:outputLabel value="Εκπαιδευτικός" for="" />
+								<h:outputText styleClass="fieldValueText"
+									value="#{employeeUtil.prettyFormat(newSecondment.employee)}" />
+							</h:panelGrid>
+						</h:panelGroup>
+						
+						<h:panelGroup>
+							<h:panelGrid columns="1">
+								<h:outputLabel value="Τρέχουσα Μονάδα" for="" />
+								<h:outputText styleClass="fieldValueText"
+									value="#{newSecondment.sourceUnit.title}" />
+							</h:panelGrid>
+						</h:panelGroup>
+						
+						<h:panelGroup>
+							<h:panelGrid columns="1">
+								<h:outputLabel value="Οικίο ΠΥΣΔΕ" for="" />
+								<h:outputText styleClass="fieldValueText"
+									value="#{newSecondment.sourceUnit.pysde.title}" />
+							</h:panelGrid>
+						</h:panelGroup>
+						
+						<s:decorate id="secondmentTypeDecoration"
+							template="/layout/doubleLineEdit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Τύπος Απόσπασης" />
+							</ui:define>
+							<h:inputText id="secondmentType" required="true" immediate="true"
+								value="#{newSecondment.secondmentType}" tabindex="0"
+								converter="secondmentTypeConverter" styleClass="fieldValueText">
+								<rich:suggestionbox var="secondmentType" for="secondmentType"
+									suggestionAction="#{secondmentTypeSuggester.suggest}">
+									<f:facet name="nothingLabel">
+										<h:outputText value="Άγνωστος Τύπος Απόσπασης" />
+									</f:facet>
+									<h:column>
+										<h:outputText value="#{secondmentType.title}" />
+									</h:column>
+
+								</rich:suggestionbox>
+								<a4j:support event="onchange" limitToList="true"
+									ajaxSingle="true" reRender="secondmentTargetDecoration"
+									bypassUpdates="false" eventsQueue="validation"
+									action="#{employeeManagement.secondmentTypeSelected()}">
+								</a4j:support>
+							</h:inputText>
+
+						</s:decorate>
+
+
+
+						<s:decorate id="secondmentTargetDecoration"
+							template="/layout/doubleLineEdit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Μονάδα Απόσπασης" />
+							</ui:define>
+
+							<h:inputText value="#{newSecondment.targetUnit}" required="true"
+								id="secondmentTarget" styleClass="fieldValueText" tabindex="1"
+								converter="unitConverter">
+								<a4j:support event="onblur" ajaxSingle="true"
+									reRender="secondmentTargetDecoration" bypassUpdates="true" />
+
+								<rich:suggestionbox for="secondmentTarget" var="secondmentUnit"
+									suggestionAction="#{secondmentAwareUnitSuggester.suggest}">
+									<f:facet name="nothingLabel">
+										<h:outputText value="Άγνωστη Μονάδα Απόσπασης" />
+									</f:facet>
+									<h:column>
+										<h:outputText value="#{secondmentUnit.title}" />
+									</h:column>
+								</rich:suggestionbox>
+							</h:inputText>
+						</s:decorate>
+
+						<s:decorate id="pysdeOrderDecoration"
+							template="/layout/doubleLineEdit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Απόφαση ΠΥΣΔΕ" />
+							</ui:define>
+							<h:inputText id="pysdeOrder" value="#{newSecondment.pysdeOrder}"
+								styleClass="fieldValueText" required="false" size="16"
+								maxlength="25">
+								<a4j:support event="onblur" ajaxSingle="true"
+									reRender="pysdeOrderDecoration" bypassUpdates="true" />
+								<f:validateLength minimum="5" maximum="25" />
+							</h:inputText>
+						</s:decorate>
+
+
+						<s:decorate id="headMasterOrderDecoration"
+							template="/layout/doubleLineEdit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Απόφαση Διευθυντή" />
+							</ui:define>
+							<h:inputText id="headMasterOrder"
+								value="#{newSecondment.headMasterOrder}"
+								styleClass="fieldValueText" required="false" size="16"
+								maxlength="25">
+								<a4j:support event="onblur" reRender="headMasterOrderDecoration"
+									bypassUpdates="true" ajaxSingle="true" />
+								<f:validateLength minimum="5" maximum="25" />
+							</h:inputText>
+						</s:decorate>
+
+
+
+
+
+						<s:decorate id="ministerialOrderDecoration"
+							template="/layout/doubleLineEdit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Υπουργική Απόφαση" />
+							</ui:define>
+							<h:inputText id="ministerialOrder"
+								value="#{newSecondment.ministerialOrder}" required="false"
+								size="16" maxlength="25" styleClass="fieldValueText">
+								<a4j:support event="onblur"
+									reRender="ministerialOrderDecoration" bypassUpdates="true"
+									ajaxSingle="true" />
+								<f:validateLength minimum="5" maximum="25" />
+							</h:inputText>
+						</s:decorate>
+
+						<s:decorate id="establishedDateDecoration"
+							template="/layout/doubleLineEdit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Έναρξη Απόσπασης" />
+							</ui:define>
+							<rich:calendar id="establishedDate"
+								value="#{newSecondment.established}" required="true" mode="ajax"
+								locale="el_GR" inputClass="fieldValueText"
+								datePattern="dd-MM-yyyy">
+								<a4j:support event="onblur" reRender="establishedDateDecoration"
+									bypassUpdates="true" ajaxSingle="true" />
+							</rich:calendar>
+						</s:decorate>
+						<s:decorate id="dueToDateDecoration"
+							template="/layout/doubleLineEdit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Λήξη Απόσπασης" />
+							</ui:define>
+							<rich:calendar id="dueToDate" value="#{newSecondment.dueTo}"
+								required="true" mode="ajax" locale="el_GR"
+								inputClass="fieldValueText" datePattern="dd-MM-yyyy">
+								<a4j:support event="onblur" reRender="dueToDateDecoration"
+									bypassUpdates="true" ajaxSingle="true" />
+							</rich:calendar>
+						</s:decorate>
+						<s:decorate template="/layout/doubleLineEdit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Με Αίτηση του ;" />
+							</ui:define>
+							<h:selectBooleanCheckbox
+								value="#{newSecondment.employeeRequested}" />
+						</s:decorate>
+						<f:facet name="footer">
+							<h:panelGroup>
+								<h:commandButton action="save-new-secondment"
+									onclick="if(!confirm('Να καταχωρηθεί η απόσπαση ?')) {form.reset(); return false;}"
+									value=" Καταχώρηση Απόσπασης" />
+								<s:button action="cancel" value="Ακύρωση Καταχώρησης" />
+							</h:panelGroup>
+						</f:facet>
+					</h:panelGrid>
+				</a4j:outputPanel>
+			</h:form>
+
+
+			<rich:modalPanel id="secondmentInfoPanel" autosized="true">
+				<f:facet name="header">
+					<h:outputText value="Αναλυτικά Στοιχεία Απόσπασης" />
+				</f:facet>
+
+				<f:facet name="controls">
+
+					<span style="cursor: pointer"
+						onclick="javascript:Richfaces.hideModalPanel('secondmentInfoPanel')">X</span>
+
+				</f:facet>
+				<a4j:outputPanel id="secondmentInfoPanelOutputPanel">
+					<rich:panel>
+						<ui:include src="/components/employee/secondmentDetail.xhtml">
+							<ui:param name="secondment" value="#{employeeActiveSecondment}" />
+						</ui:include>
+					</rich:panel>
+				</a4j:outputPanel>
+
+
+			</rich:modalPanel>
+		</rich:panel>
+		
+	</ui:define>
+</ui:composition>
+
+</html>

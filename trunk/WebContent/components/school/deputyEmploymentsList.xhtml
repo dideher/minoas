@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a4j="http://richfaces.org/a4j">
+
+<ui:component>
+	<h:form>
+		<rich:dataTable id="deputyEmploymentsList" var="deputyEmployment"
+			value="#{schoolDeputyEmployments}"  border="0" rows="15"
+					onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+					onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+					width="100%">
+			<rich:column>
+				<f:facet name="header">ΑΦΜ</f:facet>
+				<h:outputText rendered="#{deputyEmployment.employee.vatNumber ne null}"  value="#{deputyEmployment.employee.vatNumber}" />
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">Επώνυμο</f:facet>
+				<a4j:commandLink action="regular-employment-selected">
+					<h:outputText value="#{deputyEmployment.employee.lastName}" />
+				</a4j:commandLink>
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">Όνομα</f:facet>
+				<h:outputText value="#{deputyEmployment.employee.firstName}" />
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">Πατρώνυμο</f:facet>
+				<h:outputText value="#{deputyEmployment.employee.fatherName}" />
+			</rich:column>
+			<rich:column sortBy="#{deputyEmployment.specialization.id}"
+				sortOrder="ASCENDING">
+				<f:facet name="header">Ειδικότητα</f:facet>
+				<h:outputText id="specializationText"
+					value="#{deputyEmployment.specialization.id}">
+					<rich:toolTip for="specializationText"
+						value="#{deputyEmployment.specialization.title}" />
+				</h:outputText>
+			</rich:column>
+			<rich:column sortyBy="#{deputyEmployment.mandatoryWorkingHours}">
+				<f:facet name="header">Υπ. Ωράριο</f:facet>
+				<h:outputText value="#{deputyEmployment.mandatoryWorkingHours}" />
+			</rich:column>
+			<rich:column sortBy="#{deputyEmployment.finalWorkingHours}">
+						<f:facet name="header">Ωράριο</f:facet>
+						<h:outputText value="#{deputyEmployment.finalWorkingHours}" />
+					</rich:column>
+			<f:facet name="footer">
+				<rich:datascroller align="left" for="deputyEmploymentsList"
+					maxPages="20" id="sc2" />
+			</f:facet>
+		</rich:dataTable>
+	</h:form>
+</ui:component>
+
+</html>

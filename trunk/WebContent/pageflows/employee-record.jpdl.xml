@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<pageflow-definition xmlns="http://jboss.com/products/seam/pageflow"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://jboss.com/products/seam/pageflow http://jboss.com/products/seam/pageflow-2.0.xsd" name="employee-record">
+  
+  	<start-state name="start">
+		<transition to="hasActiveEmployee"></transition>
+	</start-state>
+	
+  	<decision name="hasActiveEmployee" expression="#{activeEmployee ne null}">
+		<transition name="true" to="employeePage" />
+		<transition name="false" to="employeeSearchPage" />
+	</decision>
+	
+  	<page view-id="/employees.xhtml" name="employeeSearchPage" >
+  		<description>Καρτέλα Εκπαιδευτικού - Αναζήτηση Εκπαιδευτικού</description>
+  		<redirect/>
+    	<transition name="search" to="employeeSearchPage">
+        	<action expression="#{employeeSearch.search}" />
+    	</transition>
+    	<transition to="employeePage" name="employee-selected">
+        	<action expression="#{employeeSearch.select()}" />
+        	<action expression="#{employeeRecord.search()}" />
+    	</transition>
+  	</page>
+   
+   	<page view-id="/employee.xhtml" name="employeePage" back="enabled">
+   		<description>Καρτέλα Εκπαιδευτικού - #{employeeUtil.prettyFormat(activeEmployee)}</description>
+   		<redirect/>
+    	<transition to="employeeSearchPage" name="select-other-employee" />
+    	<transition to="home" name="close-employee-record" />
+   	</page> 
+   
+   <page view-id="/home.xhtml" name="home" back="disabled">
+    <end-conversation/>
+    <redirect />
+  </page>
+	
+  
+  
+  
+</pageflow-definition>

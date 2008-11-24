@@ -1,0 +1,44 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+                             "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:s="http://jboss.com/products/seam/taglib">
+
+<ui:composition template="/layout/template.xhtml">
+
+	<ui:define name="body">
+		<rich:panel bodyClass="post" headerClass="pagetitle">
+			<f:facet name="header">
+				<h:outputText
+					value="Ανανέωση / Τροποποίηση Υπαρκτής Διδακτικής Απαίτησης Ειδικότητας #{teachingVoid.specialisation.id}" />
+			</f:facet>
+			<h:form>
+			<h:panelGrid columns="1">
+				<h:panelGroup>
+					<h:outputText value="Σλαβίκο, πρόσθεσε εδω μια περιγραφή ...."/>
+				</h:panelGroup>
+				<h:panelGroup>
+					<ui:include src="/components/void/teachingVoidComponent.xhtml">
+						<ui:param name="teachingVoid" value="#{teachingVoid}" />
+					</ui:include>
+				</h:panelGroup>
+					<h:panelGroup>
+						<h:commandButton value="Αποθήκευση Αλλαγών" action="save" />
+						<h:commandButton value="Προσθήκη Διδακτίκων Ωρών" action="addTeachingHours" />
+						<s:button value="Πλήρης Διαγραφή" action="delete" />
+						<s:button value="Ακύρωση Αλλαγών" action="cancel" />
+					</h:panelGroup>
+				</h:panelGrid>
+			</h:form>
+		</rich:panel>
+
+	</ui:define>
+
+</ui:composition>
+
+</html>

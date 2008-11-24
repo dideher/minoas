@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:s="http://jboss.com/products/seam/taglib">
+
+	<ui:composition template="#{theme.template}">
+	<ui:define name="body">
+		<rich:panel headerClass="clean-info-title" bodyClass="clean-info">
+			<f:facet name="header">
+				<h:outputText value="Επιτυχής Καταχώρηση Απόσπασης" />
+			</f:facet>
+			<h:panelGrid columns="1">
+				<h:panelGroup>
+					<h:outputText
+						value="Η καταχώρηση της νεας απόσπασης του Εκπαιδευτικού " />
+					<h:outputText value="#{employeeUtil.prettyFormat(activeEmployee)} "
+						styleClass="fieldTextValue" />
+					<h:outputText value=" για το τρέχον σχολικό έτος ήταν επιτυχής." />
+				</h:panelGroup>
+				<s:link action="done">
+					<h:outputText value="Επιστροφή" />
+				</s:link>
+			</h:panelGrid>
+			
+		</rich:panel>
+	</ui:define>
+</ui:composition>
+
+</html>

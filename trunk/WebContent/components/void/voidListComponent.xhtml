@@ -1,0 +1,61 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+                             "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+                             
+<ui:component xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+	
+		<h:form>
+			<rich:dataTable id="schoolTeachingVoidsList" var="teachingVoid" value="#{teachingVoids}" rows="15">
+			<f:facet name="header">
+				<rich:columnGroup>
+					<rich:column rowspan="2">
+						<h:outputText value="Ειδικότητα" />
+					</rich:column>
+					<rich:column rowspan="2">
+						<h:outputText value="Απαιτούμενες Ώρες" />
+					</rich:column>
+					<rich:column rowspan="2">
+						<h:outputText value="Διδασκόμενες Ώρες" />
+					</rich:column>
+					<rich:column colspan="2">
+						<h:outputText value="Κατάσταση Κενού" />
+					</rich:column>
+					<rich:column breakBefore="true">
+						<h:outputText value="+" />
+					</rich:column>
+					<rich:column>
+						<h:outputText value="-" />
+					</rich:column>
+				</rich:columnGroup>
+			</f:facet>
+			<rich:column>
+				<s:link action="selectVoid">
+				<h:outputText value="${teachingVoid.specialisation.id}" />
+				</s:link>
+			</rich:column>
+			<rich:column>
+				<h:outputText value="${teachingVoid.requiredHours}" />
+			</rich:column>
+			<rich:column>
+				<h:outputText value="${teachingVoid.teachingHours}" />
+			</rich:column>
+			<rich:column>
+				<h:outputText rendered="${teachingVoid.getTeachingHoursOverPlus() gt 0}" value="${teachingVoid.getTeachingHoursOverPlus()}" />
+				<h:outputText rendered="${teachingVoid.getTeachingHoursOverPlus() lt 0}" value="-" />
+			</rich:column>
+			<rich:column>
+				<h:outputText rendered="${teachingVoid.getTeachingHoursInsufficiency() gt 0}" value="${teachingVoid.getTeachingHoursInsufficiency()}" />
+				<h:outputText rendered="${teachingVoid.getTeachingHoursInsufficiency() lt 0}" value="-" />
+			</rich:column>
+			<f:facet name="footer">
+				<rich:datascroller align="left" for="schoolTeachingVoidsList"
+					id="sc1" />
+			</f:facet>
+		</rich:dataTable>	
+	</h:form>
+</ui:component>

@@ -1,0 +1,52 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+                             "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:a="http://richfaces.org/a4j"
+                template="layout/template.xhtml">
+                       
+<ui:define name="body">
+		<h2 class="pagetitle"><h:outputFormat value="Διαχείριση Κενώ Σχολικής Μονάδας {0} ({1} 'ΗΡΑΚΛΕΙΟΥ)">
+					<f:param value="#{school.title}"/>
+					<f:param value="#{school.regionCode}"/>
+				</h:outputFormat>
+		</h2>
+		<rich:panel>
+			<s:div rendered="#{teachingVoids.size eq 0}">
+				<h:outputText
+					value="Στην επιλεγμένη σχολική μονάδα, δεν υπάρχουν αυτή την στιγμή καταχωρημένα διδακτικά κενά. Παρακαλώ, " />
+				<s:link action="changeSchool">
+					<h:outputText value="επιλέξτε άλλη σχολική μονάδα" />
+				</s:link>
+				<br />
+				<br />
+				<s:button value="Τέλος Διαχείρησης" action="cancel" />
+			</s:div>
+			<s:div rendered="#{teachingVoids.size gt 0}" styleClass="post">
+				<h:panelGrid columns="1">
+					<h:outputText value="Στον παρακάτω πίνακα εμφανίζονται οι καταχωρυμένες απαιτήσεις σε διδακτικές ώρες ανα ειδικότητα στην επιλεγμένη σχολική μονάδα " />
+				<h:panelGroup>
+				<h:outputText value="Αν θέλετε, μπορείται να " />
+				<s:link action="changeSchool">
+				<h:outputText value="επιλέξεται άλλη σχολική μονάδα." />
+				</s:link>
+				</h:panelGroup>
+				<ui:include src="/components/void/voidListComponent.xhtml">
+					<ui:param name="teachingVoids" value="#{teachingVoids}" />
+				</ui:include>
+				<h:panelGroup>
+					<s:button value="Τέλος Διαχείρησης" action="cancel" />
+				</h:panelGroup>
+				</h:panelGrid>
+				
+			</s:div>
+		</rich:panel>
+
+	</ui:define>
+
+</ui:composition>
+
