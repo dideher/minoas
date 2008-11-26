@@ -8,8 +8,9 @@ import gr.sch.ira.minoas.model.security.RoleGroup;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
+import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Transactional;
+import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.faces.Converter;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 
@@ -19,8 +20,8 @@ import org.jboss.seam.annotations.intercept.BypassInterceptors;
  */
 @Converter
 @Name("roleGroupConverter")
-@Transactional
 @BypassInterceptors
+@Scope(ScopeType.STATELESS)
 public class RoleGroupConverter extends DatabaseAwareBaseConverter  {
 
 	

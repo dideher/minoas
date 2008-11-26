@@ -6,8 +6,9 @@ package gr.sch.ira.minoas.seam.components.converters;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
+import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Transactional;
+import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.faces.Converter;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 
@@ -16,9 +17,9 @@ import org.jboss.seam.annotations.intercept.BypassInterceptors;
  *
  */
 @Name("employeeConverter")
-@Transactional
 @BypassInterceptors
 @Converter
+@Scope(ScopeType.STATELESS)
 public class EmployeeConverter extends DatabaseAwareBaseConverter {
 
 	public Object getAsObject(FacesContext arg0, UIComponent arg1, String arg2) {

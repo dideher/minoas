@@ -1,6 +1,5 @@
-package gr.sch.ira.minoas.session;
+package gr.sch.ira.minoas.seam.components;
 
-import gr.sch.ira.minoas.seam.components.BaseSeamComponent;
 
 
 import org.jboss.seam.annotations.In;
@@ -17,10 +16,12 @@ public class Authenticator extends BaseSeamComponent {
 	
 	public boolean authenticate() {
 		info("authenticating #0", identity.getUsername());
+		
 		// write your authentication logic here,
 		// return true if the authentication was
 		// successful, false otherwise
-		identity.addRole("admin");
+		if(identity.getUsername().equals("slavikos"))
+			identity.addRole("admin");
 		return true;
 	}
 }
