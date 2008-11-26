@@ -287,6 +287,24 @@
   location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas/WebContent/WEB-INF/lib/richfaces-ui-3.2.2.GA.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-itext.jar"
   location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas/WebContent/WEB-INF/lib/itext.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jbpm-jpdl.jar"
+  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas-ear/EarContent/jbpm-jpdl.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-drools-core.jar"
+  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas-ear/EarContent/drools-core.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-mvel14.jar"
+  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas-ear/EarContent/mvel14.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-drools-compiler.jar"
+  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas-ear/EarContent/drools-compiler.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jboss-seam.jar"
+  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas-ear/EarContent/jboss-seam.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jboss-el.jar"
+  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas-ear/EarContent/jboss-el.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-antlr-runtime.jar"
+  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas-ear/EarContent/antlr-runtime.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-richfaces-api-3.2.2.GA.jar"
+  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas-ear/EarContent/richfaces-api-3.2.2.GA.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-itext-rtf.jar"
+  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas/WebContent/WEB-INF/lib/itext-rtf.jar" model-entity="FileSystemJar"/>
  <web SERVLET_VERSION="2.4" model-entity="JstWeb" model-path="/web.xml">
   <module URI="/WEB-INF/faces-config.xml" model-entity="WebJSFModule"
    model-path="/faces-config.xml" src="src" web-root="WEB-ROOT"/>

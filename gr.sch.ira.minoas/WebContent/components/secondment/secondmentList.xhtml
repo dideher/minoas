@@ -19,14 +19,8 @@
 
 			<f:facet name="header">
 				<rich:columnGroup>
-					<rich:column rowspan="2">
-						<h:outputText value="Α.Μ." />
-					</rich:column>
-					<rich:column rowspan="2">
-						<h:outputText value="Ονοματεπώνυμο" />
-					</rich:column>
-					<rich:column rowspan="2">
-						<h:outputText value="Ειδικότητα" />
+					<rich:column colspan="4">
+						<h:outputText value="Εκπαιδευτικός" />
 					</rich:column>
 					<rich:column colspan="2">
 						<h:outputText value="Απόσπαση Από" />
@@ -39,6 +33,22 @@
 					</rich:column>
 					
 					<rich:column breakBefore="true">
+						<h:outputText value="Α.Μ." />
+					</rich:column>
+					
+					<rich:column>
+						<h:outputText value="Ονοματεπώνυμο" />
+					</rich:column>
+					
+					<rich:column>
+						<h:outputText value="Πατρώνυμο" />
+					</rich:column>
+					
+					<rich:column>
+						<h:outputText value="Ειδικότητα" />
+					</rich:column>
+					
+					<rich:column>
 						<h:outputText value="ΠΥΣΔΕ" />
 					</rich:column>
 					<rich:column>
@@ -57,7 +67,6 @@
 					<rich:column>
 						<h:outputText value="Μέχρι" />
 					</rich:column>
-				
 				</rich:columnGroup>
 			</f:facet>
 			<rich:column>
@@ -65,8 +74,11 @@
 			</rich:column>
 			<rich:column>
 				<a4j:commandLink action="employee-selected">
-					<h:outputText value="#{employeeUtil.prettyFormatNoSpecialization(secondment.employee)}" />
+					<h:outputText value="#{secondment.employee.lastName} #{ secondment.employee.firstName}" />
 				</a4j:commandLink>
+			</rich:column>
+			<rich:column>
+				<h:outputText value="#{secondment.employee.fatherName}" />
 			</rich:column>
 			<rich:column>
 				<h:outputText id="specializationText"

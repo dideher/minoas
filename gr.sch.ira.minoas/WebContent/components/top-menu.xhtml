@@ -67,7 +67,7 @@
 					<rich:menuItem value="Αποσπάσεις στο Ηράκλειο" disabled="true" />
 				</rich:menuGroup>
 			</rich:dropDownMenu>
-			<rich:dropDownMenu disabled="#{!identity.loggedIn}">
+			<rich:dropDownMenu rendered="#{s:hasRole(admin)} " >
 				<f:facet name="label">
 					<h:panelGroup>
 						<h:outputText value="Διαχείριση Μίνωα" />
