@@ -14,7 +14,7 @@ import org.jboss.seam.annotations.Scope;
  *
  */
 @Name("conversationHelper")
-@Scope(ScopeType.EVENT)
+@Scope(ScopeType.APPLICATION)
 public class ConversationHelper extends BaseSeamComponent {
 
 	/**
@@ -22,27 +22,30 @@ public class ConversationHelper extends BaseSeamComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	@Begin(flushMode = FlushModeType.MANUAL, nested = true, pageflow = "new-secondment")
-	public void beginNewSecondmentConversation() {
+	@Begin(flushMode = FlushModeType.MANUAL, pageflow = "new-secondment")
+	public String beginNewSecondmentConversation() {
 		info("a new secondment conversation has begun.");
+		return "new-secondment";
 	}
 	
-	@Begin(flushMode = FlushModeType.MANUAL, nested = true, pageflow = "employee-record")
-	public void beginEmployeeRecordConversation() {
+	@Begin(flushMode = FlushModeType.MANUAL,  pageflow = "employee-record")
+	public String beginEmployeeRecordConversation() {
 		info("a new employee record conversation has begun.");
+		return "search-employee";
 	}
 	
-	@Begin(flushMode = FlushModeType.MANUAL, nested = true, pageflow = "school-record")
-	public void beginSchoolRecordConversation() {
+	@Begin(flushMode = FlushModeType.MANUAL,  pageflow = "school-record")
+	public String beginSchoolRecordConversation() {
 		info("a new school record conversation has begun.");
+		return "search-school";
 	}
 	
-	@Begin(flushMode = FlushModeType.MANUAL, nested = true, pageflow = "secondments-search" )
+	@Begin(flushMode = FlushModeType.MANUAL, join = true, pageflow = "secondments-search" )
 	public String beginSecondmentSearchActiveConversation() {
 		return "search-active-secondments";
 	}
 	
-	@Begin(flushMode = FlushModeType.MANUAL, nested = true, pageflow = "secondments-search")
+	@Begin(flushMode = FlushModeType.MANUAL, join = true, pageflow = "secondments-search")
 	public String beginSecondmentSearchSchoolIncomingConversation() {
 		return "search-school-incoming-secondments";
 	}

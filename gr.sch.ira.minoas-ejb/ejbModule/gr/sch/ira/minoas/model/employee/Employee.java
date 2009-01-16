@@ -13,20 +13,22 @@ import java.util.Set;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
 import org.hibernate.annotations.Cache;
@@ -34,52 +36,40 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
 @Table(name = "MINOAS_EMPLOYEE")
-@Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorValue("EMPLOYEE")
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public class Employee extends BaseModel {
-
-	/**
-	 * @return the active
-	 */
-	public Boolean getActive() {
-		return active;
-	}
-
-	/**
-	 * @param active the active to set
-	 */
-	public void setActive(Boolean active) {
-		this.active = active;
-	}
-
-	/**
-	 * @return the lastSpecialization
-	 */
-	public Specialization getLastSpecialization() {
-		return lastSpecialization;
-	}
-
-	/**
-	 * @param lastSpecialization the lastSpecialization to set
-	 */
-	public void setLastSpecialization(Specialization lastSpecialization) {
-		this.lastSpecialization = lastSpecialization;
-	}
 
 	/**
 	 * Comment for <code>serialVersionUID</code>
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@ManyToOne
+	/**
+	 * An employee can be active or not. 
+	 */
+	@Basic
+	@Column(name="IS_ACTIVE", nullable=true)
+	private Boolean active;
+
+	@ManyToOne(fetch=FetchType.LAZY, optional=true)
 	@JoinColumn(name = "ADDRESS_ID", nullable = true)
 	@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 	private Address address;
 
-	@Basic
+	@OneToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="CURRENT_EMPLOYMENT_ID", nullable=true)
+	private Employment currentEmployment;
+
+	@ManyToOne(fetch=FetchType.LAZY, optional=false)
+	@JoinColumn(name="PYSDE_ID", nullable=false, updatable=true)
+	private PYSDE currentPYSDE;
+
+	@Temporal(TemporalType.DATE)
 	@Column(name = "BIRTH_DAY", nullable=true)
 	private Date dateOfBirth;
+
+	@OneToMany(mappedBy="employee", fetch=FetchType.LAZY)
+	private Set<Employment> employments;
 
 	@Basic
 	@Column(name = "FATHER_NAME", nullable = true, length = 15)
@@ -90,7 +80,7 @@ public class Employee extends BaseModel {
 	private String firstName;
 
 	@Id
-	@Column(name = "EMPLOYEE_ID")
+	@Column(name = "ID")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
@@ -102,10 +92,18 @@ public class Employee extends BaseModel {
 	@Column(name = "LAST_NAME", nullable = false, length = 35)
 	private String lastName;
 
+	/**
+	 * Each employee have a specialization, which is actually the last employment's 
+	 * specialization.
+	 */
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="LAST_SPECIALIZATION_ID", nullable=true)
+	private Specialization lastSpecialization;
+	
 	@Basic
 	@Column(name="LEGACY_CODE", nullable=false, updatable=false, unique=true, length=10)
 	private String legacyCode;
-	
+
 	@Basic
 	@Column(name="MAN", nullable=true)
 	private Boolean man;
@@ -113,41 +111,23 @@ public class Employee extends BaseModel {
 	@Basic
 	@Column(name = "MOTHER_NAME", nullable = true, length = 15)
 	private String motherName;
-
+	
+	@OneToOne(optional=true, fetch=FetchType.LAZY)
+	@PrimaryKeyJoinColumn(name="ID")
+	//@JoinColumn(name="REGULAR_EMPLOYMEE_DETAIL_ID", nullable=true)
+	private RegularEmployeeInfo regularEmployeeInfo;
+	
 	@OneToMany(fetch=FetchType.LAZY)
 	@JoinTable(name="MINOAS_EMPLOYEE_TELEPHONES")
 	private List<Telephone> telephones;
 	
+	@Enumerated(EnumType.STRING)
+	@Column(name="EMPLOYEE_TYPE", nullable=false, updatable=false)
+	private EmployeeType type;
+	
 	@Basic
 	@Column(name = "VAT_NUMBER", unique = false, nullable = true, length = 10)
 	private String vatNumber;
-	
-	@OneToOne
-	@JoinColumn(name="CURRENT_EMPLOYMENT_ID", nullable=true)
-	private Employment currentEmployment;
-	
-	@ManyToOne(fetch=FetchType.LAZY, optional=false)
-	@JoinColumn(name="PYSDE_ID", nullable=false, updatable=true)
-	private PYSDE currentPYSDE;
-	
-	/**
-	 * Each employee have a specialization, which is actually the last employment's 
-	 * specialization.
-	 */
-	@ManyToOne
-	@JoinColumn(name="LAST_SPECIALIZATION_ID", nullable=true)
-	private Specialization lastSpecialization;
-	
-	/**
-	 * An employee can be active or not. 
-	 */
-	@Basic
-	@Column(name="IS_ACTIVE", nullable=true)
-	private Boolean active;
-	
-	
-	@OneToMany(mappedBy="employee", fetch=FetchType.LAZY)
-	private Set<Employment> employments;
 	
 	@SuppressWarnings("unused")
 	@Version
@@ -161,17 +141,46 @@ public class Employee extends BaseModel {
 	}
 	
 	/**
+	 * @return the active
+	 */
+	public Boolean getActive() {
+		return active;
+	}
+	
+	
+	/**
 	 * @return the address
 	 */
 	public Address getAddress() {
 		return address;
 	}
-
+	
+	/**
+	 * @return the currentEmployment
+	 */
+	public Employment getCurrentEmployment() {
+		return currentEmployment;
+	}
+	
+	/**
+	 * @return the currentPYSDE
+	 */
+	public PYSDE getCurrentPYSDE() {
+		return currentPYSDE;
+	}
+	
 	/**
 	 * @return the dateOfBirth
 	 */
 	public Date getDateOfBirth() {
 		return dateOfBirth;
+	}
+
+	/**
+	 * @return the employments
+	 */
+	public Set<Employment> getEmployments() {
+		return employments;
 	}
 
 	/**
@@ -210,6 +219,13 @@ public class Employee extends BaseModel {
 	}
 
 	/**
+	 * @return the lastSpecialization
+	 */
+	public Specialization getLastSpecialization() {
+		return lastSpecialization;
+	}
+
+	/**
 	 * @return the legacyCode
 	 */
 	public String getLegacyCode() {
@@ -222,6 +238,8 @@ public class Employee extends BaseModel {
 	public String getMotherName() {
 		return motherName;
 	}
+
+	
 
 	/**
 	 * @return the telephones
@@ -239,13 +257,18 @@ public class Employee extends BaseModel {
 		return vatNumber;
 	}
 
-	
-
 	/**
 	 * @return the man
 	 */
 	public Boolean isMan() {
 		return man;
+	}
+
+	/**
+	 * @param active the active to set
+	 */
+	public void setActive(Boolean active) {
+		this.active = active;
 	}
 
 	/**
@@ -256,10 +279,31 @@ public class Employee extends BaseModel {
 	}
 
 	/**
+	 * @param currentEmployment the currentEmployment to set
+	 */
+	public void setCurrentEmployment(Employment currentEmployment) {
+		this.currentEmployment = currentEmployment;
+	}
+
+	/**
+	 * @param currentPYSDE the currentPYSDE to set
+	 */
+	public void setCurrentPYSDE(PYSDE currentPYSDE) {
+		this.currentPYSDE = currentPYSDE;
+	}
+
+	/**
 	 * @param dateOfBirth the dateOfBirth to set
 	 */
 	public void setDateOfBirth(Date dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
+	}
+
+	/**
+	 * @param employments the employments to set
+	 */
+	public void setEmployments(Set<Employment> employments) {
+		this.employments = employments;
 	}
 
 	/**
@@ -283,6 +327,7 @@ public class Employee extends BaseModel {
 		this.id = id;
 	}
 
+
 	/**
 	 * @param idNumber the idNumber to set
 	 */
@@ -295,6 +340,13 @@ public class Employee extends BaseModel {
 	 */
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+
+	/**
+	 * @param lastSpecialization the lastSpecialization to set
+	 */
+	public void setLastSpecialization(Specialization lastSpecialization) {
+		this.lastSpecialization = lastSpecialization;
 	}
 
 	/**
@@ -317,7 +369,6 @@ public class Employee extends BaseModel {
 	public void setMotherName(String motherName) {
 		this.motherName = motherName;
 	}
-
 
 	/**
 	 * @param telephones the telephones to set
@@ -350,45 +401,31 @@ public class Employee extends BaseModel {
 	}
 
 	/**
-	 * @return the employments
+	 * @return the regularDetail
 	 */
-	public Set<Employment> getEmployments() {
-		return employments;
+	public RegularEmployeeInfo getRegularDetail() {
+		return regularEmployeeInfo;
 	}
 
 	/**
-	 * @param employments the employments to set
+	 * @param regularDetail the regularDetail to set
 	 */
-	public void setEmployments(Set<Employment> employments) {
-		this.employments = employments;
+	public void setRegularDetail(RegularEmployeeInfo regularDetail) {
+		this.regularEmployeeInfo = regularDetail;
 	}
 
 	/**
-	 * @return the currentEmployment
+	 * @return the type
 	 */
-	public Employment getCurrentEmployment() {
-		return currentEmployment;
+	public EmployeeType getType() {
+		return type;
 	}
 
 	/**
-	 * @param currentEmployment the currentEmployment to set
+	 * @param type the type to set
 	 */
-	public void setCurrentEmployment(Employment currentEmployment) {
-		this.currentEmployment = currentEmployment;
-	}
-
-	/**
-	 * @return the currentPYSDE
-	 */
-	public PYSDE getCurrentPYSDE() {
-		return currentPYSDE;
-	}
-
-	/**
-	 * @param currentPYSDE the currentPYSDE to set
-	 */
-	public void setCurrentPYSDE(PYSDE currentPYSDE) {
-		this.currentPYSDE = currentPYSDE;
+	public void setType(EmployeeType type) {
+		this.type = type;
 	}
 
 	

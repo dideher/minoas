@@ -1,70 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Persistence deployment descriptor for dev profile -->
-<persistence xmlns="http://java.sun.com/xml/ns/persistence" 
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd" 
-             version="1.0">
-             
-   <persistence-unit transaction-type="JTA" name="minoas">
-      <provider>org.hibernate.ejb.HibernatePersistence</provider>
-      <jta-data-source>java:/gr.sch.ira.minoasDatasource</jta-data-source>
-      <class>
+  <!-- Persistence deployment descriptor for dev profile -->
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"
+  version="1.0">
+
+  <persistence-unit transaction-type="JTA" name="minoas">
+    <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    <jta-data-source>java:/gr.sch.ira.minoasDatasource</jta-data-source>
+    <class>
       gr.sch.ira.minoas.model.security.RoleGroup</class>
-      <class>
+    <class>
       gr.sch.ira.minoas.model.security.Role</class>
-      <class>
+    <class>
       gr.sch.ira.minoas.model.security.Principal</class>
-      <class>
+    <class>
       gr.sch.ira.minoas.model.employement.SecondmentType</class>
-      <class>
+    <class>
       gr.sch.ira.minoas.model.employement.Secondment</class>
-      <class>
+    <class>
       gr.sch.ira.minoas.model.employement.Employment</class>
-      <class>
-      gr.sch.ira.minoas.model.employee.RegularEmployee</class>
-      <class>
-      gr.sch.ira.minoas.model.employee.HourlyPaidEmployee</class>
-      <class>
+    <class>
       gr.sch.ira.minoas.model.employee.Employee</class>
-      <class>
-      gr.sch.ira.minoas.model.employee.DeputyEmployee</class>
-      <class>
+    <class>gr.sch.ira.minoas.model.employee.RegularEmployeeInfo</class>
+    <class>
       gr.sch.ira.minoas.model.core.UnitCategory</class>
-      <class>
+    <class>
       gr.sch.ira.minoas.model.core.Unit</class>
-      <class>
+    <class>
       gr.sch.ira.minoas.model.core.Telephone</class>
-      <class>
+    <class>
       gr.sch.ira.minoas.model.core.TeachingRequirement</class>
-      <class>
+    <class>
       gr.sch.ira.minoas.model.core.Specialization</class>
-      <class>
+    <class>
       gr.sch.ira.minoas.model.core.SchoolYear</class>
-      <class>
+    <class>
       gr.sch.ira.minoas.model.core.School</class>
-      <class>
+    <class>
       gr.sch.ira.minoas.model.core.PYSDE</class>
-      <class>
+    <class>
       gr.sch.ira.minoas.model.core.OrganizationalOffice</class>
-      <class>
+    <class>
       gr.sch.ira.minoas.model.core.Address</class>
-      <properties>
-      	<!-- 
-         <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect"/>
-         -->
-         <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect"/>
-       	<!--   
-         <property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/>
-         property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
-          -->
-         <property name="hibernate.hbm2ddl.auto" value="update"/>
-         <property name="hibernate.show_sql" value="false"/>
-         <property name="hibernate.format_sql" value="true"/>
-         <property name="jboss.entity.manager.factory.jndi.name" 
-          value="java:/EntityManagerFactories/minoasDatabase"/>
-         <property name="hibernate.cache.provider_class" value="org.jboss.ejb3.entity.TreeCacheProviderHook"/>
-         <property name="hibernate.treecache.mbean.object_name" value="jboss.cache:service=EJB3EntityTreeCache"/>
-      </properties>
-   </persistence-unit>
-    
+    <properties>
+      <!--
+        <property name="hibernate.dialect"
+        value="org.hibernate.dialect.SQLServerDialect"/>
+        <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect" />
+      -->
+      <property name="hibernate.dialect"
+        value="org.hibernate.dialect.SQLServerDialect"/>
+        
+      <!--
+        <property name="hibernate.dialect"
+        value="org.hibernate.dialect.HSQLDialect"/> property
+        name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+      -->
+      <property name="hibernate.hbm2ddl.auto" value="update" />
+      <property name="hibernate.show_sql" value="true" />
+      <property name="hibernate.format_sql" value="true" />
+      <property name="jboss.entity.manager.factory.jndi.name" value="java:/EntityManagerFactories/minoasDatabase" />
+      <property name="hibernate.cache.provider_class" value="org.jboss.ejb3.entity.TreeCacheProviderHook" />
+      <property name="hibernate.treecache.mbean.object_name" value="jboss.cache:service=EJB3EntityTreeCache" />
+    </properties>
+  </persistence-unit>
+
 </persistence>

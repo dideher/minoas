@@ -38,6 +38,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 	@SuppressWarnings("unchecked")
 	public List<Employment> getSchoolEmployments(SchoolYear schoolyear,
 			Unit school) {
+		long started = System.currentTimeMillis(), finished;
 		info(
 				"fetching all employments in school unit #0 during school year #1",
 				school, schoolyear);
@@ -46,9 +47,10 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 						"SELECT e FROM Employment e WHERE e.school=:school AND e.schoolYear=:schoolyear ORDER BY e.specialization.id, e.employee.lastName")
 				.setParameter("school", school).setParameter("schoolyear",
 						schoolyear).getResultList();
+		finished = System.currentTimeMillis();
 		info(
-				"found totally #0 deputy employment(s) in school unit #1 and school year #2.",
-				return_value.size(), school, schoolyear);
+				"found totally #0 deputy employment(s) in school unit #1 and school year #2. The operation tool #3 [ms] to complete",
+				return_value.size(), school, schoolyear, Long.valueOf((finished-started)));
 		return return_value;
 	}
 
@@ -88,6 +90,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 	@SuppressWarnings("unchecked")
 	public List<Employment> getSchoolEmploymentsOfType(SchoolYear schoolyear,
 			Unit school, EmploymentType type) {
+		long started = System.currentTimeMillis(), finished;
 		info(
 				"fetching all employments of type #3 in school unit #0 during school year #1",
 				school, schoolyear, type);
@@ -96,9 +99,10 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 						"SELECT e FROM Employment e WHERE e.school=:school AND e.schoolYear=:schoolyear AND e.type=:type ORDER BY e.specialization.id, e.employee.lastName")
 				.setParameter("school", school).setParameter("schoolyear",
 						schoolyear).setParameter("type", type).getResultList();
+		finished = System.currentTimeMillis();
 		info(
-				"found totally #0 deputy employment(s) in school unit #1 and school year #2.",
-				return_value.size(), school, schoolyear);
+				"found totally #0 employment(s) of type #3 in school unit #1 during school year #2. The operation took #4 [ms] to complete. ",
+				return_value.size(), school, schoolyear, type, Long.valueOf(finished-started));
 		return return_value;
 	}
 

@@ -3,10 +3,7 @@
  */
 package gr.sch.ira.minoas.seam.components.converters;
 
-import gr.sch.ira.minoas.model.employee.DeputyEmployee;
 import gr.sch.ira.minoas.model.employee.Employee;
-import gr.sch.ira.minoas.model.employee.HourlyPaidEmployee;
-import gr.sch.ira.minoas.model.employee.RegularEmployee;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -42,8 +39,7 @@ public class EmployeeTypeConverter extends BaseConverter {
 	 * @see javax.faces.convert.Converter#getAsObject(javax.faces.context.FacesContext,
 	 *      javax.faces.component.UIComponent, java.lang.String)
 	 */
-	public Object getAsObject(FacesContext context, UIComponent component,
-			String value) {
+	public Object getAsObject(FacesContext context, UIComponent component, String value) {
 		return null;
 	}
 
@@ -51,17 +47,18 @@ public class EmployeeTypeConverter extends BaseConverter {
 	 * @see javax.faces.convert.Converter#getAsString(javax.faces.context.FacesContext,
 	 *      javax.faces.component.UIComponent, java.lang.Object)
 	 */
-	public String getAsString(FacesContext context, UIComponent component,
-			Object value) {
+	public String getAsString(FacesContext context, UIComponent component, Object value) {
 		if (value != null && value instanceof Employee) {
-			if (value instanceof RegularEmployee)
+			switch (((Employee) value).getType()) {
+			case REGULAR:
 				return REGULAR_EMPLOYEE_TYPE_STR;
-			else if (value instanceof DeputyEmployee)
+			case DEPUTY:
 				return DEPUTY_EMPLOYEE_TYPE_STR;
-			else if (value instanceof HourlyPaidEmployee)
+			case HOURLYPAID:
 				return HOURLY_PAID_EMPLOYEE_TYPE_STR;
-			else
+			default:
 				return null;
+			}
 		} else
 			return null;
 	}

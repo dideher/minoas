@@ -3,10 +3,10 @@
  */
 package gr.sch.ira.minoas.model.core;
 
-import java.util.Collection;
-
 import gr.sch.ira.minoas.model.BaseModel;
 import gr.sch.ira.minoas.model.employee.Employee;
+
+import java.util.Collection;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -51,7 +51,7 @@ public class PYSDE extends BaseModel {
 	private boolean localPYSDE;
 
 	@OneToOne
-	@JoinColumn(name="REPRESENTED_UNIT_ID", nullable=false, updatable=false)
+	@JoinColumn(name="REPRESENTED_UNIT_ID", nullable=true, updatable=false)
 	private Unit representedByUnit;
 	
 	@Basic

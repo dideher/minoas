@@ -3,10 +3,8 @@
  */
 package gr.sch.ira.minoas.seam.components;
 
-import gr.sch.ira.minoas.model.employee.DeputyEmployee;
 import gr.sch.ira.minoas.model.employee.Employee;
-import gr.sch.ira.minoas.model.employee.HourlyPaidEmployee;
-import gr.sch.ira.minoas.model.employee.RegularEmployee;
+import gr.sch.ira.minoas.model.employee.EmployeeType;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
@@ -17,7 +15,7 @@ import org.jboss.seam.annotations.Scope;
  * 
  */
 @Name("employeeUtil")
-@Scope(ScopeType.EVENT)
+@Scope(ScopeType.STATELESS)
 public class EmployeeUtil extends BaseSeamComponent {
 
 	/**
@@ -26,22 +24,23 @@ public class EmployeeUtil extends BaseSeamComponent {
 	private static final long serialVersionUID = 1L;
 
 	public String getRegistryID(Employee employee) {
-		if (employee instanceof RegularEmployee) {
-			return ((RegularEmployee) employee).getRegistryID();
-		} else
-			return null;
+		Employee aemployee = employee;
+		if(aemployee.getRegularDetail()!=null) {
+			return aemployee.getRegularDetail().getRegistryID();
+		} else return null;
+		
 	}
 
 	public boolean isRegular(Employee employee) {
-		return employee instanceof RegularEmployee;
+		return employee.getType().equals(EmployeeType.REGULAR);
 	}
 
 	public boolean isDeputy(Employee employee) {
-		return employee instanceof DeputyEmployee;
+		return employee.getType().equals(EmployeeType.DEPUTY);
 	}
 
 	public boolean isHourlyPaid(Employee employee) {
-		return employee instanceof HourlyPaidEmployee;
+		return employee.getType().equals(EmployeeType.HOURLYPAID);
 	}
 
 	public String prettyFormat(Employee employee) {

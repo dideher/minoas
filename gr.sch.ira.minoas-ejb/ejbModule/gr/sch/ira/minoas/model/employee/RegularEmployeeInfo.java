@@ -19,14 +19,20 @@
 
 package gr.sch.ira.minoas.model.employee;
 
+import gr.sch.ira.minoas.model.BaseModel;
+
 import java.util.Date;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -36,12 +42,10 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  * @version $Id$
  */
 @Entity
-@Table(name = "MINOAS_EMPLOYEE_REGULAR")
-@DiscriminatorValue("EMPLOYEE_REGULAR")
-@PrimaryKeyJoinColumn(name = "EMPLOYEE_ID")
+@Table(name = "MINOAS_REGULAR_EMPLOYEE_INFO")
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
-public class RegularEmployee extends Employee {
-
+public class RegularEmployeeInfo extends BaseModel {
+	
 	/**
 	 * Comment for <code>serialVersionUID</code>
 	 */
@@ -54,7 +58,7 @@ public class RegularEmployee extends Employee {
 	@Basic
 	@Column(name = "APPOINTMENT_GOF", length = 4)
 	private String appointmentGOF;
-
+	
 	/**
 	 * Greek Official Gazette of Date appointment («ÏÂÒÔÏÁÌﬂ· ÷≈  ƒÈÔÒÈÛÏÔ˝)
 	 * 
@@ -63,10 +67,18 @@ public class RegularEmployee extends Employee {
 	@Column(name = "APPOINTMENT_GOF_DATE")
 	private Date appointmentGOFDate;
 
+	@Id
+	@Column(name = "ID")
+	private Long id;
+
 	@Basic
 	@Column(name = "REGISTRY_ID", length = 7)
 	private String registryID;
 
+	@SuppressWarnings("unused")
+	@Version
+	private Long version;
+	
 	/**
 	 * @return the appointmentGOF
 	 */
@@ -79,6 +91,15 @@ public class RegularEmployee extends Employee {
 	 */
 	public Date getAppointmentGOFDate() {
 		return appointmentGOFDate;
+	}
+
+	
+
+	/**
+	 * @return the id
+	 */
+	public Long getId() {
+		return id;
 	}
 
 	/**
@@ -100,6 +121,15 @@ public class RegularEmployee extends Employee {
 	 */
 	public void setAppointmentGOFDate(Date appointmentGOFDate) {
 		this.appointmentGOFDate = appointmentGOFDate;
+	}
+
+	
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	/**

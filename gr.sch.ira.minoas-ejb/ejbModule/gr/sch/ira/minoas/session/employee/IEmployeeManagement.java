@@ -11,7 +11,7 @@ package gr.sch.ira.minoas.session.employee;
  */
 public interface IEmployeeManagement {
 	
-	public String prepareNewSecondmet();
+	public String prepareNewSecondment();
 	
 	public String secondmentTypeSelected();
 	

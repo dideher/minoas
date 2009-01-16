@@ -175,7 +175,7 @@ public class EmployeeSearchBean extends BaseStatefulSeamComponentImpl implements
 			sb.append("AND e.active = TRUE ");
 		if (getEmployeeSpecializationFilter() != null) {
 			sb
-					.append("AND e.specialization=:specialization_filter ");
+					.append("AND e.lastSpecialization=:specialization_filter ");
 		}
 		sb.append("ORDER BY e.lastName ASC, e.firstName ASC");
 		Query q = minoasDatabase

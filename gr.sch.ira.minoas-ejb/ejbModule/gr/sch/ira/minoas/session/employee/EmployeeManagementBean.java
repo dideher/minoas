@@ -3,13 +3,12 @@
  */
 package gr.sch.ira.minoas.session.employee;
 
-import gr.sch.ira.minoas.model.employee.DeputyEmployee;
 import gr.sch.ira.minoas.model.employee.Employee;
-import gr.sch.ira.minoas.model.employee.RegularEmployee;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.SecondmentType;
 import gr.sch.ira.minoas.seam.components.CoreSearching;
+import gr.sch.ira.minoas.seam.components.EmployeeUtil;
 import gr.sch.ira.minoas.seam.components.IBaseStatefulSeamComponent;
 
 import java.util.Calendar;
@@ -45,6 +44,9 @@ public class EmployeeManagementBean extends EmployeeAwareSeamComponent implement
 
 	@In(value = "coreSearching")
 	private CoreSearching coreSearching;
+	
+	@In(value = "employeeUtil")
+	private EmployeeUtil employeeUtil;
 
 	@Out(required = false)
 	private Secondment employeeActiveSecondment;
@@ -81,13 +83,13 @@ public class EmployeeManagementBean extends EmployeeAwareSeamComponent implement
 		return employeeActiveSecondment;
 	}
 
-	public String prepareNewSecondmet() {
+	public String prepareNewSecondment() {
 		Employee employee = getMinoasDatabase().merge(getActiveEmployee());
 		/*
 		 * A secondment for the given employee can be created only if the employ
 		 * is regular or deputy (very rare)
 		 */
-		if (!(employee instanceof RegularEmployee || employee instanceof DeputyEmployee)) {
+		if (employeeUtil.isRegular(employee) || employeeUtil.isDeputy(employee)) {
 			// oops! the employee is not valid for secondment
 			warn("active employee '#0' is not valid for secondment (regular or deputy)", employee);
 			getFacesMessages().addFromResourceBundle(FacesMessage.SEVERITY_ERROR,
