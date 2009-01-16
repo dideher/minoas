@@ -81,7 +81,7 @@
            <value>pageflows/new-secondment.jpdl.xml</value>
            <value>pageflows/school-record.jpdl.xml</value>
            <value>pageflows/employee-record.jpdl.xml</value>
-           <value>pageflows/secondments-search.jpdl.xml</value>
+           <value>pageflows/active-secondments.jpdl.xml</value>
            <value>pageflows/school-incoming-secondments.jpdl.xml</value>
        </bpm:pageflow-definitions>
    </bpm:jbpm>

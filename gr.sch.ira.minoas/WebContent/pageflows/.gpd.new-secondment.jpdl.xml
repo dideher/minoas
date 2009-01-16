@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<root-container name="new-secondment" width="1029" height="536">
-  <node name="hasActiveEmployee" x="306" y="19" width="132" height="36">
+<root-container name="new-secondment" width="997" height="457">
+  <node name="hasActiveEmployee" x="0" y="0" width="132" height="36">
     <edge>
       <label x="5" y="-10"/>
     </edge>
@@ -9,52 +9,48 @@
       <label x="5" y="-10"/>
     </edge>
   </node>
-  <node name="employeeSearchPage" x="709" y="78" width="132" height="36">
+  <node name="secondmentPrepared" x="0" y="0" width="132" height="36">
     <edge>
       <label x="5" y="-10"/>
     </edge>
-    <edge>
-      <label x="5" y="-10"/>
-    </edge>
-    <edge>
-      <label x="5" y="-10"/>
-    </edge>
-    <edge>
-      <label x="5" y="-10"/>
-      <bendpoint w1="-251" h1="-2" w2="148" h2="-61"/>
-    </edge>
-  </node>
-  <node name="secondmentPrepared" x="310" y="137" width="132" height="36">
-    <edge>
-      <label x="5" y="-10"/>
-    </edge>
-    <edge>
-      <label x="5" y="-10"/>
-      <bendpoint w1="207" h1="-3" w2="-192" h2="56"/>
-    </edge>
-  </node>
-  <node name="newSecondmentPage" x="80" y="113" width="132" height="36">
-    <edge>
-      <label x="5" y="-10"/>
-    </edge>
-    <edge>
-      <label x="5" y="-10"/>
-      <bendpoint w1="97" h1="62" w2="-188" h2="-61"/>
-    </edge>
-  </node>
-  <node name="saveSecondment" x="90" y="300" width="132" height="36">
-    <edge>
-      <label x="5" y="-10"/>
-    </edge>
-    <edge>
-      <label x="5" y="-10"/>
-      <bendpoint w1="-62" h1="-95" w2="-52" h2="92"/>
-    </edge>
-  </node>
-  <node name="successPage" x="634" y="306" width="132" height="36">
     <edge>
       <label x="5" y="-10"/>
     </edge>
   </node>
-  <node name="home" x="365" y="236" width="132" height="36"/>
+  <node name="newSecondmentPage" x="0" y="0" width="132" height="36">
+    <edge>
+      <label x="5" y="-10"/>
+    </edge>
+    <edge>
+      <label x="5" y="-10"/>
+    </edge>
+  </node>
+  <node name="saveSecondment" x="0" y="0" width="132" height="36">
+    <edge>
+      <label x="5" y="-10"/>
+    </edge>
+    <edge>
+      <label x="5" y="-10"/>
+    </edge>
+  </node>
+  <node name="successPage" x="0" y="0" width="132" height="36">
+    <edge>
+      <label x="5" y="-10"/>
+    </edge>
+  </node>
+  <node name="home" x="0" y="0" width="132" height="36"/>
+  <node name="employeeSearchPage" x="0" y="0" width="132" height="36">
+    <edge>
+      <label x="5" y="-10"/>
+    </edge>
+    <edge>
+      <label x="5" y="-10"/>
+    </edge>
+    <edge>
+      <label x="5" y="-10"/>
+    </edge>
+    <edge>
+      <label x="5" y="-10"/>
+    </edge>
+  </node>
 </root-container>

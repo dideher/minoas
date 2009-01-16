@@ -6,6 +6,8 @@
     name="secondments-search">
   
    
+    <!-- 
+    
     <start-page name="start-page" view-id="/home.xhtml">
       <redirect />
       <transition to="secondmentSearchResultPage-active" name="search-active-secondments">
@@ -14,6 +16,15 @@
       <transition to="searchSchoolPage-incoming" name="search-school-incoming-secondments" />
     </start-page>
     
+    
+     -->
+    
+    <start-state name="startState">
+      <transition to="secondmentSearchResultPage-active" name="search-active-secondments">
+        <action expression="#{secondmentSearch.searchActiveSecondments}" />
+      </transition>
+      <transition to="searchSchoolPage-incoming" name="search-school-incoming-secondments" />
+    </start-state>
     
     <page name="searchSchoolPage-incoming" view-id="/schools.xhtml">
       <description>Αποσπάσης Σε Σχολική Μονάδα - Αναζήτηση Σχολικής Μονάδας</description>

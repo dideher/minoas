@@ -5,21 +5,27 @@
     xsi:schemaLocation="http://jboss.com/products/seam/pageflow http://jboss.com/products/seam/pageflow-2.0.xsd"
     name="school-incoming-secondments">
   
-    <start-page name="searchSchoolPage" view-id="/schools.xhtml">
-		<description>Αποσπάσης Σε Σχολική Μονάδα - Αναζήτηση Σχολικής Μονάδας</description>
-		<redirect />
-		<transition to="secondmentSearchResultPage" name="school-selected">
-			<action expression="#{schoolSearch.selectSchool}"></action>
-            <action expression="#{secondmentSearch.searchSchoolIncomingSecondments}" />
-		</transition>
-	</start-page>
-	
-	<page name="secondmentSearchResultPage" view-id="/secondmentSearchResult.xhtml" back="enabled">
-		<description>Αποσπάσης Σε Σχολική Μονάδα - #{activeSchool.title}</description>
-		<redirect />
-	</page>
-	
-	
+   
+    <start-page name="start-page" view-id="/schools.xhtml">
+      <description>Αποσπάσης Σε Σχολική Μονάδα - Αναζήτηση Σχολικής Μονάδας</description>
+      <redirect />
+      <transition to="secondmentSearchResultPage" name="school-selected">
+        <action expression="#{schoolSearch.selectSchool}" />
+        <action expression="#{secondmentSearch.searchSchoolIncomingSecondments}" />
+      </transition>
+    </start-page>
+    
+    <page name="secondmentSearchResultPage" view-id="/secondmentSearchResult.xhtml" back="enabled">
+      <description>Αποσπάσης Σε Σχολική Μονάδα - #{activeSchool.title}</description>
+      <redirect />
+      <transition to="secondmentListPDF" name="generatePDF" />
+    </page>
+  
+    
+	<page name="secondmentListPDF" view-id="/components/secondment/secondmentListPDF.xhtml" back="enabled">
+       <redirect />
+    </page>
+  
 	<page name="home" view-id="/home.xhtml">
 		<end-conversation/>
 		<redirect />

@@ -5,16 +5,7 @@
 	xsi:schemaLocation="http://jboss.com/products/seam/pageflow http://jboss.com/products/seam/pageflow-2.0.xsd"
 	name="new-secondment">
 	
-	<start-state name="start">
-		<transition to="hasActiveEmployee"></transition>
-	</start-state>
-	
-	<decision name="hasActiveEmployee" expression="#{activeEmployee ne null}">
-		<transition name="true" to="secondmentPrepared" />
-		<transition name="false" to="employeeSearchPage" />
-	</decision>
-	
-	<page view-id="/employees.xhtml" name="employeeSearchPage">
+    <start-page view-id="/employees.xhtml" name="employeeSearchPage">
 		<description>Νέα Απόσπαση - Αναζήτηση Εκπαιδευτικού</description>
 		<redirect />
 		<transition name="search" to="employeeSearchPage">
@@ -32,9 +23,16 @@
         	<action expression="#{employeeSearch.select()}" />
         	<action expression="#{employeeRecord.search()}" />
     	</transition>
-	</page>
+	</start-page>
 	
-	<decision name="secondmentPrepared" expression="#{employeeManagement.prepareNewSecondmet}">
+	<decision name="hasActiveEmployee" expression="#{activeEmployee ne null}">
+		<transition name="true" to="secondmentPrepared" />
+		<transition name="false" to="employeeSearchPage" />
+	</decision>
+	
+	
+	
+	<decision name="secondmentPrepared" expression="#{employeeManagement.prepareNewSecondment}">
 		<transition name="success" to="newSecondmentPage" />
 		<transition name="failure" to="employeeSearchPage" />
 	</decision>

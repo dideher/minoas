@@ -1,5 +1,6 @@
-#Fri Nov 21 13:40:22 EET 2008
+#Fri Nov 28 11:35:55 EET 2008
 eclipse.preferences.version=1
+encoding//WebContent/components/employee/employeeList.xhtml=UTF-8
 encoding//WebContent/components/general/address.xhtml=UTF-8
 encoding//WebContent/components/school/basicInfo.xhtml=UTF-8
 encoding//WebContent/components/secondment/secondmentList.xhtml=UTF-8
@@ -8,6 +9,7 @@ encoding//WebContent/components/top-menu.xhtml=UTF-8
 encoding//WebContent/components/void/teachingVoidComponent.xhtml=UTF-8
 encoding//WebContent/components/void/voidListComponent.xhtml=UTF-8
 encoding//WebContent/createTeachingVoid.xhtml=UTF-8
+encoding//WebContent/employees.xhtml=UTF-8
 encoding//WebContent/home.xhtml=UTF-8
 encoding//WebContent/login.xhtml=UTF-8
 encoding//WebContent/manageSchoolVoids.xhtml=UTF-8

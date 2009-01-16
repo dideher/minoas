@@ -29,8 +29,7 @@
 				<f:facet name="header">
 					<h:outputText value="Α.Μ." />
 				</f:facet>
-				<h:outputText value="#{employee}"
-					converter="employeeRegistryIDConverter" />
+				<h:outputText value="#{employeeUtil.getRegistryID(employee)}" />
 			</rich:column>
 			<rich:column>
 				<f:facet name="header">
@@ -51,9 +50,9 @@
 					<h:outputText value="Ειδικότητα" />
 				</f:facet>
 				<h:outputText id="specializationText"
-					value="#{employee.currentEmployment.specialization.id}">
+					value="#{employee.lastSpecialization.id}">
 					<rich:toolTip for="specializationText"
-						value="#{employee.currentEmployment.specialization.title}" />
+						value="#{employee.lastSpecialization.title}" />
 				</h:outputText>
 			</rich:column>
 			<rich:column>
