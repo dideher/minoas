@@ -18,7 +18,7 @@
 					</h:panelGroup>
 				</f:facet>
 				<rich:menuGroup value="Καρτέλα Μονάδας">
-					<rich:menuItem value="Προβολή Καρτέλας" action="#{conversationHelper.beginSchoolRecordConversation}" submitMode="ajax" ajaxSingle="true" />
+					<rich:menuItem value="Προβολή Καρτέλας" action="#{conversationHelper.beginSchoolRecordConversation}" submitMode="ajax" ajaxSingle="true" immediate="true"/>
 					<rich:menuItem value="Επιλογή άλλης Μονάδας" action="select-other-school" disabled="#{activeSchool eq null}" submitMode="ajax" ajaxSingle="true" />
 					<rich:menuSeparator />
 					<rich:menuItem value="Κλείσιμο Καρτέλας" action="close-school-record" disabled="#{activeSchool eq null}" submitMode="ajax" ajaxSingle="true" />
@@ -39,9 +39,7 @@
 					<rich:menuItem value="Κλείσιμο Καρτέλας" action="close-employee-record" disabled="#{activeEmployee eq null}" submitMode="ajax" ajaxSingle="true" />
 				</rich:menuGroup>
 				<rich:menuGroup value="Αποσπάσεις">
-					
 					<rich:menuItem value="Εισαγωγή" submitMode="ajax" ajaxSingle="true" action="#{conversationHelper.beginNewSecondmentConversation}" />
-					
 				</rich:menuGroup>
 			</rich:dropDownMenu>
 			<rich:dropDownMenu disabled="#{!identity.loggedIn}">
@@ -50,15 +48,24 @@
 						<h:outputText value="Αποσπάσεις" />
 					</h:panelGroup>
 				</f:facet>
+				<rich:menuItem submitMode="none" ajaxSingle="true">
+					<s:link propagation="nest" pageflow="new-secondment">
+							<h:outputText value="Εισαγωγή Νέας Απόσπασης" />
+					</s:link>
+				</rich:menuItem>
+				
 				<rich:menuGroup value="Προβολές">
-					<rich:menuItem submitMode="ajax" value="Ενεργές Αποσπάσεις" action="#{conversationHelper.beginSecondmentSearchActiveConversation}" immediate="true" >
-						
-						 
-						<!-- <s:link value="Ενεργές Αποσπάσεις" action="search-active-secondments" propagation="nest" pageflow="secondments-search"></s:link>  -->
+					<rich:menuItem submitMode="none">
+						<s:link propagation="nest" pageflow="active-secondments">
+							<h:outputText value="Ενεργές Αποσπάσεις" />
+						 </s:link>
 					</rich:menuItem>
 					<rich:menuSeparator />
-					<rich:menuItem submitMode="ajax" value="Αποσπάσεις Σε Σχολική Μονάδα" action="#{conversationHelper.beginSecondmentSearchSchoolIncomingConversation}" immediate="true">
-					</rich:menuItem>
+					<rich:menuItem submitMode="none">
+						<s:link propagation="nest" pageflow="school-incoming-secondments">
+							<h:outputText value="Αποσπάσεις Σε Σχολική Μονάδα" />
+						 </s:link>
+						 </rich:menuItem>
 					<rich:menuItem submitMode="none" value="Αποσπάσεις Απο Σχολική Μονάδα">
 					</rich:menuItem>
 					<rich:menuSeparator />
