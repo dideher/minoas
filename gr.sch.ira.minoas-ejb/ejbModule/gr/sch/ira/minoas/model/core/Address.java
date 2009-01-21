@@ -24,7 +24,7 @@ import org.jboss.seam.annotations.Name;
  */
 @Entity
 @Name("address")
-@Table(name = "MINOAS_ADDRESS")
+@Table(name = "ADDRESS")
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public class Address extends BaseModel {
 
@@ -64,10 +64,6 @@ public class Address extends BaseModel {
 	@Basic
 	@Column(name = "POSTAL_CODE", length = 10, nullable = true)
 	private String postCode;
-
-	@SuppressWarnings("unused")
-	@Version
-	private Long version;
 
 	/**
 	 * 

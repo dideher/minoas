@@ -31,7 +31,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  * 
  */
 @Entity
-@Table(name = "MINOAS_SECONDMENT_TYPE")
+@Table(name = "SECONDMENT_TYPE")
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 @NamedQuery(name = INamedQueryConstants.NAMED_QUERY_SECONDMENTTYPE_FIND_BY_TITLE, query = "SELECT c FROM SecondmentType c WHERE c.title=:"
 		+ INamedQueryConstants.QUERY_PARAMETER_SECONDMENT_TITLE)
@@ -47,11 +47,7 @@ public class SecondmentType extends BaseModel {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@SuppressWarnings("unused")
-	@Column(name = "VERSION")
-	@Version
-	private Long version;
-
+	
 	@Basic
 	@Column(name = "TITLE", length = 64, nullable = false, unique = true)
 	private String title;

@@ -8,6 +8,7 @@ import gr.sch.ira.minoas.model.INamedQueryConstants;
 import gr.sch.ira.minoas.model.core.PYSDE;
 import gr.sch.ira.minoas.model.core.SchoolYear;
 import gr.sch.ira.minoas.model.core.Unit;
+import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.Person;
 
 import java.util.Date;
@@ -38,7 +39,7 @@ import org.jboss.seam.annotations.Name;
  * 
  */
 @Entity
-@Table(name = "MINOAS_SECONDMENT")
+@Table(name = "SECONDMENT")
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 @Name("secondment")
 @NamedQueries( {
@@ -89,7 +90,7 @@ public class Secondment extends BaseModel {
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "EMPLOYEE_ID", nullable = false)
-	private Person employee;
+	private Employee employee;
 
 	@Basic
 	@Column(name = "EMPLOYEE_REQUESTED", nullable = true)
@@ -117,11 +118,7 @@ public class Secondment extends BaseModel {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@Basic(fetch = FetchType.LAZY)
-	@Column(name = "INSERTED_ON")
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date insertedOn;
-
+	
 	@Basic
 	@Column(name = "MINISTERIAL_ORDER", nullable = true, length = 25)
 	private String ministerialOrder;
@@ -165,9 +162,6 @@ public class Secondment extends BaseModel {
 	@JoinColumn(name = "SOURCE_UNIT_ID", nullable = false)
 	private Unit sourceUnit;
 
-	@SuppressWarnings("unused")
-	@Version
-	private Long version;
 
 	@Basic
 	@Column(name = "WORK_HRS_DECR", nullable = true)
@@ -306,7 +300,7 @@ public class Secondment extends BaseModel {
 		this.dueTo = dueTo;
 	}
 
-	public void setEmployee(Person employee) {
+	public void setEmployee(Employee employee) {
 		this.employee = employee;
 	}
 

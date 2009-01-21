@@ -24,7 +24,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  */
 
 @Entity
-@Table(name = "MINOAS_TEACHING_REQUIREMENT")
+@Table(name = "TEACHING_REQUIREMENT")
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public class TeachingRequirement extends BaseModel {
 

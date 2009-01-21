@@ -42,7 +42,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  * @version $Id$
  */
 @Entity
-@Table(name = "MINOAS_REGULAR_EMPLOYEE_INFO")
+@Table(name = "REGULAR_EMPLOYEE_INFO")
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public class RegularEmployeeInfo extends BaseModel {
 	
@@ -74,10 +74,6 @@ public class RegularEmployeeInfo extends BaseModel {
 	@Basic
 	@Column(name = "REGISTRY_ID", length = 7)
 	private String registryID;
-
-	@SuppressWarnings("unused")
-	@Version
-	private Long version;
 	
 	/**
 	 * @return the appointmentGOF

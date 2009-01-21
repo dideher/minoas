@@ -25,7 +25,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  *
  */
 @Entity
-@Table(name = "MINOAS_UNIT_CATEGORY")
+@Table(name = "UNIT_CATEGORY")
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public class UnitCategory extends BaseModel {
 

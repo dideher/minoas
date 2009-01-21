@@ -50,7 +50,7 @@ import gr.sch.ira.minoas.model.BaseModel;
  * @version $Id$
  */
 @Entity
-@Table(name = "MINOAS_PREPARATORY_TYPE")
+@Table(name = "PREPARATORY_TYPE")
 @Name("preparatoryUnitType")
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public class PreparatoryUnitType extends BaseModel {

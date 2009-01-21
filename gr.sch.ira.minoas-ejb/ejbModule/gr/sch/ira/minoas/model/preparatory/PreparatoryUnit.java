@@ -45,7 +45,7 @@ import org.jboss.seam.annotations.Name;
  * @version $Id$
  */
 @Entity
-@Table(name = "MINOAS_PREPARATORY_UNIT")
+@Table(name = "PREPARATORY_UNIT")
 @Name("preparatoryUnit")
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public class PreparatoryUnit extends Unit {

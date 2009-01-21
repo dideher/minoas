@@ -1,5 +1,6 @@
 package gr.sch.ira.minoas.model.employement;
 
+import gr.sch.ira.minoas.model.AbstractArchivableEntity;
 import gr.sch.ira.minoas.model.BaseModel;
 import gr.sch.ira.minoas.model.core.SchoolYear;
 import gr.sch.ira.minoas.model.core.Specialization;
@@ -37,9 +38,9 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  * @version $Id$
  */
 @Entity
-@Table(name = "MINOAS_EMPLOYMENT")
+@Table(name = "EMPLOYMENT")
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
-public class Employment extends BaseModel {
+public class Employment extends AbstractArchivableEntity {
 
 	/**
 	 * 
@@ -56,7 +57,7 @@ public class Employment extends BaseModel {
 	@ManyToOne(fetch=FetchType.EAGER)
 	@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 	@JoinColumn(name = "EMPLOYEE_ID", nullable = false)
-	private Person employee;
+	private Employee employee;
 
 	@Basic
 	@Column(name = "ESTABLISHED_DATE", nullable = true)
@@ -119,10 +120,6 @@ public class Employment extends BaseModel {
 	@Enumerated(EnumType.STRING)
 	@Column(name="EMPLOYMENT_TYPE", nullable=false, updatable=false)
 	private EmploymentType type;
-
-	@SuppressWarnings("unused")
-	@Version
-	private Long version;
 
 	@Basic
 	@Column(name = "WORK_HRS_DECR", nullable = true)
@@ -251,7 +248,7 @@ public class Employment extends BaseModel {
 	/**
 	 * @param employee the employee to set
 	 */
-	public void setEmployee(Person employee) {
+	public void setEmployee(Employee employee) {
 		this.employee = employee;
 	}
 

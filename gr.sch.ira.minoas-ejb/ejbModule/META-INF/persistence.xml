@@ -8,6 +8,9 @@
   <persistence-unit transaction-type="JTA" name="minoas">
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
     <jta-data-source>java:/gr.sch.ira.minoasDatasource</jta-data-source>
+    <class>gr.sch.ira.minoas.model.BaseModel</class>
+    <class>gr.sch.ira.minoas.model.employee.Person</class>
+    <class>gr.sch.ira.minoas.model.AbstractArchivableEntity</class>
     <class>
       gr.sch.ira.minoas.model.security.RoleGroup</class>
     <class>
@@ -43,8 +46,11 @@
       gr.sch.ira.minoas.model.core.OrganizationalOffice</class>
     <class>
       gr.sch.ira.minoas.model.core.Address</class>
-      <class>gr.sch.ira.minoas.model.core.PreparatoryUnit</class>
-      <class>gr.sch.ira.minoas.model.core.PreparatoryUnitType</class>
+      <class>gr.sch.ira.minoas.model.preparatory.PreparatoryOwner</class>
+      <class>gr.sch.ira.minoas.model.preparatory.PreparatoryUnit</class>
+      <class>gr.sch.ira.minoas.model.preparatory.PreparatoryUnitType</class>
+      <class>gr.sch.ira.minoas.model.preparatory.EstablishmentLicense</class>
+      <class>gr.sch.ira.minoas.model.preparatory.EstablishmentLicenseRenewal</class>
     <properties>
       <!--
         <property name="hibernate.dialect"

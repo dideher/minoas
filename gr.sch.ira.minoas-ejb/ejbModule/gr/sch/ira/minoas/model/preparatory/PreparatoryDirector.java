@@ -36,7 +36,7 @@ import gr.sch.ira.minoas.model.employee.Person;
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
  * @version $Id$
  */
-@Entity
+
 public class PreparatoryDirector extends Person {
 	
 	@ManyToOne(fetch=FetchType.EAGER)

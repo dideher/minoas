@@ -19,7 +19,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  * 
  */
 @Entity
-@Table(name = "MINOAS_ROLE")
+@Table(name = "ROLE")
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public class Role extends BaseModel {
 

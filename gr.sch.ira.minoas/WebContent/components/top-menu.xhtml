@@ -23,9 +23,22 @@
 					<rich:menuSeparator />
 					<rich:menuItem value="Κλείσιμο Καρτέλας" action="close-school-record" disabled="#{activeSchool eq null}" submitMode="ajax" ajaxSingle="true" />
 				</rich:menuGroup>
+			</rich:dropDownMenu>	
 				
-				
+			<rich:dropDownMenu disabled="#{!identity.loggedIn}">
+				<f:facet name="label">
+					<h:panelGroup>
+						<h:outputText value="Φροντιστήρια" />
+					</h:panelGroup>
+				</f:facet>
+				<rich:menuItem>
+					<s:link view="/preparatoryEstablishmentManagement.xhtml" value="Διαχείριση Αδειών Ιδρύσεως"></s:link>
+				</rich:menuItem>
+				<rich:menuGroup value="Διαχείριση Αδειών Ιδρύσεως">
+					<s:link view="/preparatoryEstablishmentManagement.xhtml"></s:link>
+				</rich:menuGroup>
 			</rich:dropDownMenu>
+			
 			<rich:dropDownMenu disabled="#{!identity.loggedIn}">
 				<f:facet name="label">
 					<h:panelGroup>

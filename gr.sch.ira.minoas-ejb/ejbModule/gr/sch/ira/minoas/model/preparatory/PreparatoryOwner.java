@@ -29,10 +29,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import org.jboss.seam.annotations.Name;
 
@@ -45,6 +47,7 @@ import gr.sch.ira.minoas.model.employee.Person;
  * @version $Id$
  */
 @Entity
+@Table(name="PREPARATORY_OWNER")
 @Name("PreparatoryOwner")
 public class PreparatoryOwner extends Person {
 	

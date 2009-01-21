@@ -22,7 +22,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  *
  */
 @Entity
-@Table(name = "MINOAS_TELEPHONE")
+@Table(name = "TELEPHONE")
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public class Telephone extends BaseModel {
 

@@ -17,7 +17,7 @@ import javax.persistence.Version;
  * 
  */
 @Entity
-@Table(name = "MINOAS_ORGANIZATIONAL_OFFICE")
+@Table(name = "ORGANIZATIONAL_OFFICE")
 public class OrganizationalOffice extends BaseModel {
 
 	private static final long serialVersionUID = 1L;
@@ -29,10 +29,7 @@ public class OrganizationalOffice extends BaseModel {
 	@Column(name = "TITLE")
 	private String title;
 
-	@SuppressWarnings("unused")
-	@Version
-	private Long version;
-
+	
 	// private Collection<School> schools;
 
 	/**

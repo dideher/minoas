@@ -37,15 +37,19 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "UNIT")
-@Table(name = "MINOAS_UNIT")
+@Table(name = "UNIT")
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 @NamedQuery(name = Unit.NAMED_QUERY_FIND_UNIT_BY_TITLE, query = "SELECT u FROM Unit u WHERE u.title=:"
 		+ Unit.QUERY_PARAMETER_UNIT_TITLE)
-public class Unit extends AbstractArchivableEntity<Unit> {
+public class Unit extends AbstractArchivableEntity {
 
 	public static final String NAMED_QUERY_FIND_UNIT_BY_TITLE = "findUnitByTitle";
 
 	public static final String QUERY_PARAMETER_UNIT_TITLE = "title";
+	
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="OFFICE_ID", nullable=true)
+	private OrganizationalOffice office;
 
 	/**
 	 * 
@@ -166,6 +170,20 @@ public class Unit extends AbstractArchivableEntity<Unit> {
 	 */
 	protected void setCategories(Collection<UnitCategory> categories) {
 		this.categories = categories;
+	}
+
+	/**
+	 * @return the office
+	 */
+	protected OrganizationalOffice getOffice() {
+		return office;
+	}
+
+	/**
+	 * @param office the office to set
+	 */
+	protected void setOffice(OrganizationalOffice office) {
+		this.office = office;
 	}
 
 }

@@ -30,9 +30,28 @@ package gr.sch.ira.minoas.model.preparatory;
  * @version $Id$
  */
 public enum EstablishmentLicenseStatus {
+	/**
+	 * Establishment license request has been filled 
+	 */
 	PENDING,
-	GRANTED,
+	/**
+	 * Established license is valid
+	 */
+	VALID,
+	/**
+	 * Establishment license request has been rejected.
+	 */
 	REJECTED,
+	/**
+	 * Establishment license has been canceled
+	 */
 	CANCELED,
+	/**
+	 * Establishment license renewal has been filled.
+	 */
+	PENDING_RENEWAL,
+	/**
+	 * Establishment license has expired.
+	 */
 	EXPIRED
 }

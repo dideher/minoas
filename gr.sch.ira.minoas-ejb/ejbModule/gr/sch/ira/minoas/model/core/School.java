@@ -21,7 +21,7 @@ import org.jboss.seam.annotations.Name;
  * 
  */
 @Entity
-@Table(name = "MINOAS_SCHOOL")
+@Table(name = "SCHOOL")
 @Name("school")
 @DiscriminatorValue("SCHOOL")
 @PrimaryKeyJoinColumn(name = "UNIT_ID")

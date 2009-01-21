@@ -25,12 +25,15 @@
 
 package gr.sch.ira.minoas.model;
 
+import gr.sch.ira.minoas.model.security.Principal;
+
 import java.util.Date;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
@@ -42,62 +45,33 @@ import javax.persistence.Version;
  * @version $Id$
  */
 @MappedSuperclass
-public abstract class AbstractArchivableEntity<T> extends BaseModel {
+public abstract class AbstractArchivableEntity extends BaseModel {
 	
 	/**
 	 * Comment for <code>serialVersionUID</code>
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@Basic(fetch=FetchType.LAZY)
-	@Column(name="CURRENT", nullable=false)
-	private boolean current;
+	/* We need to add a link to archives instances */
 	
-	@OneToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="PREVIOUS_INSTANCE_ID", nullable=true)
-	private T previousInstance;
+	//@OneToOne(fetch=FetchType.LAZY)
+	//@JoinColumn(name="PREVIOUS_INSTANCE_ID", nullable=true)
+	//private T previousInstance;
 	
 	@Basic(fetch=FetchType.LAZY)
 	@Temporal(TemporalType.DATE)
 	@Column(name="MODIFIED_ON", nullable=false, updatable=false)
 	private Date modifiedOn;
 	
-	@Basic(fetch=FetchType.LAZY)
-	@Column(name="MODIFIED_BY", length=32, nullable=false, updatable=false)
-	private String modifiedBy;
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="MODIFIED_BY_ID", nullable=true)
+	private Principal modifiedBy;
 	
-	@SuppressWarnings("unused")
-	@Version
-	private Long version;
-
-	/**
-	 * @return the current
-	 */
-	protected boolean isCurrent() {
-		return current;
-	}
-
-	/**
-	 * @param current the current to set
-	 */
-	protected void setCurrent(boolean current) {
-		this.current = current;
-	}
-
-	/**
-	 * @return the previousInstance
-	 */
-	protected T getPreviousInstance() {
-		return previousInstance;
-	}
-
-	/**
-	 * @param previousInstance the previousInstance to set
-	 */
-	protected void setPreviousInstance(T previousInstance) {
-		this.previousInstance = previousInstance;
-	}
-
+	@Basic(fetch=FetchType.LAZY)
+	@Column(name="MODIFICATION_REASON", length=128, nullable=true, updatable=false)
+	private String modificationReason;
+	
+		
 	/**
 	 * @return the modifiedOn
 	 */
@@ -115,14 +89,28 @@ public abstract class AbstractArchivableEntity<T> extends BaseModel {
 	/**
 	 * @return the modifiedBy
 	 */
-	protected String getModifiedBy() {
+	protected Principal getModifiedBy() {
 		return modifiedBy;
 	}
 
 	/**
 	 * @param modifiedBy the modifiedBy to set
 	 */
-	protected void setModifiedBy(String modifiedBy) {
+	protected void setModifiedBy(Principal modifiedBy) {
 		this.modifiedBy = modifiedBy;
+	}
+
+	/**
+	 * @return the modificationReason
+	 */
+	protected String getModificationReason() {
+		return modificationReason;
+	}
+
+	/**
+	 * @param modificationReason the modificationReason to set
+	 */
+	protected void setModificationReason(String modificationReason) {
+		this.modificationReason = modificationReason;
 	}
 }

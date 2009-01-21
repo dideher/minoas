@@ -27,7 +27,7 @@ import org.jboss.seam.annotations.Name;
  * 
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * */
-@Table(name = "MINOAS_PRINCIPAL")
+@Table(name = "PRINCIPAL")
 @Name("principal")
 @Entity
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)

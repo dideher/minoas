@@ -20,7 +20,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  * 
  */
 @Entity
-@Table(name = "MINOAS_SPECIALIZATION")
+@Table(name = "SPECIALIZATION")
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public class Specialization extends BaseModel {
 
@@ -33,9 +33,7 @@ public class Specialization extends BaseModel {
 	@Column(name = "TITLE", nullable = false, length = 70)
 	private String title;
 
-	@SuppressWarnings("unused")
-	@Version
-	private Long version;
+
 
 	/**
 	 * 

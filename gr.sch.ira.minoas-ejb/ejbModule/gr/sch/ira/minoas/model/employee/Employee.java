@@ -25,7 +25,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
-@Table(name = "MINOAS_EMPLOYEE")
+@Table(name = "EMPLOYEE")
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public class Employee extends Person {
 

@@ -28,7 +28,7 @@ import org.jboss.seam.annotations.Name;
  * */
 @Name("schoolYear")
 @Entity
-@Table(name = "MINOAS_SCHOOL_YEAR")
+@Table(name = "SCHOOL_YEAR")
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public class SchoolYear extends BaseModel {
 

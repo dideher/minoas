@@ -58,7 +58,7 @@ import gr.sch.ira.minoas.model.core.Telephone;
  */
 @MappedSuperclass
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
-public abstract class Person extends AbstractArchivableEntity<Person> {
+public abstract class Person extends AbstractArchivableEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = true)
 	@JoinColumn(name = "ADDRESS_ID", nullable = true)
