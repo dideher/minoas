@@ -7,6 +7,7 @@ import gr.sch.ira.minoas.core.CoreUtils;
 import gr.sch.ira.minoas.model.core.SchoolYear;
 import gr.sch.ira.minoas.model.core.Specialization;
 import gr.sch.ira.minoas.model.employee.Employee;
+import gr.sch.ira.minoas.model.employee.Person;
 import gr.sch.ira.minoas.seam.components.BaseStatefulSeamComponentImpl;
 import gr.sch.ira.minoas.seam.components.IBaseStatefulSeamComponent;
 
@@ -59,12 +60,12 @@ public class EmployeeSearchBean extends BaseStatefulSeamComponentImpl implements
 	private Specialization employeeSpecializationFilter;
 
 	@Out(value = "activeEmployee", required = false, scope = ScopeType.CONVERSATION)
-	private Employee activeEmployee;
+	private Person activeEmployee;
 
 	private SchoolYear schoolYearFilter;
 
 	@DataModelSelection("employeesSearchResult")
-	private Employee selectedEmployee;
+	private Person selectedEmployee;
 
 	private Specialization specializationFilter;
 

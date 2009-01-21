@@ -6,7 +6,7 @@ import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.core.SchoolYear;
 import gr.sch.ira.minoas.model.core.Specialization;
 import gr.sch.ira.minoas.model.core.Unit;
-import gr.sch.ira.minoas.model.employee.Employee;
+import gr.sch.ira.minoas.model.employee.Person;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
 import gr.sch.ira.minoas.model.employement.Secondment;
@@ -252,7 +252,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 	}
 
 	@SuppressWarnings("unchecked")
-	public Collection<Employment> getEmployeeEmployments(Employee employee) {
+	public Collection<Employment> getEmployeeEmployments(Person employee) {
 		List<Employment> result;
 		debug("trying to featch all  employments for employee '#0'", employee);
 		result = minoasDatabase
@@ -265,7 +265,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 	}
 
 	@SuppressWarnings("unchecked")
-	public Collection<Employment> getEmployeeEmployments(Employee employee,
+	public Collection<Employment> getEmployeeEmployments(Person employee,
 			SchoolYear schoolyear) {
 		List<Employment> result;
 		debug(
@@ -283,7 +283,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 	}
 
 	@SuppressWarnings("unchecked")
-	public Collection<Employment> getEmployeeActiveEmployments(Employee employee) {
+	public Collection<Employment> getEmployeeActiveEmployments(Person employee) {
 		List<Employment> result;
 		debug("trying to featch all  employments for employee '#0'", employee);
 		result = minoasDatabase
@@ -297,7 +297,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 
 	@SuppressWarnings("unchecked")
 	public Collection<Employment> getEmployeeEmploymentsOfType(
-			Employee employee, EmploymentType type) {
+			Person employee, EmploymentType type) {
 		List<Employment> result;
 		debug("trying to featch all  employments for employee '#0'", employee);
 		result = minoasDatabase
@@ -311,7 +311,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 	}
 
 	@SuppressWarnings("unchecked")
-	public Collection<Secondment> getEmployeeSecondments(Employee employee) {
+	public Collection<Secondment> getEmployeeSecondments(Person employee) {
 		Collection<Secondment> result = null;
 		info("searching employee's '#0' secondments.");
 		result = minoasDatabase
@@ -329,7 +329,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 	 * @param employee
 	 * @return
 	 */
-	public Secondment getEmployeeActiveSecondment(Employee employee) {
+	public Secondment getEmployeeActiveSecondment(Person employee) {
 		Secondment result = null;
 		try {
 			info("searching employee's '#0' active secondment.");

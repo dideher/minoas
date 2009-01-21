@@ -4,6 +4,7 @@
 package gr.sch.ira.minoas.session.employee;
 
 import gr.sch.ira.minoas.model.employee.Employee;
+import gr.sch.ira.minoas.model.employee.Person;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.SecondmentType;
@@ -153,7 +154,7 @@ public class EmployeeManagementBean extends EmployeeAwareSeamComponent implement
 	 */
 	@End
 	public String saveSecondment() {
-		Employee employee = getMinoasDatabase().merge(getActiveEmployee());
+		Person employee = getMinoasDatabase().merge(getActiveEmployee());
 		info("trying to save new seconment '#0' for employee '#1' during school year '#2'.", newSecondment, employee, getActiveSchoolYear());
 		
 		/* if the employee has already an secondment, then

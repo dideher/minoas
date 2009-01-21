@@ -5,6 +5,7 @@ package gr.sch.ira.minoas.seam.components;
 
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
+import gr.sch.ira.minoas.model.employee.Person;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
@@ -61,7 +62,7 @@ public class EmployeeUtil extends BaseSeamComponent {
 			return null;
 	}
 
-	public String prettyFormatNoSpecialization(Employee employee) {
+	public String prettyFormatNoSpecialization(Person employee) {
 		if (employee != null) {
 			StringBuffer sb = new StringBuffer();
 			sb.append(employee.getLastName());

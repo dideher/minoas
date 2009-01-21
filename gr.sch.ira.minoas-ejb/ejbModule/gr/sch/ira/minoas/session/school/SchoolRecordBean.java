@@ -4,7 +4,7 @@
 package gr.sch.ira.minoas.session.school;
 
 import gr.sch.ira.minoas.model.core.Unit;
-import gr.sch.ira.minoas.model.employee.Employee;
+import gr.sch.ira.minoas.model.employee.Person;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
 import gr.sch.ira.minoas.model.employement.Secondment;
@@ -45,7 +45,7 @@ public class SchoolRecordBean extends BaseStatefulSeamComponentImpl implements I
 
 	
 	@Out(required=false, scope=ScopeType.CONVERSATION)
-	private Employee activeEmployee;
+	private Person activeEmployee;
 
 	public String reset() {
 		setActiveEmployee(null);
@@ -113,7 +113,7 @@ public class SchoolRecordBean extends BaseStatefulSeamComponentImpl implements I
 		info("school record '#0' conversation has ended.", getActiveSchool());
 	}
 
-	public Employee getActiveEmployee() {
+	public Person getActiveEmployee() {
 		return activeEmployee;
 	}
 
@@ -217,7 +217,7 @@ public class SchoolRecordBean extends BaseStatefulSeamComponentImpl implements I
 		return FAILURE_OUTCOME;
 	}
 
-	public void setActiveEmployee(Employee activeEmployee) {
+	public void setActiveEmployee(Person activeEmployee) {
 		this.activeEmployee = activeEmployee;
 	}
 
