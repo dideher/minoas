@@ -43,6 +43,8 @@
       gr.sch.ira.minoas.model.core.OrganizationalOffice</class>
     <class>
       gr.sch.ira.minoas.model.core.Address</class>
+      <class>gr.sch.ira.minoas.model.core.PreparatoryUnit</class>
+      <class>gr.sch.ira.minoas.model.core.PreparatoryUnitType</class>
     <properties>
       <!--
         <property name="hibernate.dialect"
