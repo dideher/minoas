@@ -3,8 +3,10 @@
  */
 package gr.sch.ira.minoas.model.core;
 
+import gr.sch.ira.minoas.model.AbstractArchivableEntity;
 import gr.sch.ira.minoas.model.BaseModel;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -39,7 +41,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 @NamedQuery(name = Unit.NAMED_QUERY_FIND_UNIT_BY_TITLE, query = "SELECT u FROM Unit u WHERE u.title=:"
 		+ Unit.QUERY_PARAMETER_UNIT_TITLE)
-public class Unit extends BaseModel {
+public class Unit extends AbstractArchivableEntity<Unit> {
 
 	public static final String NAMED_QUERY_FIND_UNIT_BY_TITLE = "findUnitByTitle";
 
@@ -65,16 +67,12 @@ public class Unit extends BaseModel {
 
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "MINOAS_UNIT_TELEPHONES")
-	private List<Telephone> telephones;
+	private Collection<Telephone> telephones = new ArrayList<Telephone>();
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 	@JoinTable(name = "MINOAS_UNIT_GATEGORIES", joinColumns = @JoinColumn(name = "UNIT_ID", referencedColumnName = "UNIT_ID"), inverseJoinColumns = @JoinColumn(name = "CATEGORY_ID", referencedColumnName = "ID"))
-	private Collection<UnitCategory> categories;
-
-	@SuppressWarnings("unused")
-	@Version
-	private Long version;
+	private Collection<UnitCategory> categories = new ArrayList<UnitCategory>();
 
 	@ManyToOne(fetch=FetchType.LAZY)
 	@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
@@ -136,7 +134,7 @@ public class Unit extends BaseModel {
 	/**
 	 * @return the telephones
 	 */
-	public List<Telephone> getTelephones() {
+	public Collection<Telephone> getTelephones() {
 		return telephones;
 	}
 
@@ -144,7 +142,7 @@ public class Unit extends BaseModel {
 	 * @param telephones
 	 *            the telephones to set
 	 */
-	public void setTelephones(List<Telephone> telephones) {
+	public void setTelephones(Collection<Telephone> telephones) {
 		this.telephones = telephones;
 	}
 
@@ -154,6 +152,20 @@ public class Unit extends BaseModel {
 
 	public void setPysde(PYSDE pysde) {
 		this.pysde = pysde;
+	}
+
+	/**
+	 * @return the categories
+	 */
+	protected Collection<UnitCategory> getCategories() {
+		return categories;
+	}
+
+	/**
+	 * @param categories the categories to set
+	 */
+	protected void setCategories(Collection<UnitCategory> categories) {
+		this.categories = categories;
 	}
 
 }

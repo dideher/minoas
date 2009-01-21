@@ -5,6 +5,7 @@ import gr.sch.ira.minoas.model.core.SchoolYear;
 import gr.sch.ira.minoas.model.core.Specialization;
 import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employee.Employee;
+import gr.sch.ira.minoas.model.employee.Person;
 
 import java.util.Date;
 
@@ -55,7 +56,7 @@ public class Employment extends BaseModel {
 	@ManyToOne(fetch=FetchType.EAGER)
 	@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 	@JoinColumn(name = "EMPLOYEE_ID", nullable = false)
-	private Employee employee;
+	private Person employee;
 
 	@Basic
 	@Column(name = "ESTABLISHED_DATE", nullable = true)
@@ -150,7 +151,7 @@ public class Employment extends BaseModel {
 	/**
 	 * @return the employee
 	 */
-	public Employee getEmployee() {
+	public Person getEmployee() {
 		return employee;
 	}
 
@@ -250,7 +251,7 @@ public class Employment extends BaseModel {
 	/**
 	 * @param employee the employee to set
 	 */
-	public void setEmployee(Employee employee) {
+	public void setEmployee(Person employee) {
 		this.employee = employee;
 	}
 

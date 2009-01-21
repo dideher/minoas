@@ -8,7 +8,7 @@ import gr.sch.ira.minoas.model.INamedQueryConstants;
 import gr.sch.ira.minoas.model.core.PYSDE;
 import gr.sch.ira.minoas.model.core.SchoolYear;
 import gr.sch.ira.minoas.model.core.Unit;
-import gr.sch.ira.minoas.model.employee.Employee;
+import gr.sch.ira.minoas.model.employee.Person;
 
 import java.util.Date;
 
@@ -89,7 +89,7 @@ public class Secondment extends BaseModel {
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "EMPLOYEE_ID", nullable = false)
-	private Employee employee;
+	private Person employee;
 
 	@Basic
 	@Column(name = "EMPLOYEE_REQUESTED", nullable = true)
@@ -198,7 +198,7 @@ public class Secondment extends BaseModel {
 		return dueTo;
 	}
 
-	public Employee getEmployee() {
+	public Person getEmployee() {
 		return employee;
 	}
 
@@ -306,7 +306,7 @@ public class Secondment extends BaseModel {
 		this.dueTo = dueTo;
 	}
 
-	public void setEmployee(Employee employee) {
+	public void setEmployee(Person employee) {
 		this.employee = employee;
 	}
 
