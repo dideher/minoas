@@ -40,6 +40,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -49,6 +51,7 @@ import javax.persistence.TemporalType;
 
 import gr.sch.ira.minoas.model.BaseModel;
 import gr.sch.ira.minoas.model.core.SchoolYear;
+import gr.sch.ira.minoas.model.core.Seat;
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
@@ -63,21 +66,33 @@ public class EstablishmentLicense extends BaseModel {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 	
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="NATURE_TYPE_ID", nullable=false)
+	private PreparatoryUnitNature nature;
+	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="SCHOOL_YEAR_ID")
 	private SchoolYear schoolYear;
 	
-	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="PREPARATORY_UNIT_ID", nullable=false)
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="PREPARATORY_UNIT_ID", nullable=true)
 	private PreparatoryUnit unit;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="PREPARATORY_OWNER_ID", nullable=false)
 	private PreparatoryOwner owner;
 	
-	@Enumerated(EnumType.STRING)
-	@Column(name="STATUS", nullable=false)
+	@ManyToOne
+	@JoinColumn(name="STATUS_ID", nullable=false)
 	private EstablishmentLicenseStatus status;
+	
+	@ManyToMany(fetch=FetchType.LAZY)
+	@JoinTable(name="PREPARATORY_EST_LICENSE_LANGUAGES")
+	private Set<TeachingLanguage> teachingLanguages = new HashSet<TeachingLanguage>();
+	
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="TYPE_ID", nullable=false)
+	private PreparatoryUnitNature type;
 	
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="license", cascade= { CascadeType.PERSIST, CascadeType.MERGE})
 	private Set<EstablishmentLicenseRenewal> renewals = new HashSet<EstablishmentLicenseRenewal>();
@@ -94,6 +109,9 @@ public class EstablishmentLicense extends BaseModel {
 	@Column(name="REQUEST_JUDGMENT_NUMBER", nullable=true)
 	private Integer requestJudgmentNumber;
 	
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="SEAT_ID", nullable=false)
+	private Seat seat;
 	
 	@Basic
 	@Column(name="REQUEST_PROTOCOL", nullable=false, unique=true)
@@ -102,6 +120,20 @@ public class EstablishmentLicense extends BaseModel {
 	public void addRenewal(EstablishmentLicenseRenewal renewal) {
 		this.renewals.add(renewal);
 		renewal.setLicense(this);
+	}
+
+	/**
+	 * @return the teachingLanguages
+	 */
+	public Set<TeachingLanguage> getTeachingLanguages() {
+		return teachingLanguages;
+	}
+
+	/**
+	 * @param teachingLanguages the teachingLanguages to set
+	 */
+	public void setTeachingLanguages(Set<TeachingLanguage> teachingLanguages) {
+		this.teachingLanguages = teachingLanguages;
 	}
 	
 	

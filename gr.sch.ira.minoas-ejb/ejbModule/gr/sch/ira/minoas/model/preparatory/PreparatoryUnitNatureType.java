@@ -25,60 +25,11 @@
 
 package gr.sch.ira.minoas.model.preparatory;
 
-import gr.sch.ira.minoas.model.core.Address;
-import gr.sch.ira.minoas.model.core.Unit;
-
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.Table;
-
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.jboss.seam.annotations.Name;
-
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
  * @version $Id$
  */
-@Entity
-@Table(name = "PREPARATORY_UNIT")
-@Name("preparatoryUnit")
-@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
-public class PreparatoryUnit extends Unit {
-
-	/**
-	 * Comment for <code>serialVersionUID</code>
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	
-	
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="OWNER_ID", nullable=false)
-	private PreparatoryOwner owner;
-	
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="ADDRESS_ID", nullable=true)
-	private Address address;
-	
-
-	/**
-	 * @return the type
-	 */
-	public PreparatoryUnitNature getType() {
-		return type;
-	}
-
-	/**
-	 * @param type the type to set
-	 */
-	public void setType(PreparatoryUnitNature type) {
-		this.type = type;
-	}
-
+public enum PreparatoryUnitNatureType {
+	SECONDARY_EDUCATION,
+	LANGUAGE_CENTER
 }

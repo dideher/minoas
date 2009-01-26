@@ -71,11 +71,11 @@ public abstract class Person extends AbstractArchivableEntity {
 	private Date dateOfBirth;
 	
 	@Basic
-	@Column(name = "FATHER_NAME", nullable = true, length = 15)
+	@Column(name = "FATHER_NAME", nullable = true, length = 25)
 	private String fatherName;
 	
 	@Basic
-	@Column(name = "FIRST_NAME", nullable = false, length = 15)
+	@Column(name = "FIRST_NAME", nullable = false, length = 25)
 	private String firstName;
 	
 	@Basic
@@ -87,8 +87,17 @@ public abstract class Person extends AbstractArchivableEntity {
 	private Boolean man;
 	
 	@Basic
-	@Column(name = "MOTHER_NAME", nullable = true, length = 15)
+	@Column(name = "MOTHER_NAME", nullable = true, length = 25)
 	private String motherName;
+	
+	@Basic
+	@Column(name = "MOTHER_SURNAME", nullable = true, length = 35)
+	private String motherSurname;
+	
+	@Basic
+	@Column(name = "FATHER_SURNAME", nullable = true, length = 35)
+	private String fatherSurname;
+	
 	
 	@OneToMany(fetch = FetchType.LAZY, cascade={ CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinTable(name = "MINOAS_EMPLOYEE_TELEPHONES")
@@ -278,6 +287,34 @@ public abstract class Person extends AbstractArchivableEntity {
 	 */
 	protected void setIdNumberAuthority(String idNumberAuthority) {
 		this.idNumberAuthority = idNumberAuthority;
+	}
+
+	/**
+	 * @return the motherSurname
+	 */
+	public String getMotherSurname() {
+		return motherSurname;
+	}
+
+	/**
+	 * @param motherSurname the motherSurname to set
+	 */
+	public void setMotherSurname(String motherSurname) {
+		this.motherSurname = motherSurname;
+	}
+
+	/**
+	 * @return the fatherSurname
+	 */
+	public String getFatherSurname() {
+		return fatherSurname;
+	}
+
+	/**
+	 * @param fatherSurname the fatherSurname to set
+	 */
+	public void setFatherSurname(String fatherSurname) {
+		this.fatherSurname = fatherSurname;
 	}
 
 }

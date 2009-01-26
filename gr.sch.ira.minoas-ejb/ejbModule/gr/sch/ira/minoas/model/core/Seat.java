@@ -23,28 +23,13 @@
  * redistribute the Software for such purposes.
  */
 
-package gr.sch.ira.minoas.model.preparatory;
-
-import java.util.HashSet;
-import java.util.Set;
+package gr.sch.ira.minoas.model.core;
 
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.jboss.seam.annotations.Name;
 
 import gr.sch.ira.minoas.model.BaseModel;
 
@@ -53,40 +38,24 @@ import gr.sch.ira.minoas.model.BaseModel;
  * @version $Id$
  */
 @Entity
-@Table(name = "PREPARATORY_TYPE")
-@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
-public class EstablishmentLicenseStatus  extends BaseModel {
+@Table(name="SEAT")
+public class Seat extends BaseModel {
 
-	/**
-	 * Comment for <code>serialVersionUID</code>
-	 */
-	private static final long serialVersionUID = 1L;
-
+	
 	@Id
-	@Column(name = "ID")
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
-
-	@Basic
-	@Column(name = "LICENSE_STATUS_TITLE", length = 64, nullable = false, unique = true)
+	@Column(name="TITLE", length=16)
 	private String title;
-	
-	@Enumerated(EnumType.STRING)
-	@Column(name="LICENSE_STATUS_TYPE", nullable=false, unique=true)
-	private EstablishmentLicenseStatusType type; 
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "status", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-	private Set<EstablishmentLicense> licenses = new HashSet<EstablishmentLicense>();
-
-	
-
+	/**
+	 * 
+	 */
+	public Seat() {
+	}
 	/**
 	 * @return the title
 	 */
 	public String getTitle() {
 		return title;
 	}
-
 	/**
 	 * @param title the title to set
 	 */
@@ -94,5 +63,4 @@ public class EstablishmentLicenseStatus  extends BaseModel {
 		this.title = title;
 	}
 
-	
 }

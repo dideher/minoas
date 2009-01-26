@@ -32,10 +32,13 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -53,7 +56,17 @@ import gr.sch.ira.minoas.model.BaseModel;
 @Table(name = "PREPARATORY_TYPE")
 @Name("preparatoryUnitType")
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
-public class PreparatoryUnitType extends BaseModel {
+public class PreparatoryUnitNature  extends BaseModel {
+
+	/**
+	 * @param type
+	 * @param title
+	 */
+	public PreparatoryUnitNature(PreparatoryUnitNatureType type, String title) {
+		super();
+		this.type = type;
+		this.title = title;
+	}
 
 	/**
 	 * Comment for <code>serialVersionUID</code>
@@ -68,14 +81,15 @@ public class PreparatoryUnitType extends BaseModel {
 	@Basic
 	@Column(name = "TITLE", length = 64, nullable = false, unique = true)
 	private String title;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name="UNIT_TYPE", nullable=false, unique=true)
+	private PreparatoryUnitNatureType type; 
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "type", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-	private Set<PreparatoryUnit> preparatoryUnits = new HashSet<PreparatoryUnit>();
-
-	public void addPreparatoryUnit(PreparatoryUnit unit) {
-		unit.setType(this);
-		getPreparatoryUnits().add(unit);
-	}
+//	public void addPreparatoryUnit(PreparatoryUnit unit) {
+//		unit.setType(this);
+//		getPreparatoryUnits().add(unit);
+//	}
 
 	/**
 	 * @return the title
@@ -92,16 +106,33 @@ public class PreparatoryUnitType extends BaseModel {
 	}
 
 	/**
-	 * @return the preparatoryUnits
+	 * @return the id
 	 */
-	public Set<PreparatoryUnit> getPreparatoryUnits() {
-		return preparatoryUnits;
+	public Long getId() {
+		return id;
 	}
 
 	/**
-	 * @param preparatoryUnits the preparatoryUnits to set
+	 * @param id the id to set
 	 */
-	public void setPreparatoryUnits(Set<PreparatoryUnit> preparatoryUnits) {
-		this.preparatoryUnits = preparatoryUnits;
+	public void setId(Long id) {
+		this.id = id;
 	}
+
+	/**
+	 * @return the type
+	 */
+	public PreparatoryUnitNatureType getType() {
+		return type;
+	}
+
+	/**
+	 * @param type the type to set
+	 */
+	public void setType(PreparatoryUnitNatureType type) {
+		this.type = type;
+	}
+
+	
+	
 }
