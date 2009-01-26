@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<ui:composition template="/layout/simple-beauty-template.xhtml">
+	<ui:define name="body">
+
+		<s:decorate template="/layout/doubleLineEdit.xhtml">
+			<ui:define name="label">
+				<h:outputText value="Επώνυμο" />
+			</ui:define>
+			<h:selectOneListbox value=""></h:selectOneListbox>
+			<h:selectOneMenu value=""></h:selectOneMenu>
+		</s:decorate>
+		<s:decorate> 
+			<ui:define name="label">
+				<h:outputText value="Επώνυμο" />
+			</ui:define>
+			<h:inputText value="" size="18" maxlength="35"/>
+		</s:decorate>
+
+		<s:decorate template="/layout/doubleLineEdit.xhtml">
+			<ui:define name="label">
+				<h:outputText value="Όνομα" />
+			</ui:define>
+			<h:inputText value="" size="12" maxlength="25"/>
+		</s:decorate>
+
+		<s:decorate template="/layout/doubleLineEdit.xhtml">
+			<ui:define name="label">
+				<h:outputText value="Επώνυμο" />
+			</ui:define>
+			<h:inputText value="" size="18" maxlength="35"/>
+		</s:decorate>
+
+		<s:decorate template="/layout/doubleLineEdit.xhtml">
+			<ui:define name="label">
+				<h:outputText value="Όνομα" />
+			</ui:define>
+			<h:inputText value="" size="12" maxlength="25"/>
+		</s:decorate>
+
+		<s:decorate template="/layout/doubleLineEdit.xhtml">
+			<ui:define name="label">
+				<h:outputText value="Α.Δ.Τ" />
+			</ui:define>
+			<h:inputText value="" size="12" maxlength="12"/>
+		</s:decorate>
+		
+		<s:decorate template="/layout/doubleLineEdit.xhtml">
+			<ui:define name="label">
+				<h:outputText value="Εκδούσα Αρχή" />
+			</ui:define>
+			<h:inputText value="" size="12" maxlength="12"/>
+		</s:decorate>
+		
+		<s:decorate template="/layout/doubleLineEdit.xhtml">
+			<ui:define name="label">
+				<h:outputText value="ΑΦΜ" />
+			</ui:define>
+			<h:inputText value="" size="12" maxlength="12"/>
+		</s:decorate>
+		
+		<s:decorate template="/layout/doubleLineEdit.xhtml">
+			<ui:define name="label">
+				<h:outputText value="ΔΟΥ" />
+			</ui:define>
+			<h:inputText value="" size="12" maxlength="12"/>
+		</s:decorate>
+		
+		<s:decorate template="/layout/doubleLineEdit.xhtml">
+			<ui:define name="label">
+				<h:outputText value="Ημερομηνία Γεννήσεως" />
+			</ui:define>
+			<h:inputText value="" size="12" maxlength="12"/>
+		</s:decorate>
+		
+		
+		
+	</ui:define>
+</ui:composition>
+</html>
