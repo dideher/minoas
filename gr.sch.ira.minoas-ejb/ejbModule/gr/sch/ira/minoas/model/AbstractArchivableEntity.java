@@ -35,10 +35,8 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Version;
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
@@ -47,10 +45,7 @@ import javax.persistence.Version;
 @MappedSuperclass
 public abstract class AbstractArchivableEntity extends BaseModel {
 	
-	/**
-	 * Comment for <code>serialVersionUID</code>
-	 */
-	private static final long serialVersionUID = 1L;
+
 
 	/* We need to add a link to archives instances */
 	

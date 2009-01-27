@@ -16,7 +16,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 import javax.persistence.Version;
 
 /**
@@ -25,6 +24,11 @@ import javax.persistence.Version;
  */
 @MappedSuperclass
 public abstract class BaseModel implements Serializable {
+	
+	/**
+	 * Comment for <code>serialVersionUID</code>
+	 */
+	private static final long serialVersionUID = 1L;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="INSERTED_BY_ID", nullable=true)
@@ -44,28 +48,28 @@ public abstract class BaseModel implements Serializable {
 	/**
 	 * @return the insertedBy
 	 */
-	protected Principal getInsertedBy() {
+	public Principal getInsertedBy() {
 		return insertedBy;
 	}
 
 	/**
 	 * @param insertedBy the insertedBy to set
 	 */
-	protected void setInsertedBy(Principal insertedBy) {
+	public void setInsertedBy(Principal insertedBy) {
 		this.insertedBy = insertedBy;
 	}
 
 	/**
 	 * @return the insertedOn
 	 */
-	protected Date getInsertedOn() {
+	public Date getInsertedOn() {
 		return insertedOn;
 	}
 
 	/**
 	 * @param insertedOn the insertedOn to set
 	 */
-	protected void setInsertedOn(Date insertedOn) {
+	public void setInsertedOn(Date insertedOn) {
 		this.insertedOn = insertedOn;
 	}
 
