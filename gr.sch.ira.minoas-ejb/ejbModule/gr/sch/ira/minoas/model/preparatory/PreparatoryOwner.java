@@ -47,7 +47,7 @@ import gr.sch.ira.minoas.model.employee.Person;
  * @version $Id$
  */
 @Entity
-@Table(name="PREPARATORY_OWNER")
+@Table(name="PREP_OWNER")
 @Name("PreparatoryOwner")
 public class PreparatoryOwner extends Person {
 	

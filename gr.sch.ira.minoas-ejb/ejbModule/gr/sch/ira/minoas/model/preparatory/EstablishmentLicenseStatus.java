@@ -53,7 +53,7 @@ import gr.sch.ira.minoas.model.BaseModel;
  * @version $Id$
  */
 @Entity
-@Table(name = "PREPARATORY_TYPE")
+@Table(name = "PREP_LCS_STATUS_TYPE")
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public class EstablishmentLicenseStatus  extends BaseModel {
 

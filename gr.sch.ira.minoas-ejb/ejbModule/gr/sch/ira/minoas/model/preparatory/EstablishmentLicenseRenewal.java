@@ -51,7 +51,7 @@ import gr.sch.ira.minoas.model.core.SchoolYear;
  * @version $Id$
  */
 @Entity
-@Table(name="PREPARATORY_EST_LICENSE_RENEWAL")
+@Table(name="PREP_EST_LCS_RENEWAL")
 public class EstablishmentLicenseRenewal extends BaseModel {
 
 	@Id

@@ -225,10 +225,6 @@ public class Secondment extends BaseModel {
 		return id;
 	}
 
-	public Date getInsertedOn() {
-		return insertedOn;
-	}
-
 	public String getMinisterialOrder() {
 		return ministerialOrder;
 	}
@@ -333,10 +329,7 @@ public class Secondment extends BaseModel {
 		this.id = id;
 	}
 
-	public void setInsertedOn(Date insertedOn) {
-		this.insertedOn = insertedOn;
-	}
-
+	
 	public void setMinisterialOrder(String ministerialOrder) {
 		this.ministerialOrder = ministerialOrder;
 	}

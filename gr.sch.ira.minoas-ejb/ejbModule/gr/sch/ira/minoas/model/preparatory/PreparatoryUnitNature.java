@@ -53,10 +53,17 @@ import gr.sch.ira.minoas.model.BaseModel;
  * @version $Id$
  */
 @Entity
-@Table(name = "PREPARATORY_TYPE")
+@Table(name = "PRE_TYPE")
 @Name("preparatoryUnitType")
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public class PreparatoryUnitNature  extends BaseModel {
+
+	/**
+	 * 
+	 */
+	public PreparatoryUnitNature() {
+		super();
+	}
 
 	/**
 	 * @param type
@@ -76,7 +83,7 @@ public class PreparatoryUnitNature  extends BaseModel {
 	@Id
 	@Column(name = "ID")
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+	private Integer id;
 
 	@Basic
 	@Column(name = "TITLE", length = 64, nullable = false, unique = true)
@@ -108,14 +115,14 @@ public class PreparatoryUnitNature  extends BaseModel {
 	/**
 	 * @return the id
 	 */
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 
 	/**
 	 * @param id the id to set
 	 */
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

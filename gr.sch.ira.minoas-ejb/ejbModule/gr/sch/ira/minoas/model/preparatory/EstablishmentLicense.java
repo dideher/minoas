@@ -58,7 +58,7 @@ import gr.sch.ira.minoas.model.core.Seat;
  * @version $Id$
  */
 @Entity
-@Table(name="PREPARATORY_EST_LICENSE")
+@Table(name="PREP_EST_LCS")
 public class EstablishmentLicense extends BaseModel {
 	
 	@Id

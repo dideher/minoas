@@ -46,10 +46,17 @@ import org.jboss.seam.annotations.Name;
  * @version $Id$
  */
 @Entity
-@Table(name = "PREPARATORY_UNIT")
+@Table(name = "PREP_UNIT")
 @Name("preparatoryUnit")
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public class PreparatoryUnit extends Unit {
+
+	/**
+	 * 
+	 */
+	public PreparatoryUnit() {
+		super();
+	}
 
 	/**
 	 * Comment for <code>serialVersionUID</code>
@@ -67,18 +74,6 @@ public class PreparatoryUnit extends Unit {
 	private Address address;
 	
 
-	/**
-	 * @return the type
-	 */
-	public PreparatoryUnitNature getType() {
-		return type;
-	}
-
-	/**
-	 * @param type the type to set
-	 */
-	public void setType(PreparatoryUnitNature type) {
-		this.type = type;
-	}
+	
 
 }
