@@ -36,7 +36,7 @@ public class SecondmentAwareUnitSuggester extends BaseDatabaseAwareSeamComponent
 	@Transactional
 	public Collection<Unit> suggest(Object secondmemt_search_pattern) {
 		info("selected secondment type is #0", selectedSecondmentType);
-		return getMinoasDatabase().createQuery("SELECT u FROM Unit u WHERE LOWER(u.title) LIKE LOWER(:search_pattern)").setParameter("search_pattern", CoreUtils.getSearchPattern(String.valueOf(secondmemt_search_pattern))).getResultList();
+		return getEm().createQuery("SELECT u FROM Unit u WHERE LOWER(u.title) LIKE LOWER(:search_pattern)").setParameter("search_pattern", CoreUtils.getSearchPattern(String.valueOf(secondmemt_search_pattern))).getResultList();
 	}
 
 }

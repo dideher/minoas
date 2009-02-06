@@ -26,7 +26,7 @@ public class SecondmentTypeList extends BaseDatabaseAwareSeamComponent {
 	@Unwrap
 	public Collection<SecondmentType> unwrap() {
 		if(secondmentTypes==null) {
-			secondmentTypes = getMinoasDatabase().createQuery("SELECT s FROM SecondmentType s").getResultList();
+			secondmentTypes = getEm().createQuery("SELECT s FROM SecondmentType s").getResultList();
 		}
 		return secondmentTypes;
 	}

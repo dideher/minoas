@@ -1,7 +1,7 @@
 /*
  * 
  *
- * Copyright (c) 2007 FORTHnet, S.A. All Rights Reserved.
+ * Copyright (c) 2009 FORTHnet, S.A. All Rights Reserved.
  *
  *
  * This software is provided "AS IS," without a warranty of any kind. ALL
@@ -23,65 +23,24 @@
  * redistribute the Software for such purposes.
  */
 
-package gr.sch.ira.minoas.session.persistent;
+package gr.sch.ira.minoas.seam.components.entity;
 
-import java.io.Serializable;
-import java.lang.reflect.ParameterizedType;
-import java.util.Collection;
-
-import javax.persistence.EntityManager;
-
-import org.jboss.seam.annotations.In;
+import org.jboss.seam.framework.EntityHome;
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
  * @version $Id$
  */
-public abstract class GenericDAOImpl<T, ID extends Serializable> implements IGenericDAO<T, ID> {
+public abstract class MinoasEntityHome<E> extends EntityHome {
 
-	protected Collection<T> EMPTY_COLLECTION;
-	@In
-	protected EntityManager em;
-
-	protected EntityManager getEm() {
-		return em;
-	}
-
-	private Class<T> persistentClass;
-
+	public static final String PERSITESTENCE_CONTEXT_NAME = "em";
 	/**
-	 * 
+	 * @see org.jboss.seam.framework.EntityHome#getPersistenceContextName()
 	 */
-	@SuppressWarnings("unchecked")
-	protected GenericDAOImpl() {
-		super();
-		persistentClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-
+	@Override
+	protected String getPersistenceContextName() {
+		return PERSITESTENCE_CONTEXT_NAME;
 	}
-
-	/**
-	 * @param persistentClass
-	 */
-	protected GenericDAOImpl(Class<T> persistentClass) {
-		super();
-		this.persistentClass = persistentClass;
-	}
-
-	/**
-	 * @see gr.forthnet.openseas.persistent.dao.IGenericDAO#findByID(java.io.Serializable)
-	 */
-	public T findByID(ID id) {
-		return getEm().find(persistentClass, id);
-	}
-
-	/**
-	 * @see gr.sch.ira.minoas.session.persistent.IGenericDAO#persist(java.lang.Object)
-	 */
-	public T persist(T entityInstance) {
-		getEm().persist(entityInstance);
-		return entityInstance;
-	}
-
 	
 
 }

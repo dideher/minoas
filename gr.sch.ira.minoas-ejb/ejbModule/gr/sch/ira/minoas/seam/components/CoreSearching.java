@@ -76,7 +76,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 		info(
 				"fetching all secondments (not superseded) for school year '#0' with target unit '#1'.",
 				schoolyear, targetUnit);
-		Collection<Secondment> return_value = minoasDatabase
+		Collection<Secondment> return_value = em
 				.createQuery(
 						"SELECT s from Secondment s WHERE s.schoolYear=:schoolyear AND s.targetUnit=:targetunit AND s.supersededBy IS NULL ORDER BY s.insertedOn")
 				.setParameter("schoolyear", schoolyear).setParameter(
@@ -140,7 +140,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 	}
 
 	protected EntityManager getEntityManager() {
-		return this.minoasDatabase;
+		return this.em;
 	}
 
 	public List<School> searchShools(String school_search_pattern,
@@ -255,7 +255,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 	public Collection<Employment> getEmployeeEmployments(Person employee) {
 		List<Employment> result;
 		debug("trying to featch all  employments for employee '#0'", employee);
-		result = minoasDatabase
+		result = em
 				.createQuery(
 						"SELECT e from Employment e WHERE e.employee=:employee ORDER BY e.schoolYear.title")
 				.setParameter("employee", employee).getResultList();
@@ -271,7 +271,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 		debug(
 				"trying to featch all  employments for employee '#0' during school year '#1'.",
 				employee, schoolyear);
-		result = minoasDatabase
+		result = em
 				.createQuery(
 						"SELECT e from Employment e WHERE e.employee=:employee AND e.schoolYear=:schoolyear")
 				.setParameter("employee", employee).setParameter("schoolyear",
@@ -286,7 +286,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 	public Collection<Employment> getEmployeeActiveEmployments(Person employee) {
 		List<Employment> result;
 		debug("trying to featch all  employments for employee '#0'", employee);
-		result = minoasDatabase
+		result = em
 				.createQuery(
 						"SELECT e from Employment e WHERE e.employee=:employee AND e.active = TRUE")
 				.setParameter("employee", employee).getResultList();
@@ -300,7 +300,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 			Person employee, EmploymentType type) {
 		List<Employment> result;
 		debug("trying to featch all  employments for employee '#0'", employee);
-		result = minoasDatabase
+		result = em
 				.createQuery(
 						"SELECT e from Employment e WHERE e.employee=:employee AND e.type=:type ORDER BY e.schoolYear.title")
 				.setParameter("employee", employee).setParameter("type", type)
@@ -314,7 +314,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 	public Collection<Secondment> getEmployeeSecondments(Person employee) {
 		Collection<Secondment> result = null;
 		info("searching employee's '#0' secondments.");
-		result = minoasDatabase
+		result = em
 				.createQuery(
 						"SELECT s from Secondment s WHERE s.employee=:employee ORDER BY s.insertedOn")
 				.setParameter("employee", employee).getResultList();
@@ -334,7 +334,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 		try {
 			info("searching employee's '#0' active secondment.");
 			SchoolYear activeSchoolYear = getActiveSchoolYear();
-			result = (Secondment) minoasDatabase
+			result = (Secondment) em
 					.createQuery(
 							"SELECT s from Secondment s WHERE s.employee=:employee AND s.active=TRUE AND s.supersededBy IS NULL and s.schoolYear=:schoolYear")
 					.setParameter("employee", employee).setParameter(

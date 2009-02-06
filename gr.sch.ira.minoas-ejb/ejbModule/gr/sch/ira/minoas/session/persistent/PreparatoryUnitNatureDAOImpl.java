@@ -61,7 +61,7 @@ public class PreparatoryUnitNatureDAOImpl extends GenericDAOImpl<PreparatoryUnit
 	@SuppressWarnings("unchecked")
 	public Collection<PreparatoryUnitNature> findAll() {
 		try {
-		return getMinoasDatabase().createQuery("FROM PreparatoryUnitNature p ORDER BY (p.title)").getResultList();
+		return getEm().createQuery("FROM PreparatoryUnitNature p ORDER BY (p.title)").getResultList();
 		} catch (javax.persistence.NoResultException nre) {
 			return EMPTY_COLLECTION;
 		}
@@ -72,7 +72,7 @@ public class PreparatoryUnitNatureDAOImpl extends GenericDAOImpl<PreparatoryUnit
 	 */
 	public PreparatoryUnitNature findByNatureType(PreparatoryUnitNatureType natureType) {
 		try {
-			return (PreparatoryUnitNature) getMinoasDatabase().createQuery(
+			return (PreparatoryUnitNature) getEm().createQuery(
 					"FROM PreparatoryUnitNature p WHERE p.type=:type ORDER BY (p.title)").setParameter("type",
 					natureType).getSingleResult();
 		} catch (javax.persistence.NoResultException nre) {

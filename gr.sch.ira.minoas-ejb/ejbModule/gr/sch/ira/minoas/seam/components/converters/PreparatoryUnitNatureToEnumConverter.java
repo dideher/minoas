@@ -1,7 +1,7 @@
 /*
  * 
  *
- * Copyright (c) 2007 FORTHnet, S.A. All Rights Reserved.
+ * Copyright (c) 2009 FORTHnet, S.A. All Rights Reserved.
  *
  *
  * This software is provided "AS IS," without a warranty of any kind. ALL
@@ -23,65 +23,41 @@
  * redistribute the Software for such purposes.
  */
 
-package gr.sch.ira.minoas.session.persistent;
+package gr.sch.ira.minoas.seam.components.converters;
 
-import java.io.Serializable;
-import java.lang.reflect.ParameterizedType;
-import java.util.Collection;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 
-import javax.persistence.EntityManager;
-
-import org.jboss.seam.annotations.In;
+import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.annotations.faces.Converter;
+import org.jboss.seam.annotations.intercept.BypassInterceptors;
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
  * @version $Id$
  */
-public abstract class GenericDAOImpl<T, ID extends Serializable> implements IGenericDAO<T, ID> {
-
-	protected Collection<T> EMPTY_COLLECTION;
-	@In
-	protected EntityManager em;
-
-	protected EntityManager getEm() {
-		return em;
-	}
-
-	private Class<T> persistentClass;
+@Name("preparatoryUnitNatureToEnumConverter")
+@BypassInterceptors
+@Converter
+@Scope(ScopeType.STATELESS)
+public class PreparatoryUnitNatureToEnumConverter extends BaseConverter {
 
 	/**
-	 * 
+	 * @see javax.faces.convert.Converter#getAsObject(javax.faces.context.FacesContext, javax.faces.component.UIComponent, java.lang.String)
 	 */
-	@SuppressWarnings("unchecked")
-	protected GenericDAOImpl() {
-		super();
-		persistentClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-
+	public Object getAsObject(FacesContext arg0, UIComponent arg1, String arg2) {
+		System.err.println(arg2);
+		return null;
 	}
 
 	/**
-	 * @param persistentClass
+	 * @see javax.faces.convert.Converter#getAsString(javax.faces.context.FacesContext, javax.faces.component.UIComponent, java.lang.Object)
 	 */
-	protected GenericDAOImpl(Class<T> persistentClass) {
-		super();
-		this.persistentClass = persistentClass;
+	public String getAsString(FacesContext arg0, UIComponent arg1, Object arg2) {
+		System.err.println(arg2);
+		return null;
 	}
-
-	/**
-	 * @see gr.forthnet.openseas.persistent.dao.IGenericDAO#findByID(java.io.Serializable)
-	 */
-	public T findByID(ID id) {
-		return getEm().find(persistentClass, id);
-	}
-
-	/**
-	 * @see gr.sch.ira.minoas.session.persistent.IGenericDAO#persist(java.lang.Object)
-	 */
-	public T persist(T entityInstance) {
-		getEm().persist(entityInstance);
-		return entityInstance;
-	}
-
-	
 
 }

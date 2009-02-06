@@ -14,10 +14,10 @@ import org.jboss.seam.annotations.In;
 public abstract class BaseDatabaseAwareSeamComponent extends BaseSeamComponent {
 	
 	@In
-	protected EntityManager minoasDatabase;
+	protected EntityManager em;
 
-	protected EntityManager getMinoasDatabase() {
-		return minoasDatabase;
+	protected EntityManager getEm() {
+		return em;
 	}
 
 }

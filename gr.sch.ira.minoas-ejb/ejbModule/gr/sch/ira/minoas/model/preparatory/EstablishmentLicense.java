@@ -82,17 +82,17 @@ public class EstablishmentLicense extends BaseModel {
 	@JoinColumn(name="PREPARATORY_OWNER_ID", nullable=false)
 	private PreparatoryOwner owner;
 	
-	@ManyToOne
-	@JoinColumn(name="STATUS_ID", nullable=false)
-	private EstablishmentLicenseStatus status;
+	@Column(name="STATUS_TYPE", nullable=false)
+	@Enumerated(EnumType.STRING)
+	private EstablishmentLicenseStatusType status;
 	
 	@ManyToMany(fetch=FetchType.LAZY)
 	@JoinTable(name="PREPARATORY_EST_LICENSE_LANGUAGES")
 	private Set<TeachingLanguage> teachingLanguages = new HashSet<TeachingLanguage>();
 	
-	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="TYPE_ID", nullable=false)
-	private PreparatoryUnitNature type;
+	@Enumerated(EnumType.STRING)
+	@Column(name="UNIT_TYPE", nullable=false)
+	private PreparatoryUnitNatureType type;
 	
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="license", cascade= { CascadeType.PERSIST, CascadeType.MERGE})
 	private Set<EstablishmentLicenseRenewal> renewals = new HashSet<EstablishmentLicenseRenewal>();
@@ -134,6 +134,132 @@ public class EstablishmentLicense extends BaseModel {
 	 */
 	public void setTeachingLanguages(Set<TeachingLanguage> teachingLanguages) {
 		this.teachingLanguages = teachingLanguages;
+	}
+
+	/**
+	 * @return the schoolYear
+	 */
+	public SchoolYear getSchoolYear() {
+		return schoolYear;
+	}
+
+	/**
+	 * @param schoolYear the schoolYear to set
+	 */
+	public void setSchoolYear(SchoolYear schoolYear) {
+		this.schoolYear = schoolYear;
+	}
+
+	/**
+	 * @return the requestDate
+	 */
+	public Date getRequestDate() {
+		return requestDate;
+	}
+
+	/**
+	 * @param requestDate the requestDate to set
+	 */
+	public void setRequestDate(Date requestDate) {
+		this.requestDate = requestDate;
+	}
+
+	/**
+	 * @return the requestJudgmentDate
+	 */
+	public Date getRequestJudgmentDate() {
+		return requestJudgmentDate;
+	}
+
+	/**
+	 * @param requestJudgmentDate the requestJudgmentDate to set
+	 */
+	public void setRequestJudgmentDate(Date requestJudgmentDate) {
+		this.requestJudgmentDate = requestJudgmentDate;
+	}
+
+	/**
+	 * @return the requestJudgmentNumber
+	 */
+	public Integer getRequestJudgmentNumber() {
+		return requestJudgmentNumber;
+	}
+
+	/**
+	 * @param requestJudgmentNumber the requestJudgmentNumber to set
+	 */
+	public void setRequestJudgmentNumber(Integer requestJudgmentNumber) {
+		this.requestJudgmentNumber = requestJudgmentNumber;
+	}
+
+	/**
+	 * @return the requestProtocol
+	 */
+	public Integer getRequestProtocol() {
+		return requestProtocol;
+	}
+
+	/**
+	 * @param requestProtocol the requestProtocol to set
+	 */
+	public void setRequestProtocol(Integer requestProtocol) {
+		this.requestProtocol = requestProtocol;
+	}
+
+	/**
+	 * @return the nature
+	 */
+	public PreparatoryUnitNature getNature() {
+		return nature;
+	}
+
+	/**
+	 * @param nature the nature to set
+	 */
+	public void setNature(PreparatoryUnitNature nature) {
+		this.nature = nature;
+	}
+
+	/**
+	 * @return the type
+	 */
+	public PreparatoryUnitNatureType getType() {
+		return type;
+	}
+
+	/**
+	 * @param type the type to set
+	 */
+	public void setType(PreparatoryUnitNatureType type) {
+		this.type = type;
+	}
+
+	/**
+	 * @return the unit
+	 */
+	public PreparatoryUnit getUnit() {
+		return unit;
+	}
+
+	/**
+	 * @param unit the unit to set
+	 */
+	public void setUnit(PreparatoryUnit unit) {
+		this.unit = unit;
+	}
+
+	/**
+	 * @return the status
+	 */
+	public EstablishmentLicenseStatusType getStatus() {
+		return status;
+	}
+
+	/**
+	 * @param status the status to set
+	 */
+	public void setStatus(EstablishmentLicenseStatusType status) {
+		this.status = status;
 	}
 	
 	

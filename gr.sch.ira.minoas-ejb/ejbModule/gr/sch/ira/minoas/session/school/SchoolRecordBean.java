@@ -190,8 +190,8 @@ public class SchoolRecordBean extends BaseStatefulSeamComponentImpl implements I
 
 	public String selectDeputyEmployment() {
 		if(getSelectedSchoolDeputyEmployment()!=null) {
-			setActiveEmployment(getMinoasDatabase().merge(getSelectedSchoolDeputyEmployment()));
-			setActiveEmployee(getMinoasDatabase().merge(getSelectedSchoolDeputyEmployment().getEmployee()));
+			setActiveEmployment(getEm().merge(getSelectedSchoolDeputyEmployment()));
+			setActiveEmployee(getEm().merge(getSelectedSchoolDeputyEmployment().getEmployee()));
 			info("selected deputy employment '#0'.", getSelectedSchoolDeputyEmployment());
 			return FAILURE_OUTCOME;
 		}
@@ -200,8 +200,8 @@ public class SchoolRecordBean extends BaseStatefulSeamComponentImpl implements I
 
 	public String selectRegularEmployment() {
 		if(getSelectedSchoolRegularEmployment()!=null) {
-			setActiveEmployment(getMinoasDatabase().merge(getSelectedSchoolRegularEmployment()));
-			setActiveEmployee(getMinoasDatabase().merge(getSelectedSchoolRegularEmployment().getEmployee()));
+			setActiveEmployment(getEm().merge(getSelectedSchoolRegularEmployment()));
+			setActiveEmployee(getEm().merge(getSelectedSchoolRegularEmployment().getEmployee()));
 			info("selected regular employment '#0'.", getSelectedSchoolRegularEmployment());
 			return FAILURE_OUTCOME;
 		}
@@ -210,7 +210,7 @@ public class SchoolRecordBean extends BaseStatefulSeamComponentImpl implements I
 
 	public String selectSecondment() {
 		if(getSelectedSchoolSecondment()!=null) {
-			setActiveEmployee(getMinoasDatabase().merge(getSelectedSchoolSecondment().getEmployee()));
+			setActiveEmployee(getEm().merge(getSelectedSchoolSecondment().getEmployee()));
 			info("selected secondment  '#0'.", getSelectedSchoolSecondment());
 			return SUCCESS_OUTCOME;
 		}

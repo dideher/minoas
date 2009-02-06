@@ -147,7 +147,7 @@ public class EmployeeSearchBean extends BaseStatefulSeamComponentImpl implements
 		if(isNonEmpty(getEmployeeVATNumberFilter())) {
 			info("searching for employee with VAT Number '#0'.",
 					getEmployeeVATNumberFilter());
-			employees = minoasDatabase.createQuery(
+			employees = em.createQuery(
 					"SELECT e FROM Employee e WHERE e.vatNumber=:vat_number")
 					.setParameter("vat_number", getEmployeeVATNumberFilter())
 					.getResultList();
@@ -158,7 +158,7 @@ public class EmployeeSearchBean extends BaseStatefulSeamComponentImpl implements
 		if(isNonEmpty(getEmployeeRegistryIDFilter())) {
 			info("searching for employee with registry ID '#0'.",
 					getEmployeeRegistryIDFilter());
-			employees = minoasDatabase.createQuery(
+			employees = em.createQuery(
 					"SELECT e FROM Employee e WHERE e.registryID=:registry_id")
 					.setParameter("registry_id", getEmployeeRegistryIDFilter())
 					.getResultList();
@@ -179,7 +179,7 @@ public class EmployeeSearchBean extends BaseStatefulSeamComponentImpl implements
 					.append("AND e.lastSpecialization=:specialization_filter ");
 		}
 		sb.append("ORDER BY e.lastName ASC, e.firstName ASC");
-		Query q = minoasDatabase
+		Query q = em
 				.createQuery(sb.toString())
 				.setParameter(
 						"lastName",

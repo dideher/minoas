@@ -27,6 +27,7 @@ package gr.sch.ira.minoas.seam.components.startup;
 
 import gr.sch.ira.minoas.model.preparatory.PreparatoryUnitNature;
 import gr.sch.ira.minoas.model.preparatory.PreparatoryUnitNatureType;
+import gr.sch.ira.minoas.seam.components.entity.PreparatoryUnitNatureHome;
 import gr.sch.ira.minoas.session.persistent.IPreparatoryUnitNatureDAO;
 
 import javax.ejb.EJB;
@@ -56,19 +57,27 @@ public class PreparatoryTypeStartup {
 	private Log log;
 
 	@In
-	protected EntityManager minoasDatabase;
+	protected EntityManager em;
 
 	@In(create = true)
 	protected IPreparatoryUnitNatureDAO preparatoryUnitNatureDAO;
 
+	@In(create=true)
+	protected PreparatoryUnitNatureHome preparatoryUnitNatureHome;
+	
+	
 	protected EntityManager getMinoasDatabase() {
-		return minoasDatabase;
+		return em;
 	}
 
 	@Create
 	@Transactional(TransactionPropagationType.REQUIRED)
 	public void init() {
-
+		System.err.println("******************************************************************************");
+		System.err.println(preparatoryUnitNatureHome);
+		if(preparatoryUnitNatureHome!=null) {
+			
+		}
 		if (preparatoryUnitNatureDAO.findByNatureType(PreparatoryUnitNatureType.LANGUAGE_CENTER) == null)
 			preparatoryUnitNatureDAO.persist(new PreparatoryUnitNature(PreparatoryUnitNatureType.LANGUAGE_CENTER,
 					"Κέντρο Ξένων Γλωσσών"));
