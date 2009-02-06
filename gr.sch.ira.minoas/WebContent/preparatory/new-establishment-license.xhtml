@@ -13,20 +13,50 @@
 
 <ui:composition template="/layout/simple-beauty-template.xhtml">
 	<ui:define name="body">
-
+		<h:form id="establishmentLicenseForm">
+		<rich:panel>
+		<f:facet name="header">
+			Αίτηση Άδειας Ιδρύσεως Φροντιστηρίου
+		</f:facet>
+		<h:panelGrid columns="3">
 		<s:decorate template="/layout/doubleLineEdit.xhtml">
 			<ui:define name="label">
-				<h:outputText value="Επώνυμο" />
+				<h:outputText value="Ημερομηνία Αίτησης" />
 			</ui:define>
-			<h:selectOneListbox value=""></h:selectOneListbox>
-			<h:selectOneMenu value=""></h:selectOneMenu>
+			<rich:calendar id="requestDate" datePattern="dd/MM/yyyy" value="#{establishmentLicense.requestDate}">
+			</rich:calendar>
 		</s:decorate>
+		<s:decorate template="/layout/doubleLineEdit.xhtml">
+			<ui:define name="label">
+				<h:outputText value="Αριθμός Πρωτ" />
+			</ui:define>
+			<h:inputText value="#{establishmentLicense.requestProtocol}" size="5" maxlength="5"/>
+		</s:decorate>
+		<s:decorate template="/layout/doubleLineEdit.xhtml">
+			<ui:define name="label">
+				<h:outputText value="Η Αίτηση Αφορά" />
+			</ui:define>
+			<h:selectOneMenu id="nature" value="#{establishmentLicense.nature}" converter="preparatoryUnitNatureToEnumConverter">
+				<s:selectItems var="_preparatoryUnitNature" value="#{preparatoryUnitNatures}" label="#{_preparatoryUnitNature.title}" />
+				
+				<s:convertEntity/>
+			</h:selectOneMenu>
+		</s:decorate>
+		
+		</h:panelGrid>
+		<rich:panel>
+			<f:facet name="header">
+				<h:outputText value="Στοιχεία Κατόχου ... " />
+			</f:facet>
+		<h:panelGrid columns="4">
 		<s:decorate> 
 			<ui:define name="label">
 				<h:outputText value="Επώνυμο" />
 			</ui:define>
 			<h:inputText value="" size="18" maxlength="35"/>
 		</s:decorate>
+		
+		
 
 		<s:decorate template="/layout/doubleLineEdit.xhtml">
 			<ui:define name="label">
@@ -83,6 +113,16 @@
 			</ui:define>
 			<h:inputText value="" size="12" maxlength="12"/>
 		</s:decorate>
+		
+		</h:panelGrid>
+		</rich:panel>
+		</rich:panel>
+		<div class="actionButtons">
+<h:commandButton id="save" value="Save"
+action="#{establishmentLicenseHome.persist}"
+rendered="#{!establishmentLicenseHome.managed}" />
+</div>
+		</h:form>
 		
 		
 		
