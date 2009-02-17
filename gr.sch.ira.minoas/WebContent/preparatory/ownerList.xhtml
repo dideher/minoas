@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<ui:composition template="/layout/simple-beauty-template.xhtml">
+	<ui:define name="body">
+		<h:form id="preparatoryOwnersList">
+		<rich:panel>
+		<f:facet name="header">
+			Λίστα Διαθέσιμων Ιδιοκτητών Φροντιστηρίου
+		</f:facet>
+		<h:outputText value="from is #{from}" />
+		<rich:dataTable var="_owner" value="#{preparatoryOwnersList.resultList}" rendered="#{not empty preparatoryOwnersList.resultList}">
+			<h:column>
+				<f:facet name="header">
+					Επώνυμο
+				</f:facet>
+				#{_owner.lastName}
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					Όνομα
+				</f:facet>
+				#{_owner.firstName}
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					Όνομα Πατρός
+				</f:facet>
+				#{_owner.fatherName}
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					Ημ/νία Γεννήσεως
+				</f:facet>
+				#{_owner.dateOfBirth}
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					Αριθμός Α/Τ
+				</f:facet>
+				#{_owner.idNumber}
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					Ενέργεια
+				</f:facet>
+				<s:link view="#{empty from ? '/preparatory/preparatoryOwner.xhtml' : from}.xhtml}">
+					<h:outputText value="#{empty from ? Προβολή : Επιλογή}" /> 
+					<f:param name="preparatoryOwnerID" value="#{_owner.id}"/>
+				</s:link>
+			</h:column>
+		</rich:dataTable>		
+		</rich:panel>
+		</h:form>
+		
+		
+		
+	</ui:define>
+</ui:composition>
+</html>

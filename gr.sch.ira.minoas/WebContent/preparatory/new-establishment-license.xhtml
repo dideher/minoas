@@ -44,78 +44,17 @@
 		</s:decorate>
 		
 		</h:panelGrid>
-		<rich:panel>
-			<f:facet name="header">
-				<h:outputText value="Στοιχεία Κατόχου ... " />
-			</f:facet>
-		<h:panelGrid columns="4">
-		<s:decorate> 
-			<ui:define name="label">
-				<h:outputText value="Επώνυμο" />
-			</ui:define>
-			<h:inputText value="" size="18" maxlength="35"/>
-		</s:decorate>
 		
-		
-
-		<s:decorate template="/layout/doubleLineEdit.xhtml">
-			<ui:define name="label">
-				<h:outputText value="Όνομα" />
-			</ui:define>
-			<h:inputText value="" size="12" maxlength="25"/>
-		</s:decorate>
-
-		<s:decorate template="/layout/doubleLineEdit.xhtml">
-			<ui:define name="label">
-				<h:outputText value="Επώνυμο" />
-			</ui:define>
-			<h:inputText value="" size="18" maxlength="35"/>
-		</s:decorate>
-
-		<s:decorate template="/layout/doubleLineEdit.xhtml">
-			<ui:define name="label">
-				<h:outputText value="Όνομα" />
-			</ui:define>
-			<h:inputText value="" size="12" maxlength="25"/>
-		</s:decorate>
-
-		<s:decorate template="/layout/doubleLineEdit.xhtml">
-			<ui:define name="label">
-				<h:outputText value="Α.Δ.Τ" />
-			</ui:define>
-			<h:inputText value="" size="12" maxlength="12"/>
-		</s:decorate>
-		
-		<s:decorate template="/layout/doubleLineEdit.xhtml">
-			<ui:define name="label">
-				<h:outputText value="Εκδούσα Αρχή" />
-			</ui:define>
-			<h:inputText value="" size="12" maxlength="12"/>
-		</s:decorate>
-		
-		<s:decorate template="/layout/doubleLineEdit.xhtml">
-			<ui:define name="label">
-				<h:outputText value="ΑΦΜ" />
-			</ui:define>
-			<h:inputText value="" size="12" maxlength="12"/>
-		</s:decorate>
-		
-		<s:decorate template="/layout/doubleLineEdit.xhtml">
-			<ui:define name="label">
-				<h:outputText value="ΔΟΥ" />
-			</ui:define>
-			<h:inputText value="" size="12" maxlength="12"/>
-		</s:decorate>
-		
-		<s:decorate template="/layout/doubleLineEdit.xhtml">
-			<ui:define name="label">
-				<h:outputText value="Ημερομηνία Γεννήσεως" />
-			</ui:define>
-			<h:inputText value="" size="12" maxlength="12"/>
-		</s:decorate>
-		
-		</h:panelGrid>
-		</rich:panel>
+		<rich:tabPanel>
+			<rich:tab label="Κάτοχος Φροντιστηρίου">
+				<h:outputText value="Δεν έχει οριστεί ο κάτοχος του Φροντιστηρίου ...." rendered="#{establishmentLicense.owner == null}"/>
+				<rich:dataTable>
+				</rich:dataTable>
+			</rich:tab>
+		</rich:tabPanel>
+		<s:button value="Επιλογή Κατόχου ...." view="/preparatory/ownerList.xhtml">
+			<f:param name="from" value="new-establishment-license" />
+		</s:button>
 		</rich:panel>
 		<div class="actionButtons">
 <h:commandButton id="save" value="Save"
