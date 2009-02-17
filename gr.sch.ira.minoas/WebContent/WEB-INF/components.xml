@@ -12,6 +12,7 @@
             xmlns:theme="http://jboss.com/products/seam/theme"
             xmlns:transaction="http://jboss.com/products/seam/transaction"
             xmlns:document="http://jboss.com/products/seam/document"
+            xmlns:framework="http://jboss.com/products/seam/framework"
             xsi:schemaLocation=
                 "http://jboss.com/products/seam/core http://jboss.com/products/seam/core-2.1.xsd 
                  http://jboss.com/products/seam/persistence http://jboss.com/products/seam/persistence-2.1.xsd 
@@ -24,7 +25,8 @@
                  http://jboss.com/products/seam/web http://jboss.com/products/seam/web-2.1.xsd
                  http://jboss.com/products/seam/transaction http://jboss.com/products/seam/transaction-2.1.xsd
                  http://jboss.com/products/seam/document http://jboss.com/products/seam/document-2.1.xsd
-                 http://jboss.com/products/seam/ui http://jboss.com/products/seam/ui-2.1.xsd">
+                 http://jboss.com/products/seam/ui http://jboss.com/products/seam/ui-2.1.xsd 
+                 http://jboss.com/products/seam/ui http://jboss.com/products/seam/framework-2.1.xsd">
                 
 
    <core:init debug="true" jndi-pattern="@jndiPattern@" transaction-management-enabled="true"/>
@@ -35,11 +37,13 @@
                  conversation-id-parameter="cid"
                  parent-conversation-id-parameter="pid"/>
     
-   <persistence:managed-persistence-context name="em" 
+   <persistence:managed-persistence-context name="entityManager"  
                                   auto-create="true"
                    persistence-unit-jndi-name="java:/EntityManagerFactories/minoasDatabase"/>
                    
-   <ui:jpa-entity-loader entityManager="#{em}"/>
+   <ui:jpa-entity-loader entity-manager="#{entityManager}" />
+   
+   
                    
    <transaction:ejb-transaction/>
      
@@ -71,6 +75,8 @@
    <component name="org.jboss.seam.persistence.persistenceProvider"   class="org.jboss.seam.persistence.HibernatePersistenceProvider"/>
     
    <mail:mail-session host="localhost" port="2525" username="test" password="test" />
+   
+   <framework:entity-query name="preparatoryOwnersList" ejbql="SELECT o FROM PreparatoryOwner o"  scope="conversation" max-results = "15" />
         
    <!-- For use with jBPM pageflow or process management -->
    
