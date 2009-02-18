@@ -41,10 +41,10 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements IGen
 
 	protected Collection<T> EMPTY_COLLECTION;
 	@In
-	protected EntityManager em;
+	protected EntityManager entityManager;
 
-	protected EntityManager getEm() {
-		return em;
+	protected EntityManager getEntityManager() {
+		return entityManager;
 	}
 
 	private Class<T> persistentClass;
@@ -71,14 +71,14 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements IGen
 	 * @see gr.forthnet.openseas.persistent.dao.IGenericDAO#findByID(java.io.Serializable)
 	 */
 	public T findByID(ID id) {
-		return getEm().find(persistentClass, id);
+		return getEntityManager().find(persistentClass, id);
 	}
 
 	/**
 	 * @see gr.sch.ira.minoas.session.persistent.IGenericDAO#persist(java.lang.Object)
 	 */
 	public T persist(T entityInstance) {
-		getEm().persist(entityInstance);
+		getEntityManager().persist(entityInstance);
 		return entityInstance;
 	}
 

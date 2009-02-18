@@ -25,21 +25,52 @@
 
 package gr.sch.ira.minoas.seam.components.entity;
 
+import java.lang.reflect.ParameterizedType;
+
+import org.jboss.seam.annotations.In;
 import org.jboss.seam.framework.EntityHome;
+import org.jboss.seam.security.Identity;
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
  * @version $Id$
  */
 public abstract class MinoasEntityHome<E> extends EntityHome {
+	
+	private Class<E> persistentClass;
 
-	public static final String PERSITESTENCE_CONTEXT_NAME = "em";
+	public static final String PERSITESTENCE_CONTEXT_NAME = "entityManager";
+	
+	@In(required=false)
+	private Identity identity;
 	/**
 	 * @see org.jboss.seam.framework.EntityHome#getPersistenceContextName()
 	 */
 	@Override
 	protected String getPersistenceContextName() {
 		return PERSITESTENCE_CONTEXT_NAME;
+	}
+	
+	public E getDefinedInstace() {
+		if(isIdDefined()) {
+			return getEntityManager().find(persistentClass,getId());
+		} else return null;
+	}
+
+	/**
+	 * @see org.jboss.seam.framework.EntityHome#create()
+	 */
+	@Override
+	public void create() {
+		super.create();
+		persistentClass = (Class<E>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+	}
+
+	/**
+	 * @return the identity
+	 */
+	protected Identity getIdentity() {
+		return identity;
 	}
 	
 

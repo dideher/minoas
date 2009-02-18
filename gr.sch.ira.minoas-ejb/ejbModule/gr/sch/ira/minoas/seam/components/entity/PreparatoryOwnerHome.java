@@ -23,59 +23,50 @@
  * redistribute the Software for such purposes.
  */
 
-package gr.sch.ira.minoas.model.preparatory;
+package gr.sch.ira.minoas.seam.components.entity;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Date;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
+import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Transactional;
 
-import gr.sch.ira.minoas.model.AbstractArchivableEntity;
-import gr.sch.ira.minoas.model.core.Specialization;
-import gr.sch.ira.minoas.model.employee.Person;
+import gr.sch.ira.minoas.model.preparatory.EstablishmentLicense;
+import gr.sch.ira.minoas.model.preparatory.PreparatoryOwner;
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
  * @version $Id$
  */
-@Entity
-@Table(name="PREP_OWNER")
-@Name("PreparatoryOwner")
-public class PreparatoryOwner extends Person {
+@Name(value="preparatoryOwnerHome")
+public class PreparatoryOwnerHome extends MinoasEntityHome<PreparatoryOwner> {
 	
-	/**
-	 * Comment for <code>serialVersionUID</code>
-	 */
-	private static final long serialVersionUID = 1L;
-
-	@OneToMany(fetch=FetchType.LAZY, mappedBy="owner", cascade= { CascadeType.PERSIST, CascadeType.MERGE })
-	private Set<PreparatoryUnit> owningUnits = new HashSet<PreparatoryUnit>();
 	
-	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="SPECIALIZATION_ID", nullable=true)
-	private Specialization specialization;
-
-	/**
-	 * @return the specialization
-	 */
-	public Specialization getSpecialization() {
-		return specialization;
+	@Factory(value="preparatoryOwner")
+	public PreparatoryOwner getPreparatoryOwner() {
+		return (PreparatoryOwner)getInstance();
 	}
 
 	/**
-	 * @param specialization the specialization to set
+	 * @see org.jboss.seam.framework.EntityHome#persist()
+	 * 
 	 */
-	public void setSpecialization(Specialization specialization) {
-		this.specialization = specialization;
+	@Override
+	@Transactional
+	public String persist() {
+		PreparatoryOwner owner = getPreparatoryOwner();
+		owner.setInsertedOn(new Date(System.currentTimeMillis()));
+		return super.persist();
 	}
-	
-	
+
+	/**
+	 * @see org.jboss.seam.framework.EntityHome#update()
+	 */
+	@Override
+	@Transactional
+	public String update() {
+		PreparatoryOwner owner = getPreparatoryOwner();
+		owner.setModifiedOn(new Date(System.currentTimeMillis()));
+		return super.update();
+	}
 }

@@ -23,7 +23,7 @@ public class SpecializationSuggester extends BaseSuggester{
 	@SuppressWarnings("unchecked")
 	@Transactional
 	public Collection<Specialization> suggest(Object specialization_search_pattern) {
-		return getEm()
+		return getEntityManager()
 				.createQuery(
 						"SELECT s from Specialization s WHERE lower(s.id) LIKE LOWER(:search_pattern) OR LOWER(s.title) LIKE LOWER(:search_pattern)")
 				.setParameter("search_pattern", CoreUtils.getSearchPattern(String.valueOf(specialization_search_pattern))).getResultList();

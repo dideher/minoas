@@ -19,7 +19,7 @@ public abstract class DatabaseAwareBaseConverter extends BaseConverter {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public static final String ENTITY_MANAGER_SEAM_COMPONENT_NAME = "em";
+	public static final String ENTITY_MANAGER_SEAM_COMPONENT_NAME = "entityManager";
 	
 	protected EntityManager getMinoasDatabase() {
 		return (EntityManager)Component.getInstance(ENTITY_MANAGER_SEAM_COMPONENT_NAME);

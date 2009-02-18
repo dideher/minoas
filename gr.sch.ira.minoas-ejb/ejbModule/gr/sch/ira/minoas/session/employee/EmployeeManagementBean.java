@@ -85,7 +85,7 @@ public class EmployeeManagementBean extends EmployeeAwareSeamComponent implement
 	}
 
 	public String prepareNewSecondment() {
-		Employee employee = getEm().merge(getActiveEmployee());
+		Employee employee = getEntityManager().merge(getActiveEmployee());
 		/*
 		 * A secondment for the given employee can be created only if the employ
 		 * is regular or deputy (very rare)
@@ -130,8 +130,8 @@ public class EmployeeManagementBean extends EmployeeAwareSeamComponent implement
 		Employment current_employment = employee.getCurrentEmployment();
 		if (current_employment != null) {
 			newSecondment.setAffectedEmployment(current_employment);
-			newSecondment.setSourcePYSDE(getEm().merge(current_employment.getSchool().getPysde()));
-			newSecondment.setSourceUnit(getEm().merge(current_employment.getSchool()));
+			newSecondment.setSourcePYSDE(getEntityManager().merge(current_employment.getSchool().getPysde()));
+			newSecondment.setSourceUnit(getEntityManager().merge(current_employment.getSchool()));
 			/*
 			 * adjust working hours by retrieving the mandatory working hours
 			 * from the affected employment. When copying do not copy any
@@ -154,7 +154,7 @@ public class EmployeeManagementBean extends EmployeeAwareSeamComponent implement
 	 */
 	@End
 	public String saveSecondment() {
-		Person employee = getEm().merge(getActiveEmployee());
+		Person employee = getEntityManager().merge(getActiveEmployee());
 		info("trying to save new seconment '#0' for employee '#1' during school year '#2'.", newSecondment, employee, getActiveSchoolYear());
 		
 		/* if the employee has already an secondment, then
@@ -162,7 +162,7 @@ public class EmployeeManagementBean extends EmployeeAwareSeamComponent implement
 		 * secondment as the successor of the old secondment.
 		 */
 		if (getEmployeeActiveSecondment() != null) {
-			Secondment activeSecondment = getEm().merge(getEmployeeActiveSecondment());
+			Secondment activeSecondment = getEntityManager().merge(getEmployeeActiveSecondment());
 			activeSecondment.setActive(Boolean.FALSE);
 			activeSecondment.setSupersededBy(newSecondment);
 		}
@@ -172,7 +172,7 @@ public class EmployeeManagementBean extends EmployeeAwareSeamComponent implement
 		}
 		newSecondment.setInsertedOn(new Date(System.currentTimeMillis()));
 		setEmployeeActiveSecondment(newSecondment);
-		getEm().persist(newSecondment);
+		getEntityManager().persist(newSecondment);
 		
 		/* if the secondment affects an employment (ie the employee had
 		 * a current employment when the secondment was created) then 
@@ -182,7 +182,7 @@ public class EmployeeManagementBean extends EmployeeAwareSeamComponent implement
 		if(employment!=null) {
 			employment.setSecondment(newSecondment);
 		}
-		getEm().flush();
+		getEntityManager().flush();
 		return SUCCESS_OUTCOME;
 	}
 
@@ -204,7 +204,7 @@ public class EmployeeManagementBean extends EmployeeAwareSeamComponent implement
 	 */
 	@End
 	public String cancelNewSecondment() {
-		getEm().flush();
+		getEntityManager().flush();
 		return SUCCESS_OUTCOME;
 	}
 

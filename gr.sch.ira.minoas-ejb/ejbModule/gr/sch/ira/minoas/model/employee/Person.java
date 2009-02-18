@@ -177,6 +177,9 @@ public abstract class Person extends AbstractArchivableEntity {
 		return man;
 	}
 
+	public Boolean getMan() {
+		return isMan();
+	}
 	/**
 	 * @param address the address to set
 	 */
@@ -278,14 +281,14 @@ public abstract class Person extends AbstractArchivableEntity {
 	/**
 	 * @return the idNumberAuthority
 	 */
-	protected String getIdNumberAuthority() {
+	public String getIdNumberAuthority() {
 		return idNumberAuthority;
 	}
 
 	/**
 	 * @param idNumberAuthority the idNumberAuthority to set
 	 */
-	protected void setIdNumberAuthority(String idNumberAuthority) {
+	public void setIdNumberAuthority(String idNumberAuthority) {
 		this.idNumberAuthority = idNumberAuthority;
 	}
 

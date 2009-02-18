@@ -55,7 +55,7 @@ public abstract class AbstractArchivableEntity extends BaseModel {
 	
 	@Basic(fetch=FetchType.LAZY)
 	@Temporal(TemporalType.DATE)
-	@Column(name="MODIFIED_ON", nullable=false, updatable=false)
+	@Column(name="MODIFIED_ON", nullable=true, updatable=false)
 	private Date modifiedOn;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
@@ -70,42 +70,42 @@ public abstract class AbstractArchivableEntity extends BaseModel {
 	/**
 	 * @return the modifiedOn
 	 */
-	protected Date getModifiedOn() {
+	public Date getModifiedOn() {
 		return modifiedOn;
 	}
 
 	/**
 	 * @param modifiedOn the modifiedOn to set
 	 */
-	protected void setModifiedOn(Date modifiedOn) {
+	public void setModifiedOn(Date modifiedOn) {
 		this.modifiedOn = modifiedOn;
 	}
 
 	/**
 	 * @return the modifiedBy
 	 */
-	protected Principal getModifiedBy() {
+	public Principal getModifiedBy() {
 		return modifiedBy;
 	}
 
 	/**
 	 * @param modifiedBy the modifiedBy to set
 	 */
-	protected void setModifiedBy(Principal modifiedBy) {
+	public void setModifiedBy(Principal modifiedBy) {
 		this.modifiedBy = modifiedBy;
 	}
 
 	/**
 	 * @return the modificationReason
 	 */
-	protected String getModificationReason() {
+	public String getModificationReason() {
 		return modificationReason;
 	}
 
 	/**
 	 * @param modificationReason the modificationReason to set
 	 */
-	protected void setModificationReason(String modificationReason) {
+	public void setModificationReason(String modificationReason) {
 		this.modificationReason = modificationReason;
 	}
 }

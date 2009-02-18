@@ -25,11 +25,19 @@
 
 package gr.sch.ira.minoas.seam.components.entity;
 
+import java.util.Date;
+
+import javax.persistence.PrePersist;
+
 import org.jboss.seam.annotations.Factory;
+import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.framework.EntityHome;
 
+import gr.sch.ira.minoas.model.core.SchoolYear;
 import gr.sch.ira.minoas.model.preparatory.EstablishmentLicense;
+import gr.sch.ira.minoas.model.preparatory.EstablishmentLicenseStatusType;
+import gr.sch.ira.minoas.model.preparatory.PreparatoryOwner;
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
@@ -42,10 +50,44 @@ public class EstablishmentLicenseHome extends MinoasEntityHome<EstablishmentLice
 	 * Comment for <code>serialVersionUID</code>
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	@In(required=true)
+	private SchoolYear activeSchoolYear;
+	
+	@In(create = true)
+	private PreparatoryOwnerHome preparatoryOwnerHome;
 
-	@Factory(value="establishmentLicense")
-	public EstablishmentLicense getEstablishmentLicense() {
-		return (EstablishmentLicense)getInstance();
+	
+
+	/**
+	 * @see org.jboss.seam.framework.Home#createInstance()
+	 */
+	@Override
+	protected EstablishmentLicense createInstance() {
+		EstablishmentLicense instance = (EstablishmentLicense)super.createInstance();
+		instance.setStatus(EstablishmentLicenseStatusType.PENDING);
+		instance.setRequestDate(new Date(System.currentTimeMillis()));
+		instance.setSchoolYear(activeSchoolYear);
+		return instance;
 	}
+	
+	public void wire() {
+		PreparatoryOwner owner = preparatoryOwnerHome.getDefinedInstace();
+		if (owner!=null) {
+			getInstance().setOwner(owner);
+		}
+	}
+
+
+	/**
+	 * @see org.jboss.seam.framework.Home#getInstance()
+	 */
+	@Override
+	@Factory(value="establishmentLicense")
+	public EstablishmentLicense getInstance() {
+		return (EstablishmentLicense)super.getInstance();
+	}
+	
+	
 
 }

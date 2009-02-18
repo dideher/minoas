@@ -57,7 +57,7 @@ public class PreparatoryTypeStartup {
 	private Log log;
 
 	@In
-	protected EntityManager em;
+	protected EntityManager entityManager;
 
 	@In(create = true)
 	protected IPreparatoryUnitNatureDAO preparatoryUnitNatureDAO;
@@ -67,7 +67,7 @@ public class PreparatoryTypeStartup {
 	
 	
 	protected EntityManager getMinoasDatabase() {
-		return em;
+		return entityManager;
 	}
 
 	@Create

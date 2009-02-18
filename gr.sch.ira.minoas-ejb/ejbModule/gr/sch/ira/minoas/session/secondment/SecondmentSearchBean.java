@@ -50,7 +50,7 @@ public class SecondmentSearchBean extends BaseStatefulSeamComponentImpl implemen
 	public String searchActiveSecondments() {
 		SchoolYear schoolYear = getActiveSchoolYear();
 		info("searching active secondments during '#0' school year.", schoolYear);
-		List<Secondment> result = getEm().createNamedQuery(
+		List<Secondment> result = getEntityManager().createNamedQuery(
 				INamedQueryConstants.NAMED_QUERY_SECONDMENT_FIND_ALL_ACTIVE).setParameter(
 				INamedQueryConstants.QUERY_PARAMETER_SCHOOL_YEAR, schoolYear).getResultList();
 		info("found totally '#0' active secondments during '#1' school year.", result.size(), schoolYear);
@@ -66,7 +66,7 @@ public class SecondmentSearchBean extends BaseStatefulSeamComponentImpl implemen
 		SchoolYear schoolYear = getActiveSchoolYear();
 		info("searching active secondments with target unit '#0' during school year '#1'.", getActiveSchool(),
 				schoolYear);
-		List<Secondment> result = getEm().createNamedQuery(
+		List<Secondment> result = getEntityManager().createNamedQuery(
 				INamedQueryConstants.NAMED_QUERY_SECONDMENT_FIND_SCHOOL_INCOMING).setParameter(
 				INamedQueryConstants.QUERY_PARAMETER_SCHOOL_YEAR, schoolYear).setParameter(
 				INamedQueryConstants.QUERY_PARAMETER_SCHOOL, getActiveSchool()).getResultList();

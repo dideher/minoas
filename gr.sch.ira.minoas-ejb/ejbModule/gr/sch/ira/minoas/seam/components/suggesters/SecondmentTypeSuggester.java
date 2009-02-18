@@ -21,7 +21,7 @@ public class SecondmentTypeSuggester extends BaseSuggester {
 	@SuppressWarnings("unchecked")
 	@Transactional
 	public Collection<SecondmentType> suggest(Object secondmemt_search_pattern) {
-		return getEm()
+		return getEntityManager()
 				.createQuery(
 						"SELECT s from SecondmentType s WHERE LOWER(s.title) LIKE LOWER(:search_pattern)")
 				.setParameter(

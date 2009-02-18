@@ -261,6 +261,20 @@ public class EstablishmentLicense extends BaseModel {
 	public void setStatus(EstablishmentLicenseStatusType status) {
 		this.status = status;
 	}
+
+	/**
+	 * @return the owner
+	 */
+	public PreparatoryOwner getOwner() {
+		return owner;
+	}
+
+	/**
+	 * @param owner the owner to set
+	 */
+	public void setOwner(PreparatoryOwner owner) {
+		this.owner = owner;
+	}
 	
 	
 	
