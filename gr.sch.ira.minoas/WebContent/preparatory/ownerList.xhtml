@@ -18,7 +18,6 @@
 		<f:facet name="header">
 			Λίστα Διαθέσιμων Ιδιοκτητών Φροντιστηρίου
 		</f:facet>
-		<h:outputText value="from is #{from}" />
 		<rich:dataTable var="_owner" value="#{preparatoryOwnersList.resultList}" rendered="#{not empty preparatoryOwnersList.resultList}">
 			<h:column>
 				<f:facet name="header">
@@ -54,8 +53,7 @@
 				<f:facet name="header">
 					Ενέργεια
 				</f:facet>
-				<s:link view="#{empty from ? '/preparatory/preparatoryOwner.xhtml' : from}.xhtml}">
-					<h:outputText value="#{empty from ? Προβολή : Επιλογή}" /> 
+				<s:link view="#{empty from ? '/preparatory/preparatoryOwner.xhtml' : from}.xhtml}" value="#{empty from ? 'Προβολή' : 'Επιλογή'}" >
 					<f:param name="preparatoryOwnerID" value="#{_owner.id}"/>
 				</s:link>
 			</h:column>

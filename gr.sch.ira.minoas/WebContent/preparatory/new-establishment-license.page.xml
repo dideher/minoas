@@ -3,6 +3,6 @@
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.1.xsd">
   <begin-conversation join="true" flush-mode="manual"/>
   <description>Καταχώρηση Αίτησης Χορήγησεις Άδειας Ιδρύσεως</description>
-  
+  <param name="preparatoryOwnerID" value="#{preparatoryOwnerHome.id}"/>
   
 </page>
