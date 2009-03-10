@@ -47,10 +47,6 @@ public class PreparatoryUnitNatureHome extends MinoasEntityHome<PreparatoryUnitN
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@SuppressWarnings("unchecked")
-	@Factory(value="preparatoryUnitNatures")
-	public Collection<PreparatoryUnitNature> findAll() {
-		return getEntityManager().createQuery("FROM PreparatoryUnitNature p ORDER BY (p.title)").getResultList();
-	}
+	
 	
 }

@@ -72,6 +72,7 @@ public class EstablishmentLicenseHome extends MinoasEntityHome<EstablishmentLice
 	}
 	
 	public void wire() {
+		System.err.println("**** wire called ****");
 		PreparatoryOwner owner = preparatoryOwnerHome.getDefinedInstace();
 		if (owner!=null) {
 			getInstance().setOwner(owner);

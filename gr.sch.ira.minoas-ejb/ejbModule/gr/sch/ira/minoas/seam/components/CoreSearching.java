@@ -1,6 +1,7 @@
 package gr.sch.ira.minoas.seam.components;
 
 import gr.sch.ira.minoas.core.CoreUtils;
+import gr.sch.ira.minoas.model.core.EstablishmentLocation;
 import gr.sch.ira.minoas.model.core.OrganizationalOffice;
 import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.core.SchoolYear;
@@ -10,6 +11,8 @@ import gr.sch.ira.minoas.model.employee.Person;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
 import gr.sch.ira.minoas.model.employement.Secondment;
+import gr.sch.ira.minoas.model.preparatory.PreparatoryUnitNature;
+import gr.sch.ira.minoas.model.preparatory.TeachingLanguage;
 import gr.sch.ira.minoas.model.security.Principal;
 import gr.sch.ira.minoas.model.security.Role;
 import gr.sch.ira.minoas.model.security.RoleGroup;
@@ -22,6 +25,7 @@ import javax.persistence.NoResultException;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.AutoCreate;
+import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 
@@ -133,6 +137,24 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 
 	public List<Principal> searchPrincipals(String search_string) {
 		return searchPrincipals(null, search_string);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Factory(value="preparatoryUnitNatures")
+	public Collection<PreparatoryUnitNature> getAvailablePreparatoryNatures() {
+		return getEntityManager().createQuery("FROM PreparatoryUnitNature p ORDER BY (p.title)").getResultList();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Factory(value="establishmentLocations")
+	public Collection<EstablishmentLocation> getAvailableEstablishments() {
+		return getEntityManager().createQuery("FROM EstablishmentLocation e ORDER BY (e.title)").getResultList();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Factory(value="teachingLanguages")
+	public Collection<TeachingLanguage> getAvailableTeachingLanguages() {
+		return getEntityManager().createQuery("FROM TeachingLanguage e ORDER BY (e.language)").getResultList();
 	}
 
 	protected EntityManager getEntityManager(EntityManager entityManager) {
