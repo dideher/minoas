@@ -8,63 +8,146 @@
 	xmlns:a4j="http://richfaces.org/a4j">
 
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 
 <ui:composition template="/layout/simple-beauty-template.xhtml">
 	<ui:define name="body">
 		<h:form id="establishmentLicenseForm">
-		<rich:panel>
-		<f:facet name="header">
+			<rich:panel>
+				<f:facet name="header">
 			Αίτηση Άδειας Ιδρύσεως Φροντιστηρίου
 		</f:facet>
-		<h:panelGrid columns="3">
-		<s:decorate template="/layout/doubleLineEdit.xhtml">
-			<ui:define name="label">
-				<h:outputText value="Ημερομηνία Αίτησης" />
-			</ui:define>
-			<rich:calendar id="requestDate" datePattern="dd/MM/yyyy" value="#{establishmentLicense.requestDate}">
-			</rich:calendar>
-		</s:decorate>
-		<s:decorate template="/layout/doubleLineEdit.xhtml">
-			<ui:define name="label">
-				<h:outputText value="Αριθμός Πρωτ" />
-			</ui:define>
-			<h:inputText value="#{establishmentLicense.requestProtocol}" size="5" maxlength="5"/>
-		</s:decorate>
-		<s:decorate template="/layout/doubleLineEdit.xhtml">
-			<ui:define name="label">
-				<h:outputText value="Η Αίτηση Αφορά" />
-			</ui:define>
-			<h:selectOneMenu id="nature" value="#{establishmentLicense.nature}" converter="preparatoryUnitNatureToEnumConverter">
-				<s:selectItems var="_preparatoryUnitNature" value="#{preparatoryUnitNatures}" label="#{_preparatoryUnitNature.title}" />
-				
-				<s:convertEntity/>
-			</h:selectOneMenu>
-		</s:decorate>
-		
-		</h:panelGrid>
-		
-		<rich:tabPanel>
-			<rich:tab label="Κάτοχος Φροντιστηρίου">
-				<h:outputText value="Δεν έχει οριστεί ο κάτοχος του Φροντιστηρίου ...." rendered="#{establishmentLicense.owner == null}"/>
-				<rich:dataTable>
-				</rich:dataTable>
-			</rich:tab>
-		</rich:tabPanel>
-		<s:button value="Επιλογή Κατόχου ...." view="/preparatory/ownerList.xhtml">
-			<f:param name="from" value="/preparatory/new-establishment-license" />
-		</s:button>
-		</rich:panel>
-		<div class="actionButtons">
-<h:commandButton id="save" value="Save"
-action="#{establishmentLicenseHome.persist}"
-rendered="#{!establishmentLicenseHome.managed}" />
-</div>
+				<p><h:outputText value="Γενικά Στοιχεία Αίτησης" /></p>
+				<rich:separator lineType="beveled" height="8" width="75%"
+					align="center" />
+				<h:panelGrid columns="4">
+					<s:decorate template="/layout/doubleLineEdit.xhtml">
+						<ui:define name="label">
+							<h:outputText value="Ημερομηνία Αίτησης" />
+						</ui:define>
+						<rich:calendar id="requestDate" datePattern="dd/MM/yyyy"
+							value="#{establishmentLicense.requestDate}" required="true">
+						</rich:calendar>
+					</s:decorate>
+					<s:decorate template="/layout/doubleLineEdit.xhtml">
+						<ui:define name="label">
+							<h:outputText value="Αριθμός Πρωτ" />
+						</ui:define>
+						<h:inputText value="#{establishmentLicense.requestProtocol}"
+							size="5" maxlength="5" required="true"/>
+					</s:decorate>
+					<s:decorate template="/layout/doubleLineEdit.xhtml">
+						<ui:define name="label">
+							<h:outputText value="Η Αίτηση Αφορά" />
+						</ui:define>
+						<h:selectOneMenu id="nature"
+							value="#{establishmentLicense.nature}"
+							converter="preparatoryUnitNatureToEnumConverter">
+							<s:selectItems var="_preparatoryUnitNature"
+								value="#{preparatoryUnitNatures}"
+								label="#{_preparatoryUnitNature.title}" />
+							<s:convertEntity />
+						</h:selectOneMenu>
+					</s:decorate>
+					
+					<s:decorate template="/layout/doubleLineEdit.xhtml">
+						<ui:define name="label">
+							<h:outputText value="Έδρα" />
+						</ui:define>
+						<h:selectOneMenu id="establishmentLocation"
+							value="#{establishmentLicense.establishmentLocation}"
+							converter="preparatoryUnitNatureToEnumConverter">
+							<s:selectItems var="_establishmentLocation"
+								value="#{establishmentLocations}"
+								label="#{_establishmentLocation.title}" />
+							<s:convertEntity />
+						</h:selectOneMenu>
+					</s:decorate>
+					
+					<s:decorate template="/layout/doubleLineEdit.xhtml">
+						<ui:define name="label">
+							<h:outputText value="Διδασκόμενες Γλώσσες" />
+						</ui:define>
+						
+						<h:selectManyListbox  id="teachingLanguages"
+							value="#{establishmentLicense.teachingLanguages}">
+							<s:selectItems var="_teachingLanguage"
+								value="#{teachingLanguages}"
+								label="#{_teachingLanguage.language}" />
+						</h:selectManyListbox>
+					</s:decorate>
+
+				</h:panelGrid>
+
+				<p><h:outputText value="Στοιχεία Κατόχου Φροντιστηρίου" /></p>
+				<rich:separator lineType="beveled" height="8" width="75%"
+					align="center" />
+				<s:div rendered="#{establishmentLicense.owner != null}">
+				<h:panelGrid columns="3">
+					
+						<s:decorate template="/layout/doubleLineEdit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Επώνυμο" />
+							</ui:define>
+							<h:inputText value="#{establishmentLicense.owner.lastName}"
+								size="15" maxlength="5" readonly="true" />
+						</s:decorate>
+
+						<s:decorate template="/layout/doubleLineEdit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Όνομα" />
+							</ui:define>
+							<h:inputText value="#{establishmentLicense.owner.firstName}"
+								size="15" maxlength="5" readonly="true" />
+						</s:decorate>
+
+						<s:decorate template="/layout/doubleLineEdit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Όνομα Πατρός" />
+							</ui:define>
+							<h:inputText value="#{establishmentLicense.owner.fatherName}"
+								size="12" maxlength="5" readonly="true" />
+						</s:decorate>
+
+						<s:decorate template="/layout/doubleLineEdit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Όνομα Μητρός" />
+							</ui:define>
+							<h:inputText value="#{establishmentLicense.owner.motherName}"
+								size="12" maxlength="5" readonly="true" />
+						</s:decorate>
+
+						<s:decorate template="/layout/doubleLineEdit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Α.Δ.Τ" />
+							</ui:define>
+							<h:inputText value="#{establishmentLicense.owner.idNumber}"
+								size="5" maxlength="5" readonly="true" />
+						</s:decorate>
+
+						<s:decorate template="/layout/doubleLineEdit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Ημερομηνία Γεννήσεως" />
+							</ui:define>
+							<rich:calendar datePattern="dd/MM/yyyy"
+								value="#{establishmentLicense.owner.dateOfBirth}"
+								readonly="true">
+							</rich:calendar>
+						</s:decorate>
+					
+				</h:panelGrid>
+				</s:div>
+				<h:commandButton action="selectPreparatoryOwner"
+					value="Επιλογή Κατόχου ...." />
+			</rich:panel>
+			<div class="actionButtons"><h:commandButton id="save"
+				value="Αποθήκευση ..." action="#{establishmentLicenseHome.persist}"
+				rendered="#{!establishmentLicenseHome.managed}" /></div>
 		</h:form>
-		
-		
-		
+
+
+
 	</ui:define>
 </ui:composition>
 </html>
