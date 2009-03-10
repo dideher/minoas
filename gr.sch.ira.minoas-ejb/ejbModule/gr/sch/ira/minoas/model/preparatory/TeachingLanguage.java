@@ -25,6 +25,7 @@
 
 package gr.sch.ira.minoas.model.preparatory;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -57,6 +58,24 @@ public class TeachingLanguage {
 	@Id
 	@Column(name="LANGUAGE", length=12)
 	private String language;
+	
+	@Basic
+	@Column(name="GENIKI_LANGUAGE", length=12, unique=true)
+	private String genikiLanguage;
+	
+	/**
+	 * @return the genikiLanguage
+	 */
+	protected String getGenikiLanguage() {
+		return genikiLanguage;
+	}
+
+	/**
+	 * @param genikiLanguage the genikiLanguage to set
+	 */
+	protected void setGenikiLanguage(String genikiLanguage) {
+		this.genikiLanguage = genikiLanguage;
+	}
 
 	/**
 	 * @return the language

@@ -51,7 +51,7 @@ import javax.persistence.TemporalType;
 
 import gr.sch.ira.minoas.model.BaseModel;
 import gr.sch.ira.minoas.model.core.SchoolYear;
-import gr.sch.ira.minoas.model.core.Seat;
+import gr.sch.ira.minoas.model.core.EstablishmentLocation;
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
@@ -90,9 +90,7 @@ public class EstablishmentLicense extends BaseModel {
 	@JoinTable(name="PREPARATORY_EST_LICENSE_LANGUAGES")
 	private Set<TeachingLanguage> teachingLanguages = new HashSet<TeachingLanguage>();
 	
-	@Enumerated(EnumType.STRING)
-	@Column(name="UNIT_TYPE", nullable=false)
-	private PreparatoryUnitNatureType type;
+	
 	
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="license", cascade= { CascadeType.PERSIST, CascadeType.MERGE})
 	private Set<EstablishmentLicenseRenewal> renewals = new HashSet<EstablishmentLicenseRenewal>();
@@ -110,9 +108,23 @@ public class EstablishmentLicense extends BaseModel {
 	private Integer requestJudgmentNumber;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="SEAT_ID", nullable=false)
-	private Seat seat;
+	@JoinColumn(name="ESTABLISHMENT_LOCATION_ID", nullable=false)
+	private EstablishmentLocation establishmentLocation;
 	
+	/**
+	 * @return the establishmentLocation
+	 */
+	public EstablishmentLocation getEstablishmentLocation() {
+		return establishmentLocation;
+	}
+
+	/**
+	 * @param establishmentLocation the establishmentLocation to set
+	 */
+	public void setEstablishmentLocation(EstablishmentLocation establishmentLocation) {
+		this.establishmentLocation = establishmentLocation;
+	}
+
 	@Basic
 	@Column(name="REQUEST_PROTOCOL", nullable=false, unique=true)
 	private Integer requestProtocol;
@@ -218,20 +230,6 @@ public class EstablishmentLicense extends BaseModel {
 	 */
 	public void setNature(PreparatoryUnitNature nature) {
 		this.nature = nature;
-	}
-
-	/**
-	 * @return the type
-	 */
-	public PreparatoryUnitNatureType getType() {
-		return type;
-	}
-
-	/**
-	 * @param type the type to set
-	 */
-	public void setType(PreparatoryUnitNatureType type) {
-		this.type = type;
 	}
 
 	/**
