@@ -25,8 +25,10 @@
 
 package gr.sch.ira.minoas.model.preparatory;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Basic;
@@ -88,12 +90,26 @@ public class EstablishmentLicense extends BaseModel {
 	
 	@ManyToMany(fetch=FetchType.LAZY)
 	@JoinTable(name="PREPARATORY_EST_LICENSE_LANGUAGES")
-	private Set<TeachingLanguage> teachingLanguages = new HashSet<TeachingLanguage>();
+	private List<TeachingLanguage> teachingLanguages = new ArrayList<TeachingLanguage>();
 	
 	
 	
+	/**
+	 * @return the teachingLanguages
+	 */
+	public List<TeachingLanguage> getTeachingLanguages() {
+		return teachingLanguages;
+	}
+
+	/**
+	 * @param teachingLanguages the teachingLanguages to set
+	 */
+	public void setTeachingLanguages(List<TeachingLanguage> teachingLanguages) {
+		this.teachingLanguages = teachingLanguages;
+	}
+
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="license", cascade= { CascadeType.PERSIST, CascadeType.MERGE})
-	private Set<EstablishmentLicenseRenewal> renewals = new HashSet<EstablishmentLicenseRenewal>();
+	private List<EstablishmentLicenseRenewal> renewals = new ArrayList<EstablishmentLicenseRenewal>();
 	
 	@Temporal(TemporalType.DATE)
 	@Column(name="REQUEST_DATE", nullable=false)
@@ -132,20 +148,6 @@ public class EstablishmentLicense extends BaseModel {
 	public void addRenewal(EstablishmentLicenseRenewal renewal) {
 		this.renewals.add(renewal);
 		renewal.setLicense(this);
-	}
-
-	/**
-	 * @return the teachingLanguages
-	 */
-	public Set<TeachingLanguage> getTeachingLanguages() {
-		return teachingLanguages;
-	}
-
-	/**
-	 * @param teachingLanguages the teachingLanguages to set
-	 */
-	public void setTeachingLanguages(Set<TeachingLanguage> teachingLanguages) {
-		this.teachingLanguages = teachingLanguages;
 	}
 
 	/**

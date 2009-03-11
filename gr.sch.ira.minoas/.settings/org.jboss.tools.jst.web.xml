@@ -307,6 +307,8 @@
   location="/opt/jboss/jboss-4.2.2.GA/client/jbossws-native-core.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-jbossws-jboss422.jar"
   location="/opt/jboss/jboss-4.2.2.GA/client/jbossws-jboss422.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-mysql-connector-java-5.0.3-bin.jar"
+  location="/opt/jboss/jboss-4.2.2.GA/server/default/lib/mysql-connector-java-5.0.3-bin.jar" model-entity="FileSystemJar"/>
  <web SERVLET_VERSION="2.4" model-entity="JstWeb" model-path="/web.xml">
   <module URI="/WEB-INF/faces-config.xml" model-entity="WebJSFModule"
    model-path="/faces-config.xml" src="src" web-root="WEB-ROOT"/>
