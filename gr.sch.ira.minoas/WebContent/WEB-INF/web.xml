@@ -57,6 +57,10 @@
     <servlet-name>Document Store Servlet</servlet-name>
     <url-pattern>*.pdf</url-pattern>
 </servlet-mapping>
+<servlet-mapping>
+    <servlet-name>Document Store Servlet</servlet-name>
+    <url-pattern>*.rtf</url-pattern>
+</servlet-mapping>
  <security-constraint>
   <display-name>Restrict raw XHTML Documents</display-name>
   <web-resource-collection>

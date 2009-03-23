@@ -269,12 +269,6 @@
   location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jboss-seam-ui.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-jsf-facelets.jar"
   location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jsf-facelets.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-richfaces-impl-3.2.2.GA.jar"
-  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas/WebContent/WEB-INF/lib/richfaces-impl-3.2.2.GA.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-richfaces-ui-3.2.2.GA.jar"
-  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas/WebContent/WEB-INF/lib/richfaces-ui-3.2.2.GA.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-itext.jar"
-  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas/WebContent/WEB-INF/lib/itext.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-jbpm-jpdl.jar"
   location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas-ear/EarContent/jbpm-jpdl.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-drools-core.jar"
@@ -289,10 +283,6 @@
   location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas-ear/EarContent/jboss-el.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-antlr-runtime.jar"
   location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas-ear/EarContent/antlr-runtime.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-richfaces-api-3.2.2.GA.jar"
-  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas-ear/EarContent/richfaces-api-3.2.2.GA.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-itext-rtf.jar"
-  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas/WebContent/WEB-INF/lib/itext-rtf.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-jbossws-native-jaxws.jar"
   location="/opt/jboss/jboss-4.2.2.GA/client/jbossws-native-jaxws.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-jbossws-native-client.jar"
@@ -309,6 +299,12 @@
   location="/opt/jboss/jboss-4.2.2.GA/client/jbossws-jboss422.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-mysql-connector-java-5.0.3-bin.jar"
   location="/opt/jboss/jboss-4.2.2.GA/server/default/lib/mysql-connector-java-5.0.3-bin.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-richfaces-api-3.2.2.SR1.jar"
+  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas-ear/EarContent/richfaces-api-3.2.2.SR1.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-richfaces-impl-3.2.2.SR1.jar"
+  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas/WebContent/WEB-INF/lib/richfaces-impl-3.2.2.SR1.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-richfaces-ui-3.2.2.SR1.jar"
+  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas/WebContent/WEB-INF/lib/richfaces-ui-3.2.2.SR1.jar" model-entity="FileSystemJar"/>
  <web SERVLET_VERSION="2.4" model-entity="JstWeb" model-path="/web.xml">
   <module URI="/WEB-INF/faces-config.xml" model-entity="WebJSFModule"
    model-path="/faces-config.xml" src="src" web-root="WEB-ROOT"/>

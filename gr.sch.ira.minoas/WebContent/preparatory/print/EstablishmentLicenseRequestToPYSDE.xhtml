@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://jboss.com/products/seam/pdf">
+	<p:document type="RTF" pageSize="A4">                                                      
+	
+	<p:table columns="3" headerRows="0">
+
+  <p:cell>
+  	<ui:include src="/components/print/FromHeaders.xhtml" />
+  </p:cell>
+
+  <p:cell>
+  	<ui:include src="/components/print/FromHeaders.xhtml" />
+  </p:cell>
+
+  <p:cell>
+  	<ui:include src="/components/print/FromHeaders.xhtml" />
+  </p:cell>
+
+
+    <p:cell>dsdsd</p:cell>
+
+    <p:cell>ddsdsds</p:cell>
+
+    <p:cell>dsdsd</p:cell>
+
+
+</p:table>
+
+	
+  
+  	<p:paragraph justify="left">
+  		<p:font name="TIMES-ROMAN" style="bold" size="13" encoding="cp1253">
+  			<p:text value="ΘΕΜΑ &quote; ίδρυσης ΧΧΧΧΧΧ, με έδρα το ΥΥΥΥΥ." />
+  		</p:font>
+  	</p:paragraph>
+    <p:paragraph alighment="justify">
+  		<p:font name="TIMES-ROMAN" style="normal" size="13" encoding="cp1253">
+  		<p:text value="Σας διαβιβάζουμε αίτηση με τα απαιτούμενα δικαιολογητικά του " />
+  		<p:font style="bold">
+  			<p:text value=" #{establishmentLicense.owner.lastName} #{establishmentLicense.owner.firstName} του #{establishmentLicense.owner.fatherName} "/>
+  		</p:font>
+  		<p:text value=" (τα στοιχεία τίθενται στην ονομαστική), για χορήγηση άδειας ΧΧΧΧΧΧ,με έδρα το #{establishmentLicense.establishmentLocation.title} για την διδασκαλία ΥΥΥΥΥΥ και παρακαλούμε να γνωμοδοτήσετε σχετικά, σύμφωνα με τις διατάξεις του άρθρου 63, 65, και 68 του Α.Ν. 2545 40. "/>
+  		</p:font>
+    </p:paragraph>
+    
+    <p:paragraph>
+    	<p:list style="numbered">
+    		<p:listItem>Αίτηση</p:listItem>
+    		<p:listItem>Πιστοποιητικά υγείας</p:listItem>
+    		<p:listItem>Διπλότυπο Δημ. Ταμείου (150 ευρώ)</p:listItem>
+    		<p:listItem>Παράβολα Δημοσίου αξίας 15 ευρώ</p:listItem>
+    		<p:listItem>Επικυρωμένα φωτοαντ/φα ταυτότητας</p:listItem>
+    		<p:listItem>Υπεύθυνες δηλώσεις Ν.1599/86</p:listItem>
+    		<p:listItem>Αντίγραφα πονικού μητρώου</p:listItem>
+    		<p:listItem>Επικυρωμένο φωτ/φο άδειας διδ/λίας</p:listItem>
+    	</p:list>
+    </p:paragraph>                                                                                      
+</p:document>
+
+</html>
