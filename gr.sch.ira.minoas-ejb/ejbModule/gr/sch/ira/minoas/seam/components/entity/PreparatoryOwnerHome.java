@@ -25,14 +25,13 @@
 
 package gr.sch.ira.minoas.seam.components.entity;
 
+import gr.sch.ira.minoas.model.preparatory.PreparatoryOwner;
+
 import java.util.Date;
 
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
-
-import gr.sch.ira.minoas.model.preparatory.EstablishmentLicense;
-import gr.sch.ira.minoas.model.preparatory.PreparatoryOwner;
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>

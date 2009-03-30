@@ -25,6 +25,10 @@
 
 package gr.sch.ira.minoas.model.employee;
 
+import gr.sch.ira.minoas.model.AbstractArchivableEntity;
+import gr.sch.ira.minoas.model.core.Address;
+import gr.sch.ira.minoas.model.core.Telephone;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -47,10 +51,6 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import gr.sch.ira.minoas.model.AbstractArchivableEntity;
-import gr.sch.ira.minoas.model.core.Address;
-import gr.sch.ira.minoas.model.core.Telephone;
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>

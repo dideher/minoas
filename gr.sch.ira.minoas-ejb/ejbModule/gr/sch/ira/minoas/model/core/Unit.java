@@ -4,11 +4,9 @@
 package gr.sch.ira.minoas.model.core;
 
 import gr.sch.ira.minoas.model.AbstractArchivableEntity;
-import gr.sch.ira.minoas.model.BaseModel;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -25,7 +23,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Version;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;

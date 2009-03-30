@@ -25,6 +25,9 @@
 
 package gr.sch.ira.minoas.model.preparatory;
 
+import gr.sch.ira.minoas.model.BaseModel;
+import gr.sch.ira.minoas.model.core.SchoolYear;
+
 import java.util.Date;
 
 import javax.persistence.Basic;
@@ -40,11 +43,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
-import org.hibernate.annotations.Cascade;
-
-import gr.sch.ira.minoas.model.BaseModel;
-import gr.sch.ira.minoas.model.core.SchoolYear;
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>

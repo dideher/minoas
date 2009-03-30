@@ -25,6 +25,9 @@
 
 package gr.sch.ira.minoas.model.preparatory;
 
+import gr.sch.ira.minoas.model.core.Specialization;
+import gr.sch.ira.minoas.model.employee.Person;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -37,10 +40,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.jboss.seam.annotations.Name;
-
-import gr.sch.ira.minoas.model.AbstractArchivableEntity;
-import gr.sch.ira.minoas.model.core.Specialization;
-import gr.sch.ira.minoas.model.employee.Person;
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>

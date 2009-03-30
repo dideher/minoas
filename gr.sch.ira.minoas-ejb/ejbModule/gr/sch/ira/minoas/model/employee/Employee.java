@@ -1,6 +1,5 @@
 package gr.sch.ira.minoas.model.employee;
 
-import gr.sch.ira.minoas.model.BaseModel;
 import gr.sch.ira.minoas.model.core.PYSDE;
 import gr.sch.ira.minoas.model.core.Specialization;
 import gr.sch.ira.minoas.model.employement.Employment;
@@ -19,7 +18,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
-import javax.persistence.Version;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;

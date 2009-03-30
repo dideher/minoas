@@ -77,7 +77,17 @@
    <mail:mail-session host="localhost" port="2525" username="test" password="test" />
    
    <framework:entity-query name="preparatoryOwnersList" ejbql="SELECT o FROM PreparatoryOwner o"  scope="conversation" max-results = "15" />
-        
+  
+   <component name="exampleEstablishmentLicense" class="gr.sch.ira.minoas.model.preparatory.EstablishmentLicense" />
+   <framework:entity-query 
+      name="establishmentLicensesList" 
+      ejbql="SELECT o FROM EstablishmentLicense o"  
+      scope="conversation" order="requestDate" max-results = "15">
+      <framework:restrictions>
+        <value>lower(owner.lastName) like lower( concat(#{exampleEstablishmentLicense.owner.lastName},'%') )</value>
+    </framework:restrictions> 
+   </framework:entity-query>     
+         
    <!-- For use with jBPM pageflow or process management -->
    
    <bpm:jbpm >

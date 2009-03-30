@@ -1,7 +1,6 @@
 package gr.sch.ira.minoas.model.employement;
 
 import gr.sch.ira.minoas.model.AbstractArchivableEntity;
-import gr.sch.ira.minoas.model.BaseModel;
 import gr.sch.ira.minoas.model.core.SchoolYear;
 import gr.sch.ira.minoas.model.core.Specialization;
 import gr.sch.ira.minoas.model.core.Unit;
@@ -25,7 +24,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Version;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;

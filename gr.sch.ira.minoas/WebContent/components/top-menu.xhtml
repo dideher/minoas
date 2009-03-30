@@ -31,11 +31,13 @@
 						<h:outputText value="Φροντιστήρια" />
 					</h:panelGroup>
 				</f:facet>
+				<rich:menuGroup value="Άδειες Ιδρύσεως">
 				<rich:menuItem submitMode="none">
-					<s:link value="Διαχείριση Αδειών Ιδρύσεως" view="/preparatory/new-establishment-license.xhtml" />
+					<s:link value="Εισαγωγή Αίτησης" view="/preparatory/new-establishment-license.xhtml" />
 				</rich:menuItem>
-				<rich:menuGroup value="Διαχείριση Αδειών Ιδρύσεως">
-					<s:link view="/preparatoryEstablishmentManagement.xhtml"></s:link>
+				<rich:menuItem submitMode="none">
+					<s:link value="Προβολή Αδειών Ιδρύσεως" view="/preparatory/establishment-licenses-list.xhtml"></s:link>
+				</rich:menuItem>
 				</rich:menuGroup>
 			</rich:dropDownMenu>
 			

@@ -25,14 +25,9 @@
 
 package gr.sch.ira.minoas.seam.components.entity;
 
-import java.util.Collection;
-
-import org.jboss.seam.annotations.Factory;
-import org.jboss.seam.annotations.Name;
-import org.jboss.seam.framework.EntityHome;
-
 import gr.sch.ira.minoas.model.preparatory.PreparatoryUnitNature;
-import gr.sch.ira.minoas.model.preparatory.PreparatoryUnitNatureType;
+
+import org.jboss.seam.annotations.Name;
 
 
 /**

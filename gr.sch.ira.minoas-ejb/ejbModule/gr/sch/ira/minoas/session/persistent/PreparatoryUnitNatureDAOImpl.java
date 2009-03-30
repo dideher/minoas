@@ -30,18 +30,12 @@ import gr.sch.ira.minoas.model.preparatory.PreparatoryUnitNatureType;
 
 import java.util.Collection;
 
-import javax.ejb.EJB;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 
-import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Scope;
-import org.jboss.seam.annotations.Startup;
-import org.jboss.seam.annotations.TransactionPropagationType;
-import org.jboss.seam.annotations.Transactional;
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>

@@ -1,35 +1,12 @@
-/*
- * 
- *
- * Copyright (c) 2009 FORTHnet, S.A. All Rights Reserved.
- *
- *
- * This software is provided "AS IS," without a warranty of any kind. ALL
- * EXPRESS OR IMPLIED CONDITIONS, REPRESENTATIONS AND WARRANTIES, INCLUDING ANY
- * IMPLIED WARRANTY OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE OR
- * NON-INFRINGEMENT, ARE HEREBY EXCLUDED. SUN AND ITS LICENSORS SHALL NOT BE
- * LIABLE FOR ANY DAMAGES SUFFERED BY LICENSEE AS A RESULT OF USING, MODIFYING
- * OR DISTRIBUTING THE SOFTWARE OR ITS DERIVATIVES. IN NO EVENT WILL SUN OR ITS
- * LICENSORS BE LIABLE FOR ANY LOST REVENUE, PROFIT OR DATA, OR FOR DIRECT,
- * INDIRECT, SPECIAL, CONSEQUENTIAL, INCIDENTAL OR PUNITIVE DAMAGES, HOWEVER
- * CAUSED AND REGARDLESS OF THE THEORY OF LIABILITY, ARISING OUT OF THE USE OF
- * OR INABILITY TO USE SOFTWARE, EVEN IF SUN HAS BEEN ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGES.
- *
- * This software is not designed or intended for use in on-line control of
- * aircraft, air traffic, aircraft navigation or aircraft communications; or in
- * the design, construction, operation or maintenance of any nuclear
- * facility. Licensee represents and warrants that it will not use or
- * redistribute the Software for such purposes.
- */
-
 package gr.sch.ira.minoas.model.preparatory;
+
+import gr.sch.ira.minoas.model.BaseModel;
+import gr.sch.ira.minoas.model.core.EstablishmentLocation;
+import gr.sch.ira.minoas.model.core.SchoolYear;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -50,11 +27,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-
-import gr.sch.ira.minoas.model.BaseModel;
-import gr.sch.ira.minoas.model.core.SchoolYear;
-import gr.sch.ira.minoas.model.core.EstablishmentLocation;
-
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
  * @version $Id$
@@ -68,10 +40,38 @@ public class EstablishmentLicense extends BaseModel {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 	
-	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="NATURE_TYPE_ID", nullable=false)
-	private PreparatoryUnitNature nature;
+	@Enumerated(EnumType.STRING)
+	@Column(name="NATURE_TYPE", nullable=false)
+	private PreparatoryUnitNatureType natureType;
 	
+	/**
+	 * @return the natureType
+	 */
+	public PreparatoryUnitNatureType getNatureType() {
+		return natureType;
+	}
+
+	/**
+	 * @param natureType the natureType to set
+	 */
+	public void setNatureType(PreparatoryUnitNatureType natureType) {
+		this.natureType = natureType;
+	}
+
+	/**
+	 * @return the statusType
+	 */
+	public EstablishmentLicenseStatusType getStatusType() {
+		return establishmentLicenseStatusType;
+	}
+
+	/**
+	 * @param establishmentLicenseStatusType the statusType to set
+	 */
+	public void setStatusType(EstablishmentLicenseStatusType establishmentLicenseStatusType) {
+		this.establishmentLicenseStatusType = establishmentLicenseStatusType;
+	}
+
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="SCHOOL_YEAR_ID")
 	private SchoolYear schoolYear;
@@ -84,9 +84,9 @@ public class EstablishmentLicense extends BaseModel {
 	@JoinColumn(name="PREPARATORY_OWNER_ID", nullable=false)
 	private PreparatoryOwner owner;
 	
-	@Column(name="STATUS_TYPE", nullable=false)
 	@Enumerated(EnumType.STRING)
-	private EstablishmentLicenseStatusType status;
+	@JoinColumn(name="STATUS_TYPE", nullable=false)
+	private EstablishmentLicenseStatusType establishmentLicenseStatusType;
 	
 	@ManyToMany(fetch=FetchType.LAZY)
 	@JoinTable(name="PREPARATORY_EST_LICENSE_LANGUAGES")
@@ -221,20 +221,6 @@ public class EstablishmentLicense extends BaseModel {
 	}
 
 	/**
-	 * @return the nature
-	 */
-	public PreparatoryUnitNature getNature() {
-		return nature;
-	}
-
-	/**
-	 * @param nature the nature to set
-	 */
-	public void setNature(PreparatoryUnitNature nature) {
-		this.nature = nature;
-	}
-
-	/**
 	 * @return the unit
 	 */
 	public PreparatoryUnit getUnit() {
@@ -246,20 +232,6 @@ public class EstablishmentLicense extends BaseModel {
 	 */
 	public void setUnit(PreparatoryUnit unit) {
 		this.unit = unit;
-	}
-
-	/**
-	 * @return the status
-	 */
-	public EstablishmentLicenseStatusType getStatus() {
-		return status;
-	}
-
-	/**
-	 * @param status the status to set
-	 */
-	public void setStatus(EstablishmentLicenseStatusType status) {
-		this.status = status;
 	}
 
 	/**
@@ -275,6 +247,7 @@ public class EstablishmentLicense extends BaseModel {
 	public void setOwner(PreparatoryOwner owner) {
 		this.owner = owner;
 	}
+
 	
 	
 	

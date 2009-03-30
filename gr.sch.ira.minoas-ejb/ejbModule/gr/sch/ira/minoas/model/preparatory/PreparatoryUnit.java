@@ -28,13 +28,10 @@ package gr.sch.ira.minoas.model.preparatory;
 import gr.sch.ira.minoas.model.core.Address;
 import gr.sch.ira.minoas.model.core.Unit;
 
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;

@@ -27,10 +27,9 @@ package gr.sch.ira.minoas.model.preparatory;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import javax.persistence.Entity;
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>

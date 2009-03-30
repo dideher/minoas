@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<ui:composition template="/layout/simple-beauty-template.xhtml">
+	<ui:define name="body">
+		<h:form id="establishmentLicenseList">
+			<rich:panel>
+				<f:facet name="header">
+			Λίστα Αδείων Ιδρύσεως
+		</f:facet>
+				<h:inputText value="#{exampleEstablishmentLicense.owner.lastName}" />
+				<rich:dataTable var="_license"
+					value="#{establishmentLicensesList.resultList}"
+					rendered="#{not empty establishmentLicensesList.resultList}">
+					<f:facet name="header">
+						<rich:columnGroup>
+							<rich:column colspan="5">
+								<h:outputText value="Γενικά Στοιχεία Άδειας ..." />
+							</rich:column>
+							<rich:column colspan="5">
+								<h:outputText value="Στοιχεία Κατόχου ..." />
+							</rich:column>
+
+						</rich:columnGroup>
+					</f:facet>
+					<rich:column breakBefore="true">
+						<f:facet name="header">
+					Αριθ. Αίτησης
+				</f:facet>
+						<h:outputText value="#{_license.requestProtocol}/" />
+						<h:outputText value="#{_license.requestDate}">
+							<s:convertDateTime pattern="dd-MM-yyyy" />
+						</h:outputText>
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+					Τύπος
+				</f:facet>
+				#{_license.nature.title}
+			</rich:column>
+					<rich:column>
+						<f:facet name="header">
+					Απ. ΠΥΣΔΕ
+				</f:facet>
+						<s:div rendered="#{_license.requestJudgmentNumber != null}">
+							<h:outputText value="#{_license.requestJudgmentNumber}/" />
+							<h:outputText value="#{_license.requestJudgmentDate}">
+								<s:convertDateTime pattern="dd-MM-yyyy" />
+							</h:outputText>
+						</s:div>
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+					Έδρα
+				</f:facet>
+						<h:outputText value="#{_license.establishmentLocation.title}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+					Κατάσταση
+				</f:facet>
+						<h:outputText value="#{_license.status}" />
+					</rich:column>
+
+					<rich:column>
+						<f:facet name="header">
+					Επώνυμο
+				</f:facet>
+				#{_license.owner.lastName}
+			</rich:column>
+					<rich:column>
+						<f:facet name="header">
+					Όνομα
+				</f:facet>
+				#{_license.owner.firstName}
+			</rich:column>
+					<rich:column>
+						<f:facet name="header">
+					Όνομα Πατρός
+				</f:facet>
+				#{_license.owner.fatherName}
+			</rich:column>
+					<rich:column>
+						<f:facet name="header">
+					Ημ/νία Γεν.
+				</f:facet>
+						<h:outputText value="#{_license.owner.dateOfBirth}">
+							<s:convertDateTime pattern="dd-MM-yyyy" />
+						</h:outputText>
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+					Αριθμός Α/Τ
+				</f:facet>
+				#{_license.owner.idNumber}
+			</rich:column>
+					<!--  
+			<h:column>
+				<f:facet name="header">
+					Ενέργεια
+				</f:facet>
+				<s:link view="#{empty from ? '/preparatory/preparatoryOwner.xhtml' : from}.xhtml}" value="#{empty from ? 'Προβολή' : 'Επιλογή'}" >
+					<f:param name="preparatoryOwnerID" value="#{_owner.id}"/>
+				</s:link>
+			</h:column>
+			-->
+				</rich:dataTable>
+
+
+			</rich:panel>
+		</h:form>
+
+
+
+	</ui:define>
+</ui:composition>
+</html>

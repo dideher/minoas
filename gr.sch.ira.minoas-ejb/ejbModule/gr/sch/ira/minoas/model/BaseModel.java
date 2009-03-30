@@ -29,7 +29,7 @@ public abstract class BaseModel implements Serializable {
 	 * Comment for <code>serialVersionUID</code>
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="INSERTED_BY_ID", nullable=true)
 	private Principal insertedBy;
@@ -43,6 +43,14 @@ public abstract class BaseModel implements Serializable {
 	@Column(name = "VERSION")
 	@Version
 	private Long version;
+	
+	/**
+	 * 
+	 */
+	public BaseModel() {
+		super();
+		setInsertedOn(new Date(System.currentTimeMillis()));
+	}
 
 
 	/**
@@ -53,17 +61,17 @@ public abstract class BaseModel implements Serializable {
 	}
 
 	/**
-	 * @param insertedBy the insertedBy to set
-	 */
-	public void setInsertedBy(Principal insertedBy) {
-		this.insertedBy = insertedBy;
-	}
-
-	/**
 	 * @return the insertedOn
 	 */
 	public Date getInsertedOn() {
 		return insertedOn;
+	}
+
+	/**
+	 * @param insertedBy the insertedBy to set
+	 */
+	public void setInsertedBy(Principal insertedBy) {
+		this.insertedBy = insertedBy;
 	}
 
 	/**

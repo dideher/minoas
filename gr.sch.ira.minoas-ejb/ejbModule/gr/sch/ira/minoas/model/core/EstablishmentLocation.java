@@ -25,13 +25,12 @@
 
 package gr.sch.ira.minoas.model.core;
 
-import javax.persistence.Basic;
+import gr.sch.ira.minoas.model.BaseModel;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import gr.sch.ira.minoas.model.BaseModel;
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
