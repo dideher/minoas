@@ -1,5 +1,3 @@
-
-
 package gr.sch.ira.minoas.seam.components.converters;
 
 import javax.faces.component.UIComponent;
@@ -13,6 +11,11 @@ import org.jboss.seam.annotations.intercept.BypassInterceptors;
 @Converter
 @BypassInterceptors
 public class TeachingLanguageConverter extends DatabaseAwareBaseConverter {
+
+	/**
+	 * Comment for <code>serialVersionUID</code>
+	 */
+	private static final long serialVersionUID = 1L;
 
 	public Object getAsObject(FacesContext arg0, UIComponent arg1, String arg2) {
 		return null;

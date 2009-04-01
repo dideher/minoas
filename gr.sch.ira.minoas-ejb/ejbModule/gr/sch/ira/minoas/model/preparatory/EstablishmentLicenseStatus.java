@@ -22,9 +22,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "PREP_LCS_STATUS_TYPE")
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
-public class EstablishmentLicenseStatus  extends BaseModel {
+public class EstablishmentLicenseStatus extends BaseModel {
 
-	
 	/**
 	 * Comment for <code>serialVersionUID</code>
 	 */
@@ -36,16 +35,12 @@ public class EstablishmentLicenseStatus  extends BaseModel {
 	private Long id;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name="LICENSE_STATUS_TYPE", nullable=false, unique=true)
+	@Column(name = "LICENSE_STATUS_TYPE", nullable = false, unique = true)
 	private EstablishmentLicenseStatusType statusType;
-	
+
 	@Basic
 	@Column(name = "LICENSE_STATUS_TITLE", length = 64, nullable = false, unique = true)
-	private String title; 
-
-	
-
-	
+	private String title;
 
 	/**
 	 * 
@@ -92,5 +87,4 @@ public class EstablishmentLicenseStatus  extends BaseModel {
 		this.statusType = establishmentLicenseStatusType;
 	}
 
-	
 }

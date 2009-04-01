@@ -32,6 +32,10 @@ public class Disposal extends BaseModel {
 	@OneToOne
 	private Employment affectedEmployment;
 
+	@OneToMany
+	@JoinColumn(name = "UNIT_ID")
+	private Unit disposalUnit;
+
 	@Basic
 	@Column(name = "ESTABLISHED", nullable = true)
 	private Date established;
@@ -43,10 +47,6 @@ public class Disposal extends BaseModel {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-
-	@OneToMany
-	@JoinColumn(name = "UNIT_ID")
-	private Unit disposalUnit;
 
 	@SuppressWarnings("unused")
 	@Version

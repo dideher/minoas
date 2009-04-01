@@ -29,33 +29,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 public class RoleGroup extends BaseModel {
 
 	/**
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof RoleGroup) {
-			RoleGroup otherRoleGroup = (RoleGroup) obj;
-			if (this.id != null) {
-				return this.id.equals(otherRoleGroup.getId());
-			}
-			else if (this.id == null && otherRoleGroup.getId() == null)
-				return true;
-			else
-				return false;
-		}
-		else
-			return false;
-	}
-
-	/**
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		return id.hashCode();
-	}
-
-	/**
 	 * Comment for <code>serialVersionUID</code>
 	 */
 	private static final long serialVersionUID = 1L;
@@ -68,13 +41,6 @@ public class RoleGroup extends BaseModel {
 	private String id;
 
 	/**
-	 * Comment for <code>title</code>
-	 */
-	@Basic
-	@Column(name = "TITLE", nullable = true)
-	private String title;
-
-	/**
 	 * Comment for <code>roles</code>
 	 */
 	@ManyToMany(fetch = FetchType.EAGER)
@@ -82,7 +48,12 @@ public class RoleGroup extends BaseModel {
 	@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 	private List<Role> roles;
 
-	
+	/**
+	 * Comment for <code>title</code>
+	 */
+	@Basic
+	@Column(name = "TITLE", nullable = true)
+	private String title;
 
 	/**
 	 * 
@@ -103,31 +74,20 @@ public class RoleGroup extends BaseModel {
 	}
 
 	/**
-	 * @return the title
+	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
-	public String getTitle() {
-		return title;
-	}
-
-	/**
-	 * @param title the title to set
-	 */
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	/**
-	 * @return the roles
-	 */
-	public List<Role> getRoles() {
-		return roles;
-	}
-
-	/**
-	 * @param roles the roles to set
-	 */
-	public void setRoles(List<Role> roles) {
-		this.roles = roles;
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof RoleGroup) {
+			RoleGroup otherRoleGroup = (RoleGroup) obj;
+			if (this.id != null) {
+				return this.id.equals(otherRoleGroup.getId());
+			} else if (this.id == null && otherRoleGroup.getId() == null)
+				return true;
+			else
+				return false;
+		} else
+			return false;
 	}
 
 	/**
@@ -138,10 +98,46 @@ public class RoleGroup extends BaseModel {
 	}
 
 	/**
+	 * @return the roles
+	 */
+	public List<Role> getRoles() {
+		return roles;
+	}
+
+	/**
+	 * @return the title
+	 */
+	public String getTitle() {
+		return title;
+	}
+
+	/**
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		return id.hashCode();
+	}
+
+	/**
 	 * @param id the id to set
 	 */
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	/**
+	 * @param roles the roles to set
+	 */
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
+	}
+
+	/**
+	 * @param title the title to set
+	 */
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	/**

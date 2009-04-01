@@ -28,7 +28,6 @@ public class OrganizationalOffice extends BaseModel {
 	@Column(name = "TITLE")
 	private String title;
 
-	
 	// private Collection<School> schools;
 
 	/**

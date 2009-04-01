@@ -36,9 +36,17 @@ import javax.persistence.Table;
  * @version $Id$
  */
 @Entity
-@Table(name="TEACHING_LANGUAGE")
+@Table(name = "TEACHING_LANGUAGE")
 public class TeachingLanguage {
-	
+
+	@Basic
+	@Column(name = "GENIKI_LANGUAGE", length = 12, unique = true)
+	private String genikiLanguage;
+
+	@Id
+	@Column(name = "LANGUAGE", length = 12)
+	private String language;
+
 	/**
 	 * 
 	 */
@@ -54,14 +62,6 @@ public class TeachingLanguage {
 		this.language = language;
 	}
 
-	@Id
-	@Column(name="LANGUAGE", length=12)
-	private String language;
-	
-	@Basic
-	@Column(name="GENIKI_LANGUAGE", length=12, unique=true)
-	private String genikiLanguage;
-	
 	/**
 	 * @return the genikiLanguage
 	 */
@@ -70,17 +70,17 @@ public class TeachingLanguage {
 	}
 
 	/**
-	 * @param genikiLanguage the genikiLanguage to set
-	 */
-	protected void setGenikiLanguage(String genikiLanguage) {
-		this.genikiLanguage = genikiLanguage;
-	}
-
-	/**
 	 * @return the language
 	 */
 	public String getLanguage() {
 		return language;
+	}
+
+	/**
+	 * @param genikiLanguage the genikiLanguage to set
+	 */
+	protected void setGenikiLanguage(String genikiLanguage) {
+		this.genikiLanguage = genikiLanguage;
 	}
 
 	/**

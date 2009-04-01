@@ -49,10 +49,10 @@ public class Employment extends AbstractArchivableEntity {
 	 * An employment may or may not be active.
 	 */
 	@Basic
-	@Column(name="IS_ACTIVE", nullable=true)
+	@Column(name = "IS_ACTIVE", nullable = true)
 	private Boolean active;
 
-	@ManyToOne(fetch=FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 	@JoinColumn(name = "EMPLOYEE_ID", nullable = false)
 	private Employee employee;
@@ -63,7 +63,7 @@ public class Employment extends AbstractArchivableEntity {
 	private Date established;
 
 	@Basic
-	@Column(name= "FINAL_WORKING_HOURS",nullable = true)
+	@Column(name = "FINAL_WORKING_HOURS", nullable = true)
 	private Integer finalWorkingHours;
 
 	@Id
@@ -79,44 +79,32 @@ public class Employment extends AbstractArchivableEntity {
 	@JoinColumn(name = "SCHOOL_ID", nullable = false)
 	private Unit school;
 
-	
-	@ManyToOne(optional=false, fetch=FetchType.EAGER)
-	@JoinColumn(name = "SCHOOL_YEAR_ID", nullable=false)
+	@ManyToOne(optional = false, fetch = FetchType.EAGER)
+	@JoinColumn(name = "SCHOOL_YEAR_ID", nullable = false)
 	private SchoolYear schoolYear;
-	
+
+	@OneToOne(optional = true, fetch = FetchType.LAZY)
+	@JoinColumn(name = "SECONDMENT_ID", nullable = true)
+	private Secondment secondment;
+
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "SPECIALIZATION_ID", nullable = false, updatable = false)
 	private Specialization specialization;
-	
-	@OneToOne(optional=true, fetch=FetchType.LAZY)
-	@JoinColumn(name="SECONDMENT_ID", nullable=true)
-	private Secondment secondment;
-	
-	
-	
-	
-	public Secondment getSecondment() {
-		return secondment;
-	}
-
-	public void setSecondment(Secondment secondment) {
-		this.secondment = secondment;
-	}
 
 	/**
 	 * An employment may be superseded by another employment
 	 */
 	@OneToOne
-	@JoinColumn(name="SUPERSEDED_BY_ID", nullable=true)
+	@JoinColumn(name = "SUPERSEDED_BY_ID", nullable = true)
 	private Employment supersededBy;
-	
+
 	@Basic
 	@Column(name = "TERMINATED_DATE", nullable = true)
 	@Temporal(TemporalType.DATE)
 	private Date terminated;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name="EMPLOYMENT_TYPE", nullable=false, updatable=false)
+	@Column(name = "EMPLOYMENT_TYPE", nullable = false, updatable = false)
 	private EmploymentType type;
 
 	@Basic
@@ -141,7 +129,6 @@ public class Employment extends AbstractArchivableEntity {
 	public Boolean getActive() {
 		return active;
 	}
-	
 
 	/**
 	 * @return the employee
@@ -156,7 +143,7 @@ public class Employment extends AbstractArchivableEntity {
 	public Date getEstablished() {
 		return established;
 	}
-	
+
 	/**
 	 * @return the finalWorkingHours
 	 */
@@ -170,7 +157,6 @@ public class Employment extends AbstractArchivableEntity {
 	public Long getId() {
 		return id;
 	}
-	
 
 	/**
 	 * @return the mandatoryWorkingHours
@@ -191,6 +177,10 @@ public class Employment extends AbstractArchivableEntity {
 	 */
 	public SchoolYear getSchoolYear() {
 		return schoolYear;
+	}
+
+	public Secondment getSecondment() {
+		return secondment;
 	}
 
 	/**
@@ -220,8 +210,7 @@ public class Employment extends AbstractArchivableEntity {
 	public EmploymentType getType() {
 		return type;
 	}
-	
-	
+
 	/**
 	 * @return the workingHoursDecrement
 	 */
@@ -290,6 +279,10 @@ public class Employment extends AbstractArchivableEntity {
 	 */
 	public void setSchoolYear(SchoolYear schoolYear) {
 		this.schoolYear = schoolYear;
+	}
+
+	public void setSecondment(Secondment secondment) {
+		this.secondment = secondment;
 	}
 
 	/**

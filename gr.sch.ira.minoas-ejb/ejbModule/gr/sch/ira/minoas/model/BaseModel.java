@@ -24,26 +24,26 @@ import javax.persistence.Version;
  */
 @MappedSuperclass
 public abstract class BaseModel implements Serializable {
-	
+
 	/**
 	 * Comment for <code>serialVersionUID</code>
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="INSERTED_BY_ID", nullable=true)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "INSERTED_BY_ID", nullable = true)
 	private Principal insertedBy;
-	
-	@Basic(fetch=FetchType.LAZY)
+
+	@Basic(fetch = FetchType.LAZY)
 	@Temporal(TemporalType.DATE)
-	@Column(name="INSERTED_ON", length=128, nullable=true, updatable=false)
+	@Column(name = "INSERTED_ON", length = 128, nullable = true, updatable = false)
 	private Date insertedOn;
-	
+
 	@SuppressWarnings("unused")
 	@Column(name = "VERSION")
 	@Version
 	private Long version;
-	
+
 	/**
 	 * 
 	 */
@@ -51,7 +51,6 @@ public abstract class BaseModel implements Serializable {
 		super();
 		setInsertedOn(new Date(System.currentTimeMillis()));
 	}
-
 
 	/**
 	 * @return the insertedBy

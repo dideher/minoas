@@ -7,8 +7,8 @@ import java.util.Map;
 
 public interface IOrganizationalOfficeList {
 
-	public abstract Map<String, OrganizationalOffice> getAsMap();
-
 	public abstract List<OrganizationalOffice> getAsList();
+
+	public abstract Map<String, OrganizationalOffice> getAsMap();
 
 }

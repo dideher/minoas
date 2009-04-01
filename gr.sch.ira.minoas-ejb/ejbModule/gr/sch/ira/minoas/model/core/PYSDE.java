@@ -39,10 +39,15 @@ public class PYSDE extends BaseModel {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "currentPYSDE")
+	private Collection<Employee> employees;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name="ID")
+	@Column(name = "ID")
 	private Long id;
+
 	/**
 	 * 
 	 */
@@ -51,31 +56,35 @@ public class PYSDE extends BaseModel {
 	private boolean localPYSDE;
 
 	@OneToOne
-	@JoinColumn(name="REPRESENTED_UNIT_ID", nullable=true, updatable=false)
+	@JoinColumn(name = "REPRESENTED_UNIT_ID", nullable = true, updatable = false)
 	private Unit representedByUnit;
-	
+
 	@Basic
 	@Column(name = "TITLE", length = 64, nullable = false, updatable = true, unique = true)
 	private String title;
-	
-	@OneToMany(fetch=FetchType.LAZY, mappedBy="pysde")
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "pysde")
 	@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 	private Collection<Unit> units;
-	
-	@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
-	@OneToMany(fetch=FetchType.LAZY, mappedBy="currentPYSDE")
-	private Collection<Employee> employees;
-	
+
 	/**
 	 * 
 	 */
 	public PYSDE() {
 		// TODO Auto-generated constructor stub
 	}
-	
+
+	/**
+	 * @return the employees
+	 */
+	public Collection<Employee> getEmployees() {
+		return employees;
+	}
+
 	public Long getId() {
 		return id;
 	}
+
 	/**
 	 * @return the representedByUnit
 	 */
@@ -86,51 +95,19 @@ public class PYSDE extends BaseModel {
 	public String getTitle() {
 		return title;
 	}
-	
+
 	/**
 	 * @return the units
 	 */
 	public Collection<Unit> getUnits() {
 		return units;
 	}
-	
+
 	/**
 	 * @return the localPYSDE
 	 */
 	public boolean isLocalPYSDE() {
 		return localPYSDE;
-	}
-	
-	public void setId(Long id) {
-		this.id = id;
-	}
-	/**
-	 * @param localPYSDE the localPYSDE to set
-	 */
-	public void setLocalPYSDE(boolean localPYSDE) {
-		this.localPYSDE = localPYSDE;
-	}
-	/**
-	 * @param representedByUnit the representedByUnit to set
-	 */
-	public void setRepresentedByUnit(Unit representedByUnit) {
-		this.representedByUnit = representedByUnit;
-	}
-	public void setTitle(String title) {
-		this.title = title;
-	}
-	/**
-	 * @param units the units to set
-	 */
-	public void setUnits(Collection<Unit> units) {
-		this.units = units;
-	}
-
-	/**
-	 * @return the employees
-	 */
-	public Collection<Employee> getEmployees() {
-		return employees;
 	}
 
 	/**
@@ -138,6 +115,35 @@ public class PYSDE extends BaseModel {
 	 */
 	public void setEmployees(Collection<Employee> employees) {
 		this.employees = employees;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	/**
+	 * @param localPYSDE the localPYSDE to set
+	 */
+	public void setLocalPYSDE(boolean localPYSDE) {
+		this.localPYSDE = localPYSDE;
+	}
+
+	/**
+	 * @param representedByUnit the representedByUnit to set
+	 */
+	public void setRepresentedByUnit(Unit representedByUnit) {
+		this.representedByUnit = representedByUnit;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	/**
+	 * @param units the units to set
+	 */
+	public void setUnits(Collection<Unit> units) {
+		this.units = units;
 	}
 
 }

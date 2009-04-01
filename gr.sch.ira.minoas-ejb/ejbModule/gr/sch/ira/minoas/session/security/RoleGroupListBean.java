@@ -32,7 +32,12 @@ import org.jboss.seam.annotations.security.Restrict;
 @Local( { IBaseStatefulSeamComponent.class, IRoleGroupList.class })
 public class RoleGroupListBean extends BaseStatefulSeamComponentImpl implements IRoleGroupList {
 
-	@In(value="coreSearching")
+	/**
+	 * Comment for <code>serialVersionUID</code>
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@In(value = "coreSearching")
 	private CoreSearching coreSearching;
 
 	public List<RoleGroup> roleGroupList;

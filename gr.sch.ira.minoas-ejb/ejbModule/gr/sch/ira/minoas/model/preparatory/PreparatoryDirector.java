@@ -38,10 +38,13 @@ import javax.persistence.ManyToOne;
  */
 
 public class PreparatoryDirector extends Person {
-	
-	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="SPECIALIZATION_ID", nullable=false)
+	/**
+	 * Comment for <code>serialVersionUID</code>
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "SPECIALIZATION_ID", nullable = false)
 	private Specialization specialization;
 
-	
 }

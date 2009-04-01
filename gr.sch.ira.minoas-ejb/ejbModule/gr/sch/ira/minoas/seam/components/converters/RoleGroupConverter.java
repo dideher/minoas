@@ -22,9 +22,8 @@ import org.jboss.seam.annotations.intercept.BypassInterceptors;
 @Name("roleGroupConverter")
 @BypassInterceptors
 @Scope(ScopeType.STATELESS)
-public class RoleGroupConverter extends DatabaseAwareBaseConverter  {
+public class RoleGroupConverter extends DatabaseAwareBaseConverter {
 
-	
 	/**
 	 * 
 	 */
@@ -44,8 +43,7 @@ public class RoleGroupConverter extends DatabaseAwareBaseConverter  {
 	public Object getAsObject(FacesContext context, UIComponent component, String value) {
 		if (value != null) {
 			return getMinoasDatabase().find(RoleGroup.class, value);
-		}
-		else
+		} else
 			return null;
 	}
 
@@ -57,12 +55,10 @@ public class RoleGroupConverter extends DatabaseAwareBaseConverter  {
 		if (value != null) {
 			if (value instanceof RoleGroup) {
 				return ((RoleGroup) value).getId();
-			}
-			else {
+			} else {
 				return value.toString();
 			}
-		}
-		else
+		} else
 			return null;
 	}
 

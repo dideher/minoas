@@ -43,49 +43,40 @@ import org.jboss.seam.annotations.security.Restrict;
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 public class SchoolRecordBean extends BaseStatefulSeamComponentImpl implements ISchoolRecord {
 
-	
-	@Out(required=false, scope=ScopeType.CONVERSATION)
+	/**
+	 * Comment for <code>serialVersionUID</code>
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Out(required = false, scope = ScopeType.CONVERSATION)
 	private Person activeEmployee;
 
-	public String reset() {
-		setActiveEmployee(null);
-		setActiveEmployment(null);
-		setSchoolDeputyEmployments(null);
-		setSchoolRegularEmployments(null);
-		setSchoolSecondments(null);
-		setSelectedSchoolDeputyEmployment(null);
-		setSelectedSchoolRegularEmployment(null);
-		setSelectedSchoolSecondment(null);
-		info("succesfull reset - component is reusable.");
-		return SUCCESS_OUTCOME;
-	}
-
-	@Out(required=false, scope=ScopeType.CONVERSATION)
+	@Out(required = false, scope = ScopeType.CONVERSATION)
 	private Employment activeEmployment;
 
 	@In(value = "activeSchool", required = false)
 	@Out(value = "activeSchool", required = false, scope = ScopeType.CONVERSATION)
 	private Unit activeSchool;
-	
+
 	@In(value = "coreSearching")
 	private CoreSearching coreSearching;
 
-	@DataModel(value="schoolDeputyEmployments", scope = ScopeType.PAGE)
+	@DataModel(value = "schoolDeputyEmployments", scope = ScopeType.PAGE)
 	private Collection<Employment> schoolDeputyEmployments;
-	
-	@DataModel(value="schoolRegularEmployments", scope = ScopeType.PAGE)
+
+	@DataModel(value = "schoolRegularEmployments", scope = ScopeType.PAGE)
 	private Collection<Employment> schoolRegularEmployments;
 
-	@DataModel(value="schoolSecondments", scope = ScopeType.PAGE)
+	@DataModel(value = "schoolSecondments", scope = ScopeType.PAGE)
 	private Collection<Secondment> schoolSecondments;
-	
-	@DataModelSelection(value="schoolDeputyEmployments")
+
+	@DataModelSelection(value = "schoolDeputyEmployments")
 	private Employment selectedSchoolDeputyEmployment;
-	
-	@DataModelSelection(value="schoolRegularEmployments")
+
+	@DataModelSelection(value = "schoolRegularEmployments")
 	private Employment selectedSchoolRegularEmployment;
-	
-	@DataModelSelection(value="schoolSecondments")
+
+	@DataModelSelection(value = "schoolSecondments")
 	private Secondment selectedSchoolSecondment;
 
 	/**
@@ -168,6 +159,19 @@ public class SchoolRecordBean extends BaseStatefulSeamComponentImpl implements I
 		return activeSchool != null;
 	}
 
+	public String reset() {
+		setActiveEmployee(null);
+		setActiveEmployment(null);
+		setSchoolDeputyEmployments(null);
+		setSchoolRegularEmployments(null);
+		setSchoolSecondments(null);
+		setSelectedSchoolDeputyEmployment(null);
+		setSelectedSchoolRegularEmployment(null);
+		setSelectedSchoolSecondment(null);
+		info("succesfull reset - component is reusable.");
+		return SUCCESS_OUTCOME;
+	}
+
 	@Factory(value = "schoolDeputyEmployments")
 	public void searchDeputyEmployments() {
 		setSchoolDeputyEmployments(coreSearching.getSchoolEmploymentsOfType(coreSearching.getActiveSchoolYear(),
@@ -183,13 +187,13 @@ public class SchoolRecordBean extends BaseStatefulSeamComponentImpl implements I
 	/**
 	 * @see gr.sch.ira.minoas.session.school.ISchoolRecord#searchSchoolSecondments()
 	 */
-	@Factory(value="schoolSecondments")
+	@Factory(value = "schoolSecondments")
 	public void searchSchoolSecondments() {
 		setSchoolSecondments(coreSearching.getUnitSecondments(getActiveSchoolYear(), getActiveSchool()));
 	}
 
 	public String selectDeputyEmployment() {
-		if(getSelectedSchoolDeputyEmployment()!=null) {
+		if (getSelectedSchoolDeputyEmployment() != null) {
 			setActiveEmployment(getEntityManager().merge(getSelectedSchoolDeputyEmployment()));
 			setActiveEmployee(getEntityManager().merge(getSelectedSchoolDeputyEmployment().getEmployee()));
 			info("selected deputy employment '#0'.", getSelectedSchoolDeputyEmployment());
@@ -199,7 +203,7 @@ public class SchoolRecordBean extends BaseStatefulSeamComponentImpl implements I
 	}
 
 	public String selectRegularEmployment() {
-		if(getSelectedSchoolRegularEmployment()!=null) {
+		if (getSelectedSchoolRegularEmployment() != null) {
 			setActiveEmployment(getEntityManager().merge(getSelectedSchoolRegularEmployment()));
 			setActiveEmployee(getEntityManager().merge(getSelectedSchoolRegularEmployment().getEmployee()));
 			info("selected regular employment '#0'.", getSelectedSchoolRegularEmployment());
@@ -209,7 +213,7 @@ public class SchoolRecordBean extends BaseStatefulSeamComponentImpl implements I
 	}
 
 	public String selectSecondment() {
-		if(getSelectedSchoolSecondment()!=null) {
+		if (getSelectedSchoolSecondment() != null) {
 			setActiveEmployee(getEntityManager().merge(getSelectedSchoolSecondment().getEmployee()));
 			info("selected secondment  '#0'.", getSelectedSchoolSecondment());
 			return SUCCESS_OUTCOME;
@@ -253,13 +257,11 @@ public class SchoolRecordBean extends BaseStatefulSeamComponentImpl implements I
 		this.schoolSecondments = schoolSecondments;
 	}
 
-	public void setSelectedSchoolDeputyEmployment(
-			Employment selectedSchoolDeputyEmployment) {
+	public void setSelectedSchoolDeputyEmployment(Employment selectedSchoolDeputyEmployment) {
 		this.selectedSchoolDeputyEmployment = selectedSchoolDeputyEmployment;
 	}
 
-	public void setSelectedSchoolRegularEmployment(
-			Employment selectedSchoolRegularEmployment) {
+	public void setSelectedSchoolRegularEmployment(Employment selectedSchoolRegularEmployment) {
 		this.selectedSchoolRegularEmployment = selectedSchoolRegularEmployment;
 	}
 

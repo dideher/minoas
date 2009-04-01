@@ -42,14 +42,19 @@ import org.jboss.seam.annotations.datamodel.DataModelSelection;
  */
 public class PrincipalManagementBean extends BaseStatefulSeamComponentImpl {
 
-	@DataModel
-	private Collection<Principal> principals;
+	/**
+	 * Comment for <code>serialVersionUID</code>
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@In
+	private EntityManager em;
 
 	@DataModelSelection
 	private Principal principal;
 
-	@In
-	private EntityManager em;
+	@DataModel
+	private Collection<Principal> principals;
 
 	private String searchString;
 

@@ -40,12 +40,9 @@ import org.jboss.seam.annotations.In;
 public abstract class GenericDAOImpl<T, ID extends Serializable> implements IGenericDAO<T, ID> {
 
 	protected Collection<T> EMPTY_COLLECTION;
+
 	@In
 	protected EntityManager entityManager;
-
-	protected EntityManager getEntityManager() {
-		return entityManager;
-	}
 
 	private Class<T> persistentClass;
 
@@ -74,6 +71,10 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements IGen
 		return getEntityManager().find(persistentClass, id);
 	}
 
+	protected EntityManager getEntityManager() {
+		return entityManager;
+	}
+
 	/**
 	 * @see gr.sch.ira.minoas.session.persistent.IGenericDAO#persist(java.lang.Object)
 	 */
@@ -81,7 +82,5 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements IGen
 		getEntityManager().persist(entityInstance);
 		return entityInstance;
 	}
-
-	
 
 }

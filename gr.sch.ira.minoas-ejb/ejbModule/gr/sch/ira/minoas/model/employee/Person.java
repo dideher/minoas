@@ -60,53 +60,32 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public abstract class Person extends AbstractArchivableEntity {
 
+	/**
+	 * Comment for <code>serialVersionUID</code>
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@ManyToOne(fetch = FetchType.LAZY, optional = true)
 	@JoinColumn(name = "ADDRESS_ID", nullable = true)
 	@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 	private Address address;
-	
+
 	@Basic
 	@Temporal(TemporalType.DATE)
 	@Column(name = "BIRTH_DAY", nullable = true)
 	private Date dateOfBirth;
-	
+
 	@Basic
 	@Column(name = "FATHER_NAME", nullable = true, length = 25)
 	private String fatherName;
-	
-	@Basic
-	@Column(name = "FIRST_NAME", nullable = false, length = 25)
-	private String firstName;
-	
-	@Basic
-	@Column(name = "LAST_NAME", nullable = false, length = 35)
-	private String lastName;
-	
-	@Basic
-	@Column(name = "MAN", nullable = true)
-	private Boolean man;
-	
-	@Basic
-	@Column(name = "MOTHER_NAME", nullable = true, length = 25)
-	private String motherName;
-	
-	@Basic
-	@Column(name = "MOTHER_SURNAME", nullable = true, length = 35)
-	private String motherSurname;
-	
+
 	@Basic
 	@Column(name = "FATHER_SURNAME", nullable = true, length = 35)
 	private String fatherSurname;
-	
-	
-	@OneToMany(fetch = FetchType.LAZY, cascade={ CascadeType.PERSIST, CascadeType.MERGE })
-	@JoinTable(name = "MINOAS_EMPLOYEE_TELEPHONES")
-	@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
-	private Collection<Telephone> telephones = new ArrayList<Telephone>();
-	
+
 	@Basic
-	@Column(name = "VAT_NUMBER", unique = false, nullable = true, length = 10)
-	private String vatNumber;
+	@Column(name = "FIRST_NAME", nullable = false, length = 25)
+	private String firstName;
 
 	@Id
 	@Column(name = "ID")
@@ -116,10 +95,35 @@ public abstract class Person extends AbstractArchivableEntity {
 	@Basic
 	@Column(name = "ID_NUMBER", unique = false, nullable = true, length = 10)
 	private String idNumber;
-	
+
 	@Basic
-	@Column(name="ID_NUMBER_AUTHORITY", nullable=true, length=64)
+	@Column(name = "ID_NUMBER_AUTHORITY", nullable = true, length = 64)
 	private String idNumberAuthority;
+
+	@Basic
+	@Column(name = "LAST_NAME", nullable = false, length = 35)
+	private String lastName;
+
+	@Basic
+	@Column(name = "MAN", nullable = true)
+	private Boolean man;
+
+	@Basic
+	@Column(name = "MOTHER_NAME", nullable = true, length = 25)
+	private String motherName;
+
+	@Basic
+	@Column(name = "MOTHER_SURNAME", nullable = true, length = 35)
+	private String motherSurname;
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@JoinTable(name = "MINOAS_EMPLOYEE_TELEPHONES")
+	@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
+	private Collection<Telephone> telephones = new ArrayList<Telephone>();
+
+	@Basic
+	@Column(name = "VAT_NUMBER", unique = false, nullable = true, length = 10)
+	private String vatNumber;
 
 	/**
 	 * @return the address
@@ -143,6 +147,13 @@ public abstract class Person extends AbstractArchivableEntity {
 	}
 
 	/**
+	 * @return the fatherSurname
+	 */
+	public String getFatherSurname() {
+		return fatherSurname;
+	}
+
+	/**
 	 * @return the firstName
 	 */
 	public String getFirstName() {
@@ -150,10 +161,35 @@ public abstract class Person extends AbstractArchivableEntity {
 	}
 
 	/**
+	 * @return the id
+	 */
+	public Long getId() {
+		return id;
+	}
+
+	/**
+	 * @return the idNumber
+	 */
+	public String getIdNumber() {
+		return idNumber;
+	}
+
+	/**
+	 * @return the idNumberAuthority
+	 */
+	public String getIdNumberAuthority() {
+		return idNumberAuthority;
+	}
+
+	/**
 	 * @return the lastName
 	 */
 	public String getLastName() {
 		return lastName;
+	}
+
+	public Boolean getMan() {
+		return isMan();
 	}
 
 	/**
@@ -164,10 +200,24 @@ public abstract class Person extends AbstractArchivableEntity {
 	}
 
 	/**
+	 * @return the motherSurname
+	 */
+	public String getMotherSurname() {
+		return motherSurname;
+	}
+
+	/**
 	 * @return the telephones
 	 */
 	public Collection<Telephone> getTelephones() {
 		return telephones;
+	}
+
+	/**
+	 * @return the vatNumber
+	 */
+	public String getVatNumber() {
+		return vatNumber;
 	}
 
 	/**
@@ -177,9 +227,6 @@ public abstract class Person extends AbstractArchivableEntity {
 		return man;
 	}
 
-	public Boolean getMan() {
-		return isMan();
-	}
 	/**
 	 * @param address the address to set
 	 */
@@ -202,10 +249,38 @@ public abstract class Person extends AbstractArchivableEntity {
 	}
 
 	/**
+	 * @param fatherSurname the fatherSurname to set
+	 */
+	public void setFatherSurname(String fatherSurname) {
+		this.fatherSurname = fatherSurname;
+	}
+
+	/**
 	 * @param firstName the firstName to set
 	 */
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	/**
+	 * @param idNumber the idNumber to set
+	 */
+	public void setIdNumber(String idNumber) {
+		this.idNumber = idNumber;
+	}
+
+	/**
+	 * @param idNumberAuthority the idNumberAuthority to set
+	 */
+	public void setIdNumberAuthority(String idNumberAuthority) {
+		this.idNumberAuthority = idNumberAuthority;
 	}
 
 	/**
@@ -230,38 +305,10 @@ public abstract class Person extends AbstractArchivableEntity {
 	}
 
 	/**
-	 * @return the id
+	 * @param motherSurname the motherSurname to set
 	 */
-	public Long getId() {
-		return id;
-	}
-
-	/**
-	 * @return the idNumber
-	 */
-	public String getIdNumber() {
-		return idNumber;
-	}
-
-	/**
-	 * @return the vatNumber
-	 */
-	public String getVatNumber() {
-		return vatNumber;
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	/**
-	 * @param idNumber the idNumber to set
-	 */
-	public void setIdNumber(String idNumber) {
-		this.idNumber = idNumber;
+	public void setMotherSurname(String motherSurname) {
+		this.motherSurname = motherSurname;
 	}
 
 	/**
@@ -276,48 +323,6 @@ public abstract class Person extends AbstractArchivableEntity {
 	 */
 	public void setVatNumber(String vatNumber) {
 		this.vatNumber = vatNumber;
-	}
-
-	/**
-	 * @return the idNumberAuthority
-	 */
-	public String getIdNumberAuthority() {
-		return idNumberAuthority;
-	}
-
-	/**
-	 * @param idNumberAuthority the idNumberAuthority to set
-	 */
-	public void setIdNumberAuthority(String idNumberAuthority) {
-		this.idNumberAuthority = idNumberAuthority;
-	}
-
-	/**
-	 * @return the motherSurname
-	 */
-	public String getMotherSurname() {
-		return motherSurname;
-	}
-
-	/**
-	 * @param motherSurname the motherSurname to set
-	 */
-	public void setMotherSurname(String motherSurname) {
-		this.motherSurname = motherSurname;
-	}
-
-	/**
-	 * @return the fatherSurname
-	 */
-	public String getFatherSurname() {
-		return fatherSurname;
-	}
-
-	/**
-	 * @param fatherSurname the fatherSurname to set
-	 */
-	public void setFatherSurname(String fatherSurname) {
-		this.fatherSurname = fatherSurname;
 	}
 
 }

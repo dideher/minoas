@@ -13,16 +13,16 @@ import org.jboss.seam.Component;
  */
 
 public abstract class DatabaseAwareBaseConverter extends BaseConverter {
-	
+
+	public static final String ENTITY_MANAGER_SEAM_COMPONENT_NAME = "entityManager";
+
 	/**
 	 * Comment for <code>serialVersionUID</code>
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	public static final String ENTITY_MANAGER_SEAM_COMPONENT_NAME = "entityManager";
-	
+
 	protected EntityManager getMinoasDatabase() {
-		return (EntityManager)Component.getInstance(ENTITY_MANAGER_SEAM_COMPONENT_NAME);
+		return (EntityManager) getSeamComponent(ENTITY_MANAGER_SEAM_COMPONENT_NAME, false);
 	}
 
 }

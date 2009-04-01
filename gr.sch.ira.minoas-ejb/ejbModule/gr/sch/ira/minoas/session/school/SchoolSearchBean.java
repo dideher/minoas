@@ -36,23 +36,20 @@ public class SchoolSearchBean extends BaseStatefulSeamComponentImpl implements I
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@In(value = "activeSchool", required=false)
+	@In(value = "activeSchool", required = false)
 	@Out(value = "activeSchool", required = false, scope = ScopeType.CONVERSATION)
 	private Unit activeSchool;
 
-	@In(value="coreSearching")
+	@In(value = "coreSearching")
 	private CoreSearching coreSearching;
-	
-	@DataModel(value="schools", scope=ScopeType.PAGE)
+
+	@DataModel(value = "schools", scope = ScopeType.PAGE)
 	private Collection<School> schools;
 
 	private String searchString;
 
 	@DataModelSelection("schools")
 	private School selectedSchool;
-
-	
-
 
 	/**
 	 * @return the activeSchool
@@ -71,15 +68,15 @@ public class SchoolSearchBean extends BaseStatefulSeamComponentImpl implements I
 	/**
 	 * @see gr.sch.ira.minoas.session.school.ISchoolSearch#search()
 	 */
-	@Factory(value="schools")
+	@Factory(value = "schools")
 	public String search() {
-		schools =  coreSearching.searchShools(getSearchString());
+		schools = coreSearching.searchShools(getSearchString());
 		return SUCCESS_OUTCOME;
 	}
 
 	public String selectSchool() {
-		if(selectedSchool!=null) {
-			info("school #0 selected successfully.",selectedSchool);
+		if (selectedSchool != null) {
+			info("school #0 selected successfully.", selectedSchool);
 			setActiveSchool(selectedSchool);
 		}
 		return SCHOOL_SELECTED_OUTCOME;
@@ -91,7 +88,6 @@ public class SchoolSearchBean extends BaseStatefulSeamComponentImpl implements I
 	public void setActiveSchool(Unit activeSchool) {
 		this.activeSchool = activeSchool;
 	}
-
 
 	/**
 	 * @param searchString the searchString to set

@@ -14,16 +14,14 @@ import org.jboss.seam.annotations.In;
  *
  */
 public class EmployeeAwareSeamComponent extends BaseStatefulSeamComponentImpl implements IEmployeeAware {
-	
-	@In(value="activeEmployee", scope = ScopeType.CONVERSATION, required = true)
-	private Employee activeEmployee;
 
 	/**
-	 * @see gr.sch.ira.minoas.session.employee.IEmployeeAware#setActiveEmployee(gr.sch.ira.minoas.model.employee.Employee)
+	 * Comment for <code>serialVersionUID</code>
 	 */
-	public void setActiveEmployee(Employee activeEmployee) {
-		this.activeEmployee = activeEmployee;
-	}
+	private static final long serialVersionUID = 1L;
+
+	@In(value = "activeEmployee", scope = ScopeType.CONVERSATION, required = true)
+	private Employee activeEmployee;
 
 	/**
 	 * @see gr.sch.ira.minoas.session.employee.IEmployeeAware#getActiveEmployee()
@@ -36,8 +34,14 @@ public class EmployeeAwareSeamComponent extends BaseStatefulSeamComponentImpl im
 	 * @see gr.sch.ira.minoas.session.employee.IEmployeeAware#hasActiveEmployee()
 	 */
 	public boolean hasActiveEmployee() {
-		return getActiveEmployee()!=null;
+		return getActiveEmployee() != null;
 	}
-	
-	
+
+	/**
+	 * @see gr.sch.ira.minoas.session.employee.IEmployeeAware#setActiveEmployee(gr.sch.ira.minoas.model.employee.Employee)
+	 */
+	public void setActiveEmployee(Employee activeEmployee) {
+		this.activeEmployee = activeEmployee;
+	}
+
 }

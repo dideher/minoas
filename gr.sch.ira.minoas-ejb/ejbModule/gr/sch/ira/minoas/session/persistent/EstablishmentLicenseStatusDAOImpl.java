@@ -37,13 +37,20 @@ public class EstablishmentLicenseStatusDAOImpl extends GenericDAOImpl<Establishm
 	}
 
 	/**
+	 * @see gr.sch.ira.minoas.session.persistent.IGenericDAO#findByExample(java.lang.Object)
+	 */
+	public EstablishmentLicenseStatus findByExample(EstablishmentLicenseStatus entityInstance) {
+		return null;
+	}
+
+	/**
 	 * @see gr.sch.ira.minoas.session.persistent.IEstablishmentLicenseStatusDAO#findByType(gr.sch.ira.minoas.model.preparatory.EstablishmentLicenseStatus.EstablishmentLicenseStatusType)
 	 */
 	public EstablishmentLicenseStatus findByType(EstablishmentLicenseStatusType establishmentLicenseStatusType) {
 		try {
 			return (EstablishmentLicenseStatus) getEntityManager().createQuery(
-					"FROM EstablishmentLicenseStatus p WHERE p.statusType=:statusType ORDER BY (p.title)").setParameter("statusType",
-					establishmentLicenseStatusType).getSingleResult();
+					"FROM EstablishmentLicenseStatus p WHERE p.statusType=:statusType ORDER BY (p.title)")
+					.setParameter("statusType", establishmentLicenseStatusType).getSingleResult();
 		} catch (javax.persistence.NoResultException nre) {
 			return null;
 		}

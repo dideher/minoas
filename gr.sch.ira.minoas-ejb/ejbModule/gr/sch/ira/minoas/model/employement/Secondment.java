@@ -53,20 +53,6 @@ import org.jboss.seam.annotations.Name;
 public class Secondment extends BaseModel {
 
 	/**
-	 * @return the mandatoryWorkingHours
-	 */
-	public Integer getMandatoryWorkingHours() {
-		return mandatoryWorkingHours;
-	}
-
-	/**
-	 * @param mandatoryWorkingHours the mandatoryWorkingHours to set
-	 */
-	public void setMandatoryWorkingHours(Integer mandatoryWorkingHours) {
-		this.mandatoryWorkingHours = mandatoryWorkingHours;
-	}
-
-	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
@@ -105,10 +91,6 @@ public class Secondment extends BaseModel {
 	private Integer finalWorkingHours;
 
 	@Basic
-	@Column(name = "MANDATORY_WORKING_HOURS", nullable = true)
-	private Integer mandatoryWorkingHours;
-
-	@Basic
 	@Column(name = "HEADMASTER_ORDER", nullable = true, length = 25)
 	private String headMasterOrder;
 
@@ -117,7 +99,10 @@ public class Secondment extends BaseModel {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	
+	@Basic
+	@Column(name = "MANDATORY_WORKING_HOURS", nullable = true)
+	private Integer mandatoryWorkingHours;
+
 	@Basic
 	@Column(name = "MINISTERIAL_ORDER", nullable = true, length = 25)
 	private String ministerialOrder;
@@ -142,6 +127,10 @@ public class Secondment extends BaseModel {
 	@JoinColumn(name = "SOURCE_PYSDE_ID", nullable = true)
 	private PYSDE sourcePYSDE;
 
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "SOURCE_UNIT_ID", nullable = false)
+	private Unit sourceUnit;
+
 	/**
 	 * A secondment may be superseded by another secondment
 	 */
@@ -156,11 +145,6 @@ public class Secondment extends BaseModel {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "TARGET_UNIT_ID", nullable = false)
 	private Unit targetUnit;
-
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "SOURCE_UNIT_ID", nullable = false)
-	private Unit sourceUnit;
-
 
 	@Basic
 	@Column(name = "WORK_HRS_DECR", nullable = true)
@@ -224,6 +208,13 @@ public class Secondment extends BaseModel {
 		return id;
 	}
 
+	/**
+	 * @return the mandatoryWorkingHours
+	 */
+	public Integer getMandatoryWorkingHours() {
+		return mandatoryWorkingHours;
+	}
+
 	public String getMinisterialOrder() {
 		return ministerialOrder;
 	}
@@ -249,6 +240,10 @@ public class Secondment extends BaseModel {
 
 	public PYSDE getSourcePYSDE() {
 		return sourcePYSDE;
+	}
+
+	public Unit getSourceUnit() {
+		return sourceUnit;
 	}
 
 	/**
@@ -328,7 +323,13 @@ public class Secondment extends BaseModel {
 		this.id = id;
 	}
 
-	
+	/**
+	 * @param mandatoryWorkingHours the mandatoryWorkingHours to set
+	 */
+	public void setMandatoryWorkingHours(Integer mandatoryWorkingHours) {
+		this.mandatoryWorkingHours = mandatoryWorkingHours;
+	}
+
 	public void setMinisterialOrder(String ministerialOrder) {
 		this.ministerialOrder = ministerialOrder;
 	}
@@ -356,6 +357,10 @@ public class Secondment extends BaseModel {
 		this.sourcePYSDE = sourcePYSDE;
 	}
 
+	public void setSourceUnit(Unit sourceUnit) {
+		this.sourceUnit = sourceUnit;
+	}
+
 	/**
 	 * @param supersededBy the supersededBy to set
 	 */
@@ -377,14 +382,6 @@ public class Secondment extends BaseModel {
 
 	public void setWorkingHoursDecrementReason(String workingHoursDecrementReason) {
 		this.workingHoursDecrementReason = workingHoursDecrementReason;
-	}
-
-	public Unit getSourceUnit() {
-		return sourceUnit;
-	}
-
-	public void setSourceUnit(Unit sourceUnit) {
-		this.sourceUnit = sourceUnit;
 	}
 
 }

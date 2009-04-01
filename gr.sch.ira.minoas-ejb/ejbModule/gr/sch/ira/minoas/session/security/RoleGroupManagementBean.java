@@ -38,7 +38,12 @@ import org.jboss.seam.annotations.security.Restrict;
 @Scope(ScopeType.CONVERSATION)
 public class RoleGroupManagementBean extends BaseStatefulSeamComponentImpl implements IRoleGroupManagement {
 
-	@In(value="coreSearching")
+	/**
+	 * Comment for <code>serialVersionUID</code>
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@In(value = "coreSearching")
 	private CoreSearching coreSearching;
 
 	@In
@@ -97,8 +102,7 @@ public class RoleGroupManagementBean extends BaseStatefulSeamComponentImpl imple
 					this.newRoleGroup.getRoles().size());
 			constructNewRoleGroup();
 			search();
-		}
-		else {
+		} else {
 			warn("ignoring save request of role #0, since that role already exists", this.newRoleGroup);
 			facesMessages.add("role fdsf", newRoleGroup.getId());
 		}

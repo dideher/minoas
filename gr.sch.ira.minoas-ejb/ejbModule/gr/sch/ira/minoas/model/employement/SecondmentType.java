@@ -46,14 +46,13 @@ public class SecondmentType extends BaseModel {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	
-	@Basic
-	@Column(name = "TITLE", length = 64, nullable = false, unique = true)
-	private String title;
-
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "MINOAS_SECONDMENT_TYPE_UNIT_CATEGORIES", joinColumns = @JoinColumn(name = "SECONDMENT_TYPE_ID", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "UNIT_CATEGORY_ID", referencedColumnName = "ID"))
 	private Collection<UnitCategory> suitableCategoryUnits;
+
+	@Basic
+	@Column(name = "TITLE", length = 64, nullable = false, unique = true)
+	private String title;
 
 	/**
 	 * 
@@ -66,25 +65,24 @@ public class SecondmentType extends BaseModel {
 		return id;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	protected Collection<UnitCategory> getSuitableCategoryUnits() {
+		return suitableCategoryUnits;
 	}
 
 	public String getTitle() {
 		return title;
 	}
 
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	protected void setSuitableCategoryUnits(Collection<UnitCategory> suitableCategoryUnits) {
+		this.suitableCategoryUnits = suitableCategoryUnits;
+	}
+
 	public void setTitle(String title) {
 		this.title = title;
-	}
-
-	protected Collection<UnitCategory> getSuitableCategoryUnits() {
-		return suitableCategoryUnits;
-	}
-
-	protected void setSuitableCategoryUnits(
-			Collection<UnitCategory> suitableCategoryUnits) {
-		this.suitableCategoryUnits = suitableCategoryUnits;
 	}
 
 }

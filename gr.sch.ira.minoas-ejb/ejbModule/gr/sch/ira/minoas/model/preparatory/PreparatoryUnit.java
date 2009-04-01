@@ -49,28 +49,23 @@ import org.jboss.seam.annotations.Name;
 public class PreparatoryUnit extends Unit {
 
 	/**
+	 * Comment for <code>serialVersionUID</code>
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "ADDRESS_ID", nullable = true)
+	private Address address;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "OWNER_ID", nullable = false)
+	private PreparatoryOwner owner;
+
+	/**
 	 * 
 	 */
 	public PreparatoryUnit() {
 		super();
 	}
-
-	/**
-	 * Comment for <code>serialVersionUID</code>
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	
-	
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="OWNER_ID", nullable=false)
-	private PreparatoryOwner owner;
-	
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="ADDRESS_ID", nullable=true)
-	private Address address;
-	
-
-	
 
 }

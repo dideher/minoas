@@ -46,20 +46,20 @@ import org.jboss.seam.annotations.Name;
  * @version $Id$
  */
 @Entity
-@Table(name="PREP_OWNER")
+@Table(name = "PREP_OWNER")
 @Name("PreparatoryOwner")
 public class PreparatoryOwner extends Person {
-	
+
 	/**
 	 * Comment for <code>serialVersionUID</code>
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@OneToMany(fetch=FetchType.LAZY, mappedBy="owner", cascade= { CascadeType.PERSIST, CascadeType.MERGE })
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "owner", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	private Set<PreparatoryUnit> owningUnits = new HashSet<PreparatoryUnit>();
-	
-	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="SPECIALIZATION_ID", nullable=true)
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "SPECIALIZATION_ID", nullable = true)
 	private Specialization specialization;
 
 	/**
@@ -75,6 +75,5 @@ public class PreparatoryOwner extends Person {
 	public void setSpecialization(Specialization specialization) {
 		this.specialization = specialization;
 	}
-	
-	
+
 }

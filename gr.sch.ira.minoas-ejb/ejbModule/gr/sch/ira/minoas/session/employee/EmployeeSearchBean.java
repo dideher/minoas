@@ -34,13 +34,17 @@ import org.jboss.seam.annotations.security.Restrict;
 @Restrict("#{identity.loggedIn}")
 @Local( { IBaseStatefulSeamComponent.class, IEmployeeSearch.class })
 @Scope(ScopeType.CONVERSATION)
-public class EmployeeSearchBean extends BaseStatefulSeamComponentImpl implements
-		IEmployeeSearch {
+public class EmployeeSearchBean extends BaseStatefulSeamComponentImpl implements IEmployeeSearch {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
+	@Out(value = "activeEmployee", required = false, scope = ScopeType.CONVERSATION)
+	private Person activeEmployee;
+
+	private Boolean employeeActiveFilter;
 
 	private String employeeFatherNameFilter;
 
@@ -53,14 +57,9 @@ public class EmployeeSearchBean extends BaseStatefulSeamComponentImpl implements
 	@DataModel(scope = ScopeType.PAGE, value = "employeesSearchResult")
 	private List<Employee> employees;
 
-	private String employeeVATNumberFilter;
-
-	private Boolean employeeActiveFilter;
-
 	private Specialization employeeSpecializationFilter;
 
-	@Out(value = "activeEmployee", required = false, scope = ScopeType.CONVERSATION)
-	private Person activeEmployee;
+	private String employeeVATNumberFilter;
 
 	private SchoolYear schoolYearFilter;
 
@@ -85,6 +84,10 @@ public class EmployeeSearchBean extends BaseStatefulSeamComponentImpl implements
 	public void destroy() {
 		// TODO Auto-generated method stub
 		super.destroy();
+	}
+
+	public Boolean getEmployeeActiveFilter() {
+		return this.employeeActiveFilter;
 	}
 
 	/**
@@ -116,14 +119,17 @@ public class EmployeeSearchBean extends BaseStatefulSeamComponentImpl implements
 	}
 
 	/**
+	 * @return the employeeSpecializationFilter
+	 */
+	public Specialization getEmployeeSpecializationFilter() {
+		return employeeSpecializationFilter;
+	}
+
+	/**
 	 * @return the employeeVATNumberFilter
 	 */
 	public String getEmployeeVATNumberFilter() {
 		return employeeVATNumberFilter;
-	}
-
-	public Boolean getEmployeeActiveFilter() {
-		return this.employeeActiveFilter;
 	}
 
 	/**
@@ -144,66 +150,46 @@ public class EmployeeSearchBean extends BaseStatefulSeamComponentImpl implements
 	 * @see gr.sch.ira.minoas.session.employee.IEmployeeSearch#search()
 	 */
 	public String search() {
-		if(isNonEmpty(getEmployeeVATNumberFilter())) {
-			info("searching for employee with VAT Number '#0'.",
-					getEmployeeVATNumberFilter());
-			employees = entityManager.createQuery(
-					"SELECT e FROM Employee e WHERE e.vatNumber=:vat_number")
-					.setParameter("vat_number", getEmployeeVATNumberFilter())
-					.getResultList();
+		if (isNonEmpty(getEmployeeVATNumberFilter())) {
+			info("searching for employee with VAT Number '#0'.", getEmployeeVATNumberFilter());
+			employees = entityManager.createQuery("SELECT e FROM Employee e WHERE e.vatNumber=:vat_number")
+					.setParameter("vat_number", getEmployeeVATNumberFilter()).getResultList();
 			info("found #0 employee(s)", employees.size());
 			return SUCCESS_OUTCOME;
 		}
-		
-		if(isNonEmpty(getEmployeeRegistryIDFilter())) {
-			info("searching for employee with registry ID '#0'.",
-					getEmployeeRegistryIDFilter());
-			employees = entityManager.createQuery(
-					"SELECT e FROM Employee e WHERE e.registryID=:registry_id")
-					.setParameter("registry_id", getEmployeeRegistryIDFilter())
-					.getResultList();
+
+		if (isNonEmpty(getEmployeeRegistryIDFilter())) {
+			info("searching for employee with registry ID '#0'.", getEmployeeRegistryIDFilter());
+			employees = entityManager.createQuery("SELECT e FROM Employee e WHERE e.registryID=:registry_id")
+					.setParameter("registry_id", getEmployeeRegistryIDFilter()).getResultList();
 			info("found #0 employee(s)", employees.size());
 			return SUCCESS_OUTCOME;
 		}
 		info(
 				"searching for employees with matching '#0' last name, '#1' first name and '#2' father name with employment filter set to '#3'.",
-				getEmployeeLastNameFilter(), getEmployeeFirstNameFilter(),
-				getEmployeeFatherNameFilter(), getEmployeeActiveFilter());
+				getEmployeeLastNameFilter(), getEmployeeFirstNameFilter(), getEmployeeFatherNameFilter(),
+				getEmployeeActiveFilter());
 		StringBuffer sb = new StringBuffer();
 		sb
 				.append("SELECT e FROM Employee e WHERE (e.lastName LIKE UPPER(:lastName) AND e.firstName LIKE UPPER(:firstName) AND e.fatherName LIKE UPPER(:fatherName)) ");
 		if (getEmployeeActiveFilter())
 			sb.append("AND e.active = TRUE ");
 		if (getEmployeeSpecializationFilter() != null) {
-			sb
-					.append("AND e.lastSpecialization=:specialization_filter ");
+			sb.append("AND e.lastSpecialization=:specialization_filter ");
 		}
 		sb.append("ORDER BY e.lastName ASC, e.firstName ASC");
-		Query q = entityManager
-				.createQuery(sb.toString())
-				.setParameter(
-						"lastName",
-						CoreUtils
-								.getSearchPattern(getEmployeeLastNameFilter()))
-				.setParameter(
-						"firstName",
-						CoreUtils
-								.getSearchPattern(getEmployeeFirstNameFilter()))
-				.setParameter(
-						"fatherName",
-						CoreUtils
-								.getSearchPattern(getEmployeeFatherNameFilter()));
+		Query q = entityManager.createQuery(sb.toString()).setParameter("lastName",
+				CoreUtils.getSearchPattern(getEmployeeLastNameFilter())).setParameter("firstName",
+				CoreUtils.getSearchPattern(getEmployeeFirstNameFilter())).setParameter("fatherName",
+				CoreUtils.getSearchPattern(getEmployeeFatherNameFilter()));
 		if (getEmployeeSpecializationFilter() != null) {
-			q = q.setParameter("specialization_filter",
-					getEmployeeSpecializationFilter());
+			q = q.setParameter("specialization_filter", getEmployeeSpecializationFilter());
 		}
 		employees = q.getResultList();
 		info("found #0 employee(s)", employees.size());
 		return SUCCESS_OUTCOME;
 	}
 
-
-	
 	/**
 	 * @see gr.sch.ira.minoas.session.employee.IEmployeeSearch#select()
 	 */
@@ -215,6 +201,10 @@ public class EmployeeSearchBean extends BaseStatefulSeamComponentImpl implements
 		} else
 			return FAILURE_OUTCOME;
 
+	}
+
+	public void setEmployeeActiveFilter(Boolean employment_filter) {
+		this.employeeActiveFilter = employment_filter;
 	}
 
 	/**
@@ -250,15 +240,19 @@ public class EmployeeSearchBean extends BaseStatefulSeamComponentImpl implements
 	}
 
 	/**
+	 * @param employeeSpecializationFilter
+	 *            the employeeSpecializationFilter to set
+	 */
+	public void setEmployeeSpecializationFilter(Specialization employeeSpecializationFilter) {
+		this.employeeSpecializationFilter = employeeSpecializationFilter;
+	}
+
+	/**
 	 * @param employeeVATNumberFilter
 	 *            the employeeVATNumberFilter to set
 	 */
 	public void setEmployeeVATNumberFilter(String employeeVATNumberFilter) {
 		this.employeeVATNumberFilter = employeeVATNumberFilter;
-	}
-
-	public void setEmployeeActiveFilter(Boolean employment_filter) {
-		this.employeeActiveFilter = employment_filter;
 	}
 
 	/**
@@ -273,21 +267,5 @@ public class EmployeeSearchBean extends BaseStatefulSeamComponentImpl implements
 	 */
 	public void setSpecializationFilter(Specialization specialization_filter) {
 		this.specializationFilter = specializationFilter;
-	}
-
-	/**
-	 * @return the employeeSpecializationFilter
-	 */
-	public Specialization getEmployeeSpecializationFilter() {
-		return employeeSpecializationFilter;
-	}
-
-	/**
-	 * @param employeeSpecializationFilter
-	 *            the employeeSpecializationFilter to set
-	 */
-	public void setEmployeeSpecializationFilter(
-			Specialization employeeSpecializationFilter) {
-		this.employeeSpecializationFilter = employeeSpecializationFilter;
 	}
 }

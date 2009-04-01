@@ -32,7 +32,12 @@ import org.jboss.seam.annotations.security.Restrict;
 @Local( { IBaseStatefulSeamComponent.class, IOrganizationalOfficeList.class })
 public class OrganizationalOfficeListBean extends BaseStatefulSeamComponentImpl implements IOrganizationalOfficeList {
 
-	@In(value="coreSearching")
+	/**
+	 * Comment for <code>serialVersionUID</code>
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@In(value = "coreSearching")
 	private CoreSearching coreSearching;
 
 	public List<OrganizationalOffice> organizationalOfficesList;
@@ -54,17 +59,17 @@ public class OrganizationalOfficeListBean extends BaseStatefulSeamComponentImpl 
 	}
 
 	/**
-	 * @see gr.sch.ira.minoas.session.school.IOrganizationalOfficeList#getAsMap()
-	 */
-	public Map<String, OrganizationalOffice> getAsMap() {
-		return this.organizationalOfficesMap;
-	}
-
-	/**
 	 * @see gr.sch.ira.minoas.session.school.IOrganizationalOfficeList#getAsList()
 	 */
 	public List<OrganizationalOffice> getAsList() {
 		return this.organizationalOfficesList;
+	}
+
+	/**
+	 * @see gr.sch.ira.minoas.session.school.IOrganizationalOfficeList#getAsMap()
+	 */
+	public Map<String, OrganizationalOffice> getAsMap() {
+		return this.organizationalOfficesMap;
 	}
 
 }

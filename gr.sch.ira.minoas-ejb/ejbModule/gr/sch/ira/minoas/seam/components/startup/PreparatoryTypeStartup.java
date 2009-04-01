@@ -24,20 +24,21 @@ import org.jboss.seam.log.Log;
 @Name("PreparatoryTypeStartup")
 public class PreparatoryTypeStartup {
 
+	/**
+	 * Comment for <code>serialVersionUID</code>
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Logger
 	private Log log;
-
 
 	@In(create = true)
 	protected IPreparatoryUnitNatureDAO preparatoryUnitNatureDAO;
 
-	
-	
-
 	@Create
 	@Transactional(TransactionPropagationType.REQUIRED)
 	public void init() {
-	if (preparatoryUnitNatureDAO.findByNatureType(PreparatoryUnitNatureType.LANGUAGE_CENTER) == null)
+		if (preparatoryUnitNatureDAO.findByNatureType(PreparatoryUnitNatureType.LANGUAGE_CENTER) == null)
 			preparatoryUnitNatureDAO.persist(new PreparatoryUnitNature(PreparatoryUnitNatureType.LANGUAGE_CENTER,
 					"Κέντρο Ξένων Γλωσσών"));
 		if (preparatoryUnitNatureDAO.findByNatureType(PreparatoryUnitNatureType.SECONDARY_EDUCATION) == null)

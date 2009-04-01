@@ -9,11 +9,11 @@ package gr.sch.ira.minoas.session.security;
  */
 public interface IRoleSearch {
 
-	public void search();
-
 	public String getSearchPattern();
 
-	public void setSearchString(String searchString);
-
 	public String getSearchString();
+
+	public void search();
+
+	public void setSearchString(String searchString);
 }

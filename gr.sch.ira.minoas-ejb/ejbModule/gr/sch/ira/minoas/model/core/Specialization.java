@@ -32,8 +32,6 @@ public class Specialization extends BaseModel {
 	@Column(name = "TITLE", nullable = false, length = 70)
 	private String title;
 
-
-
 	/**
 	 * 
 	 */

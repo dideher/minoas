@@ -25,7 +25,6 @@
 
 package gr.sch.ira.minoas.seam.components;
 
-
 import gr.sch.ira.minoas.model.core.SchoolYear;
 
 import javax.ejb.Remove;
@@ -39,39 +38,31 @@ import org.jboss.seam.annotations.In;
  * @version $Id$
  */
 
-public abstract class BaseStatefulSeamComponentImpl extends BaseDatabaseAwareSeamComponent implements IBaseStatefulSeamComponent {
+public abstract class BaseStatefulSeamComponentImpl extends BaseDatabaseAwareSeamComponent implements
+		IBaseStatefulSeamComponent {
 
-	/**
-	 * @return the activeSchoolYear
-	 */
-	public SchoolYear getActiveSchoolYear() {
-		return activeSchoolYear;
-	}
+	public static final String BEGIN_OUTCOME = "begin";
 
-	/**
-	 * @param activeSchoolYear the activeSchoolYear to set
-	 */
-	public void setActiveSchoolYear(SchoolYear activeSchoolYear) {
-		this.activeSchoolYear = activeSchoolYear;
-	}
+	public static final String EMPLOYEE_SELECTED_OUTCOME = "employee-selected";
 
-	public static final String SUCCESS_OUTCOME = "success";
+	public static final String EMPLOYMENT_SELECTED_OUTCOME = "employment-selected";
+
+	public static final String END_OUTCOME = "end";
 
 	public static final String FAILURE_OUTCOME = "failure";
 
-	public static final String BEGIN_OUTCOME = "begin";
-	
-	public static final String END_OUTCOME = "end";
-	
-	public static final String SCHOOL_SELECTED_OUTCOME ="school-selected";
-	
-	public static final String EMPLOYEE_SELECTED_OUTCOME ="employee-selected";
-	
-	public static final String EMPLOYMENT_SELECTED_OUTCOME ="employment-selected";
-	
-	@In(value="activeSchoolYear", required=false)
+	public static final String SCHOOL_SELECTED_OUTCOME = "school-selected";
+
+	/**
+	 * Comment for <code>serialVersionUID</code>
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public static final String SUCCESS_OUTCOME = "success";
+
+	@In(value = "activeSchoolYear", required = false)
 	private SchoolYear activeSchoolYear;
-	
+
 	/**
 	 * @see gr.sch.ira.minoas.seam.components.IBaseStatefulSeamComponent#create()
 	 */
@@ -89,6 +80,18 @@ public abstract class BaseStatefulSeamComponentImpl extends BaseDatabaseAwareSea
 		info("stateful seam component destroyed.");
 	}
 
-	
+	/**
+	 * @return the activeSchoolYear
+	 */
+	public SchoolYear getActiveSchoolYear() {
+		return activeSchoolYear;
+	}
+
+	/**
+	 * @param activeSchoolYear the activeSchoolYear to set
+	 */
+	public void setActiveSchoolYear(SchoolYear activeSchoolYear) {
+		this.activeSchoolYear = activeSchoolYear;
+	}
 
 }

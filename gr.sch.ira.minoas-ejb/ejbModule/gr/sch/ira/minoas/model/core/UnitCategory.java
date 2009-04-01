@@ -35,41 +35,46 @@ public class UnitCategory extends BaseModel {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name="ID")
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(name = "ID")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
+
 	@Basic
-	@Column(name="TITLE", nullable=false, unique=true, length=64)
+	@Column(name = "TITLE", nullable = false, unique = true, length = 64)
 	private String title;
-	
-	@ManyToMany(mappedBy="categories", fetch=FetchType.LAZY)
+
+	@ManyToMany(mappedBy = "categories", fetch = FetchType.LAZY)
 	private Collection<Unit> units;
+
 	/**
 	 * 
 	 */
 	public UnitCategory() {
 		// TODO Auto-generated constructor stub
 	}
+
 	public Long getId() {
 		return id;
 	}
-	public void setId(Long id) {
-		this.id = id;
-	}
+
 	public String getTitle() {
 		return title;
 	}
-	public void setTitle(String title) {
-		this.title = title;
-	}
+
 	public Collection<Unit> getUnits() {
 		return units;
 	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
 	public void setUnits(Collection<Unit> units) {
 		this.units = units;
 	}
-	
-	
 
 }

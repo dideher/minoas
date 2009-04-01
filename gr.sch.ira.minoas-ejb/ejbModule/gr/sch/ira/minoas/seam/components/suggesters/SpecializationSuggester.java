@@ -16,17 +16,21 @@ import org.jboss.seam.annotations.Transactional;
  * 
  */
 @Name("specializationSuggester")
-public class SpecializationSuggester extends BaseSuggester{
+public class SpecializationSuggester extends BaseSuggester {
 
-	
-	
+	/**
+	 * Comment for <code>serialVersionUID</code>
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@SuppressWarnings("unchecked")
 	@Transactional
 	public Collection<Specialization> suggest(Object specialization_search_pattern) {
 		return getEntityManager()
 				.createQuery(
 						"SELECT s from Specialization s WHERE lower(s.id) LIKE LOWER(:search_pattern) OR LOWER(s.title) LIKE LOWER(:search_pattern)")
-				.setParameter("search_pattern", CoreUtils.getSearchPattern(String.valueOf(specialization_search_pattern))).getResultList();
+				.setParameter("search_pattern",
+						CoreUtils.getSearchPattern(String.valueOf(specialization_search_pattern))).getResultList();
 	}
 
 }

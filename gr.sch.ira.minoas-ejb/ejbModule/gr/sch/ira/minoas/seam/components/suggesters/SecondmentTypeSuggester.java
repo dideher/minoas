@@ -18,16 +18,17 @@ import org.jboss.seam.annotations.Transactional;
 @Name("secondmentTypeSuggester")
 public class SecondmentTypeSuggester extends BaseSuggester {
 
+	/**
+	 * Comment for <code>serialVersionUID</code>
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@SuppressWarnings("unchecked")
 	@Transactional
 	public Collection<SecondmentType> suggest(Object secondmemt_search_pattern) {
-		return getEntityManager()
-				.createQuery(
-						"SELECT s from SecondmentType s WHERE LOWER(s.title) LIKE LOWER(:search_pattern)")
-				.setParameter(
-						"search_pattern",
-						CoreUtils.getSearchPattern(String
-								.valueOf(secondmemt_search_pattern)))
+		return getEntityManager().createQuery(
+				"SELECT s from SecondmentType s WHERE LOWER(s.title) LIKE LOWER(:search_pattern)").setParameter(
+				"search_pattern", CoreUtils.getSearchPattern(String.valueOf(secondmemt_search_pattern)))
 				.getResultList();
 	}
 

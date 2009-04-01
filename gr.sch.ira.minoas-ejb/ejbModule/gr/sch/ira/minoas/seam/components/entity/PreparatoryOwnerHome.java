@@ -37,13 +37,17 @@ import org.jboss.seam.annotations.Transactional;
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
  * @version $Id$
  */
-@Name(value="preparatoryOwnerHome")
+@Name(value = "preparatoryOwnerHome")
 public class PreparatoryOwnerHome extends MinoasEntityHome<PreparatoryOwner> {
-	
-	
-	@Factory(value="preparatoryOwner")
+
+	/**
+	 * Comment for <code>serialVersionUID</code>
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Factory(value = "preparatoryOwner")
 	public PreparatoryOwner getPreparatoryOwner() {
-		return (PreparatoryOwner)getInstance();
+		return (PreparatoryOwner) getInstance();
 	}
 
 	/**

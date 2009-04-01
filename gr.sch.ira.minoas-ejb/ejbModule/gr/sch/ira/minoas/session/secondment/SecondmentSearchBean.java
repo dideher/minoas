@@ -31,17 +31,45 @@ public class SecondmentSearchBean extends BaseStatefulSeamComponentImpl implemen
 	 */
 	private static final long serialVersionUID = 1L;
 
+	@In(scope = ScopeType.CONVERSATION, value = "activeSchool", required = false)
+	private School activeSchool;
+
+	@Out(scope = ScopeType.CONVERSATION, value = "activeSecondment", required = false)
+	private Secondment activeSecondment;
+
 	@DataModel(scope = ScopeType.UNSPECIFIED, value = "secondments")
 	private List<Secondment> secondments;
 
 	@DataModelSelection("secondments")
 	private Secondment selectedSecondment;
 
-	@Out(scope = ScopeType.CONVERSATION, value = "activeSecondment", required = false)
-	private Secondment activeSecondment;
+	/**
+	 * @return the activeSchool
+	 */
+	protected School getActiveSchool() {
+		return activeSchool;
+	}
 
-	@In(scope = ScopeType.CONVERSATION, value = "activeSchool", required = false)
-	private School activeSchool;
+	/**
+	 * @return the activeSecondment
+	 */
+	public Secondment getActiveSecondment() {
+		return activeSecondment;
+	}
+
+	/**
+	 * @return the secondments
+	 */
+	public List<Secondment> getSecondments() {
+		return secondments;
+	}
+
+	/**
+	 * @return the selectedSecondment
+	 */
+	public Secondment getSelectedSecondment() {
+		return selectedSecondment;
+	}
 
 	/**
 	 * @see gr.sch.ira.minoas.session.secondment.ISecondmentSearch#searchActiveSecondments()
@@ -93,10 +121,10 @@ public class SecondmentSearchBean extends BaseStatefulSeamComponentImpl implemen
 	}
 
 	/**
-	 * @return the secondments
+	 * @param activeSecondment the activeSecondment to set
 	 */
-	public List<Secondment> getSecondments() {
-		return secondments;
+	public void setActiveSecondment(Secondment activeSecondment) {
+		this.activeSecondment = activeSecondment;
 	}
 
 	/**
@@ -107,38 +135,10 @@ public class SecondmentSearchBean extends BaseStatefulSeamComponentImpl implemen
 	}
 
 	/**
-	 * @return the selectedSecondment
-	 */
-	public Secondment getSelectedSecondment() {
-		return selectedSecondment;
-	}
-
-	/**
 	 * @param selectedSecondment the selectedSecondment to set
 	 */
 	public void setSelectedSecondment(Secondment selectedSecondment) {
 		this.selectedSecondment = selectedSecondment;
-	}
-
-	/**
-	 * @return the activeSecondment
-	 */
-	public Secondment getActiveSecondment() {
-		return activeSecondment;
-	}
-
-	/**
-	 * @param activeSecondment the activeSecondment to set
-	 */
-	public void setActiveSecondment(Secondment activeSecondment) {
-		this.activeSecondment = activeSecondment;
-	}
-
-	/**
-	 * @return the activeSchool
-	 */
-	protected School getActiveSchool() {
-		return activeSchool;
 	}
 
 }

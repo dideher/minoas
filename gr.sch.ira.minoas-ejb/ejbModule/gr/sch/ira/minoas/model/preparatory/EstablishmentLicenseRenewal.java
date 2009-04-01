@@ -49,113 +49,129 @@ import javax.persistence.TemporalType;
  * @version $Id$
  */
 @Entity
-@Table(name="PREP_EST_LCS_RENEWAL")
+@Table(name = "PREP_EST_LCS_RENEWAL")
 public class EstablishmentLicenseRenewal extends BaseModel {
+
+	/**
+	 * Comment for <code>serialVersionUID</code>
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column(name = "ID")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="SCHOOL_YEAR_ID")
-	private SchoolYear schoolYear;
-	
+	@ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@JoinColumn(name = "LICENSE_ID", nullable = false, updatable = false)
+	private EstablishmentLicense license;
+
 	@Basic
-	@Column(name="REQUEST_DATE", nullable=false, updatable=false)
-	@Temporal(TemporalType.DATE)
-	private Date requestDate;
-	
-	@Basic
-	@Column(name="REQUEST_PROTOCOL", nullable=false, updatable=false)
-	private Integer requestProtocol;
-	
-	@Basic
-	@Column(name="RENEWAL_DATE", nullable=true)
+	@Column(name = "RENEWAL_DATE", nullable = true)
 	@Temporal(TemporalType.DATE)
 	private Date renewalDate;
-	
-	@ManyToOne(fetch=FetchType.EAGER, cascade= { CascadeType.PERSIST, CascadeType.MERGE})
-	@JoinColumn(name="LICENSE_ID", nullable=false, updatable=false)
-	private EstablishmentLicense license;
+
+	@Basic
+	@Column(name = "REQUEST_DATE", nullable = false, updatable = false)
+	@Temporal(TemporalType.DATE)
+	private Date requestDate;
+
+	@Basic
+	@Column(name = "REQUEST_PROTOCOL", nullable = false, updatable = false)
+	private Integer requestProtocol;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "SCHOOL_YEAR_ID")
+	private SchoolYear schoolYear;
+
 	/**
 	 * 
 	 */
 	public EstablishmentLicenseRenewal() {
 	}
+
 	/**
 	 * @return the id
 	 */
 	public Integer getId() {
 		return id;
 	}
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(Integer id) {
-		this.id = id;
-	}
-	/**
-	 * @return the schoolYear
-	 */
-	public SchoolYear getSchoolYear() {
-		return schoolYear;
-	}
-	/**
-	 * @param schoolYear the schoolYear to set
-	 */
-	public void setSchoolYear(SchoolYear schoolYear) {
-		this.schoolYear = schoolYear;
-	}
-	/**
-	 * @return the requestDate
-	 */
-	public Date getRequestDate() {
-		return requestDate;
-	}
-	/**
-	 * @param requestDate the requestDate to set
-	 */
-	public void setRequestDate(Date requestDate) {
-		this.requestDate = requestDate;
-	}
-	/**
-	 * @return the requestProtocol
-	 */
-	public Integer getRequestProtocol() {
-		return requestProtocol;
-	}
-	/**
-	 * @param requestProtocol the requestProtocol to set
-	 */
-	public void setRequestProtocol(Integer requestProtocol) {
-		this.requestProtocol = requestProtocol;
-	}
-	/**
-	 * @return the renewalDate
-	 */
-	public Date getRenewalDate() {
-		return renewalDate;
-	}
-	/**
-	 * @param renewalDate the renewalDate to set
-	 */
-	public void setRenewalDate(Date renewalDate) {
-		this.renewalDate = renewalDate;
-	}
+
 	/**
 	 * @return the license
 	 */
 	public EstablishmentLicense getLicense() {
 		return license;
 	}
+
+	/**
+	 * @return the renewalDate
+	 */
+	public Date getRenewalDate() {
+		return renewalDate;
+	}
+
+	/**
+	 * @return the requestDate
+	 */
+	public Date getRequestDate() {
+		return requestDate;
+	}
+
+	/**
+	 * @return the requestProtocol
+	 */
+	public Integer getRequestProtocol() {
+		return requestProtocol;
+	}
+
+	/**
+	 * @return the schoolYear
+	 */
+	public SchoolYear getSchoolYear() {
+		return schoolYear;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
 	/**
 	 * @param license the license to set
 	 */
 	public void setLicense(EstablishmentLicense license) {
 		this.license = license;
 	}
-	
-	
+
+	/**
+	 * @param renewalDate the renewalDate to set
+	 */
+	public void setRenewalDate(Date renewalDate) {
+		this.renewalDate = renewalDate;
+	}
+
+	/**
+	 * @param requestDate the requestDate to set
+	 */
+	public void setRequestDate(Date requestDate) {
+		this.requestDate = requestDate;
+	}
+
+	/**
+	 * @param requestProtocol the requestProtocol to set
+	 */
+	public void setRequestProtocol(Integer requestProtocol) {
+		this.requestProtocol = requestProtocol;
+	}
+
+	/**
+	 * @param schoolYear the schoolYear to set
+	 */
+	public void setSchoolYear(SchoolYear schoolYear) {
+		this.schoolYear = schoolYear;
+	}
 
 }

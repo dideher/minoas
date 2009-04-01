@@ -56,14 +56,12 @@ public class Principal extends BaseModel {
 	private String realName;
 
 	@ManyToMany
-	@JoinTable(name = "MINOAS_PRINCIPAL_ROLEGROUPS" )
+	@JoinTable(name = "MINOAS_PRINCIPAL_ROLEGROUPS")
 	private List<RoleGroup> roleGroups;
 
 	@Column(updatable = false, name = "USERNAME", length = 16)
 	@Id
 	private String username;
-
-	
 
 	/**
 	 * 
@@ -137,20 +135,6 @@ public class Principal extends BaseModel {
 	}
 
 	/**
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("[");
-		sb.append(getUsername());
-		sb.append("/");
-		sb.append(getRealName());
-		sb.append("]");
-		return sb.toString();
-	}
-
-	/**
 	 * @param realName the realName to set
 	 */
 	public void setRealName(String realName) {
@@ -169,6 +153,20 @@ public class Principal extends BaseModel {
 	 */
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	/**
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("[");
+		sb.append(getUsername());
+		sb.append("/");
+		sb.append(getRealName());
+		sb.append("]");
+		return sb.toString();
 	}
 
 }

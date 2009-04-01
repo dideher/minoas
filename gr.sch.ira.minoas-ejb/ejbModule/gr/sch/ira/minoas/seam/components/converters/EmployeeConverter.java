@@ -22,6 +22,11 @@ import org.jboss.seam.annotations.intercept.BypassInterceptors;
 @Scope(ScopeType.STATELESS)
 public class EmployeeConverter extends DatabaseAwareBaseConverter {
 
+	/**
+	 * Comment for <code>serialVersionUID</code>
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public Object getAsObject(FacesContext arg0, UIComponent arg1, String arg2) {
 		// TODO Auto-generated method stub
 		return null;

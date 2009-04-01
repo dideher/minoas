@@ -7,15 +7,13 @@ public interface ISchoolSearch {
 	 */
 	public String getSearchString();
 
+	public String search();
+
+	public String selectSchool();
+
 	/**
 	 * @param searchString the searchString to set
 	 */
 	public void setSearchString(String searchString);
-
-	
-	public String selectSchool();
-
-	public String search();
-
 
 }

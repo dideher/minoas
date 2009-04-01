@@ -31,7 +31,7 @@ public class School extends Unit {
 	private static final long serialVersionUID = 1L;
 
 	@Basic
-	@Column(name = "MINISTRY_CODE", length = 7, unique = false, nullable=true)
+	@Column(name = "MINISTRY_CODE", length = 7, unique = false, nullable = true)
 	private String ministryCode;
 
 	@Basic
@@ -41,7 +41,7 @@ public class School extends Unit {
 	@Basic
 	@Column(name = "REGION")
 	private Character regionCode;
-	
+
 	/**
 	 * @return the ministryCode
 	 */

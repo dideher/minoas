@@ -9,13 +9,13 @@ package gr.sch.ira.minoas.session.security;
  */
 public interface IPrincipalAdmin {
 
+	public String cancelPrincipal();
+
 	public String editPrincipal();
 
 	public String newPrincipal();
 
 	public String savePrincipal();
-
-	public String cancelPrincipal();
 
 	public String search();
 

@@ -16,51 +16,42 @@ import org.jboss.seam.annotations.Name;
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * @version $Id$
  */
-@Name(value="establishmentLicenseHome")
+@Name(value = "establishmentLicenseHome")
 public class EstablishmentLicenseHome extends MinoasEntityHome<EstablishmentLicense> {
-	
+
 	/**
 	 * Comment for <code>serialVersionUID</code>
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	@In(create = true)
-	private PreparatoryOwnerHome preparatoryOwnerHome;
-	
-	@In(create = true)
-	protected IEstablishmentLicenseStatusDAO establishmentLicenseStatusDAO;
 
 	@In()
 	private CoreSearching coreSearching;
+
+	@In(create = true)
+	protected IEstablishmentLicenseStatusDAO establishmentLicenseStatusDAO;
+
+	@In(create = true)
+	private PreparatoryOwnerHome preparatoryOwnerHome;
 
 	/**
 	 * @see org.jboss.seam.framework.Home#createInstance()
 	 */
 	@Override
 	protected EstablishmentLicense createInstance() {
-		EstablishmentLicense instance = (EstablishmentLicense)super.createInstance();
+		EstablishmentLicense instance = (EstablishmentLicense) super.createInstance();
 		instance.setStatusType(EstablishmentLicenseStatusType.PENDING);
 		instance.setRequestDate(new Date(System.currentTimeMillis()));
 		instance.setSchoolYear(coreSearching.getActiveSchoolYear());
 		return instance;
 	}
-	
-	public void wire() {
-		System.err.println("**** wire called ****");
-		PreparatoryOwner owner = preparatoryOwnerHome.getDefinedInstace();
-		if (owner!=null) {
-			getInstance().setOwner(owner);
-		}
-	}
-
 
 	/**
 	 * @see org.jboss.seam.framework.Home#getInstance()
 	 */
 	@Override
-	@Factory(value="establishmentLicense")
+	@Factory(value = "establishmentLicense")
 	public EstablishmentLicense getInstance() {
-		return (EstablishmentLicense)super.getInstance();
+		return (EstablishmentLicense) super.getInstance();
 	}
 
 	/**
@@ -72,9 +63,13 @@ public class EstablishmentLicenseHome extends MinoasEntityHome<EstablishmentLice
 		license.setInsertedOn(new Date(System.currentTimeMillis()));
 		return super.persist();
 	}
-	
-	
-	
-	
+
+	public void wire() {
+		System.err.println("**** wire called ****");
+		PreparatoryOwner owner = preparatoryOwnerHome.getDefinedInstace();
+		if (owner != null) {
+			getInstance().setOwner(owner);
+		}
+	}
 
 }

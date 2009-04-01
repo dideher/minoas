@@ -23,7 +23,7 @@ import org.jboss.seam.framework.EntityController;
 @Name("organizationalOfficeConverter")
 @BypassInterceptors
 @Scope(ScopeType.STATELESS)
-public class OrganizationalOfficeConverter extends EntityController  {
+public class OrganizationalOfficeConverter extends EntityController {
 
 	/**
 	 * 
@@ -38,8 +38,7 @@ public class OrganizationalOfficeConverter extends EntityController  {
 		if (value != null) {
 
 			return getEntityManager().find(OrganizationalOffice.class, value);
-		}
-		else
+		} else
 			return null;
 	}
 
@@ -51,12 +50,10 @@ public class OrganizationalOfficeConverter extends EntityController  {
 		if (value != null) {
 			if (value instanceof OrganizationalOffice) {
 				return ((OrganizationalOffice) value).getId();
-			}
-			else {
+			} else {
 				return value.toString();
 			}
-		}
-		else
+		} else
 			return null;
 	}
 

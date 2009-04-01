@@ -18,13 +18,17 @@ import org.jboss.seam.annotations.Out;
 @Name("userDefaults")
 public class UserDefaults {
 
+	/**
+	 * Comment for <code>serialVersionUID</code>
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Out(scope = ScopeType.SESSION, required = false)
+	private SchoolYear activeSchoolYear;
+
 	@In
 	private CoreSearching coreSearching;
-	
-	
-	@Out(scope=ScopeType.SESSION, required=false)
-	private SchoolYear activeSchoolYear;
-	
+
 	@Observer("org.jboss.seam.security.loginSuccessful")
 	public void loginSuccesful() {
 		this.activeSchoolYear = coreSearching.getActiveSchoolYear();

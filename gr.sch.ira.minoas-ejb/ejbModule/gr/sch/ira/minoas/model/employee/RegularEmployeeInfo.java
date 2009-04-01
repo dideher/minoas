@@ -40,7 +40,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Table(name = "REGULAR_EMPLOYEE_INFO")
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public class RegularEmployeeInfo extends BaseModel {
-	
+
 	/**
 	 * Comment for <code>serialVersionUID</code>
 	 */
@@ -53,7 +53,7 @@ public class RegularEmployeeInfo extends BaseModel {
 	@Basic
 	@Column(name = "APPOINTMENT_GOF", length = 4)
 	private String appointmentGOF;
-	
+
 	/**
 	 * Greek Official Gazette of Date appointment («ÏÂÒÔÏÁÌﬂ· ÷≈  ƒÈÔÒÈÛÏÔ˝)
 	 * 
@@ -69,7 +69,7 @@ public class RegularEmployeeInfo extends BaseModel {
 	@Basic
 	@Column(name = "REGISTRY_ID", length = 7)
 	private String registryID;
-	
+
 	/**
 	 * @return the appointmentGOF
 	 */
@@ -83,8 +83,6 @@ public class RegularEmployeeInfo extends BaseModel {
 	public Date getAppointmentGOFDate() {
 		return appointmentGOFDate;
 	}
-
-	
 
 	/**
 	 * @return the id
@@ -113,8 +111,6 @@ public class RegularEmployeeInfo extends BaseModel {
 	public void setAppointmentGOFDate(Date appointmentGOFDate) {
 		this.appointmentGOFDate = appointmentGOFDate;
 	}
-
-	
 
 	/**
 	 * @param id the id to set

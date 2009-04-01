@@ -36,7 +36,6 @@ public class Role extends BaseModel {
 	@Column(name = "TITLE", nullable = true, length = 250)
 	private String title;
 
-
 	/**
 	 * 
 	 */
@@ -56,17 +55,20 @@ public class Role extends BaseModel {
 	}
 
 	/**
-	 * @return the title
+	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
-	public String getTitle() {
-		return title;
-	}
-
-	/**
-	 * @param title the title to set
-	 */
-	public void setTitle(String title) {
-		this.title = title;
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Role) {
+			Role otherRole = (Role) obj;
+			if (this.id != null) {
+				return this.id.equals(otherRole.getId());
+			} else if (this.id == null && otherRole.getId() == null)
+				return true;
+			else
+				return false;
+		} else
+			return false;
 	}
 
 	/**
@@ -77,29 +79,10 @@ public class Role extends BaseModel {
 	}
 
 	/**
-	 * @param id the id to set
+	 * @return the title
 	 */
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	/**
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof Role) {
-			Role otherRole = (Role) obj;
-			if (this.id != null) {
-				return this.id.equals(otherRole.getId());
-			}
-			else if (this.id == null && otherRole.getId() == null)
-				return true;
-			else
-				return false;
-		}
-		else
-			return false;
+	public String getTitle() {
+		return title;
 	}
 
 	/**
@@ -108,6 +91,20 @@ public class Role extends BaseModel {
 	@Override
 	public int hashCode() {
 		return id.hashCode();
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	/**
+	 * @param title the title to set
+	 */
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	/**

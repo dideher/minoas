@@ -39,24 +39,33 @@ import org.jboss.seam.annotations.security.Restrict;
 public class EmployeeManagementBean extends EmployeeAwareSeamComponent implements IEmployeeManagement {
 
 	/**
-	 * 
+	 * Comment for <code>serialVersionUID</code>
 	 */
 	private static final long serialVersionUID = 1L;
 
 	@In(value = "coreSearching")
 	private CoreSearching coreSearching;
-	
-	@In(value = "employeeUtil")
-	private EmployeeUtil employeeUtil;
 
 	@Out(required = false)
 	private Secondment employeeActiveSecondment;
+
+	@In(value = "employeeUtil")
+	private EmployeeUtil employeeUtil;
 
 	@Out(required = false)
 	private Secondment newSecondment;
 
 	@Out(required = false)
 	private SecondmentType selectedSecondmentType;
+
+	/**
+	 * @see gr.sch.ira.minoas.session.employee.IEmployeeManagement#cancelNewSecondment()
+	 */
+	@End
+	public String cancelNewSecondment() {
+		getEntityManager().flush();
+		return SUCCESS_OUTCOME;
+	}
 
 	/**
 	 * @see gr.sch.ira.minoas.seam.components.BaseStatefulSeamComponentImpl#create()
@@ -155,8 +164,9 @@ public class EmployeeManagementBean extends EmployeeAwareSeamComponent implement
 	@End
 	public String saveSecondment() {
 		Person employee = getEntityManager().merge(getActiveEmployee());
-		info("trying to save new seconment '#0' for employee '#1' during school year '#2'.", newSecondment, employee, getActiveSchoolYear());
-		
+		info("trying to save new seconment '#0' for employee '#1' during school year '#2'.", newSecondment, employee,
+				getActiveSchoolYear());
+
 		/* if the employee has already an secondment, then
 		 * update it by disabling it and registering the new
 		 * secondment as the successor of the old secondment.
@@ -173,13 +183,13 @@ public class EmployeeManagementBean extends EmployeeAwareSeamComponent implement
 		newSecondment.setInsertedOn(new Date(System.currentTimeMillis()));
 		setEmployeeActiveSecondment(newSecondment);
 		getEntityManager().persist(newSecondment);
-		
+
 		/* if the secondment affects an employment (ie the employee had
 		 * a current employment when the secondment was created) then 
 		 * update the employment as well.
 		 */
 		Employment employment = newSecondment.getAffectedEmployment();
-		if(employment!=null) {
+		if (employment != null) {
 			employment.setSecondment(newSecondment);
 		}
 		getEntityManager().flush();
@@ -197,15 +207,6 @@ public class EmployeeManagementBean extends EmployeeAwareSeamComponent implement
 	 */
 	public void setEmployeeActiveSecondment(Secondment employeeActiveSecondment) {
 		this.employeeActiveSecondment = employeeActiveSecondment;
-	}
-
-	/**
-	 * @see gr.sch.ira.minoas.session.employee.IEmployeeManagement#cancelNewSecondment()
-	 */
-	@End
-	public String cancelNewSecondment() {
-		getEntityManager().flush();
-		return SUCCESS_OUTCOME;
 	}
 
 }

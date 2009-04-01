@@ -26,14 +26,18 @@ public class EmployeeUtil extends BaseSeamComponent {
 
 	public String getRegistryID(Employee employee) {
 		Employee aemployee = employee;
-		if(aemployee.getRegularDetail()!=null) {
+		if (aemployee.getRegularDetail() != null) {
 			return aemployee.getRegularDetail().getRegistryID();
-		} else return null;
-		
+		} else
+			return null;
+
 	}
 
-	public boolean isRegular(Employee employee) {
-		return employee.getType().equals(EmployeeType.REGULAR);
+	public boolean hasSecondment(Employee employee) {
+		if (employee != null && employee.getCurrentEmployment() != null) {
+			return employee.getCurrentEmployment().getSecondment() != null;
+		} else
+			return false;
 	}
 
 	public boolean isDeputy(Employee employee) {
@@ -42,6 +46,10 @@ public class EmployeeUtil extends BaseSeamComponent {
 
 	public boolean isHourlyPaid(Employee employee) {
 		return employee.getType().equals(EmployeeType.HOURLYPAID);
+	}
+
+	public boolean isRegular(Employee employee) {
+		return employee.getType().equals(EmployeeType.REGULAR);
 	}
 
 	public String prettyFormat(Employee employee) {
@@ -74,12 +82,5 @@ public class EmployeeUtil extends BaseSeamComponent {
 		} else
 			return null;
 
-	}
-
-	public boolean hasSecondment(Employee employee) {
-		if (employee != null && employee.getCurrentEmployment() != null) {
-			return employee.getCurrentEmployment().getSecondment() != null;
-		} else
-			return false;
 	}
 }

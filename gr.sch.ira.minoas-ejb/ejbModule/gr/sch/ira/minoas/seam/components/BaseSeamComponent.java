@@ -17,20 +17,18 @@ import org.jboss.seam.log.Log;
  */
 public abstract class BaseSeamComponent implements Serializable {
 
-	/**
-	 * @return the facesMessages
-	 */
-	public FacesMessages getFacesMessages() {
-		return facesMessages;
-	}
-
 	public static final Locale greekLocale = new Locale("el", "GR");
+
+	/**
+	 * Comment for <code>serialVersionUID</code>
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@In(required = false)
+	protected FacesMessages facesMessages;
 
 	@Logger
 	private Log logger;
-
-	@In(required=false)
-	protected FacesMessages facesMessages;
 
 	/**
 	 * @param arg0
@@ -93,6 +91,13 @@ public abstract class BaseSeamComponent implements Serializable {
 	}
 
 	/**
+	 * @return the facesMessages
+	 */
+	public FacesMessages getFacesMessages() {
+		return facesMessages;
+	}
+
+	/**
 	 * @param arg0
 	 * @param arg1
 	 * @see org.jboss.seam.log.Log#info(java.lang.Object, java.lang.Object[])
@@ -110,6 +115,14 @@ public abstract class BaseSeamComponent implements Serializable {
 	 */
 	public void info(Object arg0, Throwable arg1, Object... arg2) {
 		logger.info(arg0, arg1, arg2);
+	}
+
+	protected boolean isEmpty(Object object) {
+		return !isEmpty(object);
+	}
+
+	protected boolean isNonEmpty(Object object) {
+		return object != null && String.valueOf(object).trim().length() > 0;
 	}
 
 	/**
@@ -130,14 +143,6 @@ public abstract class BaseSeamComponent implements Serializable {
 	 */
 	public void warn(Object arg0, Throwable arg1, Object... arg2) {
 		logger.warn(arg0, arg1, arg2);
-	}
-
-	protected boolean isEmpty(Object object) {
-		return !isEmpty(object);
-	}
-
-	protected boolean isNonEmpty(Object object) {
-		return object != null && String.valueOf(object).trim().length() > 0;
 	}
 
 }

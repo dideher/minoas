@@ -7,10 +7,10 @@ public interface ISecondmentSearch {
 	 * @return
 	 */
 	public String searchActiveSecondments();
-	
+
 	public String searchSchoolIncomingSecondments();
-	
+
 	public String searchSchoolOutgoingSecondments();
-	
+
 	public String searchWithinPYSDESecondments();
 }

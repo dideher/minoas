@@ -36,32 +36,39 @@ import org.jboss.seam.annotations.security.Restrict;
 @Scope(ScopeType.CONVERSATION)
 public class RoleManagementBean extends BaseStatefulSeamComponentImpl implements IRoleManagement {
 
-	private String searchString;
+	/**
+	 * Comment for <code>serialVersionUID</code>
+	 */
+	private static final long serialVersionUID = 1L;
 
-	@In(value="coreSearching")
+	@In(value = "coreSearching")
 	private CoreSearching coreSearching;
 
-	@DataModel
-	private Collection<Role> roles;
-
-	/**
-	 * @see gr.sch.ira.minoas.session.security.IRoleManagement#selectRole()
-	 */
-	public void selectRole() {
-		this.role = minoasDatabase.merge(this.role);
-		info("role #0 selected for management", this.role);
-	}
-
-	@DataModelSelection()
-	@Out(value = "selectedRole", required = false)
-	private Role role;
+	@In
+	private EntityManager minoasDatabase;
 
 	@In(required = false)
 	@Out(required = false)
 	private Role newRole;
 
-	@In
-	private EntityManager minoasDatabase;
+	@DataModelSelection()
+	@Out(value = "selectedRole", required = false)
+	private Role role;
+
+	@DataModel
+	private Collection<Role> roles;
+
+	private String searchString;
+
+	@Factory("newRole")
+	public void constructNewRole() {
+		info("constructing new instance of role");
+		this.newRole = new Role("", "");
+	}
+
+	public String getSearchString() {
+		return searchString;
+	}
 
 	/**
 	 * @see gr.sch.ira.minoas.session.security.IRoleManagement#removeRole(gr.sch.ira.minoas.model.security.Role)
@@ -82,8 +89,7 @@ public class RoleManagementBean extends BaseStatefulSeamComponentImpl implements
 			minoasDatabase.flush();
 			constructNewRole();
 			search();
-		}
-		else {
+		} else {
 			warn("ignoring save request of role #0, since that role already exists", this.newRole);
 			facesMessages.add("role fdsf", newRole.getId());
 
@@ -97,14 +103,12 @@ public class RoleManagementBean extends BaseStatefulSeamComponentImpl implements
 
 	}
 
-	@Factory("newRole")
-	public void constructNewRole() {
-		info("constructing new instance of role");
-		this.newRole = new Role("", "");
-	}
-
-	public String getSearchString() {
-		return searchString;
+	/**
+	 * @see gr.sch.ira.minoas.session.security.IRoleManagement#selectRole()
+	 */
+	public void selectRole() {
+		this.role = minoasDatabase.merge(this.role);
+		info("role #0 selected for management", this.role);
 	}
 
 	public void setSearchString(String searchString) {

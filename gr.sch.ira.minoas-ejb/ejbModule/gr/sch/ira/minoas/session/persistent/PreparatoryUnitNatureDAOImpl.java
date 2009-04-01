@@ -36,6 +36,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 
 import org.jboss.seam.annotations.Name;
+import org.jboss.wsf.spi.deployment.Endpoint.EndpointState;
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
@@ -48,17 +49,41 @@ import org.jboss.seam.annotations.Name;
 public class PreparatoryUnitNatureDAOImpl extends GenericDAOImpl<PreparatoryUnitNature, Integer> implements
 		IPreparatoryUnitNatureDAO {
 
-	
+	/**
+	 * Comment for <code>serialVersionUID</code>
+	 */
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * @see gr.sch.ira.minoas.session.persistent.IGenericDAO#findAll()
 	 */
 	@SuppressWarnings("unchecked")
 	public Collection<PreparatoryUnitNature> findAll() {
 		try {
-		return getEntityManager().createQuery("FROM PreparatoryUnitNature p ORDER BY (p.title)").getResultList();
+			return getEntityManager().createQuery("FROM PreparatoryUnitNature p ORDER BY (p.title)").getResultList();
 		} catch (javax.persistence.NoResultException nre) {
 			return EMPTY_COLLECTION;
 		}
+	}
+
+	/**
+	 * @see gr.sch.ira.minoas.session.persistent.IGenericDAO#findByExample(java.lang.Object)
+	 */
+	public PreparatoryUnitNature findByExample(PreparatoryUnitNature entityInstance) {
+		if (entityInstance.getId() != null)
+			return findByID(entityInstance.getId());
+		else if (entityInstance.getType() != null) {
+			return findByNatureType(entityInstance.getType());
+		} else if (entityInstance.getTitle() != null) {
+			try {
+				return (PreparatoryUnitNature) getEntityManager().createQuery(
+						"FROM PreparatoryUnitNature p WHERE p.title=:title").setParameter("title",
+						entityInstance.getTitle()).getSingleResult();
+			} catch (javax.persistence.NoResultException nre) {
+				return null;
+			}
+		}
+		return null;
 	}
 
 	/**

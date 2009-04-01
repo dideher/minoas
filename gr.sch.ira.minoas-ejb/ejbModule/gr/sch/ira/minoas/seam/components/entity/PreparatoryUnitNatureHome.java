@@ -29,19 +29,16 @@ import gr.sch.ira.minoas.model.preparatory.PreparatoryUnitNature;
 
 import org.jboss.seam.annotations.Name;
 
-
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
  * @version $Id$
  */
-@Name(value="preparatoryUnitNatureHome")
+@Name(value = "preparatoryUnitNatureHome")
 public class PreparatoryUnitNatureHome extends MinoasEntityHome<PreparatoryUnitNature> {
-	
+
 	/**
 	 * Comment for <code>serialVersionUID</code>
 	 */
 	private static final long serialVersionUID = 1L;
 
-	
-	
 }

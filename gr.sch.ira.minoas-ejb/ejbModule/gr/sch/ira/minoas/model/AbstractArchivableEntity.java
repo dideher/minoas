@@ -44,41 +44,35 @@ import javax.persistence.TemporalType;
  */
 @MappedSuperclass
 public abstract class AbstractArchivableEntity extends BaseModel {
-	
-
 
 	/* We need to add a link to archives instances */
-	
+
 	//@OneToOne(fetch=FetchType.LAZY)
 	//@JoinColumn(name="PREVIOUS_INSTANCE_ID", nullable=true)
 	//private T previousInstance;
-	
-	@Basic(fetch=FetchType.LAZY)
-	@Temporal(TemporalType.DATE)
-	@Column(name="MODIFIED_ON", nullable=true, updatable=false)
-	private Date modifiedOn;
-	
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="MODIFIED_BY_ID", nullable=true)
-	private Principal modifiedBy;
-	
-	@Basic(fetch=FetchType.LAZY)
-	@Column(name="MODIFICATION_REASON", length=128, nullable=true, updatable=false)
-	private String modificationReason;
-	
-		
 	/**
-	 * @return the modifiedOn
+	 * Comment for <code>serialVersionUID</code>
 	 */
-	public Date getModifiedOn() {
-		return modifiedOn;
-	}
+	private static final long serialVersionUID = 1L;
+
+	@Basic(fetch = FetchType.LAZY)
+	@Column(name = "MODIFICATION_REASON", length = 128, nullable = true, updatable = false)
+	private String modificationReason;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "MODIFIED_BY_ID", nullable = true)
+	private Principal modifiedBy;
+
+	@Basic(fetch = FetchType.LAZY)
+	@Temporal(TemporalType.DATE)
+	@Column(name = "MODIFIED_ON", nullable = true, updatable = false)
+	private Date modifiedOn;
 
 	/**
-	 * @param modifiedOn the modifiedOn to set
+	 * @return the modificationReason
 	 */
-	public void setModifiedOn(Date modifiedOn) {
-		this.modifiedOn = modifiedOn;
+	public String getModificationReason() {
+		return modificationReason;
 	}
 
 	/**
@@ -89,17 +83,10 @@ public abstract class AbstractArchivableEntity extends BaseModel {
 	}
 
 	/**
-	 * @param modifiedBy the modifiedBy to set
+	 * @return the modifiedOn
 	 */
-	public void setModifiedBy(Principal modifiedBy) {
-		this.modifiedBy = modifiedBy;
-	}
-
-	/**
-	 * @return the modificationReason
-	 */
-	public String getModificationReason() {
-		return modificationReason;
+	public Date getModifiedOn() {
+		return modifiedOn;
 	}
 
 	/**
@@ -107,5 +94,19 @@ public abstract class AbstractArchivableEntity extends BaseModel {
 	 */
 	public void setModificationReason(String modificationReason) {
 		this.modificationReason = modificationReason;
+	}
+
+	/**
+	 * @param modifiedBy the modifiedBy to set
+	 */
+	public void setModifiedBy(Principal modifiedBy) {
+		this.modifiedBy = modifiedBy;
+	}
+
+	/**
+	 * @param modifiedOn the modifiedOn to set
+	 */
+	public void setModifiedOn(Date modifiedOn) {
+		this.modifiedOn = modifiedOn;
 	}
 }

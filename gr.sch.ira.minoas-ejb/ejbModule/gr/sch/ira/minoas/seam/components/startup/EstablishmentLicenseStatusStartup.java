@@ -47,7 +47,8 @@ public class EstablishmentLicenseStatusStartup {
 		}
 		if (establishmentLicenseStatusDAO.findByType(EstablishmentLicenseStatusType.PENDING_RENEWAL) == null) {
 			log.info("created establishment license status {0}", establishmentLicenseStatusDAO
-					.persist(new EstablishmentLicenseStatus(EstablishmentLicenseStatusType.PENDING_RENEWAL, "Εκκρεμεί Ανανέωση")));
+					.persist(new EstablishmentLicenseStatus(EstablishmentLicenseStatusType.PENDING_RENEWAL,
+							"Εκκρεμεί Ανανέωση")));
 		}
 		if (establishmentLicenseStatusDAO.findByType(EstablishmentLicenseStatusType.REJECTED) == null) {
 			log.info("created establishment license status {0}", establishmentLicenseStatusDAO

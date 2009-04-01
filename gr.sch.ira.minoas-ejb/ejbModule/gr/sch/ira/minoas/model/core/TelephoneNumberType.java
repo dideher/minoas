@@ -8,8 +8,8 @@ package gr.sch.ira.minoas.model.core;
  *
  */
 public enum TelephoneNumberType {
+	FAX,
 	HOME,
-	WORK,
 	MOBILE,
-	FAX
+	WORK
 }

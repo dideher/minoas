@@ -43,10 +43,6 @@ public class Unit extends AbstractArchivableEntity {
 	public static final String NAMED_QUERY_FIND_UNIT_BY_TITLE = "findUnitByTitle";
 
 	public static final String QUERY_PARAMETER_UNIT_TITLE = "title";
-	
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="OFFICE_ID", nullable=true)
-	private OrganizationalOffice office;
 
 	/**
 	 * 
@@ -58,27 +54,31 @@ public class Unit extends AbstractArchivableEntity {
 	@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 	private Address address;
 
-	@Id
-	@Column(name = "UNIT_ID", length = 3)
-	private String id;
-
-	@Basic
-	@Column(name = "TITLE", nullable = false, unique = true, length = 80)
-	private String title;
-
-	@OneToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "MINOAS_UNIT_TELEPHONES")
-	private Collection<Telephone> telephones = new ArrayList<Telephone>();
-
 	@ManyToMany(fetch = FetchType.LAZY)
 	@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 	@JoinTable(name = "MINOAS_UNIT_GATEGORIES", joinColumns = @JoinColumn(name = "UNIT_ID", referencedColumnName = "UNIT_ID"), inverseJoinColumns = @JoinColumn(name = "CATEGORY_ID", referencedColumnName = "ID"))
 	private Collection<UnitCategory> categories = new ArrayList<UnitCategory>();
 
-	@ManyToOne(fetch=FetchType.LAZY)
+	@Id
+	@Column(name = "UNIT_ID", length = 3)
+	private String id;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "OFFICE_ID", nullable = true)
+	private OrganizationalOffice office;
+
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 	@JoinColumn(name = "PYSDE_ID", nullable = true)
 	private PYSDE pysde;
+
+	@OneToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "MINOAS_UNIT_TELEPHONES")
+	private Collection<Telephone> telephones = new ArrayList<Telephone>();
+
+	@Basic
+	@Column(name = "TITLE", nullable = false, unique = true, length = 80)
+	private String title;
 
 	/**
 	 * 
@@ -95,10 +95,35 @@ public class Unit extends AbstractArchivableEntity {
 	}
 
 	/**
+	 * @return the categories
+	 */
+	protected Collection<UnitCategory> getCategories() {
+		return categories;
+	}
+
+	/**
 	 * @return the id
 	 */
 	public String getId() {
 		return id;
+	}
+
+	/**
+	 * @return the office
+	 */
+	protected OrganizationalOffice getOffice() {
+		return office;
+	}
+
+	public PYSDE getPysde() {
+		return pysde;
+	}
+
+	/**
+	 * @return the telephones
+	 */
+	public Collection<Telephone> getTelephones() {
+		return telephones;
 	}
 
 	/**
@@ -117,6 +142,13 @@ public class Unit extends AbstractArchivableEntity {
 	}
 
 	/**
+	 * @param categories the categories to set
+	 */
+	protected void setCategories(Collection<UnitCategory> categories) {
+		this.categories = categories;
+	}
+
+	/**
 	 * @param id
 	 *            the id to set
 	 */
@@ -125,18 +157,14 @@ public class Unit extends AbstractArchivableEntity {
 	}
 
 	/**
-	 * @param title
-	 *            the title to set
+	 * @param office the office to set
 	 */
-	public void setTitle(String title) {
-		this.title = title;
+	protected void setOffice(OrganizationalOffice office) {
+		this.office = office;
 	}
 
-	/**
-	 * @return the telephones
-	 */
-	public Collection<Telephone> getTelephones() {
-		return telephones;
+	public void setPysde(PYSDE pysde) {
+		this.pysde = pysde;
 	}
 
 	/**
@@ -147,40 +175,12 @@ public class Unit extends AbstractArchivableEntity {
 		this.telephones = telephones;
 	}
 
-	public PYSDE getPysde() {
-		return pysde;
-	}
-
-	public void setPysde(PYSDE pysde) {
-		this.pysde = pysde;
-	}
-
 	/**
-	 * @return the categories
+	 * @param title
+	 *            the title to set
 	 */
-	protected Collection<UnitCategory> getCategories() {
-		return categories;
-	}
-
-	/**
-	 * @param categories the categories to set
-	 */
-	protected void setCategories(Collection<UnitCategory> categories) {
-		this.categories = categories;
-	}
-
-	/**
-	 * @return the office
-	 */
-	protected OrganizationalOffice getOffice() {
-		return office;
-	}
-
-	/**
-	 * @param office the office to set
-	 */
-	protected void setOffice(OrganizationalOffice office) {
-		this.office = office;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 }

@@ -14,7 +14,6 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.faces.Converter;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 
-
 /**
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * 
@@ -23,10 +22,8 @@ import org.jboss.seam.annotations.intercept.BypassInterceptors;
 @Name("roleConverter")
 @Scope(ScopeType.STATELESS)
 @BypassInterceptors
-public class RoleConverter extends DatabaseAwareBaseConverter  {
+public class RoleConverter extends DatabaseAwareBaseConverter {
 
-	
-	
 	/**
 	 * 
 	 */
@@ -46,8 +43,7 @@ public class RoleConverter extends DatabaseAwareBaseConverter  {
 	public Object getAsObject(FacesContext context, UIComponent component, String value) {
 		if (value != null) {
 			return getMinoasDatabase().find(Role.class, value);
-		}
-		else
+		} else
 			return null;
 	}
 
@@ -59,12 +55,10 @@ public class RoleConverter extends DatabaseAwareBaseConverter  {
 		if (value != null) {
 			if (value instanceof Role) {
 				return ((Role) value).getId();
-			}
-			else {
+			} else {
 				return value.toString();
 			}
-		}
-		else
+		} else
 			return null;
 	}
 

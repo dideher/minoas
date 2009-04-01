@@ -24,7 +24,25 @@ import org.jboss.seam.annotations.Name;
 @Table(name = "PRE_TYPE")
 @Name("preparatoryUnitType")
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
-public class PreparatoryUnitNature  extends BaseModel {
+public class PreparatoryUnitNature extends BaseModel {
+
+	/**
+	 * Comment for <code>serialVersionUID</code>
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@Column(name = "ID")
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer id;
+
+	@Basic
+	@Column(name = "TITLE", length = 64, nullable = false, unique = true)
+	private String title;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "UNIT_TYPE", nullable = false, unique = true)
+	private PreparatoryUnitNatureType type;
 
 	/**
 	 * 
@@ -43,42 +61,10 @@ public class PreparatoryUnitNature  extends BaseModel {
 		this.title = title;
 	}
 
-	/**
-	 * Comment for <code>serialVersionUID</code>
-	 */
-	private static final long serialVersionUID = 1L;
-
-	@Id
-	@Column(name = "ID")
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer id;
-
-	@Basic
-	@Column(name = "TITLE", length = 64, nullable = false, unique = true)
-	private String title;
-	
-	@Enumerated(EnumType.STRING)
-	@Column(name="UNIT_TYPE", nullable=false, unique=true)
-	private PreparatoryUnitNatureType type; 
-
-//	public void addPreparatoryUnit(PreparatoryUnit unit) {
-//		unit.setType(this);
-//		getPreparatoryUnits().add(unit);
-//	}
-
-	/**
-	 * @return the title
-	 */
-	public String getTitle() {
-		return title;
-	}
-
-	/**
-	 * @param title the title to set
-	 */
-	public void setTitle(String title) {
-		this.title = title;
-	}
+	//	public void addPreparatoryUnit(PreparatoryUnit unit) {
+	//		unit.setType(this);
+	//		getPreparatoryUnits().add(unit);
+	//	}
 
 	/**
 	 * @return the id
@@ -88,10 +74,10 @@ public class PreparatoryUnitNature  extends BaseModel {
 	}
 
 	/**
-	 * @param id the id to set
+	 * @return the title
 	 */
-	public void setId(Integer id) {
-		this.id = id;
+	public String getTitle() {
+		return title;
 	}
 
 	/**
@@ -102,12 +88,24 @@ public class PreparatoryUnitNature  extends BaseModel {
 	}
 
 	/**
+	 * @param id the id to set
+	 */
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	/**
+	 * @param title the title to set
+	 */
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	/**
 	 * @param type the type to set
 	 */
 	public void setType(PreparatoryUnitNatureType type) {
 		this.type = type;
 	}
 
-	
-	
 }

@@ -39,6 +39,38 @@ import org.jboss.seam.annotations.security.Restrict;
 public class PrincipalAdminBean extends BaseStatefulSeamComponentImpl implements IPrincipalAdmin {
 
 	/**
+	 * Comment for <code>serialVersionUID</code>
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@In(value = "principal", create = true)
+	@Out(value = "principal", required = false)
+	private Principal activePrincipal;
+
+	@In(value = "coreSearching")
+	private CoreSearching coreSearching;
+
+	@In
+	private EntityManager minoasDatabase;
+
+	@DataModel
+	private List<Principal> principals;
+
+	private String searchString;
+
+	@DataModelSelection
+	private Principal selectedPrinicipal;
+
+	/**
+	 * @see gr.sch.ira.minoas.session.security.IPrincipalAdmin#cancelPrincipal()
+	 */
+	public String cancelPrincipal() {
+		info("canceling creation of new principal on user's request.");
+		setActivePrincipal(null);
+		return "cancel";
+	}
+
+	/**
 	 * @see gr.sch.ira.minoas.seam.components.BaseStatefulSeamComponentImpl#create()
 	 */
 	@Create
@@ -57,33 +89,6 @@ public class PrincipalAdminBean extends BaseStatefulSeamComponentImpl implements
 	public void destroy() {
 		// TODO Auto-generated method stub
 		super.destroy();
-	}
-
-	@In(value = "principal", create = true)
-	@Out(value = "principal", required = false)
-	private Principal activePrincipal;
-
-	@In(value="coreSearching")
-	private CoreSearching coreSearching;
-
-	@DataModel
-	private List<Principal> principals;
-
-	private String searchString;
-
-	@DataModelSelection
-	private Principal selectedPrinicipal;
-
-	@In
-	private EntityManager minoasDatabase;
-
-	/**
-	 * @see gr.sch.ira.minoas.session.security.IPrincipalAdmin#cancelPrincipal()
-	 */
-	public String cancelPrincipal() {
-		info("canceling creation of new principal on user's request.");
-		setActivePrincipal(null);
-		return "cancel";
 	}
 
 	/**
@@ -140,8 +145,7 @@ public class PrincipalAdminBean extends BaseStatefulSeamComponentImpl implements
 		if (minoasDatabase.find(Principal.class, new String(principal.getUsername())) != null) {
 			minoasDatabase.merge(principal);
 			info("principal #0 has been updated.", principal);
-		}
-		else {
+		} else {
 			minoasDatabase.persist(principal);
 			info("principal #0 has been saved.", principal);
 		}

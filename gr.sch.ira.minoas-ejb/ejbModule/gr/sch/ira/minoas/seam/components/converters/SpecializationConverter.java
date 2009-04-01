@@ -22,7 +22,7 @@ import org.jboss.seam.annotations.intercept.BypassInterceptors;
 @Name("specializationConverter")
 @Scope(ScopeType.STATELESS)
 @BypassInterceptors
-public class SpecializationConverter extends DatabaseAwareBaseConverter  {
+public class SpecializationConverter extends DatabaseAwareBaseConverter {
 
 	/**
 	 * 
@@ -40,8 +40,7 @@ public class SpecializationConverter extends DatabaseAwareBaseConverter  {
 	 * @see javax.faces.convert.Converter#getAsObject(javax.faces.context.FacesContext,
 	 *      javax.faces.component.UIComponent, java.lang.String)
 	 */
-	public Object getAsObject(FacesContext context, UIComponent component,
-			String value) {
+	public Object getAsObject(FacesContext context, UIComponent component, String value) {
 		if (value != null) {
 			return getMinoasDatabase().find(Specialization.class, value);
 		} else
@@ -52,8 +51,7 @@ public class SpecializationConverter extends DatabaseAwareBaseConverter  {
 	 * @see javax.faces.convert.Converter#getAsString(javax.faces.context.FacesContext,
 	 *      javax.faces.component.UIComponent, java.lang.Object)
 	 */
-	public String getAsString(FacesContext context, UIComponent component,
-			Object value) {
+	public String getAsString(FacesContext context, UIComponent component, Object value) {
 		if (value != null) {
 			if (value instanceof Specialization) {
 				return ((Specialization) value).getId();

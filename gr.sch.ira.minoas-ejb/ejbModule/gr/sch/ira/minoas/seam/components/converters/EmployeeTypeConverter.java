@@ -24,16 +24,16 @@ import org.jboss.seam.annotations.intercept.BypassInterceptors;
 @Scope(ScopeType.STATELESS)
 public class EmployeeTypeConverter extends BaseConverter {
 
+	public static final String DEPUTY_EMPLOYEE_TYPE_STR = "Αναπληρωτής";
+
+	public static final String HOURLY_PAID_EMPLOYEE_TYPE_STR = "Ωρομίσθιος";
+
+	public static final String REGULAR_EMPLOYEE_TYPE_STR = "Μόνιμος";
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-	public static final String REGULAR_EMPLOYEE_TYPE_STR = "Μόνιμος";
-
-	public static final String DEPUTY_EMPLOYEE_TYPE_STR = "Αναπληρωτής";
-
-	public static final String HOURLY_PAID_EMPLOYEE_TYPE_STR = "Ωρομίσθιος";
 
 	/**
 	 * @see javax.faces.convert.Converter#getAsObject(javax.faces.context.FacesContext,

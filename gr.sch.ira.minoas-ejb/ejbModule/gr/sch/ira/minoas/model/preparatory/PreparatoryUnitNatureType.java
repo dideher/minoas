@@ -30,6 +30,6 @@ package gr.sch.ira.minoas.model.preparatory;
  * @version $Id$
  */
 public enum PreparatoryUnitNatureType {
-	SECONDARY_EDUCATION,
-	LANGUAGE_CENTER
+	LANGUAGE_CENTER,
+	SECONDARY_EDUCATION
 }

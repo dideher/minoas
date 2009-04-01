@@ -11,11 +11,11 @@ import gr.sch.ira.minoas.model.employee.Person;
  *
  */
 public interface IEmployeeAware {
-	
-	public boolean hasActiveEmployee();
-	
+
 	public Person getActiveEmployee();
-	
+
+	public boolean hasActiveEmployee();
+
 	public void setActiveEmployee(Employee activeEmployee);
-	
+
 }

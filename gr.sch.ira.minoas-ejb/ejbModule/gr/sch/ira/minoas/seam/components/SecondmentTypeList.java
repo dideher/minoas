@@ -20,12 +20,16 @@ import org.jboss.seam.annotations.Unwrap;
 @Scope(ScopeType.PAGE)
 public class SecondmentTypeList extends BaseDatabaseAwareSeamComponent {
 
+	/**
+	 * Comment for <code>serialVersionUID</code>
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private Collection<SecondmentType> secondmentTypes;
-	
-	
+
 	@Unwrap
 	public Collection<SecondmentType> unwrap() {
-		if(secondmentTypes==null) {
+		if (secondmentTypes == null) {
 			secondmentTypes = getEntityManager().createQuery("SELECT s FROM SecondmentType s").getResultList();
 		}
 		return secondmentTypes;

@@ -36,26 +36,18 @@ import org.jboss.seam.security.Identity;
  * @version $Id$
  */
 public abstract class MinoasEntityHome<E> extends EntityHome {
-	
-	private Class<E> persistentClass;
 
 	public static final String PERSITESTENCE_CONTEXT_NAME = "entityManager";
-	
-	@In(required=false)
-	private Identity identity;
+
 	/**
-	 * @see org.jboss.seam.framework.EntityHome#getPersistenceContextName()
+	 * Comment for <code>serialVersionUID</code>
 	 */
-	@Override
-	protected String getPersistenceContextName() {
-		return PERSITESTENCE_CONTEXT_NAME;
-	}
-	
-	public E getDefinedInstace() {
-		if(isIdDefined()) {
-			return getEntityManager().find(persistentClass,getId());
-		} else return null;
-	}
+	private static final long serialVersionUID = 1L;
+
+	@In(required = false)
+	private Identity identity;
+
+	private Class<E> persistentClass;
 
 	/**
 	 * @see org.jboss.seam.framework.EntityHome#create()
@@ -66,12 +58,26 @@ public abstract class MinoasEntityHome<E> extends EntityHome {
 		persistentClass = (Class<E>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
 	}
 
+	public E getDefinedInstace() {
+		if (isIdDefined()) {
+			return getEntityManager().find(persistentClass, getId());
+		} else
+			return null;
+	}
+
 	/**
 	 * @return the identity
 	 */
 	protected Identity getIdentity() {
 		return identity;
 	}
-	
+
+	/**
+	 * @see org.jboss.seam.framework.EntityHome#getPersistenceContextName()
+	 */
+	@Override
+	protected String getPersistenceContextName() {
+		return PERSITESTENCE_CONTEXT_NAME;
+	}
 
 }

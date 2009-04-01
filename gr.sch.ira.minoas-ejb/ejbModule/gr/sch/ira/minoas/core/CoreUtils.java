@@ -10,8 +10,7 @@ package gr.sch.ira.minoas.core;
 public abstract class CoreUtils {
 
 	public static final String getSearchPattern(String searchString) {
-		return searchString == null ? "%" : '%' + searchString.toLowerCase()
-				.replace('*', '%') + '%';
+		return searchString == null ? "%" : '%' + searchString.toLowerCase().replace('*', '%') + '%';
 	}
 
 }
