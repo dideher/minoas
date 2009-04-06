@@ -50,10 +50,8 @@
       <class>gr.sch.ira.minoas.model.preparatory.PreparatoryUnit</class>
       <class>gr.sch.ira.minoas.model.preparatory.EstablishmentLicense</class>
       <class>gr.sch.ira.minoas.model.preparatory.EstablishmentLicenseRenewal</class>
-      <class>gr.sch.ira.minoas.model.preparatory.PreparatoryUnitNature</class>
       <class>gr.sch.ira.minoas.model.preparatory.TeachingLanguage</class>
       <class>gr.sch.ira.minoas.model.core.EstablishmentLocation</class>
-      <class>gr.sch.ira.minoas.model.preparatory.EstablishmentLicenseStatus</class>
     <properties>
       <!--
         <property name="hibernate.dialect"

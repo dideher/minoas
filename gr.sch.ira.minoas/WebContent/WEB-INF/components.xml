@@ -48,7 +48,8 @@
    <transaction:ejb-transaction/>
      
    <web:character-encoding-filter encoding="UTF-8"  override-client="true" url-pattern="*.seam" />
-                       
+   
+   
   <document:document-store use-extensions="true"/>                
 
   <!-- 
@@ -76,9 +77,23 @@
     
    <mail:mail-session host="localhost" port="2525" username="test" password="test" />
    
-   <framework:entity-query name="preparatoryOwnersList" ejbql="SELECT o FROM PreparatoryOwner o"  scope="conversation" max-results = "15" />
+   <component name="examplePreparatoryOwner" class="gr.sch.ira.minoas.model.preparatory.PreparatoryOwner" />
+   <framework:entity-query name="preparatoryOwnersList" 
+      ejbql="SELECT o FROM PreparatoryOwner o"  
+      scope="conversation" 
+      max-results = "15">
+      <framework:restrictions>
+        <value>lower(o.lastName) like lower(concat(#{examplePreparatoryOwner.lastName},'%') )</value>
+        <value>lower(o.firstName) like lower(concat(#{examplePreparatoryOwner.firstName},'%') )</value>
+        <value>lower(o.fatherName) like lower(concat(#{examplePreparatoryOwner.fatherName},'%') )</value>
+        <value>lower(o.idNumber) like lower(concat(#{examplePreparatoryOwner.idNumber},'%') )</value>
+      </framework:restrictions>
+   </framework:entity-query>
   
-   <component name="exampleEstablishmentLicense" class="gr.sch.ira.minoas.model.preparatory.EstablishmentLicense" />
+   <component name="exampleEstablishmentLicense" class="gr.sch.ira.minoas.model.preparatory.EstablishmentLicense">
+    <property name="owner">#{examplePreparatoryOwner}</property>
+   </component>
+   
    <framework:entity-query 
       name="establishmentLicensesList" 
       ejbql="SELECT o FROM EstablishmentLicense o"  

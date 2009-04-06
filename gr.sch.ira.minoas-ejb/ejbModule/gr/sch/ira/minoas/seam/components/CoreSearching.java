@@ -11,7 +11,7 @@ import gr.sch.ira.minoas.model.employee.Person;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
 import gr.sch.ira.minoas.model.employement.Secondment;
-import gr.sch.ira.minoas.model.preparatory.PreparatoryUnitNature;
+import gr.sch.ira.minoas.model.preparatory.PreparatoryUnitNatureType;
 import gr.sch.ira.minoas.model.preparatory.TeachingLanguage;
 import gr.sch.ira.minoas.model.security.Principal;
 import gr.sch.ira.minoas.model.security.Role;
@@ -77,10 +77,9 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 		return return_value;
 	}
 
-	@SuppressWarnings("unchecked")
-	@Factory(value = "preparatoryUnitNatures")
-	public Collection<PreparatoryUnitNature> getAvailablePreparatoryNatures() {
-		return getEntityManager().createQuery("FROM PreparatoryUnitNature p ORDER BY (p.title)").getResultList();
+	@Factory(value = "preparatoryUnitNatureTypes")
+	public PreparatoryUnitNatureType[] getAvailablePreparatoryNatures() {
+		return PreparatoryUnitNatureType.values();
 	}
 
 	@SuppressWarnings("unchecked")

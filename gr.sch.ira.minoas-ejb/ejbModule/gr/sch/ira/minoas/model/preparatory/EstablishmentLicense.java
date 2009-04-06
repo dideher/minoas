@@ -51,7 +51,8 @@ public class EstablishmentLicense extends BaseModel {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "NATURE_TYPE", nullable = false)
 	private PreparatoryUnitNatureType natureType;
-
+	
+	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "PREPARATORY_OWNER_ID", nullable = false)
 	private PreparatoryOwner owner;

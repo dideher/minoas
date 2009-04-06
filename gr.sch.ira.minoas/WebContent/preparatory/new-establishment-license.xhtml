@@ -13,11 +13,13 @@
 
 <ui:composition template="/layout/simple-beauty-template.xhtml">
 	<ui:define name="body">
+	
 		<h:form id="establishmentLicenseForm">
 			<rich:panel>
 				<f:facet name="header">
 			Αίτηση Άδειας Ιδρύσεως Φροντιστηρίου
 		</f:facet>
+				
 				<p><h:outputText value="Γενικά Στοιχεία Αίτησης" /></p>
 				<rich:separator lineType="beveled" height="8" width="75%"
 					align="center" />
@@ -37,20 +39,18 @@
 						<h:inputText value="#{establishmentLicense.requestProtocol}"
 							size="5" maxlength="5" required="true" />
 					</s:decorate>
-					<s:decorate template="/layout/doubleLineEdit.xhtml">
+					
+					<s:decorate  template="/layout/doubleLineEdit.xhtml">
 						<ui:define name="label">
 							<h:outputText value="Η Αίτηση Αφορά" />
 						</ui:define>
-						<h:selectOneMenu id="nature"
-							value="#{establishmentLicense.nature}"
-							converter="preparatoryUnitNatureToEnumConverter">
+						<h:selectOneMenu id="licenseNature"
+							value="#{establishmentLicense.natureType}" required="true">
 							<a4j:support event="onchange" reRender="teachingLanguages"
-								ajaxSingle="true" />
-							<s:selectItems var="_preparatoryUnitNature"
-								value="#{preparatoryUnitNatures}"
-								label="#{_preparatoryUnitNature.title}" />
-							<s:convertEntity />
-
+								ajaxSingle="true" />  
+							<s:selectItems hideNoSelectionLabel="true" var="_preparatoryUnitNatureType" 
+								value="#{preparatoryUnitNatureTypes}" label="#{messages[_preparatoryUnitNatureType.key]}"/>
+							<s:convertEnum />
 						</h:selectOneMenu>
 					</s:decorate>
 
@@ -59,8 +59,7 @@
 							<h:outputText value="Έδρα" />
 						</ui:define>
 						<h:selectOneMenu id="establishmentLocation"
-							value="#{establishmentLicense.establishmentLocation}"
-							converter="preparatoryUnitNatureToEnumConverter">
+							value="#{establishmentLicense.establishmentLocation}">
 							<s:selectItems var="_establishmentLocation"
 								value="#{establishmentLocations}"
 								label="#{_establishmentLocation.title}" />
@@ -73,8 +72,7 @@
 						<ui:define name="label">
 							<h:outputText value="Διδασκόμενες Γλώσσες" />
 						</ui:define>
-						<h:selectManyListbox
-							disabled="#{establishmentLicense.nature.type == 'SECONDARY_EDUCATION'}"
+						<h:selectManyListbox disabled="#{establishmentLicense.natureType == 'SECONDARY_EDUCATION'}"
 							value="#{establishmentLicense.teachingLanguages}">
 							<s:selectItems var="_teachingLanguage"
 								value="#{teachingLanguages}"
@@ -82,9 +80,7 @@
 							<s:convertEntity />
 						</h:selectManyListbox>
 					</s:decorate>
-
-
-
+				
 				</h:panelGrid>
 
 				<h:panelGroup>

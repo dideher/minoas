@@ -18,6 +18,39 @@
 		<f:facet name="header">
 			Λίστα Διαθέσιμων Ιδιοκτητών Φροντιστηρίου
 		</f:facet>
+		<h:panelGrid columns="1">
+			<h:panelGrid columns="4">
+				<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">
+							<h:outputText value="Επώνυμο : " />
+						</ui:define>
+						<h:inputText value="#{examplePreparatoryOwner.lastName}" size="15"/>
+				</s:decorate>
+				<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">
+							<h:outputText value="Όνομα : " />
+						</ui:define>
+						<h:inputText value="#{examplePreparatoryOwner.firstName}" size="12" />
+				</s:decorate>
+				<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">
+							<h:outputText value="Όνομα Πατρός : " />
+						</ui:define>
+						<h:inputText value="#{examplePreparatoryOwner.fatherName}" size="12" />
+				</s:decorate>
+				<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">
+							<h:outputText value="Α.Δ.Τ : " />
+						</ui:define>
+						<h:inputText value="#{examplePreparatoryOwner.idNumber}" size="11" />
+				</s:decorate>
+			</h:panelGrid>
+		</h:panelGrid>
+		<rich:panel>
+			<f:facet name="header">
+				Λίστα Διαθέσιμων Ιδιοκτητών Φροντιστηρίου
+			</f:facet>
+		</rich:panel>
 		<rich:dataTable var="_owner" value="#{preparatoryOwnersList.resultList}" rendered="#{not empty preparatoryOwnersList.resultList}">
 			<h:column>
 				<f:facet name="header">

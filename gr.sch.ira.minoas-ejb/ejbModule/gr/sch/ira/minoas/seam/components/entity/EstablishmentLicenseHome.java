@@ -4,7 +4,6 @@ import gr.sch.ira.minoas.model.preparatory.EstablishmentLicense;
 import gr.sch.ira.minoas.model.preparatory.EstablishmentLicenseStatusType;
 import gr.sch.ira.minoas.model.preparatory.PreparatoryOwner;
 import gr.sch.ira.minoas.seam.components.CoreSearching;
-import gr.sch.ira.minoas.session.persistent.IEstablishmentLicenseStatusDAO;
 
 import java.util.Date;
 
@@ -27,9 +26,7 @@ public class EstablishmentLicenseHome extends MinoasEntityHome<EstablishmentLice
 	@In()
 	private CoreSearching coreSearching;
 
-	@In(create = true)
-	protected IEstablishmentLicenseStatusDAO establishmentLicenseStatusDAO;
-
+	
 	@In(create = true)
 	private PreparatoryOwnerHome preparatoryOwnerHome;
 

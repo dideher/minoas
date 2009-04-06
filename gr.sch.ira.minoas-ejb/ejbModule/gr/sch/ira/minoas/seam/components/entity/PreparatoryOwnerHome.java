@@ -45,11 +45,7 @@ public class PreparatoryOwnerHome extends MinoasEntityHome<PreparatoryOwner> {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@Factory(value = "preparatoryOwner")
-	public PreparatoryOwner getPreparatoryOwner() {
-		return (PreparatoryOwner) getInstance();
-	}
-
+	
 	/**
 	 * @see org.jboss.seam.framework.EntityHome#persist()
 	 * 
@@ -57,7 +53,7 @@ public class PreparatoryOwnerHome extends MinoasEntityHome<PreparatoryOwner> {
 	@Override
 	@Transactional
 	public String persist() {
-		PreparatoryOwner owner = getPreparatoryOwner();
+		PreparatoryOwner owner = getInstance();
 		owner.setInsertedOn(new Date(System.currentTimeMillis()));
 		return super.persist();
 	}
@@ -68,8 +64,27 @@ public class PreparatoryOwnerHome extends MinoasEntityHome<PreparatoryOwner> {
 	@Override
 	@Transactional
 	public String update() {
-		PreparatoryOwner owner = getPreparatoryOwner();
+		PreparatoryOwner owner = getInstance();
 		owner.setModifiedOn(new Date(System.currentTimeMillis()));
 		return super.update();
+	}
+	
+	
+
+	/**
+	 * @see org.jboss.seam.framework.Home#createInstance()
+	 */
+	@Override
+	protected Object createInstance() {
+		return super.createInstance();
+	}
+
+	/**
+	 * @see org.jboss.seam.framework.Home#getInstance()
+	 */
+	@Override
+	@Factory(value = "preparatoryOwner")
+	public PreparatoryOwner getInstance() {
+		return (PreparatoryOwner)super.getInstance();
 	}
 }
