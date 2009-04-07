@@ -139,6 +139,8 @@
 					rendered="#{!preparatoryOwnerHome.managed}" />
 				<h:commandButton id="update" action="#{preparatoryOwnerHome.update}"
 					value="Ανανέωση" rendered="#{preparatoryOwnerHome.managed}" />
+				<rich:spacer width="20"/>
+				<s:button id="backButton" value="Επιστροφή" view="#{empty from ? '/home' : from}.xhtml}" />
 			</s:div>
 		</h:form>
 	</ui:define>

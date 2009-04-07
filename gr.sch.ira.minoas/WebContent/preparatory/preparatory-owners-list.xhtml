@@ -8,94 +8,120 @@
 	xmlns:a4j="http://richfaces.org/a4j">
 
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 
 <ui:composition template="/layout/simple-beauty-template.xhtml">
 	<ui:define name="body">
 		<h:form id="preparatoryOwnersList">
-		<rich:panel>
-		<f:facet name="header">
+			<rich:panel>
+				<f:facet name="header">
 			Λίστα Διαθέσιμων Ιδιοκτητών Φροντιστηρίου
 		</f:facet>
-		<h:panelGrid columns="1">
-			<h:panelGrid columns="4">
-				<s:decorate template="/layout/edit.xhtml">
-						<ui:define name="label">
-							<h:outputText value="Επώνυμο : " />
-						</ui:define>
-						<h:inputText value="#{examplePreparatoryOwner.lastName}" size="15"/>
-				</s:decorate>
-				<s:decorate template="/layout/edit.xhtml">
-						<ui:define name="label">
-							<h:outputText value="Όνομα : " />
-						</ui:define>
-						<h:inputText value="#{examplePreparatoryOwner.firstName}" size="12" />
-				</s:decorate>
-				<s:decorate template="/layout/edit.xhtml">
-						<ui:define name="label">
-							<h:outputText value="Όνομα Πατρός : " />
-						</ui:define>
-						<h:inputText value="#{examplePreparatoryOwner.fatherName}" size="12" />
-				</s:decorate>
-				<s:decorate template="/layout/edit.xhtml">
-						<ui:define name="label">
-							<h:outputText value="Α.Δ.Τ : " />
-						</ui:define>
-						<h:inputText value="#{examplePreparatoryOwner.idNumber}" size="11" />
-				</s:decorate>
-			</h:panelGrid>
-		</h:panelGrid>
-		<rich:panel>
-			<f:facet name="header">
-				Λίστα Διαθέσιμων Ιδιοκτητών Φροντιστηρίου
-			</f:facet>
-		</rich:panel>
-		<rich:dataTable var="_owner" value="#{preparatoryOwnersList.resultList}" rendered="#{not empty preparatoryOwnersList.resultList}">
-			<h:column>
-				<f:facet name="header">
-					Επώνυμο
-				</f:facet>
-				#{_owner.lastName}
-			</h:column>
-			<h:column>
-				<f:facet name="header">
-					Όνομα
-				</f:facet>
-				#{_owner.firstName}
-			</h:column>
-			<h:column>
-				<f:facet name="header">
-					Όνομα Πατρός
-				</f:facet>
-				#{_owner.fatherName}
-			</h:column>
-			<h:column>
-				<f:facet name="header">
-					Ημ/νία Γεννήσεως
-				</f:facet>
-				#{_owner.dateOfBirth}
-			</h:column>
-			<h:column>
-				<f:facet name="header">
-					Αριθμός Α/Τ
-				</f:facet>
-				#{_owner.idNumber}
-			</h:column>
-			<h:column>
-				<f:facet name="header">
-					Ενέργεια
-				</f:facet>
-				<s:link view="#{empty from ? '/preparatory/preparatoryOwner.xhtml' : from}.xhtml}" value="#{empty from ? 'Προβολή' : 'Επιλογή'}" >
-					<f:param name="preparatoryOwnerID" value="#{_owner.id}"/>
-				</s:link>
-			</h:column>
-		</rich:dataTable>		
-		</rich:panel>
+				<h:panelGrid columns="1">
+					<h:panelGroup>
+						<h:outputText
+							value="Χρησιμοποιήστε, αν θέλετε, τα παρακάτω πεδία για να φιλτράρετε την λίστα των κατόχων." />
+					</h:panelGroup>
+					<h:panelGrid columns="4">
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Επώνυμο : " />
+							</ui:define>
+							<h:inputText value="#{examplePreparatoryOwner.lastName}"
+								size="12" />
+						</s:decorate>
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Όνομα : " />
+							</ui:define>
+							<h:inputText value="#{examplePreparatoryOwner.firstName}"
+								size="10" />
+						</s:decorate>
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Όνομα Πατρός : " />
+							</ui:define>
+							<h:inputText value="#{examplePreparatoryOwner.fatherName}"
+								size="10" />
+						</s:decorate>
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Α.Δ.Τ : " />
+							</ui:define>
+							<h:inputText value="#{examplePreparatoryOwner.idNumber}"
+								size="11" />
+						</s:decorate>
+					</h:panelGrid>
+					<s:div styleClass="actionButtons">
+						<h:commandButton id="searchButton" value="Αναζήτηση"
+							actionListener="preparatoryOwnersList.first" />
+						<h:commandButton id="resetButton" value="Καθαρισμός" action="reset" />
+					</s:div>
+					<h:panelGroup>
+						<rich:spacer height="5"/>
+						<rich:separator height="2" lineType="dashed"/>
+						<rich:spacer height="5"/>
+					</h:panelGroup>
+					<h:panelGroup>
+						<rich:dataTable var="_owner"
+							value="#{preparatoryOwnersList.resultList}"
+							rendered="#{not empty preparatoryOwnersList.resultList}">
+							<h:column>
+								<f:facet name="header">
+									<h:outputText value="Επώνυμο" />
+								</f:facet>
+								<h:outputText value="#{_owner.lastName}" />
+							</h:column>
+							<h:column>
+								<f:facet name="header">
+									<h:outputText value="Όνομα" />
+								</f:facet>
+								<h:outputText value="#{_owner.firstName}" />
+							</h:column>
+							<h:column>
+								<f:facet name="header">
+									<h:outputText value="Όνομα Πατρός" />
+								</f:facet>
+								<h:outputText value="#{_owner.fatherName}" />
+							</h:column>
+							<h:column>
+								<f:facet name="header">
+									<h:outputText value="Όνομα Μητρός" />
+								</f:facet>
+								<h:outputText value="#{_owner.motherName}" />
+							</h:column>
+							<h:column>
+								<f:facet name="header">
+									<h:outputText value="Ημ/νία Γεννήσεως" />
+								</f:facet>
+								<h:outputText value="#{_owner.dateOfBirth}" />
+							</h:column>
+							<h:column>
+								<f:facet name="header">
+									<h:outputText value="Αριθμός Α/Τ" />
+								</f:facet>
+								<h:outputText value="#{_owner.idNumber}" />
+							</h:column>
+							<h:column>
+								<f:facet name="header">
+									<h:outputText value="Ενέργεια" />
+								</f:facet>
+								<s:link
+									view="#{empty from ? '/preparatory/preparatory-owner' : from}.xhtml}"
+									value="#{empty from ? 'Προβολή' : 'Επιλογή'}">
+									<f:param name="preparatoryOwnerID" value="#{_owner.id}" />
+									<f:param name="from" value="/preparatory/preparatory-owners-list" />
+								</s:link>
+							</h:column>
+						</rich:dataTable>
+					</h:panelGroup>
+				</h:panelGrid>
+			</rich:panel>
 		</h:form>
-		
-		
-		
+
+
+
 	</ui:define>
 </ui:composition>
 </html>

@@ -4,5 +4,5 @@
   <begin-conversation join="true" flush-mode="manual"/>
   <description>Λίστα Διαθέσιμων Ιδιοκτητών Φροντιστηρίου</description>
   <param name="from" />
-  
+  <param name="preparatoryOwnerID" />
 </page>

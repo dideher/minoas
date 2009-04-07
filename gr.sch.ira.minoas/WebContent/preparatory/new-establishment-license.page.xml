@@ -7,7 +7,7 @@
   
   <action execute="#{establishmentLicenseHome.wire}" />
   <navigation from-action="selectPreparatoryOwner">
-    <redirect view-id="/preparatory/ownerList.xhtml">
+    <redirect view-id="/preparatory/preparatory-owners-list.xhtml">
       <param name="from" value="/preparatory/new-establishment-license" />
     </redirect>
   </navigation>

@@ -16,9 +16,27 @@
 		<h:form id="establishmentLicenseList">
 			<rich:panel>
 				<f:facet name="header">
-			Λίστα Αδείων Ιδρύσεως
+			<h:outputText value="Λίστα Αδείων Ιδρύσεως" />
 		</f:facet>
-				<h:inputText value="#{exampleEstablishmentLicense.owner.lastName}" />
+			<h:panelGrid columns="1">
+				<h:panelGroup>
+				<h:outputText
+							value="Χρησιμοποιήστε, αν θέλετε, τα παρακάτω πεδία για να φιλτράρετε την λίστα των κατόχων." />
+				</h:panelGroup>
+			<h:panelGrid columns="3">
+					<h:inputText value="#{exampleEstablishmentLicense.owner.lastName}" />
+			</h:panelGrid>
+			<s:div styleClass="actionButtons">
+						<h:commandButton id="searchButton" value="Αναζήτηση"
+							actionListener="establishmentLicensesList.first" />
+						<h:commandButton id="resetButton" value="Καθαρισμός" action="reset" />
+			</s:div>
+			</h:panelGrid>
+				<h:panelGroup>
+					<rich:spacer height="5"/>
+					<rich:separator height="2" lineType="dashed"/>
+					<rich:spacer height="5"/>
+				</h:panelGroup>
 				<rich:dataTable var="_license"
 					value="#{establishmentLicensesList.resultList}"
 					rendered="#{not empty establishmentLicensesList.resultList}">
