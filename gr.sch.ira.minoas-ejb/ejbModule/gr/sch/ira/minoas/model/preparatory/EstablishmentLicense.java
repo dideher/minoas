@@ -37,7 +37,7 @@ public class EstablishmentLicense extends BaseModel {
 
 	@Enumerated(EnumType.STRING)
 	@JoinColumn(name = "STATUS_TYPE", nullable = false)
-	private EstablishmentLicenseStatusType establishmentLicenseStatusType;
+	private EstablishmentLicenseStatusType statusType;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "ESTABLISHMENT_LOCATION_ID", nullable = false)
@@ -153,7 +153,7 @@ public class EstablishmentLicense extends BaseModel {
 	 * @return the statusType
 	 */
 	public EstablishmentLicenseStatusType getStatusType() {
-		return establishmentLicenseStatusType;
+		return statusType;
 	}
 
 	/**
@@ -230,7 +230,7 @@ public class EstablishmentLicense extends BaseModel {
 	 * @param establishmentLicenseStatusType the statusType to set
 	 */
 	public void setStatusType(EstablishmentLicenseStatusType establishmentLicenseStatusType) {
-		this.establishmentLicenseStatusType = establishmentLicenseStatusType;
+		this.statusType = establishmentLicenseStatusType;
 	}
 
 	/**

@@ -7,15 +7,18 @@ import gr.sch.ira.minoas.seam.components.CoreSearching;
 
 import java.util.Date;
 
+import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Scope;
 
 /**
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * @version $Id$
  */
 @Name(value = "establishmentLicenseHome")
+@Scope(ScopeType.CONVERSATION)
 public class EstablishmentLicenseHome extends MinoasEntityHome<EstablishmentLicense> {
 
 	/**
@@ -27,7 +30,7 @@ public class EstablishmentLicenseHome extends MinoasEntityHome<EstablishmentLice
 	private CoreSearching coreSearching;
 
 	
-	@In(create = true)
+	@In(required=false)
 	private PreparatoryOwnerHome preparatoryOwnerHome;
 
 	/**
@@ -63,9 +66,11 @@ public class EstablishmentLicenseHome extends MinoasEntityHome<EstablishmentLice
 
 	public void wire() {
 		System.err.println("**** wire called ****");
+		if(preparatoryOwnerHome!=null) {
 		PreparatoryOwner owner = preparatoryOwnerHome.getDefinedInstace();
 		if (owner != null) {
 			getInstance().setOwner(owner);
+		}
 		}
 	}
 
