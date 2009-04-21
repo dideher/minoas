@@ -31,16 +31,21 @@
 						<h:outputText value="Φροντιστήρια" />
 					</h:panelGroup>
 				</f:facet>
-				<rich:menuGroup value="Άδειες Ιδρύσεως">
-				<rich:menuItem submitMode="none">
-					<s:link value="Εισαγωγή Αίτησης" view="/preparatory/new-establishment-license.xhtml" />
-				</rich:menuItem>
-				<rich:menuItem submitMode="none">
-					<s:link value="Προβολή Αδειών Ιδρύσεως" view="/preparatory/establishment-licenses-list.xhtml"></s:link>
-				</rich:menuItem>
-				<rich:menuItem submitMode="none">
-					<s:link value="Προβολή Κατόχων Φροντιστηρίων" view="/preparatory/preparatory-owners-list.xhtml"></s:link>
-				</rich:menuItem>
+				<rich:menuGroup value="Άδειες Ιδρύσεως Φροντιστηρίων">
+					<rich:menuItem submitMode="none">
+						<s:link value="Εισαγωγή Αίτησης" view="/preparatory/new-establishment-license.xhtml" />
+					</rich:menuItem>
+					<rich:menuItem submitMode="none">
+						<s:link value="Προβολή Αδειών Ιδρύσεως" view="/preparatory/establishment-licenses-list.xhtml"></s:link>
+					</rich:menuItem>
+				</rich:menuGroup>
+				<rich:menuGroup value="Ιδιοκτήτες Φροντιστηρίων">
+					<rich:menuItem submitMode="none">
+						<s:link value="Εισαγωγή Ιδιοκτήτη" view="/preparatory/preparatory-owner.xhtml "/>
+					</rich:menuItem>
+					<rich:menuItem submitMode="none">
+						<s:link value="Προβολή Ιδιοκτητών" view="/preparatory/preparatory-owners-list.xhtml"></s:link>
+					</rich:menuItem>
 				</rich:menuGroup>
 			</rich:dropDownMenu>
 			

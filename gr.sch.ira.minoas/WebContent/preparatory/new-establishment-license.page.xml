@@ -11,5 +11,9 @@
       <param name="from" value="/preparatory/new-establishment-license" />
     </redirect>
   </navigation>
+  <navigation from-action="#{establishmentLicenseHome.persist}">
+    <end-conversation />
+    <redirect view-id="#{empty from ? '/home' : from}.xhtml}" />
+  </navigation>
   
 </page>

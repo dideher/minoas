@@ -16,14 +16,23 @@
 		<h:form id="preparatoryForm">
 			<rich:panel>
 				<f:facet name="header">
-					#{preparatoryOwnerHome.managed ? 'Επεξεργασία' : 'Προσθήκη'} Ιδιοκτήτη Φροντιστηρίου
+					<h:outputText value="#{preparatoryOwnerHome.managed ? 'Επεξεργασία' : 'Προσθήκη'} Ιδιοκτήτη Φροντιστηρίου" />
 				</f:facet>
+				<h:panelGrid columns="1">
+					<h:panelGroup rendered="#{!preparatoryOwnerHome.managed}">
+						<h:outputText value="Εισάγετε στην παρακάτω φόρμα τα στοιχεία του νέου ιδιοκτήτη που θέλετε να δημιουργήσετε." />
+					</h:panelGroup>
+					<h:panelGroup rendered="#{preparatoryOwnerHome.managed}">
+						<h:outputText value="Παρακάτω εμφανίζονται τα στοιχεία του ιδιοκτήτη φροντιστηρίου" />
+						<h:outputText styleClass="fieldValueText" value=" #{preparatoryOwner.lastName} #{preparatoryOwner.firstName} του #{preparatoryOwner.fatherName}. " />
+						<h:outputText value="Προσοχή, τα στοιχεία της φόρμας είναι ενεργά, δηλαδή αν τα αλλάξετε και πατήσετε 'Ανανέωση' τότε τα στοιχεία του ιδιοκτήτη θα άλλαξουν και στην βάση.  " />
+					</h:panelGroup>
 				<h:panelGrid columns="4">
 					<s:decorate template="/layout/doubleLineEdit.xhtml">
 						<ui:define name="label">
 							<h:outputText value="Επώνυμο" />
 						</ui:define>
-						<h:inputText value="#{preparatoryOwner.lastName}" size="18"
+						<h:inputText styleClass="fieldValueText" value="#{preparatoryOwner.lastName}" size="18"
 							maxlength="35" required="true" />
 					</s:decorate>
 
@@ -32,10 +41,17 @@
 						<ui:define name="label">
 							<h:outputText value="Όνομα" />
 						</ui:define>
-						<h:inputText value="#{preparatoryOwner.firstName}" size="12"
+						<h:inputText styleClass="fieldValueText" value="#{preparatoryOwner.firstName}" size="12"
 							maxlength="25" required="true" />
 					</s:decorate>
 
+					<s:decorate template="/layout/doubleLineEdit.xhtml">
+						<ui:define name="label">
+							<h:outputText value="Άντρας" />
+						</ui:define>
+						<h:selectBooleanCheckbox required="true" value="#{preparatoryOwner.man}" size="12" />
+					</s:decorate>
+					
 					<s:decorate template="/layout/doubleLineEdit.xhtml">
 						<ui:define name="label">
 							<h:outputText value="Ειδικότητα" />
@@ -56,21 +72,32 @@
 									<h:outputText value="#{a_spec.title}" />
 								</h:column>
 							</rich:suggestionbox>
+							<a4j:support event="onchange" reRender="teachingSufficiency"
+								ajaxSingle="true" />
 						</h:inputText>
 					</s:decorate>
-
-					<s:decorate template="/layout/doubleLineEdit.xhtml">
+					
+					<s:decorate id="teachingSufficiency"
+						template="/layout/doubleLineEdit.xhtml">
 						<ui:define name="label">
-							<h:outputText value="Άντρας" />
+							<h:outputText value="Γλωσσική Επάρκεια" />
 						</ui:define>
-						<h:selectBooleanCheckbox value="#{preparatoryOwner.man}" size="12" />
+						<h:selectManyListbox
+							disabled="#{preparatoryOwner.specialization!=null}"
+							value="#{preparatoryOwner.teachingSufficiency}">
+							<s:selectItems var="_teachingLanguage"
+								value="#{teachingLanguages}"
+								label="#{_teachingLanguage.language}" />
+							<s:convertEntity />
+						</h:selectManyListbox>
 					</s:decorate>
 
+					
 					<s:decorate template="/layout/doubleLineEdit.xhtml">
 						<ui:define name="label">
 							<h:outputText value="Όνομα Πατρός" />
 						</ui:define>
-						<h:inputText value="#{preparatoryOwner.fatherName}" size="12"
+						<h:inputText styleClass="fieldValueText" value="#{preparatoryOwner.fatherName}" size="12"
 							maxlength="25" required="true" />
 					</s:decorate>
 
@@ -78,7 +105,7 @@
 						<ui:define name="label">
 							<h:outputText value="Επώνυμο Πατρός" />
 						</ui:define>
-						<h:inputText value="#{preparatoryOwner.fatherSurname}" size="18"
+						<h:inputText styleClass="fieldValueText" value="#{preparatoryOwner.fatherSurname}" size="18"
 							maxlength="35" />
 					</s:decorate>
 
@@ -86,7 +113,7 @@
 						<ui:define name="label">
 							<h:outputText value="Όνομα Μητρός" />
 						</ui:define>
-						<h:inputText value="#{preparatoryOwner.motherName}" size="12"
+						<h:inputText styleClass="fieldValueText" value="#{preparatoryOwner.motherName}" size="12"
 							maxlength="25" required="true" />
 					</s:decorate>
 
@@ -94,7 +121,7 @@
 						<ui:define name="label">
 							<h:outputText value="Επώνυμο Μητρός" />
 						</ui:define>
-						<h:inputText value="#{preparatoryOwner.motherSurname}" size="18"
+						<h:inputText styleClass="fieldValueText" value="#{preparatoryOwner.motherSurname}" size="18"
 							maxlength="35" />
 					</s:decorate>
 
@@ -102,7 +129,7 @@
 						<ui:define name="label">
 							<h:outputText value="Α.Δ.Τ" />
 						</ui:define>
-						<h:inputText value="#{preparatoryOwner.idNumber}" size="12"
+						<h:inputText styleClass="fieldValueText" value="#{preparatoryOwner.idNumber}" size="12"
 							maxlength="12" required="true" />
 					</s:decorate>
 
@@ -110,7 +137,7 @@
 						<ui:define name="label">
 							<h:outputText value="Εκδούσα Αρχή" />
 						</ui:define>
-						<h:inputText value="#{preparatoryOwner.idNumberAuthority}"
+						<h:inputText styleClass="fieldValueText" value="#{preparatoryOwner.idNumberAuthority}"
 							size="12" maxlength="12" />
 					</s:decorate>
 
@@ -118,7 +145,7 @@
 						<ui:define name="label">
 							<h:outputText value="ΑΦΜ" />
 						</ui:define>
-						<h:inputText value="#{preparatoryOwner.vatNumber}" size="10"
+						<h:inputText styleClass="fieldValueText" value="#{preparatoryOwner.vatNumber}" size="10"
 							maxlength="10" required="true" />
 					</s:decorate>
 
@@ -126,12 +153,14 @@
 						<ui:define name="label">
 							<h:outputText value="Ημερομηνία Γεννήσεως" />
 						</ui:define>
-						<rich:calendar datePattern="dd/MM/yyyy"
+						<rich:calendar styleClass="fieldValueText" datePattern="dd/MM/yyyy"
 							value="#{preparatoryOwner.dateOfBirth}" required="true">
 						</rich:calendar>
 					</s:decorate>
 
 				</h:panelGrid>
+				</h:panelGrid>
+				
 			</rich:panel>
 			<s:div styleClass="actionButtons">
 				<h:commandButton id="save" value="Καταχώρηση"

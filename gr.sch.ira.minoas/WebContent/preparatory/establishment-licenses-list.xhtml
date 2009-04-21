@@ -16,26 +16,78 @@
 		<h:form id="establishmentLicenseList">
 			<rich:panel>
 				<f:facet name="header">
-			<h:outputText value="Λίστα Αδείων Ιδρύσεως" />
-		</f:facet>
-			<h:panelGrid columns="1">
-				<h:panelGroup>
-				<h:outputText
-							value="Χρησιμοποιήστε, αν θέλετε, τα παρακάτω πεδία για να φιλτράρετε την λίστα των κατόχων." />
-				</h:panelGroup>
-			<h:panelGrid columns="3">
-					<h:inputText value="#{exampleEstablishmentLicense.owner.lastName}" />
-			</h:panelGrid>
-			<s:div styleClass="actionButtons">
+					<h:outputText value="Λίστα Αδείων Ιδρύσεως" />
+				</f:facet>
+				<h:panelGrid columns="1">
+					<h:panelGroup>
+						<h:outputText
+							value="Χρησιμοποιήστε, αν θέλετε, τα παρακάτω πεδία για να φιλτράρετε την λίστα των αδειών ιδρύσεως" />
+					</h:panelGroup>
+					<h:panelGrid columns="5">
+						<s:decorate template="/layout/doubleLineEdit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Αριθ. Αίτησης" />
+							</ui:define>
+							<h:inputText
+								value="#{exampleEstablishmentLicense.requestProtocol}" size="5"
+								required="false" />
+						</s:decorate>
+						<s:decorate template="/layout/doubleLineEdit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Σχολικό Έτος" />
+							</ui:define>
+							<h:inputText readonly="true"
+								size="12"
+								required="false" />
+						</s:decorate>
+						<s:decorate template="/layout/doubleLineEdit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Επώνυμο Κατόχου" />
+							</ui:define>
+							<h:inputText
+								value="#{exampleEstablishmentLicense.owner.lastName}" size="12"
+								required="false" />
+						</s:decorate>
+						<s:decorate template="/layout/doubleLineEdit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Τύπος Άδειας" />
+							</ui:define>
+							<h:selectOneMenu 
+							value="#{exampleEstablishmentLicense.natureType}" required="false">
+								<s:selectItems hideNoSelectionLabel="false"
+									noSelectionLabel="-------------"
+									var="_preparatoryUnitNatureType"
+									value="#{preparatoryUnitNatureTypes}"
+									label="#{messages[_preparatoryUnitNatureType.key]}" />
+								<s:convertEnum />
+							</h:selectOneMenu>
+						</s:decorate>
+						<s:decorate template="/layout/doubleLineEdit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Κατάσταση Άδειας" />
+							</ui:define>
+							<h:selectOneMenu 
+							value="#{exampleEstablishmentLicense.statusType}" required="false">
+								<s:selectItems hideNoSelectionLabel="false"
+									noSelectionLabel="-------------"
+									var="_establishmentLicenseStatusType"
+									value="#{establishmentLicenseStatusTypes}"
+									label="#{messages[_establishmentLicenseStatusType.key]}" />
+								<s:convertEnum />
+							</h:selectOneMenu>
+						</s:decorate>
+					</h:panelGrid>
+					<s:div styleClass="actionButtons">
 						<h:commandButton id="searchButton" value="Αναζήτηση"
 							actionListener="establishmentLicensesList.first" />
-						<h:commandButton id="resetButton" value="Καθαρισμός" action="reset" />
-			</s:div>
-			</h:panelGrid>
+						<h:commandButton id="resetButton" value="Καθαρισμός"
+							action="reset" />
+					</s:div>
+				</h:panelGrid>
 				<h:panelGroup>
-					<rich:spacer height="5"/>
-					<rich:separator height="2" lineType="dashed"/>
-					<rich:spacer height="5"/>
+					<rich:spacer height="5" />
+					<rich:separator height="2" lineType="dashed" />
+					<rich:spacer height="5" />
 				</h:panelGroup>
 				<rich:dataTable var="_license"
 					value="#{establishmentLicensesList.resultList}"
@@ -45,16 +97,15 @@
 							<rich:column colspan="5">
 								<h:outputText value="Γενικά Στοιχεία Άδειας ..." />
 							</rich:column>
-							<rich:column colspan="5">
+							<rich:column colspan="4">
 								<h:outputText value="Στοιχεία Κατόχου ..." />
 							</rich:column>
-
 						</rich:columnGroup>
 					</f:facet>
 					<rich:column breakBefore="true">
 						<f:facet name="header">
-					Αριθ. Αίτησης
-				</f:facet>
+							<h:outputText value="Αριθ. Αίτησης" />
+						</f:facet>
 						<h:outputText value="#{_license.requestProtocol}/" />
 						<h:outputText value="#{_license.requestDate}">
 							<s:convertDateTime pattern="dd-MM-yyyy" />
@@ -62,14 +113,14 @@
 					</rich:column>
 					<rich:column>
 						<f:facet name="header">
-					Τύπος
-				</f:facet>
-				<h:outputText value="#{messages[_license.natureType.key]}" />
-			</rich:column>
+							<h:outputText value="Τύπος" />
+						</f:facet>
+						<h:outputText value="#{messages[_license.natureType.key]}" />
+					</rich:column>
 					<rich:column>
 						<f:facet name="header">
-					Απ. ΠΥΣΔΕ
-				</f:facet>
+							<h:outputText value="Απ. ΠΥΣΔΕ" />
+						</f:facet>
 						<s:div rendered="#{_license.requestJudgmentNumber != null}">
 							<h:outputText value="#{_license.requestJudgmentNumber}/" />
 							<h:outputText value="#{_license.requestJudgmentDate}">
@@ -79,49 +130,41 @@
 					</rich:column>
 					<rich:column>
 						<f:facet name="header">
-					Έδρα
-				</f:facet>
+							<h:outputText value="Κατάσταση" />
+						</f:facet>
+						<h:outputText
+							value="#{messages[_license.statusType.key]}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Έδρα" />
+						</f:facet>
 						<h:outputText value="#{_license.establishmentLocation.title}" />
 					</rich:column>
 					<rich:column>
 						<f:facet name="header">
-					Κατάσταση
-				</f:facet>
-						<h:outputText value="#{messages[_license.statusType.key]}" />
-					</rich:column>
-
-					<rich:column>
-						<f:facet name="header">
-					Επώνυμο
-				</f:facet>
-				#{_license.owner.lastName}
-			</rich:column>
-					<rich:column>
-						<f:facet name="header">
-					Όνομα
-				</f:facet>
-				#{_license.owner.firstName}
-			</rich:column>
-					<rich:column>
-						<f:facet name="header">
-					Όνομα Πατρός
-				</f:facet>
-				#{_license.owner.fatherName}
-			</rich:column>
-					<rich:column>
-						<f:facet name="header">
-					Ημ/νία Γεν.
-				</f:facet>
-						<h:outputText value="#{_license.owner.dateOfBirth}">
-							<s:convertDateTime pattern="dd-MM-yyyy" />
-						</h:outputText>
+							<h:outputText value="Επώνυμο" />
+						</f:facet>
+						<h:outputText value="#{_license.owner.lastName}" />
 					</rich:column>
 					<rich:column>
 						<f:facet name="header">
-					Αριθμός Α/Τ
-				</f:facet>
-				#{_license.owner.idNumber}
-			</rich:column>
+							<h:outputText value="Όνομα" />
+						</f:facet>
+						<h:outputText value="#{_license.owner.firstName}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Όνομα Πατρός" />
+						</f:facet>
+						<h:outputText value="#{_license.owner.fatherName}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Αριθμός Α/Τ" />
+						</f:facet>
+						<h:outputText value="#{_license.owner.idNumber}" />
+					</rich:column>
 					<!--  
 			<h:column>
 				<f:facet name="header">

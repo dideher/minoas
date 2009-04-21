@@ -13,15 +13,15 @@
 
 <ui:composition template="/layout/simple-beauty-template.xhtml">
 	<ui:define name="body">
-	
+
 		<h:form id="establishmentLicenseForm">
 			<rich:panel>
 				<f:facet name="header">
-			Αίτηση Άδειας Ιδρύσεως Φροντιστηρίου
-		</f:facet>
-				
-				<p><h:outputText value="Γενικά Στοιχεία Αίτησης" /></p>
-				<rich:separator lineType="beveled" height="8" width="75%"
+					<h:outputText value="Αίτηση Άδειας Ιδρύσεως Φροντιστηρίου" />
+				</f:facet>
+				<rich:spacer height="10" />
+				<h:outputText value="Γενικά Στοιχεία Αίτησης" />
+				<rich:separator lineType="dashed" height="4" width="75%"
 					align="center" />
 				<h:panelGrid columns="4">
 					<s:decorate template="/layout/doubleLineEdit.xhtml">
@@ -39,17 +39,19 @@
 						<h:inputText value="#{establishmentLicense.requestProtocol}"
 							size="5" maxlength="5" required="true" />
 					</s:decorate>
-					
-					<s:decorate  template="/layout/doubleLineEdit.xhtml">
+
+					<s:decorate template="/layout/doubleLineEdit.xhtml">
 						<ui:define name="label">
 							<h:outputText value="Η Αίτηση Αφορά" />
 						</ui:define>
 						<h:selectOneMenu id="licenseNature"
 							value="#{establishmentLicense.natureType}" required="true">
 							<a4j:support event="onchange" reRender="teachingLanguages"
-								ajaxSingle="true" />  
-							<s:selectItems hideNoSelectionLabel="true" var="_preparatoryUnitNatureType" 
-								value="#{preparatoryUnitNatureTypes}" label="#{messages[_preparatoryUnitNatureType.key]}"/>
+								ajaxSingle="true" />
+							<s:selectItems hideNoSelectionLabel="true"
+								var="_preparatoryUnitNatureType"
+								value="#{preparatoryUnitNatureTypes}"
+								label="#{messages[_preparatoryUnitNatureType.key]}" />
 							<s:convertEnum />
 						</h:selectOneMenu>
 					</s:decorate>
@@ -72,7 +74,8 @@
 						<ui:define name="label">
 							<h:outputText value="Διδασκόμενες Γλώσσες" />
 						</ui:define>
-						<h:selectManyListbox disabled="#{establishmentLicense.natureType == 'SECONDARY_EDUCATION'}"
+						<h:selectManyListbox
+							disabled="#{establishmentLicense.natureType == 'SECONDARY_EDUCATION'}"
 							value="#{establishmentLicense.teachingLanguages}">
 							<s:selectItems var="_teachingLanguage"
 								value="#{teachingLanguages}"
@@ -80,12 +83,12 @@
 							<s:convertEntity />
 						</h:selectManyListbox>
 					</s:decorate>
-				
+
 				</h:panelGrid>
 
 				<h:panelGroup>
-					<p><h:outputText value="Στοιχεία Κατόχου Φροντιστηρίου" /></p>
-					<rich:separator lineType="beveled" height="8" width="75%"
+					<p><h:outputText value="Στοιχεία Ιδιοκτήτη Φροντιστηρίου" /></p>
+					<rich:separator lineType="dashed" height="4" width="75%"
 						align="center" />
 					<s:div rendered="#{establishmentLicense.owner != null}">
 						<h:panelGrid columns="3">
@@ -153,6 +156,10 @@
 				<h:commandButton id="save" value="Αποθήκευση ..."
 					action="#{establishmentLicenseHome.persist}"
 					rendered="#{!establishmentLicenseHome.managed}" />
+				<s:button id="cancel" value="Ακύρωση"
+					rendered="#{!establishmentLicenseHome.managed}" propagation="end" 
+					view="#{empty from ? '/home' : from}.xhtml"
+					/>
 				<s:button value="print"
 					view="/preparatory/print/EstablishmentLicenseRequestToPYSDE.xhtml"></s:button>
 			</s:div>

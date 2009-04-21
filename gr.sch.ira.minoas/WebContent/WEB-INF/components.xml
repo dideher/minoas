@@ -26,7 +26,7 @@
                  http://jboss.com/products/seam/transaction http://jboss.com/products/seam/transaction-2.1.xsd
                  http://jboss.com/products/seam/document http://jboss.com/products/seam/document-2.1.xsd
                  http://jboss.com/products/seam/ui http://jboss.com/products/seam/ui-2.1.xsd 
-                 http://jboss.com/products/seam/ui http://jboss.com/products/seam/framework-2.1.xsd">
+                 http://jboss.com/products/seam/framework http://jboss.com/products/seam/framework-2.1.xsd">
                 
 
    <core:init debug="true" jndi-pattern="@jndiPattern@" transaction-management-enabled="true"/>
@@ -79,10 +79,11 @@
    
    <component name="examplePreparatoryOwner" class="gr.sch.ira.minoas.model.preparatory.PreparatoryOwner" scope="conversation"/>
    <framework:entity-query name="preparatoryOwnersList" 
-      ejbql="SELECT o FROM PreparatoryOwner o"  
       scope="conversation" 
       max-results = "15">
+      <framework:ejbql>SELECT o FROM PreparatoryOwner o</framework:ejbql>
       <framework:restrictions>
+        
         <value>lower(o.lastName) like lower(concat(#{examplePreparatoryOwner.lastName},'%') )</value>
         <value>lower(o.firstName) like lower(concat(#{examplePreparatoryOwner.firstName},'%') )</value>
         <value>lower(o.fatherName) like lower(concat(#{examplePreparatoryOwner.fatherName},'%') )</value>
@@ -96,10 +97,13 @@
    
    <framework:entity-query 
       name="establishmentLicensesList" 
-      ejbql="SELECT o FROM EstablishmentLicense o"  
       scope="conversation" order="requestDate" max-results = "15">
+      <framework:ejbql>SELECT o FROM EstablishmentLicense o</framework:ejbql>  
       <framework:restrictions>
-        <value>lower(owner.lastName) like lower( concat(#{exampleEstablishmentLicense.owner.lastName},'%') )</value>
+        <value>lower(o.owner.lastName) like lower( concat(#{exampleEstablishmentLicense.owner.lastName},'%') )</value>
+        <value>o.requestProtocol=#{exampleEstablishmentLicense.requestProtocol}</value>
+        <value>o.natureType=#{exampleEstablishmentLicense.natureType}</value>
+        <value>o.statusType=#{exampleEstablishmentLicense.statusType}</value>
     </framework:restrictions> 
    </framework:entity-query>     
          

@@ -16,36 +16,36 @@
 		<h:form id="preparatoryOwnersList">
 			<rich:panel>
 				<f:facet name="header">
-			Λίστα Διαθέσιμων Ιδιοκτητών Φροντιστηρίου
-		</f:facet>
+					<h:outputText value="Λίστα Διαθέσιμων Ιδιοκτητών Φροντιστηρίου" />
+				</f:facet>
 				<h:panelGrid columns="1">
 					<h:panelGroup>
 						<h:outputText
 							value="Χρησιμοποιήστε, αν θέλετε, τα παρακάτω πεδία για να φιλτράρετε την λίστα των κατόχων." />
 					</h:panelGroup>
 					<h:panelGrid columns="4">
-						<s:decorate template="/layout/edit.xhtml">
+						<s:decorate template="/layout/doubleLineEdit.xhtml">
 							<ui:define name="label">
 								<h:outputText value="Επώνυμο : " />
 							</ui:define>
 							<h:inputText value="#{examplePreparatoryOwner.lastName}"
 								size="12" />
 						</s:decorate>
-						<s:decorate template="/layout/edit.xhtml">
+						<s:decorate template="/layout/doubleLineEdit.xhtml">
 							<ui:define name="label">
 								<h:outputText value="Όνομα : " />
 							</ui:define>
 							<h:inputText value="#{examplePreparatoryOwner.firstName}"
 								size="10" />
 						</s:decorate>
-						<s:decorate template="/layout/edit.xhtml">
+						<s:decorate template="/layout/doubleLineEdit.xhtml">
 							<ui:define name="label">
 								<h:outputText value="Όνομα Πατρός : " />
 							</ui:define>
 							<h:inputText value="#{examplePreparatoryOwner.fatherName}"
 								size="10" />
 						</s:decorate>
-						<s:decorate template="/layout/edit.xhtml">
+						<s:decorate template="/layout/doubleLineEdit.xhtml">
 							<ui:define name="label">
 								<h:outputText value="Α.Δ.Τ : " />
 							</ui:define>
@@ -56,12 +56,13 @@
 					<s:div styleClass="actionButtons">
 						<h:commandButton id="searchButton" value="Αναζήτηση"
 							actionListener="preparatoryOwnersList.first" />
-						<h:commandButton id="resetButton" value="Καθαρισμός" action="reset" />
+						<h:commandButton id="resetButton" value="Καθαρισμός"
+							action="reset" />
 					</s:div>
 					<h:panelGroup>
-						<rich:spacer height="5"/>
-						<rich:separator height="2" lineType="dashed"/>
-						<rich:spacer height="5"/>
+						<rich:spacer height="5" />
+						<rich:separator height="2" lineType="dashed" />
+						<rich:spacer height="5" />
 					</h:panelGroup>
 					<h:panelGroup>
 						<rich:dataTable var="_owner"
@@ -111,7 +112,8 @@
 									view="#{empty from ? '/preparatory/preparatory-owner' : from}.xhtml}"
 									value="#{empty from ? 'Προβολή' : 'Επιλογή'}">
 									<f:param name="preparatoryOwnerID" value="#{_owner.id}" />
-									<f:param name="from" value="/preparatory/preparatory-owners-list" />
+									<f:param name="from"
+										value="/preparatory/preparatory-owners-list" />
 								</s:link>
 							</h:column>
 						</rich:dataTable>
@@ -119,9 +121,6 @@
 				</h:panelGrid>
 			</rich:panel>
 		</h:form>
-
-
-
 	</ui:define>
 </ui:composition>
 </html>
