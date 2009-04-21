@@ -37,14 +37,11 @@ import javax.persistence.ManyToOne;
  * @version $Id$
  */
 
-public class PreparatoryDirector extends Person {
+public class PreparatoryDirector extends PreparatoryOwnerOrDirector {
 	/**
 	 * Comment for <code>serialVersionUID</code>
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "SPECIALIZATION_ID", nullable = false)
-	private Specialization specialization;
-
+	
 }

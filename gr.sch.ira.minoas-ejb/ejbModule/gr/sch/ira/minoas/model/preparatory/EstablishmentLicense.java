@@ -81,7 +81,7 @@ public class EstablishmentLicense extends BaseModel {
 	private SchoolYear schoolYear;
 
 	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "PREPARATORY_EST_LICENSE_LANGUAGES")
+	@JoinTable(name = "PREP_EST_LCS_LANGUAGES")
 	private List<TeachingLanguage> teachingLanguages = new ArrayList<TeachingLanguage>();
 
 	@ManyToOne(fetch = FetchType.LAZY)
