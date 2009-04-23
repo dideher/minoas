@@ -1,8 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <page login-required="true" xmlns="http://jboss.com/products/seam/pages"
- xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.1.xsd">
-  <begin-conversation join="true" flush-mode="manual"/>
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.1.xsd">
+  <begin-conversation nested="true" flush-mode="manual" />
   <description>Ιδιοκτήτης Φροντιστηρίου</description>
-  <param name="preparatoryOwnerID" value="#{preparatoryOwnerHome.id}"  converterId="javax.faces.Long" />
+  <param name="preparatoryOwnerID" value="#{preparatoryOwnerHome.id}"
+    converterId="javax.faces.Long" />
   <param name="from" />
+  
+  <!-- **************************************** -->
+  <!-- Navigation Rules                         -->
+  <!-- **************************************** -->
+  
+  <navigation from-action="#{preparatoryOwnerHome.revert}">
+    <end-conversation />
+    <redirect view-id="#{empty from ? '/home' : from}.xhtml}" />
+  </navigation>
+  <navigation from-action="#{preparatoryOwnerHome.persist}">
+    <end-conversation />
+    <redirect view-id="#{empty from ? '/home' : from}.xhtml}" />
+  </navigation>
+  <navigation from-action="#{preparatoryOwnerHome.update}">
+    <end-conversation />
+    <redirect view-id="#{empty from ? '/home' : from}.xhtml}" />
+  </navigation>
 </page>

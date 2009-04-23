@@ -1,20 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <components xmlns="http://jboss.com/products/seam/components"
-            xmlns:core="http://jboss.com/products/seam/core"
-            xmlns:ui="http://jboss.com/products/seam/ui"
-            xmlns:persistence="http://jboss.com/products/seam/persistence"
-            xmlns:drools="http://jboss.com/products/seam/drools"
-            xmlns:bpm="http://jboss.com/products/seam/bpm"
-            xmlns:security="http://jboss.com/products/seam/security"
-            xmlns:mail="http://jboss.com/products/seam/mail"
-            xmlns:web="http://jboss.com/products/seam/web"
-            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xmlns:theme="http://jboss.com/products/seam/theme"
-            xmlns:transaction="http://jboss.com/products/seam/transaction"
-            xmlns:document="http://jboss.com/products/seam/document"
-            xmlns:framework="http://jboss.com/products/seam/framework"
-            xsi:schemaLocation=
-                "http://jboss.com/products/seam/core http://jboss.com/products/seam/core-2.1.xsd 
+  xmlns:core="http://jboss.com/products/seam/core" xmlns:ui="http://jboss.com/products/seam/ui"
+  xmlns:persistence="http://jboss.com/products/seam/persistence" xmlns:drools="http://jboss.com/products/seam/drools"
+  xmlns:bpm="http://jboss.com/products/seam/bpm" xmlns:security="http://jboss.com/products/seam/security"
+  xmlns:mail="http://jboss.com/products/seam/mail" xmlns:web="http://jboss.com/products/seam/web"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:theme="http://jboss.com/products/seam/theme"
+  xmlns:transaction="http://jboss.com/products/seam/transaction" xmlns:document="http://jboss.com/products/seam/document"
+  xmlns:framework="http://jboss.com/products/seam/framework"
+  xsi:schemaLocation="http://jboss.com/products/seam/core http://jboss.com/products/seam/core-2.1.xsd 
                  http://jboss.com/products/seam/persistence http://jboss.com/products/seam/persistence-2.1.xsd 
                  http://jboss.com/products/seam/drools http://jboss.com/products/seam/drools-2.1.xsd
                  http://jboss.com/products/seam/bpm http://jboss.com/products/seam/bpm-2.1.xsd
@@ -27,64 +20,74 @@
                  http://jboss.com/products/seam/document http://jboss.com/products/seam/document-2.1.xsd
                  http://jboss.com/products/seam/ui http://jboss.com/products/seam/ui-2.1.xsd 
                  http://jboss.com/products/seam/framework http://jboss.com/products/seam/framework-2.1.xsd">
-                
 
-   <core:init debug="true" jndi-pattern="@jndiPattern@" transaction-management-enabled="true"/>
-   
-   
-   <core:manager concurrent-request-timeout="500" 
-                 conversation-timeout="120000" 
-                 conversation-id-parameter="cid"
-                 parent-conversation-id-parameter="pid"/>
-    
-   <persistence:managed-persistence-context name="entityManager"  
-                                  auto-create="true"
-                   persistence-unit-jndi-name="java:/EntityManagerFactories/minoasDatabase"/>
-                   
-   <ui:jpa-entity-loader entity-manager="#{entityManager}" />
-   
-   
-                   
-   <transaction:ejb-transaction/>
-     
-   <web:character-encoding-filter encoding="UTF-8"  override-client="true" url-pattern="*.seam" />
-   
-   
-  <document:document-store use-extensions="true"/>                
+
+  <core:init debug="true" jndi-pattern="@jndiPattern@"
+    transaction-management-enabled="true" />
+
+
+  <core:manager concurrent-request-timeout="500"
+    conversation-timeout="120000" conversation-id-parameter="cid"
+    parent-conversation-id-parameter="pid" />
+
+  <persistence:managed-persistence-context
+    name="entityManager" auto-create="true"
+    persistence-unit-jndi-name="java:/EntityManagerFactories/minoasDatabase" />
+
+  <ui:jpa-entity-loader entity-manager="#{entityManager}" />
+
+
+
+  <transaction:ejb-transaction />
+
+  <web:character-encoding-filter encoding="UTF-8"
+    override-client="true" url-pattern="*.seam" />
+
+
+  <document:document-store use-extensions="true" />
+
+  <!--
+    <drools:rule-base name="securityRules"> <drools:rule-files>
+    <value>/security.drl</value> </drools:rule-files> </drools:rule-base>
+  -->
+
+  <security:rule-based-permission-resolver
+    security-rules="#{securityRules}" />
+
+  <security:identity authenticate-method="#{authenticator.authenticate}" />
+
+
+  <event type="org.jboss.seam.security.notLoggedIn">
+    <action execute="#{redirect.captureCurrentView}" />
+    <action execute="#{identity.tryLogin}" />
+  </event>
+  <event type="org.jboss.seam.security.loginSuccessful">
+    <action execute="#{redirect.returnToCapturedView}" />
+  </event>
 
   <!-- 
-   <drools:rule-base name="securityRules">
-       <drools:rule-files>
-           <value>/security.drl</value>
-       </drools:rule-files>
-   </drools:rule-base>
-  -->
-   
-   <security:rule-based-permission-resolver security-rules="#{securityRules}" />
-   
-   <security:identity authenticate-method="#{authenticator.authenticate}"/>
-   
-   
-   <event type="org.jboss.seam.security.notLoggedIn">
-       <action execute="#{redirect.captureCurrentView}"/>
-       <action execute="#{identity.tryLogin}" />
-   </event>
-   <event type="org.jboss.seam.security.loginSuccessful">
-       <action execute="#{redirect.returnToCapturedView}"/>
-   </event>
-   
-   <component name="org.jboss.seam.persistence.persistenceProvider" class="org.jboss.seam.persistence.HibernatePersistenceProvider"/>
-    
-   <mail:mail-session host="localhost" port="2525" username="test" password="test" />
-   
-   <component name="examplePreparatoryOwner" class="gr.sch.ira.minoas.model.preparatory.PreparatoryOwner" scope="conversation"/>
-   <framework:entity-query name="preparatoryOwnersList" 
-      scope="conversation" 
-      max-results = "15">
-      <framework:ejbql>SELECT o FROM PreparatoryOwner o</framework:ejbql>
-      <framework:restrictions>
-        
-        <value>lower(o.lastName) like lower(concat(#{examplePreparatoryOwner.lastName},'%') )</value>
+  <event type="org.jboss.seam.afterTransactionSuccess.PreparatoryOwner">
+    <action execute="#{preparatoryOwnersList.refresh}" />
+    <action execute="#{preparatoryOwnersList.getResultList}" />
+  </event>
+
+   -->
+  <component name="org.jboss.seam.persistence.persistenceProvider"
+    class="org.jboss.seam.persistence.HibernatePersistenceProvider" />
+
+  <mail:mail-session host="localhost" port="2525" username="test"
+    password="test" />
+
+  <factory name="preparatoryOwner" value="#{preparatoryOwnerHome.instance}" />
+  
+  <component name="examplePreparatoryOwner"
+    class="gr.sch.ira.minoas.model.preparatory.PreparatoryOwner" scope="conversation" />
+  <framework:entity-query name="preparatoryOwnersList"
+    scope="conversation" max-results="15">
+    <framework:ejbql>SELECT o FROM PreparatoryOwner o</framework:ejbql>
+    <framework:restrictions>
+
+      <value>lower(o.lastName) like lower(concat(#{examplePreparatoryOwner.lastName},'%') )</value>
         <value>lower(o.firstName) like lower(concat(#{examplePreparatoryOwner.firstName},'%') )</value>
         <value>lower(o.fatherName) like lower(concat(#{examplePreparatoryOwner.fatherName},'%') )</value>
         <value>lower(o.idNumber) like lower(concat(#{examplePreparatoryOwner.idNumber},'%') )</value>

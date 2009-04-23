@@ -32,7 +32,7 @@ public class PreparatoryOwnerHome extends MinoasEntityHome<PreparatoryOwner> {
 	@Override
 	@Transactional
 	public String persist() {
-		PreparatoryOwner owner = getInstance();
+		PreparatoryOwner owner = getDefinedInstace();
 		owner.setInsertedOn(new Date(System.currentTimeMillis()));
 		return super.persist();
 	}
@@ -43,27 +43,15 @@ public class PreparatoryOwnerHome extends MinoasEntityHome<PreparatoryOwner> {
 	@Override
 	@Transactional
 	public String update() {
-		PreparatoryOwner owner = getInstance();
+		PreparatoryOwner owner = getDefinedInstace();
 		owner.setModifiedOn(new Date(System.currentTimeMillis()));
 		return super.update();
 	}
 	
+	@Transactional
+	public String revert() {
+		getEntityManager().refresh(getInstance());
+		return "reverted";
+	}
 	
-
-	/**
-	 * @see org.jboss.seam.framework.Home#createInstance()
-	 */
-	@Override
-	protected Object createInstance() {
-		return super.createInstance();
-	}
-
-	/**
-	 * @see org.jboss.seam.framework.Home#getInstance()
-	 */
-	@Override
-	@Factory(value = "preparatoryOwner")
-	public PreparatoryOwner getInstance() {
-		return (PreparatoryOwner)super.getInstance();
-	}
 }

@@ -1,5 +1,6 @@
-#Tue Apr 21 12:27:04 EEST 2009
+#Thu Apr 23 12:15:43 EEST 2009
 eclipse.preferences.version=1
+encoding//WebContent/WEB-INF/classes/messages.properties=UTF-8
 encoding//WebContent/components/employee/employeeList.xhtml=UTF-8
 encoding//WebContent/components/general/address.xhtml=UTF-8
 encoding//WebContent/components/print/FromHeaders.xhtml=UTF-8

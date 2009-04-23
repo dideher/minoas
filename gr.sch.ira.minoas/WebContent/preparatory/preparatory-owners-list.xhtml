@@ -108,13 +108,16 @@
 								<f:facet name="header">
 									<h:outputText value="Ενέργεια" />
 								</f:facet>
-								<s:link
-									view="#{empty from ? '/preparatory/preparatory-owner' : from}.xhtml}"
-									value="#{empty from ? 'Προβολή' : 'Επιλογή'}">
+								<s:link rendered="!#{empty from}" value="Επιλογή"
+									view="#{from}.xhtml">
 									<f:param name="preparatoryOwnerID" value="#{_owner.id}" />
-									<f:param name="from"
-										value="/preparatory/preparatory-owners-list" />
 								</s:link>
+								<h:outputText rendered="!#{empty from}" value="|" />
+								<s:link value="Επεξεργασία" view="/preparatory/preparatory-owner.xhtml">
+									<f:param name="preparatoryOwnerID" value="#{_owner.id}" />
+									<f:param name="from" value="/preparatory/preparatory-owners-list" />
+								</s:link>
+								
 							</h:column>
 						</rich:dataTable>
 					</h:panelGroup>
