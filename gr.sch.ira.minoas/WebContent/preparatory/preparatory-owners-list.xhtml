@@ -56,8 +56,9 @@
 					<s:div styleClass="actionButtons">
 						<h:commandButton id="searchButton" value="Αναζήτηση"
 							actionListener="preparatoryOwnersList.first" />
-						<h:commandButton id="resetButton" value="Καθαρισμός"
-							action="reset" />
+						<s:button disabled="#{empty preparatoryOwnersListFrom}"  action="backButton" value="Επιστροφή" />
+						<rich:spacer width="20"/>
+						<s:button action="endButton" value="Τέλος Ενέργειας" /> 
 					</s:div>
 					<h:panelGroup>
 						<rich:spacer height="5" />
@@ -96,7 +97,9 @@
 								<f:facet name="header">
 									<h:outputText value="Ημ/νία Γεννήσεως" />
 								</f:facet>
-								<h:outputText value="#{_owner.dateOfBirth}" />
+								<h:outputText value="#{_owner.dateOfBirth}">
+									<s:convertDateTime pattern="dd-MM-yyyy" />
+								</h:outputText>
 							</h:column>
 							<h:column>
 								<f:facet name="header">
@@ -108,16 +111,17 @@
 								<f:facet name="header">
 									<h:outputText value="Ενέργεια" />
 								</f:facet>
-								<s:link rendered="!#{empty from}" value="Επιλογή"
-									view="#{from}.xhtml">
+								<rich:toolBar itemSeparator="line">
+								<s:link rendered="#{preparatoryOwnersListFrom!=null}" value="Επιλογή"
+									view="#{preparatoryOwnersListFrom}.xhtml">
 									<f:param name="preparatoryOwnerID" value="#{_owner.id}" />
 								</s:link>
-								<h:outputText rendered="!#{empty from}" value="|" />
 								<s:link value="Επεξεργασία" view="/preparatory/preparatory-owner.xhtml">
 									<f:param name="preparatoryOwnerID" value="#{_owner.id}" />
-									<f:param name="from" value="/preparatory/preparatory-owners-list" />
+									<f:param name="preparatoryOwnerFrom" value="/preparatory/preparatory-owners-list" />
 								</s:link>
-								
+									
+								</rich:toolBar>
 							</h:column>
 						</rich:dataTable>
 					</h:panelGroup>

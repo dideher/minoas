@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page login-required="true" xmlns="http://jboss.com/products/seam/pages"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.1.xsd">
+  <begin-conversation join="true" flush-mode="manual"/>
+  <description>Λίστα Αδειών Ιδρύσεως</description>
+  
+  <param name="establishmentLicensesListFrom" />
+  
+  <!-- navigation rules -->
+  <navigation from-action="selectPreparatoryOwner">
+    <redirect view-id="/preparatory/preparatory-owners-list.xhtml">
+      <param name="preparatoryOwnersListFrom" value="/preparatory/establishment-license-request" />
+    </redirect>
+  </navigation>
+  <navigation from-action="endButton">
+    <end-conversation />
+    <redirect view-id="#{empty establishmentLicensesListFrom ? '/home' : establishmentLicensesListFrom}.xhtml}" />
+  </navigation>
+  
+  <navigation from-action="backButton">
+    <redirect view-id="#{empty establishmentLicensesListFrom ? '/home' : establishmentLicensesListFrom}.xhtml}" />
+  </navigation>
+  
+</page>

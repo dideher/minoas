@@ -4,33 +4,24 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:s="http://jboss.com/products/seam/taglib"
-	 xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:a4j="http://richfaces.org/a4j">
 
-<ui:composition template="#{theme.template}">
-<ui:define name="body">
-		<rich:panel headerClass="clean-error">
-			<f:facet name="header">
-				<h:outputText value="Mύνημα Σφάλματος απο τον Μίνωα ...." />
-			</f:facet>
-			<h:panelGrid columns="1">
-				<h:messages globalOnly="true" layout="table" styleClass="clean-error" />
-				<f:facet name="footer">
-					<h:panelGroup>
-						<s:link value="Επιστροφή" action="return" />
-					</h:panelGroup>
-				</f:facet>
-			</h:panelGrid>
-			
-		</rich:panel>
+<ui:composition template="/layout/simple-beauty-template.xhtml">
+	<ui:param name="showGlobalMessages" value="false" />
+	<ui:define name="body">
 
+		<h1>Σφάλμα!</h1>
+		<h:outputText
+			value="Ο Μίνωας δεν μπόρεσε να διαικπερεώση την λειτουργία που ζητήσατε." />
+		<h:messages id="errorMessages" styleClass="message" />
 	</ui:define>
 
 
-    
-    
-        
+
+
+
 
 </ui:composition>
 </html>

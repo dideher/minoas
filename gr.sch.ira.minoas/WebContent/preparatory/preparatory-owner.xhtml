@@ -180,7 +180,7 @@
 			</rich:panel>
 			<s:div styleClass="actionButtons">
 				<s:button id="backButton" value="Επιστροφή"
-					view="#{empty from ? '/home' : from}.xhtml}" propagation="end" />
+					view="#{empty preparatoryOwnerFrom ? '/home' : preparatoryOwnerFrom}.xhtml}" propagation="end" />
 				<rich:spacer width="20" />
 				<h:commandButton id="save" value="Καταχώρηση"
 					action="#{preparatoryOwnerHome.persist}"

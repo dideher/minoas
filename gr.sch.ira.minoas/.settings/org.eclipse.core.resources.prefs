@@ -1,6 +1,5 @@
-#Thu Apr 23 12:15:43 EEST 2009
+#Mon Apr 27 12:46:34 EEST 2009
 eclipse.preferences.version=1
-encoding//WebContent/WEB-INF/classes/messages.properties=UTF-8
 encoding//WebContent/components/employee/employeeList.xhtml=UTF-8
 encoding//WebContent/components/general/address.xhtml=UTF-8
 encoding//WebContent/components/print/FromHeaders.xhtml=UTF-8
@@ -14,6 +13,7 @@ encoding//WebContent/components/void/voidListComponent.xhtml=UTF-8
 encoding//WebContent/createTeachingVoid.xhtml=UTF-8
 encoding//WebContent/employee.xhtml=UTF-8
 encoding//WebContent/employees.xhtml=UTF-8
+encoding//WebContent/error.xhtml=UTF-8
 encoding//WebContent/home.xhtml=UTF-8
 encoding//WebContent/login.xhtml=UTF-8
 encoding//WebContent/manageSchoolVoids.xhtml=UTF-8
@@ -26,4 +26,5 @@ encoding//WebContent/schoolYears.xhtml=UTF-8
 encoding//WebContent/schools.xhtml=UTF-8
 encoding//WebContent/secondmentSearchResult.xhtml=UTF-8
 encoding//WebContent/updateTeachingVoid.xhtml=UTF-8
+encoding//src/messages_el.properties=UTF-8
 encoding/<project>=UTF-8

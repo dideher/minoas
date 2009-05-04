@@ -21,8 +21,7 @@
 				</f:facet>
 				<rich:spacer height="10" />
 				<h:outputText value="Γενικά Στοιχεία Αίτησης" />
-				<rich:separator lineType="dashed" height="4" width="75%"
-					align="center" />
+				<rich:separator height="2" lineType="dashed" />
 				<h:panelGrid columns="4">
 					<s:decorate template="/layout/doubleLineEdit.xhtml">
 						<ui:define name="label">
@@ -88,8 +87,7 @@
 
 				<h:panelGroup>
 					<p><h:outputText value="Στοιχεία Ιδιοκτήτη Φροντιστηρίου" /></p>
-					<rich:separator lineType="dashed" height="4" width="75%"
-						align="center" />
+					<rich:separator height="2" lineType="dashed" />
 					<s:div rendered="#{establishmentLicense.owner != null}">
 						<h:panelGrid columns="3">
 
@@ -146,20 +144,26 @@
 						</h:panelGrid>
 					</s:div>
 					<h:commandButton action="selectPreparatoryOwner"
-						value="Επιλογή Κατόχου ...." />
+						value="Επιλογή Κατόχου ....">
+					</h:commandButton>
 
 				</h:panelGroup>
 
 			</rich:panel>
 
 			<s:div styleClass="actionButtons">
+				<s:button id="backButton" value="Επιστροφή"
+					view="#{empty from ? '/home' : from}.xhtml}" propagation="end" />
+				<rich:spacer width="20" />
+				
 				<h:commandButton id="save" value="Αποθήκευση ..."
 					action="#{establishmentLicenseHome.persist}"
 					rendered="#{!establishmentLicenseHome.managed}" />
-				<s:button id="cancel" value="Ακύρωση"
-					rendered="#{!establishmentLicenseHome.managed}" propagation="end" 
-					view="#{empty from ? '/home' : from}.xhtml"
-					/>
+				<h:commandButton id="update" action="#{establishmentLicenseHome.update}"
+					value="Ανανέωση" rendered="#{establishmentLicenseHome.managed}" />
+				<s:button id="revertButton" value="Ακύρωση Αλλαγών"
+					rendered="#{establishmentLicenseHome.managed}"
+					action="#{establishmentLicenseHome.revert}" />
 				<s:button value="print"
 					view="/preparatory/print/EstablishmentLicenseRequestToPYSDE.xhtml"></s:button>
 			</s:div>

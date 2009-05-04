@@ -79,9 +79,12 @@
 					</h:panelGrid>
 					<s:div styleClass="actionButtons">
 						<h:commandButton id="searchButton" value="Αναζήτηση"
-							actionListener="establishmentLicensesList.first" />
-						<h:commandButton id="resetButton" value="Καθαρισμός"
-							action="reset" />
+							actionListener="establishmentLicensesList.first">
+							<s:defaultAction/>
+						</h:commandButton>
+						<s:button disabled="#{empty establishmentLicensesListFrom}"  action="backButton" value="Επιστροφή" />
+						<rich:spacer width="20"/>
+						<s:button action="endButton" value="Τέλος Ενέργειας" /> 
 					</s:div>
 				</h:panelGrid>
 				<h:panelGroup>
@@ -99,6 +102,9 @@
 							</rich:column>
 							<rich:column colspan="4">
 								<h:outputText value="Στοιχεία Κατόχου ..." />
+							</rich:column>
+							<rich:column rowspan="2">
+								<h:outputText value="Ενέργεια" />
 							</rich:column>
 						</rich:columnGroup>
 					</f:facet>
@@ -164,6 +170,12 @@
 							<h:outputText value="Αριθμός Α/Τ" />
 						</f:facet>
 						<h:outputText value="#{_license.owner.idNumber}" />
+					</rich:column>
+					<rich:column>
+						<rich:toolBar itemSeparator="line">
+							<s:link value="Επιλογή"></s:link>
+							<s:link value="Επεξεργασία"></s:link>
+						</rich:toolBar>
 					</rich:column>
 					<!--  
 			<h:column>
