@@ -247,4 +247,11 @@ public class EstablishmentLicense extends BaseModel {
 		this.unit = unit;
 	}
 
+	/**
+	 * @return the id
+	 */
+	public Integer getId() {
+		return id;
+	}
+
 }

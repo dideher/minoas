@@ -25,12 +25,6 @@
 
 package gr.sch.ira.minoas.model.preparatory;
 
-import gr.sch.ira.minoas.model.core.Specialization;
-import gr.sch.ira.minoas.model.employee.Person;
-
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>

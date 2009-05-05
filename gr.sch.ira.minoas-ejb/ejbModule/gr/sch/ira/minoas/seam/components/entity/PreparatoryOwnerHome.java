@@ -6,7 +6,6 @@ import gr.sch.ira.minoas.model.preparatory.PreparatoryOwner;
 import java.util.Date;
 
 import org.jboss.seam.ScopeType;
-import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
@@ -32,7 +31,7 @@ public class PreparatoryOwnerHome extends MinoasEntityHome<PreparatoryOwner> {
 	@Override
 	@Transactional
 	public String persist() {
-		PreparatoryOwner owner = getDefinedInstace();
+		PreparatoryOwner owner = (PreparatoryOwner)getInstance();
 		owner.setInsertedOn(new Date(System.currentTimeMillis()));
 		return super.persist();
 	}
@@ -43,7 +42,7 @@ public class PreparatoryOwnerHome extends MinoasEntityHome<PreparatoryOwner> {
 	@Override
 	@Transactional
 	public String update() {
-		PreparatoryOwner owner = getDefinedInstace();
+		PreparatoryOwner owner = (PreparatoryOwner)getInstance();
 		owner.setModifiedOn(new Date(System.currentTimeMillis()));
 		return super.update();
 	}

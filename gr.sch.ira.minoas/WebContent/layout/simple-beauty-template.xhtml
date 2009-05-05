@@ -3,7 +3,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:s="http://jboss.com/products/seam/taglib"
-	 xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:a4j="http://richfaces.org/a4j">
 
@@ -17,10 +17,10 @@
 
 <meta name="keywords" content="website main keywords" />
 
-	<title>Μίνωας - Ολοκληρωμένο Σύστημα Μηχανογράφησης</title>
-	<!--  <a4j:loadStyle src="resource:///stylesheet/theme.xcss"/> -->
-    <a4j:loadStyle src="/stylesheet/simple-beauty-stylesheet.css"/>
-     <ui:insert name="head"/>
+<title>Μίνωας - Ολοκληρωμένο Σύστημα Μηχανογράφησης</title>
+<!--  <a4j:loadStyle src="resource:///stylesheet/theme.xcss"/> -->
+<a4j:loadStyle src="/stylesheet/simple-beauty-stylesheet.css" />
+<ui:insert name="head" />
 
 
 </head>
@@ -54,13 +54,13 @@
 
 
 	<s:div id="main_content">
-	
+
 		<!-- 
 		<s:div styleClass="menu">
 			<ui:include src="/components/menu.xhtml" />
 		</s:div>
 		 -->
-		
+
 		<s:div styleClass="content">
 			<h:panelGrid columns="1" width="100%">
 				<rich:messages styleClass="clean-gray" globalOnly="true"
@@ -72,32 +72,31 @@
 
 
 		<s:div id="clear"></s:div>
-		
+
 
 
 
 	</s:div>
-	
+
 
 	<s:div id="main_content_bottom">
-		<rich:toolBar>
-			<rich:toolBarGroup location="left" itemSeparator="line">
-				<h:panelGroup rendered="#{activeSchool ne null}">
-					<h:outputLabel value="Ενεργή Σχολική Μονάδα : " for="" />
-					<h:outputText value="#{activeSchool}" />
-				</h:panelGroup>
-				<h:panelGroup rendered="#{activeEmployee ne null}">
-					<h:outputLabel value="Ενεργός Εκπαιδευτικός : " for="" />
-					<h:outputText value="#{employeeUtil.prettyFormat(activeEmployee)}" />
-				</h:panelGroup>
+		<rich:toolBar itemSeparator="line">
+			<rich:toolBarGroup rendered="#{activeSchool ne null}">
+				<h:outputLabel value="Ενεργή Σχολική Μονάδα : " for="" />
+				<h:outputText value="#{activeSchool}" />
+			</rich:toolBarGroup>
+			<rich:toolBarGroup rendered="#{activeEmployee ne null}">
+				<h:outputLabel value="Ενεργός Εκπαιδευτικός : " for="" />
+				<h:outputText value="#{employeeUtil.prettyFormat(activeEmployee)}" />
+			</rich:toolBarGroup>
+			<rich:toolBarGroup location="right">
+				<h:outputText value="Τρέχουσες Διαδικασίες : " />
+				<h:selectOneMenu value="#{switcher.conversationIdOrOutcome}">
+					<f:selectItems value="#{switcher.selectItems}" />
+				</h:selectOneMenu>
+				<h:commandButton action="#{switcher.select}" value="Αλλαγή" />
 			</rich:toolBarGroup>
 		</rich:toolBar>
-		<h:panelGroup rendered="false">
-			<h:selectOneMenu value="#{switcher.conversationIdOrOutcome}">
-				<f:selectItems value="#{switcher.selectItems}" />
-			</h:selectOneMenu>
-			<h:commandButton action="#{switcher.select}" value="Switch" />
-		</h:panelGroup>
 	</s:div>
 
 

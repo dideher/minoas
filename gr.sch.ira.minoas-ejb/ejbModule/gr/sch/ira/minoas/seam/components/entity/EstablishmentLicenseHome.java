@@ -12,6 +12,7 @@ import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.annotations.Transactional;
 
 /**
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
@@ -72,6 +73,12 @@ public class EstablishmentLicenseHome extends MinoasEntityHome<EstablishmentLice
 			getInstance().setOwner(owner);
 		}
 		}
+	}
+	
+	@Transactional
+	public String revert() {
+		getEntityManager().refresh(getInstance());
+		return "reverted";
 	}
 
 }

@@ -1,5 +1,8 @@
 package gr.sch.ira.minoas.model.preparatory;
 
+import gr.sch.ira.minoas.model.core.Specialization;
+import gr.sch.ira.minoas.model.employee.Person;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,9 +12,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
-
-import gr.sch.ira.minoas.model.core.Specialization;
-import gr.sch.ira.minoas.model.employee.Person;
 
 @MappedSuperclass
 public abstract class PreparatoryOwnerOrDirector extends Person {

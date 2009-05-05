@@ -97,11 +97,8 @@
 					rendered="#{not empty establishmentLicensesList.resultList}">
 					<f:facet name="header">
 						<rich:columnGroup>
-							<rich:column colspan="5">
+							<rich:column colspan="6">
 								<h:outputText value="Γενικά Στοιχεία Άδειας ..." />
-							</rich:column>
-							<rich:column colspan="4">
-								<h:outputText value="Στοιχεία Κατόχου ..." />
 							</rich:column>
 							<rich:column rowspan="2">
 								<h:outputText value="Ενέργεια" />
@@ -149,32 +146,20 @@
 					</rich:column>
 					<rich:column>
 						<f:facet name="header">
-							<h:outputText value="Επώνυμο" />
+							<h:outputText value="Στοιχεία Κατόχου" />
 						</f:facet>
-						<h:outputText value="#{_license.owner.lastName}" />
+						<h:outputText value="#{_license.owner.lastName} #{_license.owner.firstName} του #{_license.owner.fatherName} (#{_license.owner.idNumber})" /> 
 					</rich:column>
 					<rich:column>
-						<f:facet name="header">
-							<h:outputText value="Όνομα" />
-						</f:facet>
-						<h:outputText value="#{_license.owner.firstName}" />
-					</rich:column>
-					<rich:column>
-						<f:facet name="header">
-							<h:outputText value="Όνομα Πατρός" />
-						</f:facet>
-						<h:outputText value="#{_license.owner.fatherName}" />
-					</rich:column>
-					<rich:column>
-						<f:facet name="header">
-							<h:outputText value="Αριθμός Α/Τ" />
-						</f:facet>
-						<h:outputText value="#{_license.owner.idNumber}" />
-					</rich:column>
-					<rich:column>
+						<h:outputText value="from is #{from}" />
 						<rich:toolBar itemSeparator="line">
-							<s:link value="Επιλογή"></s:link>
-							<s:link value="Επεξεργασία"></s:link>
+							<s:link rendered="{not empty from}" value="Επιλογή" view="#{from}.xhtml">>
+								<f:param name="establishmentLicenseID" value="#{_license.id}" />
+							</s:link>
+							<s:link value="Επεξεργασία" view="/preparatory/establishment-license.xhtml"  >
+								<f:param name="establishmentLicenseID" value="#{_license.id}" />
+								<f:param name="from" value="/preparatory/establishment-licenses-list" />
+							</s:link>
 						</rich:toolBar>
 					</rich:column>
 					<!--  
