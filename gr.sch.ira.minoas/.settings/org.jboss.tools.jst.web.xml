@@ -297,8 +297,6 @@
   location="/opt/jboss/jboss-4.2.2.GA/client/jbossws-native-core.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-jbossws-jboss422.jar"
   location="/opt/jboss/jboss-4.2.2.GA/client/jbossws-jboss422.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-mysql-connector-java-5.0.3-bin.jar"
-  location="/opt/jboss/jboss-4.2.2.GA/server/default/lib/mysql-connector-java-5.0.3-bin.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-richfaces-api-3.2.2.SR1.jar"
   location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas-ear/EarContent/richfaces-api-3.2.2.SR1.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-richfaces-impl-3.2.2.SR1.jar"

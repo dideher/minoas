@@ -31,7 +31,7 @@
 						<h:outputText styleClass="fieldValueText"
 							value="#{establishmentLicense.owner.lastName} #{establishmentLicense.owner.firstName} του #{establishmentLicense.owner.fatherName}." />
 						<h:outputText
-							value="Προσοχή, τα στοιχεία της φόρμας είναι ενεργά, δηλαδή αν τα αλλάξετε και πατήσετε 'Ανανέωση' τότε τα στοιχεία της άδειας θα άλλαξουν και στην βάση.  " />
+							value=" Προσοχή, τα στοιχεία της φόρμας είναι ενεργά, δηλαδή αν τα αλλάξετε και πατήσετε 'Ανανέωση' τότε τα στοιχεία της άδειας θα άλλαξουν και στην βάση.  " />
 					</h:panelGroup>
 					<h:panelGrid columns="4">
 
@@ -46,7 +46,15 @@
 								<s:convertDateTime pattern="dd/MM/yyyy" />
 							</h:outputText>
 						</s:decorate>
-
+						
+						<s:decorate template="/layout/doubleLineEdit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Κατάσταση Άδειας" />
+							</ui:define>
+							<h:outputText value="#{messages[establishmentLicense.statusType.key]}" styleClass="fieldValueText"/>
+						</s:decorate>
+							
+						
 						<s:decorate template="/layout/doubleLineEdit.xhtml">
 							<ui:define name="label">
 								<h:outputText value="Η Αίτηση Αφορά" />
@@ -63,6 +71,22 @@
 							</h:selectOneMenu>
 						</s:decorate>
 
+						<s:decorate id="teachingLanguages"
+							template="/layout/doubleLineEdit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Διδασκόμενες Γλώσσες" />
+							</ui:define>
+							<h:selectManyCheckbox layout="lineDirection"
+								styleClass="fieldValueText"
+								disabled="#{establishmentLicense.natureType == 'SECONDARY_EDUCATION'}"
+								value="#{establishmentLicense.teachingLanguages}">
+								<s:selectItems var="_teachingLanguage"
+									value="#{teachingLanguages}"
+									label="#{_teachingLanguage.language}" />
+								<s:convertEntity />
+							</h:selectManyCheckbox>
+						</s:decorate>
+						
 						<s:decorate template="/layout/doubleLineEdit.xhtml">
 							<ui:define name="label">
 								<h:outputText value="Έδρα" />
@@ -77,22 +101,24 @@
 							</h:selectOneMenu>
 						</s:decorate>
 
-						<s:decorate id="teachingLanguages"
-							template="/layout/doubleLineEdit.xhtml">
-							<ui:define name="label">
-								<h:outputText value="Διδασκόμενες Γλώσσες" />
-							</ui:define>
-							<h:selectManyListbox styleClass="fieldValueText"
-								disabled="#{establishmentLicense.natureType == 'SECONDARY_EDUCATION'}"
-								value="#{establishmentLicense.teachingLanguages}">
-								<s:selectItems var="_teachingLanguage"
-									value="#{teachingLanguages}"
-									label="#{_teachingLanguage.language}" />
-								<s:convertEntity />
-							</h:selectManyListbox>
-						</s:decorate>
-
+						
 					</h:panelGrid>
+					<s:div rendered="#{establishmentLicense.statusType=='PENDING'}" styleClass="clear-yellow">
+						<h:outputText value="Αίτηση Άδειας Ιδρύσεως Φροντιστηρίου" />
+						fdfdf
+						fsdfdsfsdf
+						
+						<rich:panel>
+							<f:facet name="header">
+													<h:outputText value="Αίτηση Άδειας Ιδρύσεως Φροντιστηρίου" />
+								
+							</f:facet>
+												<h:outputText value="Αίτηση Άδειας Ιδρύσεως Φροντιστηρίου" />
+							
+						</rich:panel>
+											<h:outputText value="Αίτηση Άδειας Ιδρύσεως Φροντιστηρίου" />
+						
+					</s:div>
 				</h:panelGrid>
 
 				<s:div styleClass="actionButtons">
@@ -119,10 +145,7 @@
 				<f:facet name="header">
 					<h:outputText value="Αίτηση Άδειας Ιδρύσεως Φροντιστηρίου" />
 				</f:facet>
-				<rich:spacer height="10" />
-				<h:outputText value="Γενικά Στοιχεία Αίτησης" />
-				<rich:separator height="2" lineType="dashed" />
-
+				
 
 				<h:panelGroup>
 					<p><h:outputText value="Στοιχεία Ιδιοκτήτη Φροντιστηρίου" /></p>
