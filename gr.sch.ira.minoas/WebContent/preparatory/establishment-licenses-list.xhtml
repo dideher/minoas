@@ -151,7 +151,6 @@
 						<h:outputText value="#{_license.owner.lastName} #{_license.owner.firstName} του #{_license.owner.fatherName} (#{_license.owner.idNumber})" /> 
 					</rich:column>
 					<rich:column>
-						<h:outputText value="from is #{from}" />
 						<rich:toolBar itemSeparator="line">
 							<s:link rendered="{not empty from}" value="Επιλογή" view="#{from}.xhtml">>
 								<f:param name="establishmentLicenseID" value="#{_license.id}" />

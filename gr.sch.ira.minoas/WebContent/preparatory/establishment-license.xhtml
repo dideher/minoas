@@ -33,7 +33,7 @@
 						<h:outputText
 							value=" Προσοχή, τα στοιχεία της φόρμας είναι ενεργά, δηλαδή αν τα αλλάξετε και πατήσετε 'Ανανέωση' τότε τα στοιχεία της άδειας θα άλλαξουν και στην βάση.  " />
 					</h:panelGroup>
-					<h:panelGrid columns="4">
+					<h:panelGrid columns="4" rules="groups">
 
 						<s:decorate template="/layout/doubleLineEdit.xhtml">
 							<ui:define name="label">
@@ -46,15 +46,32 @@
 								<s:convertDateTime pattern="dd/MM/yyyy" />
 							</h:outputText>
 						</s:decorate>
-						
+
+						<h:panelGroup layout="horizontal">
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Αριθμός Απόφασης ΠΥΣΔΕ" />
+								</ui:define>
+								<h:inputText styleClass="fieldValueText"
+									value="#{establishmentLicense.requestJudgmentNumber}" size="5"
+									maxlength="5" />
+								<rich:spacer width="5" />
+								<rich:calendar datePattern="dd/MM/yyyy" style="width:50px"
+									styleClass="fieldValueText"
+									value="#{establishmentLicense.requestJudgmentDate}">
+								</rich:calendar>
+							</s:decorate>
+						</h:panelGroup>
 						<s:decorate template="/layout/doubleLineEdit.xhtml">
 							<ui:define name="label">
 								<h:outputText value="Κατάσταση Άδειας" />
 							</ui:define>
-							<h:outputText value="#{messages[establishmentLicense.statusType.key]}" styleClass="fieldValueText"/>
+							<h:outputText
+								value="#{messages[establishmentLicense.statusType.key]}"
+								styleClass="fieldValueText" />
 						</s:decorate>
-							
-						
+
+
 						<s:decorate template="/layout/doubleLineEdit.xhtml">
 							<ui:define name="label">
 								<h:outputText value="Η Αίτηση Αφορά" />
@@ -71,6 +88,21 @@
 							</h:selectOneMenu>
 						</s:decorate>
 
+						<s:decorate template="/layout/doubleLineEdit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Έδρα" />
+							</ui:define>
+							<h:selectOneMenu id="establishmentLocation"
+								styleClass="fieldValueText"
+								value="#{establishmentLicense.establishmentLocation}">
+								<s:selectItems var="_establishmentLocation"
+									value="#{establishmentLocations}"
+									label="#{_establishmentLocation.title}" />
+								<s:convertEntity />
+							</h:selectOneMenu>
+						</s:decorate>
+
+
 						<s:decorate id="teachingLanguages"
 							template="/layout/doubleLineEdit.xhtml">
 							<ui:define name="label">
@@ -86,39 +118,26 @@
 								<s:convertEntity />
 							</h:selectManyCheckbox>
 						</s:decorate>
-						
+
 						<s:decorate template="/layout/doubleLineEdit.xhtml">
 							<ui:define name="label">
-								<h:outputText value="Έδρα" />
+								<h:outputText value="Ιδιοκτήτης" />
 							</ui:define>
-							<h:selectOneMenu id="establishmentLocation"
-								styleClass="fieldValueText"
-								value="#{establishmentLicense.establishmentLocation}">
-								<s:selectItems var="_establishmentLocation"
-									value="#{establishmentLocations}"
-									label="#{_establishmentLocation.title}" />
-								<s:convertEntity />
-							</h:selectOneMenu>
+							<h:outputText styleClass="fieldValueText"
+								value="#{establishmentLicense.owner.lastName} #{establishmentLicense.owner.firstName} του #{establishmentLicense.owner.fatherName} (#{establishmentLicense.owner.idNumber})" />
+							<rich:spacer width="5" />
+							<h:commandButton action="changeOwner" value="Αλλαγή"
+								onclick="if (!confirm('Σίγουρα θέλετε να αλλάξετε τον ιδιοκτήτη?')){return false;}">
+							</h:commandButton>
 						</s:decorate>
 
-						
 					</h:panelGrid>
-					<s:div rendered="#{establishmentLicense.statusType=='PENDING'}" styleClass="clear-yellow">
-						<h:outputText value="Αίτηση Άδειας Ιδρύσεως Φροντιστηρίου" />
-						fdfdf
-						fsdfdsfsdf
-						
-						<rich:panel>
-							<f:facet name="header">
-													<h:outputText value="Αίτηση Άδειας Ιδρύσεως Φροντιστηρίου" />
-								
-							</f:facet>
-												<h:outputText value="Αίτηση Άδειας Ιδρύσεως Φροντιστηρίου" />
-							
-						</rich:panel>
-											<h:outputText value="Αίτηση Άδειας Ιδρύσεως Φροντιστηρίου" />
-						
-					</s:div>
+									<h:panelGroup>
+					<rich:spacer height="5" />
+					<rich:separator height="2" lineType="dashed" />
+					<rich:spacer height="5" />
+				</h:panelGroup>
+					
 				</h:panelGrid>
 
 				<s:div styleClass="actionButtons">
@@ -135,83 +154,10 @@
 					<s:button id="revertButton" value="Ακύρωση Αλλαγών"
 						rendered="#{establishmentLicenseHome.managed}"
 						action="#{establishmentLicenseHome.revert}" />
-					<s:button value="print"
-						view="/preparatory/print/EstablishmentLicenseRequestToPYSDE.xhtml"></s:button>
 				</s:div>
 
 			</rich:panel>
 
-			<rich:panel>
-				<f:facet name="header">
-					<h:outputText value="Αίτηση Άδειας Ιδρύσεως Φροντιστηρίου" />
-				</f:facet>
-				
-
-				<h:panelGroup>
-					<p><h:outputText value="Στοιχεία Ιδιοκτήτη Φροντιστηρίου" /></p>
-					<rich:separator height="2" lineType="dashed" />
-					<s:div rendered="#{establishmentLicense.owner != null}">
-						<h:panelGrid columns="3">
-
-							<s:decorate template="/layout/doubleLineEdit.xhtml">
-								<ui:define name="label">
-									<h:outputText value="Επώνυμο" />
-								</ui:define>
-								<h:inputText value="#{establishmentLicense.owner.lastName}"
-									size="15" maxlength="15" readonly="true" />
-							</s:decorate>
-
-							<s:decorate template="/layout/doubleLineEdit.xhtml">
-								<ui:define name="label">
-									<h:outputText value="Όνομα" />
-								</ui:define>
-								<h:inputText value="#{establishmentLicense.owner.firstName}"
-									size="15" maxlength="15" readonly="true" />
-							</s:decorate>
-
-							<s:decorate template="/layout/doubleLineEdit.xhtml">
-								<ui:define name="label">
-									<h:outputText value="Όνομα Πατρός" />
-								</ui:define>
-								<h:inputText value="#{establishmentLicense.owner.fatherName}"
-									size="12" maxlength="12" readonly="true" />
-							</s:decorate>
-
-							<s:decorate template="/layout/doubleLineEdit.xhtml">
-								<ui:define name="label">
-									<h:outputText value="Όνομα Μητρός" />
-								</ui:define>
-								<h:inputText value="#{establishmentLicense.owner.motherName}"
-									size="12" maxlength="12" readonly="true" />
-							</s:decorate>
-
-							<s:decorate template="/layout/doubleLineEdit.xhtml">
-								<ui:define name="label">
-									<h:outputText value="Α.Δ.Τ" />
-								</ui:define>
-								<h:inputText value="#{establishmentLicense.owner.idNumber}"
-									size="5" maxlength="5" readonly="true" />
-							</s:decorate>
-
-							<s:decorate template="/layout/doubleLineEdit.xhtml">
-								<ui:define name="label">
-									<h:outputText value="Ημερομηνία Γεννήσεως" />
-								</ui:define>
-								<rich:calendar datePattern="dd/MM/yyyy"
-									value="#{establishmentLicense.owner.dateOfBirth}"
-									readonly="true">
-								</rich:calendar>
-							</s:decorate>
-
-						</h:panelGrid>
-					</s:div>
-					<h:commandButton action="selectPreparatoryOwner"
-						value="Επιλογή Κατόχου ....">
-					</h:commandButton>
-
-				</h:panelGroup>
-
-			</rich:panel>
 
 
 		</h:form>
