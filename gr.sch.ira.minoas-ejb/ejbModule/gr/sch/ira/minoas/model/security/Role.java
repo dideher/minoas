@@ -8,11 +8,13 @@ import gr.sch.ira.minoas.model.BaseModel;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.jboss.seam.annotations.AutoCreate;
 
 /**
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
@@ -28,13 +30,31 @@ public class Role extends BaseModel {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@Id
+	@Id @GeneratedValue
 	@Column(name = "ID", length = 32, updatable = false)
-	private String id;
+	private Long id;
 
 	@Basic
-	@Column(name = "TITLE", nullable = true, length = 250)
-	private String title;
+	@Column(name = "NAME", nullable = false, length = 32, unique=true )
+	private String name;
+	
+	@Basic
+	@Column(name="DESCR", nullable=true, length=250)
+	private String description;
+
+	/**
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * @param description the description to set
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
 	/**
 	 * 
@@ -44,14 +64,16 @@ public class Role extends BaseModel {
 		// TODO Auto-generated constructor stub
 	}
 
+	
+
 	/**
-	 * @param id
-	 * @param title
+	 * @param name
+	 * @param description
 	 */
-	public Role(String id, String title) {
+	public Role(String name, String description) {
 		super();
-		this.id = id;
-		this.title = title;
+		this.name = name;
+		this.description = description;
 	}
 
 	/**
@@ -61,9 +83,9 @@ public class Role extends BaseModel {
 	public boolean equals(Object obj) {
 		if (obj instanceof Role) {
 			Role otherRole = (Role) obj;
-			if (this.id != null) {
-				return this.id.equals(otherRole.getId());
-			} else if (this.id == null && otherRole.getId() == null)
+			if (this.name != null) {
+				return this.name.equals(otherRole.getName());
+			} else if (this.name == null && otherRole.getName() == null)
 				return true;
 			else
 				return false;
@@ -72,17 +94,10 @@ public class Role extends BaseModel {
 	}
 
 	/**
-	 * @return the id
-	 */
-	public String getId() {
-		return id;
-	}
-
-	/**
 	 * @return the title
 	 */
-	public String getTitle() {
-		return title;
+	public String getName() {
+		return name;
 	}
 
 	/**
@@ -94,17 +109,10 @@ public class Role extends BaseModel {
 	}
 
 	/**
-	 * @param id the id to set
-	 */
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	/**
 	 * @param title the title to set
 	 */
-	public void setTitle(String title) {
-		this.title = title;
+	public void setName(String title) {
+		this.name = title;
 	}
 
 	/**
@@ -114,7 +122,7 @@ public class Role extends BaseModel {
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("<Role:");
-		sb.append(getId());
+		sb.append(getName());
 		sb.append(">");
 		return sb.toString();
 	}

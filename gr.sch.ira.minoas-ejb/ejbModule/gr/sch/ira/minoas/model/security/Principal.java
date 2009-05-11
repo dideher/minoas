@@ -6,11 +6,15 @@ package gr.sch.ira.minoas.model.security;
 import gr.sch.ira.minoas.model.BaseModel;
 import gr.sch.ira.minoas.model.core.OrganizationalOffice;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -20,6 +24,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.validator.NotNull;
 import org.jboss.seam.annotations.Name;
 
 /**
@@ -38,12 +43,49 @@ public class Principal extends BaseModel {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	@Id
+	@GeneratedValue
+	@Column(name = "ID")
+	private Long id;
+
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "PRINCIPAL_ROLE", joinColumns = @JoinColumn(name = "PRINCIPAL_ID"), inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))
+	private Set<Role> roles = new HashSet<Role>();
+
+	/**
+	 * @return the roles
+	 */
+	public Set<Role> getRoles() {
+		return roles;
+	}
+
+	/**
+	 * @param roles the roles to set
+	 */
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
+	}
+
+	/**
+	 * @return the id
+	 */
+	public Long getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	@Basic
 	@Column(name = "EMAIL", length = 60, nullable = true)
 	private String email;
 
 	@Basic
-	@ManyToOne(optional = true)
+	@ManyToOne
 	@JoinColumn(name = "OFFICE_ID", nullable = true)
 	private OrganizationalOffice office;
 
@@ -55,12 +97,8 @@ public class Principal extends BaseModel {
 	@Column(name = "REAL_NAME", length = 90, nullable = false)
 	private String realName;
 
-	@ManyToMany
-	@JoinTable(name = "MINOAS_PRINCIPAL_ROLEGROUPS")
-	private List<RoleGroup> roleGroups;
-
-	@Column(updatable = false, name = "USERNAME", length = 16)
-	@Id
+	@Basic
+	@Column(updatable = false, name = "USERNAME", length = 16, nullable = false, unique = true)
 	private String username;
 
 	/**
@@ -100,13 +138,6 @@ public class Principal extends BaseModel {
 	}
 
 	/**
-	 * @return the roleGroups
-	 */
-	public List<RoleGroup> getRoleGroups() {
-		return roleGroups;
-	}
-
-	/**
 	 * @return the username
 	 */
 	public String getUsername() {
@@ -139,13 +170,6 @@ public class Principal extends BaseModel {
 	 */
 	public void setRealName(String realName) {
 		this.realName = realName;
-	}
-
-	/**
-	 * @param roleGroups the roleGroups to set
-	 */
-	public void setRoleGroups(List<RoleGroup> roleGroups) {
-		this.roleGroups = roleGroups;
 	}
 
 	/**

@@ -16,7 +16,6 @@ import gr.sch.ira.minoas.model.preparatory.PreparatoryUnitNatureType;
 import gr.sch.ira.minoas.model.preparatory.TeachingLanguage;
 import gr.sch.ira.minoas.model.security.Principal;
 import gr.sch.ira.minoas.model.security.Role;
-import gr.sch.ira.minoas.model.security.RoleGroup;
 
 import java.util.Collection;
 import java.util.List;
@@ -44,9 +43,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 		return getEntityManager().find(Role.class, roleID);
 	}
 
-	public RoleGroup findRoleGroup(String roleGroupID) {
-		return getEntityManager().find(RoleGroup.class, roleGroupID);
-	}
+	
 
 	public SchoolYear getActiveSchoolYear() {
 		return getActiveSchoolYear(null);
@@ -89,13 +86,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 	}
 	
 
-	@SuppressWarnings("unchecked")
-	public List<RoleGroup> getAvailableRoleGroups() {
-		debug("fetching all available role groups");
-		List return_value = getEntityManager().createQuery("SELECT r from RoleGroup r").getResultList();
-		debug("found totally #0 role group(s).", return_value.size());
-		return return_value;
-	}
+	
 
 	@SuppressWarnings("unchecked")
 	public List<Role> getAvailableRoles() {
@@ -295,16 +286,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 		return searchPrincipals(null, search_string);
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<RoleGroup> searchRoleGroups(String roleGroup_search_pattern) {
-		String pattern = CoreUtils.getSearchPattern(roleGroup_search_pattern);
-		info("searching for role groups with #0 search pattern", pattern);
-		List return_value = getEntityManager().createQuery(
-				"SELECT r from RoleGroup r WHERE lower(r.id) LIKE :search_pattern").setParameter("search_pattern",
-				pattern).getResultList();
-		info("found totally #0 role group(s).", return_value.size());
-		return return_value;
-	}
+	
 
 	@SuppressWarnings("unchecked")
 	public List<Role> searchRoles(String role_search_pattern) {
