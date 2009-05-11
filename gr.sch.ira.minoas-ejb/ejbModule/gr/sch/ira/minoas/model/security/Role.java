@@ -30,6 +30,10 @@ public class Role extends BaseModel {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	@Basic
+	@Column(name="DESCR", nullable=true, length=250)
+	private String description;
+
 	@Id @GeneratedValue
 	@Column(name = "ID", length = 32, updatable = false)
 	private Long id;
@@ -38,33 +42,12 @@ public class Role extends BaseModel {
 	@Column(name = "NAME", nullable = false, length = 32, unique=true )
 	private String name;
 	
-	@Basic
-	@Column(name="DESCR", nullable=true, length=250)
-	private String description;
-
-	/**
-	 * @return the description
-	 */
-	public String getDescription() {
-		return description;
-	}
-
-	/**
-	 * @param description the description to set
-	 */
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
 	/**
 	 * 
 	 */
 	public Role() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
-
-	
 
 	/**
 	 * @param name
@@ -93,6 +76,15 @@ public class Role extends BaseModel {
 			return false;
 	}
 
+	
+
+	/**
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description;
+	}
+
 	/**
 	 * @return the title
 	 */
@@ -106,6 +98,13 @@ public class Role extends BaseModel {
 	@Override
 	public int hashCode() {
 		return id.hashCode();
+	}
+
+	/**
+	 * @param description the description to set
+	 */
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	/**

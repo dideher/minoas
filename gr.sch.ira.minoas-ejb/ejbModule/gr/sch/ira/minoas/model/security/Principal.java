@@ -43,46 +43,14 @@ public class Principal extends BaseModel {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	@Basic
+	@Column(name = "EMAIL", length = 60, nullable = true)
+	private String email;
+
 	@Id
 	@GeneratedValue
 	@Column(name = "ID")
 	private Long id;
-
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "PRINCIPAL_ROLE", joinColumns = @JoinColumn(name = "PRINCIPAL_ID"), inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))
-	private Set<Role> roles = new HashSet<Role>();
-
-	/**
-	 * @return the roles
-	 */
-	public Set<Role> getRoles() {
-		return roles;
-	}
-
-	/**
-	 * @param roles the roles to set
-	 */
-	public void setRoles(Set<Role> roles) {
-		this.roles = roles;
-	}
-
-	/**
-	 * @return the id
-	 */
-	public Long getId() {
-		return id;
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	@Basic
-	@Column(name = "EMAIL", length = 60, nullable = true)
-	private String email;
 
 	@Basic
 	@ManyToOne
@@ -96,6 +64,10 @@ public class Principal extends BaseModel {
 	@Basic
 	@Column(name = "REAL_NAME", length = 90, nullable = false)
 	private String realName;
+
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "PRINCIPAL_ROLE", joinColumns = @JoinColumn(name = "PRINCIPAL_ID"), inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))
+	private Set<Role> roles = new HashSet<Role>();
 
 	@Basic
 	@Column(updatable = false, name = "USERNAME", length = 16, nullable = false, unique = true)
@@ -117,6 +89,13 @@ public class Principal extends BaseModel {
 	}
 
 	/**
+	 * @return the id
+	 */
+	public Long getId() {
+		return id;
+	}
+
+	/**
 	 * @return the office
 	 */
 	public OrganizationalOffice getOffice() {
@@ -131,10 +110,29 @@ public class Principal extends BaseModel {
 	}
 
 	/**
+	 * @param username
+	 * @param realName
+	 * @param password
+	 */
+	public Principal(String username, String realName, String password) {
+		super();
+		this.username = username;
+		this.realName = realName;
+		this.password = password;
+	}
+
+	/**
 	 * @return the realName
 	 */
 	public String getRealName() {
 		return realName;
+	}
+
+	/**
+	 * @return the roles
+	 */
+	public Set<Role> getRoles() {
+		return roles;
 	}
 
 	/**
@@ -149,6 +147,13 @@ public class Principal extends BaseModel {
 	 */
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	/**
@@ -173,10 +178,22 @@ public class Principal extends BaseModel {
 	}
 
 	/**
+	 * @param roles the roles to set
+	 */
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
+	}
+
+	/**
 	 * @param username the username to set
 	 */
 	public void setUsername(String username) {
 		this.username = username;
+	}
+	
+	public Role addRole(Role aRole) {
+		getRoles().add(aRole);
+		return aRole;
 	}
 
 	/**

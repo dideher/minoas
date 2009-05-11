@@ -1,22 +1,48 @@
 package gr.sch.ira.minoas.seam.components;
 
+import gr.sch.ira.minoas.model.security.Principal;
+import gr.sch.ira.minoas.model.security.Role;
+
+import javax.persistence.NoResultException;
+
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.security.Identity;
 
 @Name("authenticator")
-public class Authenticator extends BaseSeamComponent {
+public class Authenticator extends BaseDatabaseAwareSeamComponent {
+
+	/**
+	 * Comment for <code>serialVersionUID</code>
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	@In
 	protected Identity identity;
 
+	@Transactional
 	public boolean authenticate() {
-		info("authenticating #0", identity.getUsername());
+		String username = identity.getCredentials().getUsername();
+		try {
+			info("authenticating user #0", username);
+			Principal p = (Principal) getEntityManager().createQuery(
+					"SELECT OBJECT(p) FROM Principal p WHERE p.username = :username").setParameter("username", username)
+					.getSingleResult();
+			if (p.getPassword().equals(identity.getCredentials().getPassword())) {
 
-		// write your authentication logic here,
-		// return true if the authentication was
-		// successful, false otherwise
-		if (identity.getUsername().equals("slavikos"))
-			identity.addRole("admin");
-		return true;
+				for (Role role : p.getRoles()) {
+					identity.addRole(role.getName());
+				}
+				info("user #0 has been authenticated successfully and granted the #1 role(s)", username, p.getRoles());
+				return true;
+			} else {
+				warn("user #0 specified invalid password, therefore access will be denied.", username);
+				return false;
+			}
+		} catch (NoResultException nre) {
+			warn("user #0 not found, therefore access will be denied.", username);
+			return false;
+		}
 	}
 }
