@@ -9,6 +9,7 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
+import org.jboss.seam.annotations.security.Restrict;
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
@@ -41,6 +42,7 @@ public class PreparatoryOwnerHome extends MinoasEntityHome<PreparatoryOwner> {
 	 */
 	@Override
 	@Transactional
+	@Restrict("#{s:hasRole('MANAGE_PREPARATORY_OWNER') or s:hasRole('ADMIN')}")
 	public String update() {
 		PreparatoryOwner owner = (PreparatoryOwner)getInstance();
 		owner.setModifiedOn(new Date(System.currentTimeMillis()));

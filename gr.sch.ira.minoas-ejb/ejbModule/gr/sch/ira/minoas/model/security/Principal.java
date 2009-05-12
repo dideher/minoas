@@ -7,7 +7,6 @@ import gr.sch.ira.minoas.model.BaseModel;
 import gr.sch.ira.minoas.model.core.OrganizationalOffice;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Basic;
@@ -24,7 +23,6 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.validator.NotNull;
 import org.jboss.seam.annotations.Name;
 
 /**
@@ -114,7 +112,7 @@ public class Principal extends BaseModel {
 	 * @param realName
 	 * @param password
 	 */
-	public Principal(String username, String realName, String password) {
+	public Principal(String username, String password, String realName) {
 		super();
 		this.username = username;
 		this.realName = realName;
@@ -190,7 +188,7 @@ public class Principal extends BaseModel {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	
+
 	public Role addRole(Role aRole) {
 		getRoles().add(aRole);
 		return aRole;

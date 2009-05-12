@@ -11,7 +11,7 @@
 	<a4j:form id="menuform">
 		<rich:toolBar>
 			
-			<rich:dropDownMenu disabled="#{!identity.loggedIn}">
+			<rich:dropDownMenu disabled="#{!(identity.loggedIn and (s:hasRole('ADMIN')))}">
 				<f:facet name="label">
 					<h:panelGroup>
 						<h:outputText value="Σχολική Μονάδα" />
@@ -25,7 +25,7 @@
 				</rich:menuGroup>
 			</rich:dropDownMenu>	
 				
-			<rich:dropDownMenu disabled="#{!identity.loggedIn}">
+			<rich:dropDownMenu disabled="#{!(identity.loggedIn and (s:hasRole('ADMIN') or s:hasRole('VIEW_PREPARATORY')))}">
 				<f:facet name="label">
 					<h:panelGroup>
 						<h:outputText value="Φροντιστήρια" />
@@ -49,7 +49,7 @@
 				</rich:menuGroup>
 			</rich:dropDownMenu>
 			
-			<rich:dropDownMenu disabled="#{!identity.loggedIn}">
+			<rich:dropDownMenu disabled="#{!(identity.loggedIn and (s:hasRole('ADMIN')))}">
 				<f:facet name="label">
 					<h:panelGroup>
 						<h:outputText value="Προσωπικό" />
@@ -65,7 +65,7 @@
 					<rich:menuItem value="Εισαγωγή" submitMode="ajax" ajaxSingle="true" action="#{conversationHelper.beginNewSecondmentConversation}" />
 				</rich:menuGroup>
 			</rich:dropDownMenu>
-			<rich:dropDownMenu disabled="#{!identity.loggedIn}">
+			<rich:dropDownMenu disabled="#{!(identity.loggedIn and (s:hasRole('ADMIN')))}">
 				<f:facet name="label">
 					<h:panelGroup>
 						<h:outputText value="Αποσπάσεις" />
@@ -97,7 +97,7 @@
 					<rich:menuItem value="Αποσπάσεις στο Ηράκλειο" disabled="true" />
 				</rich:menuGroup>
 			</rich:dropDownMenu>
-			<rich:dropDownMenu rendered="#{s:hasRole(admin)} " >
+			<rich:dropDownMenu rendered="#{s:hasRole(ADMIN)} " >
 				<f:facet name="label">
 					<h:panelGroup>
 						<h:outputText value="Διαχείριση Μίνωα" />
