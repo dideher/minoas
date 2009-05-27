@@ -43,7 +43,7 @@
   <web:character-encoding-filter encoding="UTF-8"
     override-client="true" url-pattern="*.seam" />
 
-
+  
   <document:document-store use-extensions="true" />
 
   <!--
@@ -82,6 +82,7 @@
   
   <component name="examplePreparatoryOwner"
     class="gr.sch.ira.minoas.model.preparatory.PreparatoryOwner" scope="conversation" />
+ 
   <framework:entity-query name="preparatoryOwnersList"
     scope="conversation" max-results="15">
     <framework:ejbql>SELECT o FROM PreparatoryOwner o</framework:ejbql>
@@ -109,6 +110,23 @@
         <value>o.statusType=#{exampleEstablishmentLicense.statusType}</value>
     </framework:restrictions> 
    </framework:entity-query>     
+   
+
+   <!-- School Components -->   
+    <factory name="school" value="#{schoolHome.instance}" />
+  
+  <component name="exampleSchool"
+    class="gr.sch.ira.minoas.model.core.School" scope="conversation" />
+ 
+  <framework:entity-query name="schoolList"
+    scope="conversation" max-results="15">
+    <framework:ejbql>SELECT o FROM School o</framework:ejbql>
+    <framework:restrictions>
+
+      <value>lower(o.title) like lower(concat(#{exampleSchool.title},'%') )</value>
+     </framework:restrictions>
+   </framework:entity-query>
+   
          
    <!-- For use with jBPM pageflow or process management -->
    

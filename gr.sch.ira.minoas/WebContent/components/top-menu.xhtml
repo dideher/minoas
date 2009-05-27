@@ -14,6 +14,20 @@
 			<rich:dropDownMenu disabled="#{!(identity.loggedIn and (s:hasRole('ADMIN')))}">
 				<f:facet name="label">
 					<h:panelGroup>
+						<h:outputText value="Κενά" />
+					</h:panelGroup>
+				</f:facet>
+				<rich:menuGroup value="Διαχείρηση Ωρών Διδασκαλίας">
+					<rich:menuItem submitMode="none">
+						<s:link value="Ώρες Διδασκαλίας Σχολικής Μονάδας" view="/teachingResources/school-teaching-resources.xhtml" />
+					</rich:menuItem>
+				</rich:menuGroup>
+				
+			</rich:dropDownMenu>
+			
+			<rich:dropDownMenu disabled="#{!(identity.loggedIn and (s:hasRole('ADMIN')))}">
+				<f:facet name="label">
+					<h:panelGroup>
 						<h:outputText value="Σχολική Μονάδα" />
 					</h:panelGroup>
 				</f:facet>
