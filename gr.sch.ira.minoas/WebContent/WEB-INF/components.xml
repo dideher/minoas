@@ -113,8 +113,7 @@
    
 
    <!-- School Components -->   
-    <factory name="school" value="#{schoolHome.instance}" />
-  
+   
   <component name="exampleSchool"
     class="gr.sch.ira.minoas.model.core.School" scope="conversation" />
  
@@ -123,7 +122,7 @@
     <framework:ejbql>SELECT o FROM School o</framework:ejbql>
     <framework:restrictions>
 
-      <value>lower(o.title) like lower(concat(#{exampleSchool.title},'%') )</value>
+      <value>lower(o.title) like lower(concat('%', concat(#{exampleSchool.title},'%')))</value>
      </framework:restrictions>
    </framework:entity-query>
    

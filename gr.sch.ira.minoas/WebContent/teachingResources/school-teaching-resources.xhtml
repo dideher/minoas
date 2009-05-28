@@ -15,7 +15,13 @@
 	<ui:define name="body">
 	
 		<h:outputText value="Ώρες Διδασκαλίας" />
-
+		<h:outputText value="the table and the school #{school}" />
+		
+		<rich:dataTable var="requirement" value="#{school.teachingRequirements}">
+			<rich:column>
+				<h:outputText value="#{requirement.specialization}" />
+			</rich:column>
+		</rich:dataTable>	
 		<h:form id="establishmentLicenseForm">
 
 			<rich:panel>

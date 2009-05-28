@@ -1,5 +1,5 @@
 
-package gr.sch.ira.minoas.seam.components.entity;
+package gr.sch.ira.minoas.seam.components.home;
 
 import gr.sch.ira.minoas.model.preparatory.PreparatoryOwner;
 

@@ -14,153 +14,92 @@
 <ui:composition template="/layout/simple-beauty-template.xhtml">
 	<ui:define name="body">
 
-		<h:form id="establishmentLicenseForm">
+		<rich:panel headerClass="pagetitle" bodyClass="post">
+			<f:facet name="header">
+				<h:outputText value="Αναζήτηση Σχολικής Μονάδας" />
+			</f:facet>
+			<br />
+			<h:outputText
+				value="Πριν συνεχίσετε, πρέπει να επιλέξετε σχολική μονάδα από
+				τον παρακάτω πίνακα." />
+			<br />
+			<br />
 
-			<rich:panel>
-				<f:facet name="header">
-					<h:outputText
-						value="Άδεια Ιδρύσεως #{messages[establishmentLicense.natureType.key]}" />
-				</f:facet>
-				<h:panelGrid columns="1">
-					<h:panelGroup rendered="#{establishmentLicenseHome.managed}">
-						<h:outputText
-							value="Παρακάτω εμφανίζονται τα στοιχεία της άδειας ιδρύσεως του " />
-						<h:outputText styleClass="fieldValueText"
-							value=" #{messages[establishmentLicense.natureType.key]} " />
-						<h:outputText value=" του " />
-						<h:outputText styleClass="fieldValueText"
-							value="#{establishmentLicense.owner.lastName} #{establishmentLicense.owner.firstName} του #{establishmentLicense.owner.fatherName}." />
-						<h:outputText
-							value=" Προσοχή, τα στοιχεία της φόρμας είναι ενεργά, δηλαδή αν τα αλλάξετε και πατήσετε 'Ανανέωση' τότε τα στοιχεία της άδειας θα άλλαξουν και στην βάση.  " />
-					</h:panelGroup>
-					<h:panelGrid columns="4" rules="groups">
+			<h:outputText
+				value="Για την διευκόλυνσή σας, μπορείτε να
+				φιλτράρετε την λίστα με τα διαθέσιμα φίλτρα." />
 
-						<s:decorate template="/layout/doubleLineEdit.xhtml">
+			<h:form id="schoolSearchForm">
+				<h:panelGrid columns="1" width="100%">
+					<s:decorate template="/layout/doubleLineEdit.xhtml">
 							<ui:define name="label">
-								<h:outputText value="Αίτηση Ιδρύσεως" />
+								<h:outputText value="Επώνυμο : " />
 							</ui:define>
-							<h:outputText styleClass="fieldValueText"
-								value="#{establishmentLicense.requestProtocol}/" />
-							<h:outputText styleClass="fieldValueText"
-								value="#{establishmentLicense.requestDate}">
-								<s:convertDateTime pattern="dd/MM/yyyy" />
-							</h:outputText>
-						</s:decorate>
+							<h:inputText value="#{exampleSchool.title}"
+								size="12" />
+					</s:decorate>
+											<a4j:status id="schoolSearchStatus">
+							<f:facet name="start">
+								<h:graphicImage value="/img/spinner.gif" />
+							</f:facet>
+						</a4j:status>
+											
+					<s:div styleClass="actionButtons">
+						<h:commandButton id="searchButton" value="Αναζήτηση"
+							actionListener="#{schoolList.first}" />
+						<s:button disabled="#{empty preparatoryOwnersListFrom}"  action="backButton" value="Επιστροφή" />
+						<rich:spacer width="20"/>
+						<s:button action="endButton" value="Τέλος Ενέργειας" /> 
+					</s:div>
+					
+					<rich:dataTable id="schoolList" value="#{schoolList.resultList}" var="school"
+						rows="15" border="0"
+						onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+						onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+						width="100%">
+						<f:facet name="header">
+							<h:outputLabel value="Λίστα Σχολικών Μονάδων" />
+						</f:facet>
 
-						<h:panelGroup layout="horizontal">
-							<s:decorate template="/layout/doubleLineEdit.xhtml">
-								<ui:define name="label">
-									<h:outputText value="Αριθμός Απόφασης ΠΥΣΔΕ" />
-								</ui:define>
-								<h:inputText styleClass="fieldValueText"
-									value="#{establishmentLicense.requestJudgmentNumber}" size="5"
-									maxlength="5" />
-								<rich:spacer width="5" />
-								<rich:calendar datePattern="dd/MM/yyyy" style="width:50px"
-									styleClass="fieldValueText"
-									value="#{establishmentLicense.requestJudgmentDate}">
-								</rich:calendar>
-							</s:decorate>
-						</h:panelGroup>
-						<s:decorate template="/layout/doubleLineEdit.xhtml">
-							<ui:define name="label">
-								<h:outputText value="Κατάσταση Άδειας" />
-							</ui:define>
+						<rich:column>
+							<f:facet name="header">Κωδ. Υπουργείου</f:facet>
+							<h:outputText value="#{school.ministryCode}" />
+						</rich:column>
+
+						<rich:column>
+							<f:facet name="header">Τίτλος Μονάδας</f:facet>
+							<a4j:commandLink action="school-selected">
+								<h:outputText value="#{school.title}" />
+							</a4j:commandLink>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Μόρια</f:facet>
+							<h:outputText value="#{school.points}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Περιοχή</f:facet>
+							<h:outputText value="#{school.regionCode}' ΗΡΑΚΛΕΙΟΥ" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Διεύθυνση</f:facet>
 							<h:outputText
-								value="#{messages[establishmentLicense.statusType.key]}"
-								styleClass="fieldValueText" />
-						</s:decorate>
+								value="#{school.address.address} #{school.address.number} - #{school.address.postCode} - #{school.address.city}" />
+						</rich:column>
 
 
-						<s:decorate template="/layout/doubleLineEdit.xhtml">
-							<ui:define name="label">
-								<h:outputText value="Η Αίτηση Αφορά" />
-							</ui:define>
-							<h:selectOneMenu id="licenseNature" styleClass="fieldValueText"
-								value="#{establishmentLicense.natureType}" required="true">
-								<a4j:support event="onchange" reRender="teachingLanguages"
-									ajaxSingle="true" />
-								<s:selectItems hideNoSelectionLabel="true"
-									var="_preparatoryUnitNatureType"
-									value="#{preparatoryUnitNatureTypes}"
-									label="#{messages[_preparatoryUnitNatureType.key]}" />
-								<s:convertEnum />
-							</h:selectOneMenu>
-						</s:decorate>
+						<f:facet name="footer">
+							<rich:datascroller align="left" for="schoolList" maxPages="20"
+								renderIfSinglePage="false" id="sc1" />
+						</f:facet>
 
-						<s:decorate template="/layout/doubleLineEdit.xhtml">
-							<ui:define name="label">
-								<h:outputText value="Έδρα" />
-							</ui:define>
-							<h:selectOneMenu id="establishmentLocation"
-								styleClass="fieldValueText"
-								value="#{establishmentLicense.establishmentLocation}">
-								<s:selectItems var="_establishmentLocation"
-									value="#{establishmentLocations}"
-									label="#{_establishmentLocation.title}" />
-								<s:convertEntity />
-							</h:selectOneMenu>
-						</s:decorate>
+					</rich:dataTable>
 
-
-						<s:decorate id="teachingLanguages"
-							template="/layout/doubleLineEdit.xhtml">
-							<ui:define name="label">
-								<h:outputText value="Διδασκόμενες Γλώσσες" />
-							</ui:define>
-							<h:selectManyCheckbox layout="lineDirection"
-								styleClass="fieldValueText"
-								disabled="#{establishmentLicense.natureType == 'SECONDARY_EDUCATION'}"
-								value="#{establishmentLicense.teachingLanguages}">
-								<s:selectItems var="_teachingLanguage"
-									value="#{teachingLanguages}"
-									label="#{_teachingLanguage.language}" />
-								<s:convertEntity />
-							</h:selectManyCheckbox>
-						</s:decorate>
-
-						<s:decorate template="/layout/doubleLineEdit.xhtml">
-							<ui:define name="label">
-								<h:outputText value="Ιδιοκτήτης" />
-							</ui:define>
-							<h:outputText styleClass="fieldValueText"
-								value="#{establishmentLicense.owner.lastName} #{establishmentLicense.owner.firstName} του #{establishmentLicense.owner.fatherName} (#{establishmentLicense.owner.idNumber})" />
-							<rich:spacer width="5" />
-							<h:commandButton action="changeOwner" value="Αλλαγή"
-								onclick="if (!confirm('Σίγουρα θέλετε να αλλάξετε τον ιδιοκτήτη?')){return false;}">
-							</h:commandButton>
-						</s:decorate>
-
-					</h:panelGrid>
-									<h:panelGroup>
-					<rich:spacer height="5" />
-					<rich:separator height="2" lineType="dashed" />
-					<rich:spacer height="5" />
-				</h:panelGroup>
 					
 				</h:panelGrid>
+			</h:form>
 
-				<s:div styleClass="actionButtons">
-					<s:button id="backButton" value="Επιστροφή"
-						view="#{empty from ? '/home' : from}.xhtml}" propagation="end" />
-					<rich:spacer width="20" />
+		</rich:panel>
 
-					<h:commandButton id="save" value="Αποθήκευση ..."
-						action="#{establishmentLicenseHome.persist}"
-						rendered="#{!establishmentLicenseHome.managed}" />
-					<h:commandButton id="update"
-						action="#{establishmentLicenseHome.update}" value="Ανανέωση"
-						rendered="#{establishmentLicenseHome.managed}" />
-					<s:button id="revertButton" value="Ακύρωση Αλλαγών"
-						rendered="#{establishmentLicenseHome.managed}"
-						action="#{establishmentLicenseHome.revert}" />
-				</s:div>
-
-			</rich:panel>
-
-
-
-		</h:form>
 
 
 

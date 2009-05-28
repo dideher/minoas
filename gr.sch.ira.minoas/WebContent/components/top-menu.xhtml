@@ -19,7 +19,10 @@
 				</f:facet>
 				<rich:menuGroup value="Διαχείρηση Ωρών Διδασκαλίας">
 					<rich:menuItem submitMode="none">
-						<s:link value="Ώρες Διδασκαλίας Σχολικής Μονάδας" view="/teachingResources/school-teaching-resources.xhtml" />
+						<s:link value="Ώρες Διδασκαλίας Σχολικής Μονάδας" view="/school/select-school.xhtml">
+							<f:param name="selectSchoolFrom" value="/home" />
+							<f:param name="selectSchoolTo" value="/teachingResources/school-teaching-resources" />
+						</s:link> 
 					</rich:menuItem>
 				</rich:menuGroup>
 				

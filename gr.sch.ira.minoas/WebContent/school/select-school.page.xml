@@ -5,20 +5,21 @@
   <description>Λίστα Σχολικών Μονάδων</description>
   
   <param name="selectSchoolFrom" />
+  <param name="selectSchoolTo" />
   
   <!-- navigation rules -->
-  <navigation from-action="selectPreparatoryOwner">
+  <navigation from-action="select">
     <redirect view-id="/preparatory/preparatory-owners-list.xhtml">
       <param name="preparatoryOwnersListFrom" value="/preparatory/establishment-license-request" />
     </redirect>
   </navigation>
   <navigation from-action="endButton">
     <end-conversation />
-    <redirect view-id="#{empty establishmentLicensesListFrom ? '/home' : establishmentLicensesListFrom}.xhtml}" />
+    <redirect view-id="#{empty establishmentLicensesListFrom ? '/home' : selectSchoolFrom}.xhtml}" />
   </navigation>
   
   <navigation from-action="backButton">
-    <redirect view-id="#{empty establishmentLicensesListFrom ? '/home' : establishmentLicensesListFrom}.xhtml}" />
+    <redirect view-id="#{empty establishmentLicensesListFrom ? '/home' : selectSchoolFrom}.xhtml}" />
   </navigation>
   
 </page>

@@ -34,7 +34,7 @@ public class TeachingRequirement extends BaseModel {
 	private static final long serialVersionUID = 1L;
 
 	@Basic
-	@Column(name = "HOURS")
+	@Column(name = "HOURS", nullable=false)
 	private Integer hours;
 
 	@Id
@@ -43,15 +43,15 @@ public class TeachingRequirement extends BaseModel {
 	private Long id;
 
 	@ManyToOne
-	@JoinColumn(name = "SCHOOL_ID")
-	private Unit school;
+	@JoinColumn(name = "SCHOOL_ID", nullable=false)
+	private School school;
 
 	@ManyToOne
-	@JoinColumn(name = "SCHOOL_YEAR_ID")
+	@JoinColumn(name = "SCHOOL_YEAR_ID", nullable=false)
 	private SchoolYear schoolYear;
 
 	@ManyToOne
-	@JoinColumn(name = "SPECIALIZATION_ID")
+	@JoinColumn(name = "SPECIALIZATION_ID", nullable=false)
 	private Specialization specialization;
 
 	/**
@@ -73,13 +73,6 @@ public class TeachingRequirement extends BaseModel {
 	 */
 	public Long getId() {
 		return id;
-	}
-
-	/**
-	 * @return the school
-	 */
-	public Unit getSchool() {
-		return school;
 	}
 
 	/**
@@ -111,13 +104,6 @@ public class TeachingRequirement extends BaseModel {
 	}
 
 	/**
-	 * @param school the school to set
-	 */
-	public void setSchool(Unit school) {
-		this.school = school;
-	}
-
-	/**
 	 * @param schoolYear the schoolYear to set
 	 */
 	public void setSchoolYear(SchoolYear schoolYear) {
@@ -129,6 +115,20 @@ public class TeachingRequirement extends BaseModel {
 	 */
 	public void setSpecialization(Specialization specialization) {
 		this.specialization = specialization;
+	}
+
+	/**
+	 * @return the school
+	 */
+	public School getSchool() {
+		return school;
+	}
+
+	/**
+	 * @param school the school to set
+	 */
+	public void setSchool(School school) {
+		this.school = school;
 	}
 
 }

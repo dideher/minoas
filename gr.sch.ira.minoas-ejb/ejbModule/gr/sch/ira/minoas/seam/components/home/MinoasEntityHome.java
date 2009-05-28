@@ -23,7 +23,7 @@
  * redistribute the Software for such purposes.
  */
 
-package gr.sch.ira.minoas.seam.components.entity;
+package gr.sch.ira.minoas.seam.components.home;
 
 import java.lang.reflect.ParameterizedType;
 
