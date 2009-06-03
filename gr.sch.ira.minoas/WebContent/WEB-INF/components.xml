@@ -123,6 +123,8 @@
     <framework:restrictions>
 
       <value>lower(o.title) like lower(concat('%', concat(#{exampleSchool.title},'%')))</value>
+      <value>lower(o.regionCode) like lower(concat('%', concat(#{exampleSchool.regionCode},'%')))</value>
+      <value>o.points = #{exampleSchool.points}</value>
      </framework:restrictions>
    </framework:entity-query>
    

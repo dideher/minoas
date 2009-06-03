@@ -28,7 +28,9 @@ package gr.sch.ira.minoas.seam.components.home;
 import java.lang.reflect.ParameterizedType;
 
 import org.jboss.seam.annotations.In;
+import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.framework.EntityHome;
+import org.jboss.seam.log.Log;
 import org.jboss.seam.security.Identity;
 
 /**
@@ -47,6 +49,9 @@ public abstract class MinoasEntityHome<E> extends EntityHome {
 	@In(required = false)
 	private Identity identity;
 
+	@Logger
+	private Log logger;
+	
 	private Class<E> persistentClass;
 
 	/**
@@ -71,6 +76,10 @@ public abstract class MinoasEntityHome<E> extends EntityHome {
 	protected Identity getIdentity() {
 		return identity;
 	}
+	
+	protected String getPrincipalName() {
+		return getIdentity()!=null ? getIdentity().getPrincipal().getName() : "<anonymous>";
+	}
 
 	/**
 	 * @see org.jboss.seam.framework.EntityHome#getPersistenceContextName()
@@ -78,6 +87,13 @@ public abstract class MinoasEntityHome<E> extends EntityHome {
 	@Override
 	protected String getPersistenceContextName() {
 		return PERSITESTENCE_CONTEXT_NAME;
+	}
+
+	/**
+	 * @return the logger
+	 */
+	protected Log getLogger() {
+		return logger;
 	}
 
 }

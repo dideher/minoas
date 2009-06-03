@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -17,6 +18,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Cascade;
 import org.jboss.seam.annotations.Name;
 
 /**
@@ -47,7 +49,7 @@ public class School extends Unit {
 	@Column(name = "REGION")
 	private Character regionCode;
 	
-	@OneToMany(fetch=FetchType.LAZY, mappedBy="school")
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="school", cascade={ CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
 	private Collection<TeachingRequirement> teachingRequirements = new ArrayList<TeachingRequirement>();
 
 	/**
@@ -120,6 +122,11 @@ public class School extends Unit {
 		sb.append(getRegionCode());
 		sb.append(")] ");
 		return sb.toString();
+	}
+	
+	public void addTeachingRequirement(TeachingRequirement req) {
+		req.setSchool(this);
+		getTeachingRequirements().add(req);
 	}
 
 }

@@ -4,17 +4,10 @@
   <begin-conversation nested="true" flush-mode="manual"/>
   <description>Διαχείριση Ωρών Διδασκαλίας</description>
   
-  <param name="shoolTeachingResourcesFrom" />
- 
-  <navigation>
-  
-    <rule if="true">
-    <redirect view-id="/school/select-school.xhtml">
-      <param name="selectSchoolFrom" value="/teachingResources/school-teaching-resources" />
-    </redirect>
-    </rule>
-  </navigation>
+  <param name="from" />
+  <param name="schoolID" value="#{schoolHome.id}" />
   <!-- navigation rules -->
+  
   <navigation from-action="selectPreparatoryOwner">
     <redirect view-id="/preparatory/preparatory-owners-list.xhtml">
       <param name="preparatoryOwnersListFrom" value="/preparatory/establishment-license-request" />

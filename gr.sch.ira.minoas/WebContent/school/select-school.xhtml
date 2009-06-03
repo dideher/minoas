@@ -21,39 +21,61 @@
 			<br />
 			<h:outputText
 				value="Πριν συνεχίσετε, πρέπει να επιλέξετε σχολική μονάδα από
-				τον παρακάτω πίνακα." />
+				τον παρακάτω πίνακα. Για την διευκόλυνσή σας, μπορείτε να
+				φιλτράρετε την λίστα με τα διαθέσιμα φίλτρα." />
 			<br />
 			<br />
 
-			<h:outputText
-				value="Για την διευκόλυνσή σας, μπορείτε να
-				φιλτράρετε την λίστα με τα διαθέσιμα φίλτρα." />
 
 			<h:form id="schoolSearchForm">
 				<h:panelGrid columns="1" width="100%">
-					<s:decorate template="/layout/doubleLineEdit.xhtml">
-							<ui:define name="label">
-								<h:outputText value="Επώνυμο : " />
-							</ui:define>
-							<h:inputText value="#{exampleSchool.title}"
-								size="12" />
-					</s:decorate>
-											<a4j:status id="schoolSearchStatus">
-							<f:facet name="start">
-								<h:graphicImage value="/img/spinner.gif" />
-							</f:facet>
-						</a4j:status>
-											
+					<h:panelGroup>
+						<h:panelGrid columns="3">
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Τίτλος Σχολικής Μονάδας : " />
+								</ui:define>
+								<h:inputText value="#{exampleSchool.title}" size="12" />
+							</s:decorate>
+
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Περιοχή : " />
+								</ui:define>
+								<h:selectOneMenu value="#{exampleSchool.regionCode}" required="false">
+									<f:selectItem itemValue=""/>
+									<f:selectItem itemLabel="'Α ΗΡΑΚΛΕΙΟΥ" itemValue="Α' ΗΡΑΚΛΕΙΟΥ" />
+									<f:selectItem itemLabel="'Β ΗΡΑΚΛΕΙΟΥ" itemValue="Β' ΗΡΑΚΛΕΙΟΥ" />
+								</h:selectOneMenu>
+							</s:decorate>
+
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Μόρια : " />
+								</ui:define>
+								<h:inputText value="#{exampleSchool.points}" size="2"
+									maxlength="2" />
+							</s:decorate>
+						</h:panelGrid>
+					</h:panelGroup>
+
 					<s:div styleClass="actionButtons">
 						<h:commandButton id="searchButton" value="Αναζήτηση"
-							actionListener="#{schoolList.first}" />
-						<s:button disabled="#{empty preparatoryOwnersListFrom}"  action="backButton" value="Επιστροφή" />
-						<rich:spacer width="20"/>
-						<s:button action="endButton" value="Τέλος Ενέργειας" /> 
+							actionListener="#{schoolList.first}">
+							<s:defaultAction />
+						</h:commandButton>
+						<s:button disabled="#{empty preparatoryOwnersListFrom}"
+							action="backButton" value="Επιστροφή" />
+						<rich:spacer width="20" />
+						<s:button action="endButton" value="Τέλος Ενέργειας" />
 					</s:div>
-					
-					<rich:dataTable id="schoolList" value="#{schoolList.resultList}" var="school"
-						rows="15" border="0"
+					<h:panelGroup>
+						<rich:spacer height="5" />
+						<rich:separator height="2" lineType="dashed" />
+						<rich:spacer height="5" />
+					</h:panelGroup>
+					<rich:dataTable id="schoolList" value="#{schoolList.resultList}"
+						var="school" rows="15" border="0"
 						onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
 						onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
 						width="100%">
@@ -68,9 +90,7 @@
 
 						<rich:column>
 							<f:facet name="header">Τίτλος Μονάδας</f:facet>
-							<a4j:commandLink action="school-selected">
 								<h:outputText value="#{school.title}" />
-							</a4j:commandLink>
 						</rich:column>
 						<rich:column>
 							<f:facet name="header">Μόρια</f:facet>
@@ -85,6 +105,17 @@
 							<h:outputText
 								value="#{school.address.address} #{school.address.number} - #{school.address.postCode} - #{school.address.city}" />
 						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Ενέργεια" />
+							</f:facet>
+							<rich:toolBar itemSeparator="line">
+							<s:link rendered="#{selectSchoolTo!=null}" value="Επιλογή" view="#{selectSchoolTo}.xhtml">
+								<f:param name="schoolID" value="#{school.id}" />
+								<f:param name="from" value="/school/select-school" />
+							</s:link>
+						</rich:toolBar>
+						</rich:column>
 
 
 						<f:facet name="footer">
@@ -94,7 +125,7 @@
 
 					</rich:dataTable>
 
-					
+
 				</h:panelGrid>
 			</h:form>
 
