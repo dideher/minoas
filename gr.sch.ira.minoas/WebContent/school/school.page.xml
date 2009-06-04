@@ -2,10 +2,10 @@
 <page login-required="true" xmlns="http://jboss.com/products/seam/pages"
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.1.xsd">
   <begin-conversation nested="true" flush-mode="manual"/> 
-  <description>Λίστα Σχολικών Μονάδων</description>
+  <description>Καρτέλα Σχολικής Μονάδας (#{school.title})</description>
   
-  <param name="selectSchoolFrom" />
-  <param name="selectSchoolTo" />
+  <param name="from" />
+  <param name="schoolID" value="#{schoolHome.id}" />
   
   <!-- navigation rules -->
   <navigation from-action="select">

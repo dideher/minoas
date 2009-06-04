@@ -1,4 +1,4 @@
-#Thu May 28 12:23:41 EEST 2009
+#Thu Jun 04 13:35:34 EEST 2009
 eclipse.preferences.version=1
 encoding//WebContent/components/employee/employeeList.xhtml=UTF-8
 encoding//WebContent/components/general/address.xhtml=UTF-8
@@ -23,6 +23,7 @@ encoding//WebContent/new-secondment.xhtml=UTF-8
 encoding//WebContent/roleGroups.xhtml=UTF-8
 encoding//WebContent/roles.xhtml=UTF-8
 encoding//WebContent/school.xhtml=UTF-8
+encoding//WebContent/school/school.xhtml=UTF-8
 encoding//WebContent/schoolYears.xhtml=UTF-8
 encoding//WebContent/schools.xhtml=UTF-8
 encoding//WebContent/secondmentSearchResult.xhtml=UTF-8

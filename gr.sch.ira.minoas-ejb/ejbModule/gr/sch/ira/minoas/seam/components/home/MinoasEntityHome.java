@@ -29,6 +29,7 @@ import java.lang.reflect.ParameterizedType;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Logger;
+import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.framework.EntityHome;
 import org.jboss.seam.log.Log;
 import org.jboss.seam.security.Identity;
@@ -48,6 +49,8 @@ public abstract class MinoasEntityHome<E> extends EntityHome {
 
 	@In(required = false)
 	private Identity identity;
+	
+	@In(required=false) FacesMessages facesMessages;
 
 	@Logger
 	private Log logger;

@@ -90,11 +90,13 @@
 				<h:outputText value="#{employeeUtil.prettyFormat(activeEmployee)}" />
 			</rich:toolBarGroup>
 			<rich:toolBarGroup location="right">
+				<h:form id="conveform">
 				<h:outputText value="Τρέχουσες Διαδικασίες : " />
 				<h:selectOneMenu value="#{switcher.conversationIdOrOutcome}">
 					<f:selectItems value="#{switcher.selectItems}" />
 				</h:selectOneMenu>
 				<h:commandButton action="#{switcher.select}" value="Αλλαγή" />
+				</h:form>
 			</rich:toolBarGroup>
 		</rich:toolBar>
 	</s:div>

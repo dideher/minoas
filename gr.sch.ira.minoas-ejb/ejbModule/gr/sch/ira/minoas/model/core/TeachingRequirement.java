@@ -55,6 +55,23 @@ public class TeachingRequirement extends BaseModel {
 	@JoinColumn(name = "SPECIALIZATION_ID", nullable=false)
 	private Specialization specialization;
 
+	@Basic
+	@Column(name="COMMENT", nullable=true, length=255)
+	private String comment;
+	/**
+	 * @return the comment
+	 */
+	public String getComment() {
+		return comment;
+	}
+
+	/**
+	 * @param comment the comment to set
+	 */
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
 	/**
 	 * 
 	 */

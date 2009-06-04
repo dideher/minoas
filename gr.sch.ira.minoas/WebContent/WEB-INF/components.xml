@@ -128,6 +128,10 @@
      </framework:restrictions>
    </framework:entity-query>
    
+   <!-- Teaching Requirement -->
+   
+   <component name="exampleTeachingRequirement" class="gr.sch.ira.minoas.model.core.TeachingRequirement" scope="conversation" />
+   
          
    <!-- For use with jBPM pageflow or process management -->
    
@@ -147,13 +151,7 @@
        </bpm:pageflow-definitions>
    </bpm:jbpm>
    
-   <theme:theme-selector cookie-enabled="true">
-       <theme:available-themes>
-           <value>default</value>
-           <value>accessible</value>
-           <value>printable</value>
-       </theme:available-themes>
-   </theme:theme-selector>
+ 
    
 
 </components>

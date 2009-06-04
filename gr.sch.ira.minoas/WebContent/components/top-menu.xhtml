@@ -14,34 +14,25 @@
 			<rich:dropDownMenu disabled="#{!(identity.loggedIn and (s:hasRole('ADMIN')))}">
 				<f:facet name="label">
 					<h:panelGroup>
-						<h:outputText value="Κενά" />
+						<h:outputText value="Διαχείρηση Σχολικών Μονάδων" />
 					</h:panelGroup>
 				</f:facet>
-				<rich:menuGroup value="Διαχείρηση Ωρών Διδασκαλίας">
+				
+				<rich:menuItem submitMode="none">
+						<s:link value="Προβολή Κατάστασης" view="/school/select-school.xhtml">
+							<f:param name="selectSchoolFrom" value="/home" />
+							<f:param name="selectSchoolTo" value="/school/school" />
+						</s:link>
+					</rich:menuItem>
 					<rich:menuItem submitMode="none">
 						<s:link value="Ώρες Διδασκαλίας Σχολικής Μονάδας" view="/school/select-school.xhtml">
 							<f:param name="selectSchoolFrom" value="/home" />
 							<f:param name="selectSchoolTo" value="/teachingResources/school-teaching-resources" />
 						</s:link> 
 					</rich:menuItem>
-				</rich:menuGroup>
 				
 			</rich:dropDownMenu>
 			
-			<rich:dropDownMenu disabled="#{!(identity.loggedIn and (s:hasRole('ADMIN')))}">
-				<f:facet name="label">
-					<h:panelGroup>
-						<h:outputText value="Σχολική Μονάδα" />
-					</h:panelGroup>
-				</f:facet>
-				<rich:menuGroup value="Καρτέλα Μονάδας">
-					<rich:menuItem value="Προβολή Καρτέλας" action="#{conversationHelper.beginSchoolRecordConversation}" submitMode="ajax" ajaxSingle="true" immediate="true"/>
-					<rich:menuItem value="Επιλογή άλλης Μονάδας" action="select-other-school" disabled="#{activeSchool eq null}" submitMode="ajax" ajaxSingle="true" />
-					<rich:menuSeparator />
-					<rich:menuItem value="Κλείσιμο Καρτέλας" action="close-school-record" disabled="#{activeSchool eq null}" submitMode="ajax" ajaxSingle="true" />
-				</rich:menuGroup>
-			</rich:dropDownMenu>	
-				
 			<rich:dropDownMenu disabled="#{!(identity.loggedIn and (s:hasRole('ADMIN') or s:hasRole('VIEW_PREPARATORY')))}">
 				<f:facet name="label">
 					<h:panelGroup>

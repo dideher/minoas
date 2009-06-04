@@ -155,6 +155,11 @@ a.menu_link:hover {
 	color: black;
 }
 
+.vertTop {
+        vertical-align:top;
+}
+
+
 /* --------------------------------- */
 /* MESSAGE BOX CLEAN	serie	  	 */
 /* --------------------------------- */
