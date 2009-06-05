@@ -41,7 +41,7 @@ public class SchoolHome extends MinoasEntityHome<School> {
 	 * @see org.jboss.seam.framework.Home#getInstance()
 	 */
 	@Override
-	@Factory(value = "school")
+	@Factory(value = "school", scope=ScopeType.PAGE)
 	public School getInstance() {
 		return (School) super.getInstance();
 	}
