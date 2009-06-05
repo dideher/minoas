@@ -25,7 +25,15 @@
 					<ui:param name="activeSchool" value="#{school}" />
 				</ui:include>
 			</rich:simpleTogglePanel>
-
+			
+			<h:panelGroup>
+					<s:div styleClass="actionButtons">
+						<s:button disabled="#{empty from}"
+							action="backButton" value="Επιστροφή" />
+						<rich:spacer width="20" />
+						<s:button action="endButton" value="Τέλος Ενέργειας" />
+					</s:div>
+				</h:panelGroup>
 
 
 			<rich:tabPanel mode="Ajax">
@@ -33,15 +41,16 @@
 					<f:facet name="label">
 						<h:outputText value="Δύναμη Καθηγητών" />
 					</f:facet>
-					<ui:include src="/components/school/schoolEmployeesList.xhtml" />
+					<!-- <ui:include src="/components/school/schoolEmployeesList.xhtml" />  -->
 				</rich:tab>
 				<rich:tab>
 					<f:facet name="label">
 						<h:outputText value="Διδακτικές Ώρες" />
 					</f:facet>
 
-					<ui:include
-						src="/components/school/schoolTeachingRequirementsList.xhtml" />
+					<ui:include src="/school/teaching-resources.xhtml">
+					</ui:include>
+					
 				</rich:tab>
 			</rich:tabPanel>
 

@@ -19,20 +19,34 @@
 				</f:facet>
 				
 				<rich:menuItem submitMode="none">
-						<s:link value="Προβολή Κατάστασης" view="/school/select-school.xhtml">
-							<f:param name="selectSchoolFrom" value="/home" />
-							<f:param name="selectSchoolTo" value="/school/school" />
+						<s:link value="Καρτέλα Σχολικής Μονάδας" view="/school/select-school.xhtml">
+							<f:param name="from" value="/home" />
+							<f:param name="to" value="/school/school" />
 						</s:link>
 					</rich:menuItem>
 					<rich:menuItem submitMode="none">
 						<s:link value="Ώρες Διδασκαλίας Σχολικής Μονάδας" view="/school/select-school.xhtml">
-							<f:param name="selectSchoolFrom" value="/home" />
-							<f:param name="selectSchoolTo" value="/teachingResources/school-teaching-resources" />
+							<f:param name="from" value="/home" />
+							<f:param name="to" value="/teachingResources/school-teaching-resources" />
 						</s:link> 
 					</rich:menuItem>
 				
 			</rich:dropDownMenu>
 			
+			<rich:dropDownMenu disabled="#{!(identity.loggedIn and (s:hasRole('ADMIN')))}">
+				<f:facet name="label">
+					<h:panelGroup>
+						<h:outputText value="Διαχείρηση Προσωπικού" />
+					</h:panelGroup>
+				</f:facet>
+					<rich:menuItem submitMode="none">
+						<s:link value="Καρτέλα Προσωπικού" view="/employee/select-employee.xhtml">
+							<f:param name="from" value="/home" />
+							<f:param name="to" value="/employee/employee" />
+						</s:link> 
+					</rich:menuItem>
+				
+			</rich:dropDownMenu>
 			<rich:dropDownMenu disabled="#{!(identity.loggedIn and (s:hasRole('ADMIN') or s:hasRole('VIEW_PREPARATORY')))}">
 				<f:facet name="label">
 					<h:panelGroup>
@@ -54,55 +68,6 @@
 					<rich:menuItem submitMode="none">
 						<s:link value="Προβολή Ιδιοκτητών" view="/preparatory/preparatory-owners-list.xhtml"></s:link>
 					</rich:menuItem>
-				</rich:menuGroup>
-			</rich:dropDownMenu>
-			
-			<rich:dropDownMenu disabled="#{!(identity.loggedIn and (s:hasRole('ADMIN')))}">
-				<f:facet name="label">
-					<h:panelGroup>
-						<h:outputText value="Προσωπικό" />
-					</h:panelGroup>
-				</f:facet>
-				<rich:menuGroup value="Καρτέλα Εκπαιδευτικού">
-					<rich:menuItem value="Προβολή Καρτέλας ..." action="#{conversationHelper.beginEmployeeRecordConversation}" ajaxSingle="true" submitMode="ajax"/>
-					<rich:menuItem value="Επιλογή άλλου Εκπαιδευτικού ..."  action="select-other-employee" disabled="#{activeEmployee eq null}" ajaxSingle="true" submitMode="ajax" />
-					<rich:menuSeparator />
-					<rich:menuItem value="Κλείσιμο Καρτέλας" action="close-employee-record" disabled="#{activeEmployee eq null}" submitMode="ajax" ajaxSingle="true" />
-				</rich:menuGroup>
-				<rich:menuGroup value="Αποσπάσεις">
-					<rich:menuItem value="Εισαγωγή" submitMode="ajax" ajaxSingle="true" action="#{conversationHelper.beginNewSecondmentConversation}" />
-				</rich:menuGroup>
-			</rich:dropDownMenu>
-			<rich:dropDownMenu disabled="#{!(identity.loggedIn and (s:hasRole('ADMIN')))}">
-				<f:facet name="label">
-					<h:panelGroup>
-						<h:outputText value="Αποσπάσεις" />
-					</h:panelGroup>
-				</f:facet>
-				<rich:menuItem submitMode="none" ajaxSingle="true">
-					<s:link propagation="nest" pageflow="new-secondment">
-							<h:outputText value="Εισαγωγή Νέας Απόσπασης" />
-					</s:link>
-				</rich:menuItem>
-				
-				<rich:menuGroup value="Προβολές">
-					<rich:menuItem submitMode="none">
-						<s:link propagation="nest" pageflow="active-secondments">
-							<h:outputText value="Ενεργές Αποσπάσεις" />
-						 </s:link>
-					</rich:menuItem>
-					<rich:menuSeparator />
-					<rich:menuItem submitMode="none">
-						<s:link propagation="nest" pageflow="school-incoming-secondments">
-							<h:outputText value="Αποσπάσεις Σε Σχολική Μονάδα" />
-						 </s:link>
-						 </rich:menuItem>
-					<rich:menuItem submitMode="none" value="Αποσπάσεις Απο Σχολική Μονάδα">
-					</rich:menuItem>
-					<rich:menuSeparator />
-					<rich:menuItem value="Αποσπάσεις Εντός ΠΥΣΔΕ" disabled="true" />
-					<rich:menuItem value="Αποσπάσεις σε άλλο ΠΥΣΔΕ" disabled="true" />
-					<rich:menuItem value="Αποσπάσεις στο Ηράκλειο" disabled="true" />
 				</rich:menuGroup>
 			</rich:dropDownMenu>
 			<rich:dropDownMenu rendered="#{s:hasRole(ADMIN)} " >

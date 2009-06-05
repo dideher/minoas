@@ -1,0 +1,172 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<ui:composition template="/layout/simple-beauty-template.xhtml">
+	<ui:define name="body">
+
+		<rich:panel headerClass="pagetitle" bodyClass="post">
+			<f:facet name="header">
+				<h:outputText value="Αναζήτηση Προσωπικού" />
+			</f:facet>
+			<br />
+			<h:outputText
+				value="Πριν συνεχίσετε, πρέπει να επιλέξετε τον εργαζόμενο που σας ενδιαφέρει απο την παρακάτω λίστα. Για την διευκόλυνσή σας, μπορείτε να
+				φιλτράρετε την λίστα με τα διαθέσιμα φίλτρα." />
+			<br />
+			<br />
+
+
+			<h:form id="employeeSearchForm">
+				<h:panelGrid columns="1" width="100%">
+					<h:panelGroup>
+						<h:panelGrid columns="5">
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Επώνυμο : " />
+								</ui:define>
+								<h:inputText value="#{exampleEmployee.lastName}" size="12" />
+							</s:decorate>
+
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Όνομα : " />
+								</ui:define>
+								<h:inputText value="#{exampleEmployee.firstName}" size="12" />
+							</s:decorate>
+
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Ειδικότητα : " />
+								</ui:define>
+								<h:inputText id="specializationFilter"
+									value="#{exampleEmployee.lastSpecialization}"
+									styleClass="fieldValueText" converter="specializationConverter">
+									<rich:suggestionbox height="100" width="250"
+										for="specializationFilter" var="a_spec"
+										suggestionAction="#{specializationSuggester.suggest}">
+										<f:facet name="nothingLabel">
+											<h:outputText value="Άγνωστη Ειδικότητα" />
+										</f:facet>
+										<h:column>
+											<h:outputText value="#{a_spec.id}" />
+										</h:column>
+										<h:column>
+											<h:outputText value="#{a_spec.title}" />
+										</h:column>
+									</rich:suggestionbox>
+								</h:inputText>
+							</s:decorate>
+
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Σε ενεργεία : " />
+								</ui:define>
+								<h:selectBooleanCheckbox value="#{employeeCriteria.onlyActive}" />
+							</s:decorate>
+						</h:panelGrid>
+					</h:panelGroup>
+
+					<s:div styleClass="actionButtons">
+						<h:commandButton id="searchButton" value="Αναζήτηση"
+							actionListener="#{employeeListQuery.first}">
+							<s:defaultAction />
+						</h:commandButton>
+						<s:button disabled="#{empty preparatoryOwnersListFrom}"
+							action="backButton" value="Επιστροφή" />
+						<rich:spacer width="20" />
+						<s:button action="endButton" value="Τέλος Ενέργειας" />
+					</s:div>
+					<h:panelGroup>
+						<rich:spacer height="5" />
+						<rich:separator height="2" lineType="dashed" />
+						<rich:spacer height="5" />
+					</h:panelGroup>
+					<rich:dataTable id="employeeList"
+						value="#{employeeListQuery.resultList}" var="employee" rows="15"
+						border="0" onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+						onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+						width="100%">
+						<f:facet name="header">
+							<h:outputLabel value="Λίστα Διαθέσιμου Προσωπικού" />
+						</f:facet>
+
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Επώνυμο" />
+							</f:facet>
+							<h:outputText value="#{employee.lastName}" />
+						</rich:column>
+
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Όνομα" />
+							</f:facet>
+							<h:outputText value="#{employee.firstName}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Όνομα Πατρός" />
+							</f:facet>
+							<h:outputText value="#{employee.fatherName}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Ειδικότητα" />
+							</f:facet>
+							<h:outputText id="specializationText"
+								value="#{employee.lastSpecialization.id}">
+								<rich:toolTip for="specializationText"
+									value="#{employee.lastSpecialization.title}" />
+							</h:outputText>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Ημ/νια Γεννήσεως" />
+							</f:facet>
+							<h:outputText value="#{employee.dateOfBirth}">
+								<s:convertDateTime pattern="dd-MM-yyyy" />
+							</h:outputText>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Ενέργεια" />
+							</f:facet>
+							<rich:toolBar itemSeparator="line">
+								<s:link rendered="#{!empty to}" value="Προβολή"
+									view="#{to}.xhtml">
+									<f:param name="employeeID" value="#{employee.id}" />
+									<f:param name="from" value="/employee/select-employee" />
+								</s:link>
+							</rich:toolBar>
+						</rich:column>
+
+
+						<f:facet name="footer">
+							<rich:datascroller align="left" for="employeeList" maxPages="20"
+								renderIfSinglePage="false" id="sc1" />
+						</f:facet>
+
+					</rich:dataTable>
+
+
+				</h:panelGrid>
+			</h:form>
+
+		</rich:panel>
+
+
+
+
+	</ui:define>
+</ui:composition>
+</html>

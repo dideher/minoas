@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich">
+
+<ui:component>
+	<h:form>
+		<h:panelGrid columns="1">
+
+	<h:outputText value="Στον παρακάτω πίνακα εμφανίζονται οι απαιτήσεις σε διδακτικές ώρες, ανα ειδικότητα, της σχολικής μονάδας κατά το τρέχων σχολικό έτος." />
+			<rich:dataTable id="resourcesTable" var="requirement" rows="10"
+				value="#{school.teachingRequirements}">
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="Ειδικότητα" />
+					</f:facet>
+
+					<h:outputText value="#{requirement.specialization.id}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="Λεκτικό Ειδικότητας" />
+					</f:facet>
+
+					<h:outputText value="#{requirement.specialization.title}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="Ώρες Διδασκαλίας" />
+					</f:facet>
+					<h:outputText value="#{requirement.hours}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="Προαιρετικά Σχόλια" />
+					</f:facet>
+					<h:outputText value="#{requirement.comment}" />
+				</rich:column>
+				<f:facet name="footer">
+					<rich:datascroller for="resourcesTable">
+						<f:facet name="first">
+							<h:outputText value="Πρώτη" />
+						</f:facet>
+						<f:facet name="last">
+							<h:outputText value="Τελευταία" />
+						</f:facet>
+					</rich:datascroller>
+
+				</f:facet>
+			</rich:dataTable>
+		</h:panelGrid>
+	</h:form>
+</ui:component>
+
+
+</html>

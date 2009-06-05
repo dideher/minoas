@@ -133,6 +133,22 @@
    <component name="exampleTeachingRequirement" class="gr.sch.ira.minoas.model.core.TeachingRequirement" scope="conversation" />
    
          
+   <!-- Employee Components -->
+   
+  <component name="exampleEmployee" class="gr.sch.ira.minoas.model.employee.Employee" />
+   
+   <framework:entity-query name="employeeListQuery" max-results="100">
+    <framework:ejbql>SELECT e FROM Employee e</framework:ejbql>
+    <framework:order>e.lastName asc, e.firstName asc</framework:order>
+    <framework:restrictions>
+      <value>lower(e.lastName) like lower(concat('%', concat(#{exampleEmployee.lastName},'%')))</value>
+      <value>lower(e.firstName) like lower(concat('%', concat(#{exampleEmployee.firstName},'%')))</value>
+      <value>e.lastSpecialization = #{exampleEmployee.lastSpecialization}</value>
+      <value>e.active = #{employeeCriteria.onlyActive}</value>
+    </framework:restrictions>
+   </framework:entity-query>
+   
+   
    <!-- For use with jBPM pageflow or process management -->
    
    <bpm:jbpm >

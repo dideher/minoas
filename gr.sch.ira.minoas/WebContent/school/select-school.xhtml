@@ -110,7 +110,7 @@
 								<h:outputText value="Ενέργεια" />
 							</f:facet>
 							<rich:toolBar itemSeparator="line">
-							<s:link rendered="#{selectSchoolTo!=null}" value="Επιλογή" view="#{selectSchoolTo}.xhtml">
+							<s:link rendered="#{to!=null}" value="Επιλογή" view="#{to}.xhtml">
 								<f:param name="schoolID" value="#{school.id}" />
 								<f:param name="from" value="/school/select-school" />
 							</s:link>
