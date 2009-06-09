@@ -148,6 +148,29 @@
     </framework:restrictions>
    </framework:entity-query>
    
+   <!-- Employment Components -->
+   
+   
+   <framework:entity-query name="regularEmploymentsListQuery" max-results="200">
+    <framework:ejbql>SELECT e FROM Employment e WHERE e.type='REGULAR'</framework:ejbql>
+    <framework:order>e.specialization.id asc, e.employee.lastName asc</framework:order>
+    <framework:restrictions>
+      <value>e.active = #{regularEmploymentCriteria.onlyActive}</value>
+      <value>e.school = #{regularEmploymentCriteria.school}</value>
+      <value>e.schoolYear.id = #{regularEmploymentCriteria.schoolYear.id}</value>
+    </framework:restrictions> 
+   </framework:entity-query>
+   
+   <framework:entity-query name="deputyEmploymentsListQuery" max-results="200">
+    <framework:ejbql>SELECT e FROM Employment e WHERE e.type='DEPUTY'</framework:ejbql>
+    <framework:order>e.specialization.id asc, e.employee.lastName asc</framework:order>
+    <framework:restrictions>
+      <value>e.active = #{deputyEmploymentCriteria.onlyActive}</value>
+      <value>e.school = #{deputyEmploymentCriteria.school}</value>
+      <value>e.schoolYear.id = #{deputyEmploymentCriteria.schoolYear.id}</value>
+    </framework:restrictions> 
+   </framework:entity-query>
+   
    
    <!-- For use with jBPM pageflow or process management -->
    

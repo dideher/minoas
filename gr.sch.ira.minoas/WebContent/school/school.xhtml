@@ -42,6 +42,45 @@
 						<h:outputText value="Δύναμη Καθηγητών" />
 					</f:facet>
 					<!-- <ui:include src="/components/school/schoolEmployeesList.xhtml" />  -->
+					<h:panelGrid columns="1">
+					<h:outputText value="Στις παρακάτω καρτέλες εμφανίζεται η δύναμη της σχολικής μονάδας, σε εκπαιδευτικό προσωπικό, κατά την τρέχουσα σχολική χρονία (#{activeSchoolYear.title}). " />
+					<rich:separator  lineType="dashed" height="2"/>
+					
+					<rich:tabPanel mode="Ajax">
+						<rich:tab>
+							<f:facet name="label">
+							<h:outputText value="Οργανικά Ανοίκωντες" />
+							</f:facet>
+							<ui:include src="/school/school-regular-employee.xhtml">
+								
+								<ui:param name="school" value="#{school}" />
+							</ui:include>
+						</rich:tab>
+						<rich:tab disabled="true">
+							<f:facet name="label">
+							<h:outputText value="Με Απόσπαση" />
+							</f:facet>
+						</rich:tab>
+						<rich:tab disabled="true">
+							<f:facet name="label">
+							<h:outputText value="Με Διάθεση" />
+							</f:facet>
+						</rich:tab>
+						<rich:tab>
+							<f:facet name="label">
+							<h:outputText value="Αναπληρωτές" />
+							</f:facet>
+							<ui:include src="/school/school-deputy-employee.xhtml">
+								
+							</ui:include>
+						</rich:tab>
+						<rich:tab disabled="true">
+							<f:facet name="label">
+							<h:outputText value="Ωρομίσθιοι" />
+							</f:facet>
+						</rich:tab>
+					</rich:tabPanel>
+					</h:panelGrid>
 				</rich:tab>
 				<rich:tab>
 					<f:facet name="label">
