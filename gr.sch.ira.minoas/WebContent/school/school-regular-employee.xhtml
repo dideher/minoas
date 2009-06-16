@@ -1,18 +1,19 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:rich="http://richfaces.org/rich"
-      xmlns:s="http://jboss.com/products/seam/taglib"
-      xmlns:a4j="http://richfaces.org/a4j">
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:a4j="http://richfaces.org/a4j">
 
 <ui:component>
 	<h:form>
-			
+
 		<rich:dataTable id="regularEmploymentsList" var="regularEmployment"
-			value="#{regularEmploymentsListQuery.resultList}" sortMode="multi" border="0"
-			rows="20" onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+			value="#{regularEmploymentsListQuery.resultList}" sortMode="multi"
+			border="0" rows="20"
+			onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
 			onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
 			width="100%">
 			<f:facet name="header">
@@ -21,17 +22,18 @@
 			</f:facet>
 			<rich:column>
 				<f:facet name="header"></f:facet>
-				<h:graphicImage rendered="#{employmentUtil.hasSecondment(regularEmployment)}"  value="/img/apospasi.png" height="24" width="24"/>
+				<h:graphicImage
+					rendered="#{employmentUtil.hasSecondment(regularEmployment)}"
+					value="/img/apospasi.png" height="24" width="24" />
 			</rich:column>
 			<rich:column>
 				<f:facet name="header">ΑΜ</f:facet>
-				<h:outputText value="#{employeeUtil.getRegistryID(regularEmployment.employee)}" />
+				<h:outputText
+					value="#{employeeUtil.getRegistryID(regularEmployment.employee)}" />
 			</rich:column>
 			<rich:column>
 				<f:facet name="header">Επώνυμο</f:facet>
-				<a4j:commandLink action="regular-employment-selected">
-					<h:outputText value="#{regularEmployment.employee.lastName}" />
-				</a4j:commandLink>
+				<h:outputText value="#{regularEmployment.employee.lastName}" />
 			</rich:column>
 			<rich:column>
 				<f:facet name="header">Όνομα</f:facet>
@@ -80,6 +82,18 @@
 					<h:outputText styleClass="fieldValueText"
 						value="#{regularEmployment.secondment.targetUnit.title}" />
 				</h:panelGroup>
+			</rich:column>
+
+			<rich:column>
+				<f:facet name="header">
+					<h:outputText value="Ενέργεια" />
+				</f:facet>
+				<rich:toolBar itemSeparator="line">
+					<s:link value="Προβολή" view="/employee/employee.xhtml">
+						<f:param name="employeeID" value="#{regularEmployment.employee.id}" />
+						<f:param name="from" value="/school/school" />
+					</s:link>
+				</rich:toolBar>
 			</rich:column>
 
 			<f:facet name="footer">

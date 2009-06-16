@@ -171,6 +171,14 @@
     </framework:restrictions> 
    </framework:entity-query>
    
+   <framework:entity-query name="employeeRegularEmploymentsListQuery" max-results="200" scope="page">
+    <framework:ejbql>SELECT e FROM Employment e WHERE e.type='REGULAR'</framework:ejbql>
+    <framework:order>e.schoolYear asc, e.established</framework:order>
+    <framework:restrictions>
+      <value>e.employee = #{employee}</value>
+    </framework:restrictions> 
+   </framework:entity-query>
+   
    
    <!-- For use with jBPM pageflow or process management -->
    

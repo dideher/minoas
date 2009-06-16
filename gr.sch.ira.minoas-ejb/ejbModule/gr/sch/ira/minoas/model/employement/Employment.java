@@ -133,7 +133,7 @@ public class Employment extends AbstractArchivableEntity {
 	/**
 	 * @return the employee
 	 */
-	public Person getEmployee() {
+	public Employee getEmployee() {
 		return employee;
 	}
 

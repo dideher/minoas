@@ -33,12 +33,27 @@
 					</h:panelGrid>
 				</h:panelGroup>
 				<h:panelGroup>
-					<s:div styleClass="actionButtons">
-						<s:button disabled="#{empty from}"
+				<rich:toolBar itemSeparator="line">
+					<rich:toolBarGroup location="left">
+						<s:link disabled="#{empty from}"
 							action="backButton" value="Επιστροφή" />
-						<rich:spacer width="20" />
-						<s:button action="endButton" value="Τέλος Ενέργειας" />
-					</s:div>
+						<s:link action="endButton" value="Τέλος Ενέργειας" />
+					</rich:toolBarGroup>
+					<s:link value="Δια. Οργανικής Θέσης" disabled="#{!employeeHome.hasRegularEmployment()}" view="/employee/regular-employment.xhtml">
+						<f:param name="from" value="/employee/employee" />
+						<f:param name="employmentID" value="#{employee.currentEmployment.id}" />
+					</s:link>
+					<s:link value="Δια. Απόσπασεωνς">
+						<ui:param name="from" value="/employee/employee" />
+					</s:link>
+					<s:link value="Δια. Διαθέσεων">
+						<ui:param name="from" value="/employee/employee" />
+					</s:link>
+					<s:link value="Δια. Αδειών">
+						<ui:param name="from" value="/employee/employee" />
+					</s:link>
+				</rich:toolBar>
+				
 				</h:panelGroup>
 				<rich:simpleTogglePanel switchType="AJAX">
 					<f:facet name="header">
