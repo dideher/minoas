@@ -40,12 +40,18 @@
 					</h:panelGroup>
 				</f:facet>
 					<rich:menuItem submitMode="none">
-						<s:link value="Καρτέλα Προσωπικού" view="/employee/select-employee.xhtml">
+						<s:link value="Προβολή Καρτέλας" view="/employee/select-employee.xhtml">
 							<f:param name="from" value="/home" />
 							<f:param name="to" value="/employee/employee" />
 						</s:link> 
 					</rich:menuItem>
-				
+					<rich:menuItem submitMode="none">
+						<s:link value="Διαχείρηση Οργανικής Θέσης" view="/employee/select-employee.xhtml">
+							<f:param name="from" value="/home" />
+							<f:param name="to" value="/employee/regular-employment-management" />
+						</s:link> 
+					</rich:menuItem>
+					
 			</rich:dropDownMenu>
 			<rich:dropDownMenu disabled="#{!(identity.loggedIn and (s:hasRole('ADMIN') or s:hasRole('VIEW_PREPARATORY')))}">
 				<f:facet name="label">

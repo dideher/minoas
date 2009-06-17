@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<ui:composition template="/layout/simple-beauty-template.xhtml">
+	<ui:define name="body">
+		<rich:panel>
+			<f:facet name="header">
+				<h:outputText
+					value="Διαχείρηση Οργανική Θέσης του/της #{employeeUtil.prettyFormat(employee)}" />
+			</f:facet>
+
+			<h:form>
+				<h:panelGrid columns="1">
+
+
+					<rich:dataTable id="employeeRegularEmploymentList"
+						value="#{employeeRegularEmploymentsListQuery.resultList}"
+						var="_employment" rows="15" border="0"
+						onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+						onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+						width="100%">
+						<f:facet name="header">
+							<h:outputLabel value="Ιστορικό Οργανικών Θέσεων Εκπαιδευτικού" />
+						</f:facet>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Σχολική Χρονία" />
+							</f:facet>
+							<h:outputText value="#{_employment.schoolYear.title}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Σχολική Μονάδα" />
+							</f:facet>
+							<h:outputText value="#{_employment.school.title}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Ημ/νια Έναρξης" />
+							</f:facet>
+							<h:outputText value="#{_employment.established}">
+								<s:convertDateTime pattern="dd-MM-yyyy" />
+							</h:outputText>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Ημ/νια Λήξης" />
+							</f:facet>
+							<h:outputText value="#{_employment.terminated}">
+								<s:convertDateTime pattern="dd-MM-yyyy" />
+							</h:outputText>
+						</rich:column>
+						
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Ειδικότητα" />
+							</f:facet>
+							<h:outputText value="#{_employment.specialization.id}" />
+						</rich:column>
+
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Υποχ. Ωράριο" />
+							</f:facet>
+							<h:outputText value="#{_employment.mandatoryWorkingHours}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Πραγ. Ωράριο" />
+							</f:facet>
+							<h:outputText value="#{_employment.finalWorkingHours}" />
+						</rich:column>
+
+
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Ενέργεια" />
+							</f:facet>
+							<rich:toolBar itemSeparator="line">
+								<s:link id="modifyEmployment" value="Τροποποίηση" rendered="#{_employment.active}"
+									view="/employee/modify-regular-employment.xhtml">
+									<f:param name="employmentID" value="#{_employment.id}" />
+									<f:param name="from" value="/employee/regular-employment-management" />
+								</s:link>
+
+							</rich:toolBar>
+						</rich:column>
+					</rich:dataTable>
+
+				</h:panelGrid>
+			</h:form>
+		</rich:panel>
+
+
+
+	</ui:define>
+</ui:composition>
+</html>

@@ -40,13 +40,14 @@ public class EmploymentHome extends MinoasEntityHome<Employment> {
 		new_employment.setInsertedOn(new Date(System.currentTimeMillis()));
 		new_employment.setSpecialization(current_employment.getSpecialization());
 		new_employment.setType(current_employment.getType());
-		
+		new_employment.setModificationReason(current_employment.getModificationReason());
 		getEntityManager().persist(new_employment);
 		
 		getEntityManager().refresh(current_employment);
 		current_employment.setModifiedOn(new Date(System.currentTimeMillis()));
 		current_employment.setSupersededBy(new_employment);
 		current_employment.setActive(Boolean.FALSE);
+		current_employment.setTerminated(new_employment.getEstablished());
 		getEntityManager().flush();
 		
 		 updatedMessage();
@@ -54,15 +55,13 @@ public class EmploymentHome extends MinoasEntityHome<Employment> {
 	      return "updated";
 	}
 
-	/**
-	 * @see org.jboss.seam.framework.Home#setInstance(java.lang.Object)
-	 */
-	@Override
-	public void setInstance(Object instance) {
-		super.setInstance(instance);
-		System.err.println("************************************************ SET INSTANCE");
-	}
+	
 
+	@Transactional
+	public String revert() {
+		getEntityManager().refresh(getInstance());
+		return "reverted";
+	}
 	/**
 	 * @see org.jboss.seam.framework.Home#createInstance()
 	 */
