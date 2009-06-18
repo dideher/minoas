@@ -7,6 +7,7 @@ import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
 
+import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employement.Employment;
 
 /**
@@ -27,6 +28,7 @@ public class EmploymentHome extends MinoasEntityHome<Employment> {
 		 */
 		joinTransaction();
 		Employment current_employment = getInstance();
+		Employee employee = current_employment.getEmployee();
 		Employment new_employment = new Employment();
 		
 		/* clone the employment */
@@ -43,17 +45,24 @@ public class EmploymentHome extends MinoasEntityHome<Employment> {
 		new_employment.setModificationReason(current_employment.getModificationReason());
 		getEntityManager().persist(new_employment);
 		
+		/* get a fresh copy of the current employment */
 		getEntityManager().refresh(current_employment);
+		
+		/* update the current (now old) employment */
+		
 		current_employment.setModifiedOn(new Date(System.currentTimeMillis()));
 		current_employment.setSupersededBy(new_employment);
 		current_employment.setActive(Boolean.FALSE);
 		current_employment.setTerminated(new_employment.getEstablished());
-		getEntityManager().flush();
 		
-		 updatedMessage();
-	      raiseAfterTransactionSuccessEvent();
-	      return "updated";
-	}
+		/* update the employee */
+		employee.setCurrentEmployment(new_employment);
+		employee.setLastSpecialization(new_employment.getSpecialization());
+		employee.setModifiedOn(new Date(System.currentTimeMillis()));
+		
+		
+		return super.update(); 
+	  }
 
 	
 

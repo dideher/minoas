@@ -68,7 +68,7 @@ public abstract class Person extends AbstractArchivableEntity {
 	private Long id;
 
 	@Basic
-	@Column(name = "ID_NUMBER", unique = true, nullable = false, length = 10)
+	@Column(name = "ID_NUMBER", unique = false, nullable = true, length = 10)
 	private String idNumber;
 
 	@Basic
@@ -97,7 +97,7 @@ public abstract class Person extends AbstractArchivableEntity {
 	private Collection<Telephone> telephones = new ArrayList<Telephone>();
 
 	@Basic
-	@Column(name = "VAT_NUMBER", unique = true, nullable=false, length = 10)
+	@Column(name = "VAT_NUMBER", nullable=true, length = 10)
 	private String vatNumber;
 
 	/**
