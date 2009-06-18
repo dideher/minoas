@@ -21,7 +21,9 @@
 
 			<h:form>
 				<h:panelGrid columns="1">
-
+					
+					
+					
 					<h:panelGrid columns="4">
 
 						<s:decorate id="unit" template="/layout/doubleLineEdit.xhtml">
@@ -87,7 +89,7 @@
 							</ui:define>
 							<rich:calendar datePattern="dd/MM/yyyy" style="width:50px"
 								enableManualInput="true" styleClass="fieldValueText"
-								value="#{employment.terminated}" required="true">
+								value="#{employment.terminated}" required="false">
 							</rich:calendar>
 						</s:decorate>
 
@@ -131,7 +133,7 @@
 							
 							<rich:spacer width="10" />
 							<h:commandButton action="#{employmentHome.update}"
-								value="Ανανέωση" rendered="#{employmentHome.managed}"
+								value="Ανανέωση" id="updateButton" rendered="#{employmentHome.managed}"
 								disabled="#{!employment.active}"/>
 								<rich:spacer width="3" />
 							

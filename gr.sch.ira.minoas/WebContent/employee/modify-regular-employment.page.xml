@@ -7,7 +7,7 @@
   <param name="from"/>
   <param name="to" />
   
-  <param name="employmentID" value="#{employmentHome.id}" converterId="javax.faces.Long" required="true"/>
+  <param name="employmentID" value="#{employmentHome.id}" converterId="javax.faces.Long"/>
   <!-- navigation rules -->
   <navigation from-action="endButton">
     <end-conversation />
@@ -20,7 +20,7 @@
     </redirect>
   </navigation>
   
-  <navigation from-action="updated">
+  <navigation from-action="updateButton">
     <redirect view-id="#{empty from ? '/home' : from}.xhtml}">
      
     </redirect>

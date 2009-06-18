@@ -22,83 +22,204 @@
 			<h:form>
 				<h:panelGrid columns="1">
 
+					<h:outputText
+						value="Στον παρακάτω πίνακα εμφανίζεται το ιστορικό όλων των οργανικών θέσεων του εκπαιδευτικού. Μπορείτε να τροποποιήσεται, αν θέλετε, την ενεργή οργανική θέση." />
+					<a4j:outputPanel id="employmentsTable">
+						<rich:dataTable id="employeeRegularEmploymentList"
+							value="#{employeeRegularEmploymentsListQuery.resultList}"
+							var="_employment" rows="15" border="0"
+							onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+							onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+							width="100%">
+							<f:facet name="header">
+								<h:outputLabel value="Ιστορικό Οργανικών Θέσεων Εκπαιδευτικού" />
+							</f:facet>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Σχολική Χρονία" />
+								</f:facet>
+								<h:outputText value="#{_employment.schoolYear.title}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Σχολική Μονάδα" />
+								</f:facet>
+								<h:outputText value="#{_employment.school.title}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Ημ/νια Έναρξης" />
+								</f:facet>
+								<h:outputText value="#{_employment.established}">
+									<s:convertDateTime pattern="dd-MM-yyyy" />
+								</h:outputText>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Ημ/νια Λήξης" />
+								</f:facet>
+								<h:outputText value="#{_employment.terminated}">
+									<s:convertDateTime pattern="dd-MM-yyyy" />
+								</h:outputText>
+							</rich:column>
 
-					<rich:dataTable id="employeeRegularEmploymentList"
-						value="#{employeeRegularEmploymentsListQuery.resultList}"
-						var="_employment" rows="15" border="0"
-						onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
-						onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
-						width="100%">
-						<f:facet name="header">
-							<h:outputLabel value="Ιστορικό Οργανικών Θέσεων Εκπαιδευτικού" />
-						</f:facet>
-						<rich:column>
-							<f:facet name="header">
-								<h:outputText value="Σχολική Χρονία" />
-							</f:facet>
-							<h:outputText value="#{_employment.schoolYear.title}" />
-						</rich:column>
-						<rich:column>
-							<f:facet name="header">
-								<h:outputText value="Σχολική Μονάδα" />
-							</f:facet>
-							<h:outputText value="#{_employment.school.title}" />
-						</rich:column>
-						<rich:column>
-							<f:facet name="header">
-								<h:outputText value="Ημ/νια Έναρξης" />
-							</f:facet>
-							<h:outputText value="#{_employment.established}">
-								<s:convertDateTime pattern="dd-MM-yyyy" />
-							</h:outputText>
-						</rich:column>
-						<rich:column>
-							<f:facet name="header">
-								<h:outputText value="Ημ/νια Λήξης" />
-							</f:facet>
-							<h:outputText value="#{_employment.terminated}">
-								<s:convertDateTime pattern="dd-MM-yyyy" />
-							</h:outputText>
-						</rich:column>
-						
-						<rich:column>
-							<f:facet name="header">
-								<h:outputText value="Ειδικότητα" />
-							</f:facet>
-							<h:outputText value="#{_employment.specialization.id}" />
-						</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Ειδικότητα" />
+								</f:facet>
+								<h:outputText value="#{_employment.specialization.id}" />
+							</rich:column>
 
-						<rich:column>
-							<f:facet name="header">
-								<h:outputText value="Υποχ. Ωράριο" />
-							</f:facet>
-							<h:outputText value="#{_employment.mandatoryWorkingHours}" />
-						</rich:column>
-						<rich:column>
-							<f:facet name="header">
-								<h:outputText value="Πραγ. Ωράριο" />
-							</f:facet>
-							<h:outputText value="#{_employment.finalWorkingHours}" />
-						</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Υποχ. Ωράριο" />
+								</f:facet>
+								<h:outputText value="#{_employment.mandatoryWorkingHours}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Πραγ. Ωράριο" />
+								</f:facet>
+								<h:outputText value="#{_employment.finalWorkingHours}" />
+							</rich:column>
 
 
-						<rich:column>
-							<f:facet name="header">
-								<h:outputText value="Ενέργεια" />
-							</f:facet>
-							<rich:toolBar itemSeparator="line">
-								<s:link id="modifyEmployment" value="Τροποποίηση" rendered="#{_employment.active}"
-									view="/employee/modify-regular-employment.xhtml">
-									<f:param name="employmentID" value="#{_employment.id}" />
-									<f:param name="from" value="/employee/regular-employment-management" />
-								</s:link>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Ενέργεια" />
+								</f:facet>
+								<rich:toolBar itemSeparator="line">
+									<s:link id="modifyEmployment" value="Τροποποίηση"
+										rendered="#{_employment.active}"
+										view="/employee/modify-regular-employment.xhtml">
+										<f:param name="employmentID" value="#{_employment.id}" />
+										<f:param name="from"
+											value="/employee/regular-employment-management" />
+									</s:link>
 
-							</rich:toolBar>
-						</rich:column>
-					</rich:dataTable>
+								</rich:toolBar>
+							</rich:column>
+						</rich:dataTable>
+					</a4j:outputPanel>
+					<h:panelGroup>
 
+						<s:div styleClass="actionButtons">
+							<s:button 
+								view="#{empty from ? '/home' : from}.xhtml}" value="Επιστροφή" />
+						</s:div>
+					</h:panelGroup>
 				</h:panelGrid>
 			</h:form>
+
+			<h:form>
+				<rich:panel>
+					<f:facet name="header">
+						<h:outputText value="Εισαγωγή Νέας Οργανικής Θέσης" />
+					</f:facet>
+
+					<h:panelGrid columns="1">
+
+						<h:outputText
+							value="Με την παρακάτω φόρμα μπορείται να εισάγεται καινούργια οργανική θέση στον εκπαιδευτικό." />
+						<h:panelGrid columns="3">
+
+							<s:decorate id="unit" template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Σχολική Μονάδα Οργανικής" />
+								</ui:define>
+
+								<h:inputText value="#{newRegularEmployment.school}" tabindex="1"
+									required="true" id="schoolTarget" styleClass="fieldValueText"
+									 converter="unitConverter" size="12" maxlength="22">
+									<a4j:support event="onblur" ajaxSingle="true" reRender="unit"
+										bypassUpdates="true" /> 
+
+									<rich:suggestionbox for="schoolTarget" var="schoolUnit"
+										suggestionAction="#{schoolUnitSuggester.suggest}">
+										<f:facet name="nothingLabel">
+											<h:outputText value="Άγνωστη Σχολική Μονάδα" />
+										</f:facet>
+										<h:column>
+											<h:outputText value="#{schoolUnit.title}" />
+										</h:column>
+									</rich:suggestionbox>
+								</h:inputText>
+							</s:decorate>
+
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Ειδικότητα : " />
+								</ui:define>
+								<h:inputText id="specializationFilter"
+									value="#{newRegularEmployment.specialization}" tabindex="2"
+									styleClass="fieldValueText" converter="specializationConverter"
+									size="8" maxlength="8">
+									<rich:suggestionbox height="100" width="250"
+										for="specializationFilter" var="a_spec"
+										suggestionAction="#{specializationSuggester.suggest}">
+										<f:facet name="nothingLabel">
+											<h:outputText value="Άγνωστη Ειδικότητα" />
+										</f:facet>
+										<h:column>
+											<h:outputText value="#{a_spec.id}" />
+										</h:column>
+										<h:column>
+											<h:outputText value="#{a_spec.title}" />
+										</h:column>
+									</rich:suggestionbox>
+								</h:inputText>
+							</s:decorate>
+
+
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Ημ/νια Έναρξης : " />
+								</ui:define>
+								<rich:calendar datePattern="dd/MM/yyyy" style="width:50px"  
+									enableManualInput="true" styleClass="fieldValueText"
+									required="true" value="#{newRegularEmployment.established}">
+								</rich:calendar>
+							</s:decorate>
+
+
+
+
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Υποχρεωτικό Ωράριο : " />
+								</ui:define>
+								<h:inputText tabindex="4"
+									value="#{newRegularEmployment.mandatoryWorkingHours}" size="3"
+									maxlength="3" required="true" />
+							</s:decorate>
+
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Πραγματικό Ωράριο : " />
+								</ui:define>
+								<h:inputText tabindex="5" value="#{newRegularEmployment.finalWorkingHours}"
+									size="3" maxlength="3" required="true" />
+							</s:decorate>
+
+						</h:panelGrid>
+
+						<h:panelGroup>
+
+							<s:div styleClass="actionButtons">
+								<h:commandButton
+									action="#{employeeHome.addNewRegularEmployment(newRegularEmployment)}"
+									value="Εισαγωγή" rendered="#{employeeHome.managed}">
+									<a4j:support event="onclick" reRender="employmentsTable"
+										ajaxSingle="true" />
+								</h:commandButton>
+							</s:div>
+						</h:panelGroup>
+					</h:panelGrid>
+
+				</rich:panel>
+
+			</h:form>
+
 		</rich:panel>
 
 
