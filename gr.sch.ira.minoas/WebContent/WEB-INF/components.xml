@@ -154,6 +154,8 @@
    <component name="newRegularEmployment" class="gr.sch.ira.minoas.model.employement.Employment" scope="page">
     <property name="type">REGULAR</property>
    </component>
+   
+   
      
    <framework:entity-query name="regularEmploymentsListQuery" max-results="200">
     <framework:ejbql>SELECT e FROM Employment e WHERE e.type='REGULAR'</framework:ejbql>
@@ -184,10 +186,16 @@
    </framework:entity-query>
    
 
+    <!-- Secondment Components -->
+  
+   <component name="exampleSecondment" class="gr.sch.ira.minoas.model.employement.Secondment" scope="page" />
+   
+   <component name="newSecondment" class="gr.sch.ira.minoas.model.employement.Secondment" scope="page" />
+   
    <!-- Events -->
     <event type="org.jboss.seam.afterTransactionSuccess.Employee">
-    <action execute="#{employeeRegularEmploymentsListQuery.refresh}"/>
-    <action execute="#{employeeRegularEmploymentsListQuery.getResultList}"/>
+      <action execute="#{employeeRegularEmploymentsListQuery.refresh}"/>
+      <action execute="#{employeeRegularEmploymentsListQuery.getResultList}"/>
    </event>
       
    <!-- For use with jBPM pageflow or process management -->

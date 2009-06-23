@@ -13,6 +13,7 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
@@ -50,6 +51,7 @@ public class School extends Unit {
 	private Character regionCode;
 	
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="school", cascade={ CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
+	@OrderBy("specialization ASC")
 	private Collection<TeachingRequirement> teachingRequirements = new ArrayList<TeachingRequirement>();
 
 	/**

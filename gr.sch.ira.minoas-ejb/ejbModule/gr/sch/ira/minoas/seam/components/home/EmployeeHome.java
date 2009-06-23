@@ -7,11 +7,13 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Out;
 import org.jboss.seam.annotations.Transactional;
 
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
+import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.seam.components.CoreSearching;
 
 /**
@@ -23,7 +25,13 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 
 	@In()
 	private CoreSearching coreSearching;
-
+	
+	@In(create=true, value="newSecondment")
+	@Out
+	private Secondment newSecondment;
+	
+	@In(create=true)
+	private SecondmentHome secondmentHome;
 	/**
 	 * Comment for <code>serialVersionUID</code>
 	 */
@@ -78,6 +86,19 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 		getEntityManager().flush();
 		raiseAfterTransactionSuccessEvent();
 		return "added";
+	}
+	
+	@Transactional
+	public String addNewSecodmentEmployment(Secondment newSecondment) {
+		return "added";
+	}
+	
+	public boolean wire() {
+		Employee employee = getInstance();
+		if(newSecondment!=null) {
+			newSecondment.setSourceUnit(employee.getCurrentEmployment().getSchool());
+		}
+		return true;
 	}
 
 }

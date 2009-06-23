@@ -1,0 +1,269 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<ui:composition template="/layout/simple-beauty-template.xhtml">
+	<ui:define name="body">
+		<rich:panel>
+			<f:facet name="header">
+				<h:outputText
+					value="Διαχείρηση Αποσπάσεων του/της #{employeeUtil.prettyFormat(employee)}" />
+			</f:facet>
+
+			<h:form>
+				<h:panelGrid columns="1">
+
+					<h:outputText
+						value="Στον παρακάτω πίνακα εμφανίζεται το ιστορικό όλων των αποσπάσεων του εκπαιδευτικού. Μπορείτε να τροποποιήσεται, αν θέλετε, την ενεργή κατά το τρέχων σχολικό έτος απόσπαση." />
+					<a4j:outputPanel id="employmentsTable">
+						<rich:dataTable id="employeeRegularEmploymentList"
+							value="#{employeeRegularEmploymentsListQuery.resultList}"
+							var="_employment" rows="15" border="0"
+							onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+							onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+							width="100%">
+							<f:facet name="header">
+								<h:outputLabel value="Ιστορικό Αποσπάσεων Εκπαιδευτικού" />
+							</f:facet>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Σχολική Χρονία" />
+								</f:facet>
+								<h:outputText value="#{_employment.schoolYear.title}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Σχολική Μονάδα" />
+								</f:facet>
+								<h:outputText value="#{_employment.school.title}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Ανάληψη Υπ." />
+								</f:facet>
+								<h:outputText value="#{_employment.established}">
+									<s:convertDateTime pattern="dd-MM-yyyy" />
+								</h:outputText>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Λήξη Υπ." />
+								</f:facet>
+								<h:outputText value="#{_employment.terminated}">
+									<s:convertDateTime pattern="dd-MM-yyyy" />
+								</h:outputText>
+							</rich:column>
+
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Ειδικότητα" />
+								</f:facet>
+								<h:outputText value="#{_employment.specialization.id}" />
+							</rich:column>
+
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Υποχ. Ωράριο" />
+								</f:facet>
+								<h:outputText value="#{_employment.mandatoryWorkingHours}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Πραγ. Ωράριο" />
+								</f:facet>
+								<h:outputText value="#{_employment.finalWorkingHours}" />
+							</rich:column>
+
+
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Ενέργεια" />
+								</f:facet>
+								<rich:toolBar itemSeparator="line">
+									<s:link id="modifyEmployment" value="Τροποποίηση"
+										rendered="#{_employment.active}"
+										view="/employee/modify-secondment-employment.xhtml">
+										<f:param name="employmentID" value="#{_employment.id}" />
+										<f:param name="mod-empl-mng-from"
+											value="/employee/secondment-employment-management" />
+									</s:link>
+
+								</rich:toolBar>
+							</rich:column>
+						</rich:dataTable>
+					</a4j:outputPanel>
+					<h:panelGroup>
+
+						<s:div styleClass="actionButtons">
+							<s:button 
+								view="#{empty from ? '/home' : from}.xhtml}" value="Επιστροφή" />
+						</s:div>
+					</h:panelGroup>
+				</h:panelGrid>
+			</h:form>
+
+			<h:form id="form">
+				<rich:panel>
+					<f:facet name="header">
+						<h:outputText value="Εισαγωγή Νέας Απόσπασης Εκπαιδευτικού" />
+					</f:facet>
+
+					<h:panelGrid columns="1">
+
+						<h:outputText
+							value="Με την παρακάτω φόρμα μπορείται να εισάγεται καινούργια απόσπαση στον εκπαιδευτικό." />
+							
+							<h:outputText value="#{newSecondment}" />
+						<h:panelGrid columns="4">
+
+							<s:decorate id="sourceUnit" template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Σχολική Μονάδα Οργανικής" />
+								</ui:define>
+
+								<h:inputText value="#{newSecondment.sourceUnit}" tabindex="1"
+									required="true" id="schoolTarget" styleClass="fieldValueText"
+									 converter="unitConverter" size="20" maxlength="22" readonly="true">
+								</h:inputText>
+							</s:decorate>
+							
+							<s:decorate id="secondmentTargetDecoration"
+							template="/layout/doubleLineEdit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Μονάδα Απόσπασης" />
+							</ui:define>
+
+							<h:inputText value="#{newSecondment.targetUnit}" required="true"
+								id="secondmentTarget" styleClass="fieldValueText" tabindex="1"
+								converter="unitConverter">
+								<a4j:support event="onblur" ajaxSingle="true"
+									reRender="secondmentTargetDecoration" bypassUpdates="true" />
+
+								<rich:suggestionbox for="secondmentTarget" var="secondmentUnit"
+									suggestionAction="#{secondmentAwareUnitSuggester.suggest}">
+									<f:facet name="nothingLabel">
+										<h:outputText value="Άγνωστη Μονάδα Απόσπασης" />
+									</f:facet>
+									<h:column>
+										<h:outputText value="#{secondmentUnit.title}" />
+									</h:column>
+								</rich:suggestionbox>
+							</h:inputText>
+						</s:decorate>
+							
+
+														
+
+							<s:decorate id="pysdeOrderDecoration"
+							template="/layout/doubleLineEdit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Απόφαση ΠΥΣΔΕ" />
+							</ui:define>
+							<h:inputText id="pysdeOrder" value="#{newSecondment.pysdeOrder}"
+								styleClass="fieldValueText" required="false" size="16"
+								maxlength="25">
+								<a4j:support event="onblur" ajaxSingle="true"
+									reRender="pysdeOrderDecoration" bypassUpdates="true" />
+								<f:validateLength minimum="5" maximum="25" />
+							</h:inputText>
+						</s:decorate>
+
+
+						<s:decorate id="headMasterOrderDecoration"
+							template="/layout/doubleLineEdit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Απόφαση Διευθυντή" />
+							</ui:define>
+							<h:inputText id="headMasterOrder"
+								value="#{newSecondment.headMasterOrder}"
+								styleClass="fieldValueText" required="false" size="16"
+								maxlength="25">
+								<a4j:support event="onblur" reRender="headMasterOrderDecoration"
+									bypassUpdates="true" ajaxSingle="true" />
+								<f:validateLength minimum="5" maximum="25" />
+							</h:inputText>
+						</s:decorate>
+
+						<s:decorate id="ministerialOrderDecoration"
+							template="/layout/doubleLineEdit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Υπουργική Απόφαση" />
+							</ui:define>
+							<h:inputText id="ministerialOrder"
+								value="#{newSecondment.ministerialOrder}" required="false"
+								size="16" maxlength="25" styleClass="fieldValueText">
+								<a4j:support event="onblur"
+									reRender="ministerialOrderDecoration" bypassUpdates="true"
+									ajaxSingle="true" />
+								<f:validateLength minimum="5" maximum="25" />
+							</h:inputText>
+						</s:decorate>
+
+						<s:decorate id="establishedDateDecoration"
+							template="/layout/doubleLineEdit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Έναρξη Απόσπασης" />
+							</ui:define>
+							<rich:calendar id="establishedDate" enableManualInput="true"
+								value="#{newSecondment.established}" required="true" mode="ajax"
+								locale="el_GR" inputClass="fieldValueText"
+								datePattern="dd-MM-yyyy">
+								<a4j:support event="onblur" reRender="establishedDateDecoration"
+									bypassUpdates="true" ajaxSingle="true" />
+							</rich:calendar>
+						</s:decorate>
+						<s:decorate id="dueToDateDecoration"
+							template="/layout/doubleLineEdit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Λήξη Απόσπασης" />
+							</ui:define>
+							<rich:calendar id="dueToDate" value="#{newSecondment.dueTo}"
+								required="true" mode="ajax" locale="el_GR" enableManualInput="true"
+								inputClass="fieldValueText" datePattern="dd-MM-yyyy">
+								
+								<a4j:support event="onblur" reRender="dueToDateDecoration"
+									bypassUpdates="true" ajaxSingle="true" />
+							</rich:calendar>
+						</s:decorate>
+						<s:decorate template="/layout/doubleLineEdit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Με Αίτηση του ;" />
+							</ui:define>
+							<h:selectBooleanCheckbox
+								value="#{newSecondment.employeeRequested}" />
+						</s:decorate>
+						</h:panelGrid>
+
+						<h:panelGroup>
+
+							<s:div styleClass="actionButtons">
+								<h:commandButton onclick="if(!confirm('Να καταχωρηθεί η απόσπαση ?')) {form.reset(); return false;}"
+									action="#{employeeHome.addNewSecodmentEmployment(newSecondment)}"
+									value="Καταχώρηση Απόσπασης" rendered="#{employeeHome.managed}">
+									<a4j:support event="onclick" reRender="employmentsTable"
+										ajaxSingle="true" />
+								</h:commandButton>
+							</s:div>
+						</h:panelGroup>
+					</h:panelGrid>
+
+				</rich:panel>
+
+			</h:form>
+
+		</rich:panel>
+
+
+
+	</ui:define>
+</ui:composition>
+</html>

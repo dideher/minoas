@@ -81,12 +81,15 @@ public class SchoolHome extends MinoasEntityHome<School> {
 		school.setModifiedOn(new Date(System.currentTimeMillis()));
 		for(Iterator<TeachingRequirement> it = school.getTeachingRequirements().iterator() ; it.hasNext();) {
 			TeachingRequirement r = it.next();
-			if(r.getHours()<=0)
+			if(r.getHours()<=0) {
+				r.setSchool(null);
+				r.setSchoolYear(null);
+				getEntityManager().remove(r);
 				it.remove();
+			}
 		}
-		super.update();
 		getLogger().info(" user #0 has updated school's #1 teaching resources", getPrincipalName(), school);
-		return "updated";
+		return super.update();
 	}
 
 }
