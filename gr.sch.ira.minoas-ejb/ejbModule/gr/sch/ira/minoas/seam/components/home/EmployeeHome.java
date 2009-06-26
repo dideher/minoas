@@ -25,13 +25,11 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 
 	@In()
 	private CoreSearching coreSearching;
+
 	
-	@In(create=true, value="newSecondment")
-	@Out
-	private Secondment newSecondment;
-	
-	@In(create=true)
+	@In(create = true)
 	private SecondmentHome secondmentHome;
+
 	/**
 	 * Comment for <code>serialVersionUID</code>
 	 */
@@ -69,14 +67,12 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 		employment.setEmployee(employee);
 		employment.setActive(Boolean.TRUE);
 		getEntityManager().persist(employment);
-		
+
 		/* update the employee */
 		employee.setCurrentEmployment(employment);
 		employee.setLastSpecialization(employment.getSpecialization());
 		employee.setModifiedOn(new Date(System.currentTimeMillis()));
 
-		
-		
 		if (old_employment != null) {
 			/* modify the current employment */
 			old_employment.setActive(Boolean.FALSE);
@@ -87,16 +83,53 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 		raiseAfterTransactionSuccessEvent();
 		return "added";
 	}
-	
+
 	@Transactional
 	public String addNewSecodmentEmployment(Secondment newSecondment) {
+		joinTransaction();
+		Employee employee = getInstance();
+		newSecondment = secondmentHome.getInstance();
+		info("trying to add new secondment #0 for employee #1,", newSecondment, employee);
+		Employment currentEmployment = employee.getCurrentEmployment();
+		Secondment currentSecondment = currentEmployment != null ? currentEmployment.getSecondment() : null;
+		newSecondment.setSchoolYear(coreSearching.getActiveSchoolYear());
+		newSecondment.setActive(Boolean.TRUE);
+		newSecondment.setEmployee(employee);
+		newSecondment.setTargetPYSDE(newSecondment.getTargetUnit().getPysde());
+		newSecondment.setSourcePYSDE(newSecondment.getSourceUnit().getPysde());
+		if(currentEmployment!=null) {
+			newSecondment.setAffectedEmployment(currentEmployment);
+			
+		}
+		
+		if(currentSecondment!=null) {
+			currentSecondment.setActive(Boolean.FALSE);
+			currentSecondment.setSupersededBy(newSecondment);
+			getEntityManager().merge(currentSecondment);
+		}
+		
+		getEntityManager().persist(newSecondment);
+		getEntityManager().merge(employee);
+		getEntityManager().flush();
+		raiseAfterTransactionSuccessEvent();
+		info("successfully registered new secondment #0 for employee #1,", newSecondment, employee);
 		return "added";
 	}
-	
+
+	@Transactional
 	public boolean wire() {
+		joinTransaction();	
 		Employee employee = getInstance();
-		if(newSecondment!=null) {
-			newSecondment.setSourceUnit(employee.getCurrentEmployment().getSchool());
+		Secondment newSecondment = secondmentHome.getInstance();
+		if (newSecondment != null) {
+			Employment currentEmployment = employee.getCurrentEmployment();
+			if (currentEmployment != null) {
+				newSecondment.setSourceUnit(currentEmployment.getSchool());
+				newSecondment.setMandatoryWorkingHours(currentEmployment.getMandatoryWorkingHours());
+				newSecondment.setFinalWorkingHours(currentEmployment.getFinalWorkingHours());
+			} else {
+				newSecondment.setSourceUnit(employee.getCurrentPYSDE().getRepresentedByUnit());
+			}
 		}
 		return true;
 	}

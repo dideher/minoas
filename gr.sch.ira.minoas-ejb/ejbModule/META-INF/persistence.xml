@@ -51,6 +51,7 @@
     <class>gr.sch.ira.minoas.model.preparatory.TeachingLanguage</class>
     <class>gr.sch.ira.minoas.model.core.EstablishmentLocation</class>
     <class>gr.sch.ira.minoas.model.preparatory.PreparatoryOwnerOrDirector</class>
+    <class>gr.sch.ira.minoas.model.employement.SecondmentUnit</class>
     <properties>
       <!--
         <property name="hibernate.dialect"

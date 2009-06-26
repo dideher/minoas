@@ -190,12 +190,27 @@
   
    <component name="exampleSecondment" class="gr.sch.ira.minoas.model.employement.Secondment" scope="page" />
    
-   <component name="newSecondment" class="gr.sch.ira.minoas.model.employement.Secondment" scope="page" />
+   <framework:entity-query name="employeeActiveSecondmentListQuery" max-results="1" scope="page">
+    <framework:ejbql>SELECT s FROM Secondment s WHERE s.active IS TRUE</framework:ejbql>
+    <framework:order>s.schoolYear desc, s.established desc</framework:order>
+    <framework:restrictions>
+      <value>s.employee = #{employee}</value>
+    </framework:restrictions> 
+   </framework:entity-query>
+   
+   <framework:entity-query name="employeeSecondmentsListQuery" max-results="200" scope="page">
+    <framework:ejbql>SELECT s FROM Secondment s</framework:ejbql>
+    <framework:order>s.schoolYear desc, s.established desc</framework:order>
+    <framework:restrictions>
+      <value>s.employee = #{employee}</value>
+    </framework:restrictions> 
+   </framework:entity-query>
+   
    
    <!-- Events -->
-    <event type="org.jboss.seam.afterTransactionSuccess.Employee">
-      <action execute="#{employeeRegularEmploymentsListQuery.refresh}"/>
-      <action execute="#{employeeRegularEmploymentsListQuery.getResultList}"/>
+   <event type="org.jboss.seam.afterTransactionSuccess.Employee">
+      <action execute="#{employeeRegularEmploymentsListQuery.refresh}" />
+      <action execute="#{employeeSecondmentsListQuery.refresh}" />
    </event>
       
    <!-- For use with jBPM pageflow or process management -->

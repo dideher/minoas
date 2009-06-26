@@ -11,6 +11,7 @@ import gr.sch.ira.minoas.model.employee.Person;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
 import gr.sch.ira.minoas.model.employement.Secondment;
+import gr.sch.ira.minoas.model.employement.SecondmentType;
 import gr.sch.ira.minoas.model.preparatory.EstablishmentLicenseStatusType;
 import gr.sch.ira.minoas.model.preparatory.PreparatoryUnitNatureType;
 import gr.sch.ira.minoas.model.preparatory.TeachingLanguage;
@@ -78,6 +79,11 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 	@Factory(value = "preparatoryUnitNatureTypes")
 	public PreparatoryUnitNatureType[] getAvailablePreparatoryNatures() {
 		return PreparatoryUnitNatureType.values();
+	}
+	
+	@Factory(value="secondmentTypes")
+	public SecondmentType[] getAvailableSecondmentTypes() {
+		return SecondmentType.values();
 	}
 	
 	@Factory(value = "establishmentLicenseStatusTypes")

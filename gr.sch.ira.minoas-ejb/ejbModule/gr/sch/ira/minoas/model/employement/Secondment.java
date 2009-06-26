@@ -16,6 +16,8 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -119,8 +121,8 @@ public class Secondment extends BaseModel {
 	@JoinColumn(name = "SCHOOL_YEAR_ID", nullable = false)
 	private SchoolYear schoolYear;
 
-	@ManyToOne(fetch = FetchType.EAGER, optional = false)
-	@JoinColumn(name = "SECONDMENT_TYPE_ID", nullable = false)
+	@Enumerated(EnumType.STRING)
+	@Column(name="SECONDMENT_TYPE")
 	private SecondmentType secondmentType;
 
 	@ManyToOne(fetch = FetchType.EAGER)
