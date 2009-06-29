@@ -210,7 +210,11 @@
    <!-- Events -->
    <event type="org.jboss.seam.afterTransactionSuccess.Employee">
       <action execute="#{employeeRegularEmploymentsListQuery.refresh}" />
+   </event>
+   
+   <event type="org.jboss.seam.afterTransactionSuccess.Secondment">
       <action execute="#{employeeSecondmentsListQuery.refresh}" />
+      <action execute="#{employeeActiveSecondmentListQuery.refresh}" />
    </event>
       
    <!-- For use with jBPM pageflow or process management -->

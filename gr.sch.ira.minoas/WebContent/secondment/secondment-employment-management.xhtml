@@ -92,20 +92,19 @@
 								</f:facet>
 								<rich:toolBar itemSeparator="line">
 
-									<s:link id="cancelSecondment" value="Ακύρωση"
-										rendered="#{_secondment.active}"
-										view="/secondment/modify-secondment-employment.xhtml">
+									<s:link id="cancelSecondment" value="Ακύρωση" action="#{secondmentHome.cancel}"
+										rendered="#{_secondment.active}" onclick="if(!confirm('Να ακυρωθή η απόσπαση ?')) {form.reset(); return false;} else { #{secondmentHome.setId(_secondment.id);}">
+										
 										<f:param name="secondmentID" value="#{_secondment.id}" />
-										<f:param name="mod-empl-mng-from"
-											value="/employee/secondment-employment-management" />
+										
 									</s:link>
 
-									<s:link id="modifyEmployment" value="Τροποποίηση"
+									<s:link id="modifySecondment" value="Τροποποίηση"
 										rendered="#{_secondment.active}"
 										view="/secondment/modify-secondment-employment.xhtml">
 										<f:param name="secondmentID" value="#{_secondment.id}" />
-										<f:param name="mod-empl-mng-from"
-											value="/employee/secondment-employment-management" />
+										<f:param name="modify_secondment_from"
+											value="/secondment/secondment-employment-management" />
 									</s:link>
 
 								</rich:toolBar>

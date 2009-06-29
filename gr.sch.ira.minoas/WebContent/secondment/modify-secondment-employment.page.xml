@@ -4,25 +4,20 @@
   <begin-conversation join="true" flush-mode="manual"/> 
   <description>Τροποποίση Απόσπασης του/της #{employeeUtil.prettyFormat(employee)}</description>
   
-  <param name="mod-sec-empl-from"/>
-  <param name="mod-sec-empl-to" />
+  <param name="modify_secondment_from"/>
+  <param name="modify-secondment-to" />
   
-  <param name="employmentID" value="#{employmentHome.id}" converterId="javax.faces.Long"/>
+  <param name="secondmentID" value="#{secondmentHome.id}" converterId="javax.faces.Long"/>
+  
   <!-- navigation rules -->
-  <navigation from-action="endButton">
-    <end-conversation />
-    <redirect view-id="#{empty from ? '/home' : from}.xhtml}" />
-  </navigation>
   
-  <navigation from-action="backButton">
-    <redirect view-id="#{empty from ? '/home' : from}.xhtml}">
-     
+  <navigation from-action="#{secondmentHome.revert}">
+    <redirect view-id="#{empty modify_secondment_from ? '/home' : modify_secondment_from}.xhtml}">
     </redirect>
   </navigation>
   
-  <navigation from-action="updateButton">
-    <redirect view-id="#{empty from ? '/home' : from}.xhtml}">
-     
+  <navigation from-action="#{secondmentHome.update}">
+    <redirect view-id="#{empty modify_secondment_from ? '/home' : modify_secondment_from}.xhtml}">
     </redirect>
   </navigation>
   

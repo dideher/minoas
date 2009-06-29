@@ -8,8 +8,10 @@
   <param name="sec-empl-mng-to" />
   <param name="employeeID" value="#{employeeHome.id}" converterId="javax.faces.Long"/>
   <action execute="#{employeeHome.wire()}"/>
+  
   <!-- navigation rules -->
   <navigation from-action="endButton">
+    
     <end-conversation />
     <redirect view-id="#{empty from ? '/home' : from}.xhtml}" />
   </navigation>

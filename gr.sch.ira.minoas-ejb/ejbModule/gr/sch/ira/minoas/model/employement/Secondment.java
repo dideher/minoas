@@ -52,7 +52,7 @@ import org.jboss.seam.annotations.Name;
 				+ INamedQueryConstants.QUERY_PARAMETER_SCHOOL
 				+ " AND c.schoolYear=:"
 				+ INamedQueryConstants.QUERY_PARAMETER_SCHOOL_YEAR) })
-public class Secondment extends BaseModel {
+public class Secondment extends BaseModel implements Cloneable {
 
 	/**
 	 * 
@@ -157,6 +157,16 @@ public class Secondment extends BaseModel {
 	private String workingHoursDecrementReason;
 
 	/**
+	 * @see java.lang.Object#clone()
+	 */
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		Secondment clone = (Secondment)super.clone();
+		clone.setId(null);
+		return clone;
+	}
+
+	/**
 	 * @return the active
 	 */
 	public Boolean getActive() {
@@ -177,7 +187,7 @@ public class Secondment extends BaseModel {
 		return dueTo;
 	}
 
-	public Person getEmployee() {
+	public Employee getEmployee() {
 		return employee;
 	}
 

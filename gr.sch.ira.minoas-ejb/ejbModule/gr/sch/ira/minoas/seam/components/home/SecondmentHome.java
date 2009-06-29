@@ -24,54 +24,53 @@ public class SecondmentHome extends MinoasEntityHome<Secondment> {
 	@Override
 	@Transactional
 	public String update() {
-		/* Employment Update is special. We create a new employment and set the
+		/* Secondment Update is special. We create a new Secondment and set the
 		 * current employment as parent.
 		 */
-		joinTransaction();
-		Employment current_employment = null;
-		Employee employee = current_employment.getEmployee();
-		Employment new_employment = new Employment();
-		
-		/* clone the employment */
-		new_employment.setEmployee(current_employment.getEmployee());
-		new_employment.setActive(Boolean.TRUE);
-		new_employment.setEstablished(current_employment.getEstablished());
-		new_employment.setFinalWorkingHours(current_employment.getFinalWorkingHours());
-		new_employment.setMandatoryWorkingHours(current_employment.getMandatoryWorkingHours());
-		new_employment.setSchool(current_employment.getSchool());
-		new_employment.setSchoolYear(current_employment.getSchoolYear());
-		new_employment.setInsertedOn(new Date(System.currentTimeMillis()));
-		new_employment.setSpecialization(current_employment.getSpecialization());
-		new_employment.setType(current_employment.getType());
-		new_employment.setModificationReason(current_employment.getModificationReason());
-		getEntityManager().persist(new_employment);
-		
-		/* get a fresh copy of the current employment */
-		getEntityManager().refresh(current_employment);
-		
-		/* update the current (now old) employment */
-		
-		current_employment.setModifiedOn(new Date(System.currentTimeMillis()));
-		current_employment.setSupersededBy(new_employment);
-		current_employment.setActive(Boolean.FALSE);
-		current_employment.setTerminated(new_employment.getEstablished());
-		
-		/* update the employee */
-		employee.setCurrentEmployment(new_employment);
-		employee.setLastSpecialization(new_employment.getSpecialization());
-		employee.setModifiedOn(new Date(System.currentTimeMillis()));
-		
-		
-		return super.update(); 
-	  }
+		try {
+			joinTransaction();
+			Secondment current_secondment = getInstance();
+			Employment affected_employment = current_secondment.getAffectedEmployment();
+			Secondment newSecondment = (Secondment) current_secondment.clone();
 
-	
+			/* revert the current secondment */
+			getEntityManager().refresh(current_secondment);
+			current_secondment.setActive(Boolean.FALSE);
+			current_secondment.setSupersededBy(newSecondment);
+			if (affected_employment != null) {
+				affected_employment.setSecondment(newSecondment);
+			}
+
+			getEntityManager().persist(newSecondment);
+			getEntityManager().merge(current_secondment);
+			getEntityManager().merge(affected_employment);
+			return super.update();
+		} catch (CloneNotSupportedException cnse) {
+			throw new RuntimeException(cnse);
+		}
+	}
+
+	@Transactional
+	public String cancel() {
+		joinTransaction();
+		Secondment current_secondment = getInstance();
+		Employee employee = current_secondment.getEmployee();
+		Employment employment = current_secondment.getAffectedEmployment();
+		info("trying to cancel employee #0 current secondment #1.", employee, current_secondment);
+		current_secondment.setActive(Boolean.FALSE);
+		getEntityManager().merge(current_secondment);
+		if (employment != null)
+			employment.setSecondment(null);
+		return super.update();
+	}
 
 	@Transactional
 	public String revert() {
+		info("reverting updates to secondment #0", getInstance());
 		getEntityManager().refresh(getInstance());
 		return "reverted";
 	}
+
 	/**
 	 * @see org.jboss.seam.framework.Home#createInstance()
 	 */
@@ -84,9 +83,9 @@ public class SecondmentHome extends MinoasEntityHome<Secondment> {
 	 * @see org.jboss.seam.framework.Home#getInstance()
 	 */
 	@Override
-	@Factory(value="secondment", scope=ScopeType.PAGE)
+	@Factory(value = "secondment", scope = ScopeType.PAGE)
 	public Secondment getInstance() {
-		return (Secondment)super.getInstance();
+		return (Secondment) super.getInstance();
 	}
 
 }

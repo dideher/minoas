@@ -16,128 +16,93 @@
 		<rich:panel>
 			<f:facet name="header">
 				<h:outputText
-					value="Τροποποίηση Οργανικής Θέσης του/της #{employeeUtil.prettyFormat(employee)}" />
+					value="Τροποποίηση Απόσπασης του/της #{employeeUtil.prettyFormat(employee)}" />
 			</f:facet>
 
 			<h:form>
 				<h:panelGrid columns="1">
-					
-					
-					
-					<h:panelGrid columns="4">
 
-						<s:decorate id="unit" template="/layout/doubleLineEdit.xhtml">
-							<ui:define name="label">
-								<h:outputText value="Σχολική Μονάδα Οργανικής" />
-							</ui:define>
+					<h:outputText
+						value="Με την παρακάτω φόρμα, μπορείται να τροποποίησεται την ενεργή απόσπαση του/της εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}." />
 
-							<h:inputText value="#{employment.school}" required="true" readonly="true"
-								id="schoolTarget" styleClass="fieldValueText" tabindex="1"
-								converter="unitConverter" size="12" maxlength="22">
-								<a4j:support event="onblur" ajaxSingle="true" reRender="unit"
-									bypassUpdates="true" />
-
-								<rich:suggestionbox for="schoolTarget" var="schoolUnit"
-									suggestionAction="#{schoolUnitSuggester.suggest}">
-									<f:facet name="nothingLabel">
-										<h:outputText value="Άγνωστη Σχολική Μονάδα" />
-									</f:facet>
-									<h:column>
-										<h:outputText value="#{schoolUnit.title}" />
-									</h:column>
-								</rich:suggestionbox>
-							</h:inputText>
-						</s:decorate>
-						
-												<s:decorate template="/layout/doubleLineEdit.xhtml">
-							<ui:define name="label">
-								<h:outputText value="Ειδικότητα : " />
-							</ui:define>
-							<h:inputText id="specializationFilter" readonly="true"
-								value="#{employment.specialization}" styleClass="fieldValueText"
-								converter="specializationConverter" size="8" maxlength="8">
-								<rich:suggestionbox height="100" width="250"
-									for="specializationFilter" var="a_spec"
-									suggestionAction="#{specializationSuggester.suggest}">
-									<f:facet name="nothingLabel">
-										<h:outputText value="Άγνωστη Ειδικότητα" />
-									</f:facet>
-									<h:column>
-										<h:outputText value="#{a_spec.id}" />
-									</h:column>
-									<h:column>
-										<h:outputText value="#{a_spec.title}" />
-									</h:column>
-								</rich:suggestionbox>
-							</h:inputText>
-						</s:decorate>
-						
+					<h:panelGrid columns="5">
 
 						<s:decorate template="/layout/doubleLineEdit.xhtml">
 							<ui:define name="label">
-								<h:outputText value="Ανάληψη Υπηρεσίας : " />
+								<h:outputText value="Απόσπαση Από" />
 							</ui:define>
-							<rich:calendar datePattern="dd/MM/yyyy" style="width:50px"
-								enableManualInput="true" styleClass="fieldValueText" required="true"
-								value="#{employment.established}">
+
+							<h:inputText value="#{secondment.sourceUnit.title}"
+								required="true" readonly="true" id="sourceUnit"
+								styleClass="fieldValueText" tabindex="1" size="17"
+								maxlength="22">
+							</h:inputText>
+						</s:decorate>
+
+						<s:decorate template="/layout/doubleLineEdit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Απόσπαση Σε" />
+							</ui:define>
+
+							<h:inputText value="#{secondment.targetUnit.title}"
+								required="true" readonly="true" id="targetUnit"
+								styleClass="fieldValueText" tabindex="2" size="17"
+								maxlength="22">
+							</h:inputText>
+						</s:decorate>
+
+
+						<s:decorate template="/layout/doubleLineEdit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Από : " />
+							</ui:define>
+							<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
+								style="width:50px" enableManualInput="true"
+								styleClass="fieldValueText" required="true"
+								value="#{secondment.established}">
 							</rich:calendar>
 						</s:decorate>
 
 						<s:decorate template="/layout/doubleLineEdit.xhtml">
 							<ui:define name="label">
-								<h:outputText value="Λήξη Υπηρεσίας : " />
+								<h:outputText value="Έως : " />
 							</ui:define>
-							<rich:calendar datePattern="dd/MM/yyyy" style="width:50px"
-								enableManualInput="true" styleClass="fieldValueText"
-								value="#{employment.terminated}" required="false">
+							<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
+								style="width:50px" enableManualInput="true"
+								styleClass="fieldValueText" required="true"
+								value="#{secondment.dueTo}">
 							</rich:calendar>
 						</s:decorate>
 
 
-						<s:decorate template="/layout/doubleLineEdit.xhtml">
-							<ui:define name="label">
-								<h:outputText value="Υποχρεωτικό Ωράριο : " />
-							</ui:define>
-							<h:inputText value="#{employment.mandatoryWorkingHours}" size="3"
-								maxlength="3" required="true" />
-						</s:decorate>
 
 						<s:decorate template="/layout/doubleLineEdit.xhtml">
 							<ui:define name="label">
 								<h:outputText value="Πραγματικό Ωράριο : " />
 							</ui:define>
-							<h:inputText value="#{employment.finalWorkingHours}" size="3"
+							<h:inputText value="#{secondment.finalWorkingHours}" size="3"
 								maxlength="3" required="true" />
 						</s:decorate>
 
 					</h:panelGrid>
 
-					<h:panelGrid columns="1">
-						<s:decorate template="/layout/doubleLineEdit.xhtml">
-							<ui:define name="label">
-								<h:outputText value="Αιτία Τροποποίησης : " />
-							</ui:define>
-							<h:inputText value="#{employment.modificationReason}" size="40"
-								required="true" maxlength="200" />
-						</s:decorate>
-					</h:panelGrid>
 
 					<rich:separator lineType="dashed" height="2" />
 
 					<h:panelGroup>
 
 						<s:div styleClass="actionButtons">
-								<s:button id="revertButton" value="Επιστροφή"
-									rendered="#{employmentHome.managed}"
-									action="#{employmentHome.revert}"  view="#{empty from ? '/home' : from}.xhtml}"/>
-							
-							<rich:spacer width="10" />
-							<h:commandButton action="#{employmentHome.update}"
-								value="Ανανέωση" id="updateButton" rendered="#{employmentHome.managed}"
-								disabled="#{!employment.active}"/>
-								<rich:spacer width="3" />
-							
+							<s:button id="revertButton" value="Επιστροφή"
+								rendered="#{secondmentHome.managed}"
+								action="#{secondmentHome.revert}" />
 
+							<rich:spacer width="10" />
+							<h:commandButton action="#{secondmentHome.update}"
+								onclick="if(!confirm('Να ανανεωθή η απόσπαση ?')) {form.reset(); return false;}"
+								value="Ανανέωση" id="updateButton"
+								rendered="#{secondmentHome.managed}"
+								disabled="#{!secondment.active}" />
+							<rich:spacer width="3" />
 						</s:div>
 					</h:panelGroup>
 
