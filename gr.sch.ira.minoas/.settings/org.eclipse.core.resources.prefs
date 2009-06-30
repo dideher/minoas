@@ -1,4 +1,4 @@
-#Tue Jun 09 13:14:48 EEST 2009
+#Tue Jun 30 12:54:00 EEST 2009
 eclipse.preferences.version=1
 encoding//WebContent/components/employee/employeeList.xhtml=UTF-8
 encoding//WebContent/components/employee/employeeSecondmentsHistory.xhtml=UTF-8
@@ -28,6 +28,7 @@ encoding//WebContent/roles.xhtml=UTF-8
 encoding//WebContent/school.xhtml=UTF-8
 encoding//WebContent/school/school-deputy-employee.xhtml=UTF-8
 encoding//WebContent/school/school-regular-employee.xhtml=UTF-8
+encoding//WebContent/school/school-secondment-employee.xhtml=UTF-8
 encoding//WebContent/school/school.xhtml=UTF-8
 encoding//WebContent/school/teaching-resources.xhtml=UTF-8
 encoding//WebContent/schoolYears.xhtml=UTF-8
@@ -35,4 +36,5 @@ encoding//WebContent/schools.xhtml=UTF-8
 encoding//WebContent/secondmentSearchResult.xhtml=UTF-8
 encoding//WebContent/updateTeachingVoid.xhtml=UTF-8
 encoding//src/messages_el.properties=UTF-8
+encoding//src/messages_en.properties=UTF-8
 encoding/<project>=UTF-8

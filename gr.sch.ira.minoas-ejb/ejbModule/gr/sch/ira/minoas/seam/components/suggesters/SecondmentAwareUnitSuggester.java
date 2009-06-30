@@ -31,12 +31,12 @@ public class SecondmentAwareUnitSuggester extends BaseDatabaseAwareSeamComponent
 	private static final long serialVersionUID = 1L;
 
 	@In(required = false)
-	private Secondment newSecondment;
+	private Secondment secondment;
 
 	@SuppressWarnings("unchecked")
 	@Transactional
 	public Collection<Unit> suggest(Object secondmemt_search_pattern) {
-		SecondmentType type = newSecondment != null ? type = newSecondment.getSecondmentType() : null;
+		SecondmentType type = secondment != null ? type = secondment.getSecondmentType() : null;
 		if (type != null) {
 			return getEntityManager()
 					.createQuery(

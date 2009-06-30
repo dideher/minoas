@@ -24,8 +24,10 @@
 				<h:panelGrid columns="1">
 
 
-					<a4j:outputPanel id="activeSecondment">
-						<rich:dataTable value="#{employeeActiveSecondmentListQuery.resultList}"
+					<a4j:outputPanel id="activeSecondment"
+						rendered="#{employeeActiveSecondmentListQuery.resultCount==1}">
+						<rich:dataTable
+							value="#{employeeActiveSecondmentListQuery.resultList}"
 							var="_secondment" rows="15" border="0"
 							onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
 							onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
@@ -92,12 +94,12 @@
 								</f:facet>
 								<rich:toolBar itemSeparator="line">
 
-									<s:link id="cancelSecondment" value="Ακύρωση" action="#{secondmentHome.cancel}"
-										rendered="#{_secondment.active}" onclick="if(!confirm('Να ακυρωθή η απόσπαση ?')) {form.reset(); return false;} else { #{secondmentHome.setId(_secondment.id);}">
-										
-										<f:param name="secondmentID" value="#{_secondment.id}" />
-										
-									</s:link>
+									<s:link id="cancelSecondment" value="Ακύρωση"
+										action="#{secondmentHome.cancel}"
+										rendered="#{_secondment.active}"
+										onclick="if(!confirm('Να ακυρωθή η απόσπαση ?')) {form.reset(); return false;} else { #{secondmentHome.setId(_secondment.id)};}">
+					
+					 				</s:link>
 
 									<s:link id="modifySecondment" value="Τροποποίηση"
 										rendered="#{_secondment.active}"
@@ -117,88 +119,93 @@
 
 
 
-					<h:outputText
-						value="Στον παρακάτω πίνακα εμφανίζεται το ιστορικό όλων των αποσπάσεων του εκπαιδευτικού. Μπορείτε να τροποποιήσεται, αν θέλετε, την ενεργή κατά το τρέχων σχολικό έτος απόσπαση." />
-					<a4j:outputPanel id="employmentsTable">
-						<rich:dataTable id="employeeSecondmentsList"
-							value="#{employeeSecondmentsListQuery.resultList}"
-							var="_secondment" rows="15" border="0"
-							onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
-							onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
-							width="100%">
-							<f:facet name="header">
-								<h:outputLabel value="Ιστορικό Αποσπάσεων Εκπαιδευτικού" />
-							</f:facet>
-							<rich:column>
-								<f:facet name="header">
-									<h:outputText value="Σχ. Χρονία" />
-								</f:facet>
-								<h:outputText value="#{_secondment.schoolYear.title}" />
-							</rich:column>
-							<rich:column>
-								<f:facet name="header">
-									<h:outputText value="Αποσπ. Απο" />
-								</f:facet>
-								<h:outputText value="#{_secondment.sourceUnit.title}" />
-							</rich:column>
-							<rich:column>
-								<f:facet name="header">
-									<h:outputText value="Αποσπ. Σε" />
-								</f:facet>
-								<h:outputText value="#{_secondment.targetUnit.title}" />
-							</rich:column>
-							<rich:column>
-								<f:facet name="header">
-									<h:outputText value="Απο" />
-								</f:facet>
-								<h:outputText value="#{_secondment.established}">
-									<s:convertDateTime pattern="dd-MM-yyyy" />
-								</h:outputText>
-							</rich:column>
-							<rich:column>
-								<f:facet name="header">
-									<h:outputText value="Εώς" />
-								</f:facet>
-								<h:outputText value="#{_secondment.dueTo}">
-									<s:convertDateTime pattern="dd-MM-yyyy" />
-								</h:outputText>
-							</rich:column>
+					<a4j:outputPanel id="employmentsTable"
+						rendered="#{employeeSecondmentsListQuery.resultCount &gt; 0}">
+						<h:panelGrid columns="1">
+							<h:outputText
+								value="Στον παρακάτω πίνακα εμφανίζεται το ιστορικό όλων των αποσπάσεων του εκπαιδευτικού. Μπορείτε να τροποποιήσεται, αν θέλετε, την ενεργή κατά το τρέχων σχολικό έτος απόσπαση." />
 
-							<rich:column>
+							<rich:dataTable id="employeeSecondmentsList"
+								value="#{employeeSecondmentsListQuery.resultList}"
+								var="_secondment" rows="15" border="0"
+								onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+								onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+								width="100%">
 								<f:facet name="header">
-									<h:outputText value="Με Αίτηση Του" />
+									<h:outputLabel value="Ιστορικό Αποσπάσεων Εκπαιδευτικού" />
 								</f:facet>
-								<h:outputText value="Ναί"
-									rendered="#{_secondment.employeeRequested}" />
-								<h:outputText value="Οχι"
-									rendered="#{!_secondment.employeeRequested}" />
-							</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Σχ. Χρονία" />
+									</f:facet>
+									<h:outputText value="#{_secondment.schoolYear.title}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Αποσπ. Απο" />
+									</f:facet>
+									<h:outputText value="#{_secondment.sourceUnit.title}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Αποσπ. Σε" />
+									</f:facet>
+									<h:outputText value="#{_secondment.targetUnit.title}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Απο" />
+									</f:facet>
+									<h:outputText value="#{_secondment.established}">
+										<s:convertDateTime pattern="dd-MM-yyyy" />
+									</h:outputText>
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Εώς" />
+									</f:facet>
+									<h:outputText value="#{_secondment.dueTo}">
+										<s:convertDateTime pattern="dd-MM-yyyy" />
+									</h:outputText>
+								</rich:column>
 
-							<rich:column>
-								<f:facet name="header">
-									<h:outputText value="Υποχ. Ωράριο" />
-								</f:facet>
-								<h:outputText value="#{_secondment.mandatoryWorkingHours}" />
-							</rich:column>
-							<rich:column>
-								<f:facet name="header">
-									<h:outputText value="Πραγ. Ωράριο" />
-								</f:facet>
-								<h:outputText value="#{_secondment.finalWorkingHours}" />
-							</rich:column>
-						</rich:dataTable>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Με Αίτηση Του" />
+									</f:facet>
+									<h:outputText value="Ναί"
+										rendered="#{_secondment.employeeRequested}" />
+									<h:outputText value="Οχι"
+										rendered="#{!_secondment.employeeRequested}" />
+								</rich:column>
+
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Υποχ. Ωράριο" />
+									</f:facet>
+									<h:outputText value="#{_secondment.mandatoryWorkingHours}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Πραγ. Ωράριο" />
+									</f:facet>
+									<h:outputText value="#{_secondment.finalWorkingHours}" />
+								</rich:column>
+							</rich:dataTable>
+							<h:panelGroup>
+
+								<s:div styleClass="actionButtons">
+									<s:button action="backButton" value="Επιστροφή" />
+
+									<s:button action="endButton" value="Τέλος Ενέργειας" />
+								</s:div>
+							</h:panelGroup>
+						</h:panelGrid>
 					</a4j:outputPanel>
-					<h:panelGroup>
-
-						<s:div styleClass="actionButtons">
-							<s:button view="#{empty from ? '/home' : from}.xhtml}"
-								value="Επιστροφή" />
-						</s:div>
-					</h:panelGroup>
 				</h:panelGrid>
 			</h:form>
 
-			<a4j:outputPanel>
+			<a4j:outputPanel rendered="#{employeeActiveSecondmentListQuery.resultCount==0}">
 				<h:form id="form">
 					<rich:panel>
 						<f:facet name="header">
@@ -248,9 +255,8 @@
 										<h:outputText value="Μονάδα Απόσπασης" />
 									</ui:define>
 
-									<h:inputText value="#{secondment.targetUnit}"
-										required="true" id="secondmentTarget"
-										styleClass="fieldValueText" tabindex="1"
+									<h:inputText value="#{secondment.targetUnit}" required="true"
+										id="secondmentTarget" styleClass="fieldValueText" tabindex="1"
 										converter="unitConverter">
 
 										<rich:suggestionbox for="secondmentTarget"
@@ -286,8 +292,8 @@
 									<ui:define name="label">
 										<h:outputText value="Ωράριο Απόσπασης : " />
 									</ui:define>
-									<h:inputText value="#{secondment.finalWorkingHours}"
-										size="3" maxlength="3" required="true" />
+									<h:inputText value="#{secondment.finalWorkingHours}" size="3"
+										maxlength="3" required="true" />
 								</s:decorate>
 
 								<s:decorate id="pysdeOrderDecoration"
@@ -295,8 +301,7 @@
 									<ui:define name="label">
 										<h:outputText value="Απόφαση ΠΥΣΔΕ" />
 									</ui:define>
-									<h:inputText id="pysdeOrder"
-										value="#{secondment.pysdeOrder}"
+									<h:inputText id="pysdeOrder" value="#{secondment.pysdeOrder}"
 										styleClass="fieldValueText" required="false" size="16"
 										maxlength="25">
 										<a4j:support event="onblur" ajaxSingle="true"
@@ -344,8 +349,8 @@
 									</ui:define>
 									<rich:calendar id="establishedDate" enableManualInput="true"
 										value="#{secondment.established}" required="true"
-										mode="ajax" locale="el_GR" inputClass="fieldValueText"
-										datePattern="dd-MM-yyyy">
+										inputSize="10" mode="ajax" locale="el_GR"
+										inputClass="fieldValueText" datePattern="dd-MM-yyyy">
 										<a4j:support event="onblur"
 											reRender="establishedDateDecoration" bypassUpdates="true"
 											ajaxSingle="true" />
@@ -357,7 +362,7 @@
 										<h:outputText value="Λήξη Απόσπασης" />
 									</ui:define>
 									<rich:calendar id="dueToDate" value="#{secondment.dueTo}"
-										required="true" mode="ajax" locale="el_GR"
+										required="true" mode="ajax" locale="el_GR" inputSize="10"
 										enableManualInput="true" inputClass="fieldValueText"
 										datePattern="dd-MM-yyyy">
 
@@ -373,12 +378,15 @@
 								<s:div styleClass="actionButtons">
 									<h:commandButton
 										onclick="if(!confirm('Να καταχωρηθεί η απόσπαση ?')) {form.reset(); return false;}"
-										action="#{employeeHome.addNewSecodmentEmployment(secondment)}"
+										action="#{secondmentHome.persist}"
 										value="Καταχώρηση Απόσπασης"
-										rendered="#{employeeHome.managed}">
+										rendered="#{!secondmentHome.managed}">
 										<a4j:support event="onclick" reRender="employmentsTable"
 											ajaxSingle="true" />
 									</h:commandButton>
+									<s:button action="backButton" value="Επιστροφή" />
+
+									<s:button action="endButton" value="Τέλος Ενέργειας" />
 								</s:div>
 							</h:panelGroup>
 						</h:panelGrid>

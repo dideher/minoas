@@ -23,7 +23,7 @@ public class EmploymentUtil extends BaseSeamComponent {
 
 	public boolean hasSecondment(Employment employment) {
 		if (employment != null) {
-			return employment.getSecondment() != null;
+			return employment.getSecondment() != null && employment.getSecondment().getActive();
 		} else
 			return false;
 	}

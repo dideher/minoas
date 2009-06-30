@@ -28,7 +28,7 @@
 							<h:outputText value="Ημερομηνία Αίτησης" />
 						</ui:define>
 						<rich:calendar id="requestDate" datePattern="dd/MM/yyyy"
-							value="#{establishmentLicense.requestDate}" required="true">
+							value="#{establishmentLicense.requestDate}" inputSize="10" enableManualInput="true" required="true">
 						</rich:calendar>
 					</s:decorate>
 					<s:decorate template="/layout/doubleLineEdit.xhtml">
@@ -135,7 +135,7 @@
 								<ui:define name="label">
 									<h:outputText value="Ημερομηνία Γεννήσεως" />
 								</ui:define>
-								<rich:calendar datePattern="dd/MM/yyyy"
+								<rich:calendar datePattern="dd/MM/yyyy" enableManualInput="true" inputSize="10"
 									value="#{establishmentLicense.owner.dateOfBirth}"
 									readonly="true">
 								</rich:calendar>

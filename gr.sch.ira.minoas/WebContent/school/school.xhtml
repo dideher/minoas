@@ -52,14 +52,17 @@
 							<h:outputText value="Οργανικά Ανοίκωντες" />
 							</f:facet>
 							<ui:include src="/school/school-regular-employee.xhtml">
-								
 								<ui:param name="school" value="#{school}" />
 							</ui:include>
 						</rich:tab>
-						<rich:tab disabled="true">
+						<rich:tab>
 							<f:facet name="label">
 							<h:outputText value="Με Απόσπαση" />
 							</f:facet>
+								<ui:include src="/school/school-secondment-employee.xhtml">
+								<ui:param name="school" value="#{school}" />
+							</ui:include>
+						
 						</rich:tab>
 						<rich:tab disabled="true">
 							<f:facet name="label">

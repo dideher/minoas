@@ -1,15 +1,18 @@
 package gr.sch.ira.minoas.seam.components.home;
 
-import java.util.Date;
+
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
+import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
 
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.Secondment;
+import gr.sch.ira.minoas.model.employement.SecondmentType;
+import gr.sch.ira.minoas.seam.components.CoreSearching;
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
@@ -17,6 +20,42 @@ import gr.sch.ira.minoas.model.employement.Secondment;
  */
 @Name("secondmentHome")
 public class SecondmentHome extends MinoasEntityHome<Secondment> {
+
+	@In()
+	private CoreSearching coreSearching;
+
+	@In(create = true)
+	private EmployeeHome employeeHome;
+
+	/**
+	 * @see org.jboss.seam.framework.EntityHome#persist()
+	 */
+	@Transactional
+	@Override
+	public String persist() {
+		Employee employee = employeeHome.getInstance();
+		Secondment newSecondment = getInstance();
+		info("trying to add new secondment #0 for employee #1,", newSecondment, employee);
+		Employment currentEmployment = employee.getCurrentEmployment();
+		Secondment currentSecondment = currentEmployment != null ? currentEmployment.getSecondment() : null;
+		newSecondment.setSchoolYear(coreSearching.getActiveSchoolYear());
+		newSecondment.setActive(Boolean.TRUE);
+		newSecondment.setEmployee(employee);
+		newSecondment.setTargetPYSDE(newSecondment.getTargetUnit().getPysde());
+		newSecondment.setSourcePYSDE(newSecondment.getSourceUnit().getPysde());
+		if (currentEmployment != null) {
+			newSecondment.setAffectedEmployment(currentEmployment);
+
+		}
+
+		if (currentSecondment != null) {
+			currentSecondment.setActive(Boolean.FALSE);
+			currentSecondment.setSupersededBy(newSecondment);
+			getEntityManager().merge(currentSecondment);
+		}
+		info("successfully registered new secondment #0 for employee #1,", newSecondment, employee);
+		return super.persist();
+	}
 
 	/**
 	 * @see org.jboss.seam.framework.EntityHome#update()
@@ -42,8 +81,6 @@ public class SecondmentHome extends MinoasEntityHome<Secondment> {
 			}
 
 			getEntityManager().persist(newSecondment);
-			getEntityManager().merge(current_secondment);
-			getEntityManager().merge(affected_employment);
 			return super.update();
 		} catch (CloneNotSupportedException cnse) {
 			throw new RuntimeException(cnse);
@@ -61,7 +98,9 @@ public class SecondmentHome extends MinoasEntityHome<Secondment> {
 		getEntityManager().merge(current_secondment);
 		if (employment != null)
 			employment.setSecondment(null);
-		return super.update();
+		super.update();
+		clearInstance();
+		return "updated";
 	}
 
 	@Transactional
@@ -85,7 +124,9 @@ public class SecondmentHome extends MinoasEntityHome<Secondment> {
 	@Override
 	@Factory(value = "secondment", scope = ScopeType.PAGE)
 	public Secondment getInstance() {
-		return (Secondment) super.getInstance();
+		Secondment secondment =(Secondment)super.getInstance();
+		secondment.setSecondmentType(SecondmentType.FULL_TO_SCHOOL);
+		return secondment;
 	}
 
 }

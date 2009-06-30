@@ -43,6 +43,7 @@ public class EmploymentHome extends MinoasEntityHome<Employment> {
 		new_employment.setSpecialization(current_employment.getSpecialization());
 		new_employment.setType(current_employment.getType());
 		new_employment.setModificationReason(current_employment.getModificationReason());
+		new_employment.setSecondment(current_employment.getSecondment());
 		getEntityManager().persist(new_employment);
 		
 		/* get a fresh copy of the current employment */
