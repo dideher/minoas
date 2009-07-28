@@ -4,6 +4,7 @@
 package gr.sch.ira.minoas.model.core;
 
 import gr.sch.ira.minoas.model.BaseModel;
+import gr.sch.ira.minoas.model.employement.Secondment;
 
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -27,7 +28,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "TEACHING_REQUIREMENT")
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
-public class TeachingRequirement extends BaseModel {
+public class TeachingRequirement extends BaseModel implements Cloneable {
 
 	/**
 	 * 
@@ -35,7 +36,7 @@ public class TeachingRequirement extends BaseModel {
 	private static final long serialVersionUID = 1L;
 
 	@Basic
-	@Column(name = "HOURS", nullable=false)
+	@Column(name = "HOURS", nullable = false)
 	private Integer hours;
 
 	@Id
@@ -43,21 +44,29 @@ public class TeachingRequirement extends BaseModel {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@ManyToOne(cascade={ CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-	@JoinColumn(name = "SCHOOL_ID", nullable=false)
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		TeachingRequirement clone = (TeachingRequirement) super.clone();
+		clone.setId(null);
+		return clone;
+	}
+
+	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
+	@JoinColumn(name = "SCHOOL_ID", nullable = false)
 	private School school;
 
 	@ManyToOne
-	@JoinColumn(name = "SCHOOL_YEAR_ID", nullable=false)
+	@JoinColumn(name = "SCHOOL_YEAR_ID", nullable = false)
 	private SchoolYear schoolYear;
 
 	@ManyToOne
-	@JoinColumn(name = "SPECIALIZATION_ID", nullable=false)
+	@JoinColumn(name = "SPECIALIZATION_ID", nullable = false)
 	private Specialization specialization;
 
 	@Basic
-	@Column(name="COMMENT", nullable=true, length=255)
+	@Column(name = "COMMENT", nullable = true, length = 255)
 	private String comment;
+
 	/**
 	 * @return the comment
 	 */

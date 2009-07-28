@@ -28,41 +28,53 @@
 						value="#{school.teachingRequirements}">
 						<rich:column>
 							<f:facet name="header">
-								<h:outputText value="Ειδικότητα" />
+								<h:outputText value="Κωδ. Ειδ." />
 							</f:facet>
+							<h:outputText value="#{requirement.specialization.id}" />
 
-							<h:inputText id="specializationFilter" size="8"
-								value="#{requirement.specialization}" required="true"
-								styleClass="fieldValueText" converter="specializationConverter">
-
-								<rich:suggestionbox height="100" width="250"
-									for="specializationFilter" var="a_spec"
-									suggestionAction="#{specializationSuggester.suggest}">
-									<f:facet name="nothingLabel">
-										<h:outputText value="Άγνωστη Ειδικότητα" />
-									</f:facet>
-									<h:column>
-										<h:outputText value="#{a_spec.id}" />
-									</h:column>
-									<h:column>
-										<h:outputText value="#{a_spec.title}" />
-									</h:column>
-								</rich:suggestionbox>
-							</h:inputText>
+							
 						</rich:column>
 						<rich:column>
 							<f:facet name="header">
-								<h:outputText value="Ώρες Διδασκαλίας" />
+								<h:outputText value="Ειδικότητα" />
 							</f:facet>
-							<rich:inplaceInput value="#{requirement.hours}" inputWidth="60"
-								required="true" />
+							<h:outputText value="#{requirement.specialization.title}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Ώρες" />
+							</f:facet>
+							<h:outputText value="#{requirement.hours}" />
 						</rich:column>
 						<rich:column>
 							<f:facet name="header">
 								<h:outputText value="Προαιρετικά Σχόλια" />
 							</f:facet>
-							<rich:inplaceInput value="#{requirement.comment}"
-								inputWidth="100" />
+							<h:outputText value="#{requirement.comment}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Ενέργεια" />
+							</f:facet>
+							<rich:toolBar itemSeparator="line">
+
+
+								<s:link id="modifyResource" value="Τροποποίηση"
+									view="/teachingResources/modify-teaching-resource.xhtml">
+									<f:param name="teachingRequirementID" value="#{requirement.id}" />
+									<f:param name="modify_teaching_resource_from"
+										value="/teachingResources/school-teaching-resources" />
+								</s:link>
+
+								<s:link id="removeResource" value="Διαγραφή"
+									view="/teachingResources/remove-teaching-resource.xhtml">
+									<f:param name="teachingRequirementID" value="#{requirement.id}" />
+									<f:param name="remove_teaching_resource_from"
+										value="/teachingResources/school-teaching-resources" />
+								</s:link>
+
+
+							</rich:toolBar>
 						</rich:column>
 						<f:facet name="footer">
 							<rich:datascroller for="resourcesTable">
@@ -77,14 +89,14 @@
 						</f:facet>
 					</rich:dataTable>
 					<s:div styleClass="actionButtons">
-
-						<h:commandButton id="update"
-							action="#{schoolHome.updateTeachingResources}" value="Aποθήκευση"
-							rendered="#{schoolHome.managed}" />
-						<rich:spacer width="20" />
-
-						<s:button id="revertButton" value="Ακύρωση Αλλαγών"
-							rendered="#{schoolHome.managed}" action="#{schoolHome.revert}"/>
+						
+						<s:button id="revertButton" value="Τέλος Διαχείρησης" view="/home.xhtml"
+							propagation="end" />
+						<rich:spacer width="20"/>
+						<s:button value="Προσθήκη Διδακτικών Ωρών" action="#{teachingRequirementHome.clearInstance()}" view="/teachingResources/add-teaching-resource.xhtml">
+							<f:param name="add_teaching_resource_from"
+										value="/teachingResources/school-teaching-resources" />
+						</s:button>
 
 					</s:div>
 
@@ -94,64 +106,7 @@
 		</h:form>
 
 
-		<h:form id="form2">
-			<rich:panel>
-				<f:facet name="header">
-					<h:outputText value="Προσθήκη Ωρών Διδασκαλίας" />
-				</f:facet>
-				<h:outputText
-					value="Συμπληρώστε τα παρακάτω πεδία για να εισάγετε νέες διδακτικές ώρες" />
-				<h:panelGrid columns="4">
-					<s:decorate template="/layout/doubleLineEdit.xhtml">
-						<ui:define name="label">
-							<h:outputText value="Ειδικότητα : " />
-						</ui:define>
-						<h:inputText id="specializationFilter2"
-							value="#{exampleTeachingRequirement.specialization}"
-							required="true" styleClass="fieldValueText"
-							converter="specializationConverter">
-
-							<rich:suggestionbox height="100" width="250"
-								for="specializationFilter2" var="a_spec"
-								suggestionAction="#{specializationSuggester.suggest}">
-								<f:facet name="nothingLabel">
-									<h:outputText value="Άγνωστη Ειδικότητα" />
-								</f:facet>
-								<h:column>
-									<h:outputText value="#{a_spec.id}" />
-								</h:column>
-								<h:column>
-									<h:outputText value="#{a_spec.title}" />
-								</h:column>
-							</rich:suggestionbox>
-						</h:inputText>
-
-					</s:decorate>
-
-					<s:decorate template="/layout/doubleLineEdit.xhtml">
-						<ui:define name="label">
-							<h:outputText value="Ώρες : " />
-						</ui:define>
-
-						<h:inputText value="#{exampleTeachingRequirement.hours}"
-							required="true" maxlength="3" size="3" />
-					</s:decorate>
-
-					<s:decorate template="/layout/doubleLineEdit.xhtml">
-						<ui:define name="label">
-							<h:outputText value="Προαιρετικό Σχόλιο : " />
-						</ui:define>
-
-						<h:inputText value="#{exampleTeachingRequirement.comment}"
-							required="false" maxlength="255" size="40" />
-					</s:decorate>
-					<h:commandButton value="Προσθήκη Ωρών"
-						action="#{schoolHome.addTeachingResource}">
-						<a4j:support event="onclick" reRender="resourcesTable" />
-					</h:commandButton>
-				</h:panelGrid>
-			</rich:panel>
-		</h:form>
+	
 
 	</ui:define>
 </ui:composition>

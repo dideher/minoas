@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<ui:composition template="/layout/simple-beauty-template.xhtml">
+	<ui:define name="body">
+
+
+				
+
+
+		<h:form id="form2">
+			<rich:panel>
+				<f:facet name="header">
+					<h:outputText
+						value="Προσθήκη Ωρών Διδασκαλίας στην Σχολική Μονάδα #{school.title}" />
+				</f:facet>
+				<h:outputText
+					value="Συμπληρώστε τα παρακάτω πεδία για να εισάγετε νέες διδακτικές ώρες" />
+				<h:panelGrid columns="4">
+					<s:decorate template="/layout/doubleLineEdit.xhtml">
+						<ui:define name="label">
+							<h:outputText value="Ειδικότητα : " />
+						</ui:define>
+						<h:inputText id="specializationFilter2"
+							value="#{teachingRequirement.specialization}" required="true"
+							styleClass="fieldValueText" converter="specializationConverter">
+
+							<rich:suggestionbox height="100" width="250"
+								for="specializationFilter2" var="a_spec"
+								suggestionAction="#{specializationSuggester.suggest}">
+								<f:facet name="nothingLabel">
+									<h:outputText value="Άγνωστη Ειδικότητα" />
+								</f:facet>
+								<h:column>
+									<h:outputText value="#{a_spec.id}" />
+								</h:column>
+								<h:column>
+									<h:outputText value="#{a_spec.title}" />
+								</h:column>
+							</rich:suggestionbox>
+						</h:inputText>
+
+					</s:decorate>
+
+					<s:decorate template="/layout/doubleLineEdit.xhtml">
+						<ui:define name="label">
+							<h:outputText value="Ώρες : " />
+						</ui:define>
+
+						<h:inputText value="#{teachingRequirement.hours}" required="true"
+							maxlength="3" size="3" />
+					</s:decorate>
+
+					<s:decorate template="/layout/doubleLineEdit.xhtml">
+						<ui:define name="label">
+							<h:outputText value="Προαιρετικό Σχόλιο : " />
+						</ui:define>
+
+						<h:inputText value="#{teachingRequirement.comment}"
+							required="false" maxlength="255" size="40" />
+					</s:decorate>
+				</h:panelGrid>
+				<s:div styleClass="actionButtons">
+
+						<s:button id="backButton" value="Ακύρωση Αλλαγών"
+						action="back" />
+						<rich:spacer width="20" />
+
+				<h:commandButton value="Προσθήκη Ωρών"
+						action="#{teachingRequirementHome.persist()}">
+					</h:commandButton>
+				
+
+					</s:div>
+			</rich:panel>
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

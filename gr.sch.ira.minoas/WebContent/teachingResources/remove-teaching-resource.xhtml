@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<ui:composition template="/layout/simple-beauty-template.xhtml">
+	<ui:define name="body">
+
+		<h:form id="form1">
+			<rich:panel>
+				<f:facet name="header">
+					<h:outputText value="Διαγραφή Ωρών Διδασκαλίας" />
+				</f:facet>
+
+				<h:panelGrid columns="1" rowClasses="vertTop">
+					<h:panelGroup>
+						<h:outputText value="Είστε σίγουροι πως θέλετε να διαγράψετε τις " />
+						<h:outputText value="#{teachingRequirement.hours}"
+							styleClass="fieldValueText" />
+						<h:outputText value=" ώρες, ειδικότητας " />
+						<h:outputText value="#{teachingRequirement.specialization.title}"
+							styleClass="fieldValueText" />
+						<h:outputText value=" απο την σχολική μονάδα " />
+						<h:outputText value="#{teachingRequirement.school.title}"
+							styleClass="fieldValueText" />
+						<h:outputText value=" κατά την σχολική χρονία " />
+						<h:outputText value="#{teachingRequirement.schoolYear.title}"
+							styleClass="fieldValueText" />
+					</h:panelGroup>
+					<rich:spacer height="10" />
+					<s:div styleClass="actionButtons">
+
+						<h:commandButton id="back" action="backButton" value="Οχι, επιστροφή"
+							styleClass="fieldValueText" />
+						<rich:spacer width="20" />
+
+						<s:button id="remove" value="Ναι, διαγραφή!"
+							action="#{teachingRequirementHome.remove()}" />
+
+					</s:div>
+				</h:panelGrid>
+
+			</rich:panel>
+		</h:form>
+
+
+	</ui:define>
+</ui:composition>
+</html>

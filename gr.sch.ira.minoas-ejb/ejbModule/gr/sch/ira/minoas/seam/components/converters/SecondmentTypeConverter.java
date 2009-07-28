@@ -66,7 +66,7 @@ public class SecondmentTypeConverter extends DatabaseAwareBaseConverter {
 	public String getAsString(FacesContext context, UIComponent component, Object value) {
 		if (value != null) {
 			if (value instanceof SecondmentType) {
-				return ((SecondmentType) value).getTitle();
+				return ((SecondmentType) value).getKey();
 			} else {
 				return value.toString();
 			}

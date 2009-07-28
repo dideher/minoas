@@ -58,6 +58,12 @@ public class Unit extends AbstractArchivableEntity {
 	@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 	@JoinTable(name = "MINOAS_UNIT_GATEGORIES", joinColumns = @JoinColumn(name = "UNIT_ID", referencedColumnName = "UNIT_ID"), inverseJoinColumns = @JoinColumn(name = "CATEGORY_ID", referencedColumnName = "ID"))
 	private Collection<UnitCategory> categories = new ArrayList<UnitCategory>();
+	
+	
+	/*@ManyToOne(fetch=FetchType.LAZY, targetEntity=Unit.class)
+	@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
+	@JoinTable(name = "UNIT_NEIGHBOURS", joinColumns = @JoinColumn(name = "UNIT_ID", referencedColumnName = "UNIT_ID"), inverseJoinColumns = @JoinColumn(name = "NEIGHBOOR_UNIT_ID", referencedColumnName = "UNIT_ID"))
+	private Collection<Unit> neighbours = new ArrayList<Unit>();*/
 
 	@Id
 	@Column(name = "UNIT_ID", length = 3)
@@ -182,5 +188,7 @@ public class Unit extends AbstractArchivableEntity {
 	public void setTitle(String title) {
 		this.title = title;
 	}
+
+	
 
 }

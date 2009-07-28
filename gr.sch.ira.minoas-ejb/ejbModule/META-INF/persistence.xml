@@ -16,8 +16,6 @@
     <class>
       gr.sch.ira.minoas.model.security.Principal</class>
     <class>
-      gr.sch.ira.minoas.model.employement.SecondmentType</class>
-    <class>
       gr.sch.ira.minoas.model.employement.Secondment</class>
     <class>
       gr.sch.ira.minoas.model.employement.Employment</class>
@@ -52,6 +50,7 @@
     <class>gr.sch.ira.minoas.model.core.EstablishmentLocation</class>
     <class>gr.sch.ira.minoas.model.preparatory.PreparatoryOwnerOrDirector</class>
     <class>gr.sch.ira.minoas.model.employement.SecondmentUnit</class>
+    <class>gr.sch.ira.minoas.model.core.SchoolGroup</class>
     <properties>
       <!--
         <property name="hibernate.dialect"

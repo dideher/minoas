@@ -11,7 +11,11 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -53,6 +57,29 @@ public class School extends Unit {
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="school", cascade={ CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
 	@OrderBy("specialization ASC")
 	private Collection<TeachingRequirement> teachingRequirements = new ArrayList<TeachingRequirement>();
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name="SCHOOL_TYPE", nullable=true)
+	private SchoolType type;
+	
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="SCHOOL_GROUP_ID", nullable=true)
+	private SchoolGroup group;
+	
+
+	/**
+	 * @return the group
+	 */
+	public SchoolGroup getGroup() {
+		return group;
+	}
+
+	/**
+	 * @param group the group to set
+	 */
+	public void setGroup(SchoolGroup group) {
+		this.group = group;
+	}
 
 	/**
 	 * @return the teachingRequirements
@@ -129,6 +156,20 @@ public class School extends Unit {
 	public void addTeachingRequirement(TeachingRequirement req) {
 		req.setSchool(this);
 		getTeachingRequirements().add(req);
+	}
+
+	/**
+	 * @return the type
+	 */
+	public SchoolType getType() {
+		return type;
+	}
+
+	/**
+	 * @param type the type to set
+	 */
+	public void setType(SchoolType type) {
+		this.type = type;
 	}
 
 }
