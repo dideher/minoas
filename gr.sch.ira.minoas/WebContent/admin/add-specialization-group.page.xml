@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page login-required="true" view-id="/teachingResources/school-teaching-resources.xhtml"  xmlns="http://jboss.com/products/seam/pages"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.1.xsd">
+  <begin-conversation join="true" flush-mode="manual"/>
+  <description>Προσθήκη Ομάδας Ειδικοτητών</description>
+  
+  <param name="add_specialization_group_from" />
+  <!-- navigation rules -->
+  
+ 
+  
+  <navigation from-action="#{specializationGroupHome.persist()}">
+      <redirect view-id="#{empty add_specialization_group_from ? '/home' : add_specialization_group_from}.xhtml}" />
+  </navigation>
+  
+  
+  <navigation from-action="back">
+      <redirect view-id="#{add_specialization_group_from ? '/home' : add_specialization_group_from}.xhtml}" />
+  </navigation>
+  
+  
+  
+</page>

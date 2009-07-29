@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<ui:composition template="/layout/simple-beauty-template.xhtml">
+	<ui:define name="body">
+
+		<h:form id="form1">
+			<rich:panel>
+				<f:facet name="header">
+					<h:outputText
+						value="Διαχείρηση Ομάδων Ειδικοτητών" />
+				</f:facet>
+
+				<h:panelGrid columns="1" rowClasses="vertTop">
+					<h:outputText
+						value="Στον παρακάτω πίνακα εμφανίζονται οι απαιτήσεις σε διδακτικές ώρες στην σχολική μονάδα που επιλέξατε, κατά την τρέχουσα σχολική χρονία. " />
+					<a4j:region>
+					<rich:dataTable id="specializationGroupTable" var="_specializationGroup" rows="20"
+						value="#{specializationGroupsListQuery.resultList}" rendered="#{specializationGroupsListQuery.resultCount>0}">
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Ομάδα Ειδικοτήτων" />
+							</f:facet>
+							<h:outputText value="#{_specializationGroup.title}" />
+						</rich:column>
+							
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Ειδικότητες" />
+							</f:facet>
+							<h:panelGroup>
+							<rich:dataTable width="100%" value="#{_specializationGroup.specializations}" var="_specialization">
+							<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Κωδικός Ειδ." />
+							</f:facet>
+							<h:outputText value="#{_specialization.id}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Λεκτικό Ειδικότητας" />
+							</f:facet>
+							<h:outputText value="#{_specialization.title}" />
+						</rich:column>
+						</rich:dataTable>
+						</h:panelGroup>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Ενέργεια" />
+							</f:facet>
+							
+                    <rich:toolTip for="deletelink" value="Delete"/>
+							<rich:toolBar itemSeparator="line">
+								<a4j:commandLink ajaxSingle="true" id="deletelink"
+                    oncomplete="#{rich:component('deletePanel')}.show()" value="Διαφραφή">
+                    <h:graphicImage value="/images/icons/delete.gif" style="border:0"/>
+                    <f:setPropertyActionListener value="#{_specializationGroup.id}"
+                        target="#{specializationGroupHome.id}" />
+                   	
+                </a4j:commandLink>
+
+								<s:link id="modifyResource" value="Τροποποίηση"
+									view="/teachingResources/modify-teaching-resource.xhtml">
+									<f:param name="teachingRequirementID" value="#{requirement.id}" />
+									<f:param name="modify_teaching_resource_from"
+										value="/teachingResources/school-teaching-resources" />
+								</s:link>
+
+								<s:link id="removeResource" value="Διαγραφή"
+									view="/teachingResources/remove-teaching-resource.xhtml">
+									<f:param name="teachingRequirementID" value="#{requirement.id}" />
+									<f:param name="remove_teaching_resource_from"
+										value="/teachingResources/school-teaching-resources" />
+								</s:link>
+
+
+							</rich:toolBar>
+						</rich:column>
+						
+						<f:facet name="footer">
+							<rich:datascroller for="specializationGroupTable">
+								<f:facet name="first">
+									<h:outputText value="Πρώτη" />
+								</f:facet>
+								<f:facet name="last">
+									<h:outputText value="Τελευταία" />
+								</f:facet>
+							</rich:datascroller>
+
+						</f:facet>
+					</rich:dataTable>
+					</a4j:region>
+					<s:div styleClass="actionButtons">
+						
+						<s:button id="revertButton" value="Τέλος Διαχείρησης" view="/home.xhtml"
+							propagation="end" />
+						<rich:spacer width="20"/>
+						<s:button value="Προσθήκη Ομάδας Ειδικότητων" action="#{specializationGroupHome.clearInstance()}" view="/admin/add-specialization-group.xhtml">
+							<f:param name="add_specialization_group_from"
+										value="/admin/manage-specialization-groups" />
+						</s:button>
+
+					</s:div>
+
+				</h:panelGrid>
+
+			</rich:panel>
+		</h:form>
+
+
+	<rich:modalPanel id="deletePanel" autosized="true" width="200">
+        <f:facet name="header">
+            <h:outputText value="Διαγραφή της ομάδας ?"
+                style="padding-right:15px;" />
+        </f:facet>
+        <f:facet name="controls">
+            <h:panelGroup>
+                <h:graphicImage value="/images/modal/close.png"
+                    styleClass="hidelink" id="hidelink2" />
+                <rich:componentControl for="deletePanel" attachTo="hidelink2"
+                    operation="hide" event="onclick" />
+            </h:panelGroup>
+        </f:facet>
+        <h:form>
+            <table width="100%">
+                <tbody>
+                    <tr>
+                        <td align="center" width="50%">
+                <a4j:commandButton value="Yes" ajaxSingle="true"
+                    action="#{specializationGroupHome.remove()}"
+                    oncomplete="#{rich:component('deletePanel')}.hide();"
+                    reRender="specializationGroupTable" />
+                        </td>
+                        <td align="center" width="50%">
+                <a4j:commandButton value="Cancel"
+                    onclick="#{rich:component('deletePanel')}.hide();return false;" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </h:form>
+    </rich:modalPanel>
+    
+     <a4j:status onstart="#{rich:component('wait')}.show()" onstop="#{rich:component('wait')}.hide()"/>
+    <rich:modalPanel id="wait" autosized="true" width="200" height="120" moveable="false" resizeable="false">
+        <f:facet name="header">
+            <h:outputText value="Επεξεργασία"/>
+        </f:facet>
+        <h:outputText value="Παρακαλώ Περιμένετε..."/>
+    </rich:modalPanel>
+    <rich:messages></rich:messages>
+
+	</ui:define>
+</ui:composition>
+</html>

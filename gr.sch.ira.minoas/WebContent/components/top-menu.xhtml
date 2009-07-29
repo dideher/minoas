@@ -82,12 +82,20 @@
 					</rich:menuItem>
 				</rich:menuGroup>
 			</rich:dropDownMenu>
-			<rich:dropDownMenu rendered="#{s:hasRole(ADMIN)} " >
+			<rich:dropDownMenu rendered="#{identity.loggedIn}">
 				<f:facet name="label">
 					<h:panelGroup>
 						<h:outputText value="Διαχείριση Μίνωα" />
 					</h:panelGroup>
 				</f:facet>
+				<rich:menuGroup value="Ειδικότητες">
+				<rich:menuItem submitMode="none" disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MANAGE_SPECIALIZATION_GROUP'))}">
+					<s:link value="Ομάδες Ειδικοτητών" view="/admin/manage-specialization-groups.xhtml">
+						<f:param name="manage_specialization_groups_from" value="home"/>
+					</s:link>
+				</rich:menuItem>
+				</rich:menuGroup>
+				<!--  
 				<rich:menuItem submitMode="ajax">
 					<s:link value="Σχολικά Έτη" action="#{schoolYearAdmin.search()}"
 					view="/schoolYears.xhtml" />
@@ -104,13 +112,14 @@
 						<s:link value="Διαχείριση Ομάδων" view="/roleGroups.xhtml" />
 					</rich:menuItem>
 				</rich:menuGroup>
+				-->
 			</rich:dropDownMenu>
 			<rich:toolBarGroup location="right" itemSeparator="line">
 				<s:link value="Κεντρική Σελίδα" view="/home.xhtml"
-					propagation="none" disabled="#{!identity.loggedIn}"
-					styleClass="current_page_item" />
-				<s:link value="Αποσύνδεση" action="#{identity.logout}"
-					view="/home.xhtml" styleClass="current_page_item" />
+					propagation="none" rendered="#{identity.loggedIn}"
+					 />
+				<s:link value="Αποσύνδεση" rendered="#{identity.loggedIn}" action="#{identity.logout}"
+					view="/home.xhtml" />
 			</rich:toolBarGroup>
 		</rich:toolBar>
 	</a4j:form>

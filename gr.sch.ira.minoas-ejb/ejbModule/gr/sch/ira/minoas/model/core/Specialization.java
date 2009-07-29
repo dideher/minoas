@@ -7,7 +7,10 @@ import gr.sch.ira.minoas.model.BaseModel;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
@@ -28,7 +31,8 @@ public class Specialization extends BaseModel {
 	@Id
 	@Column(name = "SPECIALIZATION_ID", length = 6)
 	private String id;
-
+	
+	
 	@Column(name = "TITLE", nullable = false, length = 70)
 	private String title;
 
@@ -46,6 +50,8 @@ public class Specialization extends BaseModel {
 		return id;
 	}
 
+	
+
 	/**
 	 * @return the title
 	 */
@@ -59,6 +65,7 @@ public class Specialization extends BaseModel {
 	public void setId(String id) {
 		this.id = id;
 	}
+
 
 	/**
 	 * @param title the title to set

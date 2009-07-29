@@ -51,6 +51,7 @@
     <class>gr.sch.ira.minoas.model.preparatory.PreparatoryOwnerOrDirector</class>
     <class>gr.sch.ira.minoas.model.employement.SecondmentUnit</class>
     <class>gr.sch.ira.minoas.model.core.SchoolGroup</class>
+    <class>gr.sch.ira.minoas.model.core.SpecializationGroup</class>
     <properties>
       <!--
         <property name="hibernate.dialect"
