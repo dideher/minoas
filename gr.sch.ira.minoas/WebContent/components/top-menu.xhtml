@@ -82,7 +82,7 @@
 					</rich:menuItem>
 				</rich:menuGroup>
 			</rich:dropDownMenu>
-			<rich:dropDownMenu rendered="#{identity.loggedIn}">
+			<rich:dropDownMenu disabled="#{!identity.loggedIn}">
 				<f:facet name="label">
 					<h:panelGroup>
 						<h:outputText value="Διαχείριση Μίνωα" />

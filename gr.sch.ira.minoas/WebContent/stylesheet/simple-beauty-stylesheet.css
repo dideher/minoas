@@ -5,7 +5,7 @@ body {
 
 #container {
 	margin: 0 auto;
-	width: 750px
+	width: 1000px
 }
 
 #header {
@@ -47,7 +47,7 @@ body {
 .content {
 	/* float: right; */
 	/* width: 540px; */
-	width: 720px;
+	width: 980px;
 	text-align: justify;
 	padding: 0 10px 0 10px;
 	font-size: 12px
