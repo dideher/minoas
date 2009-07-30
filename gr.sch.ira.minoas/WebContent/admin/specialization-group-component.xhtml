@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich">
+
+<ui:component>
+	<h:panelGrid columns="1">
+					<s:decorate template="/layout/doubleLineEdit.xhtml">
+						<ui:define name="label">
+							<h:outputText value="Όνομα Ειδικότητας : " />
+						</ui:define>
+						<h:inputText id="specializationFilter"
+							value="${specializationGroup.title}" required="true" size="24"
+							maxlength="128" styleClass="fieldValueText" />
+
+					</s:decorate>
+
+					<s:decorate template="/layout/doubleLineEdit.xhtml">
+						<ui:define name="label">
+							<h:outputText value="Ειδικότητες Ομάδας" />
+						</ui:define>
+						<rich:pickList value="${specializationGroup.specializations}" sourceListWidth="240" targetListWidth="240">
+							<s:selectItems var="item" value="#{specializationsListQuery.resultList}" label="#{item.id} - #{item.title}">
+								
+							</s:selectItems>
+							<s:convertEntity></s:convertEntity>
+						</rich:pickList>
+					</s:decorate>
+				</h:panelGrid>
+</ui:component>
+</html>

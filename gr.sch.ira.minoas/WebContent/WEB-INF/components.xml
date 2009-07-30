@@ -220,13 +220,13 @@
    <!-- Specialization Components -->
    <framework:entity-query name="specializationsListQuery" max-results="200" scope="page">
     <framework:ejbql>SELECT s FROM Specialization s</framework:ejbql>
-    <framework:order>s.id desc</framework:order>
+    <framework:order>s.id asc</framework:order>
    </framework:entity-query>
    
    
    <framework:entity-query name="specializationGroupsListQuery" max-results="200" scope="page">
     <framework:ejbql>SELECT s FROM SpecializationGroup s</framework:ejbql>
-    <framework:order>s.title desc</framework:order>
+    <framework:order>s.title asc</framework:order>
       <framework:restrictions>
         <value>s.schoolYear = #{activeShoolYear}</value>
       </framework:restrictions>
@@ -235,6 +235,10 @@
    <!-- Events -->
    <event type="org.jboss.seam.afterTransactionSuccess.Employee">
       <action execute="#{employeeRegularEmploymentsListQuery.refresh}" />
+   </event>
+   
+   <event type="org.jboss.seam.afterTransactionSuccess.SpecializationGroup">
+      <action execute="#{specializationGroupsListQuery.refresh}" />
    </event>
    
    <event type="org.jboss.seam.afterTransactionSuccess.Secondment">

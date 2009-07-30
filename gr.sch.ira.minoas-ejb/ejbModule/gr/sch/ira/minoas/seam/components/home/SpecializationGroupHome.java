@@ -32,6 +32,7 @@ public class SpecializationGroupHome extends MinoasEntityHome<SpecializationGrou
 	@Override
 	@Transactional
 	public String remove() {
+		getLogger().info("specialiaztion group #0 has been deleted by #1", getInstance().getTitle(), getIdentity().getPrincipal().getName());
 		return super.remove();
 	}
 
@@ -82,6 +83,15 @@ public class SpecializationGroupHome extends MinoasEntityHome<SpecializationGrou
 	@Transactional
 	public String update() {
 		return super.update();
+	}
+
+
+	/**
+	 * @see org.jboss.seam.framework.Home#setId(java.lang.Object)
+	 */
+	@Override
+	public void setId(Object id) {
+		super.setId(id);
 	}
 
 
