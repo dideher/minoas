@@ -109,4 +109,16 @@ public class SpecializationGroup extends BaseModel {
 		this.title = title;
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("SpecializationGroup [");
+		if (title != null) {
+			builder.append("title=");
+			builder.append(title);
+		}
+		builder.append("]");
+		return builder.toString();
+	}
+
 }

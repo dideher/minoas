@@ -21,8 +21,7 @@ import gr.sch.ira.minoas.seam.components.CoreSearching;
 @Name("secondmentHome")
 public class SecondmentHome extends MinoasEntityHome<Secondment> {
 
-	@In()
-	private CoreSearching coreSearching;
+	
 
 	@In(create = true)
 	private EmployeeHome employeeHome;
@@ -38,7 +37,7 @@ public class SecondmentHome extends MinoasEntityHome<Secondment> {
 		info("trying to add new secondment #0 for employee #1,", newSecondment, employee);
 		Employment currentEmployment = employee.getCurrentEmployment();
 		Secondment currentSecondment = currentEmployment != null ? currentEmployment.getSecondment() : null;
-		newSecondment.setSchoolYear(coreSearching.getActiveSchoolYear());
+		newSecondment.setSchoolYear(getCoreSearching().getActiveSchoolYear());
 		newSecondment.setActive(Boolean.TRUE);
 		newSecondment.setEmployee(employee);
 		newSecondment.setTargetPYSDE(newSecondment.getTargetUnit().getPysde());

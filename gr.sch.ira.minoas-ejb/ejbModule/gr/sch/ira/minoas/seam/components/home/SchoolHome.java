@@ -30,8 +30,7 @@ public class SchoolHome extends MinoasEntityHome<School> {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@In(required = true)
-	private CoreSearching coreSearching;
+	
 
 	@In(required = false)
 	@Out(required = false)
@@ -50,7 +49,7 @@ public class SchoolHome extends MinoasEntityHome<School> {
 		School instance = getDefinedInstace();
 		TeachingRequirement req = new TeachingRequirement();
 		req.setSchool(instance);
-		req.setSchoolYear(coreSearching.getActiveSchoolYear());
+		req.setSchoolYear(getCoreSearching().getActiveSchoolYear());
 		if (getIdentity() != null) {
 
 		}

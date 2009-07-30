@@ -23,8 +23,7 @@ import gr.sch.ira.minoas.seam.components.CoreSearching;
 @Name("employeeHome")
 public class EmployeeHome extends MinoasEntityHome<Employee> {
 
-	@In()
-	private CoreSearching coreSearching;
+	
 
 	
 	@In(create = true)
@@ -63,7 +62,7 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 		Employment old_employment = employee.getCurrentEmployment();
 
 		/* update the new emploment */
-		employment.setSchoolYear(coreSearching.getActiveSchoolYear());
+		employment.setSchoolYear(getCoreSearching().getActiveSchoolYear());
 		employment.setEmployee(employee);
 		employment.setActive(Boolean.TRUE);
 		getEntityManager().persist(employment);

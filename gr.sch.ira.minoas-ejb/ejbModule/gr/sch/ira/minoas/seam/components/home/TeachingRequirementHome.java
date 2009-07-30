@@ -27,41 +27,21 @@ import org.jboss.seam.annotations.Transactional;
 public class TeachingRequirementHome extends MinoasEntityHome<TeachingRequirement> {
 
 	/**
-	 * @see org.jboss.seam.framework.EntityHome#remove()
-	 */
-	@Override
-	@Transactional
-	public String remove() {
-		School school = schoolHome.getDefinedInstace();
-		TeachingRequirement req = (TeachingRequirement) getInstance();
-		school.getTeachingRequirements().remove(req);
-		req.setSchool(null);
-		req.setSchoolYear(null);
-		return super.remove();
-	}
-
-	/**
 	 * Comment for <code>serialVersionUID</code>
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@In()
-	private CoreSearching coreSearching;
-
-	
 	@In(create=true)
 	private SchoolHome schoolHome;
 
+
+	
 	/**
 	 * @see org.jboss.seam.framework.Home#createInstance()
 	 */
 	@Override
-	
 	protected TeachingRequirement createInstance() {
 		TeachingRequirement instance = (TeachingRequirement) super.createInstance();
-//		instance.setStatusType(EstablishmentLicenseStatusType.PENDING);
-//		instance.setRequestDate(new Date(System.currentTimeMillis()));
-//		instance.setSchoolYear(coreSearching.getActiveSchoolYear());
 		return instance;
 	}
 
@@ -74,7 +54,6 @@ public class TeachingRequirementHome extends MinoasEntityHome<TeachingRequiremen
 		TeachingRequirement req =(TeachingRequirement)super.getInstance();
 		return req;
 	}
-	
 
 	/**
 	 * @see org.jboss.seam.framework.EntityHome#persist()
@@ -84,12 +63,32 @@ public class TeachingRequirementHome extends MinoasEntityHome<TeachingRequiremen
 		School school = schoolHome.getDefinedInstace();
 		TeachingRequirement req = (TeachingRequirement) getInstance();
 		req.setSchool(school);
-		req.setSchoolYear(coreSearching.getActiveSchoolYear(getEntityManager()));
-		
+		req.setSchoolYear(getCoreSearching().getActiveSchoolYear(getEntityManager()));
 		school.addTeachingRequirement(req);
+		req.setInsertedBy(getPrincipal());
 		getEntityManager().persist(req);
-		
+		getLogger().info("principal #0 created teaching requirement #1.", getPrincipalName(), req);
 		return super.persist();
+	}
+	
+
+	/**
+	 * @see org.jboss.seam.framework.EntityHome#remove()
+	 */
+	@Override
+	@Transactional
+	public String remove() {
+		School school = schoolHome.getDefinedInstace();
+		TeachingRequirement req = (TeachingRequirement) getInstance();
+		school.getTeachingRequirements().remove(req);
+		getLogger().info("principal #0 deleted teaching requirement #1.", getPrincipalName(), req);
+		return super.remove();
+	}
+
+	@Transactional
+	public String revert() {
+		getEntityManager().refresh(getInstance());
+		return "reverted";
 	}
 
 	/**
@@ -98,17 +97,10 @@ public class TeachingRequirementHome extends MinoasEntityHome<TeachingRequiremen
 	@Override
 	@Transactional
 	public String update() {
+		getLogger().info("principal #0 updated teaching requirement #1.", getPrincipalName(), getInstance());
 		return super.update();
 	}
-
-	public void wire() {
-		
-	}
 	
-	@Transactional
-	public String revert() {
-		getEntityManager().refresh(getInstance());
-		return "reverted";
-	}
+	
 
 }

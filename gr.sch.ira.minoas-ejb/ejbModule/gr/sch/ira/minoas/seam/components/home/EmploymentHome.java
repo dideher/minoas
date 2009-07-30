@@ -17,6 +17,24 @@ import gr.sch.ira.minoas.model.employement.Employment;
 @Name("employmentHome")
 public class EmploymentHome extends MinoasEntityHome<Employment> {
 
+	
+
+	
+
+	/**
+	 * @see org.jboss.seam.framework.Home#getInstance()
+	 */
+	@Override
+	@Factory(value="employment", scope=ScopeType.PAGE)
+	public Employment getInstance() {
+		return (Employment)super.getInstance();
+	}
+	@Transactional
+	public String revert() {
+		getEntityManager().refresh(getInstance());
+		return "reverted";
+	}
+
 	/**
 	 * @see org.jboss.seam.framework.EntityHome#update()
 	 */
@@ -64,29 +82,5 @@ public class EmploymentHome extends MinoasEntityHome<Employment> {
 		
 		return super.update(); 
 	  }
-
-	
-
-	@Transactional
-	public String revert() {
-		getEntityManager().refresh(getInstance());
-		return "reverted";
-	}
-	/**
-	 * @see org.jboss.seam.framework.Home#createInstance()
-	 */
-	@Override
-	protected Object createInstance() {
-		return super.createInstance();
-	}
-
-	/**
-	 * @see org.jboss.seam.framework.Home#getInstance()
-	 */
-	@Override
-	@Factory(value="employment", scope=ScopeType.PAGE)
-	public Employment getInstance() {
-		return (Employment)super.getInstance();
-	}
 
 }

@@ -133,7 +133,7 @@
 					<h:panelGroup>
 					<a4j:commandButton value="Αποθήκευση Αλλαγών"
 						action="#{specializationGroupHome.update()}"
-						oncomplete="if (#{facesContext.maximumSeverity==null}) #{rich:component('updatePanel')}.hide();" />
+						oncomplete="#{rich:component('updatePanel')}.hide();return true;" />
 					<a4j:commandButton value="Ακύρωση Αλλαγών" 
 						action="#{specializationGroupHome.revert()}"
 						oncomplete="#{rich:component('updatePanel')}.hide();return false;" />

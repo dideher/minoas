@@ -36,6 +36,10 @@ public class TeachingRequirement extends BaseModel implements Cloneable {
 	private static final long serialVersionUID = 1L;
 
 	@Basic
+	@Column(name = "COMMENT", nullable = true, length = 255)
+	private String comment;
+
+	@Basic
 	@Column(name = "HOURS", nullable = false)
 	private Integer hours;
 
@@ -43,13 +47,6 @@ public class TeachingRequirement extends BaseModel implements Cloneable {
 	@Column(name = "REQUIREMENT_ID")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-
-	@Override
-	public Object clone() throws CloneNotSupportedException {
-		TeachingRequirement clone = (TeachingRequirement) super.clone();
-		clone.setId(null);
-		return clone;
-	}
 
 	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
 	@JoinColumn(name = "SCHOOL_ID", nullable = false)
@@ -60,32 +57,28 @@ public class TeachingRequirement extends BaseModel implements Cloneable {
 	private SchoolYear schoolYear;
 
 	@ManyToOne
-	@JoinColumn(name = "SPECIALIZATION_ID", nullable = false)
-	private Specialization specialization;
-
-	@Basic
-	@Column(name = "COMMENT", nullable = true, length = 255)
-	private String comment;
-
-	/**
-	 * @return the comment
-	 */
-	public String getComment() {
-		return comment;
-	}
-
-	/**
-	 * @param comment the comment to set
-	 */
-	public void setComment(String comment) {
-		this.comment = comment;
-	}
+	@JoinColumn(name = "SPECIALIZATION_GROUP_ID", nullable = false)
+	private SpecializationGroup specialization;
 
 	/**
 	 * 
 	 */
 	public TeachingRequirement() {
 		super();
+	}
+
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		TeachingRequirement clone = (TeachingRequirement) super.clone();
+		clone.setId(null);
+		return clone;
+	}
+
+	/**
+	 * @return the comment
+	 */
+	public String getComment() {
+		return comment;
 	}
 
 	/**
@@ -103,6 +96,13 @@ public class TeachingRequirement extends BaseModel implements Cloneable {
 	}
 
 	/**
+	 * @return the school
+	 */
+	public School getSchool() {
+		return school;
+	}
+
+	/**
 	 * @return the schoolYear
 	 */
 	public SchoolYear getSchoolYear() {
@@ -112,8 +112,15 @@ public class TeachingRequirement extends BaseModel implements Cloneable {
 	/**
 	 * @return the specialization
 	 */
-	public Specialization getSpecialization() {
+	public SpecializationGroup getSpecialization() {
 		return specialization;
+	}
+
+	/**
+	 * @param comment the comment to set
+	 */
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 
 	/**
@@ -131,6 +138,13 @@ public class TeachingRequirement extends BaseModel implements Cloneable {
 	}
 
 	/**
+	 * @param school the school to set
+	 */
+	public void setSchool(School school) {
+		this.school = school;
+	}
+
+	/**
 	 * @param schoolYear the schoolYear to set
 	 */
 	public void setSchoolYear(SchoolYear schoolYear) {
@@ -140,22 +154,35 @@ public class TeachingRequirement extends BaseModel implements Cloneable {
 	/**
 	 * @param specialization the specialization to set
 	 */
-	public void setSpecialization(Specialization specialization) {
+	public void setSpecialization(SpecializationGroup specialization) {
 		this.specialization = specialization;
 	}
 
-	/**
-	 * @return the school
-	 */
-	public School getSchool() {
-		return school;
-	}
-
-	/**
-	 * @param school the school to set
-	 */
-	public void setSchool(School school) {
-		this.school = school;
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("TeachingRequirement [");
+		if (hours != null) {
+			builder.append("hours=");
+			builder.append(hours);
+			builder.append(", ");
+		}
+		if (school != null) {
+			builder.append("school=");
+			builder.append(school);
+			builder.append(", ");
+		}
+		if (schoolYear != null) {
+			builder.append("schoolYear=");
+			builder.append(schoolYear);
+			builder.append(", ");
+		}
+		if (specialization != null) {
+			builder.append("specialization=");
+			builder.append(specialization);
+		}
+		builder.append("]");
+		return builder.toString();
 	}
 
 }

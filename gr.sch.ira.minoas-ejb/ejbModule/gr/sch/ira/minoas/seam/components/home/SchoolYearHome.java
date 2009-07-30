@@ -22,8 +22,7 @@ public class SchoolYearHome extends MinoasEntityHome<SchoolYear> {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@In(required = true)
-	private CoreSearching coreSearching;
+	
 
 	
 	/**

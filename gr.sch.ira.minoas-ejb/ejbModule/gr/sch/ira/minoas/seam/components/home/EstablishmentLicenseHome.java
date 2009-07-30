@@ -27,8 +27,7 @@ public class EstablishmentLicenseHome extends MinoasEntityHome<EstablishmentLice
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@In()
-	private CoreSearching coreSearching;
+	
 
 	
 	@In(required=false)
@@ -42,7 +41,7 @@ public class EstablishmentLicenseHome extends MinoasEntityHome<EstablishmentLice
 		EstablishmentLicense instance = (EstablishmentLicense) super.createInstance();
 		instance.setStatusType(EstablishmentLicenseStatusType.PENDING);
 		instance.setRequestDate(new Date(System.currentTimeMillis()));
-		instance.setSchoolYear(coreSearching.getActiveSchoolYear());
+		instance.setSchoolYear(getCoreSearching().getActiveSchoolYear());
 		return instance;
 	}
 
@@ -65,6 +64,12 @@ public class EstablishmentLicenseHome extends MinoasEntityHome<EstablishmentLice
 		return super.persist();
 	}
 
+	@Transactional
+	public String revert() {
+		getEntityManager().refresh(getInstance());
+		return "reverted";
+	}
+
 	/**
 	 * @see org.jboss.seam.framework.EntityHome#update()
 	 */
@@ -84,7 +89,7 @@ public class EstablishmentLicenseHome extends MinoasEntityHome<EstablishmentLice
 		}
 		return super.update();
 	}
-
+	
 	public void wire() {
 		if(preparatoryOwnerHome!=null) {
 		PreparatoryOwner owner = preparatoryOwnerHome.getDefinedInstace();
@@ -92,12 +97,6 @@ public class EstablishmentLicenseHome extends MinoasEntityHome<EstablishmentLice
 			getInstance().setOwner(owner);
 		}
 		}
-	}
-	
-	@Transactional
-	public String revert() {
-		getEntityManager().refresh(getInstance());
-		return "reverted";
 	}
 
 }
