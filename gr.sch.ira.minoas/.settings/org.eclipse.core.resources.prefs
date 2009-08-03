@@ -1,18 +1,21 @@
-#Tue Jun 30 12:54:00 EEST 2009
+#Mon Aug 03 13:53:17 EEST 2009
 eclipse.preferences.version=1
-encoding//WebContent/components/employee/employeeList.xhtml=UTF-8
-encoding//WebContent/components/employee/employeeSecondmentsHistory.xhtml=UTF-8
+encoding//WebContent/admin/manage-specialization-groups.xhtml=UTF-8
+encoding//WebContent/admin/specialization-group-component.xhtml=UTF-8
+encoding//WebContent/components/employee/basicInfo.xhtml=UTF-8
 encoding//WebContent/components/general/address.xhtml=UTF-8
 encoding//WebContent/components/print/FromHeaders.xhtml=UTF-8
 encoding//WebContent/components/school/basicInfo.xhtml=UTF-8
 encoding//WebContent/components/school/regularEmploymentsList.xhtml=UTF-8
 encoding//WebContent/components/school/schoolEmployeesList.xhtml=UTF-8
 encoding//WebContent/components/school/schoolList.xhtml=UTF-8
+encoding//WebContent/components/search-employee-modal-panel.xhtml=UTF-8
 encoding//WebContent/components/secondment/secondmentList.xhtml=UTF-8
 encoding//WebContent/components/secondment/secondmentListPDF.xhtml=UTF-8
 encoding//WebContent/components/top-menu.xhtml=UTF-8
 encoding//WebContent/components/void/teachingVoidComponent.xhtml=UTF-8
 encoding//WebContent/components/void/voidListComponent.xhtml=UTF-8
+encoding//WebContent/components/wait-modal-panel.xhtml=UTF-8
 encoding//WebContent/createTeachingVoid.xhtml=UTF-8
 encoding//WebContent/employee.xhtml=UTF-8
 encoding//WebContent/employee/basic-info.xhtml=UTF-8
@@ -34,6 +37,7 @@ encoding//WebContent/school/teaching-resources.xhtml=UTF-8
 encoding//WebContent/schoolYears.xhtml=UTF-8
 encoding//WebContent/schools.xhtml=UTF-8
 encoding//WebContent/secondmentSearchResult.xhtml=UTF-8
+encoding//WebContent/teachingResources/teaching-resource-component.xhtml=UTF-8
 encoding//WebContent/updateTeachingVoid.xhtml=UTF-8
 encoding//src/messages_el.properties=UTF-8
 encoding//src/messages_en.properties=UTF-8

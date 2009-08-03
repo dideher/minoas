@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<ui:composition template="/layout/simple-beauty-template.xhtml">
+	<ui:define name="body">
+		<rich:panel>
+			<f:facet name="header">
+				<h:outputText
+					value="Εισαγωγή Νέας Απόσπασης κατά το τρέχων Σχολικό Έτος" />
+			</f:facet>
+
+			<h:form>
+				<h:panelGrid columns="1">
+
+					<rich:panel>
+						<s:div rendered="#{employeeHome.managed}">
+							<ui:include src="/employee/basic-info.xhtml" />
+						</s:div>
+						
+						<a4j:commandLink ajaxSingle="true" id="updatelink"
+										oncomplete="#{rich:component('employee_search_panel')}.show()"
+										value="Επιλογή Εκπαιδευτικού">
+										<f:setPropertyActionListener value="#{requirement.id}"
+											target="#{teachingRequirementHome.id}" />
+									</a4j:commandLink>
+					</rich:panel>
+					<h:panelGrid columns="5">
+
+						<s:decorate template="/layout/doubleLineEdit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Απόσπαση Από" />
+							</ui:define>
+
+							<h:inputText value="#{secondment.sourceUnit.title}"
+								required="true" readonly="true" id="sourceUnit"
+								styleClass="fieldValueText" tabindex="1" size="17"
+								maxlength="22">
+							</h:inputText>
+						</s:decorate>
+
+						<s:decorate template="/layout/doubleLineEdit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Απόσπαση Σε" />
+							</ui:define>
+
+							<h:inputText value="#{secondment.targetUnit.title}"
+								required="true" readonly="true" id="targetUnit"
+								styleClass="fieldValueText" tabindex="2" size="17"
+								maxlength="22">
+							</h:inputText>
+						</s:decorate>
+
+
+						<s:decorate template="/layout/doubleLineEdit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Από : " />
+							</ui:define>
+							<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
+								style="width:50px" enableManualInput="true"
+								styleClass="fieldValueText" required="true"
+								value="#{secondment.established}">
+							</rich:calendar>
+						</s:decorate>
+
+						<s:decorate template="/layout/doubleLineEdit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Έως : " />
+							</ui:define>
+							<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
+								style="width:50px" enableManualInput="true"
+								styleClass="fieldValueText" required="true"
+								value="#{secondment.dueTo}">
+							</rich:calendar>
+						</s:decorate>
+
+
+
+						<s:decorate template="/layout/doubleLineEdit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Πραγματικό Ωράριο : " />
+							</ui:define>
+							<h:inputText value="#{secondment.finalWorkingHours}" size="3"
+								maxlength="3" required="true" />
+						</s:decorate>
+
+					</h:panelGrid>
+
+
+					<rich:separator lineType="dashed" height="2" />
+
+					<h:panelGroup>
+
+						<s:div styleClass="actionButtons">
+							<s:button id="revertButton" value="Επιστροφή"
+								rendered="#{secondmentHome.managed}"
+								action="#{secondmentHome.revert}" />
+
+							<rich:spacer width="10" />
+							<h:commandButton action="#{secondmentHome.update}"
+								onclick="if(!confirm('Να ανανεωθή η απόσπαση ?')) {form.reset(); return false;}"
+								value="Ανανέωση" id="updateButton"
+								rendered="#{secondmentHome.managed}"
+								disabled="#{!secondment.active}" />
+							<rich:spacer width="3" />
+						</s:div>
+					</h:panelGroup>
+
+
+				</h:panelGrid>
+			</h:form>
+		</rich:panel>
+	<ui:include src="/components/search-employee-modal-panel.xhtml" />
+	<ui:include src="/components/wait-modal-panel.xhtml" />
+	
+	</ui:define>
+</ui:composition>
+</html>

@@ -132,6 +132,14 @@
    
    <component name="exampleTeachingRequirement" class="gr.sch.ira.minoas.model.core.TeachingRequirement" scope="conversation" />
    
+   <framework:entity-query name="schoolTeachingRequirement" max-results="100">
+    <framework:ejbql>SELECT e FROM TeachingRequirement e</framework:ejbql>
+    <framework:order>e.specialization.title asc</framework:order>
+    <framework:restrictions>
+      <value>e.school = #{schoolHome.instance}</value>
+      <value>e.schoolYear.id = #{activeSchoolYear.id}</value>
+    </framework:restrictions>
+   </framework:entity-query>
          
    <!-- Employee Components -->
    
@@ -228,7 +236,7 @@
     <framework:ejbql>SELECT s FROM SpecializationGroup s</framework:ejbql>
     <framework:order>s.title asc</framework:order>
       <framework:restrictions>
-        <value>s.schoolYear = #{activeShoolYear}</value>
+        <value>s.schoolYear.id = #{activeShoolYear.id}</value>
       </framework:restrictions>
    </framework:entity-query>
    
@@ -245,6 +253,11 @@
       <action execute="#{employeeSecondmentsListQuery.refresh}" />
       <action execute="#{employeeActiveSecondmentListQuery.refresh}" />
    </event>
+   
+    <event type="org.jboss.seam.afterTransactionSuccess.TeachingRequirement">
+      <action execute="#{schoolTeachingRequirement.refresh}" />
+   </event>
+   
       
    <!-- For use with jBPM pageflow or process management -->
    

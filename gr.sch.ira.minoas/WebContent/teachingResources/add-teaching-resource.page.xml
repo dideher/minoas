@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <page login-required="true" view-id="/teachingResources/school-teaching-resources.xhtml"  xmlns="http://jboss.com/products/seam/pages"
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.1.xsd">
-  <begin-conversation nested="true" flush-mode="manual"/>
+  <begin-conversation join="true" flush-mode="manual"/>
   <description>Προσθήκη Ωρών Διδασκαλίας (#{school.title})</description>
   
   <param name="add_teaching_resource_from" />
@@ -10,13 +10,11 @@
  
   
   <navigation from-action="#{teachingRequirementHome.persist()}">
-      <end-conversation />
       <redirect view-id="#{empty add_teaching_resource_from ? '/home' : add_teaching_resource_from}.xhtml}" />
   </navigation>
   
   
   <navigation from-action="back">
-       <end-conversation />
       <redirect view-id="#{add_modify_teaching_resource_from ? '/home' : add_teaching_resource_from}.xhtml}" />
   </navigation>
   

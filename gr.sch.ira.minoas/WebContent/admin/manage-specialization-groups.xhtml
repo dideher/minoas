@@ -24,28 +24,35 @@
 							var="_specializationGroup" rows="20"
 							value="#{specializationGroupsListQuery.resultList}"
 							rendered="#{specializationGroupsListQuery.resultCount>0}">
+
+							<f:facet name="header">
+								<rich:columnGroup>
+									<rich:column>
+										<h:outputText value="Τίτλος Ομάδας" />
+									</rich:column>
+									<rich:column>
+										<h:outputText value="Ενέργιες" />
+									</rich:column>
+
+								</rich:columnGroup>
+							</f:facet>
 							<rich:column>
-								<f:facet name="header">
-									<h:outputText value="Τίτλος Ομάδας" />
-								</f:facet>
-								<h:outputText value="#{_specializationGroup.title}" styleClass="fieldValueText"/>
+								<h:outputText value="#{_specializationGroup.title}"
+									styleClass="fieldValueText" />
 							</rich:column>
 
 							<rich:column>
-								<f:facet name="header">
-									<h:outputText value="Ενέργιες" />
-								</f:facet>
 
 								<rich:toolTip for="deletelink" value="Διαγραφή της Ομάδας" />
 								<rich:toolTip for="updatelink" value="Τροποποίηση της Ομάδας" />
-									
+
 								<rich:toolBar itemSeparator="line">
-									<a4j:commandLink  id="deletelink" 
+									<a4j:commandLink id="deletelink" reRender="deletePanelContent"
 										oncomplete="#{rich:component('deletePanel')}.show()"
 										value="Διαγραφή">
-										<h:graphicImage value="/img/icons/delete.png" width="12" height="12"
-											style="border:0" />
-											<f:setPropertyActionListener 
+										<h:graphicImage value="/img/icons/delete.png" width="12"
+											height="12" style="border:0" />
+										<f:setPropertyActionListener
 											value="#{_specializationGroup.id}"
 											target="#{specializationGroupHome.id}" />
 									</a4j:commandLink>
@@ -53,30 +60,35 @@
 									<a4j:commandLink ajaxSingle="true" id="updatelink"
 										oncomplete="#{rich:component('updatePanel')}.show()"
 										value="Τροποποίηση">
-										<h:graphicImage value="/img/icons/update.png"
-											style="border:0" />
-										<f:setPropertyActionListener 
+										<h:graphicImage value="/img/icons/update.png" style="border:0" />
+										<f:setPropertyActionListener
 											value="#{_specializationGroup.id}"
 											target="#{specializationGroupHome.id}" />
 									</a4j:commandLink>
 								</rich:toolBar>
 							</rich:column>
-							<rich:subTable value="#{_specializationGroup.specializations}"
-										var="_specialization">
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Κωδικός" />
-											</f:facet>
-											<h:outputText value="#{_specialization.id}" />
-										</rich:column>
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Λεκτικό" />
-											</f:facet>
-											<h:outputText value="#{_specialization.title}" />
-										</rich:column>
-							</rich:subTable>
 
+							<rich:column breakBefore="true" colspan="2" width="100%">
+								<rich:dataTable value="#{_specializationGroup.specializations}"
+									var="_specialization" width="100%">
+									<f:facet name="header">
+										<rich:columnGroup>
+											<rich:column>
+												<h:outputText value="Κωδικός" />
+											</rich:column>
+											<rich:column>
+												<h:outputText value="Λεκτικό" />
+											</rich:column>
+										</rich:columnGroup>
+									</f:facet>
+									<rich:column>
+										<h:outputText value="#{_specialization.id}" />
+									</rich:column>
+									<rich:column>
+										<h:outputText value="#{_specialization.title}" />
+									</rich:column>
+								</rich:dataTable>
+							</rich:column>
 							<f:facet name="footer">
 								<rich:datascroller for="specializationGroupTable">
 									<f:facet name="first">
@@ -108,7 +120,7 @@
 
 			</rich:panel>
 		</h:form>
-	<rich:modalPanel id="updatePanel" autosized="true" width="450">
+		<rich:modalPanel id="updatePanel" autosized="true" width="450">
 			<f:facet name="header">
 				<h:outputText value="Τροποποίηση Ομάδας Ειδικοτήτων" />
 			</f:facet>
@@ -123,21 +135,22 @@
 			<h:form>
 				<rich:messages style="color:red;"></rich:messages>
 				<h:panelGrid columns="1">
-					
+
 					<a4j:outputPanel id="editAjaxPanel" ajaxRendered="true">
 						<h:outputText value="fsdfdsf #{specializationGroup.title}" />
-						<ui:include  src="/admin/specialization-group-component.xhtml">
-							<ui:param name="specializationGroup" value="#{specializationGroupHome.definedInstace}" />
+						<ui:include src="/admin/specialization-group-component.xhtml">
+							<ui:param name="specializationGroup"
+								value="#{specializationGroupHome.definedInstace}" />
 						</ui:include>
 					</a4j:outputPanel>
 					<h:panelGroup>
-					<a4j:commandButton value="Αποθήκευση Αλλαγών"
-						action="#{specializationGroupHome.update()}"
-						oncomplete="#{rich:component('updatePanel')}.hide();return true;" />
-					<a4j:commandButton value="Ακύρωση Αλλαγών" 
-						action="#{specializationGroupHome.revert()}"
-						oncomplete="#{rich:component('updatePanel')}.hide();return false;" />
-						</h:panelGroup>
+						<a4j:commandButton value="Αποθήκευση Αλλαγών"
+							action="#{specializationGroupHome.update()}"
+							oncomplete="#{rich:component('updatePanel')}.hide();return true;" />
+						<a4j:commandButton value="Ακύρωση Αλλαγών"
+							action="#{specializationGroupHome.revert()}"
+							oncomplete="#{rich:component('updatePanel')}.hide();return false;" />
+					</h:panelGroup>
 				</h:panelGrid>
 			</h:form>
 		</rich:modalPanel>
@@ -148,18 +161,20 @@
 			</f:facet>
 			<f:facet name="controls">
 				<h:panelGroup>
-					<h:graphicImage value="/img/modal/close.png"
-						styleClass="hidelink" id="hidelink2" />
+					<h:graphicImage value="/img/modal/close.png" styleClass="hidelink"
+						id="hidelink2" />
 					<rich:componentControl for="deletePanel" attachTo="hidelink2"
 						operation="hide" event="onclick" />
 				</h:panelGroup>
 			</f:facet>
 			<h:form>
 				<a4j:outputPanel id="deletePanelContent" layout="inline">
-				<h:panelGroup>
-					<h:outputText value="Να διαγραφεί η ομάδα ειδικοτητών " />
-					<h:outputText value="#{specializationGroupHome.definedInstace.title}" styleClass="fieldValueText"/>
-					<h:outputText value=" απο την βάση ;" />
+					<h:panelGroup>
+						<h:outputText value="Να διαγραφεί η ομάδα ειδικοτητών " />
+						<h:outputText
+							value="#{specializationGroupHome.definedInstace.title}"
+							styleClass="fieldValueText" />
+						<h:outputText value=" απο την βάση ;" />
 					</h:panelGroup>
 				</a4j:outputPanel>
 				<h:panelGrid columns="2">
@@ -171,7 +186,7 @@
 						onclick="#{rich:component('deletePanel')}.hide();return false;" />
 				</h:panelGrid>
 			</h:form>
-			
+
 		</rich:modalPanel>
 		<a4j:status onstart="#{rich:component('wait')}.show()"
 			onstop="#{rich:component('wait')}.hide()" />

@@ -23,7 +23,6 @@ import org.jboss.seam.annotations.Transactional;
  * @version $Id$
  */
 @Name(value = "teachingRequirementHome")
-@Scope(ScopeType.CONVERSATION)
 public class TeachingRequirementHome extends MinoasEntityHome<TeachingRequirement> {
 
 	/**

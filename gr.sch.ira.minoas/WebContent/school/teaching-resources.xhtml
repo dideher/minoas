@@ -12,17 +12,10 @@
 
 	<h:outputText value="Στον παρακάτω πίνακα εμφανίζονται οι απαιτήσεις σε διδακτικές ώρες, ανα ειδικότητα, της σχολικής μονάδας κατά το τρέχων σχολικό έτος." />
 			<rich:dataTable id="resourcesTable" var="requirement" rows="10"
-				value="#{school.teachingRequirements}">
+				value="#{schoolTeachingRequirement.resultList}">
 				<rich:column>
 					<f:facet name="header">
-						<h:outputText value="Ειδικότητα" />
-					</f:facet>
-
-					<h:outputText value="#{requirement.specialization.id}" />
-				</rich:column>
-				<rich:column>
-					<f:facet name="header">
-						<h:outputText value="Λεκτικό Ειδικότητας" />
+						<h:outputText value="Λεκτικό Ομάδας Ειδικότητας" />
 					</f:facet>
 
 					<h:outputText value="#{requirement.specialization.title}" />

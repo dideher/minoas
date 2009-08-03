@@ -26,50 +26,7 @@
 				</f:facet>
 				<h:outputText
 					value="Συμπληρώστε τα παρακάτω πεδία για να εισάγετε νέες διδακτικές ώρες" />
-				<h:panelGrid columns="4">
-					<s:decorate template="/layout/doubleLineEdit.xhtml">
-						<ui:define name="label">
-							<h:outputText value="Ειδικότητα : " />
-						</ui:define>
-						<h:inputText id="specializationFilter2"
-							value="#{teachingRequirement.specialization}" required="true"
-							styleClass="fieldValueText" converter="specializationConverter">
-
-							<rich:suggestionbox height="100" width="250"
-								for="specializationFilter2" var="a_spec"
-								suggestionAction="#{specializationSuggester.suggest}">
-								<f:facet name="nothingLabel">
-									<h:outputText value="Άγνωστη Ειδικότητα" />
-								</f:facet>
-								<h:column>
-									<h:outputText value="#{a_spec.id}" />
-								</h:column>
-								<h:column>
-									<h:outputText value="#{a_spec.title}" />
-								</h:column>
-							</rich:suggestionbox>
-						</h:inputText>
-
-					</s:decorate>
-
-					<s:decorate template="/layout/doubleLineEdit.xhtml">
-						<ui:define name="label">
-							<h:outputText value="Ώρες : " />
-						</ui:define>
-
-						<h:inputText value="#{teachingRequirement.hours}" required="true"
-							maxlength="3" size="3" />
-					</s:decorate>
-
-					<s:decorate template="/layout/doubleLineEdit.xhtml">
-						<ui:define name="label">
-							<h:outputText value="Προαιρετικό Σχόλιο : " />
-						</ui:define>
-
-						<h:inputText value="#{teachingRequirement.comment}"
-							required="false" maxlength="255" size="40" />
-					</s:decorate>
-				</h:panelGrid>
+				<ui:include src="/teachingResources/teaching-resource-component.xhtml" />
 				<s:div styleClass="actionButtons">
 
 						<s:button id="backButton" value="Ακύρωση Αλλαγών"

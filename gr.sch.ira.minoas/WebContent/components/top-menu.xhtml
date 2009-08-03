@@ -39,6 +39,12 @@
 						<h:outputText value="Διαχείρηση Προσωπικού" />
 					</h:panelGroup>
 				</f:facet>
+					<rich:menuItem submitMode="none" disabled="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_EMPLOYEE'))}">
+						<s:link value="Εισαγωγή Εκπαιδευτικού" view="/employee/add-new-employee.xhtml">
+							<f:param name="add_new_employee_from" value="/home" />
+						</s:link> 
+					</rich:menuItem>
+					
 					<rich:menuItem submitMode="none">
 						<s:link value="Προβολή Καρτέλας" view="/employee/select-employee.xhtml">
 							<f:param name="from" value="/home" />
@@ -51,12 +57,20 @@
 							<f:param name="to" value="/employee/regular-employment-management" />
 						</s:link> 
 					</rich:menuItem>
+					<rich:menuGroup value="Διαχείρηση Αποσπάσεων">
 					<rich:menuItem submitMode="none">
-						<s:link value="Διαχείρηση Απόσπασης" view="/employee/select-employee.xhtml">
+						<s:link value="Εισαγωγή Νέας Απόσπασης" view="/secondment/add-new-secondment.xhtml">
+							<f:param name="add_new_secondment_from" value="/home" />
+						</s:link>
+					</rich:menuItem>
+						<rich:menuItem submitMode="none">
+						<s:link value="Διαχείρηση Απόσπασης Εκπαιδευτικού" view="/employee/select-employee.xhtml">
 							<f:param name="from" value="/home" />
 							<f:param name="to" value="/secondment/secondment-employment-management" />
 						</s:link> 
 					</rich:menuItem>
+					
+					</rich:menuGroup>
 					
 			</rich:dropDownMenu>
 			<rich:dropDownMenu disabled="#{!(identity.loggedIn and (s:hasRole('ADMIN') or s:hasRole('VIEW_PREPARATORY')))}">
