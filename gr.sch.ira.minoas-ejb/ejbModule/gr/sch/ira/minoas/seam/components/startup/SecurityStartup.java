@@ -48,6 +48,8 @@ public class SecurityStartup {
 		createRole("MANAGE_PREPARATORY_OWNER", "Manage Preperatory Owner", admin);
 		createRole("MANAGE_PREPARATORY_EST_LICENSE", "Manage Preparatory Establishment License", admin);
 		createRole("MANAGE_SPECIALIZATION_GROUP", "Manage Specialization Groups", admin);
+		createRole("ADD_SECONDMENT", "Add New Secondments", admin);
+		
 	}
 	
 	protected Principal createPrincipal(String username, String password, String realname) {

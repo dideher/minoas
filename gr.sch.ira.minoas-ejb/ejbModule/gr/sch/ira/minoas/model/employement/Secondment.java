@@ -155,6 +155,24 @@ public class Secondment extends BaseModel implements Cloneable {
 	@Basic
 	@Column(name = "WORK_HRS_DECR_REASON", nullable = true)
 	private String workingHoursDecrementReason;
+	
+	@Basic
+	@Column(name="COMMENT", nullable=true, length=255)
+	private String comment;
+
+	/**
+	 * @return the comment
+	 */
+	public String getComment() {
+		return comment;
+	}
+
+	/**
+	 * @param comment the comment to set
+	 */
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
 
 	/**
 	 * @see java.lang.Object#clone()

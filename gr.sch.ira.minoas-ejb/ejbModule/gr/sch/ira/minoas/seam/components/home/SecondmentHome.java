@@ -108,6 +108,8 @@ public class SecondmentHome extends MinoasEntityHome<Secondment> {
 		getEntityManager().refresh(getInstance());
 		return "reverted";
 	}
+	
+	
 
 	/**
 	 * @see org.jboss.seam.framework.Home#createInstance()
