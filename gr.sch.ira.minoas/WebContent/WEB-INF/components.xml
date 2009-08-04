@@ -153,6 +153,7 @@
       <value>lower(e.firstName) like lower(concat('%', concat(#{exampleEmployee.firstName},'%')))</value>
       <value>e.lastSpecialization = #{exampleEmployee.lastSpecialization}</value>
       <value>e.active = #{employeeCriteria.onlyActive}</value>
+      <value>e.type = #{employeeCriteria.type}</value>
     </framework:restrictions>
    </framework:entity-query>
    

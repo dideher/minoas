@@ -58,7 +58,7 @@
 						</s:link> 
 					</rich:menuItem>
 					<rich:menuGroup value="Διαχείρηση Αποσπάσεων">
-					<rich:menuItem submitMode="none">
+					<rich:menuItem submitMode="none" disabled="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_SECONDMENT'))}">
 						<s:link value="Εισαγωγή Νέας Απόσπασης" view="/secondment/add-new-secondment.xhtml">
 							<f:param name="add_new_secondment_from" value="/home" />
 						</s:link>

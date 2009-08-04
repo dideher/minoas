@@ -10,13 +10,15 @@
   
   <!-- navigation rules -->
   
-  <navigation from-action="#{secondmentHome.revert}">
-    <redirect view-id="#{empty modify_secondment_from ? '/home' : modify_secondment_from}.xhtml}">
+  <navigation from-action="#{secondmentHome.persist()}">
+    <end-conversation/>
+    <redirect view-id="#{empty add_new_secondment_from ? '/home' : add_new_secondment_from}.xhtml}">
     </redirect>
   </navigation>
   
-  <navigation from-action="#{secondmentHome.update}">
-    <redirect view-id="#{empty modify_secondment_from ? '/home' : modify_secondment_from}.xhtml}">
+  <navigation from-action="backButton">
+    <end-conversation/>
+    <redirect view-id="#{empty empty add_new_secondment_from ? '/home' : empty add_new_secondment_from}.xhtml}">
     </redirect>
   </navigation>
   
