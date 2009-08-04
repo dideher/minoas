@@ -3,7 +3,6 @@ package gr.sch.ira.minoas.seam.components.home;
 import gr.sch.ira.minoas.model.preparatory.EstablishmentLicense;
 import gr.sch.ira.minoas.model.preparatory.EstablishmentLicenseStatusType;
 import gr.sch.ira.minoas.model.preparatory.PreparatoryOwner;
-import gr.sch.ira.minoas.seam.components.CoreSearching;
 
 import java.util.Date;
 

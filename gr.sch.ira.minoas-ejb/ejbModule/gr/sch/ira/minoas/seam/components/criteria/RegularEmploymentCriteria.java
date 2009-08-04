@@ -3,7 +3,6 @@ package gr.sch.ira.minoas.seam.components.criteria;
 
 import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.core.SchoolYear;
-import gr.sch.ira.minoas.model.employement.EmploymentType;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;

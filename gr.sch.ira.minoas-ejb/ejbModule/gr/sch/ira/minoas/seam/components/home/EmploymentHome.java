@@ -1,14 +1,14 @@
 package gr.sch.ira.minoas.seam.components.home;
 
+import gr.sch.ira.minoas.model.employee.Employee;
+import gr.sch.ira.minoas.model.employement.Employment;
+
 import java.util.Date;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
-
-import gr.sch.ira.minoas.model.employee.Employee;
-import gr.sch.ira.minoas.model.employement.Employment;
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>

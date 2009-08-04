@@ -2,11 +2,9 @@ package gr.sch.ira.minoas.seam.components.home;
 
 import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.core.SchoolYear;
-import gr.sch.ira.minoas.seam.components.CoreSearching;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
-import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
 

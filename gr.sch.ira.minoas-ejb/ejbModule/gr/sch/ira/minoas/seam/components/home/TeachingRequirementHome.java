@@ -2,20 +2,11 @@ package gr.sch.ira.minoas.seam.components.home;
 
 import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.core.TeachingRequirement;
-import gr.sch.ira.minoas.model.employement.Secondment;
-import gr.sch.ira.minoas.model.employement.SecondmentType;
-import gr.sch.ira.minoas.model.preparatory.EstablishmentLicense;
-import gr.sch.ira.minoas.model.preparatory.EstablishmentLicenseStatusType;
-import gr.sch.ira.minoas.model.preparatory.PreparatoryOwner;
-import gr.sch.ira.minoas.seam.components.CoreSearching;
-
-import java.util.Date;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
 
 /**

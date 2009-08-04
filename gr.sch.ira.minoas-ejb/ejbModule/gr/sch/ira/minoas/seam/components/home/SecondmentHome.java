@@ -2,17 +2,16 @@ package gr.sch.ira.minoas.seam.components.home;
 
 
 
+import gr.sch.ira.minoas.model.employee.Employee;
+import gr.sch.ira.minoas.model.employement.Employment;
+import gr.sch.ira.minoas.model.employement.Secondment;
+import gr.sch.ira.minoas.model.employement.SecondmentType;
+
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
-
-import gr.sch.ira.minoas.model.employee.Employee;
-import gr.sch.ira.minoas.model.employement.Employment;
-import gr.sch.ira.minoas.model.employement.Secondment;
-import gr.sch.ira.minoas.model.employement.SecondmentType;
-import gr.sch.ira.minoas.seam.components.CoreSearching;
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
@@ -42,6 +41,7 @@ public class SecondmentHome extends MinoasEntityHome<Secondment> {
 		newSecondment.setEmployee(employee);
 		newSecondment.setTargetPYSDE(newSecondment.getTargetUnit().getPysde());
 		newSecondment.setSourcePYSDE(newSecondment.getSourceUnit().getPysde());
+		newSecondment.setInsertedBy(getPrincipal());
 		if (currentEmployment != null) {
 			newSecondment.setAffectedEmployment(currentEmployment);
 
@@ -51,8 +51,9 @@ public class SecondmentHome extends MinoasEntityHome<Secondment> {
 			currentSecondment.setActive(Boolean.FALSE);
 			currentSecondment.setSupersededBy(newSecondment);
 			getEntityManager().merge(currentSecondment);
+			
 		}
-		info("successfully registered new secondment #0 for employee #1,", newSecondment, employee);
+		info("principal '#0' successfully registered new secondment #1 for employee #2,", getPrincipalName(), newSecondment, employee);
 		return super.persist();
 	}
 
