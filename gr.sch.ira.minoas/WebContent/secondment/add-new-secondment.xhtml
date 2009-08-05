@@ -194,7 +194,7 @@
 										<rich:calendar id="dueToDate" value="#{secondment.dueTo}"
 											required="true" mode="ajax" locale="el_GR" inputSize="10"
 											enableManualInput="true" inputClass="fieldValueText"
-											datePattern="dd-MM-yyyy">
+											datePattern="dd-MM-yyyy" valueChangeListener="#{secondmentHome.checkSecondmentDueDate}">
 
 											<a4j:support event="onblur" reRender="dueToDateDecoration"
 												bypassUpdates="true" ajaxSingle="true" />
@@ -212,7 +212,7 @@
 						<h:panelGroup>
 
 							<s:div styleClass="actionButtons">
-								<s:button id="backButton" value="Τέλος Εργασίας" />
+								<s:button id="backButton" action="backButton" value="Τέλος Εργασίας" />
 								<rich:spacer width="10" />
 								<h:commandButton action="#{secondmentHome.persist()}"
 									onclick="if(!confirm('Να καταχωρηθή η απόσπαση ?')) {form.reset(); return false;}"

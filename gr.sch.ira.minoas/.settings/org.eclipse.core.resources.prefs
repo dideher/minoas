@@ -1,4 +1,4 @@
-#Mon Aug 03 13:53:17 EEST 2009
+#Tue Aug 04 11:55:01 EEST 2009
 eclipse.preferences.version=1
 encoding//WebContent/admin/manage-specialization-groups.xhtml=UTF-8
 encoding//WebContent/admin/specialization-group-component.xhtml=UTF-8
@@ -9,7 +9,6 @@ encoding//WebContent/components/school/basicInfo.xhtml=UTF-8
 encoding//WebContent/components/school/regularEmploymentsList.xhtml=UTF-8
 encoding//WebContent/components/school/schoolEmployeesList.xhtml=UTF-8
 encoding//WebContent/components/school/schoolList.xhtml=UTF-8
-encoding//WebContent/components/search-employee-modal-panel.xhtml=UTF-8
 encoding//WebContent/components/secondment/secondmentList.xhtml=UTF-8
 encoding//WebContent/components/secondment/secondmentListPDF.xhtml=UTF-8
 encoding//WebContent/components/top-menu.xhtml=UTF-8
