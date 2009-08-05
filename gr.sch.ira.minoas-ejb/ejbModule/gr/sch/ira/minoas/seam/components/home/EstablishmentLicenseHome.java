@@ -40,7 +40,7 @@ public class EstablishmentLicenseHome extends MinoasEntityHome<EstablishmentLice
 		EstablishmentLicense instance = (EstablishmentLicense) super.createInstance();
 		instance.setStatusType(EstablishmentLicenseStatusType.PENDING);
 		instance.setRequestDate(new Date(System.currentTimeMillis()));
-		instance.setSchoolYear(getCoreSearching().getActiveSchoolYear());
+		instance.setSchoolYear(getCoreSearching().getActiveSchoolYear(getEntityManager()));
 		return instance;
 	}
 

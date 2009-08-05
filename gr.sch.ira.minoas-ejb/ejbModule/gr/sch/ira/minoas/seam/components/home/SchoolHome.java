@@ -44,7 +44,7 @@ public class SchoolHome extends MinoasEntityHome<School> {
 		School instance = getDefinedInstace();
 		TeachingRequirement req = new TeachingRequirement();
 		req.setSchool(instance);
-		req.setSchoolYear(getCoreSearching().getActiveSchoolYear());
+		req.setSchoolYear(getCoreSearching().getActiveSchoolYear(getEntityManager()));
 		if (getIdentity() != null) {
 
 		}

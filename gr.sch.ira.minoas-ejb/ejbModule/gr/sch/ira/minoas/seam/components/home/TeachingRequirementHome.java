@@ -57,7 +57,7 @@ public class TeachingRequirementHome extends MinoasEntityHome<TeachingRequiremen
 		school.addTeachingRequirement(req);
 		req.setInsertedBy(getPrincipal());
 		getEntityManager().persist(req);
-		getLogger().info("principal #0 created teaching requirement #1.", getPrincipalName(), req);
+		getLogger().info("principal '#0' created teaching requirement #1.", getPrincipalName(), req);
 		return super.persist();
 	}
 	
@@ -71,7 +71,7 @@ public class TeachingRequirementHome extends MinoasEntityHome<TeachingRequiremen
 		School school = schoolHome.getDefinedInstace();
 		TeachingRequirement req = (TeachingRequirement) getInstance();
 		school.getTeachingRequirements().remove(req);
-		getLogger().info("principal #0 deleted teaching requirement #1.", getPrincipalName(), req);
+		getLogger().info("principal '#0' deleted teaching requirement #1.", getPrincipalName(), req);
 		return super.remove();
 	}
 
@@ -87,7 +87,7 @@ public class TeachingRequirementHome extends MinoasEntityHome<TeachingRequiremen
 	@Override
 	@Transactional
 	public String update() {
-		getLogger().info("principal #0 updated teaching requirement #1.", getPrincipalName(), getInstance());
+		getLogger().info("principal '#0' updated teaching requirement #1.", getPrincipalName(), getInstance());
 		return super.update();
 	}
 	

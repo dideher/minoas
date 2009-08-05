@@ -31,6 +31,6 @@ public class UserDefaults {
 
 	@Observer("org.jboss.seam.security.loginSuccessful")
 	public void loginSuccesful() {
-		this.activeSchoolYear = coreSearching.getActiveSchoolYear();
+		this.activeSchoolYear = coreSearching.getActiveSchoolYear(null);
 	}
 }

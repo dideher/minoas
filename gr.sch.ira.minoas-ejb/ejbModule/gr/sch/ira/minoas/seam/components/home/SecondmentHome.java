@@ -1,11 +1,15 @@
 package gr.sch.ira.minoas.seam.components.home;
 
+import java.util.Date;
 
+import javax.faces.application.FacesMessage.Severity;
+import javax.faces.event.ValueChangeEvent;
 
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.SecondmentType;
+import gr.sch.ira.minoas.seam.components.CoreSearching;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
@@ -20,7 +24,24 @@ import org.jboss.seam.annotations.Transactional;
 @Name("secondmentHome")
 public class SecondmentHome extends MinoasEntityHome<Secondment> {
 
-	
+	public void checkSecondmentEndDate(ValueChangeEvent e) {
+		Date newEndDate = (Date) e.getNewValue();
+		if (newEndDate.before(getInstance().getEstablished())) {
+			facesMessages.addToControl(e.getComponent().getId(),
+					"Η ημ/νια λήξης της απόσπασης πρέπει να είναι μεταγενέστερη της έναρξης.");
+		}
+	}
+
+	public void checkSecondmentDueDate(ValueChangeEvent e) {
+		Secondment secondment = getInstance();
+		if (secondment.getEstablished() != null) {
+			Date newEndDate = (Date) e.getNewValue();
+			if (newEndDate.before(secondment.getEstablished())) {
+				facesMessages.addToControl(e.getComponent().getId(),
+						"Η ημ/νια λήξης της απόσπασης πρέπει να είναι μεταγενέστερη της έναρξης.");
+			}
+		}
+	}
 
 	@In(create = true)
 	private EmployeeHome employeeHome;
@@ -32,11 +53,10 @@ public class SecondmentHome extends MinoasEntityHome<Secondment> {
 	@Override
 	public String persist() {
 		Employee employee = employeeHome.getInstance();
-		Secondment newSecondment = getInstance();
-		info("trying to add new secondment #0 for employee #1,", newSecondment, employee);
 		Employment currentEmployment = employee.getCurrentEmployment();
 		Secondment currentSecondment = currentEmployment != null ? currentEmployment.getSecondment() : null;
-		newSecondment.setSchoolYear(getCoreSearching().getActiveSchoolYear());
+		Secondment newSecondment = getInstance();
+		newSecondment.setSchoolYear(getCoreSearching().getActiveSchoolYear(getEntityManager()));
 		newSecondment.setActive(Boolean.TRUE);
 		newSecondment.setEmployee(employee);
 		newSecondment.setTargetPYSDE(newSecondment.getTargetUnit().getPysde());
@@ -44,16 +64,16 @@ public class SecondmentHome extends MinoasEntityHome<Secondment> {
 		newSecondment.setInsertedBy(getPrincipal());
 		if (currentEmployment != null) {
 			newSecondment.setAffectedEmployment(currentEmployment);
-
 		}
 
 		if (currentSecondment != null) {
 			currentSecondment.setActive(Boolean.FALSE);
 			currentSecondment.setSupersededBy(newSecondment);
 			getEntityManager().merge(currentSecondment);
-			
+
 		}
-		info("principal '#0' successfully registered new secondment #1 for employee #2,", getPrincipalName(), newSecondment, employee);
+		info("principal '#0' successfully registered new secondment #1 for employee #2,", getPrincipalName(),
+				newSecondment, employee);
 		return super.persist();
 	}
 
@@ -93,12 +113,13 @@ public class SecondmentHome extends MinoasEntityHome<Secondment> {
 		Secondment current_secondment = getInstance();
 		Employee employee = current_secondment.getEmployee();
 		Employment employment = current_secondment.getAffectedEmployment();
-		info("trying to cancel employee #0 current secondment #1.", employee, current_secondment);
 		current_secondment.setActive(Boolean.FALSE);
 		getEntityManager().merge(current_secondment);
 		if (employment != null)
 			employment.setSecondment(null);
 		super.update();
+		info("principal '#0' canceled employee #1 current secondment #1.", getPrincipalName(), employee,
+				current_secondment);
 		clearInstance();
 		return "updated";
 	}
@@ -109,16 +130,6 @@ public class SecondmentHome extends MinoasEntityHome<Secondment> {
 		getEntityManager().refresh(getInstance());
 		return "reverted";
 	}
-	
-	
-
-	/**
-	 * @see org.jboss.seam.framework.Home#createInstance()
-	 */
-	@Override
-	protected Object createInstance() {
-		return super.createInstance();
-	}
 
 	/**
 	 * @see org.jboss.seam.framework.Home#getInstance()
@@ -126,7 +137,7 @@ public class SecondmentHome extends MinoasEntityHome<Secondment> {
 	@Override
 	@Factory(value = "secondment", scope = ScopeType.PAGE)
 	public Secondment getInstance() {
-		Secondment secondment =(Secondment)super.getInstance();
+		Secondment secondment = (Secondment) super.getInstance();
 		secondment.setSecondmentType(SecondmentType.FULL_TO_SCHOOL);
 		return secondment;
 	}

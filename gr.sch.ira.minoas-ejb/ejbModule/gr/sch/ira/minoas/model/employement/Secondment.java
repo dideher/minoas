@@ -414,4 +414,35 @@ public class Secondment extends BaseModel implements Cloneable {
 		this.workingHoursDecrementReason = workingHoursDecrementReason;
 	}
 
+	/**
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Secondment [");
+		if (sourceUnit != null) {
+			builder.append("sourceUnit=");
+			builder.append(sourceUnit);
+			builder.append(", ");
+		}
+		if (targetUnit != null) {
+			builder.append("targetUnit=");
+			builder.append(targetUnit);
+			builder.append(", ");
+		}
+		if(finalWorkingHours != null) {
+			builder.append("finalWorkingHours=");
+			builder.append(finalWorkingHours);
+			builder.append(", ");
+		}
+		if (schoolYear != null) {
+			builder.append("schoolYear=");
+			builder.append(schoolYear);
+			builder.append(", ");
+		}
+		builder.append("]");
+		return builder.toString();
+	}
+
 }
