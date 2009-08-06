@@ -226,6 +226,16 @@
     </framework:restrictions> 
    </framework:entity-query>
    
+   <framework:entity-query name="secondmentsByTypeListQuery" max-results="400" scope="page">
+    <framework:ejbql>SELECT s FROM Secondment s WHERE s.active IS TRUE</framework:ejbql>
+    <framework:order>s.id desc</framework:order>
+    <framework:restrictions>
+      <value>s.schoolYear.id = #{activeShoolYear.id}</value>
+      <value>s.secondmentType = #{exampleSecondment.secondmentType}</value>
+    </framework:restrictions> 
+   </framework:entity-query>
+   
+   
    <!-- Specialization Components -->
    <framework:entity-query name="specializationsListQuery" max-results="200" scope="page">
     <framework:ejbql>SELECT s FROM Specialization s</framework:ejbql>
@@ -267,7 +277,7 @@
    </event>
    
       
-   <!-- For use with jBPM pageflow or process management -->
+   
    
    
    

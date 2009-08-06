@@ -1,79 +1,102 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:s="http://jboss.com/products/seam/taglib"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:a4j="http://richfaces.org/a4j"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
-	
-	<ui:component>
+
+<ui:component>
 	<a4j:form id="menuform">
 		<rich:toolBar>
-			
-			<rich:dropDownMenu disabled="#{!(identity.loggedIn and (s:hasRole('ADMIN')))}">
+
+			<rich:dropDownMenu
+				disabled="#{!(identity.loggedIn and (s:hasRole('ADMIN')))}">
 				<f:facet name="label">
 					<h:panelGroup>
 						<h:outputText value="Διαχείρηση Σχολικών Μονάδων" />
 					</h:panelGroup>
 				</f:facet>
-				
+
 				<rich:menuItem submitMode="none">
-						<s:link value="Καρτέλα Σχολικής Μονάδας" view="/school/select-school.xhtml">
-							<f:param name="from" value="/home" />
-							<f:param name="to" value="/school/school" />
-						</s:link>
-					</rich:menuItem>
-					<rich:menuItem submitMode="none">
-						<s:link value="Ώρες Διδασκαλίας Σχολικής Μονάδας" view="/school/select-school.xhtml">
-							<f:param name="from" value="/home" />
-							<f:param name="to" value="/teachingResources/school-teaching-resources" />
-						</s:link> 
-					</rich:menuItem>
-				
+					<s:link value="Καρτέλα Σχολικής Μονάδας"
+						view="/school/select-school.xhtml">
+						<f:param name="from" value="/home" />
+						<f:param name="to" value="/school/school" />
+					</s:link>
+				</rich:menuItem>
+				<rich:menuItem submitMode="none">
+					<s:link value="Ώρες Διδασκαλίας Σχολικής Μονάδας"
+						view="/school/select-school.xhtml">
+						<f:param name="from" value="/home" />
+						<f:param name="to"
+							value="/teachingResources/school-teaching-resources" />
+					</s:link>
+				</rich:menuItem>
+
 			</rich:dropDownMenu>
-			
-			<rich:dropDownMenu disabled="#{!(identity.loggedIn and (s:hasRole('ADMIN')))}">
+
+			<rich:dropDownMenu
+				disabled="#{!(identity.loggedIn and (s:hasRole('ADMIN')))}">
 				<f:facet name="label">
 					<h:panelGroup>
 						<h:outputText value="Διαχείρηση Προσωπικού" />
 					</h:panelGroup>
 				</f:facet>
-					<rich:menuItem submitMode="none" disabled="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_EMPLOYEE'))}">
-						<s:link value="Εισαγωγή Εκπαιδευτικού" view="/employee/add-new-employee.xhtml">
-							<f:param name="add_new_employee_from" value="/home" />
-						</s:link> 
-					</rich:menuItem>
-					
-					<rich:menuItem submitMode="none">
-						<s:link value="Προβολή Καρτέλας" view="/employee/select-employee.xhtml">
-							<f:param name="from" value="/home" />
-							<f:param name="to" value="/employee/employee" />
-						</s:link> 
-					</rich:menuItem>
-					<rich:menuItem submitMode="none">
-						<s:link value="Διαχείρηση Οργανικής Θέσης" view="/employee/select-employee.xhtml">
-							<f:param name="from" value="/home" />
-							<f:param name="to" value="/employee/regular-employment-management" />
-						</s:link> 
-					</rich:menuItem>
-					<rich:menuGroup value="Διαχείρηση Αποσπάσεων">
-					<rich:menuItem submitMode="none" disabled="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_SECONDMENT'))}">
-						<s:link value="Εισαγωγή Νέας Απόσπασης" view="/secondment/add-new-secondment.xhtml">
+				<rich:menuItem submitMode="none"
+					disabled="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_EMPLOYEE'))}">
+					<s:link value="Εισαγωγή Εκπαιδευτικού"
+						view="/employee/add-new-employee.xhtml">
+						<f:param name="add_new_employee_from" value="/home" />
+					</s:link>
+				</rich:menuItem>
+
+				<rich:menuItem submitMode="none">
+					<s:link value="Προβολή Καρτέλας"
+						view="/employee/select-employee.xhtml">
+						<f:param name="from" value="/home" />
+						<f:param name="to" value="/employee/employee" />
+					</s:link>
+				</rich:menuItem>
+				<rich:menuItem submitMode="none">
+					<s:link value="Διαχείρηση Οργανικής Θέσης"
+						view="/employee/select-employee.xhtml">
+						<f:param name="from" value="/home" />
+						<f:param name="to" value="/employee/regular-employment-management" />
+					</s:link>
+				</rich:menuItem>
+				<rich:menuGroup value="Διαχείρηση Αποσπάσεων">
+					<rich:menuItem submitMode="none"
+						disabled="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_SECONDMENT'))}">
+						<s:link value="Εισαγωγή Νέας Απόσπασης"
+							view="/secondment/add-new-secondment.xhtml">
 							<f:param name="add_new_secondment_from" value="/home" />
 						</s:link>
 					</rich:menuItem>
-						<rich:menuItem submitMode="none">
-						<s:link value="Διαχείρηση Απόσπασης Εκπαιδευτικού" view="/employee/select-employee.xhtml">
+					<rich:menuItem submitMode="none">
+						<s:link value="Διαχείρηση Απόσπασης Εκπαιδευτικού"
+							view="/employee/select-employee.xhtml">
 							<f:param name="from" value="/home" />
-							<f:param name="to" value="/secondment/secondment-employment-management" />
-						</s:link> 
+							<f:param name="to"
+								value="/secondment/secondment-employment-management" />
+						</s:link>
 					</rich:menuItem>
-					
+					<rich:menuSeparator />
+					<rich:menuGroup value="Εκτύπωσεις και Σταστικά">
+											<rich:menuItem submitMode="none">
+						<s:link value="Αποσπάσεις Ανα Τύπο"
+							view="/secondment/report-by-type.xhtml">
+							<f:param name="from" value="/home" />
+						</s:link>
+					</rich:menuItem>
+						
 					</rich:menuGroup>
-					
+				</rich:menuGroup>
+
 			</rich:dropDownMenu>
-			<rich:dropDownMenu disabled="#{!(identity.loggedIn and (s:hasRole('ADMIN') or s:hasRole('VIEW_PREPARATORY')))}">
+			<rich:dropDownMenu
+				disabled="#{!(identity.loggedIn and (s:hasRole('ADMIN') or s:hasRole('VIEW_PREPARATORY')))}">
 				<f:facet name="label">
 					<h:panelGroup>
 						<h:outputText value="Φροντιστήρια" />
@@ -81,18 +104,22 @@
 				</f:facet>
 				<rich:menuGroup value="Άδειες Ιδρύσεως Φροντιστηρίων">
 					<rich:menuItem submitMode="none">
-						<s:link value="Εισαγωγή Αίτησης" view="/preparatory/establishment-license-request.xhtml" />
+						<s:link value="Εισαγωγή Αίτησης"
+							view="/preparatory/establishment-license-request.xhtml" />
 					</rich:menuItem>
 					<rich:menuItem submitMode="none">
-						<s:link value="Προβολή Αδειών Ιδρύσεως" view="/preparatory/establishment-licenses-list.xhtml"></s:link>
+						<s:link value="Προβολή Αδειών Ιδρύσεως"
+							view="/preparatory/establishment-licenses-list.xhtml"></s:link>
 					</rich:menuItem>
 				</rich:menuGroup>
 				<rich:menuGroup value="Ιδιοκτήτες Φροντιστηρίων">
 					<rich:menuItem submitMode="none">
-						<s:link value="Εισαγωγή Ιδιοκτήτη" view="/preparatory/preparatory-owner.xhtml "/>
+						<s:link value="Εισαγωγή Ιδιοκτήτη"
+							view="/preparatory/preparatory-owner.xhtml " />
 					</rich:menuItem>
 					<rich:menuItem submitMode="none">
-						<s:link value="Προβολή Ιδιοκτητών" view="/preparatory/preparatory-owners-list.xhtml"></s:link>
+						<s:link value="Προβολή Ιδιοκτητών"
+							view="/preparatory/preparatory-owners-list.xhtml"></s:link>
 					</rich:menuItem>
 				</rich:menuGroup>
 			</rich:dropDownMenu>
@@ -103,17 +130,20 @@
 					</h:panelGroup>
 				</f:facet>
 				<rich:menuItem submitMode="none" disabled="#{!(s:hasRole('ADMIN'))}">
-					<s:link value="Διαχείρηση Χρηστών" view="/admin/manage-principals.xhtml">
-						<f:param name="manage_principals_from" value="home"/>
+					<s:link value="Διαχείρηση Χρηστών"
+						view="/admin/manage-principals.xhtml">
+						<f:param name="manage_principals_from" value="home" />
 					</s:link>
 				</rich:menuItem>
-				
+
 				<rich:menuGroup value="Ειδικότητες">
-				<rich:menuItem submitMode="none" disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MANAGE_SPECIALIZATION_GROUP'))}">
-					<s:link value="Ομάδες Ειδικοτητών" view="/admin/manage-specialization-groups.xhtml">
-						<f:param name="manage_specialization_groups_from" value="home"/>
-					</s:link>
-				</rich:menuItem>
+					<rich:menuItem submitMode="none"
+						disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MANAGE_SPECIALIZATION_GROUP'))}">
+						<s:link value="Ομάδες Ειδικοτητών"
+							view="/admin/manage-specialization-groups.xhtml">
+							<f:param name="manage_specialization_groups_from" value="home" />
+						</s:link>
+					</rich:menuItem>
 				</rich:menuGroup>
 				<!--  
 				<rich:menuItem submitMode="ajax">
@@ -136,10 +166,9 @@
 			</rich:dropDownMenu>
 			<rich:toolBarGroup location="right" itemSeparator="line">
 				<s:link value="Κεντρική Σελίδα" view="/home.xhtml"
-					propagation="none" rendered="#{identity.loggedIn}"
-					 />
-				<s:link value="Αποσύνδεση" rendered="#{identity.loggedIn}" action="#{identity.logout}"
-					view="/home.xhtml" />
+					propagation="none" rendered="#{identity.loggedIn}" />
+				<s:link value="Αποσύνδεση" rendered="#{identity.loggedIn}"
+					action="#{identity.logout}" view="/home.xhtml" />
 			</rich:toolBarGroup>
 		</rich:toolBar>
 	</a4j:form>
