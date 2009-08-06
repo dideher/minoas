@@ -102,6 +102,12 @@
 						<h:outputText value="Διαχείριση Μίνωα" />
 					</h:panelGroup>
 				</f:facet>
+				<rich:menuItem submitMode="none" disabled="#{!(s:hasRole('ADMIN'))}">
+					<s:link value="Διαχείρηση Χρηστών" view="/admin/manage-principals.xhtml">
+						<f:param name="manage_principals_from" value="home"/>
+					</s:link>
+				</rich:menuItem>
+				
 				<rich:menuGroup value="Ειδικότητες">
 				<rich:menuItem submitMode="none" disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MANAGE_SPECIALIZATION_GROUP'))}">
 					<s:link value="Ομάδες Ειδικοτητών" view="/admin/manage-specialization-groups.xhtml">

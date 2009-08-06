@@ -241,6 +241,13 @@
       </framework:restrictions>
    </framework:entity-query>
    
+   <!-- Principals -->
+   
+   <framework:entity-query name="principalsListQuery" max-results="200" scope="page">
+    <framework:ejbql>SELECT p FROM Principal p</framework:ejbql>
+    <framework:order>p.username asc</framework:order>
+   </framework:entity-query>
+   
    <!-- Events -->
    <event type="org.jboss.seam.afterTransactionSuccess.Employee">
       <action execute="#{employeeRegularEmploymentsListQuery.refresh}" />
