@@ -200,6 +200,13 @@
 												bypassUpdates="true" ajaxSingle="true" />
 										</rich:calendar>
 									</s:decorate>
+									
+									<s:decorate template="/layout/doubleLineEdit.xhtml">
+										<ui:define name="label">
+											<h:outputText value="Σχόλιο" />
+										</ui:define>
+										<h:inputTextarea  value="#{secondment.comment}" />
+									</s:decorate>
 
 								</h:panelGrid>
 							</a4j:outputPanel>

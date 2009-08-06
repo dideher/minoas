@@ -66,7 +66,7 @@
 						<rich:spacer height="5" />
 					</h:panelGroup>
 					<h:panelGroup>
-						<rich:dataTable var="_owner"
+						<rich:dataTable var="_owner" id="preparatoryOwnerListTable"
 							value="#{preparatoryOwnersList.resultList}"
 							rendered="#{not empty preparatoryOwnersList.resultList}">
 							<h:column>
@@ -120,14 +120,66 @@
 									<f:param name="preparatoryOwnerID" value="#{_owner.id}" />
 									<f:param name="preparatoryOwnerFrom" value="/preparatory/preparatory-owners-list" />
 								</s:link>
+								<a4j:commandLink id="deletelink" reRender="deletePanelContent"
+										oncomplete="#{rich:component('deletePanel')}.show()"
+										value="Διαγραφή">
+										<h:graphicImage value="/img/icons/delete.png" width="12"
+											height="12" style="border:0" />
+										<f:setPropertyActionListener value="#{_owner.id}"
+											target="#{preparatoryOwnerHome.id}" />
+									</a4j:commandLink>
 									
 								</rich:toolBar>
 							</h:column>
+							<f:facet name="footer">
+										<rich:datascroller align="left" for="preparatoryOwnerListTable"
+											maxPages="20" renderIfSinglePage="false" id="sc1" />
+									</f:facet>
 						</rich:dataTable>
 					</h:panelGroup>
 				</h:panelGrid>
 			</rich:panel>
 		</h:form>
+		
+		<rich:modalPanel id="deletePanel" autosized="true" width="200">
+			<f:facet name="header">
+				<h:outputText value="Να γίνει διαγραφή ?"
+					style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<h:graphicImage value="/img/modal/close.png" styleClass="hidelink"
+						id="hidelink2" />
+					<rich:componentControl for="deletePanel" attachTo="hidelink2"
+						operation="hide" event="onclick" />
+				</h:panelGroup>
+			</f:facet>
+			<h:form>
+				<rich:spacer height="20" />
+				<a4j:outputPanel id="deletePanelContent" layout="inline">
+					<h:panelGroup>
+						<h:outputText value="Να διαγραφεί ο κάτοχος " />
+						<h:outputText
+							value="#{preparatoryOwnerHome.definedInstace.lastName} #{preparatoryOwnerHome.definedInstace.firstName}"
+							styleClass="fieldValueText" />
+						<h:outputText value=" απο την βάση ;" />
+					</h:panelGroup>
+				</a4j:outputPanel>
+				<rich:spacer height="20" />
+
+				<h:panelGrid columns="2">
+					<a4j:commandButton value="Ναι, διαγραφή !" ajaxSingle="true"
+						action="#{preparatoryOwnerHome.remove()}"
+						oncomplete="#{rich:component('deletePanel')}.hide();"
+						reRender="preparatoryOwnerListTable" />
+					<a4j:commandButton value="Οχι !"
+						onclick="#{rich:component('deletePanel')}.hide();return false;" />
+				</h:panelGrid>
+			</h:form>
+
+		</rich:modalPanel>
+		
+		<ui:include src="/components/wait-modal-panel.xhtml" />
 	</ui:define>
 </ui:composition>
 </html>

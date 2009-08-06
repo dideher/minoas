@@ -16,6 +16,16 @@
     </navigation>
   </page>
 
+  <exception class="org.hibernate.exception.ConstraintViolationException">
+    <redirect view-id="/error.xhtml">
+      <message severity="ERROR">
+        Δεν ήταν δυνατόν να τροποποιηθεί η βάση. Η οντότητα σχετίζεται με άλλη.
+        Το παρακάτω μύνημα ίσως βοήθησει :
+        
+        #{org.jboss.seam.handleException.message}
+      </message>
+    </redirect>
+  </exception>
   <exception class="org.jboss.seam.framework.EntityNotFoundException">
     <redirect view-id="/error.xhtml">
       <message>Not found</message>
@@ -36,8 +46,8 @@
 
 
   <exception class="javax.persistence.OptimisticLockException">
+    <end-conversation />
     <redirect view-id="/error.xhtml">
-      <end-conversation />
       <message>The record was modified by another user.</message>
     </redirect>
   </exception>
