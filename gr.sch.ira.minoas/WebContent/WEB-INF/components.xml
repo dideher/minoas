@@ -269,21 +269,7 @@
       
    <!-- For use with jBPM pageflow or process management -->
    
-   <bpm:jbpm >
-   	   <bpm:pageflow-definitions>
-           <!-- 
-           <value>new-principal.jpdl.xml</value>
-           <value>new-school-year.jpdl.xml</value>
-           <value>edit-school-year.jpdl.xml</value>
-           <value>school-search.jpdl.xml</value>
-            -->
-           <value>pageflows/new-secondment.jpdl.xml</value>
-           <value>pageflows/school-record.jpdl.xml</value>
-           <value>pageflows/employee-record.jpdl.xml</value>
-           <value>pageflows/active-secondments.jpdl.xml</value>
-           <value>pageflows/school-incoming-secondments.jpdl.xml</value>
-       </bpm:pageflow-definitions>
-   </bpm:jbpm>
+   
    
  
    
