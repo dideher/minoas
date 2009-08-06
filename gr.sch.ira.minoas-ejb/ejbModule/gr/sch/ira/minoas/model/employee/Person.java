@@ -300,4 +300,39 @@ public abstract class Person extends AbstractArchivableEntity {
 		this.vatNumber = vatNumber;
 	}
 
+	/**
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append(this.getClass().getSimpleName());
+		builder.append(" [");
+		if (lastName != null) {
+			builder.append("lastName=");
+			builder.append(lastName);
+			builder.append(", ");
+		}
+		if (firstName != null) {
+			builder.append("fistName=");
+			builder.append(firstName);
+			builder.append(", ");
+		}
+		if (fatherName != null) {
+			builder.append("fatherName=");
+			builder.append(fatherName);
+			builder.append(", ");
+		}
+		if (motherName != null) {
+			builder.append("motherName=");
+			builder.append(motherName);
+		}
+		if (idNumber != null) {
+			builder.append("idNumber=");
+			builder.append(idNumber);
+		}
+		builder.append("]");
+		return builder.toString();
+	}
+
 }

@@ -139,6 +139,7 @@ public class SecondmentHome extends MinoasEntityHome<Secondment> {
 	public Secondment getInstance() {
 		Secondment secondment = (Secondment) super.getInstance();
 		secondment.setSecondmentType(SecondmentType.FULL_TO_SCHOOL);
+		secondment.setEmployeeRequested(Boolean.TRUE);
 		return secondment;
 	}
 

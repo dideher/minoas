@@ -4,6 +4,7 @@ import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
 import gr.sch.ira.minoas.model.employement.Secondment;
+import gr.sch.ira.minoas.seam.components.CoreSearching;
 
 import java.util.Date;
 
@@ -87,6 +88,7 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 		if (!secondmentHome.isManaged()) {
 			Employee employee = getInstance();
 			Secondment newSecondment = secondmentHome.getInstance();
+			newSecondment.setDueTo(getCoreSearching().getActiveSchoolYear(getEntityManager()).getEndDate());
 			Employment currentEmployment = employee.getCurrentEmployment();
 			if (currentEmployment != null) {
 				newSecondment.setSourceUnit(currentEmployment.getSchool());

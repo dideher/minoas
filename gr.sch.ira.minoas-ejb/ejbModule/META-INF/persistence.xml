@@ -52,6 +52,7 @@
     <class>gr.sch.ira.minoas.model.employement.SecondmentUnit</class>
     <class>gr.sch.ira.minoas.model.core.SchoolGroup</class>
     <class>gr.sch.ira.minoas.model.core.SpecializationGroup</class>
+    <class>gr.sch.ira.minoas.model.core.Audit</class>
     <properties>
       <!--
         <property name="hibernate.dialect"

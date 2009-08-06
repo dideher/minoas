@@ -10,6 +10,8 @@ import java.lang.reflect.ParameterizedType;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Logger;
+import org.jboss.seam.annotations.TransactionPropagationType;
+import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.framework.EntityHome;
 import org.jboss.seam.log.Log;
@@ -42,9 +44,9 @@ public abstract class MinoasEntityHome<E> extends EntityHome {
 	private Class<E> persistentClass;
 	
 	
-	protected Object foo(AuditType type, String comment) {
+	protected void foo(AuditType type, String comment) {
 		Audit audit = new Audit(type, comment, getPrincipal());
-		return audit;
+		getEntityManager().persist(audit);
 	}
 	
 	/**
@@ -101,9 +103,10 @@ public abstract class MinoasEntityHome<E> extends EntityHome {
 	 * @see org.jboss.seam.framework.EntityHome#persist()
 	 */
 	@Override
+	@Transactional(TransactionPropagationType.REQUIRED)
 	public String persist() {
-		String result = super.persist();
 		foo(AuditType.INSERT, getInstance().toString());
+		String result = super.persist();
 		getLogger().info("principal '#0' successfully created '#1'", getPrincipal(), getInstance()); 
 		return result;
 	}
@@ -112,9 +115,10 @@ public abstract class MinoasEntityHome<E> extends EntityHome {
 	 * @see org.jboss.seam.framework.EntityHome#remove()
 	 */
 	@Override
+	@Transactional(TransactionPropagationType.REQUIRED)
 	public String remove() {
-		String result = super.remove();
 		foo(AuditType.REMOVE, getInstance().toString());
+		String result = super.remove();
 		getLogger().info("principal '#0' successfully removed '#1'", getPrincipal(), getInstance()); 
 		return result;
 	}
@@ -122,10 +126,11 @@ public abstract class MinoasEntityHome<E> extends EntityHome {
 	/**
 	 * @see org.jboss.seam.framework.EntityHome#update()
 	 */
+	@Transactional(TransactionPropagationType.REQUIRED)
 	@Override
 	public String update() {
-		String result = super.update();
 		foo(AuditType.UPDATE, getInstance().toString());
+		String result = super.update();
 		getLogger().info("principal '#0' successfully updated '#1'", getPrincipal(), getInstance()); 
 		return result;
 	}

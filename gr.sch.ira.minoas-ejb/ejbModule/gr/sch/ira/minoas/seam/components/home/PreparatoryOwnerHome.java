@@ -32,7 +32,7 @@ public class PreparatoryOwnerHome extends MinoasEntityHome<PreparatoryOwner> {
 	@Transactional
 	public String persist() {
 		PreparatoryOwner owner = (PreparatoryOwner)getInstance();
-		owner.setInsertedOn(new Date(System.currentTimeMillis()));
+		owner.setInsertedBy(getPrincipal());
 		return super.persist();
 	}
 

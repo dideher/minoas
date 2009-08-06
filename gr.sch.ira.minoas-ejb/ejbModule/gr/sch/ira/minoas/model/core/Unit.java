@@ -43,6 +43,16 @@ public class Unit extends AbstractArchivableEntity {
 	public static final String NAMED_QUERY_FIND_UNIT_BY_TITLE = "findUnitByTitle";
 
 	public static final String QUERY_PARAMETER_UNIT_TITLE = "title";
+	
+	@Override
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("[ ");
+		sb.append("");
+		sb.append(getTitle());
+		sb.append("] ");
+		return sb.toString();
+	}
 
 	/**
 	 * 
