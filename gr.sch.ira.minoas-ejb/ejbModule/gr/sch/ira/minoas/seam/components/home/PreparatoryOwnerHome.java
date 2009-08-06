@@ -16,7 +16,6 @@ import org.jboss.seam.annotations.security.Restrict;
  * @version $Id$
  */
 @Name(value = "preparatoryOwnerHome")
-@Scope(ScopeType.CONVERSATION)
 public class PreparatoryOwnerHome extends MinoasEntityHome<PreparatoryOwner> {
 
 	/**
@@ -46,6 +45,7 @@ public class PreparatoryOwnerHome extends MinoasEntityHome<PreparatoryOwner> {
 	public String update() {
 		PreparatoryOwner owner = (PreparatoryOwner)getInstance();
 		owner.setModifiedOn(new Date(System.currentTimeMillis()));
+		getLogger().info("principal '#0' updated preparatory owner #1", getPrincipalName(), owner);
 		return super.update();
 	}
 	

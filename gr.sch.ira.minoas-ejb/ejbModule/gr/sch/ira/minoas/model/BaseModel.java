@@ -35,7 +35,7 @@ public abstract class BaseModel implements Serializable {
 	private Principal insertedBy;
 
 	@Basic(fetch = FetchType.LAZY)
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "INSERTED_ON", length = 128, nullable = true, updatable = false)
 	private Date insertedOn;
 

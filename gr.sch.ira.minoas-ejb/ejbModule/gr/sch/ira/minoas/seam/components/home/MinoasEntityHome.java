@@ -1,6 +1,8 @@
 
 package gr.sch.ira.minoas.seam.components.home;
 
+import gr.sch.ira.minoas.model.core.Audit;
+import gr.sch.ira.minoas.model.core.AuditType;
 import gr.sch.ira.minoas.model.security.Principal;
 import gr.sch.ira.minoas.seam.components.CoreSearching;
 
@@ -38,6 +40,12 @@ public abstract class MinoasEntityHome<E> extends EntityHome {
 	private Log logger;
 
 	private Class<E> persistentClass;
+	
+	
+	protected Object foo(AuditType type, String comment) {
+		Audit audit = new Audit(type, comment, getPrincipal());
+		return audit;
+	}
 	
 	/**
 	 * @see org.jboss.seam.framework.EntityHome#create()
@@ -87,6 +95,39 @@ public abstract class MinoasEntityHome<E> extends EntityHome {
 
 	protected String getPrincipalName() {
 		return getIdentity()!=null ? getIdentity().getPrincipal().getName() : "<anonymous>";
+	}
+
+	/**
+	 * @see org.jboss.seam.framework.EntityHome#persist()
+	 */
+	@Override
+	public String persist() {
+		String result = super.persist();
+		foo(AuditType.INSERT, getInstance().toString());
+		getLogger().info("principal '#0' successfully created '#1'", getPrincipal(), getInstance()); 
+		return result;
+	}
+
+	/**
+	 * @see org.jboss.seam.framework.EntityHome#remove()
+	 */
+	@Override
+	public String remove() {
+		String result = super.remove();
+		foo(AuditType.REMOVE, getInstance().toString());
+		getLogger().info("principal '#0' successfully removed '#1'", getPrincipal(), getInstance()); 
+		return result;
+	}
+
+	/**
+	 * @see org.jboss.seam.framework.EntityHome#update()
+	 */
+	@Override
+	public String update() {
+		String result = super.update();
+		foo(AuditType.UPDATE, getInstance().toString());
+		getLogger().info("principal '#0' successfully updated '#1'", getPrincipal(), getInstance()); 
+		return result;
 	}
 
 }
