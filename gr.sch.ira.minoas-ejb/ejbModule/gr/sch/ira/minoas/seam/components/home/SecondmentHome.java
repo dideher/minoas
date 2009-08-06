@@ -1,16 +1,13 @@
 package gr.sch.ira.minoas.seam.components.home;
 
-import java.util.Date;
-
-import javax.faces.application.FacesMessage.Severity;
-import javax.faces.event.ValueChangeEvent;
-
-import gr.sch.ira.minoas.model.core.AuditType;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.SecondmentType;
-import gr.sch.ira.minoas.seam.components.CoreSearching;
+
+import java.util.Date;
+
+import javax.faces.event.ValueChangeEvent;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;

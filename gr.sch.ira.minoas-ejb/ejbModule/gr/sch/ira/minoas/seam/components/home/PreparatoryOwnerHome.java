@@ -5,9 +5,7 @@ import gr.sch.ira.minoas.model.preparatory.PreparatoryOwner;
 
 import java.util.Date;
 
-import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.annotations.security.Restrict;
 

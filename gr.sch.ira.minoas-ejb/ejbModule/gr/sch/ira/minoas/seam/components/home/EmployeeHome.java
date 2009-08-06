@@ -4,7 +4,6 @@ import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
 import gr.sch.ira.minoas.model.employement.Secondment;
-import gr.sch.ira.minoas.seam.components.CoreSearching;
 
 import java.util.Date;
 

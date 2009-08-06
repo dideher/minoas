@@ -6,10 +6,13 @@ package gr.sch.ira.minoas.model.security;
 import gr.sch.ira.minoas.model.BaseModel;
 import gr.sch.ira.minoas.model.core.OrganizationalOffice;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -63,9 +66,13 @@ public class Principal extends BaseModel {
 	@Column(name = "REAL_NAME", length = 90, nullable = false)
 	private String realName;
 
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.LAZY, cascade={ CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
 	@JoinTable(name = "PRINCIPAL_ROLE", joinColumns = @JoinColumn(name = "PRINCIPAL_ID"), inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))
-	private Set<Role> roles = new HashSet<Role>();
+	private List<Role> roles = new ArrayList<Role>();
+	
+	@Basic
+	@Column(name = "IS_ACTIVE", nullable = true)
+	private Boolean active = Boolean.TRUE;
 
 	@Basic
 	@Column(updatable = false, name = "USERNAME", length = 16, nullable = false, unique = true)
@@ -76,7 +83,7 @@ public class Principal extends BaseModel {
 	 */
 	public Principal() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	/**
@@ -129,7 +136,7 @@ public class Principal extends BaseModel {
 	/**
 	 * @return the roles
 	 */
-	public Set<Role> getRoles() {
+	public List<Role> getRoles() {
 		return roles;
 	}
 
@@ -178,7 +185,7 @@ public class Principal extends BaseModel {
 	/**
 	 * @param roles the roles to set
 	 */
-	public void setRoles(Set<Role> roles) {
+	public void setRoles(List<Role> roles) {
 		this.roles = roles;
 	}
 
@@ -190,7 +197,9 @@ public class Principal extends BaseModel {
 	}
 
 	public Role addRole(Role aRole) {
-		getRoles().add(aRole);
+		if(!roles.contains(aRole)) {
+			getRoles().add(aRole);
+		}
 		return aRole;
 	}
 
@@ -206,6 +215,20 @@ public class Principal extends BaseModel {
 		sb.append(getRealName());
 		sb.append("]");
 		return sb.toString();
+	}
+
+	/**
+	 * @return the active
+	 */
+	public Boolean getActive() {
+		return active;
+	}
+
+	/**
+	 * @param active the active to set
+	 */
+	public void setActive(Boolean active) {
+		this.active = active;
 	}
 
 }

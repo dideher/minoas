@@ -24,6 +24,8 @@ import org.jboss.seam.security.Identity;
 public abstract class MinoasEntityHome<E> extends EntityHome {
 
 	public static final String PERSITESTENCE_CONTEXT_NAME = "entityManager";
+	
+	public static final String DUPLICATE_VALUE_OUTCOME = "duplicateValue";
 
 	/**
 	 * Comment for <code>serialVersionUID</code>

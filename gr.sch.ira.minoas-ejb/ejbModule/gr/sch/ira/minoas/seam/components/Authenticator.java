@@ -29,6 +29,11 @@ public class Authenticator extends BaseDatabaseAwareSeamComponent {
 			Principal p = (Principal) getEntityManager().createQuery(
 					"SELECT OBJECT(p) FROM Principal p WHERE p.username = :username").setParameter("username", username)
 					.getSingleResult();
+			if(p.getActive()==false) {
+				info("principal '#0' is disabled, therefore access is denied.", username, p.getRoles());
+				return false;
+				
+			}
 			if (p.getPassword().equals(identity.getCredentials().getPassword())) {
 
 				for (Role role : p.getRoles()) {
