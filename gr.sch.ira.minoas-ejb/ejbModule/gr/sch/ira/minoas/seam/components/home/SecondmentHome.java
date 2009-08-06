@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.faces.application.FacesMessage.Severity;
 import javax.faces.event.ValueChangeEvent;
 
+import gr.sch.ira.minoas.model.core.AuditType;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.Secondment;
@@ -72,8 +73,6 @@ public class SecondmentHome extends MinoasEntityHome<Secondment> {
 			getEntityManager().merge(currentSecondment);
 
 		}
-		info("principal '#0' successfully registered new secondment #1 for employee #2,", getPrincipalName(),
-				newSecondment, employee);
 		return super.persist();
 	}
 

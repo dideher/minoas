@@ -431,6 +431,11 @@ public class Secondment extends BaseModel implements Cloneable {
 			builder.append(targetUnit);
 			builder.append(", ");
 		}
+		if (employee != null) {
+			builder.append("employee=");
+			builder.append(employee);
+			builder.append(", ");
+		}
 		if(finalWorkingHours != null) {
 			builder.append("finalWorkingHours=");
 			builder.append(finalWorkingHours);

@@ -44,7 +44,7 @@ public abstract class MinoasEntityHome<E> extends EntityHome {
 	private Class<E> persistentClass;
 	
 	
-	protected void foo(AuditType type, String comment) {
+	protected void logAudit(AuditType type, String comment) {
 		Audit audit = new Audit(type, comment, getPrincipal());
 		getEntityManager().persist(audit);
 	}
@@ -105,9 +105,9 @@ public abstract class MinoasEntityHome<E> extends EntityHome {
 	@Override
 	@Transactional(TransactionPropagationType.REQUIRED)
 	public String persist() {
-		foo(AuditType.INSERT, getInstance().toString());
+		logAudit(AuditType.INSERT, getInstance().toString());
 		String result = super.persist();
-		getLogger().info("principal '#0' successfully created '#1'", getPrincipal(), getInstance()); 
+		getLogger().info("principal '#0' successfully created '#1'", getPrincipalName(), getInstance()); 
 		return result;
 	}
 
@@ -117,9 +117,9 @@ public abstract class MinoasEntityHome<E> extends EntityHome {
 	@Override
 	@Transactional(TransactionPropagationType.REQUIRED)
 	public String remove() {
-		foo(AuditType.REMOVE, getInstance().toString());
+		logAudit(AuditType.REMOVE, getInstance().toString());
 		String result = super.remove();
-		getLogger().info("principal '#0' successfully removed '#1'", getPrincipal(), getInstance()); 
+		getLogger().info("principal '#0' successfully removed '#1'", getPrincipalName(), getInstance()); 
 		return result;
 	}
 
@@ -129,9 +129,9 @@ public abstract class MinoasEntityHome<E> extends EntityHome {
 	@Transactional(TransactionPropagationType.REQUIRED)
 	@Override
 	public String update() {
-		foo(AuditType.UPDATE, getInstance().toString());
+		logAudit(AuditType.UPDATE, getInstance().toString());
 		String result = super.update();
-		getLogger().info("principal '#0' successfully updated '#1'", getPrincipal(), getInstance()); 
+		getLogger().info("principal '#0' successfully updated '#1'", getPrincipalName(), getInstance()); 
 		return result;
 	}
 
