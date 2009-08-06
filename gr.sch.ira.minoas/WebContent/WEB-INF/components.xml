@@ -251,11 +251,16 @@
       </framework:restrictions>
    </framework:entity-query>
    
-   <!-- Principals -->
+   <!-- Principals and Roles -->
    
    <framework:entity-query name="principalsListQuery" max-results="200" scope="page">
     <framework:ejbql>SELECT p FROM Principal p</framework:ejbql>
     <framework:order>p.username asc</framework:order>
+   </framework:entity-query>
+   
+   <framework:entity-query name="rolesListQuery" max-results="200" scope="page">
+    <framework:ejbql>SELECT p FROM Role p</framework:ejbql>
+    <framework:order>p.name asc</framework:order>
    </framework:entity-query>
    
    <!-- Events -->
@@ -274,6 +279,10 @@
    
     <event type="org.jboss.seam.afterTransactionSuccess.TeachingRequirement">
       <action execute="#{schoolTeachingRequirement.refresh}" />
+   </event>
+   
+   <event type="org.jboss.seam.afterTransactionSuccess.Principal">
+      <action execute="#{principalsListQuery.refresh}" />
    </event>
    
       

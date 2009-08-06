@@ -7,7 +7,15 @@
   <param name="manage_principals_from" />
   <!-- navigation rules -->
   
- 
+ 	<navigation from-action="#{principalHome.persist()}">
+ 		<rule if-outcome="duplicateValue">
+ 			<redirect view-id="/admin/manage-principals.xhtml">
+ 				<message severity="ERROR">
+ 					Το όνομα χρήστη που εισάγετε είναι ήδει σε χρήση απο άλλον χρήστη.
+ 				</message>
+ 			</redirect>
+ 		</rule>
+ 	</navigation>
   
   
   

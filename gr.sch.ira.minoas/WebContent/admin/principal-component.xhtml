@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich">
+
+<ui:component>
+	<h:panelGrid columns="1">
+		<h:panelGrid columns="4">
+			<s:decorate template="/layout/doubleLineEdit.xhtml">
+				<ui:define name="label">
+					<h:outputText value="Όνομα Χρήστη : " />
+				</ui:define>
+				<h:inputText id="principalUsername" value="${principal.username}" required="true" size="8"
+					maxlength="16" styleClass="fieldValueText" />
+			</s:decorate>
+
+			<s:decorate template="/layout/doubleLineEdit.xhtml">
+				<ui:define name="label">
+					<h:outputText value="Πραγματικό Όνομα : " />
+				</ui:define>
+				<h:inputText value="${principal.realName}" required="true" size="25"
+					maxlength="90" styleClass="fieldValueText" />
+			</s:decorate>
+
+			<s:decorate template="/layout/doubleLineEdit.xhtml">
+				<ui:define name="label">
+					<h:outputText value="Κωδικός Χρήστη : " />
+				</ui:define>
+				<h:inputText value="${principal.password}" required="true" size="20"
+					maxlength="20" styleClass="fieldValueText" />
+			</s:decorate>
+
+
+			<s:decorate template="/layout/doubleLineEdit.xhtml">
+				<ui:define name="label">
+					<h:outputText value="Ηλεκτρονικό Ταχυδρομείο : " />
+				</ui:define>
+				<h:inputText value="${principal.email}" required="false" size="25"
+					maxlength="60" styleClass="fieldValueText" />
+			</s:decorate>
+
+
+
+		</h:panelGrid>
+		<s:decorate template="/layout/doubleLineEdit.xhtml">
+			<ui:define name="label">
+				<h:outputText value="Ρόλοι Χρήστη" />
+			</ui:define>
+			<rich:pickList value="${principal.roles}" sourceListWidth="240"
+				targetListWidth="240">
+				<s:selectItems var="item" value="#{rolesListQuery.resultList}"
+					label="#{item.name} - #{item.description}">
+
+				</s:selectItems>
+				<s:convertEntity></s:convertEntity>
+			</rich:pickList>
+		</s:decorate>
+	</h:panelGrid>
+
+
+</ui:component>
+</html>
