@@ -124,6 +124,7 @@ public class Principal extends BaseModel {
 		this.username = username;
 		this.realName = realName;
 		this.password = password;
+		this.active = Boolean.TRUE;
 	}
 
 	/**

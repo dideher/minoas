@@ -6,5 +6,7 @@ Class-Path: richfaces-api.jar
  drools-compiler.jar 
  jboss-seam.jar 
  jboss-el.jar 
- antlr-runtime.jar
+ antlr-runtime.jar 
+ jasperreports-3.5.3.jar 
+ iText-2.1.0.jar
 
