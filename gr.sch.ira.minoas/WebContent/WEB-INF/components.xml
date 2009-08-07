@@ -197,7 +197,7 @@
 
     <!-- Secondment Components -->
   
-   <component name="exampleSecondment" class="gr.sch.ira.minoas.model.employement.Secondment" scope="page" />
+   <component name="exampleSecondment" class="gr.sch.ira.minoas.model.employement.Secondment" scope="conversation" />
    
    <!-- The active secondment of an employee -->
    <framework:entity-query name="employeeActiveSecondmentListQuery" max-results="1" scope="page">
@@ -226,12 +226,15 @@
     </framework:restrictions> 
    </framework:entity-query>
    
-   <framework:entity-query name="secondmentsByTypeListQuery" max-results="400" scope="page">
-    <framework:ejbql>SELECT s FROM Secondment s WHERE s.active IS TRUE</framework:ejbql>
-    <framework:order>s.id desc</framework:order>
+   <framework:entity-query name="secondmentsByTypeListQuery" max-results="1000" scope="CONVERSATION">
+    <framework:ejbql>SELECT s FROM Secondment s INNER JOIN FETCH s.employee WHERE s.active IS TRUE</framework:ejbql>
+    <framework:order>s.employee.lastSpecialization.id asc, s.employee.lastName asc</framework:order>
     <framework:restrictions>
       <value>s.schoolYear.id = #{activeShoolYear.id}</value>
       <value>s.secondmentType = #{exampleSecondment.secondmentType}</value>
+      <value>s.targetUnit = #{exampleSecondment.targetUnit}</value>
+      <value>s.employeeRequested = #{exampleSecondment.employeeRequested}</value>
+      <value>lower(s.comment) like lower(concat(#{exampleSecondment.comment},'%') )</value>
     </framework:restrictions> 
    </framework:entity-query>
    
