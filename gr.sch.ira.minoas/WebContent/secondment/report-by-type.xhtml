@@ -22,26 +22,17 @@
 			<h:form>
 				<h:panelGrid columns="1">
 
-										<a4j:region>
+					
 						<rich:panel>
 							<f:facet name="header">
 								<h:outputText value="Στοιχεία Απόσπασης" />
 							</f:facet>
-							<a4j:outputPanel id="newSecondmentPanel">
+
+							<ui:include src="/components/messages-component.xhtml" />
+							
 								<h:panelGrid columns="4">
 
-									<s:decorate id="sourceUnit"
-										template="/layout/doubleLineEdit.xhtml">
-										<ui:define name="label">
-											<h:outputText value="Σχολική Μονάδα Οργανικής" />
-										</ui:define>
 
-										<h:inputText value="#{secondment.sourceUnit}" tabindex="1"
-											required="true" id="schoolTarget" styleClass="fieldValueText"
-											converter="unitConverter" size="20" maxlength="22"
-											readonly="true">
-										</h:inputText>
-									</s:decorate>
 
 									<s:decorate id="secondmentTypeDecoration"
 										template="/layout/doubleLineEdit.xhtml">
@@ -50,7 +41,7 @@
 										</ui:define>
 
 										<h:selectOneMenu id="secondmentType"
-											value="#{secondment.secondmentType}" required="true">
+											value="#{exampleSecondment.secondmentType}">
 											<s:selectItems hideNoSelectionLabel="true"
 												var="_secondmentType" value="#{secondmentTypes}"
 												label="#{messages[_secondmentType.key]}" />
@@ -66,13 +57,13 @@
 											<h:outputText value="Μονάδα Απόσπασης" />
 										</ui:define>
 
-										<h:inputText value="#{secondment.targetUnit}" required="true"
+										<h:inputText value="#{exampleSecondment.targetUnit}"
 											id="secondmentTarget" styleClass="fieldValueText"
-											tabindex="1" converter="unitConverter">
+											converter="unitConverter">
 
 											<rich:suggestionbox for="secondmentTarget"
 												var="secondmentUnit"
-												suggestionAction="#{secondmentAwareUnitSuggester.suggest}">
+												suggestionAction="#{exampleSecondmentAwareUnitSuggester.suggest}">
 												<f:facet name="nothingLabel">
 													<h:outputText value="Άγνωστη Μονάδα Απόσπασης" />
 												</f:facet>
@@ -87,211 +78,138 @@
 										<ui:define name="label">
 											<h:outputText value="Με Αίτηση του ;" />
 										</ui:define>
-										<h:selectBooleanCheckbox
-											value="#{secondment.employeeRequested}" />
-									</s:decorate>
-
-									<s:decorate template="/layout/doubleLineEdit.xhtml">
-										<ui:define name="label">
-											<h:outputText value="Υποχρεωτικό Ωράριο : " />
-										</ui:define>
-										<h:inputText value="#{secondment.mandatoryWorkingHours}"
-											size="3" maxlength="3" readonly="true" required="true" />
-									</s:decorate>
-
-									<s:decorate template="/layout/doubleLineEdit.xhtml">
-										<ui:define name="label">
-											<h:outputText value="Ωράριο Απόσπασης : " />
-										</ui:define>
-										<h:inputText value="#{secondment.finalWorkingHours}" size="3"
-											maxlength="3" required="true" />
-									</s:decorate>
-
-									<s:decorate id="pysdeOrderDecoration"
-										template="/layout/doubleLineEdit.xhtml">
-										<ui:define name="label">
-											<h:outputText value="Απόφαση ΠΥΣΔΕ" />
-										</ui:define>
-										<h:inputText id="pysdeOrder" value="#{secondment.pysdeOrder}"
-											styleClass="fieldValueText" required="false" size="16"
-											maxlength="25">
-											<a4j:support event="onblur" ajaxSingle="true"
-												reRender="pysdeOrderDecoration" bypassUpdates="true" />
-											<f:validateLength minimum="5" maximum="25" />
-										</h:inputText>
+										<h:selectBooleanCheckbox  converterId="javax.faces.Boolean"
+											value="#{exampleSecondment.employeeRequested}" />
 									</s:decorate>
 
 
-									<s:decorate id="headMasterOrderDecoration"
-										template="/layout/doubleLineEdit.xhtml">
-										<ui:define name="label">
-											<h:outputText value="Απόφαση Διευθυντή" />
-										</ui:define>
-										<h:inputText id="headMasterOrder"
-											value="#{secondment.headMasterOrder}"
-											styleClass="fieldValueText" required="false" size="16"
-											maxlength="25">
-											<a4j:support event="onblur"
-												reRender="headMasterOrderDecoration" bypassUpdates="true"
-												ajaxSingle="true" />
-											<f:validateLength minimum="5" maximum="25" />
-										</h:inputText>
-									</s:decorate>
-
-									<s:decorate id="ministerialOrderDecoration"
-										template="/layout/doubleLineEdit.xhtml">
-										<ui:define name="label">
-											<h:outputText value="Υπουργική Απόφαση" />
-										</ui:define>
-										<h:inputText id="ministerialOrder"
-											value="#{secondment.ministerialOrder}" required="false"
-											size="16" maxlength="25" styleClass="fieldValueText">
-											<a4j:support event="onblur"
-												reRender="ministerialOrderDecoration" bypassUpdates="true"
-												ajaxSingle="true" />
-											<f:validateLength minimum="5" maximum="25" />
-										</h:inputText>
-									</s:decorate>
-
-									<s:decorate id="establishedDateDecoration"
-										template="/layout/doubleLineEdit.xhtml">
-										<ui:define name="label">
-											<h:outputText value="Έναρξη Απόσπασης" />
-										</ui:define>
-										<rich:calendar id="establishedDate" enableManualInput="true"
-											value="#{secondment.established}" required="true"
-											inputSize="10" mode="ajax" locale="el_GR"
-											inputClass="fieldValueText" datePattern="dd-MM-yyyy">
-											<a4j:support event="onblur"
-												reRender="establishedDateDecoration" bypassUpdates="true"
-												ajaxSingle="true" />
-										</rich:calendar>
-									</s:decorate>
-									<s:decorate id="dueToDateDecoration"
-										template="/layout/doubleLineEdit.xhtml">
-										<ui:define name="label">
-											<h:outputText value="Λήξη Απόσπασης" />
-										</ui:define>
-										<rich:calendar id="dueToDate" value="#{secondment.dueTo}"
-											required="true" mode="ajax" locale="el_GR" inputSize="10"
-											enableManualInput="true" inputClass="fieldValueText"
-											datePattern="dd-MM-yyyy" valueChangeListener="#{secondmentHome.checkSecondmentDueDate}">
-
-											<a4j:support event="onblur" reRender="dueToDateDecoration"
-												bypassUpdates="true" ajaxSingle="true" />
-										</rich:calendar>
-									</s:decorate>
-									
 									<s:decorate template="/layout/doubleLineEdit.xhtml">
 										<ui:define name="label">
 											<h:outputText value="Σχόλιο" />
 										</ui:define>
-										<h:inputTextarea  value="#{secondment.comment}" />
+										<h:inputText value="#{exampleSecondment.comment}" />
 									</s:decorate>
 
 								</h:panelGrid>
-							</a4j:outputPanel>
 						</rich:panel>
-						</a4j:region>
-						<rich:spacer height="5" />
-						<rich:separator lineType="dashed" height="2" />
-						<rich:spacer height="5" />
+					<rich:spacer height="5" />
+					<rich:separator lineType="dashed" height="2" />
+					<rich:spacer height="5" />
 
-						<h:panelGroup>
+					<h:panelGroup>
 
-							<s:div styleClass="actionButtons">
-								<s:button id="backButton" action="backButton" value="Τέλος Εργασίας" />
-								<rich:spacer width="10" />
-								<h:commandButton action="#{secondmentHome.persist()}"
-									onclick="if(!confirm('Να καταχωρηθή η απόσπαση ?')) {form.reset(); return false;}"
-									value="Καταχώρηση" id="updateButton"
-									/>
-								<rich:spacer width="3" />
-							</s:div>
-						</h:panelGroup>
+						<s:div styleClass="actionButtons">
+							<h:panelGrid columns="3">
+								<h:commandButton id="searchButton" value="Αναζήτηση"
+									actionListener="#{secondmentsByTypeListQuery.refresh}">
+									<s:defaultAction />
+								</h:commandButton>
+								<s:button action="#{secondmentReportByType.runReport}" value="Εκτύπωση (PDF)" target="new" />
+								<s:button id="backButton" action="backButton"
+									value="Τέλος Εργασίας" />
+							</h:panelGrid>
+						</s:div>
+					</h:panelGroup>
 				</h:panelGrid>
+
+				<rich:dataTable id="secondmentsByTypeTable"
+					value="#{secondmentsByTypeListQuery.resultList}" var="_secondment"
+					rows="25" border="0"
+					onRowMouseOver="this.style.backgfroundColor='#F8F8F8'"
+					onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+					width="100%">
+					<f:facet name="header">
+						<h:outputLabel
+							value="Ενεργές Αποσπάσεις Κατά Το Τρέχων Σχολικό Έτος" />
+					</f:facet>
+
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Εκπαιδευτικός" />
+						</f:facet>
+						<h:outputText
+							value="#{employeeUtil.prettyFormatNoSpecialization(_secondment.employee)}" />
+					</rich:column>
+
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Ειδικότητα" />
+						</f:facet>
+						<h:outputText
+							value="#{_secondment.employee.lastSpecialization.title}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Οργανική Μονάδα" />
+						</f:facet>
+						<h:outputText value="#{_secondment.sourceUnit.title}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Tύπος Απόσπασης" />
+						</f:facet>
+						<h:outputText value="#{messages[_secondment.secondmentType.key]}" />
+					</rich:column>
+
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Απόσπαση Σε" />
+						</f:facet>
+						<h:outputText value="#{_secondment.targetUnit.title}" />
+					</rich:column>
+
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Σχόλιο" />
+						</f:facet>
+						<h:outputText value="#{_secondment.comment}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Απο" />
+						</f:facet>
+						<h:outputText value="#{_secondment.established}">
+							<s:convertDateTime pattern="dd-MM-yyyy" />
+						</h:outputText>
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Εώς" />
+						</f:facet>
+						<h:outputText value="#{_secondment.dueTo}">
+							<s:convertDateTime pattern="dd-MM-yyyy" />
+						</h:outputText>
+					</rich:column>
+
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Με Αίτηση Του" />
+						</f:facet>
+						<h:outputText value="Ναί"
+							rendered="#{_secondment.employeeRequested}" />
+						<h:outputText value="Οχι"
+							rendered="#{!_secondment.employeeRequested}" />
+					</rich:column>
+
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Πραγ. Ωράριο" />
+						</f:facet>
+						<h:outputText value="#{_secondment.finalWorkingHours}" />
+					</rich:column>
+					<f:facet name="footer">
+						<rich:datascroller for="secondmentsByTypeTable">
+							<f:facet name="first">
+								<h:outputText value="Πρώτη" />
+							</f:facet>
+							<f:facet name="last">
+								<h:outputText value="Τελευταία" />
+							</f:facet>
+						</rich:datascroller>
+					</f:facet>
+				</rich:dataTable>
 			</h:form>
-		
-		<rich:dataTable id="secondmentsByTypeTable"
-								value="#{secondmentsByTypeListQuery.resultList}"
-								var="_secondment" rows="25" border="0"
-								onRowMouseOver="this.style.backgfroundColor='#F8F8F8'"
-								onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
-								width="100%">
-								<f:facet name="header">
-									<h:outputLabel value="Ιστορικό Αποσπάσεων Εκπαιδευτικού" />
-								</f:facet>
-								
-								<rich:column>
-									<f:facet name="header">
-										<h:outputText value="Αποσπ. Απο" />
-									</f:facet>
-									<h:outputText value="#{_secondment.sourceUnit.title}" />
-								</rich:column>
-								<rich:column>
-									<f:facet name="header">
-										<h:outputText value="Αποσπ. Σε" />
-									</f:facet>
-									<h:outputText value="#{_secondment.targetUnit.title}" />
-								</rich:column>
-								<rich:column>
-									<f:facet name="header">
-										<h:outputText value="Σχόλιο" />
-									</f:facet>
-									<h:outputText value="#{_secondment.comment}" />
-								</rich:column>
-								<rich:column>
-									<f:facet name="header">
-										<h:outputText value="Απο" />
-									</f:facet>
-									<h:outputText value="#{_secondment.established}">
-										<s:convertDateTime pattern="dd-MM-yyyy" />
-									</h:outputText>
-								</rich:column>
-								<rich:column>
-									<f:facet name="header">
-										<h:outputText value="Εώς" />
-									</f:facet>
-									<h:outputText value="#{_secondment.dueTo}">
-										<s:convertDateTime pattern="dd-MM-yyyy" />
-									</h:outputText>
-								</rich:column>
-
-								<rich:column>
-									<f:facet name="header">
-										<h:outputText value="Με Αίτηση Του" />
-									</f:facet>
-									<h:outputText value="Ναί"
-										rendered="#{_secondment.employeeRequested}" />
-									<h:outputText value="Οχι"
-										rendered="#{!_secondment.employeeRequested}" />
-								</rich:column>
-
-								<rich:column>
-									<f:facet name="header">
-										<h:outputText value="Υποχ. Ωράριο" />
-									</f:facet>
-									<h:outputText value="#{_secondment.mandatoryWorkingHours}" />
-								</rich:column>
-								<rich:column>
-									<f:facet name="header">
-										<h:outputText value="Πραγ. Ωράριο" />
-									</f:facet>
-									<h:outputText value="#{_secondment.finalWorkingHours}" />
-								</rich:column>
-								<f:facet name="footer">
-					<rich:datascroller for="secondmentsByTypeTable"> 
-						<f:facet name="first">
-							<h:outputText value="Πρώτη" />
-						</f:facet>
-						<f:facet name="last">
-							<h:outputText value="Τελευταία" />
-						</f:facet>
-					</rich:datascroller>
-
-				</f:facet>
-							</rich:dataTable>
-	</rich:panel>	
+		</rich:panel>
 	</ui:define>
 </ui:composition>
 </html>

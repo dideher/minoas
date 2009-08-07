@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page login-required="true" xmlns="http://jboss.com/products/seam/pages"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.1.xsd">
+  <begin-conversation join="true" flush-mode="manual"/> 
+  <description>Αποσπάσεις Ανα Τύπο</description>
+  
+  <param name="secondment_report_by_type_from"/>
+  
+  <navigation from-action="backButton">
+    <redirect view-id="#{empty secondment_report_by_type_from ? '/home' : secondment_report_by_type_from}.xhtml}">
+    </redirect>
+  </navigation>
+  
+  
+</page>
