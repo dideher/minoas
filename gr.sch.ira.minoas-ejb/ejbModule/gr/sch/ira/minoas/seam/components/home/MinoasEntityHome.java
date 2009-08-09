@@ -26,6 +26,8 @@ public abstract class MinoasEntityHome<E> extends EntityHome {
 	public static final String PERSITESTENCE_CONTEXT_NAME = "entityManager";
 	
 	public static final String DUPLICATE_VALUE_OUTCOME = "duplicateValue";
+	
+	public static final String VALIDATION_ERROR_OUTCOME = "validationError";
 
 	/**
 	 * Comment for <code>serialVersionUID</code>

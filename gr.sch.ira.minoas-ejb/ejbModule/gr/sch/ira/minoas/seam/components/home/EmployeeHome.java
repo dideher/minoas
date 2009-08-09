@@ -87,7 +87,6 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 		if (!secondmentHome.isManaged()) {
 			Employee employee = getInstance();
 			Secondment newSecondment = secondmentHome.getInstance();
-			newSecondment.setDueTo(getCoreSearching().getActiveSchoolYear(getEntityManager()).getEndDate());
 			Employment currentEmployment = employee.getCurrentEmployment();
 			if (currentEmployment != null) {
 				newSecondment.setSourceUnit(currentEmployment.getSchool());
