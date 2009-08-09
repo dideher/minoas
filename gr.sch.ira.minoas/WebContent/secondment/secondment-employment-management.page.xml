@@ -16,6 +16,12 @@
     <redirect view-id="/home.xhtml" />
   </navigation>
   
+  <navigation from-action="#{secondmentHome.cancel()}">
+    <rule if-outcome="updated">
+    	<render view-id="/secondment/secondment-employment-management.xtml"></render>
+    </rule>
+  </navigation>
+  
   <navigation from-action="backButton">
     <redirect view-id="#{empty secondment_management_from ? '/home' : secondment_management_from}.xhtml}" />
   </navigation>
