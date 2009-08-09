@@ -2,6 +2,7 @@
                  xmlns:ui="http://java.sun.com/jsf/facelets"
                  xmlns:h="http://java.sun.com/jsf/html"
                  xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:rich="http://richfaces.org/rich"
                  xmlns:s="http://jboss.com/products/seam/taglib">
 
 	<s:div>
@@ -12,7 +13,7 @@
 					<s:span styleClass="required" rendered="#{required}">*</s:span>
 				</s:label>
 			</h:panelGroup>
-			<h:panelGroup>
+			<h:panelGroup id="lala">
 				<span class="value #{invalid?'errors':''}"> <s:validateAll>
 					<ui:insert />
 				</s:validateAll> </span>
@@ -21,7 +22,8 @@
 				<h:panelGroup>
 					<h:graphicImage value="/img/error.png" rendered="#{invalid}"
 						styleClass="errors" />
-					<s:message styleClass="errors" />
+					<s:message styleClass="errors"></s:message>
+					
 				</h:panelGroup>
 			</f:facet>
 		</h:panelGrid>

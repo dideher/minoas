@@ -20,7 +20,7 @@
 			</f:facet>
 
 			<ui:include src="/components/messages-component.xhtml" />
-			<a4j:region>
+			
 				<h:form>
 					<h:panelGrid columns="1">
 						<rich:panel>
@@ -232,10 +232,8 @@
 						</rich:panel>
 					</h:panelGrid>
 				</h:form>
-			</a4j:region>
-			<h:panelGroup>
-
-			</h:panelGroup>
+			
+			
 		</rich:panel>
 
 
@@ -282,7 +280,7 @@
 				</h:panelGrid>
 			</h:form>
 		</rich:modalPanel>
-		<a4j:region>
+		
 			<rich:modalPanel id="updateModalPanel" autosized="true" width="450">
 				<f:facet name="header">
 					<h:outputText value="Τροποποίηση Ενεργής Απόσπασης "
@@ -296,12 +294,13 @@
 							operation="hide" event="onclick" />
 					</h:panelGroup>
 				</f:facet>
-				<h:form>
+					<a4j:region>
 					<h:panelGrid columns="1">
+						<h:form>
 						<a4j:outputPanel id="updateModalPanelContent" layout="inline">
 							<h:outputText
 								value="Με την παρακάτω φόρμα, μπορείται να τροποποίησεται την ενεργή απόσπαση του/της εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}." />
-
+							<rich:messages style="color:red;"></rich:messages>
 							<h:panelGrid columns="4">
 
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
@@ -393,18 +392,20 @@
 						</a4j:outputPanel>
 
 						<h:panelGrid columns="2">
-							<a4j:commandButton value="Τροποποίηση Απόσπασης !" bypassUpdates="true"
-								ajaxSingle="true" action="#{secondmentHome.update()}"
+							
+								<a4j:commandButton value="Τροποποίηση Απόσπασης !" 
+								action="#{secondmentHome.update()}"
 								data="#{facesContext.maximumSeverity.ordinal ge 2}"
 								oncomplete="if(data == false) Richfaces.hideModalPanel('updateModalPanel');"
 								reRender="activeSecondment" />
 							<a4j:commandButton value="Επιστροφή .."
 								onclick="#{rich:component('updateModalPanel')}.hide();return false;" />
 						</h:panelGrid>
+						</h:form>
 					</h:panelGrid>
-				</h:form>
+				</a4j:region>
 			</rich:modalPanel>
-		</a4j:region>
+		
 		<ui:include src="/components/wait-modal-panel.xhtml" />
 
 	</ui:define>
