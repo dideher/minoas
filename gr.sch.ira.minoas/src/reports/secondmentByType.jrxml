@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="secondmentByType" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<style name="Crosstab Data Text" isDefault="false" hAlign="Center"/>
+	<field name="dueTo" class="java.util.Date"/>
+	<field name="comment" class="java.lang.String"/>
+	<field name="targetUnit" class="java.lang.String"/>
+	<field name="specialization" class="java.lang.String"/>
+	<field name="employeeName" class="java.lang.String"/>
+	<field name="employeeSurname" class="java.lang.String"/>
+	<field name="employeeFather" class="java.lang.String"/>
+	<field name="employeeCode" class="java.lang.String"/>
+	<field name="requestByEmployee" class="java.lang.Boolean"/>
+	<field name="establishedIn" class="java.util.Date"/>
+	<field name="sourceUnit" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="75" splitType="Stretch">
+			<staticText>
+				<reportElement x="144" y="0" width="549" height="35"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Unicode MS" size="24" isBold="true" pdfFontName="arial.ttf" pdfEncoding="Cp1253" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Ενεργές Αποσπάσεις Ανά Τύπο]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="702" y="15" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="128" y="35" width="674" height="1"/>
+			</line>
+			<image>
+				<reportElement x="0" y="0" width="128" height="66"/>
+				<imageExpression class="java.lang.String"><![CDATA["/Users/slavikos/work/java/workspace-galileo/gr.sch.ira.minoas/src/reports/minoas.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="25" splitType="Stretch">
+			<staticText>
+				<reportElement style="Crosstab Data Text" mode="Opaque" x="0" y="0" width="271" height="20" backcolor="#CCCCCC"/>
+				<textElement>
+					<font isBold="true" pdfFontName="arial.ttf" pdfEncoding="Cp1253" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Εκπαιδευτικός]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Crosstab Data Text" mode="Opaque" x="276" y="0" width="115" height="20" backcolor="#CCCCCC"/>
+				<textElement>
+					<font isBold="true" pdfFontName="arial.ttf" pdfEncoding="Cp1253" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Ειδικότητα]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Crosstab Data Text" mode="Opaque" x="396" y="0" width="80" height="20" backcolor="#CCCCCC"/>
+				<textElement>
+					<font isBold="true" pdfFontName="arial.ttf" pdfEncoding="Cp1253" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Οργανική]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Crosstab Data Text" mode="Opaque" x="481" y="0" width="75" height="20" backcolor="#CCCCCC"/>
+				<textElement>
+					<font isBold="true" pdfFontName="arial.ttf" pdfEncoding="Cp1253" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Απόσπασε Σε]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Crosstab Data Text" mode="Opaque" x="561" y="0" width="50" height="20" backcolor="#CCCCCC"/>
+				<textElement>
+					<font isBold="true" pdfFontName="arial.ttf" pdfEncoding="Cp1253" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Έναρξη]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Crosstab Data Text" mode="Opaque" x="616" y="0" width="45" height="20" backcolor="#CCCCCC"/>
+				<textElement>
+					<font isBold="true" pdfFontName="arial.ttf" pdfEncoding="Cp1253" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Λήξη]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Crosstab Data Text" mode="Opaque" x="666" y="0" width="100" height="20" backcolor="#CCCCCC"/>
+				<textElement>
+					<font isBold="true" pdfFontName="arial.ttf" pdfEncoding="Cp1253" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Σχόλιο]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="22" splitType="Stretch">
+			<textField>
+				<reportElement mode="Opaque" x="666" y="0" width="100" height="20" backcolor="#FFFFFF"/>
+				<textElement>
+					<font pdfFontName="arial.ttf" pdfEncoding="Cp1253" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{comment}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="616" y="0" width="45" height="20" backcolor="#FFFFFF"/>
+				<textElement>
+					<font pdfFontName="arial.ttf" pdfEncoding="Cp1253" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{dueTo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Crosstab Data Text" mode="Opaque" x="0" y="0" width="111" height="20" backcolor="#FFFFFF"/>
+				<textElement>
+					<font pdfFontName="arial.ttf" pdfEncoding="Cp1253" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{employeeSurname}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="116" y="0" width="60" height="20" backcolor="#FFFFFF"/>
+				<textElement>
+					<font pdfFontName="arial.ttf" pdfEncoding="Cp1253" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{employeeName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="246" y="0" width="30" height="20" backcolor="#FFFFFF"/>
+				<textElement>
+					<font pdfFontName="arial.ttf" pdfEncoding="Cp1253" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{employeeCode}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="181" y="0" width="60" height="20" backcolor="#FFFFFF"/>
+				<textElement>
+					<font pdfFontName="arial.ttf" pdfEncoding="Cp1253"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{employeeFather}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="566" y="0" width="45" height="20" backcolor="#FFFFFF"/>
+				<textElement>
+					<font pdfFontName="arial.ttf" pdfEncoding="Cp1253"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{establishedIn}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="396" y="0" width="80" height="20" backcolor="#FFFFFF"/>
+				<textElement>
+					<font pdfFontName="arial.ttf" pdfEncoding="Cp1253"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{sourceUnit}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="481" y="0" width="80" height="20" backcolor="#FFFFFF"/>
+				<textElement>
+					<font pdfFontName="arial.ttf" pdfEncoding="Cp1253"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{targetUnit}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="281" y="0" width="110" height="20" backcolor="#FFFFFF"/>
+				<textElement>
+					<font pdfFontName="arial.ttf" pdfEncoding="Cp1253"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{specialization}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="682" y="0" width="80" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="762" y="0" width="40" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="241" height="20"/>
+				<textElement>
+					<font pdfFontName="arial.ttf" pdfEncoding="Cp1253" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Εκτύπωση απο τον Μίνωα - Φίλιππος Σλάβικ]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
