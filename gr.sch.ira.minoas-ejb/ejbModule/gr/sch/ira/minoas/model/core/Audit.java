@@ -3,7 +3,7 @@
  */
 package gr.sch.ira.minoas.model.core;
 
-import gr.sch.ira.minoas.model.BaseModel;
+import gr.sch.ira.minoas.model.BaseIDModel;
 import gr.sch.ira.minoas.model.security.Principal;
 
 import java.util.Date;
@@ -13,9 +13,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
@@ -28,7 +25,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "AUDIT")
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
-public class Audit extends BaseModel {
+public class Audit extends BaseIDModel {
 
 	/**
 	 * 
@@ -39,9 +36,7 @@ public class Audit extends BaseModel {
 	@Column(name="AUDIT_COMMENT", length=450, nullable=true)
 	private String comment;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer id;
+	
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name="AUDIT_TYPE", nullable=false)
@@ -71,19 +66,9 @@ public class Audit extends BaseModel {
 		return comment;
 	}
 
-	public Integer getId() {
-		return id;
-	}
-
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-
 
 	/**
 	 * @return the type

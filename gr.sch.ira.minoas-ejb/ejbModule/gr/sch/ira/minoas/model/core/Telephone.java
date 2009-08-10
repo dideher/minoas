@@ -3,15 +3,12 @@
  */
 package gr.sch.ira.minoas.model.core;
 
-import gr.sch.ira.minoas.model.BaseModel;
+import gr.sch.ira.minoas.model.BaseIDModel;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
@@ -24,7 +21,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "TELEPHONE")
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
-public class Telephone extends BaseModel {
+public class Telephone extends BaseIDModel {
 
 	/**
 	 * 
@@ -34,11 +31,6 @@ public class Telephone extends BaseModel {
 	@Basic
 	@Column(name = "COMMENT", nullable = true, length = 60)
 	private String comment;
-
-	@Id
-	@Column(name = "TELEPHONE_ID")
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
 
 	@Basic
 	@Column(name = "NUMBER", nullable = false, length = 20)
@@ -64,13 +56,6 @@ public class Telephone extends BaseModel {
 	}
 
 	/**
-	 * @return the id
-	 */
-	public Long getId() {
-		return id;
-	}
-
-	/**
 	 * @return the number
 	 */
 	public String getNumber() {
@@ -89,13 +74,6 @@ public class Telephone extends BaseModel {
 	 */
 	public void setComment(String comment) {
 		this.comment = comment;
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	/**

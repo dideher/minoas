@@ -3,16 +3,12 @@
  */
 package gr.sch.ira.minoas.model.core;
 
-import gr.sch.ira.minoas.model.BaseModel;
-import gr.sch.ira.minoas.model.employement.Secondment;
+import gr.sch.ira.minoas.model.BaseIDModel;
 
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -28,7 +24,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "TEACHING_REQUIREMENT")
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
-public class TeachingRequirement extends BaseModel implements Cloneable {
+public class TeachingRequirement extends BaseIDModel implements Cloneable {
 
 	/**
 	 * 
@@ -43,10 +39,7 @@ public class TeachingRequirement extends BaseModel implements Cloneable {
 	@Column(name = "HOURS", nullable = false)
 	private Integer hours;
 
-	@Id
-	@Column(name = "REQUIREMENT_ID")
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+	
 
 	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
 	@JoinColumn(name = "SCHOOL_ID", nullable = false)
@@ -89,13 +82,6 @@ public class TeachingRequirement extends BaseModel implements Cloneable {
 	}
 
 	/**
-	 * @return the id
-	 */
-	public Long getId() {
-		return id;
-	}
-
-	/**
 	 * @return the school
 	 */
 	public School getSchool() {
@@ -128,13 +114,6 @@ public class TeachingRequirement extends BaseModel implements Cloneable {
 	 */
 	public void setHours(Integer hours) {
 		this.hours = hours;
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	/**

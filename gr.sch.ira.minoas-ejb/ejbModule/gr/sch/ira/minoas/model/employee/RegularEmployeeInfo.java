@@ -19,14 +19,13 @@
 
 package gr.sch.ira.minoas.model.employee;
 
-import gr.sch.ira.minoas.model.BaseModel;
+import gr.sch.ira.minoas.model.BaseIDModel;
 
 import java.util.Date;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
@@ -39,7 +38,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "REGULAR_EMPLOYEE_INFO")
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
-public class RegularEmployeeInfo extends BaseModel {
+public class RegularEmployeeInfo extends BaseIDModel {
 
 	/**
 	 * Comment for <code>serialVersionUID</code>
@@ -62,9 +61,7 @@ public class RegularEmployeeInfo extends BaseModel {
 	@Column(name = "APPOINTMENT_GOF_DATE")
 	private Date appointmentGOFDate;
 
-	@Id
-	@Column(name = "ID")
-	private Long id;
+	
 
 	@Basic
 	@Column(name = "REGISTRY_ID", length = 7)
@@ -82,13 +79,6 @@ public class RegularEmployeeInfo extends BaseModel {
 	 */
 	public Date getAppointmentGOFDate() {
 		return appointmentGOFDate;
-	}
-
-	/**
-	 * @return the id
-	 */
-	public Long getId() {
-		return id;
 	}
 
 	/**
@@ -110,13 +100,6 @@ public class RegularEmployeeInfo extends BaseModel {
 	 */
 	public void setAppointmentGOFDate(Date appointmentGOFDate) {
 		this.appointmentGOFDate = appointmentGOFDate;
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	/**

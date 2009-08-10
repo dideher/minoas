@@ -3,21 +3,17 @@
  */
 package gr.sch.ira.minoas.model.security;
 
-import gr.sch.ira.minoas.model.BaseModel;
+import gr.sch.ira.minoas.model.BaseIDModel;
 import gr.sch.ira.minoas.model.core.OrganizationalOffice;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -37,7 +33,7 @@ import org.jboss.seam.annotations.Name;
 @Name("principal")
 @Entity
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
-public class Principal extends BaseModel {
+public class Principal extends BaseIDModel {
 
 	/**
 	 * Comment for <code>serialVersionUID</code>
@@ -47,11 +43,6 @@ public class Principal extends BaseModel {
 	@Basic
 	@Column(name = "EMAIL", length = 60, nullable = true)
 	private String email;
-
-	@Id
-	@GeneratedValue
-	@Column(name = "ID")
-	private Long id;
 
 	@Basic
 	@ManyToOne
@@ -91,13 +82,6 @@ public class Principal extends BaseModel {
 	 */
 	public String getEmail() {
 		return email;
-	}
-
-	/**
-	 * @return the id
-	 */
-	public Long getId() {
-		return id;
 	}
 
 	/**
@@ -153,13 +137,6 @@ public class Principal extends BaseModel {
 	 */
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	/**

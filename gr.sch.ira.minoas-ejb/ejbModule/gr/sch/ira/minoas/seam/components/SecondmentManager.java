@@ -1,8 +1,6 @@
 
 package gr.sch.ira.minoas.seam.components;
 
-import gr.sch.ira.minoas.model.employee.Employee;
-import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
 import gr.sch.ira.minoas.seam.components.home.SecondmentHome;
 

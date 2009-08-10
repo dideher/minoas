@@ -1,11 +1,10 @@
 package gr.sch.ira.minoas.model.employement;
 
-import gr.sch.ira.minoas.model.AbstractArchivableEntity;
+import gr.sch.ira.minoas.model.BaseIDModel;
 import gr.sch.ira.minoas.model.core.SchoolYear;
 import gr.sch.ira.minoas.model.core.Specialization;
 import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employee.Employee;
-import gr.sch.ira.minoas.model.employee.Person;
 
 import java.util.Date;
 
@@ -15,9 +14,6 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
@@ -38,7 +34,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "EMPLOYMENT")
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
-public class Employment extends AbstractArchivableEntity {
+public class Employment extends BaseIDModel {
 
 	/**
 	 * 
@@ -66,10 +62,7 @@ public class Employment extends AbstractArchivableEntity {
 	@Column(name = "FINAL_WORKING_HOURS", nullable = true)
 	private Integer finalWorkingHours;
 
-	@Id
-	@Column(name = "ID")
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+
 
 	@Basic
 	@Column(name = "MANDATORY_WORK_HRS", nullable = false)
@@ -149,13 +142,6 @@ public class Employment extends AbstractArchivableEntity {
 	 */
 	public Integer getFinalWorkingHours() {
 		return finalWorkingHours;
-	}
-
-	/**
-	 * @return the id
-	 */
-	public Long getId() {
-		return id;
 	}
 
 	/**
@@ -251,13 +237,6 @@ public class Employment extends AbstractArchivableEntity {
 	 */
 	public void setFinalWorkingHours(Integer finalWorkingHours) {
 		this.finalWorkingHours = finalWorkingHours;
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	/**

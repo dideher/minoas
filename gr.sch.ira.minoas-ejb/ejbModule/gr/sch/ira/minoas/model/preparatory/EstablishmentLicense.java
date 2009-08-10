@@ -1,6 +1,6 @@
 package gr.sch.ira.minoas.model.preparatory;
 
-import gr.sch.ira.minoas.model.BaseModel;
+import gr.sch.ira.minoas.model.BaseIDModel;
 import gr.sch.ira.minoas.model.core.EstablishmentLocation;
 import gr.sch.ira.minoas.model.core.SchoolYear;
 
@@ -15,9 +15,6 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -33,7 +30,7 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "PREP_EST_LCS")
-public class EstablishmentLicense extends BaseModel {
+public class EstablishmentLicense extends BaseIDModel {
 
 	@Enumerated(EnumType.STRING)
 	@JoinColumn(name = "STATUS_TYPE", nullable = false)
@@ -43,10 +40,7 @@ public class EstablishmentLicense extends BaseModel {
 	@JoinColumn(name = "ESTABLISHMENT_LOCATION_ID", nullable = false)
 	private EstablishmentLocation establishmentLocation;
 
-	@Id
-	@Column(name = "ID")
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer id;
+
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "NATURE_TYPE", nullable = false)
@@ -245,13 +239,6 @@ public class EstablishmentLicense extends BaseModel {
 	 */
 	public void setUnit(PreparatoryUnit unit) {
 		this.unit = unit;
-	}
-
-	/**
-	 * @return the id
-	 */
-	public Integer getId() {
-		return id;
 	}
 
 }

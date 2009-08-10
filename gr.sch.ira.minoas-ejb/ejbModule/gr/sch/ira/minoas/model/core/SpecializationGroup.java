@@ -1,7 +1,8 @@
 package gr.sch.ira.minoas.model.core;
 
+import gr.sch.ira.minoas.model.BaseIDModel;
+
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.Basic;
@@ -9,18 +10,12 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-
-import gr.sch.ira.minoas.model.BaseModel;
 
 /**
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
@@ -28,12 +23,9 @@ import gr.sch.ira.minoas.model.BaseModel;
  */
 @Entity
 @Table(name = "SPECIALIZATION_GROUP", uniqueConstraints = { @UniqueConstraint(columnNames = { "TITLE", "SCHOOL_YEAR_ID" }) })
-public class SpecializationGroup extends BaseModel {
+public class SpecializationGroup extends BaseIDModel {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "ID")
-	private Integer id;
+	
 
 	@ManyToOne
 	@JoinColumn(name = "SCHOOL_YEAR_ID", nullable = false)
@@ -51,13 +43,6 @@ public class SpecializationGroup extends BaseModel {
 	 * 
 	 */
 	public SpecializationGroup() {
-	}
-
-	/**
-	 * @return the id
-	 */
-	public Integer getId() {
-		return id;
 	}
 
 	/**
@@ -79,13 +64,6 @@ public class SpecializationGroup extends BaseModel {
 	 */
 	public String getTitle() {
 		return title;
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(Integer id) {
-		this.id = id;
 	}
 
 	/**

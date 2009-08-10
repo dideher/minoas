@@ -1,7 +1,6 @@
 package gr.sch.ira.minoas.session.persistent;
 
 import gr.sch.ira.minoas.model.security.Principal;
-import gr.sch.ira.minoas.model.security.Role;
 
 import java.util.Collection;
 

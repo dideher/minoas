@@ -3,16 +3,13 @@
  */
 package gr.sch.ira.minoas.model.core;
 
-import gr.sch.ira.minoas.model.BaseModel;
+import gr.sch.ira.minoas.model.BaseIDModel;
 
 import java.util.Date;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -30,7 +27,7 @@ import org.jboss.seam.annotations.Name;
 @Entity
 @Table(name = "SCHOOL_YEAR")
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
-public class SchoolYear extends BaseModel {
+public class SchoolYear extends BaseIDModel {
 
 	private static final long serialVersionUID = 1L;
 
@@ -45,10 +42,6 @@ public class SchoolYear extends BaseModel {
 	@Temporal(TemporalType.DATE)
 	@Column(name = "END_DATE", nullable = false)
 	private Date endDate;
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name = "START_DATE", nullable = false)
@@ -101,13 +94,6 @@ public class SchoolYear extends BaseModel {
 	}
 
 	/**
-	 * @return the id
-	 */
-	public Long getId() {
-		return id;
-	}
-
-	/**
 	 * @return the startDate
 	 */
 	public Date getStartDate() {
@@ -147,13 +133,6 @@ public class SchoolYear extends BaseModel {
 	 */
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	/**

@@ -1,5 +1,7 @@
 package gr.sch.ira.minoas.session.persistent;
 
+import gr.sch.ira.minoas.model.security.Role;
+
 import java.util.Collection;
 
 import javax.ejb.Local;
@@ -7,8 +9,6 @@ import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
 
 import org.jboss.seam.annotations.Name;
-
-import gr.sch.ira.minoas.model.security.Role;
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>

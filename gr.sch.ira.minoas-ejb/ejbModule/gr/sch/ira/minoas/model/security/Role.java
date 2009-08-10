@@ -3,18 +3,15 @@
  */
 package gr.sch.ira.minoas.model.security;
 
-import gr.sch.ira.minoas.model.BaseModel;
+import gr.sch.ira.minoas.model.BaseIDModel;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.jboss.seam.annotations.AutoCreate;
 
 /**
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
@@ -23,7 +20,7 @@ import org.jboss.seam.annotations.AutoCreate;
 @Entity
 @Table(name = "ROLE")
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
-public class Role extends BaseModel {
+public class Role extends BaseIDModel {
 
 	/**
 	 * Comment for <code>serialVersionUID</code>
@@ -33,10 +30,6 @@ public class Role extends BaseModel {
 	@Basic
 	@Column(name="DESCR", nullable=true, length=250)
 	private String description;
-
-	@Id @GeneratedValue
-	@Column(name = "ID", length = 32, updatable = false)
-	private Long id;
 
 	@Basic
 	@Column(name = "NAME", nullable = false, length = 32, unique=true )
@@ -113,7 +106,7 @@ public class Role extends BaseModel {
 		int result = 1;
 		result = prime * result
 				+ ((description == null) ? 0 : description.hashCode());
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
@@ -135,10 +128,10 @@ public class Role extends BaseModel {
 				return false;
 		} else if (!description.equals(other.description))
 			return false;
-		if (id == null) {
-			if (other.id != null)
+		if (getId() == null) {
+			if (other.getId() != null)
 				return false;
-		} else if (!id.equals(other.id))
+		} else if (!getId().equals(other.getId()))
 			return false;
 		if (name == null) {
 			if (other.name != null)

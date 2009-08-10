@@ -60,7 +60,6 @@ public class EmploymentHome extends MinoasEntityHome<Employment> {
 		new_employment.setInsertedOn(new Date(System.currentTimeMillis()));
 		new_employment.setSpecialization(current_employment.getSpecialization());
 		new_employment.setType(current_employment.getType());
-		new_employment.setModificationReason(current_employment.getModificationReason());
 		new_employment.setSecondment(current_employment.getSecondment());
 		getEntityManager().persist(new_employment);
 		
@@ -69,7 +68,6 @@ public class EmploymentHome extends MinoasEntityHome<Employment> {
 		
 		/* update the current (now old) employment */
 		
-		current_employment.setModifiedOn(new Date(System.currentTimeMillis()));
 		current_employment.setSupersededBy(new_employment);
 		current_employment.setActive(Boolean.FALSE);
 		current_employment.setTerminated(new_employment.getEstablished());
@@ -77,7 +75,7 @@ public class EmploymentHome extends MinoasEntityHome<Employment> {
 		/* update the employee */
 		employee.setCurrentEmployment(new_employment);
 		employee.setLastSpecialization(new_employment.getSpecialization());
-		employee.setModifiedOn(new Date(System.currentTimeMillis()));
+		
 		
 		
 		return super.update(); 

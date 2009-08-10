@@ -5,13 +5,11 @@ package gr.sch.ira.minoas.seam.components.suggesters;
 
 import gr.sch.ira.minoas.core.CoreUtils;
 import gr.sch.ira.minoas.model.core.Unit;
-import gr.sch.ira.minoas.model.employement.SecondmentType;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 
 import java.util.Collection;
 
 import org.jboss.seam.ScopeType;
-import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;

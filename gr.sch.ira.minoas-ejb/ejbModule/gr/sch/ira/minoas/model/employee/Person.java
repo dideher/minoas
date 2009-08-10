@@ -1,6 +1,6 @@
 package gr.sch.ira.minoas.model.employee;
 
-import gr.sch.ira.minoas.model.AbstractArchivableEntity;
+import gr.sch.ira.minoas.model.BaseIDModel;
 import gr.sch.ira.minoas.model.core.Address;
 import gr.sch.ira.minoas.model.core.Telephone;
 
@@ -13,9 +13,6 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
@@ -33,7 +30,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  */
 @MappedSuperclass
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
-public abstract class Person extends AbstractArchivableEntity {
+public abstract class Person extends BaseIDModel {
 
 	/**
 	 * Comment for <code>serialVersionUID</code>
@@ -62,10 +59,7 @@ public abstract class Person extends AbstractArchivableEntity {
 	@Column(name = "FIRST_NAME", nullable = false, length = 25)
 	private String firstName;
 
-	@Id
-	@Column(name = "ID")
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+	
 
 	@Basic
 	@Column(name = "ID_NUMBER", unique = false, nullable = true, length = 10)
@@ -133,13 +127,6 @@ public abstract class Person extends AbstractArchivableEntity {
 	 */
 	public String getFirstName() {
 		return firstName;
-	}
-
-	/**
-	 * @return the id
-	 */
-	public Long getId() {
-		return id;
 	}
 
 	/**
@@ -235,13 +222,6 @@ public abstract class Person extends AbstractArchivableEntity {
 	 */
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	/**

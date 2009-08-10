@@ -3,8 +3,6 @@ package gr.sch.ira.minoas.seam.components.home;
 
 import gr.sch.ira.minoas.model.preparatory.PreparatoryOwner;
 
-import java.util.Date;
-
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.annotations.security.Restrict;
@@ -42,7 +40,6 @@ public class PreparatoryOwnerHome extends MinoasEntityHome<PreparatoryOwner> {
 	@Restrict("#{s:hasRole('MANAGE_PREPARATORY_OWNER') or s:hasRole('ADMIN')}")
 	public String update() {
 		PreparatoryOwner owner = (PreparatoryOwner)getInstance();
-		owner.setModifiedOn(new Date(System.currentTimeMillis()));
 		getLogger().info("principal '#0' updated preparatory owner #1", getPrincipalName(), owner);
 		return super.update();
 	}

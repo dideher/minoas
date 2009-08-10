@@ -67,7 +67,7 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 		/* update the employee */
 		employee.setCurrentEmployment(employment);
 		employee.setLastSpecialization(employment.getSpecialization());
-		employee.setModifiedOn(new Date(System.currentTimeMillis()));
+		
 
 		if (old_employment != null) {
 			/* modify the current employment */

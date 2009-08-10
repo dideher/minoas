@@ -25,7 +25,7 @@
 
 package gr.sch.ira.minoas.model.preparatory;
 
-import gr.sch.ira.minoas.model.BaseModel;
+import gr.sch.ira.minoas.model.BaseIDModel;
 import gr.sch.ira.minoas.model.core.SchoolYear;
 
 import java.util.Date;
@@ -35,9 +35,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -50,17 +47,13 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "PREP_EST_LCS_RENEWAL")
-public class EstablishmentLicenseRenewal extends BaseModel {
+public class EstablishmentLicenseRenewal extends BaseIDModel {
 
 	/**
 	 * Comment for <code>serialVersionUID</code>
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@Column(name = "ID")
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer id;
 
 	@ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinColumn(name = "LICENSE_ID", nullable = false, updatable = false)
@@ -88,13 +81,6 @@ public class EstablishmentLicenseRenewal extends BaseModel {
 	 * 
 	 */
 	public EstablishmentLicenseRenewal() {
-	}
-
-	/**
-	 * @return the id
-	 */
-	public Integer getId() {
-		return id;
 	}
 
 	/**
@@ -130,13 +116,6 @@ public class EstablishmentLicenseRenewal extends BaseModel {
 	 */
 	public SchoolYear getSchoolYear() {
 		return schoolYear;
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(Integer id) {
-		this.id = id;
 	}
 
 	/**

@@ -1,13 +1,13 @@
 
 package gr.sch.ira.minoas.seam.components.reports;
 
+import gr.sch.ira.minoas.model.employement.Secondment;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import gr.sch.ira.minoas.model.employement.Secondment;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletOutputStream;
@@ -17,10 +17,8 @@ import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JasperRunManager;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
-import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.framework.EntityQuery;
 
 /**

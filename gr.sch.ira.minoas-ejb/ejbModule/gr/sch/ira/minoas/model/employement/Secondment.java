@@ -3,13 +3,12 @@
  */
 package gr.sch.ira.minoas.model.employement;
 
-import gr.sch.ira.minoas.model.BaseModel;
+import gr.sch.ira.minoas.model.BaseIDModel;
 import gr.sch.ira.minoas.model.INamedQueryConstants;
 import gr.sch.ira.minoas.model.core.PYSDE;
 import gr.sch.ira.minoas.model.core.SchoolYear;
 import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employee.Employee;
-import gr.sch.ira.minoas.model.employee.Person;
 
 import java.util.Date;
 
@@ -19,9 +18,6 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -52,7 +48,7 @@ import org.jboss.seam.annotations.Name;
 				+ INamedQueryConstants.QUERY_PARAMETER_SCHOOL
 				+ " AND c.schoolYear=:"
 				+ INamedQueryConstants.QUERY_PARAMETER_SCHOOL_YEAR) })
-public class Secondment extends BaseModel implements Cloneable {
+public class Secondment extends BaseIDModel implements Cloneable {
 
 	/**
 	 * 
@@ -96,10 +92,7 @@ public class Secondment extends BaseModel implements Cloneable {
 	@Column(name = "HEADMASTER_ORDER", nullable = true, length = 25)
 	private String headMasterOrder;
 
-	@Id
-	@Column(name = "ID")
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+	
 
 	@Basic
 	@Column(name = "MANDATORY_WORKING_HOURS", nullable = true)
@@ -231,13 +224,7 @@ public class Secondment extends BaseModel implements Cloneable {
 		return headMasterOrder;
 	}
 
-	/**
-	 * @return the id
-	 */
-	public Long getId() {
-		return id;
-	}
-
+	
 	/**
 	 * @return the mandatoryWorkingHours
 	 */
@@ -346,12 +333,7 @@ public class Secondment extends BaseModel implements Cloneable {
 		this.headMasterOrder = headMasterOrder;
 	}
 
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(Long id) {
-		this.id = id;
-	}
+	
 
 	/**
 	 * @param mandatoryWorkingHours the mandatoryWorkingHours to set

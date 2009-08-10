@@ -3,7 +3,7 @@
  */
 package gr.sch.ira.minoas.model.core;
 
-import gr.sch.ira.minoas.model.BaseModel;
+import gr.sch.ira.minoas.model.BaseIDModel;
 import gr.sch.ira.minoas.model.employee.Employee;
 
 import java.util.Collection;
@@ -12,9 +12,6 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -32,7 +29,7 @@ import org.jboss.seam.annotations.Name;
 @Name("pysde")
 @Table(name = "PYSDE")
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
-public class PYSDE extends BaseModel {
+public class PYSDE extends BaseIDModel {
 
 	/**
 	 * 
@@ -43,10 +40,6 @@ public class PYSDE extends BaseModel {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "currentPYSDE")
 	private Collection<Employee> employees;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "ID")
-	private Long id;
 
 	/**
 	 * 
@@ -81,9 +74,7 @@ public class PYSDE extends BaseModel {
 		return employees;
 	}
 
-	public Long getId() {
-		return id;
-	}
+	
 
 	/**
 	 * @return the representedByUnit
@@ -117,10 +108,7 @@ public class PYSDE extends BaseModel {
 		this.employees = employees;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-
+	
 	/**
 	 * @param localPYSDE the localPYSDE to set
 	 */

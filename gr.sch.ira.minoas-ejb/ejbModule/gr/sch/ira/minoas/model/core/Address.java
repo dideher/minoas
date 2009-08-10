@@ -3,14 +3,11 @@
  */
 package gr.sch.ira.minoas.model.core;
 
-import gr.sch.ira.minoas.model.BaseModel;
+import gr.sch.ira.minoas.model.BaseIDModel;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
@@ -25,7 +22,7 @@ import org.jboss.seam.annotations.Name;
 @Name("address")
 @Table(name = "ADDRESS")
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
-public class Address extends BaseModel {
+public class Address extends BaseIDModel {
 
 	/**
 	 * 
@@ -44,9 +41,7 @@ public class Address extends BaseModel {
 	@Column(name = "CITY", length = 15, nullable = true)
 	private String city;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+	
 
 	@Basic
 	@Column(name = "LATITUDE", nullable = true)
@@ -90,13 +85,6 @@ public class Address extends BaseModel {
 	 */
 	public String getCity() {
 		return city;
-	}
-
-	/**
-	 * @return the id
-	 */
-	public Long getId() {
-		return id;
 	}
 
 	/**
@@ -146,13 +134,6 @@ public class Address extends BaseModel {
 	 */
 	public void setCity(String city) {
 		this.city = city;
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	/**

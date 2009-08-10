@@ -3,7 +3,7 @@
  */
 package gr.sch.ira.minoas.model.core;
 
-import gr.sch.ira.minoas.model.BaseModel;
+import gr.sch.ira.minoas.model.BaseIDModel;
 
 import java.util.Collection;
 
@@ -11,9 +11,6 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
@@ -27,17 +24,13 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "UNIT_CATEGORY")
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
-public class UnitCategory extends BaseModel {
+public class UnitCategory extends BaseIDModel {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@Column(name = "ID")
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
 
 	@Basic
 	@Column(name = "TITLE", nullable = false, unique = true, length = 64)
@@ -53,20 +46,12 @@ public class UnitCategory extends BaseModel {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Long getId() {
-		return id;
-	}
-
 	public String getTitle() {
 		return title;
 	}
 
 	public Collection<Unit> getUnits() {
 		return units;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public void setTitle(String title) {
