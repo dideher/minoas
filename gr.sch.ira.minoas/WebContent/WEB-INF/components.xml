@@ -194,6 +194,10 @@
     </framework:restrictions> 
    </framework:entity-query>
    
+   
+    <!-- Service Allocation Components -->
+  
+   	<component name="exampleServiceAllocation" class="gr.sch.ira.minoas.model.employement.ServiceAllocation" />
 
     <!-- Secondment Components -->
   
