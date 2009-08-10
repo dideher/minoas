@@ -38,7 +38,6 @@ import org.jboss.seam.annotations.Name;
 @Entity
 @Table(name = "SECONDMENT")
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
-@Name("secondment")
 @NamedQueries( {
 		@NamedQuery(name = INamedQueryConstants.NAMED_QUERY_SECONDMENT_FIND_ALL_ACTIVE, query = "SELECT c FROM Secondment c WHERE c.active=TRUE AND c.supersededBy IS NULL AND c.schoolYear=:"
 				+ INamedQueryConstants.QUERY_PARAMETER_SCHOOL_YEAR),

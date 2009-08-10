@@ -49,6 +49,7 @@ public class SecurityStartup {
 		createRole("MANAGE_PREPARATORY_EST_LICENSE", "Manage Preparatory Establishment License", admin);
 		createRole("MANAGE_SPECIALIZATION_GROUP", "Manage Specialization Groups", admin);
 		createRole("ADD_SECONDMENT", "Add New Secondments", admin);
+		createRole("ADD_SERVICE_ALLOCATION", "Add New Service Allocation", admin);
 		
 	}
 	
