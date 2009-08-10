@@ -35,10 +35,6 @@
 			<line>
 				<reportElement x="128" y="35" width="674" height="1"/>
 			</line>
-			<image>
-				<reportElement x="0" y="0" width="128" height="66"/>
-				<imageExpression class="java.lang.String"><![CDATA["/Users/slavikos/work/java/workspace-galileo/gr.sch.ira.minoas/src/reports/minoas.jpg"]]></imageExpression>
-			</image>
 		</band>
 	</pageHeader>
 	<columnHeader>
@@ -92,6 +88,9 @@
 				</textElement>
 				<text><![CDATA[Σχόλιο]]></text>
 			</staticText>
+			<line>
+				<reportElement x="0" y="20" width="802" height="2"/>
+			</line>
 		</band>
 	</columnHeader>
 	<detail>
