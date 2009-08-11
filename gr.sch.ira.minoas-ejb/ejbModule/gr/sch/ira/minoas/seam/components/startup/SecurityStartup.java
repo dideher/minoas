@@ -48,9 +48,14 @@ public class SecurityStartup {
 		createRole("MANAGE_PREPARATORY_OWNER", "Manage Preperatory Owner", admin);
 		createRole("MANAGE_PREPARATORY_EST_LICENSE", "Manage Preparatory Establishment License", admin);
 		createRole("MANAGE_SPECIALIZATION_GROUP", "Manage Specialization Groups", admin);
+		/* Secondments */
 		createRole("ADD_SECONDMENT", "Add New Secondments", admin);
+		createRole("MANAGE_SECONDMENT", "Manage Secondment", admin);
+		createRole("VIEW_SECONDMENT", "View Secondment", admin);
+		/* Service Allocation */
 		createRole("ADD_SERVICE_ALLOCATION", "Add New Service Allocation", admin);
-		
+		createRole("MANAGE_SERVICE_ALLOCATION", "Manage Service Allocation", admin);
+		createRole("VIEW_SERVICE_ALLOCATION", "View Service Allocation", admin);
 	}
 	
 	protected Principal createPrincipal(String username, String password, String realname) {

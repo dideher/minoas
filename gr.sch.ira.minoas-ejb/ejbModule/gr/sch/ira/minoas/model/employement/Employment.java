@@ -79,6 +79,10 @@ public class Employment extends BaseIDModel {
 	@OneToOne(optional = true, fetch = FetchType.LAZY)
 	@JoinColumn(name = "SECONDMENT_ID", nullable = true)
 	private Secondment secondment;
+	
+	@OneToOne(optional = true, fetch = FetchType.LAZY)
+	@JoinColumn(name = "SERVICE_ALLOCATION_ID", nullable = true)
+	private ServiceAllocation serviceAllocation;
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "SPECIALIZATION_ID", nullable = false, updatable = false)
@@ -319,6 +323,20 @@ public class Employment extends BaseIDModel {
 		sb.append(getSchool());
 		sb.append(" ]");
 		return sb.toString();
+	}
+
+	/**
+	 * @return the serviceAllocation
+	 */
+	public ServiceAllocation getServiceAllocation() {
+		return serviceAllocation;
+	}
+
+	/**
+	 * @param serviceAllocation the serviceAllocation to set
+	 */
+	public void setServiceAllocation(ServiceAllocation serviceAllocation) {
+		this.serviceAllocation = serviceAllocation;
 	}
 
 }

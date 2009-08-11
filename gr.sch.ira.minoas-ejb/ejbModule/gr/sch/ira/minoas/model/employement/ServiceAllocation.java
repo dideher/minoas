@@ -138,12 +138,7 @@ public class ServiceAllocation extends BaseIDModel {
 		return pysdeOrder;
 	}
 
-	/**
-	 * @return the schoolYear
-	 */
-	public SchoolYear getSchoolYear() {
-		return schoolYear;
-	}
+	
 
 	/**
 	 * @return the serviceUnit
@@ -215,12 +210,7 @@ public class ServiceAllocation extends BaseIDModel {
 		this.pysdeOrder = pysdeOrder;
 	}
 
-	/**
-	 * @param schoolYear the schoolYear to set
-	 */
-	public void setSchoolYear(SchoolYear schoolYear) {
-		this.schoolYear = schoolYear;
-	}
+	
 
 	/**
 	 * @param serviceUnit the serviceUnit to set

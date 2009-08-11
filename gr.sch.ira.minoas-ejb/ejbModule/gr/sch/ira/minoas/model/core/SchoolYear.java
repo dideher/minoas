@@ -56,17 +56,7 @@ public class SchoolYear extends BaseIDModel {
 		// TODO Auto-generated constructor stub
 	}
 
-	/**
-	 * @param endDate
-	 * @param startDate
-	 * @param title
-	 */
-	public SchoolYear(Date endDate, Date startDate, String title) {
-		super();
-		this.endDate = endDate;
-		this.startDate = startDate;
-		this.title = title;
-	}
+	
 
 	/**
 	 * @param title
@@ -83,19 +73,7 @@ public class SchoolYear extends BaseIDModel {
 		return description;
 	}
 
-	/**
-	 * @return the endDate
-	 */
-	public Date getEndDate() {
-		return endDate;
-	}
-
-	/**
-	 * @return the startDate
-	 */
-	public Date getStartDate() {
-		return startDate;
-	}
+	
 
 	/**
 	 * @return the title
@@ -125,19 +103,7 @@ public class SchoolYear extends BaseIDModel {
 		this.description = description;
 	}
 
-	/**
-	 * @param endDate the endDate to set
-	 */
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
-
-	/**
-	 * @param startDate the startDate to set
-	 */
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
+	
 
 	/**
 	 * @param title the title to set
