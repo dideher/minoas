@@ -7,7 +7,10 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Transactional;
 
+import gr.sch.ira.minoas.model.employee.Employee;
+import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.SecondmentType;
 import gr.sch.ira.minoas.model.employement.ServiceAllocation;
@@ -44,11 +47,26 @@ public class ServiceAllocationHome extends MinoasEntityHome<ServiceAllocation> {
 	protected Object createInstance() {
 		ServiceAllocation instance = new ServiceAllocation();
 		instance.setServiceType(ServiceAllocationType.SCHOOL_HEADMASTER);
-		
 		instance.setEstablished(getCoreSearching().getActiveSchoolYear(
 				getEntityManager()).getStartDate());
 		instance.setDueTo(getCoreSearching().getActiveSchoolYear(
 				getEntityManager()).getEndDate());
+		instance.setActive(Boolean.TRUE);
 		return instance;
+	}
+	
+	@Transactional
+	public boolean wire() {
+		ServiceAllocation instance = getInstance();
+		if (!isManaged()) {
+			Employee employee = employeeHome != null ? employeeHome.getInstance() : null;
+			Employment currentEmployment = employee != null ? employee.getCurrentEmployment() : null;
+			if (currentEmployment != null) {
+				instance.setSourceUnit(currentEmployment.getSchool());
+			} else {
+				instance.setSourceUnit(employee.getCurrentPYSDE().getRepresentedByUnit());
+			}
+		}
+		return true;
 	}
 }

@@ -26,7 +26,6 @@ import org.jboss.seam.annotations.Name;
  *
  */
 @Entity
-@Name("pysde")
 @Table(name = "PYSDE")
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public class PYSDE extends BaseIDModel {

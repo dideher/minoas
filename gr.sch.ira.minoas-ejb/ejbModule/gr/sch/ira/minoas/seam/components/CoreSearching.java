@@ -12,6 +12,7 @@ import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.SecondmentType;
+import gr.sch.ira.minoas.model.employement.ServiceAllocationType;
 import gr.sch.ira.minoas.model.preparatory.EstablishmentLicenseStatusType;
 import gr.sch.ira.minoas.model.preparatory.PreparatoryUnitNatureType;
 import gr.sch.ira.minoas.model.preparatory.TeachingLanguage;
@@ -88,6 +89,11 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 	@Factory(value = "secondmentTypes")
 	public SecondmentType[] getAvailableSecondmentTypes() {
 		return SecondmentType.values();
+	}
+	
+	@Factory(value = "serviceAllocationTypes")
+	public ServiceAllocationType[] getAvailableServiceAllocationTypes() {
+		return ServiceAllocationType.values();
 	}
 
 	@Factory(value = "establishmentLicenseStatusTypes")

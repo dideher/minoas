@@ -5,6 +5,7 @@ package gr.sch.ira.minoas.model.core;
 
 import gr.sch.ira.minoas.model.BaseIDModel;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.persistence.Basic;
@@ -23,7 +24,6 @@ import org.jboss.seam.annotations.Name;
  * 
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * */
-@Name("schoolYear")
 @Entity
 @Table(name = "SCHOOL_YEAR")
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
@@ -39,17 +39,14 @@ public class SchoolYear extends BaseIDModel {
 	@Column(name = "DESCRIPTION", length = 64, nullable = true)
 	private String description;
 
-	@Temporal(TemporalType.DATE)
-	@Column(name = "END_DATE", nullable = false)
-	private Date endDate;
-
-	@Temporal(TemporalType.DATE)
-	@Column(name = "START_DATE", nullable = false)
-	private Date startDate;
-
+	
 	@Basic
 	@Column(name = "TITLE", length = 32, nullable = false, updatable = true, unique = true)
 	private String title;
+	
+	@Basic
+	@Column(name = "YEAR", nullable = false, unique=true)
+	private Integer year;
 
 	/**
 	 * 
@@ -149,6 +146,39 @@ public class SchoolYear extends BaseIDModel {
 		this.title = title;
 	}
 
+	public Date getTeachingSchoolYearStart() {
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.YEAR, getYear());
+		cal.set(Calendar.MONTH, Calendar.SEPTEMBER);
+		cal.set(Calendar.DAY_OF_MONTH, 1);
+		return cal.getTime();
+	}
+	
+	
+	public Date getTeachingSchoolYearStop() {
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.YEAR, getYear()+1);
+		cal.set(Calendar.MONTH, Calendar.JUNE);
+		cal.set(Calendar.DAY_OF_MONTH, 30);
+		return cal.getTime();
+	}
+	
+	public Date getSchoolYearStart() {
+		return getTeachingSchoolYearStart();
+	}
+	
+	
+	public Date getSchoolYearStop() {
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.YEAR, getYear()+1);
+		cal.set(Calendar.MONTH, Calendar.AUGUST);
+		cal.set(Calendar.DAY_OF_MONTH, 31);
+		return cal.getTime();
+	
+	}
+	
+	
+	
 	/**
 	 * @see java.lang.Object#toString()
 	 */
@@ -161,6 +191,20 @@ public class SchoolYear extends BaseIDModel {
 		sb.append(getTitle());
 		sb.append("]");
 		return sb.toString();
+	}
+
+	/**
+	 * @return the year
+	 */
+	public Integer getYear() {
+		return year;
+	}
+
+	/**
+	 * @param year the year to set
+	 */
+	public void setYear(Integer year) {
+		this.year = year;
 	}
 
 }

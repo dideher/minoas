@@ -20,7 +20,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.UniqueConstraint;
+
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -63,14 +63,15 @@ public class ServiceAllocation extends BaseIDModel {
 	@Enumerated(EnumType.STRING)
 	@Column(name="SERVICE_TYPE")
 	private ServiceAllocationType serviceType;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "SOURCE_UNIT_ID", nullable = true)
+	private Unit sourceUnit;
 
 	@Basic
 	@Column(name = "PYSDE_ORDER", nullable = true, length = 25)
 	private String pysdeOrder;
 
-	@ManyToOne(optional = false, fetch = FetchType.EAGER)
-	@JoinColumn(name = "SCHOOL_YEAR_ID", nullable = false)
-	private SchoolYear schoolYear;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "SERVICE_UNIT_ID", nullable = false)
@@ -286,5 +287,19 @@ public class ServiceAllocation extends BaseIDModel {
 	 */
 	public void setServiceType(ServiceAllocationType serviceType) {
 		this.serviceType = serviceType;
+	}
+
+	/**
+	 * @return the sourceUnit
+	 */
+	public Unit getSourceUnit() {
+		return sourceUnit;
+	}
+
+	/**
+	 * @param sourceUnit the sourceUnit to set
+	 */
+	public void setSourceUnit(Unit sourceUnit) {
+		this.sourceUnit = sourceUnit;
 	}
 }
