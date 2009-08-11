@@ -6,7 +6,7 @@
   
   <param name="secondment_management_from"/>
   <param name="secondment_management_to" />
-  <param name="employeeID" value="#{employeeHome.id}" converterId="javax.faces.Long"/>
+  <param name="employeeID" value="#{employeeHome.id}" converterId="javax.faces.Integer"/>
   
   
   <action execute="#{employeeHome.wire()}"/>

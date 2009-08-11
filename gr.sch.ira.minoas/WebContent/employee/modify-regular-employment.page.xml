@@ -7,7 +7,7 @@
   <param name="from"/>
   <param name="to" />
   
-  <param name="employmentID" value="#{employmentHome.id}" converterId="javax.faces.Long"/>
+  <param name="employmentID" value="#{employmentHome.id}" converterId="javax.faces.Integer"/>
   <!-- navigation rules -->
   <navigation from-action="endButton">
     <end-conversation />
