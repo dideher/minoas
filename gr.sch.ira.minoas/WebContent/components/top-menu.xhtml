@@ -69,23 +69,36 @@
 				<rich:menuGroup value="Διαχείρηση Θητειών">
 					<rich:menuItem submitMode="none"
 						disabled="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_SERVICE_ALLOCATION'))}">
-						
-						<s:link value="Εισαγωγή Νέας Θητείας" action="#{serviceAllocationHome.clearInstance()}"
+						<s:link value="Εισαγωγή Νέας Θητείας"
+							action="#{serviceAllocationHome.clearInstance()}"
 							view="/serviceallocation/add-new-service-allocation.xhtml">
 							<f:param name="add_new_service_allocation_from" value="/home" />
 						</s:link>
 					</rich:menuItem>
+					<rich:menuSeparator />
+					<rich:menuGroup value="Εκτύπωσεις και Σταστικά"
+						disabled="#{!(s:hasRole('ADMIN') or s:hasRole('VIEW_SERVICE_ALLOCATION'))}">
+						<rich:menuItem submitMode="none">
+							<s:link value="Θητείες Ανα Τύπο"
+								view="/serviceallocation/report-by-type.xhtml">
+								<f:param name="service_allocation_report_by_type_from" value="/home" />
+							</s:link>
+						</rich:menuItem>
+
 					</rich:menuGroup>
+				</rich:menuGroup>
 				<rich:menuGroup value="Διαχείρηση Αποσπάσεων">
 					<rich:menuItem submitMode="none"
 						disabled="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_SECONDMENT'))}">
-						
-						<s:link value="Εισαγωγή Νέας Απόσπασης" action="#{secondmentHome.clearInstance()}"
+
+						<s:link value="Εισαγωγή Νέας Απόσπασης"
+							action="#{secondmentHome.clearInstance()}"
 							view="/secondment/add-new-secondment.xhtml">
 							<f:param name="add_new_secondment_from" value="/home" />
 						</s:link>
 					</rich:menuItem>
-					<rich:menuItem submitMode="none">
+					<rich:menuItem submitMode="none"
+						disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MANAGE_SECONDMENT'))}">
 						<s:link value="Διαχείρηση Απόσπασης Εκπαιδευτικού"
 							view="/employee/select-employee.xhtml">
 							<f:param name="from" value="/home" />
@@ -94,14 +107,15 @@
 						</s:link>
 					</rich:menuItem>
 					<rich:menuSeparator />
-					<rich:menuGroup value="Εκτύπωσεις και Σταστικά">
-											<rich:menuItem submitMode="none">
-						<s:link value="Αποσπάσεις Ανα Τύπο"
-							view="/secondment/report-by-type.xhtml">
-							<f:param name="from" value="/home" />
-						</s:link>
-					</rich:menuItem>
-						
+					<rich:menuGroup value="Εκτύπωσεις και Σταστικά"
+						disabled="#{!(s:hasRole('ADMIN') or s:hasRole('VIEW_SECONDMENT'))}">
+						<rich:menuItem submitMode="none">
+							<s:link value="Αποσπάσεις Ανα Τύπο"
+								view="/secondment/report-by-type.xhtml">
+								<f:param name="from" value="/home" />
+							</s:link>
+						</rich:menuItem>
+
 					</rich:menuGroup>
 				</rich:menuGroup>
 

@@ -46,7 +46,7 @@
 								<h:outputText value="Στοιχεία Θητείας" />
 							</f:facet>
 							<a4j:outputPanel id="newServiceAllocationPanel">
-								<h:panelGrid columns="4">
+								<h:panelGrid columns="3">
 
 									<s:decorate id="sourceUnit"
 										template="/layout/doubleLineEdit.xhtml">
@@ -54,15 +54,14 @@
 											<h:outputText value="Σχολική Μονάδα Οργανικής" />
 										</ui:define>
 
-										<h:inputText value="#{serviceAllocation.sourceUnit}" tabindex="1"
-											required="true" id="schoolTarget" styleClass="fieldValueText"
-											converter="unitConverter" size="20" maxlength="22"
-											readonly="true">
+										<h:inputText value="#{serviceAllocation.sourceUnit}"
+											tabindex="1" required="true" 
+											styleClass="fieldValueText" converter="unitConverter"
+											size="20" maxlength="22" readonly="true">
 										</h:inputText>
 									</s:decorate>
-									
-									<s:decorate 
-										template="/layout/doubleLineEdit.xhtml">
+
+									<s:decorate template="/layout/doubleLineEdit.xhtml">
 										<ui:define name="label">
 											<h:outputText value="Τύπος Θητείας" />
 										</ui:define>
@@ -70,62 +69,67 @@
 										<h:selectOneMenu id="serviceAllocationType"
 											value="#{serviceAllocation.serviceType}" required="true">
 											<s:selectItems hideNoSelectionLabel="true"
-												var="_serviceAllocationType" value="#{serviceAllocationType}"
+												var="_serviceAllocationType"
+												value="#{serviceAllocationTypes}"
 												label="#{messages[_serviceAllocationType.key]}" />
 											<s:convertEnum />
-											<a4j:support event="onblur"
-												reRender="serviceAllocationTarget" ajaxSingle="true" />
+											<a4j:support event="onblur" action="#{serviceAllocationHome.suggestHours()}"
+												reRender="serviceUnit, workingHoursOnServicingPosition, workingHoursOnRegularPosition" ajaxSingle="true"  />
 										</h:selectOneMenu>
 									</s:decorate>
- 									
- 									<s:decorate 
-										template="/layout/doubleLineEdit.xhtml">
+
+									<s:decorate template="/layout/doubleLineEdit.xhtml">
 										<ui:define name="label">
 											<h:outputText value="Μονάδα Θητείας" />
 										</ui:define>
 
-										<h:inputText value="#{secondment.targetUnit}" required="true"
-											id="serviceAllocationTarget" styleClass="fieldValueText"
-											tabindex="1" converter="unitConverter">
+										<h:inputText value="#{serviceAllocation.serviceUnit}"
+											 required="true" id="serviceUnit"
+											styleClass="fieldValueText" converter="unitConverter"
+											size="12" maxlength="22">
+											
 
-											<rich:suggestionbox for="serviceAllocationTarget"
-												var="serviceAllocationUnit"
-												suggestionAction="#{secondmentAwareUnitSuggester.suggest}">
+											<rich:suggestionbox for="serviceUnit" var="serviceUnit"
+												suggestionAction="#{schoolUnitSuggester.suggest}">
 												<f:facet name="nothingLabel">
-													<h:outputText value="Άγνωστη Μονάδα Απόσπασης" />
+													<h:outputText value="Άγνωστη Μονάδα Θητείας" />
 												</f:facet>
 												<h:column>
-													<h:outputText value="#{serviceAllocationUnit.title}" />
+													<h:outputText value="#{serviceUnit.title}" />
 												</h:column>
 											</rich:suggestionbox>
 										</h:inputText>
 									</s:decorate>
 
-									
+
 									<s:decorate template="/layout/doubleLineEdit.xhtml">
 										<ui:define name="label">
 											<h:outputText value="Ωράριο Στην Οργανική : " />
 										</ui:define>
-										<h:inputText value="#{serviceAllocation.workingHoursOnRegularPosition}" size="3"
-											maxlength="3" required="true" />
+										<h:inputText id="workingHoursOnRegularPosition"
+											value="#{serviceAllocation.workingHoursOnRegularPosition}"
+											size="3" maxlength="3" required="true" />
 									</s:decorate>
-									
+
 									<s:decorate template="/layout/doubleLineEdit.xhtml">
 										<ui:define name="label">
 											<h:outputText value="Ωράριο Στην Μονάδα Θητείας : " />
 										</ui:define>
-										<h:inputText value="#{serviceAllocation.workingHoursOnServicingPosition}"
+										<h:inputText
+											value="#{serviceAllocation.workingHoursOnServicingPosition}"
+											id="workingHoursOnServicingPosition"
 											size="3" maxlength="3" required="true" />
 									</s:decorate>
 
-									
+
 
 									<s:decorate id="pysdeOrderDecoration"
 										template="/layout/doubleLineEdit.xhtml">
 										<ui:define name="label">
 											<h:outputText value="Απόφαση ΠΥΣΔΕ" />
 										</ui:define>
-										<h:inputText id="pysdeOrder" value="#{serviceAllocation.pysdeOrder}"
+										<h:inputText id="pysdeOrder"
+											value="#{serviceAllocation.pysdeOrder}"
 											styleClass="fieldValueText" required="false" size="16"
 											maxlength="25">
 											<a4j:support event="onblur" ajaxSingle="true"
@@ -135,8 +139,8 @@
 									</s:decorate>
 
 
-									
-									
+
+
 									<s:decorate id="establishedDateDecoration"
 										template="/layout/doubleLineEdit.xhtml">
 										<ui:define name="label">
@@ -156,8 +160,9 @@
 										<ui:define name="label">
 											<h:outputText value="Λήξη Θητείας" />
 										</ui:define>
-										<rich:calendar id="dueToDate" value="#{serviceAllocation.dueTo}"
-											required="true" mode="ajax" locale="el_GR" inputSize="10"
+										<rich:calendar id="dueToDate"
+											value="#{serviceAllocation.dueTo}" required="true"
+											mode="ajax" locale="el_GR" inputSize="10"
 											enableManualInput="true" inputClass="fieldValueText"
 											datePattern="dd-MM-yyyy">
 

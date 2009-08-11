@@ -198,6 +198,17 @@
     <!-- Service Allocation Components -->
   
    	<component name="exampleServiceAllocation" class="gr.sch.ira.minoas.model.employement.ServiceAllocation" />
+   	
+   	 <framework:entity-query name="serviceAllocationsByTypeListQuery"
+	max-results="1000" scope="CONVERSATION">
+    <framework:ejbql>SELECT s FROM ServiceAllocation s INNER JOIN FETCH s.employee WHERE s.active IS TRUE</framework:ejbql>
+    <framework:order>s.employee.lastName asc, s.employee.firstName asc</framework:order>
+    <framework:restrictions>
+      <value>s.serviceType = #{exampleServiceAllocation.serviceType}</value>
+      <value>s.serviceUnit = #{exampleServiceAllocation.serviceUnit}</value>
+      <value>lower(s.comment) like lower(concat(#{exampleServiceAllocation.comment},'%') )</value>
+    </framework:restrictions> 
+   </framework:entity-query>
 
     <!-- Secondment Components -->
   

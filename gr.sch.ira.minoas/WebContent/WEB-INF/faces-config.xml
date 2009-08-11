@@ -7,14 +7,8 @@
    <application>
       <locale-config>
          <default-locale>el</default-locale>
-         <supported-locale>en</supported-locale>
-         <!-- 
-         <supported-locale>bg</supported-locale>
-         <supported-locale>de</supported-locale>
-         <supported-locale>fr</supported-locale>
-         <supported-locale>tr</supported-locale>
-          -->
-      </locale-config>
+         <supported-locale>el</supported-locale>
+        </locale-config>
       <view-handler>com.sun.facelets.FaceletViewHandler</view-handler>
    </application>
 
