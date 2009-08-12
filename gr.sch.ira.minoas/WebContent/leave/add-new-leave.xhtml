@@ -41,13 +41,14 @@
 					
 					</rich:panel>
 					
-					<a4j:region id="mainleavepanel" >
+					<a4j:region>
+					<a4j:outputPanel id="newLeavePanel">
 						<rich:panel rendered="#{employeeHome.managed}">
 							<f:facet name="header">
 								<h:outputText value="Στοιχεία Άδειας" />
 							</f:facet>
 							<h:outputText value="Συμπληρώστε τα στοιχεία της παρακάτω φόρμας για να εισάγεται νέα άδεια για τον εκπαιδευτικό." />
-							<a4j:outputPanel id="newLeavePanel">
+							
 								<h:panelGrid columns="4">
 
 									<s:decorate template="/layout/doubleLineEdit.xhtml" >
@@ -106,8 +107,9 @@
 									</s:decorate>
 
 								</h:panelGrid>
-							</a4j:outputPanel>
+							
 						</rich:panel>
+						</a4j:outputPanel>
 					</a4j:region>
 					<rich:spacer height="5" />
 					<rich:separator lineType="dashed" height="2" />
@@ -120,7 +122,7 @@
 								value="Τέλος Εργασίας" />
 							<rich:spacer width="10" />
 							<h:commandButton action="#{leaveHome.persist()}"
-								onclick="if(!confirm('Να καταχωρηθή η θητεία του εκπαιδευτικού ?')) {form.reset(); return false;}"
+								onclick="if(!confirm('Να καταχωρηθή η άδεια του εκπαιδευτικού ?')) {form.reset(); return false;}"
 								value="Καταχώρηση" id="updateButton" />
 							<rich:spacer width="3" />
 						</s:div>
@@ -148,7 +150,7 @@
 
 						<h:panelGrid columns="1" width="100%">
 							<h:outputText
-								value="Απο τον παρακάτω πίνακα επιλέξτε τον εκπαιδευτικό για τον οποίον θα εισάγετε την νεα απόσπαση." />
+								value="Απο τον παρακάτω πίνακα επιλέξτε τον εκπαιδευτικό για τον οποίον θα εισάγετε την νεα άδεια" />
 							<h:panelGroup>
 								<h:panelGrid columns="5">
 									<s:decorate template="/layout/doubleLineEdit.xhtml">
@@ -267,7 +269,7 @@
 										<a4j:commandLink action="#{leaveHome.wire()}"
 											value="Επιλογή"
 											oncomplete="#{rich:component('employee_search_panel')}.hide();return false;"
-											reRender="employeePanel,newLeavePanel,mainleavepanel">
+											reRender="employeePanel,newLeavePanel">
 											<f:setPropertyActionListener value="#{employee.id}"
 												target="#{employeeHome.id}" />
 										</a4j:commandLink>
