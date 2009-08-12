@@ -16,7 +16,7 @@
 		<rich:panel>
 			<f:facet name="header">
 				<h:outputText
-					value="Διαχείρηση Αποσπάσεων του/της #{employeeUtil.prettyFormat(employee)}" />
+					value="Διαχείρηση Θητείας του/της #{employeeUtil.prettyFormat(employee)}" />
 			</f:facet>
 
 			<ui:include src="/components/messages-component.xhtml" />
@@ -25,57 +25,57 @@
 					<h:panelGrid columns="1">
 						<rich:panel>
 							<f:facet name="header">
-								<h:outputText value="Ενεργή Απόσπαση" />
+								<h:outputText value="Ενεργή Θητεία" />
 							</f:facet>
 							<h:outputText
-								value="Δεν βρέθηκε καμία ενεργή απόσπαση για τον εκπαιδευτικό."
-								rendered="#{employeeActiveSecondmentListQuery.resultCount==0}" />
+								value="Δεν βρέθηκε καμία ενεργή θητεία για τον εκπαιδευτικό."
+								rendered="#{employeeActiveServiceAllocationListQuery.resultCount==0}" />
 
-							<a4j:outputPanel id="activeSecondment"
-								rendered="#{employeeActiveSecondmentListQuery.resultCount!=0}">
+							<a4j:outputPanel id="activeServiceAllocation"
+								rendered="#{employeeActiveServiceAllocationListQuery.resultCount!=0}">
 								<h:panelGrid columns="1">
 									<h:outputText
-										value="Στον παραπάνω πίνακα εμφανίζετε η τρέχουσα ενεργή απόσπαση του Εκπαιδευτικού." />
+										value="Στον παραπάνω πίνακα εμφανίζετε η τρέχουσα ενεργή θητεία του Εκπαιδευτικού." />
 									<rich:dataTable
-										value="#{employeeActiveSecondmentListQuery.resultList}"
-										var="_secondment" rows="15" border="0"
+										value="#{employeeActiveServiceAllocationListQuery.resultList}"
+										var="_serviceAllocation" rows="15" border="0"
 										onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
 										onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
 										width="100%">
 										<f:facet name="header">
-											<h:outputLabel value="Ενεργή Απόσπαση Εκπαιδευτικού" />
+											<h:outputLabel value="Ενεργή Θητεία Εκπαιδευτικού" />
 										</f:facet>
 										<rich:column>
 											<f:facet name="header">
-												<h:outputText value="Σχ. Χρονία" />
+												<h:outputText value="Οργανική" />
 											</f:facet>
-											<h:outputText value="#{_secondment.schoolYear.title}" />
+											<h:outputText value="#{_serviceAllocation.sourceUnit.title}" />
 										</rich:column>
 										<rich:column>
 											<f:facet name="header">
-												<h:outputText value="Αποσπ. Απο" />
+												<h:outputText value="Τύπος Θητείας" />
 											</f:facet>
-											<h:outputText value="#{_secondment.sourceUnit.title}" />
+											<h:outputText value="#{messages[_serviceAllocation.serviceType.key]}" />
 										</rich:column>
 										<rich:column>
 											<f:facet name="header">
-												<h:outputText value="Αποσπ. Σε" />
+												<h:outputText value="Μονάδα Θητείας" />
 											</f:facet>
-											<h:outputText value="#{_secondment.targetUnit.title}" />
+											<h:outputText value="#{_serviceAllocation.serviceUnit.title}" />
 										</rich:column>
 										<rich:column>
 											<f:facet name="header">
-												<h:outputText value="Απο" />
+												<h:outputText value="Έναρξη" />
 											</f:facet>
-											<h:outputText value="#{_secondment.established}">
+											<h:outputText value="#{_serviceAllocation.established}">
 												<s:convertDateTime pattern="dd-MM-yyyy" />
 											</h:outputText>
 										</rich:column>
 										<rich:column>
 											<f:facet name="header">
-												<h:outputText value="Εώς" />
+												<h:outputText value="Λήξη" />
 											</f:facet>
-											<h:outputText value="#{_secondment.dueTo}">
+											<h:outputText value="#{_serviceAllocation.dueTo}">
 												<s:convertDateTime pattern="dd-MM-yyyy" />
 											</h:outputText>
 										</rich:column>
@@ -83,27 +83,24 @@
 											<f:facet name="header">
 												<h:outputText value="Σχόλιο" />
 											</f:facet>
-											<h:outputText value="#{_secondment.comment}" />
+											<h:outputText value="#{_serviceAllocation.comment}" />
 										</rich:column>
 
 
+										
 										<rich:column>
 											<f:facet name="header">
-												<h:outputText value="Με Αίτηση Του" />
+												<h:outputText value="Ωρ. Οργανικής" />
 											</f:facet>
-											<h:outputText value="Ναί"
-												rendered="#{_secondment.employeeRequested}" />
-											<h:outputText value="Οχι"
-												rendered="#{!_secondment.employeeRequested}" />
+											<h:outputText value="#{_serviceAllocation.workingHoursOnRegularPosition}" />
 										</rich:column>
-
+										
 										<rich:column>
 											<f:facet name="header">
-												<h:outputText value="Πραγ. Ωράριο" />
+												<h:outputText value="Ωρ. Θητείας" />
 											</f:facet>
-											<h:outputText value="#{_secondment.finalWorkingHours}" />
+											<h:outputText value="#{_serviceAllocation.workingHoursOnServicingPosition}" />
 										</rich:column>
-
 
 										<rich:column>
 											<f:facet name="header">
@@ -116,16 +113,16 @@
 													value="Ακύρωση">
 													<h:graphicImage value="/img/icons/delete.png" width="12"
 														height="12" style="border:0" />
-													<f:setPropertyActionListener value="#{_secondment.id}"
-														target="#{secondmentHome.id}" />
+													<f:setPropertyActionListener value="#{_serviceAllocation.id}"
+														target="#{serviceAllocationHome.id}" />
 												</a4j:commandLink>
 
 												<a4j:commandLink id="updatelink"
 													reRender="updateModalPanelContent"
 													oncomplete="#{rich:component('updateModalPanel')}.show()"
 													value="Τροποποίηση">
-													<f:setPropertyActionListener value="#{_secondment.id}"
-														target="#{secondmentHome.id}" />
+													<f:setPropertyActionListener value="#{_serviceAllocation.id}"
+														target="#{serviceAllocationHome.id}" />
 												</a4j:commandLink>
 											</rich:toolBar>
 										</rich:column>
@@ -149,8 +146,8 @@
 										value="Στον παρακάτω πίνακα εμφανίζεται το ιστορικό όλων των αποσπάσεων του εκπαιδευτικού. Μπορείτε να τροποποιήσεται, αν θέλετε, την ενεργή κατά το τρέχων σχολικό έτος απόσπαση." />
 
 									<rich:dataTable id="employeeSecondmentsList"
-										value="#{employeeSecondmentsListQuery.resultList}"
-										var="_secondment" rows="15" border="0"
+										value="#{employeeServiceAllocationsListQuery.resultList}"
+										var="_serviceAllocation" rows="15" border="0"
 										onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
 										onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
 										width="100%">
@@ -159,35 +156,35 @@
 										</f:facet>
 										<rich:column>
 											<f:facet name="header">
-												<h:outputText value="Σχ. Χρονία" />
+												<h:outputText value="Οργανική" />
 											</f:facet>
-											<h:outputText value="#{_secondment.schoolYear.title}" />
+											<h:outputText value="#{_serviceAllocation.sourceUnit.title}" />
 										</rich:column>
 										<rich:column>
 											<f:facet name="header">
-												<h:outputText value="Αποσπ. Απο" />
+												<h:outputText value="Τύπος Θητείας" />
 											</f:facet>
-											<h:outputText value="#{_secondment.sourceUnit.title}" />
+											<h:outputText value="#{messages[_serviceAllocation.serviceType.key]}" />
 										</rich:column>
 										<rich:column>
 											<f:facet name="header">
-												<h:outputText value="Αποσπ. Σε" />
+												<h:outputText value="Μονάδα Θητείας" />
 											</f:facet>
-											<h:outputText value="#{_secondment.targetUnit.title}" />
+											<h:outputText value="#{_serviceAllocation.serviceUnit.title}" />
 										</rich:column>
 										<rich:column>
 											<f:facet name="header">
-												<h:outputText value="Απο" />
+												<h:outputText value="Έναρξη" />
 											</f:facet>
-											<h:outputText value="#{_secondment.established}">
+											<h:outputText value="#{_serviceAllocation.established}">
 												<s:convertDateTime pattern="dd-MM-yyyy" />
 											</h:outputText>
 										</rich:column>
 										<rich:column>
 											<f:facet name="header">
-												<h:outputText value="Εώς" />
+												<h:outputText value="Λήξη" />
 											</f:facet>
-											<h:outputText value="#{_secondment.dueTo}">
+											<h:outputText value="#{_serviceAllocation.dueTo}">
 												<s:convertDateTime pattern="dd-MM-yyyy" />
 											</h:outputText>
 										</rich:column>
@@ -195,29 +192,21 @@
 											<f:facet name="header">
 												<h:outputText value="Σχόλιο" />
 											</f:facet>
-											<h:outputText value="#{_secondment.comment}" />
+											<h:outputText value="#{_serviceAllocation.comment}" />
 										</rich:column>
+										
 										<rich:column>
 											<f:facet name="header">
-												<h:outputText value="Με Αίτηση Του" />
+												<h:outputText value="Ωρ. Οργανικής" />
 											</f:facet>
-											<h:outputText value="Ναί"
-												rendered="#{_secondment.employeeRequested}" />
-											<h:outputText value="Οχι"
-												rendered="#{!_secondment.employeeRequested}" />
+											<h:outputText value="#{_serviceAllocation.workingHoursOnRegularPosition}" />
 										</rich:column>
-
+										
 										<rich:column>
 											<f:facet name="header">
-												<h:outputText value="Υποχ. Ωράριο" />
+												<h:outputText value="Ωρ. Θητείας" />
 											</f:facet>
-											<h:outputText value="#{_secondment.mandatoryWorkingHours}" />
-										</rich:column>
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Πραγ. Ωράριο" />
-											</f:facet>
-											<h:outputText value="#{_secondment.finalWorkingHours}" />
+											<h:outputText value="#{_serviceAllocation.workingHoursOnServicingPosition}" />
 										</rich:column>
 									</rich:dataTable>
 								</h:panelGrid>
@@ -239,7 +228,7 @@
 
 		<rich:modalPanel id="cancelModalPanel" autosized="true" width="350">
 			<f:facet name="header">
-				<h:outputText value="Να ακυρωθή η απόσπαση ?"
+				<h:outputText value="Να ακυρωθή η θητεία ?"
 					style="padding-right:15px;" />
 			</f:facet>
 			<f:facet name="controls">
@@ -255,25 +244,31 @@
 					<a4j:outputPanel id="cancelModalPanelContent" layout="inline">
 						<h:panelGroup>
 							<h:outputText
-								value="Να ακυρωθή η τρέχουσα ενεργή απόσπαση του εκπαιδευτικού #{employeeUtil.prettyFormat(secondmentHome.instance.employee)} στην μονάδα " />
+								value="Να ακυρωθή η τρέχουσα ενεργή θητεία του εκπαιδευτικού #{employeeUtil.prettyFormat(serviceAllocationtHome.instance.employee)} στην μονάδα " />
 							<h:outputText
-								value="#{secondmentHome.instance.targetUnit.title}"
+								value="#{serviceAllocationtHome.instance.serviceUnit.title}"
 								styleClass="fieldValueText" />
+							<h:outputText value=" με την ιδιότητα του " />
+							<h:outputText value="#{messages[serviceAllocationHome.instance.serviceType.key]}" styleClass="fieldValueText"/>
 							<h:outputText value=" με λήξη την " />
-							<h:outputText value="#{secondmentHome.instance.dueTo}"
+							<h:outputText value="#{serviceAllocationHome.instance.dueTo}"
 								styleClass="fieldValueText">
 								<s:convertDateTime pattern="dd-MM-yyyy" />
 							</h:outputText>
+							<h:outputText value=" στην μονάδα " />
+							<h:outputText value="#{serviceAllocationHome.instance.serviceUnit.title}"
+								styleClass="fieldValueText" />
+							
 							<h:outputText value=" ;" />
 
 						</h:panelGroup>
 					</a4j:outputPanel>
 
 					<h:panelGrid columns="2">
-						<a4j:commandButton value="Ακύρωση Απόσπασης !" ajaxSingle="true"
-							action="#{secondmentHome.cancel()}"
+						<a4j:commandButton value="Ακύρωση Θητείας !" ajaxSingle="true"
+							action="#{serviceAllocationHome.cancel()}"
 							oncomplete="#{rich:component('cancelModalPanel')}.hide();"
-							reRender="activeSecondment" />
+							reRender="activeServiceAllocation" />
 						<a4j:commandButton value="Επιστροφή .."
 							onclick="#{rich:component('cancelModalPanel')}.hide();return false;" />
 					</h:panelGrid>
@@ -283,7 +278,7 @@
 		
 			<rich:modalPanel id="updateModalPanel" autosized="true" width="450">
 				<f:facet name="header">
-					<h:outputText value="Τροποποίηση Ενεργής Απόσπασης "
+					<h:outputText value="Τροποποίηση Ενεργής Θητείας "
 						style="padding-right:15px;" />
 				</f:facet>
 				<f:facet name="controls">
@@ -299,17 +294,17 @@
 						<h:form>
 						<a4j:outputPanel id="updateModalPanelContent" layout="inline">
 							<h:outputText
-								value="Με την παρακάτω φόρμα, μπορείται να τροποποίησεται την ενεργή απόσπαση του/της εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}." />
+								value="Με την παρακάτω φόρμα, μπορείται να τροποποίησεται την ενεργή θητεία του/της εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}." />
 							<rich:messages style="color:red;"></rich:messages>
 							<h:panelGrid columns="4">
 
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
 									<ui:define name="label">
-										<h:outputText value="Απόσπαση Από" />
+										<h:outputText value="Οργανική" />
 									</ui:define>
 
 									<h:inputText
-										value="#{secondmentHome.instance.sourceUnit.title}"
+										value="#{serviceAllocationHome.instance.sourceUnit.title}"
 										required="true" readonly="true" id="sourceUnit"
 										styleClass="fieldValueText" tabindex="1" size="17"
 										maxlength="22">
@@ -318,11 +313,11 @@
 
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
 									<ui:define name="label">
-										<h:outputText value="Απόσπαση Σε" />
+										<h:outputText value="Μονάδα Θητείας" />
 									</ui:define>
 
 									<h:inputText
-										value="#{secondmentHome.instance.targetUnit}"
+										value="#{serviceAllocationHome.instance.serviceUnit}"
 										required="true" id="secondmentTarget"
 										styleClass="fieldValueText" tabindex="1"
 										converter="unitConverter">
@@ -343,61 +338,63 @@
 
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
 									<ui:define name="label">
-										<h:outputText value="Από : " />
+										<h:outputText value="Έναρξη : " />
 									</ui:define>
 									<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
 										style="width:50px" enableManualInput="true"
 										styleClass="fieldValueText" required="true"
-										value="#{secondmentHome.instance.established}">
+										value="#{serviceAllocationHome.instance.established}">
 									</rich:calendar>
 								</s:decorate>
 
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
 									<ui:define name="label">
-										<h:outputText value="Έως : " />
+										<h:outputText value="Λήξη : " />
 									</ui:define>
 									<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
 										style="width:50px" enableManualInput="true"
 										styleClass="fieldValueText" required="true"
-										value="#{secondmentHome.instance.dueTo}">
+										value="#{serviceAllocationHome.instance.dueTo}">
 									</rich:calendar>
 								</s:decorate>
-
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
-									<ui:define name="label">
-										<h:outputText value="Με Αίτηση του ;" />
-									</ui:define>
-									<h:selectBooleanCheckbox
-										value="#{secondmentHome.instance.employeeRequested}" />
-								</s:decorate>
-
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
-									<ui:define name="label">
-										<h:outputText value="Πραγματικό Ωράριο : " />
-									</ui:define>
-									<h:inputText
-										value="#{secondmentHome.instance.finalWorkingHours}"
-										size="3" maxlength="3" required="true" />
-								</s:decorate>
-
+								
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
 									<ui:define name="label">
 										<h:outputText value="Σχόλιο" />
 									</ui:define>
 									<h:inputTextarea
-										value="#{secondmentHome.instance.comment}" />
+										value="#{serviceAllocationHome.instance.comment}" />
 								</s:decorate>
+								
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Ωρ. Οργανικής : " />
+									</ui:define>
+									<h:inputText
+										value="#{serviceAllocationHome.instance.workingHoursOnRegularPosition}"
+										size="3" maxlength="3" required="true" />
+								</s:decorate>
+
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Ωρ. Οργανικής : " />
+									</ui:define>
+									<h:inputText
+										value="#{serviceAllocationHome.instance.workingHoursOnServicingPosition}"
+										size="3" maxlength="3" required="true" />
+								</s:decorate>
+															
 
 							</h:panelGrid>
 						</a4j:outputPanel>
 
 						<h:panelGrid columns="2">
 							
-								<a4j:commandButton value="Τροποποίηση Απόσπασης !" 
-								action="#{secondmentHome.update()}"
+								<a4j:commandButton value="Τροποποίηση Θητείας !" 
+								action="#{serviceAllocationHome.update()}"
 								data="#{facesContext.maximumSeverity.ordinal ge 2}"
 								oncomplete="if(data == false) Richfaces.hideModalPanel('updateModalPanel');"
-								reRender="activeSecondment" />
+								reRender="activeServiceAllocation" />
 							<a4j:commandButton value="Επιστροφή .."
 								onclick="#{rich:component('updateModalPanel')}.hide();return false;" />
 						</h:panelGrid>

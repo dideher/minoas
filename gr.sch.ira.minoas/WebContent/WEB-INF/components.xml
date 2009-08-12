@@ -43,7 +43,7 @@
   <web:character-encoding-filter encoding="UTF-8"
     override-client="true" url-pattern="*.seam" />
 
-  
+
   <document:document-store use-extensions="true" />
 
   <!--
@@ -65,13 +65,11 @@
     <action execute="#{redirect.returnToCapturedView}" />
   </event>
 
-  <!-- 
-  <event type="org.jboss.seam.afterTransactionSuccess.PreparatoryOwner">
-    <action execute="#{preparatoryOwnersList.refresh}" />
-    <action execute="#{preparatoryOwnersList.getResultList}" />
-  </event>
-
-   -->
+  <!--
+    <event type="org.jboss.seam.afterTransactionSuccess.PreparatoryOwner">
+    <action execute="#{preparatoryOwnersList.refresh}" /> <action
+    execute="#{preparatoryOwnersList.getResultList}" /> </event>
+  -->
   <component name="org.jboss.seam.persistence.persistenceProvider"
     class="org.jboss.seam.persistence.HibernatePersistenceProvider" />
 
@@ -79,10 +77,10 @@
     password="test" />
 
   <factory name="preparatoryOwner" value="#{preparatoryOwnerHome.instance}" />
-  
+
   <component name="examplePreparatoryOwner"
     class="gr.sch.ira.minoas.model.preparatory.PreparatoryOwner" scope="conversation" />
- 
+
   <framework:entity-query name="preparatoryOwnersList"
     scope="conversation" max-results="15">
     <framework:ejbql>SELECT o FROM PreparatoryOwner o</framework:ejbql>
@@ -199,6 +197,32 @@
   
    	<component name="exampleServiceAllocation" class="gr.sch.ira.minoas.model.employement.ServiceAllocation" />
    	
+     <!-- The active secondment of an employee -->
+   <framework:entity-query name="employeeActiveServiceAllocationListQuery" scope="page">
+    <framework:ejbql>SELECT s FROM ServiceAllocation s WHERE s.active IS TRUE</framework:ejbql>
+    <framework:restrictions>
+      <value>s.employee = #{employeeHome.instance}</value>
+    </framework:restrictions> 
+   </framework:entity-query>
+   
+   <!--  All employee's secondments -->
+   <framework:entity-query name="employeeServiceAllocationsListQuery" max-results="200" scope="page">
+    <framework:ejbql>SELECT s FROM ServiceAllocation s</framework:ejbql>
+    <framework:order>s.established desc</framework:order>
+    <framework:restrictions>
+      <value>s.employee = #{employeeHome.instance}</value>
+    </framework:restrictions> 
+   </framework:entity-query>
+   
+   <framework:entity-query name="schoolServiceAllocationListQuery" max-results="200" scope="page">
+    <framework:ejbql>SELECT s FROM ServiceAllocation s WHERE s.active IS TRUE</framework:ejbql>
+    <framework:order>s.id desc</framework:order>
+    <framework:restrictions>
+      <value>s.serviceUnit = #{schoolHome.instance}</value>
+    </framework:restrictions> 
+   </framework:entity-query>
+   
+    
    	 <framework:entity-query name="serviceAllocationsByTypeListQuery"
 	max-results="1000" scope="CONVERSATION">
     <framework:ejbql>SELECT s FROM ServiceAllocation s INNER JOIN FETCH s.employee WHERE s.active IS TRUE</framework:ejbql>
@@ -294,6 +318,11 @@
    <event type="org.jboss.seam.afterTransactionSuccess.Secondment">
       <action execute="#{employeeSecondmentsListQuery.refresh}" />
       <action execute="#{employeeActiveSecondmentListQuery.refresh}" />
+   </event>
+   
+   <event type="org.jboss.seam.afterTransactionSuccess.ServiceAllocation">
+      <action execute="#{employeeServiceAllocationsListQuery.refresh}" />
+      <action execute="#{employeeActiveServiceAllocationListQuery.refresh}" />
    </event>
    
     <event type="org.jboss.seam.afterTransactionSuccess.TeachingRequirement">

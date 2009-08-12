@@ -74,7 +74,7 @@
 												label="#{messages[_serviceAllocationType.key]}" />
 											<s:convertEnum />
 											<a4j:support event="onblur" action="#{serviceAllocationHome.suggestHours()}"
-												reRender="serviceUnit, workingHoursOnServicingPosition, workingHoursOnRegularPosition" ajaxSingle="true"  />
+												reRender="workingHoursOnServicingPosition, workingHoursOnRegularPosition" ajaxSingle="true"  />
 										</h:selectOneMenu>
 									</s:decorate>
 

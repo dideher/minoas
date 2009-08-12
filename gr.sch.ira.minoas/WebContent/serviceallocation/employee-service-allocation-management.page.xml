@@ -2,28 +2,26 @@
 <page login-required="true" xmlns="http://jboss.com/products/seam/pages"
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.1.xsd">
   <begin-conversation join="true" flush-mode="manual"/> 
-  <description>Διαχείρηση Αποσπάσεων του/της #{employeeUtil.prettyFormat(employee)}</description>
+  <description>Διαχείρηση Θητείας του/της #{employeeUtil.prettyFormat(employee)}</description>
   
-  <param name="secondment_management_from"/>
-  <param name="secondment_management_to" />
-  <param name="employeeID" value="#{employeeHome.id}" converterId="javax.faces.Long"/>
+  <param name="service_allocation_management_from"/>
+  <param name="employeeID" value="#{employeeHome.id}" converterId="javax.faces.Integer"/>
   
   
-  <action execute="#{employeeHome.wire()}"/>
   <!-- navigation rules -->
   <navigation from-action="endButton">
     <end-conversation />
     <redirect view-id="/home.xhtml" />
   </navigation>
   
-  <navigation from-action="#{secondmentHome.cancel()}">
+  <navigation from-action="#{serviceAllocationHome.cancel()}">
     <rule if-outcome="updated">
-    	<render view-id="/secondment/secondment-employment-management.xtml"></render>
+    	<render view-id="/serviceallocation/employee-service-allocation-management.xtml"></render>
     </rule>
   </navigation>
   
   <navigation from-action="backButton">
-    <redirect view-id="#{empty secondment_management_from ? '/home' : secondment_management_from}.xhtml}" />
+    <redirect view-id="#{empty service_allocation_management_from ? '/home' : service_allocation_management}.xhtml}" />
   </navigation>
   
 </page>
