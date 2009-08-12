@@ -66,6 +66,36 @@
 						<f:param name="to" value="/employee/regular-employment-management" />
 					</s:link>
 				</rich:menuItem>
+				<rich:menuGroup value="Διαχείρηση Αδειών">
+					<rich:menuItem submitMode="none"
+						disabled="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_LEAVE'))}">
+						<s:link value="Εισαγωγή Νέας Άδειας"
+							action="#{leaveHome.clearInstance()}"
+							view="/leave/add-new-leave.xhtml">
+							<f:param name="add_new_leave_from" value="/home" />
+						</s:link>
+					</rich:menuItem>
+					<rich:menuItem submitMode="none"
+						disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MANAGE_LEAVE'))}">
+						<s:link value="Διαχείρηση Αδειών Εκπαιδευτικού"
+							view="/employee/select-employee.xhtml">
+							<f:param name="from" value="/home" />
+							<f:param name="to"
+								value="/leave/employee-leave-management" />
+						</s:link>
+					</rich:menuItem>
+					<rich:menuSeparator />
+					<rich:menuGroup value="Εκτύπωσεις και Σταστικά"
+						disabled="#{!(s:hasRole('ADMIN') or s:hasRole('VIEW_LEAVE'))}">
+						<rich:menuItem submitMode="none">
+							<s:link value="Θητείες Ανα Τύπο"
+								view="/serviceallocation/report-by-type.xhtml">
+								<f:param name="service_allocation_report_by_type_from" value="/home" />
+							</s:link>
+						</rich:menuItem>
+
+					</rich:menuGroup>
+				</rich:menuGroup>
 				<rich:menuGroup value="Διαχείρηση Θητειών">
 					<rich:menuItem submitMode="none"
 						disabled="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_SERVICE_ALLOCATION'))}">

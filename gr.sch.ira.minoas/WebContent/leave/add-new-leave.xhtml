@@ -1,0 +1,295 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<ui:composition template="/layout/simple-beauty-template.xhtml">
+	<ui:define name="body">
+		<rich:panel>
+			<f:facet name="header">
+				<h:outputText
+					value="Εισαγωγή Νέας Άδειας" />
+			</f:facet>
+			<h:form>
+				<h:panelGrid columns="1">
+
+					<rich:panel>
+						<f:facet name="header">
+							<h:outputText value="Στοιχεία Εκπαιδευτικού" />
+						</f:facet>
+						<a4j:outputPanel id="employeePanel">
+							<s:div rendered="#{employeeHome.managed}">
+								<ui:include src="/employee/basic-info.xhtml">
+									<ui:param name="employee" value="#{employeeHome.instance}" />
+								</ui:include>
+							</s:div>
+						</a4j:outputPanel>
+						<rich:separator lineType="dashed" height="2" />
+						<a4j:commandLink ajaxSingle="true" id="select-employee"
+							oncomplete="#{rich:component('employee_search_panel')}.show()"
+							value="Επιλογή Εκπαιδευτικού">
+						</a4j:commandLink>
+
+					
+					</rich:panel>
+					
+					<a4j:region id="mainleavepanel" >
+						<rich:panel rendered="#{employeeHome.managed}">
+							<f:facet name="header">
+								<h:outputText value="Στοιχεία Άδειας" />
+							</f:facet>
+							<h:outputText value="Συμπληρώστε τα στοιχεία της παρακάτω φόρμας για να εισάγεται νέα άδεια για τον εκπαιδευτικό." />
+							<a4j:outputPanel id="newLeavePanel">
+								<h:panelGrid columns="4">
+
+									<s:decorate template="/layout/doubleLineEdit.xhtml" >
+										<ui:define name="label">
+											<h:outputText value="Τύπος Άδειας" />
+										</ui:define>
+
+										<h:selectOneMenu id="LeaveType"
+											value="#{leave.leaveType}" required="true">
+											<s:selectItems hideNoSelectionLabel="true"
+												var="_leaveType"
+												value="#{leaveTypes}"
+												label="#{messages[_leaveType.key]}" />
+											<s:convertEnum />
+											<a4j:support event="onblur" 
+												 ajaxSingle="true" bypassUpdates="true"  />
+										</h:selectOneMenu>
+									</s:decorate>
+
+
+									<s:decorate id="establishedDateDecoration"
+										template="/layout/doubleLineEdit.xhtml">
+										<ui:define name="label">
+											<h:outputText value="Έναρξη Άδειας" />
+										</ui:define>
+										<rich:calendar id="establishedDate" enableManualInput="true"
+											value="#{leave.established}" required="true"
+											inputSize="10" mode="ajax" locale="el_GR"
+											inputClass="fieldValueText" datePattern="dd-MM-yyyy">
+											<a4j:support event="onblur"
+												reRender="establishedDateDecoration" bypassUpdates="true"
+												ajaxSingle="true" />
+										</rich:calendar>
+									</s:decorate>
+									<s:decorate id="dueToDateDecoration"
+										template="/layout/doubleLineEdit.xhtml">
+										<ui:define name="label">
+											<h:outputText value="Λήξη Άδειας" />
+										</ui:define>
+										<rich:calendar id="dueToDate"
+											value="#{leave.dueTo}" required="true"
+											mode="ajax" locale="el_GR" inputSize="10"
+											enableManualInput="true" inputClass="fieldValueText"
+											datePattern="dd-MM-yyyy">
+
+											<a4j:support event="onblur" reRender="dueToDateDecoration"
+												bypassUpdates="true" ajaxSingle="true" />
+										</rich:calendar>
+									</s:decorate>
+
+									<s:decorate template="/layout/doubleLineEdit.xhtml">
+										<ui:define name="label">
+											<h:outputText value="Σχόλιο" />
+										</ui:define>
+										<h:inputTextarea value="#{leave.comment}" />
+									</s:decorate>
+
+								</h:panelGrid>
+							</a4j:outputPanel>
+						</rich:panel>
+					</a4j:region>
+					<rich:spacer height="5" />
+					<rich:separator lineType="dashed" height="2" />
+					<rich:spacer height="5" />
+
+					<h:panelGroup>
+						<ui:include src="/components/messages-component.xhtml" />
+						<s:div styleClass="actionButtons">
+							<s:button id="backButton" action="backButton"
+								value="Τέλος Εργασίας" />
+							<rich:spacer width="10" />
+							<h:commandButton action="#{leaveHome.persist()}"
+								onclick="if(!confirm('Να καταχωρηθή η θητεία του εκπαιδευτικού ?')) {form.reset(); return false;}"
+								value="Καταχώρηση" id="updateButton" />
+							<rich:spacer width="3" />
+						</s:div>
+					</h:panelGroup>
+				</h:panelGrid>
+			</h:form>
+		</rich:panel>
+		<rich:modalPanel id="employee_search_panel" autosized="true"
+			width="550">
+			<f:facet name="header">
+				<h:outputText value="Αναζήτηση Προσωπικού ...." />
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<h:graphicImage value="/img/modal/close.png" id="hidelink"
+						styleClass="hidelink" width="18" height="18" />
+					<rich:componentControl for="employee_search_panel"
+						attachTo="hidelink" operation="hide" event="onclick" />
+				</h:panelGroup>
+			</f:facet>
+			<h:form>
+				<rich:messages style="color:red;"></rich:messages>
+				<a4j:region>
+					<h:form id="employeeSearchForm">
+
+						<h:panelGrid columns="1" width="100%">
+							<h:outputText
+								value="Απο τον παρακάτω πίνακα επιλέξτε τον εκπαιδευτικό για τον οποίον θα εισάγετε την νεα απόσπαση." />
+							<h:panelGroup>
+								<h:panelGrid columns="5">
+									<s:decorate template="/layout/doubleLineEdit.xhtml">
+										<ui:define name="label">
+											<h:outputText value="Επώνυμο : " />
+										</ui:define>
+										<h:inputText value="#{exampleEmployee.lastName}" size="12" />
+									</s:decorate>
+
+									<s:decorate template="/layout/doubleLineEdit.xhtml">
+										<ui:define name="label">
+											<h:outputText value="Όνομα : " />
+										</ui:define>
+										<h:inputText value="#{exampleEmployee.firstName}" size="12" />
+									</s:decorate>
+
+									<s:decorate template="/layout/doubleLineEdit.xhtml">
+										<ui:define name="label">
+											<h:outputText value="Ειδικότητα : " />
+										</ui:define>
+										<a4j:region>
+											<h:inputText id="specializationFilter"
+												value="#{exampleEmployee.lastSpecialization}"
+												styleClass="fieldValueText"
+												converter="specializationConverter">
+												<rich:suggestionbox height="100" width="250"
+													for="specializationFilter" var="a_spec"
+													suggestionAction="#{specializationSuggester.suggest}">
+													<f:facet name="nothingLabel">
+														<h:outputText value="Άγνωστη Ειδικότητα" />
+													</f:facet>
+													<h:column>
+														<h:outputText value="#{a_spec.id}" />
+													</h:column>
+													<h:column>
+														<h:outputText value="#{a_spec.title}" />
+													</h:column>
+												</rich:suggestionbox>
+											</h:inputText>
+										</a4j:region>
+									</s:decorate>
+
+									<s:decorate template="/layout/doubleLineEdit.xhtml">
+										<ui:define name="label">
+											<h:outputText value="Σε ενεργεία : " />
+										</ui:define>
+										<h:selectBooleanCheckbox
+											value="#{employeeCriteria.onlyActive}" />
+									</s:decorate>
+								</h:panelGrid>
+
+							</h:panelGroup>
+							<rich:panel>
+								<s:div styleClass="actionButtons">
+									<a4j:commandButton action="#{employeeListQuery.first}"
+										value="Αναζήτηση" reRender="employeeList" />
+								</s:div>
+							</rich:panel>
+							<h:panelGroup>
+								<rich:spacer height="5" />
+								<rich:separator height="2" lineType="dashed" />
+								<rich:spacer height="5" />
+							</h:panelGroup>
+							<a4j:outputPanel>
+								<rich:dataTable id="employeeList"
+									value="#{employeeListQuery.resultList}" var="employee"
+									rows="15" border="0"
+									onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+									onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+									width="100%">
+									<f:facet name="header">
+										<h:outputLabel value="Λίστα Διαθέσιμου Προσωπικού" />
+									</f:facet>
+
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText value="Επώνυμο" />
+										</f:facet>
+										<h:outputText value="#{employee.lastName}" />
+									</rich:column>
+
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText value="Όνομα" />
+										</f:facet>
+										<h:outputText value="#{employee.firstName}" />
+									</rich:column>
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText value="Όνομα Πατρός" />
+										</f:facet>
+										<h:outputText value="#{employee.fatherName}" />
+									</rich:column>
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText value="Ειδικότητα" />
+										</f:facet>
+										<h:outputText id="specializationText"
+											value="#{employee.lastSpecialization.id}">
+											<rich:toolTip for="specializationText"
+												value="#{employee.lastSpecialization.title}" />
+										</h:outputText>
+									</rich:column>
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText value="Ημ/νια Γεννήσεως" />
+										</f:facet>
+										<h:outputText value="#{employee.dateOfBirth}">
+											<s:convertDateTime pattern="dd-MM-yyyy" />
+										</h:outputText>
+									</rich:column>
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText value="Ενέργεια" />
+										</f:facet>
+										<a4j:commandLink action="#{leaveHome.wire()}"
+											value="Επιλογή"
+											oncomplete="#{rich:component('employee_search_panel')}.hide();return false;"
+											reRender="employeePanel,newLeavePanel,mainleavepanel">
+											<f:setPropertyActionListener value="#{employee.id}"
+												target="#{employeeHome.id}" />
+										</a4j:commandLink>
+									</rich:column>
+
+
+									<f:facet name="footer">
+										<rich:datascroller align="left" for="employeeList"
+											maxPages="20" renderIfSinglePage="false" id="sc1" />
+									</f:facet>
+
+								</rich:dataTable>
+							</a4j:outputPanel>
+
+						</h:panelGrid>
+					</h:form>
+				</a4j:region>
+
+			</h:form>
+		</rich:modalPanel>
+		<ui:include src="/components/wait-modal-panel.xhtml" />
+
+	</ui:define>
+</ui:composition>
+</html>

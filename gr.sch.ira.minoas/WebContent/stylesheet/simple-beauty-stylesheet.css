@@ -159,6 +159,10 @@ a.menu_link:hover {
         vertical-align:top;
 }
 
+td { 
+vertical-align:top; 
+} 
+
 
 /* --------------------------------- */
 /* MESSAGE BOX CLEAN	serie	  	 */
