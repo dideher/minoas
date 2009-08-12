@@ -3,6 +3,7 @@ package gr.sch.ira.minoas.model.employee;
 import gr.sch.ira.minoas.model.core.PYSDE;
 import gr.sch.ira.minoas.model.core.Specialization;
 import gr.sch.ira.minoas.model.employement.Employment;
+import gr.sch.ira.minoas.model.employement.Leave;
 
 import java.util.Set;
 
@@ -70,6 +71,24 @@ public class Employee extends Person {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "EMPLOYEE_TYPE", nullable = false, updatable = false)
 	private EmployeeType type;
+	
+	@OneToOne(optional = true, fetch = FetchType.LAZY)
+	@JoinColumn(name = "LEAVE_ID", nullable = true)
+	private Leave leave;
+
+	/**
+	 * @return the leave
+	 */
+	public Leave getLeave() {
+		return leave;
+	}
+
+	/**
+	 * @param leave the leave to set
+	 */
+	public void setLeave(Leave leave) {
+		this.leave = leave;
+	}
 
 	/**
 	 * 

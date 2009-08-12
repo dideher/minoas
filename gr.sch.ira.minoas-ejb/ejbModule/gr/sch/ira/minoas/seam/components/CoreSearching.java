@@ -10,6 +10,7 @@ import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employee.Person;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
+import gr.sch.ira.minoas.model.employement.LeaveType;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.SecondmentType;
 import gr.sch.ira.minoas.model.employement.ServiceAllocationType;
@@ -94,6 +95,11 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 	@Factory(value = "serviceAllocationTypes")
 	public ServiceAllocationType[] getAvailableServiceAllocationTypes() {
 		return ServiceAllocationType.values();
+	}
+	
+	@Factory(value = "leaveTypes")
+	public LeaveType[] getAvailableLeaveTypes() {
+		return LeaveType.values();
 	}
 
 	@Factory(value = "establishmentLicenseStatusTypes")

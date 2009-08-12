@@ -56,6 +56,11 @@ public class SecurityStartup {
 		createRole("ADD_SERVICE_ALLOCATION", "Add New Service Allocation", admin);
 		createRole("MANAGE_SERVICE_ALLOCATION", "Manage Service Allocation", admin);
 		createRole("VIEW_SERVICE_ALLOCATION", "View Service Allocation", admin);
+		/* Leave */
+		createRole("ADD_LEAVE", "Add New Leave", admin);
+		createRole("MANAGE_LEAVE", "Manage Leave", admin);
+		createRole("VIEW_LEAVE", "View Leave", admin);
+		
 	}
 	
 	protected Principal createPrincipal(String username, String password, String realname) {
