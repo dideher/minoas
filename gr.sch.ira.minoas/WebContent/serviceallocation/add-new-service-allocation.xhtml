@@ -41,11 +41,12 @@
 
 					</rich:panel>
 					<a4j:region>
-						<rich:panel>
+					<a4j:outputPanel id="newServiceAllocationPanel">
+						<rich:panel rendered="#{employeeHome.managed}">
 							<f:facet name="header">
 								<h:outputText value="Στοιχεία Θητείας" />
 							</f:facet>
-							<a4j:outputPanel id="newServiceAllocationPanel">
+							
 								<h:panelGrid columns="3">
 
 									<s:decorate id="sourceUnit"
@@ -83,20 +84,23 @@
 											<h:outputText value="Μονάδα Θητείας" />
 										</ui:define>
 
-										<h:inputText value="#{serviceAllocation.serviceUnit}"
+										<h:inputText
 											 required="true" id="serviceUnit"
-											styleClass="fieldValueText" converter="unitConverter"
-											size="12" maxlength="22">
+											styleClass="fieldValueText" 
+											size="22" maxlength="30">
 											
 
 											<rich:suggestionbox for="serviceUnit" var="serviceUnit"
-												suggestionAction="#{schoolUnitSuggester.suggest}">
+												suggestionAction="#{unitSuggester.suggest}">
 												<f:facet name="nothingLabel">
 													<h:outputText value="Άγνωστη Μονάδα Θητείας" />
 												</f:facet>
 												<h:column>
 													<h:outputText value="#{serviceUnit.title}" />
 												</h:column>
+												<a4j:support ajaxSingle="true" event="onselect">
+													<f:setPropertyActionListener value="#{serviceUnit}" target="#{serviceAllocation.serviceUnit}" />
+												</a4j:support>
 											</rich:suggestionbox>
 										</h:inputText>
 									</s:decorate>
@@ -179,8 +183,9 @@
 									</s:decorate>
 
 								</h:panelGrid>
-							</a4j:outputPanel>
+							
 						</rich:panel>
+						</a4j:outputPanel>
 					</a4j:region>
 					<rich:spacer height="5" />
 					<rich:separator lineType="dashed" height="2" />
@@ -340,7 +345,7 @@
 										<a4j:commandLink action="#{serviceAllocationHome.wire()}"
 											value="Επιλογή"
 											oncomplete="#{rich:component('employee_search_panel')}.hide();return false;"
-											reRender="employeePanel, newServiceAllocationPanel">
+											reRender="employeePanel,newServiceAllocationPanel">
 											<f:setPropertyActionListener value="#{employee.id}"
 												target="#{employeeHome.id}" />
 										</a4j:commandLink>

@@ -84,9 +84,9 @@
 											<h:outputText value="Μονάδα Απόσπασης" />
 										</ui:define>
 
-										<h:inputText value="#{secondment.targetUnit}" required="true"
+										<h:inputText required="true"
 											id="secondmentTarget" styleClass="fieldValueText"
-											tabindex="1" converter="unitConverter">
+											tabindex="1">
 
 											<rich:suggestionbox for="secondmentTarget"
 												var="secondmentUnit"
@@ -97,6 +97,9 @@
 												<h:column>
 													<h:outputText value="#{secondmentUnit.title}" />
 												</h:column>
+												<a4j:support ajaxSingle="true" event="onselect">
+													<f:setPropertyActionListener value="#{secondmentUnitt}" target="#{secondment.targetUnit}" />
+												</a4j:support>
 											</rich:suggestionbox>
 										</h:inputText>
 									</s:decorate>
