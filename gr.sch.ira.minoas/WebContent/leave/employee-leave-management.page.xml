@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page login-required="true" xmlns="http://jboss.com/products/seam/pages"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.1.xsd">
+  <begin-conversation join="true" flush-mode="manual"/> 
+  <description>Διαχείρηση Αδειών του/της #{employeeUtil.prettyFormat(employee)}</description>
+  
+  <param name="leave_management_from"/>
+  <param name="employeeID" value="#{employeeHome.id}" converterId="javax.faces.Integer"/>
+  
+  
+  <!-- navigation rules -->
+  <navigation from-action="endButton">
+    <end-conversation />
+    <redirect view-id="/home.xhtml" />
+  </navigation>
+  
+  <navigation from-action="#{leaveHome.cancel()}">
+    <rule if-outcome="updated">
+      <render view-id="/leave/employee-leave-management.xtml"></render>
+    </rule>
+  </navigation>
+  
+  <navigation from-action="backButton">
+    <redirect view-id="#{empty leave_management_from ? '/home' : leave_management}.xhtml}" />
+  </navigation>
+  
+</page>
