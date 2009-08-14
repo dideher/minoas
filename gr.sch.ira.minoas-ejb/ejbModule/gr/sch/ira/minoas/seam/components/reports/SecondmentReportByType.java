@@ -47,7 +47,7 @@ public class SecondmentReportByType {
 			this.comment = secondment.getComment();
 			this.dueTo = secondment.getDueTo();
 			this.establishedIn = secondment.getEstablished();
-			this.requestByEmployee = secondment.getEmployeeRequested();
+			this.requestByEmployee = secondment.isEmployeeRequested();
 			this.sourceUnit = secondment.getSourceUnit().getTitle();
 			this.targetUnit = secondment.getTargetUnit().getTitle();
 			this.specializationID = secondment.getEmployee().getLastSpecialization().getId();

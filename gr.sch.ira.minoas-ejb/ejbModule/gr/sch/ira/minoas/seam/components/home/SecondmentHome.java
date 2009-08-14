@@ -134,7 +134,7 @@ public class SecondmentHome extends MinoasEntityHome<Secondment> {
 
 	@Transactional
 	public String revert() {
-		info("reverting updates to secondment #0", getInstance());
+		info("principal #0 is reverting updates to secondment #1", getPrincipalName(), getInstance());
 		getEntityManager().refresh(getInstance());
 		return "reverted";
 	}

@@ -59,11 +59,15 @@ public class Secondment extends BaseIDModel implements Cloneable {
 	 */
 	@Basic
 	@Column(name = "IS_ACTIVE", nullable = true)
-	private Boolean active;
+	private boolean active;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = true)
 	@JoinColumn(name = "PARENT_EMPLOYMENT_ID", nullable = true)
 	private Employment affectedEmployment;
+
+	@Basic
+	@Column(name = "COMMENT", nullable = true, length = 255)
+	private String comment;
 
 	@Basic
 	@Column(name = "DUE_TO", nullable = true)
@@ -76,7 +80,7 @@ public class Secondment extends BaseIDModel implements Cloneable {
 
 	@Basic
 	@Column(name = "EMPLOYEE_REQUESTED", nullable = true)
-	private Boolean employeeRequested;
+	private boolean employeeRequested;
 
 	@Basic
 	@Column(name = "ESTABLISHED", nullable = true)
@@ -90,8 +94,6 @@ public class Secondment extends BaseIDModel implements Cloneable {
 	@Basic
 	@Column(name = "HEADMASTER_ORDER", nullable = true, length = 25)
 	private String headMasterOrder;
-
-	
 
 	@Basic
 	@Column(name = "MANDATORY_WORKING_HOURS", nullable = true)
@@ -114,7 +116,7 @@ public class Secondment extends BaseIDModel implements Cloneable {
 	private SchoolYear schoolYear;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name="SECONDMENT_TYPE")
+	@Column(name = "SECONDMENT_TYPE")
 	private SecondmentType secondmentType;
 
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -147,40 +149,15 @@ public class Secondment extends BaseIDModel implements Cloneable {
 	@Basic
 	@Column(name = "WORK_HRS_DECR_REASON", nullable = true)
 	private String workingHoursDecrementReason;
-	
-	@Basic
-	@Column(name="COMMENT", nullable=true, length=255)
-	private String comment;
-
-	/**
-	 * @return the comment
-	 */
-	public String getComment() {
-		return comment;
-	}
-
-	/**
-	 * @param comment the comment to set
-	 */
-	public void setComment(String comment) {
-		this.comment = comment;
-	}
 
 	/**
 	 * @see java.lang.Object#clone()
 	 */
 	@Override
 	public Object clone() throws CloneNotSupportedException {
-		Secondment clone = (Secondment)super.clone();
+		Secondment clone = (Secondment) super.clone();
 		clone.setId(null);
 		return clone;
-	}
-
-	/**
-	 * @return the active
-	 */
-	public Boolean getActive() {
-		return active;
 	}
 
 	/**
@@ -188,6 +165,13 @@ public class Secondment extends BaseIDModel implements Cloneable {
 	 */
 	public Employment getAffectedEmployment() {
 		return affectedEmployment;
+	}
+
+	/**
+	 * @return the comment
+	 */
+	public String getComment() {
+		return comment;
 	}
 
 	/**
@@ -202,18 +186,13 @@ public class Secondment extends BaseIDModel implements Cloneable {
 	}
 
 	/**
-	 * @return the employeeRequested
-	 */
-	public Boolean getEmployeeRequested() {
-		return employeeRequested;
-	}
-
-	/**
 	 * @return the established
 	 */
 	public Date getEstablished() {
 		return established;
 	}
+
+	
 
 	public Integer getFinalWorkingHours() {
 		return finalWorkingHours;
@@ -223,7 +202,6 @@ public class Secondment extends BaseIDModel implements Cloneable {
 		return headMasterOrder;
 	}
 
-	
 	/**
 	 * @return the mandatoryWorkingHours
 	 */
@@ -286,9 +264,23 @@ public class Secondment extends BaseIDModel implements Cloneable {
 	}
 
 	/**
+	 * @return the active
+	 */
+	public boolean isActive() {
+		return active;
+	}
+
+	/**
+	 * @return the employeeRequested
+	 */
+	public boolean isEmployeeRequested() {
+		return employeeRequested;
+	}
+
+	/**
 	 * @param active the active to set
 	 */
-	public void setActive(Boolean active) {
+	public void setActive(boolean active) {
 		this.active = active;
 	}
 
@@ -297,6 +289,15 @@ public class Secondment extends BaseIDModel implements Cloneable {
 	 */
 	public void setAffectedEmployment(Employment affectedEmployment) {
 		this.affectedEmployment = affectedEmployment;
+	}
+
+	
+
+	/**
+	 * @param comment the comment to set
+	 */
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 
 	/**
@@ -313,7 +314,7 @@ public class Secondment extends BaseIDModel implements Cloneable {
 	/**
 	 * @param employeeRequested the employeeRequested to set
 	 */
-	public void setEmployeeRequested(Boolean employeeRequested) {
+	public void setEmployeeRequested(boolean employeeRequested) {
 		this.employeeRequested = employeeRequested;
 	}
 
@@ -331,8 +332,6 @@ public class Secondment extends BaseIDModel implements Cloneable {
 	public void setHeadMasterOrder(String headMasterOrder) {
 		this.headMasterOrder = headMasterOrder;
 	}
-
-	
 
 	/**
 	 * @param mandatoryWorkingHours the mandatoryWorkingHours to set
@@ -417,7 +416,7 @@ public class Secondment extends BaseIDModel implements Cloneable {
 			builder.append(employee);
 			builder.append(", ");
 		}
-		if(finalWorkingHours != null) {
+		if (finalWorkingHours != null) {
 			builder.append("finalWorkingHours=");
 			builder.append(finalWorkingHours);
 			builder.append(", ");

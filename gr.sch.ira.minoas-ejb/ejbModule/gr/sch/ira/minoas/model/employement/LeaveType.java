@@ -9,7 +9,37 @@ package gr.sch.ira.minoas.model.employement;
  * 
  */
 public enum LeaveType {
-	LABOUR_LEAVE("LABOUR_LEAVE_KEY", (30*9)),
+	/**
+	 * Κύησης
+	 */
+	LABOUR_LEAVE("LABOUR_LEAVE_KEY", (30*2)),
+	/**
+	 * Λοχείας
+	 */
+	PUERPERIUM_LEAVE("PUERPERIUM_LEAVE_KEY", 30*3),
+	/**
+	 * Εκπαιδευτική
+	 */
+	LEARNING_LEAVE("LEARNING_LEAVE_KEY", 30*12),
+	/**
+	 * 9-μήνη
+	 */
+	NINE_MONTHS_LEAVE("NINE_MONTHS_LEAVE_KEY", 30*9),
+	/**
+	 * 3-μήνη
+	 */
+	THREE_MONTHS_LEAVE("THREE_MONTHS_LEAVE_KEY", 30*3),
+	/**
+	 * Ασθενείας
+	 */
+	MEDICAL_LEAVE("MEDICAL_LEAVE_KEY", 0),
+	/**
+	 * Υιοθεσίας
+	 */
+	ADOPTION_LEAVE("ADOPTION_LEAVE_KEY", 30*3),
+	/**
+	 * Άνευ Αποδοχών
+	 */
 	UNPAID_LEAVE("UNPAID_LEAVE_KEY", (30*12));
 	
 	private LeaveType(String key, Integer durationInDays) {

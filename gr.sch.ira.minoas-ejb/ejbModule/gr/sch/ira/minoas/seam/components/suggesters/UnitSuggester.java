@@ -18,8 +18,9 @@ import org.jboss.seam.annotations.Transactional;
  * @author slavikos
  *
  */
-@Name("unitSuggester")
-public class SchoolUnitSuggester extends BaseDatabaseAwareSeamComponent {
+@Name("schoolUnitSuggester")
+@Scope(ScopeType.CONVERSATION)
+public class UnitSuggester extends BaseDatabaseAwareSeamComponent {
 
 	/**
 	 * 
@@ -29,9 +30,9 @@ public class SchoolUnitSuggester extends BaseDatabaseAwareSeamComponent {
 	
 	@SuppressWarnings("unchecked")
 	@Transactional
-	public Collection<Unit> suggest(Object unit_search_pattern) {
-		return getEntityManager().createQuery("SELECT s FROM Unit s WHERE LOWER(s.title) LIKE LOWER(:search_pattern)")
-				.setParameter("search_pattern", CoreUtils.getSearchPattern(String.valueOf(unit_search_pattern)))
+	public Collection<Unit> suggest(Object secondmemt_search_pattern) {
+		return getEntityManager().createQuery("SELECT s FROM School s WHERE LOWER(s.title) LIKE LOWER(:search_pattern)")
+				.setParameter("search_pattern", CoreUtils.getSearchPattern(String.valueOf(secondmemt_search_pattern)))
 				.getResultList();
 	}
 

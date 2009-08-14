@@ -26,6 +26,13 @@ public class ServiceAllocationHome extends MinoasEntityHome<ServiceAllocation> {
 
 	@In(create = true)
 	private EmployeeHome employeeHome;
+	
+	@Transactional
+	public String revert() {
+		info("principal #0 is reverting updates to service allocation #1", getPrincipalName(), getInstance());
+		getEntityManager().refresh(getInstance());
+		return "reverted";
+	}
 
 	/**
 	 * 

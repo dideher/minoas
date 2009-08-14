@@ -17,6 +17,7 @@ import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.Leave;
 import gr.sch.ira.minoas.model.employement.LeaveType;
+import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.ServiceAllocation;
 
 /**
@@ -82,6 +83,7 @@ public class LeaveHome extends MinoasEntityHome<Leave> {
 	 * @see gr.sch.ira.minoas.seam.components.home.MinoasEntityHome#persist()
 	 */
 	@Override
+	@Transactional
 	public String persist() {
 		Leave newLeave = getInstance();
 		Employee employee = employeeHome.getInstance();
@@ -113,11 +115,46 @@ public class LeaveHome extends MinoasEntityHome<Leave> {
 	 * @see gr.sch.ira.minoas.seam.components.home.MinoasEntityHome#update()
 	 */
 	@Override
+	@Transactional
 	public String update() {
-		// TODO Auto-generated method stub
+		Leave current_leave = getInstance();
+		Employee employee = employeeHome.getInstance();
+		if (!validateLeave(current_leave, true)) {
+			return VALIDATION_ERROR_OUTCOME;
+		}
+		
+		/* check if the leave should be activated. A leave can be activated
+		 * if and only if the leave's period is current (ie, today is after and 
+		 * before leave's established and dueTo dates respectively).
+		 */
+		
+		Date today = new Date(System.currentTimeMillis());
+		current_leave.setActive(today.after(current_leave.getEstablished()) && today.before(current_leave.getDueTo()));
+		
+		/* if the leave is active, then update the employee */
+		if(current_leave.getActive()) {
+			employee.setLeave(current_leave);
+		} else {
+			employee.setLeave(null);
+		}
 		return super.update();
 	}
 
+	
+	@Transactional
+	public String cancel() {
+		Leave current_leave = getInstance();
+		current_leave.setActive(Boolean.FALSE);
+		current_leave.setAffectedEmployment(null);
+		Employee employee = current_leave.getEmployee();
+		if (employee != null)
+			employee.setLeave(null);
+		super.update();
+		info("principal '#0' canceled employee #1 current leave #1.",
+				getPrincipalName(), employee, current_leave);
+		clearInstance();
+		return "updated";
+	}
 	/**
 	 * @see org.jboss.seam.framework.Home#getInstance()
 	 */
@@ -126,6 +163,13 @@ public class LeaveHome extends MinoasEntityHome<Leave> {
 	public Leave getInstance() {
 		// TODO Auto-generated method stub
 		return (Leave) super.getInstance();
+	}
+	
+	@Transactional
+	public String revert() {
+		info("principal #0 is reverting updates to leave #1", getPrincipalName(), getInstance());
+		getEntityManager().refresh(getInstance());
+		return "reverted";
 	}
 
 }

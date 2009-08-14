@@ -1,6 +1,7 @@
 package gr.sch.ira.minoas.model.employement;
 
 import gr.sch.ira.minoas.model.BaseIDModel;
+import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.core.SchoolYear;
 import gr.sch.ira.minoas.model.core.Specialization;
 import gr.sch.ira.minoas.model.core.Unit;
@@ -70,7 +71,7 @@ public class Employment extends BaseIDModel {
 
 	@OneToOne
 	@JoinColumn(name = "SCHOOL_ID", nullable = false)
-	private Unit school;
+	private School school;
 
 	@ManyToOne(optional = false, fetch = FetchType.EAGER)
 	@JoinColumn(name = "SCHOOL_YEAR_ID", nullable = false)
@@ -158,7 +159,7 @@ public class Employment extends BaseIDModel {
 	/**
 	 * @return the school
 	 */
-	public Unit getSchool() {
+	public School getSchool() {
 		return school;
 	}
 
@@ -253,7 +254,7 @@ public class Employment extends BaseIDModel {
 	/**
 	 * @param school the school to set
 	 */
-	public void setSchool(Unit school) {
+	public void setSchool(School school) {
 		this.school = school;
 	}
 

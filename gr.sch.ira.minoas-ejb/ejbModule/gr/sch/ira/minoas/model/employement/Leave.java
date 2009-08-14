@@ -28,11 +28,47 @@ import gr.sch.ira.minoas.model.employee.Employee;
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public class Leave extends BaseIDModel {
 	
+	/**
+	 * Comment for <code>serialVersionUID</code>
+	 */
+	private static final long serialVersionUID = 1L;
+
+
+
 	@Basic
 	@Column(name = "IS_ACTIVE", nullable = false)
 	private Boolean active;
 
 	
+	/**
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Leave [");
+		if (employee != null) {
+			builder.append("employee=");
+			builder.append(employee);
+			builder.append(", ");
+		}
+		if (leaveType != null) {
+			builder.append("leaveType=");
+			builder.append(leaveType);
+			builder.append(", ");
+		}
+		if (established != null) {
+			builder.append("established=");
+			builder.append(established);
+			builder.append(", ");
+		}
+		if (dueTo != null) {
+			builder.append("dueTo=");
+			builder.append(dueTo);
+		}
+		builder.append("]");
+		return builder.toString();
+	}
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = true)
 	@JoinColumn(name = "PARENT_EMPLOYMENT_ID", nullable = true)
@@ -59,6 +95,10 @@ public class Leave extends BaseIDModel {
 	@Enumerated(EnumType.STRING)
 	@Column(name="LEAVE_TYPE", length=64, nullable=false)
 	private LeaveType leaveType;
+	
+	@Basic
+	@Column(name = "DAY_DURATION", nullable = true)
+	private Integer days;
 	
 	public Leave() {
 		super();
@@ -163,4 +203,19 @@ public class Leave extends BaseIDModel {
 		this.leaveType = leaveType;
 	}
 
+	/**
+	 * @return the days
+	 */
+	public Integer getDays() {
+		return days;
+	}
+
+	/**
+	 * @param days the days to set
+	 */
+	public void setDays(Integer days) {
+		this.days = days;
+	}
+
+	
 }
