@@ -406,7 +406,7 @@
 								data="#{facesContext.maximumSeverity.ordinal ge 2}"
 								oncomplete="if(data == false) Richfaces.hideModalPanel('updateModalPanel');"
 								reRender="activeServiceAllocation" />
-							<a4j:commandButton value="Επιστροφή .."
+							<a4j:commandButton value="Επιστροφή .." action="#{serviceAllocationHome.revert()}"
 								onclick="#{rich:component('updateModalPanel')}.hide();return false;" />
 						</h:panelGrid>
 					</h:form>

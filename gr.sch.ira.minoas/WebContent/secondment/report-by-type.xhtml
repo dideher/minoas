@@ -30,7 +30,7 @@
 
 							<ui:include src="/components/messages-component.xhtml" />
 							
-								<h:panelGrid columns="4">
+								<h:panelGrid columns="5">
 
 
 
@@ -41,8 +41,9 @@
 										</ui:define>
 
 										<h:selectOneMenu id="secondmentType"
-											value="#{exampleSecondment.secondmentType}">
-											<s:selectItems hideNoSelectionLabel="true"
+											value="#{secondmentCriteria.secondmentType}">
+											<s:selectItems 
+												hideNoSelectionLabel="false" noSelectionLabel="Όλοι οι Τύποι"
 												var="_secondmentType" value="#{secondmentTypes}"
 												label="#{messages[_secondmentType.key]}" />
 											<s:convertEnum />
@@ -57,7 +58,7 @@
 											<h:outputText value="Μονάδα Απόσπασης" />
 										</ui:define>
 
-										<h:inputText value="#{exampleSecondment.targetUnit}"
+										<h:inputText value="#{secondmentCriteria.targetUnit}"
 											id="secondmentTarget" styleClass="fieldValueText"
 											converter="unitConverter">
 
@@ -73,13 +74,25 @@
 											</rich:suggestionbox>
 										</h:inputText>
 									</s:decorate>
+									
+									<s:decorate template="/layout/doubleLineEdit.xhtml">
+										<ui:define name="label">
+											<h:outputText value="Περιοχή Οργανικής Αποσπασμένου" />
+										</ui:define>
+
+										<h:selectOneMenu value="#{secondmentCriteria.region}">
+											<f:selectItem itemLabel="Όλες οι Περιοχές" itemValue="" />
+											<f:selectItem itemLabel="Α Ηρακλείου" itemValue="Α"/>
+											<f:selectItem itemLabel="Β Ηρακλείου" itemValue="Β"/>
+										</h:selectOneMenu>
+									</s:decorate>
 
 									<s:decorate template="/layout/doubleLineEdit.xhtml">
 										<ui:define name="label">
 											<h:outputText value="Με Αίτηση του ;" />
 										</ui:define>
-										<h:selectBooleanCheckbox  converterId="javax.faces.Boolean"
-											value="#{exampleSecondment.employeeRequested}" />
+										<h:selectBooleanCheckbox  converterId="javax.faces.Boolean" 
+											value="#{secondmentCriteria.employeeRequested}" />
 									</s:decorate>
 
 
@@ -87,7 +100,7 @@
 										<ui:define name="label">
 											<h:outputText value="Σχόλιο" />
 										</ui:define>
-										<h:inputText value="#{exampleSecondment.comment}" />
+										<h:inputText value="#{secondmentCriteria.comment}" />
 									</s:decorate>
 
 								</h:panelGrid>
@@ -114,7 +127,7 @@
 
 				<rich:dataTable id="secondmentsByTypeTable"
 					value="#{secondmentsByTypeListQuery.resultList}" var="_secondment"
-					rows="25" border="0"
+					rows="40" border="0"
 					onRowMouseOver="this.style.backgfroundColor='#F8F8F8'"
 					onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
 					width="100%">
@@ -130,10 +143,17 @@
 						<h:outputText
 							value="#{employeeUtil.prettyFormatNoSpecialization(_secondment.employee)}" />
 					</rich:column>
-
 					<rich:column>
 						<f:facet name="header">
-							<h:outputText value="Ειδικότητα" />
+							<h:outputText value="Ειδ." />
+						</f:facet>
+						<h:outputText
+							value="#{_secondment.employee.lastSpecialization.id}" />
+					</rich:column>
+					
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Λεκτικό Ειδ." />
 						</f:facet>
 						<h:outputText
 							value="#{_secondment.employee.lastSpecialization.title}" />
@@ -144,6 +164,13 @@
 						</f:facet>
 						<h:outputText value="#{_secondment.sourceUnit.title}" />
 					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Περ." />
+						</f:facet>
+						<h:outputText value="#{_secondment.affectedEmployment.school.regionCode}" />
+					</rich:column>
+					
 					<rich:column>
 						<f:facet name="header">
 							<h:outputText value="Tύπος Απόσπασης" />
@@ -193,7 +220,7 @@
 
 					<rich:column>
 						<f:facet name="header">
-							<h:outputText value="Πραγ. Ωράριο" />
+							<h:outputText value="Ωράριο" />
 						</f:facet>
 						<h:outputText value="#{_secondment.finalWorkingHours}" />
 					</rich:column>

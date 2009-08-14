@@ -67,9 +67,9 @@
 											<h:outputText value="Τύπος Θητείας" />
 										</ui:define>
 
-										<h:selectOneMenu id="serviceAllocationType"
+										<h:selectOneMenu id="serviceAllocationType" 
 											value="#{serviceAllocation.serviceType}" required="true">
-											<s:selectItems hideNoSelectionLabel="true"
+											<s:selectItems   hideNoSelectionLabel="true"
 												var="_serviceAllocationType"
 												value="#{serviceAllocationTypes}"
 												label="#{messages[_serviceAllocationType.key]}" />

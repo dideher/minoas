@@ -41,11 +41,12 @@
 
 					</rich:panel>
 					<a4j:region>
-						<rich:panel>
+					<a4j:outputPanel id="newSecondmentPanel">
+						<rich:panel rendered="#{employeeHome.managed}">
 							<f:facet name="header">
 								<h:outputText value="Στοιχεία Απόσπασης" />
 							</f:facet>
-							<a4j:outputPanel id="newSecondmentPanel">
+							
 								<h:panelGrid columns="4">
 
 									<s:decorate id="sourceUnit"
@@ -98,7 +99,7 @@
 													<h:outputText value="#{secondmentUnit.title}" />
 												</h:column>
 												<a4j:support ajaxSingle="true" event="onselect">
-													<f:setPropertyActionListener value="#{secondmentUnitt}" target="#{secondment.targetUnit}" />
+													<f:setPropertyActionListener value="#{secondmentUnit}" target="#{secondment.targetUnit}" />
 												</a4j:support>
 											</rich:suggestionbox>
 										</h:inputText>
@@ -211,8 +212,8 @@
 									</s:decorate>
 
 								</h:panelGrid>
-							</a4j:outputPanel>
 						</rich:panel>
+						</a4j:outputPanel>
 					</a4j:region>
 					<rich:spacer height="5" />
 					<rich:separator lineType="dashed" height="2" />
@@ -372,7 +373,7 @@
 										<a4j:commandLink action="#{employeeHome.wire()}"
 											value="Επιλογή"
 											oncomplete="#{rich:component('employee_search_panel')}.hide();return false;"
-											reRender="employeePanel, newSecondmentPanel">
+											reRender="employeePanel,newSecondmentPanel">
 											<f:setPropertyActionListener value="#{employee.id}"
 												target="#{employeeHome.id}" />
 										</a4j:commandLink>
