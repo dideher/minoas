@@ -1,5 +1,8 @@
 package gr.sch.ira.minoas.model.employement;
 
+import gr.sch.ira.minoas.model.BaseIDModel;
+import gr.sch.ira.minoas.model.employee.Employee;
+
 import java.util.Date;
 
 import javax.persistence.Basic;
@@ -16,9 +19,6 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import gr.sch.ira.minoas.model.BaseIDModel;
-import gr.sch.ira.minoas.model.employee.Employee;
 /**
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * 

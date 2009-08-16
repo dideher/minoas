@@ -3,6 +3,11 @@
  */
 package gr.sch.ira.minoas.seam.components.home;
 
+import gr.sch.ira.minoas.model.employee.Employee;
+import gr.sch.ira.minoas.model.employement.Employment;
+import gr.sch.ira.minoas.model.employement.Leave;
+import gr.sch.ira.minoas.model.employement.LeaveType;
+
 import java.util.Calendar;
 import java.util.Date;
 
@@ -12,13 +17,6 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.international.StatusMessage.Severity;
-
-import gr.sch.ira.minoas.model.employee.Employee;
-import gr.sch.ira.minoas.model.employement.Employment;
-import gr.sch.ira.minoas.model.employement.Leave;
-import gr.sch.ira.minoas.model.employement.LeaveType;
-import gr.sch.ira.minoas.model.employement.Secondment;
-import gr.sch.ira.minoas.model.employement.ServiceAllocation;
 
 /**
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
@@ -87,7 +85,7 @@ public class LeaveHome extends MinoasEntityHome<Leave> {
 	public String persist() {
 		Leave newLeave = getInstance();
 		Employee employee = employeeHome.getInstance();
-		Employment currentEmployment = employee.getCurrentEmployment();
+		
 		
 
 		if (!validateLeave(newLeave, true)) {

@@ -9,9 +9,7 @@ import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 
 import java.util.Collection;
 
-import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
 
 /**

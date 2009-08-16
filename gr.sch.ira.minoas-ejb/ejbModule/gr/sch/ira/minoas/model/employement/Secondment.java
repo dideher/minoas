@@ -29,7 +29,6 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.jboss.seam.annotations.Name;
 
 /**
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>

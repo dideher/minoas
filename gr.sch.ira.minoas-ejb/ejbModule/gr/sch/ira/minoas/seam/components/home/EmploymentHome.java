@@ -22,6 +22,11 @@ public class EmploymentHome extends MinoasEntityHome<Employment> {
 	
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
 	 * @see org.jboss.seam.framework.Home#getInstance()
 	 */
 	@Override

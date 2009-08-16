@@ -33,4 +33,18 @@ public class UserDefaults {
 	public void loginSuccesful() {
 		this.activeSchoolYear = coreSearching.getActiveSchoolYear(null);
 	}
+
+	/**
+	 * @return the activeSchoolYear
+	 */
+	public SchoolYear getActiveSchoolYear() {
+		return activeSchoolYear;
+	}
+
+	/**
+	 * @param activeSchoolYear the activeSchoolYear to set
+	 */
+	public void setActiveSchoolYear(SchoolYear activeSchoolYear) {
+		this.activeSchoolYear = activeSchoolYear;
+	}
 }

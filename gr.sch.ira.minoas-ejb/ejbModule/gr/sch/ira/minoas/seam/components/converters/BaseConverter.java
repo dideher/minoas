@@ -22,6 +22,7 @@ public abstract class BaseConverter extends BaseSeamComponent implements Convert
 	 */
 	private static final long serialVersionUID = 1L;
 
+	@SuppressWarnings("unchecked")
 	protected Object getSeamComponent(Class componentClass, boolean create) {
 		return Component.getInstance(componentClass, create);
 	}

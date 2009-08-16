@@ -3,19 +3,17 @@
  */
 package gr.sch.ira.minoas.seam.components.home;
 
+import gr.sch.ira.minoas.model.employee.Employee;
+import gr.sch.ira.minoas.model.employement.Employment;
+import gr.sch.ira.minoas.model.employement.ServiceAllocation;
+import gr.sch.ira.minoas.model.employement.ServiceAllocationType;
+
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.international.StatusMessage.Severity;
-
-import gr.sch.ira.minoas.model.employee.Employee;
-import gr.sch.ira.minoas.model.employement.Employment;
-import gr.sch.ira.minoas.model.employement.Secondment;
-import gr.sch.ira.minoas.model.employement.SecondmentType;
-import gr.sch.ira.minoas.model.employement.ServiceAllocation;
-import gr.sch.ira.minoas.model.employement.ServiceAllocationType;
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
