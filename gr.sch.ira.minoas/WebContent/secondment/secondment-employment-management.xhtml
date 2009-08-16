@@ -322,7 +322,6 @@
 									</ui:define>
 
 									<h:inputText
-										value="#{secondmentHome.instance.targetUnit}"
 										required="true" id="secondmentTarget"
 										styleClass="fieldValueText" tabindex="1">
 
@@ -336,7 +335,7 @@
 												<h:outputText value="#{secondmentUnit.title}" />
 											</h:column>
 											<a4j:support ajaxSingle="true" event="onselect">
-													<f:setPropertyActionListener value="#{secondmentUnitt}" target="#{secondmentHome.instance.targetUnit}" />
+													<f:setPropertyActionListener value="#{secondmentUnit}" target="#{secondmentHome.instance.targetUnit}" />
 											</a4j:support>
 										</rich:suggestionbox>
 									</h:inputText>

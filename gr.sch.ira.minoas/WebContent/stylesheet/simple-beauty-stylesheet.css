@@ -9,7 +9,8 @@ body {
 }
 
 #header {
-	width: 100%
+	width: 100%;
+	
 }
 
 #sub_header {
@@ -34,14 +35,15 @@ body {
 }
 
 #main_content_bottom {
-	height: 30px;
+	height: 35px;
+	padding: 0 10px 0 10px;
 	background: #FFFFFF url(../img/simple-beauty/background_bottom.gif);
 }
 
 #footer {
 	text-align: center;
 	font-size: 12px;
-	margin: 10px auto
+	 margin: 10px auto 
 }
 
 .content {

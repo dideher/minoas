@@ -42,8 +42,9 @@
 								<ui:define name="label">
 									<h:outputText value="Περιοχή : " />
 								</ui:define>
-								<h:selectOneMenu value="#{exampleSchool.regionCode}" required="false">
-									<f:selectItem itemValue=""/>
+								<h:selectOneMenu value="#{exampleSchool.regionCode}"
+									required="false">
+									<f:selectItem itemLabel="Όλες οι Περιοχές" itemValue="" />
 									<f:selectItem itemLabel="'Α ΗΡΑΚΛΕΙΟΥ" itemValue="Α' ΗΡΑΚΛΕΙΟΥ" />
 									<f:selectItem itemLabel="'Β ΗΡΑΚΛΕΙΟΥ" itemValue="Β' ΗΡΑΚΛΕΙΟΥ" />
 								</h:selectOneMenu>
@@ -75,7 +76,7 @@
 						<rich:spacer height="5" />
 					</h:panelGroup>
 					<rich:dataTable id="schoolList" value="#{schoolList.resultList}"
-						var="school" rows="15" border="0"
+						var="_school" rows="15" border="0"
 						onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
 						onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
 						width="100%">
@@ -84,37 +85,40 @@
 						</f:facet>
 
 						<rich:column>
-							<f:facet name="header">Κωδ. Υπουργείου</f:facet>
-							<h:outputText value="#{school.ministryCode}" />
+							<f:facet name="header">
+								<h:outputText value="Κωδ. Υπουργείου" />
+							</f:facet>
+							<h:outputText value="#{_school.ministryCode}" />
 						</rich:column>
 
 						<rich:column>
 							<f:facet name="header">Τίτλος Μονάδας</f:facet>
-								<h:outputText value="#{school.title}" />
+							<h:outputText value="#{_school.title}" />
 						</rich:column>
 						<rich:column>
 							<f:facet name="header">Μόρια</f:facet>
-							<h:outputText value="#{school.points}" />
+							<h:outputText value="#{_school.points}" />
 						</rich:column>
 						<rich:column>
 							<f:facet name="header">Περιοχή</f:facet>
-							<h:outputText value="#{school.regionCode}' ΗΡΑΚΛΕΙΟΥ" />
+							<h:outputText value="#{_school.regionCode}' ΗΡΑΚΛΕΙΟΥ" />
 						</rich:column>
 						<rich:column>
 							<f:facet name="header">Διεύθυνση</f:facet>
 							<h:outputText
-								value="#{school.address.address} #{school.address.number} - #{school.address.postCode} - #{school.address.city}" />
+								value="#{_school.address.address} #{_school.address.number} - #{_school.address.postCode} - #{_school.address.city}" />
 						</rich:column>
 						<rich:column>
 							<f:facet name="header">
 								<h:outputText value="Ενέργεια" />
 							</f:facet>
 							<rich:toolBar itemSeparator="line">
-							<s:link rendered="#{to!=null}" value="Επιλογή" view="#{to}.xhtml">
-								<f:param name="schoolID" value="#{school.id}" />
-								<f:param name="from" value="/school/select-school" />
-							</s:link>
-						</rich:toolBar>
+								<s:link rendered="#{to!=null}" value="Επιλογή"
+									view="#{to}.xhtml">
+									<f:param name="schoolID" value="#{_school.id}" />
+									<f:param name="from" value="/school/select-school" />
+								</s:link>
+							</rich:toolBar>
 						</rich:column>
 
 
