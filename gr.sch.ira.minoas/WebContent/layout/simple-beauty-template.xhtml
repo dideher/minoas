@@ -1,29 +1,28 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:s="http://jboss.com/products/seam/taglib"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:rich="http://richfaces.org/rich"
-	xmlns:a4j="http://richfaces.org/a4j">
-
-
-
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
 <head>
-
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-
-<meta name="description" content="Website short description." />
-
-<meta name="keywords" content="website main keywords" />
-
-<title>Μίνωας - Ολοκληρωμένο Σύστημα Μηχανογράφησης</title>
-<!--  <a4j:loadStyle src="resource:///stylesheet/theme.xcss"/> -->
 <a4j:loadStyle src="/stylesheet/simple-beauty-stylesheet.css" />
+
 <ui:insert name="head" />
 
-
 </head>
+
+
+
+
+
+
+
+
+
 
 
 
@@ -36,16 +35,7 @@
 
 
 	<s:div id="header">
-		
-		<h1><h:outputText value="Μίνωας" /></h1>
-		
-		
-	</s:div>
-
-
-
-	<s:div id="sub_header">
-		<h:outputText value="Ολοκληρωμένο Σύστημα Μηχανογράφησης (new layout)" />
+		<h:graphicImage value="/img/minoas-header.png" />
 	</s:div>
 
 
@@ -58,7 +48,7 @@
 
 	<s:div id="main_content">
 
-		
+
 
 		<s:div styleClass="content">
 			<h:panelGrid columns="1" width="100%">
@@ -77,21 +67,14 @@
 
 	<s:div id="main_content_bottom">
 		<rich:toolBar itemSeparator="line">
-			<rich:toolBarGroup rendered="#{activeSchool ne null}">
-				<h:outputLabel value="Ενεργή Σχολική Μονάδα : " for="" />
-				<h:outputText value="#{activeSchool}" />
-			</rich:toolBarGroup>
-			<rich:toolBarGroup rendered="#{activeEmployee ne null}">
-				<h:outputLabel value="Ενεργός Εκπαιδευτικός : " for="" />
-				<h:outputText value="#{employeeUtil.prettyFormat(activeEmployee)}" />
-			</rich:toolBarGroup>
+
 			<rich:toolBarGroup location="right">
 				<h:form id="conveform">
-				<h:outputText value="Τρέχουσες Διαδικασίες : " />
-				<h:selectOneMenu value="#{switcher.conversationIdOrOutcome}">
-					<f:selectItems value="#{switcher.selectItems}" />
-				</h:selectOneMenu>
-				<h:commandButton action="#{switcher.select}" value="Αλλαγή" />
+					<h:outputText value="Τρέχουσες Διαδικασίες : " />
+					<h:selectOneMenu value="#{switcher.conversationIdOrOutcome}">
+						<f:selectItems value="#{switcher.selectItems}" />
+					</h:selectOneMenu>
+					<h:commandButton action="#{switcher.select}" value="Αλλαγή" />
 				</h:form>
 			</rich:toolBarGroup>
 		</rich:toolBar>
@@ -100,9 +83,13 @@
 
 
 	<s:div id="footer">
-		<strong>Copyright &copy; 2008-2009</strong> | <a
-			href="http://www.slavik.gr">Filippos Slavik</a> | <em>Original
-		Template Design by <a href="http://www.pikanai.com">Pikanai.com</a></em>
+
+		<h:outputText value="Copyright &copy; 2008-2009 - " />
+		<h:outputLink value="http://www.slavik.gr" target="new"
+			title="Ο Ισότοπος του Σλαβίκου">
+			<h:outputText value="Φίλιππος Σλάβικ" />
+		</h:outputLink>
+
 	</s:div>
 
 
