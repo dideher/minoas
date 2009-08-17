@@ -6,6 +6,7 @@ import gr.sch.ira.minoas.model.core.OrganizationalOffice;
 import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.core.SchoolYear;
 import gr.sch.ira.minoas.model.core.Specialization;
+import gr.sch.ira.minoas.model.core.SpecializationGroup;
 import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employee.Person;
 import gr.sch.ira.minoas.model.employement.Employment;
@@ -91,12 +92,12 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 	public SecondmentType[] getAvailableSecondmentTypes() {
 		return SecondmentType.values();
 	}
-	
+
 	@Factory(value = "serviceAllocationTypes")
 	public ServiceAllocationType[] getAvailableServiceAllocationTypes() {
 		return ServiceAllocationType.values();
 	}
-	
+
 	@Factory(value = "leaveTypes")
 	public LeaveType[] getAvailableLeaveTypes() {
 		return LeaveType.values();
@@ -245,6 +246,13 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 
 	public Specialization getSpecialization(String id) {
 		return getEntityManager().find(Specialization.class, id);
+	}
+
+	@SuppressWarnings("unchecked")
+	public Collection<SpecializationGroup> getSpecializationGroups(SchoolYear schoolYear, EntityManager em) {
+		return (Collection<SpecializationGroup>) em.createQuery(
+				"SELECT s FROM SpecializationGroup s WHERE s.schoolYear=:schoolYear ORDER BY s.title ASC")
+				.setParameter("schoolYear", schoolYear).getResultList();
 	}
 
 	/**
