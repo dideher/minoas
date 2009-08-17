@@ -360,6 +360,10 @@
       <action execute="#{principalsListQuery.refresh}" />
    </event>
    
+   <event type="org.jboss.seam.afterTransactionSuccess.Leave">
+   		<action execute="#{employeeLeavesListQuery.refresh}" />
+   </event>
+   
       
    
    

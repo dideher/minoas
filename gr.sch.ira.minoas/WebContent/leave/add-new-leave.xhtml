@@ -49,64 +49,7 @@
 							</f:facet>
 							<h:outputText value="Συμπληρώστε τα στοιχεία της παρακάτω φόρμας για να εισάγεται νέα άδεια για τον εκπαιδευτικό." />
 							
-								<h:panelGrid columns="4">
-
-									<s:decorate template="/layout/doubleLineEdit.xhtml" >
-										<ui:define name="label">
-											<h:outputText value="Τύπος Άδειας" />
-										</ui:define>
-
-										<h:selectOneMenu id="LeaveType"
-											value="#{leave.leaveType}" required="true">
-											<s:selectItems hideNoSelectionLabel="true"
-												var="_leaveType"
-												value="#{leaveTypes}"
-												label="#{messages[_leaveType.key]}" />
-											<s:convertEnum />
-											<a4j:support event="onblur" 
-												 ajaxSingle="true" bypassUpdates="true"  />
-										</h:selectOneMenu>
-									</s:decorate>
-
-
-									<s:decorate id="establishedDateDecoration"
-										template="/layout/doubleLineEdit.xhtml">
-										<ui:define name="label">
-											<h:outputText value="Έναρξη Άδειας" />
-										</ui:define>
-										<rich:calendar id="establishedDate" enableManualInput="true"
-											value="#{leave.established}" required="true"
-											inputSize="10" mode="ajax" locale="el_GR"
-											inputClass="fieldValueText" datePattern="dd-MM-yyyy">
-											<a4j:support event="onblur"
-												reRender="establishedDateDecoration" bypassUpdates="true"
-												ajaxSingle="true" />
-										</rich:calendar>
-									</s:decorate>
-									<s:decorate id="dueToDateDecoration"
-										template="/layout/doubleLineEdit.xhtml">
-										<ui:define name="label">
-											<h:outputText value="Λήξη Άδειας" />
-										</ui:define>
-										<rich:calendar id="dueToDate"
-											value="#{leave.dueTo}" required="true"
-											mode="ajax" locale="el_GR" inputSize="10"
-											enableManualInput="true" inputClass="fieldValueText"
-											datePattern="dd-MM-yyyy">
-
-											<a4j:support event="onblur" reRender="dueToDateDecoration"
-												bypassUpdates="true" ajaxSingle="true" />
-										</rich:calendar>
-									</s:decorate>
-
-									<s:decorate template="/layout/doubleLineEdit.xhtml">
-										<ui:define name="label">
-											<h:outputText value="Σχόλιο" />
-										</ui:define>
-										<h:inputTextarea value="#{leave.comment}" />
-									</s:decorate>
-
-								</h:panelGrid>
+								<ui:include src="/leave/leave-component.xhtml" />
 							
 						</rich:panel>
 						</a4j:outputPanel>

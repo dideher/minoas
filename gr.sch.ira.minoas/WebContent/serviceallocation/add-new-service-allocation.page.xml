@@ -7,8 +7,7 @@
  <!-- navigation rules -->
  <navigation from-action="#{serviceAllocationHome.persist()}">
   <rule if-outcome="persisted">
-   <end-conversation/>
-   <redirect view-id="#{empty add_new_service_allocation_from ? '/home' : add_new_service_allocation_from}.xhtml}"/>
+   <redirect view-id="/serviceallocation/employee-service-allocation-management.xhtml"/>
   </rule>
  </navigation>
  <navigation from-action="backButton">

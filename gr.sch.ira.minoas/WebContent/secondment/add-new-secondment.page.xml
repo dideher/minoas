@@ -12,9 +12,8 @@
 
 	<navigation from-action="#{secondmentHome.persist()}">
 		<rule if-outcome="persisted">
-			<end-conversation />
 			<render
-				view-id="#{empty add_new_secondment_from ? '/home' : add_new_secondment_from}.xhtml}" />
+				view-id="/secondment/secondment-employment-management.xhtml" />
 		</rule>
 
 

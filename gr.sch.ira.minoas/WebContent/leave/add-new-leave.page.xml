@@ -8,9 +8,8 @@
 	<!-- navigation rules -->
 	<navigation from-action="#{leaveHome.persist()}">
 		<rule if-outcome="persisted">
-			<end-conversation />
 			<redirect
-				view-id="#{empty add_new_leave_from ? '/home' : add_new_leave_from}" />
+				view-id="/leave/employee-leave-management.xhtml" />
 		</rule>
 	</navigation>
 	<navigation from-action="backButton">

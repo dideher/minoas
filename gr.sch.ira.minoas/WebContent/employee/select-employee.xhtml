@@ -100,6 +100,12 @@
 							<h:outputLabel value="Λίστα Διαθέσιμου Προσωπικού" />
 						</f:facet>
 
+						<rich:column style="text-align:center">
+							<f:facet name="header">
+								<h:outputText value="ΑΜ" />
+							</f:facet>
+							<h:outputText value="#{employeeUtil.getRegistryID(employee)}" />
+						</rich:column>
 						<rich:column>
 							<f:facet name="header">
 								<h:outputText value="Επώνυμο" />
@@ -121,15 +127,32 @@
 						</rich:column>
 						<rich:column>
 							<f:facet name="header">
-								<h:outputText value="Ειδικότητα" />
+								<h:outputText value="Όνομα Μητρός" />
 							</f:facet>
-							<h:outputText id="specializationText"
-								value="#{employee.lastSpecialization.id}">
-								<rich:toolTip for="specializationText"
-									value="#{employee.lastSpecialization.title}" />
-							</h:outputText>
+							<h:outputText value="#{employee.motherName}" />
+						</rich:column>
+						<rich:column style="text-align:right">
+							<f:facet name="header">
+								<h:outputText value="Τύπος" />
+							</f:facet>
+							<h:outputText 
+								value="#{employee.type}" />
+						</rich:column>
+						<rich:column style="text-align:center">
+							<f:facet name="header">
+								<h:outputText value="Ειδ." />
+							</f:facet>
+							<h:outputText 
+								value="#{employee.lastSpecialization.id}" />
 						</rich:column>
 						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Λεκτικό Ειδικότητας" />
+							</f:facet>
+							<h:outputText value="#{employee.lastSpecialization.title}">
+							</h:outputText>
+						</rich:column>
+						<rich:column style="text-align:center">
 							<f:facet name="header">
 								<h:outputText value="Ημ/νια Γεννήσεως" />
 							</f:facet>
@@ -137,12 +160,12 @@
 								<s:convertDateTime pattern="dd-MM-yyyy" />
 							</h:outputText>
 						</rich:column>
-						<rich:column>
+						<rich:column style="text-align:center">
 							<f:facet name="header">
 								<h:outputText value="Ενέργεια" />
 							</f:facet>
 							<rich:toolBar itemSeparator="line">
-								<s:link rendered="#{!empty to}" value="Προβολή"
+								<s:link rendered="#{!empty to}" value="Επιλογή"
 									view="#{to}.xhtml">
 									<f:param name="employeeID" value="#{employee.id}" />
 									<f:param name="from" value="/employee/select-employee" />

@@ -41,12 +41,12 @@
 
 					</rich:panel>
 					<a4j:region>
-					<a4j:outputPanel id="newSecondmentPanel">
-						<rich:panel rendered="#{employeeHome.managed}">
-							<f:facet name="header">
-								<h:outputText value="Στοιχεία Απόσπασης" />
-							</f:facet>
-							
+						<a4j:outputPanel id="newSecondmentPanel">
+							<rich:panel rendered="#{employeeHome.managed}">
+								<f:facet name="header">
+									<h:outputText value="Στοιχεία Απόσπασης" />
+								</f:facet>
+
 								<h:panelGrid columns="4">
 
 									<s:decorate id="sourceUnit"
@@ -68,7 +68,7 @@
 											<h:outputText value="Τύπος Απόσπασης" />
 										</ui:define>
 
-										<h:selectOneMenu id="secondmentType"
+										<h:selectOneMenu id="secondmentType" tabindex="1"
 											value="#{secondment.secondmentType}" required="true">
 											<s:selectItems hideNoSelectionLabel="true"
 												var="_secondmentType" value="#{secondmentTypes}"
@@ -85,9 +85,8 @@
 											<h:outputText value="Μονάδα Απόσπασης" />
 										</ui:define>
 
-										<h:inputText required="true"
-											id="secondmentTarget" styleClass="fieldValueText"
-											tabindex="1">
+										<h:inputText required="true" id="secondmentTarget"
+											styleClass="fieldValueText" tabindex="2">
 
 											<rich:suggestionbox for="secondmentTarget"
 												var="secondmentUnit"
@@ -99,7 +98,8 @@
 													<h:outputText value="#{secondmentUnit.title}" />
 												</h:column>
 												<a4j:support ajaxSingle="true" event="onselect">
-													<f:setPropertyActionListener value="#{secondmentUnit}" target="#{secondment.targetUnit}" />
+													<f:setPropertyActionListener value="#{secondmentUnit}"
+														target="#{secondment.targetUnit}" />
 												</a4j:support>
 											</rich:suggestionbox>
 										</h:inputText>
@@ -109,7 +109,7 @@
 										<ui:define name="label">
 											<h:outputText value="Με Αίτηση του ;" />
 										</ui:define>
-										<h:selectBooleanCheckbox
+										<h:selectBooleanCheckbox tabindex="3"
 											value="#{secondment.employeeRequested}" />
 									</s:decorate>
 
@@ -118,7 +118,8 @@
 											<h:outputText value="Υποχρεωτικό Ωράριο : " />
 										</ui:define>
 										<h:inputText value="#{secondment.mandatoryWorkingHours}"
-											size="3" maxlength="3" readonly="true" required="true" />
+											tabindex="4" size="3" maxlength="3" readonly="true"
+											required="true" />
 									</s:decorate>
 
 									<s:decorate template="/layout/doubleLineEdit.xhtml">
@@ -126,7 +127,7 @@
 											<h:outputText value="Ωράριο Απόσπασης : " />
 										</ui:define>
 										<h:inputText value="#{secondment.finalWorkingHours}" size="3"
-											maxlength="3" required="true" />
+											tabindex="5" maxlength="3" required="true" />
 									</s:decorate>
 
 									<s:decorate id="pysdeOrderDecoration"
@@ -135,8 +136,8 @@
 											<h:outputText value="Απόφαση ΠΥΣΔΕ" />
 										</ui:define>
 										<h:inputText id="pysdeOrder" value="#{secondment.pysdeOrder}"
-											styleClass="fieldValueText" required="false" size="16"
-											maxlength="25">
+											tabindex="6" styleClass="fieldValueText" required="false"
+											size="16" maxlength="25">
 											<a4j:support event="onblur" ajaxSingle="true"
 												reRender="pysdeOrderDecoration" bypassUpdates="true" />
 											<f:validateLength minimum="5" maximum="25" />
@@ -149,7 +150,7 @@
 										<ui:define name="label">
 											<h:outputText value="Απόφαση Διευθυντή" />
 										</ui:define>
-										<h:inputText id="headMasterOrder"
+										<h:inputText id="headMasterOrder" tabindex="7"
 											value="#{secondment.headMasterOrder}"
 											styleClass="fieldValueText" required="false" size="16"
 											maxlength="25">
@@ -165,7 +166,7 @@
 										<ui:define name="label">
 											<h:outputText value="Υπουργική Απόφαση" />
 										</ui:define>
-										<h:inputText id="ministerialOrder"
+										<h:inputText id="ministerialOrder" tabindex="8"
 											value="#{secondment.ministerialOrder}" required="false"
 											size="16" maxlength="25" styleClass="fieldValueText">
 											<a4j:support event="onblur"
@@ -212,7 +213,7 @@
 									</s:decorate>
 
 								</h:panelGrid>
-						</rich:panel>
+							</rich:panel>
 						</a4j:outputPanel>
 					</a4j:region>
 					<rich:spacer height="5" />
