@@ -2,6 +2,8 @@
 package gr.sch.ira.minoas.seam.components.reports;
 
 import gr.sch.ira.minoas.model.employement.Secondment;
+import gr.sch.ira.minoas.model.employement.SecondmentType;
+import gr.sch.ira.minoas.seam.components.CoreSearching;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,6 +21,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.core.SeamResourceBundle;
 import org.jboss.seam.framework.EntityQuery;
 
 /**
@@ -26,10 +29,12 @@ import org.jboss.seam.framework.EntityQuery;
  * @version $Id$
  */
 @Name("secondmentReportByType")
-public class SecondmentReportByType {
+public class SecondmentReportByType extends BaseReport {
 
 	@In(required=true, value="secondmentsByTypeListQuery")
 	private EntityQuery<Secondment> secondmentsByTypeListQuery;
+	
+	
 	
 	/**
 	 * 
@@ -40,9 +45,14 @@ public class SecondmentReportByType {
 	public void runReport() throws Exception {
 		try {
 		Map<String, String> parameters = new HashMap<String, String>();
-		List<SecondmentItem> rows = new ArrayList<SecondmentItem>(100);
+		
+		/* create the secondment type helper */
+		for(SecondmentType secondmentType : getCoreSearching().getAvailableSecondmentTypes()) {
+			String l = SeamResourceBundle.getBundle("messages", FacesContext.getCurrentInstance().getViewRoot().getLocale()).getString(secondmentType.getKey());
+			parameters.put(secondmentType.name(), l);
+		}
+		List<SecondmentItem> rows = new ArrayList<SecondmentItem>();
 		for(Secondment secondment : secondmentsByTypeListQuery.getResultList()) {
-			for(int i = 0 ; i < 200 ; i++)
 			rows.add(new SecondmentItem(secondment));
 		}
 		JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(rows);
@@ -60,4 +70,6 @@ public class SecondmentReportByType {
 			ex.printStackTrace(System.err);
 		}
 	}
+
+	
 }

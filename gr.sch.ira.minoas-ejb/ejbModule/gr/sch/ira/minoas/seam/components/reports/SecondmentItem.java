@@ -1,8 +1,12 @@
 package gr.sch.ira.minoas.seam.components.reports;
 
+import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.employement.Secondment;
+import gr.sch.ira.minoas.model.employement.SecondmentType;
 
 import java.util.Date;
+
+import javax.print.attribute.standard.Chromaticity;
 
 public class SecondmentItem {
 	private String specialization;
@@ -17,6 +21,8 @@ public class SecondmentItem {
 	private Date establishedIn;
 	private String sourceUnit;
 	private String targetUnit;
+	private String secondmentType;
+	private Character region;
 
 	public SecondmentItem() {
 		super();
@@ -38,6 +44,10 @@ public class SecondmentItem {
 		this.targetUnit = secondment.getTargetUnit().getTitle();
 		this.specializationID = secondment.getEmployee().getLastSpecialization().getId();
 		this.employeeName = secondment.getEmployee().getFirstName();
+		if(secondment.getSourceUnit() instanceof School) {
+			this.region = ((School)secondment.getSourceUnit()).getRegionCode();
+		}
+		this.secondmentType = secondment.getSecondmentType().name();
 	}
 
 	public String getSpecialization() {
@@ -135,4 +145,34 @@ public class SecondmentItem {
 	public void setTargetUnit(String targetUnit) {
 		this.targetUnit = targetUnit;
 	}
+
+	/**
+	 * @return the region
+	 */
+	public Character getRegion() {
+		return region;
+	}
+
+	/**
+	 * @param region the region to set
+	 */
+	public void setRegion(Character region) {
+		this.region = region;
+	}
+
+	/**
+	 * @return the secondmentType
+	 */
+	public String getSecondmentType() {
+		return secondmentType;
+	}
+
+	/**
+	 * @param secondmentType the secondmentType to set
+	 */
+	public void setSecondmentType(String secondmentType) {
+		this.secondmentType = secondmentType;
+	}
+
+
 }
