@@ -12,7 +12,7 @@ import org.jboss.seam.annotations.Scope;
  * @version $Id$
  */
 @Name("secondmentCriteria")
-@Scope(ScopeType.PAGE)
+@Scope(ScopeType.CONVERSATION)
 public class SecondmentCriteria  {
 	private boolean employeeRequested = true;
 	

@@ -4,6 +4,7 @@ package gr.sch.ira.minoas.seam.components.reports;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.SecondmentType;
 import gr.sch.ira.minoas.seam.components.CoreSearching;
+import gr.sch.ira.minoas.seam.components.criteria.SecondmentCriteria;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,7 +35,8 @@ public class SecondmentReportByType extends BaseReport {
 	@In(required=true, value="secondmentsByTypeListQuery")
 	private EntityQuery<Secondment> secondmentsByTypeListQuery;
 	
-	
+	@In(required=true)
+	private SecondmentCriteria secondmentCriteria;
 	
 	/**
 	 * 
@@ -45,7 +47,7 @@ public class SecondmentReportByType extends BaseReport {
 	public void runReport() throws Exception {
 		try {
 		Map<String, String> parameters = new HashMap<String, String>();
-		
+		parameters.put("SECONDMENT_TYPE_FILTER", secondmentCriteria.getSecondmentType() != null ? SeamResourceBundle.getBundle("messages", FacesContext.getCurrentInstance().getViewRoot().getLocale()).getString( secondmentCriteria.getSecondmentType().getKey()) : "Όλοι οι Τύποι");
 		/* create the secondment type helper */
 		for(SecondmentType secondmentType : getCoreSearching().getAvailableSecondmentTypes()) {
 			String l = SeamResourceBundle.getBundle("messages", FacesContext.getCurrentInstance().getViewRoot().getLocale()).getString(secondmentType.getKey());

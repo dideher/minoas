@@ -9,8 +9,10 @@ import gr.sch.ira.minoas.model.employement.Leave;
 import gr.sch.ira.minoas.model.employement.LeaveType;
 
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
@@ -61,10 +63,11 @@ public class LeaveHome extends MinoasEntityHome<Leave> {
 	
 	protected boolean validateLeave(Leave leave,
 			boolean addMessages) {
-
+		Date established = DateUtils.truncate(leave.getEstablished(), Calendar.DAY_OF_MONTH);
+		Date dueTo = DateUtils.truncate(leave.getDueTo(), Calendar.DAY_OF_MONTH);
 		/* check if the dates are correct */
-		if (leave.getEstablished().after(
-				leave.getDueTo())) {
+		if (established.after(
+				dueTo)) {
 
 			if (addMessages)
 				facesMessages
@@ -73,6 +76,47 @@ public class LeaveHome extends MinoasEntityHome<Leave> {
 								"Η ημ/νια λήξης της άδειας πρέπει να είναι μεταγενέστερη της έναρξης. Μήπως να κάνεις ένα διάλειμα ;");
 			return false;
 		}
+		
+		
+		
+		
+		Collection<Leave> current_leaves = getCoreSearching().getEmployeeLeaves(employeeHome.getInstance());
+		for(Leave current_leave : current_leaves) {
+			if(current_leave.getId().equals(leave.getId()))
+				continue;
+			Date current_established = DateUtils.truncate(current_leave.getEstablished(), Calendar.DAY_OF_MONTH);
+			Date current_dueTo = DateUtils.truncate(current_leave.getDueTo(), Calendar.DAY_OF_MONTH);
+			if(DateUtils.isSameDay(established, current_established) || DateUtils.isSameDay(dueTo, current_dueTo)) {
+				if(addMessages) 
+					facesMessages
+					.add(
+							Severity.ERROR,
+							"Υπάρχει ήδει άδεια με τις ημερομηνίες που εισάγατε. Μήπως να κάνεις ένα διάλειμα ;");
+				return false;
+			}
+			
+			if (DateUtils.isSameDay(established, current_dueTo)) {
+
+				if (addMessages)
+					facesMessages
+							.add(
+									Severity.ERROR,
+									"Η ημ/νια έναρξης της άδειας πρέπει να είναι μεταγενέστερη της λήξης της προηγούμενης άδειας. Μήπως να κάνεις ένα διάλειμα ;");
+				return false;
+			}
+			
+			
+			if((established.before(current_established) && dueTo.after(current_established)) || ( established.after(current_established) && dueTo.before(current_dueTo)) || (established.before(current_dueTo) && dueTo.after(current_dueTo))) {
+				if(addMessages) 
+					facesMessages
+					.add(
+							Severity.ERROR,
+							"Υπάρχει επικαλυπτόμενο διάστημα με υπάρχουσες άδειες! Μήπως να κάνεις ένα διάλειμα ;");
+				return false;
+			}
+			
+		}
+		
 		return true;
 
 	}

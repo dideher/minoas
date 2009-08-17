@@ -11,6 +11,7 @@ import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employee.Person;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
+import gr.sch.ira.minoas.model.employement.Leave;
 import gr.sch.ira.minoas.model.employement.LeaveType;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.SecondmentType;
@@ -197,11 +198,22 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 	@SuppressWarnings("unchecked")
 	public Collection<Secondment> getEmployeeSecondments(Person employee) {
 		Collection<Secondment> result = null;
-		info("searching employee's '#0' secondments.");
+		info("searching employee's '#0' secondments.", employee);
 		result = entityManager.createQuery(
 				"SELECT s from Secondment s WHERE s.employee=:employee ORDER BY s.insertedOn").setParameter("employee",
 				employee).getResultList();
 		info("found totally '#0' secondments for employee '#1'.", result.size(), employee);
+		return result;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Collection<Leave> getEmployeeLeaves(Person employee) {
+		Collection<Leave> result = null;
+		info("searching employee's '#0' leaves.", employee);
+		result = entityManager.createQuery(
+				"SELECT s from Leave s WHERE s.employee=:employee ORDER BY s.established").setParameter("employee",
+				employee).getResultList();
+		info("found totally '#0' leave(s) for employee '#1'.", result.size(), employee);
 		return result;
 	}
 
