@@ -236,7 +236,9 @@
 
     <!-- Secondment Components -->
   
-   <component name="exampleSecondment" class="gr.sch.ira.minoas.model.employement.Secondment" />
+   <component name="exampleSecondment" class="gr.sch.ira.minoas.model.employement.Secondment">
+    <property name="employeeRequested">true</property>
+   </component>
    		
    
    <!-- The active secondment of an employee -->
@@ -267,14 +269,15 @@
    </framework:entity-query>
    
    <framework:entity-query name="secondmentsByTypeListQuery" max-results="1000" scope="CONVERSATION">
-    <framework:ejbql>SELECT s FROM Secondment s INNER JOIN FETCH s.employee WHERE s.active IS TRUE</framework:ejbql>
-    <framework:order>s.employee.lastSpecialization.id asc, s.employee.lastName asc</framework:order>
+    <framework:ejbql>SELECT s FROM Secondment s INNER JOIN FETCH s.employee INNER JOIN FETCH s.affectedEmployment WHERE s.active IS TRUE</framework:ejbql>
+    <framework:order>s.affectedEmployment.school.regionCode asc, s.employee.lastSpecialization.id asc, s.employee.lastName asc</framework:order>
     <framework:restrictions>
       <value>s.schoolYear.id = #{activeShoolYear.id}</value>
-      <value>s.secondmentType = #{exampleSecondment.secondmentType}</value>
-      <value>s.targetUnit = #{exampleSecondment.targetUnit}</value>
-      <value>s.employeeRequested = #{exampleSecondment.employeeRequested}</value>
-      <value>lower(s.comment) like lower(concat(#{exampleSecondment.comment},'%') )</value>
+      <value>s.secondmentType = #{secondmentCriteria.secondmentType}</value>
+      <value>s.targetUnit = #{secondmentCriteria.targetUnit}</value>
+      <value>s.employeeRequested = #{secondmentCriteria.employeeRequested}</value>
+      <value>lower(s.comment) like lower(concat(#{secondmentCriteria.comment},'%') )</value>
+      <value>lower(s.affectedEmployment.school.regionCode) like  lower(concat(#{secondmentCriteria.region},'%') )</value>
     </framework:restrictions> 
    </framework:entity-query>
    
@@ -292,6 +295,30 @@
       <framework:restrictions>
         <value>s.schoolYear.id = #{activeShoolYear.id}</value>
       </framework:restrictions>
+   </framework:entity-query>
+   
+   
+   <!-- Leave Components -->
+   
+   <component name="exampleLeave" class="gr.sch.ira.minoas.model.employement.Leave" />
+   
+   <framework:entity-query name="employeeLeavesListQuery" max-results="200" scope="page">
+    <framework:ejbql>SELECT s FROM Leave s</framework:ejbql>
+    <framework:order>s.established desc</framework:order>
+    <framework:restrictions>
+      <value>s.employee = #{employeeHome.instance}</value>
+    </framework:restrictions> 
+   </framework:entity-query>
+   
+    
+     <framework:entity-query name="LeavesByTypeListQuery"
+  max-results="1000" scope="CONVERSATION">
+    <framework:ejbql>SELECT s FROM Leave s INNER JOIN FETCH s.employee WHERE s.active IS TRUE</framework:ejbql>
+    <framework:order>s.employee.lastName asc, s.employee.firstName asc</framework:order>
+    <framework:restrictions>
+      <value>s.leaveType = #{exampleLeave.leaveType}</value>
+      <value>lower(s.comment) like lower(concat(#{exampleLeave.comment},'%') )</value>
+    </framework:restrictions> 
    </framework:entity-query>
    
    <!-- Principals and Roles -->
