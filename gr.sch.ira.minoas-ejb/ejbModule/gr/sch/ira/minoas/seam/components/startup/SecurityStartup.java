@@ -61,6 +61,9 @@ public class SecurityStartup {
 		createRole("MANAGE_LEAVE", "Manage Leave", admin);
 		createRole("VIEW_LEAVE", "View Leave", admin);
 		
+		/* Reports */
+		createRole("VIEW_SCHOOL_REPORT", "View School Oriented Reports", admin);
+		
 	}
 	
 	protected Principal createPrincipal(String username, String password, String realname) {

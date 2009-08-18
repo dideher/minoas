@@ -7,7 +7,9 @@ import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.core.SchoolYear;
 import gr.sch.ira.minoas.model.core.Specialization;
 import gr.sch.ira.minoas.model.core.SpecializationGroup;
+import gr.sch.ira.minoas.model.core.TeachingRequirement;
 import gr.sch.ira.minoas.model.core.Unit;
+import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.Person;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
@@ -23,6 +25,7 @@ import gr.sch.ira.minoas.model.security.Principal;
 import gr.sch.ira.minoas.model.security.Role;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -137,6 +140,11 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 		return getEntityManager().createQuery("FROM TeachingLanguage e ORDER BY (e.language)").getResultList();
 	}
 
+	
+	@SuppressWarnings("unchecked")
+	public Collection<TeachingRequirement> getSchoolTeachingRequirement(EntityManager entityManager, School school, SchoolYear schoolYear) {
+		return getEntityManager(entityManager).createQuery("SELECT t FROM TeachingRequirement t WHERE t.school=:school AND t.schoolYear=:schoolYear ORDER BY t.specialization.title ASC").setParameter("school", school).setParameter("schoolYear", schoolYear).getResultList();
+	}
 	/**
 	 * Returns the active secondment (if any) for the given employee.
 	 * 
@@ -226,10 +234,10 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Employment> getSchoolEmployments(SchoolYear schoolyear, Unit school) {
+	public List<Employment> getSchoolEmployments(EntityManager entityManager, SchoolYear schoolyear, Unit school) {
 		long started = System.currentTimeMillis(), finished;
 		info("fetching all employments in school unit #0 during school year #1", school, schoolyear);
-		List<Employment> return_value = getEntityManager()
+		List<Employment> return_value = getEntityManager(entityManager)
 				.createQuery(
 						"SELECT e FROM Employment e WHERE e.school=:school AND e.schoolYear=:schoolyear ORDER BY e.specialization.id, e.employee.lastName")
 				.setParameter("school", school).setParameter("schoolyear", schoolyear).getResultList();
@@ -241,10 +249,10 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Employment> getSchoolEmploymentsOfType(SchoolYear schoolyear, Unit school, EmploymentType type) {
+	public List<Employment> getSchoolEmploymentsOfType(EntityManager entityManager, SchoolYear schoolyear, Unit school, EmploymentType type) {
 		long started = System.currentTimeMillis(), finished;
 		info("fetching all employments of type #3 in school unit #0 during school year #1", school, schoolyear, type);
-		List<Employment> return_value = getEntityManager()
+		List<Employment> return_value = getEntityManager(entityManager)
 				.createQuery(
 						"SELECT e FROM Employment e WHERE e.school=:school AND e.schoolYear=:schoolyear AND e.type=:type ORDER BY e.specialization.id, e.employee.lastName")
 				.setParameter("school", school).setParameter("schoolyear", schoolyear).setParameter("type", type)
@@ -254,6 +262,11 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 				"found totally #0 employment(s) of type #3 in school unit #1 during school year #2. The operation took #4 [ms] to complete. ",
 				return_value.size(), school, schoolyear, type, Long.valueOf(finished - started));
 		return return_value;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Collection<Employee> getSchoolEmployeeWithPresence(EntityManager entityManager, Date dayOfPrecense, School school, SchoolYear schoolYear) {
+		return getEntityManager(entityManager).createQuery("SELECT e FROM Employee e LEFT OUTER JOIN e.secondments sec WHERE (e.currentEmployment.active IS TRUE AND e.currentEmployment.school=:school AND e.currentEmployment.schoolYear=:schoolYear) AND (:dayOfPrecense >= sec.established AND :dayOfPrecense <= sec.dueTo)").setParameter("school", school).setParameter("schoolYear", schoolYear).setParameter("dayOfPrecense", dayOfPrecense).getResultList();
 	}
 
 	public Specialization getSpecialization(String id) {
@@ -337,6 +350,13 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 
 	public List<School> searchShools(String school_search_pattern, String regionCode) {
 		throw new RuntimeException("not implemented yet");
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Collection<School> getSchools(EntityManager em) {
+		return getEntityManager(em).createQuery(
+		"SELECT s from School s ORDER BY s.title ASC").getResultList();
+		
 	}
 
 }

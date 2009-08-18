@@ -4,7 +4,10 @@ import gr.sch.ira.minoas.model.core.PYSDE;
 import gr.sch.ira.minoas.model.core.Specialization;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.Leave;
+import gr.sch.ira.minoas.model.employement.Secondment;
+import gr.sch.ira.minoas.model.employement.ServiceAllocation;
 
+import java.util.Collection;
 import java.util.Set;
 
 import javax.persistence.Basic;
@@ -50,8 +53,16 @@ public class Employee extends Person {
 
 	@OneToMany(mappedBy = "employee", fetch = FetchType.LAZY)
 	private Set<Employment> employments;
-
-	/**
+	
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="employee")
+	private Collection<Secondment> secondments;
+	
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="employee")
+	private Collection<Leave> leaves;
+	
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="employee")
+	private Collection<ServiceAllocation> serviceAllocations;
+ 	/**
 	 * Each employee have a specialization, which is actually the last employment's 
 	 * specialization.
 	 */
@@ -223,6 +234,48 @@ public class Employee extends Person {
 		sb.append(getFatherName());
 		sb.append(" ]");
 		return sb.toString();
+	}
+
+	/**
+	 * @return the secondments
+	 */
+	public Collection<Secondment> getSecondments() {
+		return secondments;
+	}
+
+	/**
+	 * @param secondments the secondments to set
+	 */
+	public void setSecondments(Collection<Secondment> secondments) {
+		this.secondments = secondments;
+	}
+
+	/**
+	 * @return the leaves
+	 */
+	public Collection<Leave> getLeaves() {
+		return leaves;
+	}
+
+	/**
+	 * @param leaves the leaves to set
+	 */
+	public void setLeaves(Collection<Leave> leaves) {
+		this.leaves = leaves;
+	}
+
+	/**
+	 * @return the serviceAllocations
+	 */
+	public Collection<ServiceAllocation> getServiceAllocations() {
+		return serviceAllocations;
+	}
+
+	/**
+	 * @param serviceAllocations the serviceAllocations to set
+	 */
+	public void setServiceAllocations(Collection<ServiceAllocation> serviceAllocations) {
+		this.serviceAllocations = serviceAllocations;
 	}
 
 }
