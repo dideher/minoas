@@ -34,6 +34,16 @@
 							value="/teachingResources/school-teaching-resources" />
 					</s:link>
 				</rich:menuItem>
+				<rich:menuGroup value="Εκτύπωσεις και Στατιστικά"
+						disabled="#{!(s:hasRole('ADMIN') or s:hasRole('VIEW_SCHOOL_REPORT'))}">
+						<rich:menuItem submitMode="none">
+							<s:link value="Διδακτικά Κενά - Πλεονάσματα Ανα Ειδικότητα" action="#{teachingVoidBySpecializationReport.foo()}"
+								view="/home.xhtml">
+								<f:param name="service_allocation_report_by_type_from" value="/home" />
+							</s:link>
+						</rich:menuItem>
+
+					</rich:menuGroup>
 
 			</rich:dropDownMenu>
 
