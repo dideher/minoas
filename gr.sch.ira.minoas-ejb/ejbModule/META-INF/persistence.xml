@@ -53,6 +53,9 @@
     <class>gr.sch.ira.minoas.model.core.SchoolGroup</class>
     <class>gr.sch.ira.minoas.model.core.SpecializationGroup</class>
     <class>gr.sch.ira.minoas.model.core.Audit</class>
+    <class>gr.sch.ira.minoas.model.BaseIDModel</class>
+    <class>gr.sch.ira.minoas.model.employement.ServiceAllocation</class>
+    <class>gr.sch.ira.minoas.model.employement.Leave</class>
     <properties>
       <!--
         <property name="hibernate.dialect"
@@ -71,8 +74,10 @@
       <property name="hibernate.show_sql" value="false" />
       <property name="hibernate.format_sql" value="true" />
       <property name="jboss.entity.manager.factory.jndi.name" value="java:/EntityManagerFactories/minoasDatabase" />
+      <!-- 
       <property name="hibernate.cache.provider_class" value="org.jboss.ejb3.entity.TreeCacheProviderHook" />
       <property name="hibernate.treecache.mbean.object_name" value="jboss.cache:service=EJB3EntityTreeCache" />
+       -->
     </properties>
   </persistence-unit>
 

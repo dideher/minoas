@@ -42,6 +42,16 @@ public class SchoolVoidAnalysisItem {
 			resource.setRequired(requirement.getHours());
 		}
 	}
+	
+	public void addEmployeeWorkingHours(SpecializationGroup specialization, Integer workHours) {
+		TeachingResource resource = teachingResourcesMap.get(specialization);
+		resource.addHours(workHours);
+	}
+	
+	public void removeEmployeeWorkingHours(SpecializationGroup specialization, Integer workHours) {
+		TeachingResource resource = teachingResourcesMap.get(specialization);
+		resource.removeHours(workHours);
+	}
 	/**
 	 * @return the school
 	 */

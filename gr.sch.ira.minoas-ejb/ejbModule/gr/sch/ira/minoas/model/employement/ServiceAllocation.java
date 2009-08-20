@@ -245,6 +245,11 @@ public class ServiceAllocation extends BaseIDModel {
 			builder.append(employee);
 			builder.append(", ");
 		}
+		if (serviceType!=null) {
+			builder.append("serviceType=");
+			builder.append(serviceType);
+			builder.append(", ");
+		}
 		if (serviceUnit != null) {
 			builder.append("serviceUnit=");
 			builder.append(serviceUnit);

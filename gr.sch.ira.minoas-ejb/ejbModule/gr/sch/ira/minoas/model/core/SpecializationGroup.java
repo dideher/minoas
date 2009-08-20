@@ -23,7 +23,7 @@ import javax.persistence.UniqueConstraint;
  */
 @Entity
 @Table(name = "SPECIALIZATION_GROUP", uniqueConstraints = { @UniqueConstraint(columnNames = { "TITLE", "SCHOOL_YEAR_ID" }) })
-public class SpecializationGroup extends BaseIDModel {
+public class SpecializationGroup extends BaseIDModel implements Comparable<SpecializationGroup> {
 
 	
 
@@ -97,6 +97,13 @@ public class SpecializationGroup extends BaseIDModel {
 		}
 		builder.append("]");
 		return builder.toString();
+	}
+
+	/**
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
+	public int compareTo(SpecializationGroup o) {
+		return title.compareTo(o.getTitle());
 	}
 
 }

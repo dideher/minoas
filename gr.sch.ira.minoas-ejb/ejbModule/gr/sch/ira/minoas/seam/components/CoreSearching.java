@@ -140,11 +140,15 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 		return getEntityManager().createQuery("FROM TeachingLanguage e ORDER BY (e.language)").getResultList();
 	}
 
-	
 	@SuppressWarnings("unchecked")
-	public Collection<TeachingRequirement> getSchoolTeachingRequirement(EntityManager entityManager, School school, SchoolYear schoolYear) {
-		return getEntityManager(entityManager).createQuery("SELECT t FROM TeachingRequirement t WHERE t.school=:school AND t.schoolYear=:schoolYear ORDER BY t.specialization.title ASC").setParameter("school", school).setParameter("schoolYear", schoolYear).getResultList();
+	public Collection<TeachingRequirement> getSchoolTeachingRequirement(EntityManager entityManager, School school,
+			SchoolYear schoolYear) {
+		return getEntityManager(entityManager)
+				.createQuery(
+						"SELECT t FROM TeachingRequirement t WHERE t.school=:school AND t.schoolYear=:schoolYear ORDER BY t.specialization.title ASC")
+				.setParameter("school", school).setParameter("schoolYear", schoolYear).getResultList();
 	}
+
 	/**
 	 * Returns the active secondment (if any) for the given employee.
 	 * 
@@ -213,14 +217,13 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 		info("found totally '#0' secondments for employee '#1'.", result.size(), employee);
 		return result;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public Collection<Leave> getEmployeeLeaves(Person employee) {
 		Collection<Leave> result = null;
 		info("searching employee's '#0' leaves.", employee);
-		result = entityManager.createQuery(
-				"SELECT s from Leave s WHERE s.employee=:employee ORDER BY s.established").setParameter("employee",
-				employee).getResultList();
+		result = entityManager.createQuery("SELECT s from Leave s WHERE s.employee=:employee ORDER BY s.established")
+				.setParameter("employee", employee).getResultList();
 		info("found totally '#0' leave(s) for employee '#1'.", result.size(), employee);
 		return result;
 	}
@@ -249,7 +252,8 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Employment> getSchoolEmploymentsOfType(EntityManager entityManager, SchoolYear schoolyear, Unit school, EmploymentType type) {
+	public List<Employment> getSchoolEmploymentsOfType(EntityManager entityManager, SchoolYear schoolyear, Unit school,
+			EmploymentType type) {
 		long started = System.currentTimeMillis(), finished;
 		info("fetching all employments of type #3 in school unit #0 during school year #1", school, schoolyear, type);
 		List<Employment> return_value = getEntityManager(entityManager)
@@ -263,10 +267,15 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 				return_value.size(), school, schoolyear, type, Long.valueOf(finished - started));
 		return return_value;
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	public Collection<Employee> getSchoolEmployeeWithPresence(EntityManager entityManager, Date dayOfPrecense, School school, SchoolYear schoolYear) {
-		return getEntityManager(entityManager).createQuery("SELECT e FROM Employee e LEFT OUTER JOIN e.secondments sec WHERE (e.currentEmployment.active IS TRUE AND e.currentEmployment.school=:school AND e.currentEmployment.schoolYear=:schoolYear) AND (:dayOfPrecense >= sec.established AND :dayOfPrecense <= sec.dueTo)").setParameter("school", school).setParameter("schoolYear", schoolYear).setParameter("dayOfPrecense", dayOfPrecense).getResultList();
+	public Collection<Employee> getSchoolEmployeeWithPresence(EntityManager entityManager, Date dayOfPrecense,
+			School school, SchoolYear schoolYear) {
+		return getEntityManager(entityManager)
+				.createQuery(
+						"SELECT e FROM Employee e LEFT OUTER JOIN e.secondments sec WHERE (e.currentEmployment.active IS TRUE AND e.currentEmployment.school=:school AND e.currentEmployment.schoolYear=:schoolYear) AND (:dayOfPrecense >= sec.established AND :dayOfPrecense <= sec.dueTo)")
+				.setParameter("school", school).setParameter("schoolYear", schoolYear).setParameter("dayOfPrecense",
+						dayOfPrecense).getResultList();
 	}
 
 	public Specialization getSpecialization(String id) {
@@ -351,12 +360,21 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 	public List<School> searchShools(String school_search_pattern, String regionCode) {
 		throw new RuntimeException("not implemented yet");
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public Collection<School> getSchools(EntityManager em) {
-		return getEntityManager(em).createQuery(
-		"SELECT s from School s ORDER BY s.title ASC").getResultList();
-		
+		return getEntityManager(em).createQuery("SELECT s from School s ORDER BY s.title ASC").getResultList();
+
+	}
+
+	@SuppressWarnings("unchecked")
+	public Collection<School> getSchools(EntityManager em, Character region) {
+		if (region != null)
+			return getEntityManager(em).createQuery(
+					"SELECT s from School s WHERE s.regionCode=:region ORDER BY s.title ASC").setParameter("region",
+					region).getResultList();
+		else
+			return getSchools(em);
 	}
 
 }

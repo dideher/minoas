@@ -34,6 +34,7 @@
     name="entityManager" auto-create="true"
     persistence-unit-jndi-name="java:/EntityManagerFactories/minoasDatabase" />
 
+  
   <ui:jpa-entity-loader entity-manager="#{entityManager}" />
 
 
