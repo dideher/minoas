@@ -99,14 +99,14 @@
 								<h:panelGrid columns="4">
 									<a4j:commandButton value="Επεξεργασία ...."
 										action="#{teachingVoidBySpecializationReport.foo()}"
-										reRender="schoolTeachingResourcesAnalysisTable,reportAnalysisModalPanelContent" />
+										reRender="schoolTeachingResourcesAnalysisTable,reportAnalysisModalPanelContent,showDecisionsButton" />
 									<s:button action="#{secondmentReportByType.runReport}"
 										value="Εκτύπωση (PDF)" target="new" disabled="true" />
 
-									<a4j:commandButton value="Προβολή Πρακτικών" ajaxSingle="true"
+									<a4j:commandButton id="showDecisionsButton" value="Προβολή Πρακτικών" ajaxSingle="true"
 										oncomplete="#{rich:component('reportAnalysisModalPanel')}.show();"
-										reRender="reportAnalysisModalPanelContent" />
-									<s:button id="backButton" action="backButton"
+										reRender="reportAnalysisModalPanelContent" disabled="#{reportTextAnalysis.rowCount == 0}"/>
+									<s:button id="endButton" action="endButton"
 										value="Τέλος Εργασίας" />
 								</h:panelGrid>
 							</s:div>
@@ -336,7 +336,7 @@
 						layout="inline">
 						<h:panelGroup>
 							<rich:dataTable id="reportAnalysisTable" value="#{reportTextAnalysis}" var="_report"
-								rows="5">
+								rows="8">
 								<rich:column>
 									<f:facet name="header">
 										<h:outputText value="Πρακτικό - Ενέργεια" />
