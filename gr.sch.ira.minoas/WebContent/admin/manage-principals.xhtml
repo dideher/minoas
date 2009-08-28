@@ -132,7 +132,7 @@
 
 		<rich:modalPanel id="createPanel" autosized="true" width="450">
 			<f:facet name="header">
-				<h:outputText value="Τροποποίηση Ομάδας Ειδικοτήτων" />
+				<h:outputText value="Εισαγωγή Νέου Χρήστη" />
 			</f:facet>
 			<f:facet name="controls">
 				<h:panelGroup>
@@ -162,7 +162,7 @@
 							oncomplete="if(data == false) Richfaces.hideModalPanel('createPanel');" />
 						<a4j:commandButton value="Ακύρωση" ajaxSingle="true"
 							action="#{principalHome.clearInstance}"
-							oncomplete="#{rich:component('createPanel')}.hide();return false;" />
+							oncomplete="#{rich:component('createPanel')}.hide();" />
 					</h:panelGroup>
 				</h:panelGrid>
 			</h:form>

@@ -39,12 +39,21 @@ public class SchoolVoidAnalysisItem {
 	public void updateWithTeachingRequirements(Collection<TeachingRequirement> requirements) {
 		for(TeachingRequirement requirement : requirements) {
 			TeachingResource resource = teachingResourcesMap.get(requirement.getSpecialization());
-			resource.setRequired(requirement.getHours());
+			if(resource!=null) {
+				resource.setRequired(requirement.getHours());
+			}
 		}
 	}
 	
 	public void addEmployeeWorkingHours(SpecializationGroup specialization, Integer workHours) {
 		TeachingResource resource = teachingResourcesMap.get(specialization);
+		if(resource==null) {
+			/* ops we have an employee providing hours of some specialization
+			 * but the school unit has no intereset of that specialization.
+			 */
+			resource = new TeachingResource(specialization);
+			teachingResourcesMap.put(specialization, resource);
+		}
 		resource.addHours(workHours);
 	}
 	

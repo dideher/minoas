@@ -17,6 +17,7 @@ import gr.sch.ira.minoas.model.employement.Leave;
 import gr.sch.ira.minoas.model.employement.LeaveType;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.SecondmentType;
+import gr.sch.ira.minoas.model.employement.ServiceAllocation;
 import gr.sch.ira.minoas.model.employement.ServiceAllocationType;
 import gr.sch.ira.minoas.model.preparatory.EstablishmentLicenseStatusType;
 import gr.sch.ira.minoas.model.preparatory.PreparatoryUnitNatureType;
@@ -51,16 +52,6 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 		return getEntityManager().find(Role.class, roleID);
 	}
 
-	public Principal getPrincipal(EntityManager entityManager, String username) {
-		try {
-			EntityManager em = getEntityManager(entityManager);
-			return (Principal) em.createQuery("SELECT OBJECT(p) FROM Principal p WHERE p.username=:username")
-					.setParameter("username", username).getSingleResult();
-		} catch (NoResultException nre) {
-			return null;
-		}
-	}
-
 	public SchoolYear getActiveSchoolYear(EntityManager entityManager) {
 		try {
 			debug("trying to find active school year");
@@ -73,10 +64,20 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 		}
 	}
 
+	@Factory(value = "establishmentLicenseStatusTypes")
+	public EstablishmentLicenseStatusType[] getAvailableEstablishmentLicenseStatusTypes() {
+		return EstablishmentLicenseStatusType.values();
+	}
+
 	@SuppressWarnings("unchecked")
 	@Factory(value = "establishmentLocations")
 	public Collection<EstablishmentLocation> getAvailableEstablishments() {
 		return getEntityManager().createQuery("FROM EstablishmentLocation e ORDER BY (e.title)").getResultList();
+	}
+
+	@Factory(value = "leaveTypes")
+	public LeaveType[] getAvailableLeaveTypes() {
+		return LeaveType.values();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -90,26 +91,6 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 	@Factory(value = "preparatoryUnitNatureTypes")
 	public PreparatoryUnitNatureType[] getAvailablePreparatoryNatures() {
 		return PreparatoryUnitNatureType.values();
-	}
-
-	@Factory(value = "secondmentTypes")
-	public SecondmentType[] getAvailableSecondmentTypes() {
-		return SecondmentType.values();
-	}
-
-	@Factory(value = "serviceAllocationTypes")
-	public ServiceAllocationType[] getAvailableServiceAllocationTypes() {
-		return ServiceAllocationType.values();
-	}
-
-	@Factory(value = "leaveTypes")
-	public LeaveType[] getAvailableLeaveTypes() {
-		return LeaveType.values();
-	}
-
-	@Factory(value = "establishmentLicenseStatusTypes")
-	public EstablishmentLicenseStatusType[] getAvailableEstablishmentLicenseStatusTypes() {
-		return EstablishmentLicenseStatusType.values();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -134,19 +115,20 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 		return return_value;
 	}
 
+	@Factory(value = "secondmentTypes")
+	public SecondmentType[] getAvailableSecondmentTypes() {
+		return SecondmentType.values();
+	}
+
+	@Factory(value = "serviceAllocationTypes")
+	public ServiceAllocationType[] getAvailableServiceAllocationTypes() {
+		return ServiceAllocationType.values();
+	}
+
 	@SuppressWarnings("unchecked")
 	@Factory(value = "teachingLanguages")
 	public Collection<TeachingLanguage> getAvailableTeachingLanguages() {
 		return getEntityManager().createQuery("FROM TeachingLanguage e ORDER BY (e.language)").getResultList();
-	}
-
-	@SuppressWarnings("unchecked")
-	public Collection<TeachingRequirement> getSchoolTeachingRequirement(EntityManager entityManager, School school,
-			SchoolYear schoolYear) {
-		return getEntityManager(entityManager)
-				.createQuery(
-						"SELECT t FROM TeachingRequirement t WHERE t.school=:school AND t.schoolYear=:schoolYear ORDER BY t.specialization.title ASC")
-				.setParameter("school", school).setParameter("schoolYear", schoolYear).getResultList();
 	}
 
 	/**
@@ -208,6 +190,16 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 	}
 
 	@SuppressWarnings("unchecked")
+	public Collection<Leave> getEmployeeLeaves(Person employee) {
+		Collection<Leave> result = null;
+		info("searching employee's '#0' leaves.", employee);
+		result = entityManager.createQuery("SELECT s from Leave s WHERE s.employee=:employee ORDER BY s.established")
+				.setParameter("employee", employee).getResultList();
+		info("found totally '#0' leave(s) for employee '#1'.", result.size(), employee);
+		return result;
+	}
+
+	@SuppressWarnings("unchecked")
 	public Collection<Secondment> getEmployeeSecondments(Person employee) {
 		Collection<Secondment> result = null;
 		info("searching employee's '#0' secondments.", employee);
@@ -218,22 +210,32 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 		return result;
 	}
 
-	@SuppressWarnings("unchecked")
-	public Collection<Leave> getEmployeeLeaves(Person employee) {
-		Collection<Leave> result = null;
-		info("searching employee's '#0' leaves.", employee);
-		result = entityManager.createQuery("SELECT s from Leave s WHERE s.employee=:employee ORDER BY s.established")
-				.setParameter("employee", employee).getResultList();
-		info("found totally '#0' leave(s) for employee '#1'.", result.size(), employee);
-		return result;
-	}
-
 	protected EntityManager getEntityManager() {
 		return this.entityManager;
 	}
 
 	protected EntityManager getEntityManager(EntityManager entityManager) {
 		return entityManager != null ? entityManager : getEntityManager();
+	}
+
+	public Principal getPrincipal(EntityManager entityManager, String username) {
+		try {
+			EntityManager em = getEntityManager(entityManager);
+			return (Principal) em.createQuery("SELECT OBJECT(p) FROM Principal p WHERE p.username=:username")
+					.setParameter("username", username).getSingleResult();
+		} catch (NoResultException nre) {
+			return null;
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public Collection<Employee> getSchoolEmployeeWithPresence(EntityManager entityManager, Date dayOfPrecense,
+			School school, SchoolYear schoolYear) {
+		return getEntityManager(entityManager)
+				.createQuery(
+						"SELECT e FROM Employee e LEFT OUTER JOIN e.secondments sec WHERE (e.currentEmployment.active IS TRUE AND e.currentEmployment.school=:school AND e.currentEmployment.schoolYear=:schoolYear) AND (:dayOfPrecense >= sec.established AND :dayOfPrecense <= sec.dueTo)")
+				.setParameter("school", school).setParameter("schoolYear", schoolYear).setParameter("dayOfPrecense",
+						dayOfPrecense).getResultList();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -268,14 +270,114 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 		return return_value;
 	}
 
+	public Collection<Employee> getSchoolRegularEmployees(EntityManager em, School school, SchoolYear schoolYear,
+			Date dayOfPrecense) {
+		return getSchoolRegularEmployees(em, school, schoolYear,
+				dayOfPrecense, null);
+		}
+
 	@SuppressWarnings("unchecked")
-	public Collection<Employee> getSchoolEmployeeWithPresence(EntityManager entityManager, Date dayOfPrecense,
-			School school, SchoolYear schoolYear) {
+	public Collection<Employee> getSchoolRegularEmployees(EntityManager em, School school, SchoolYear schoolYear,
+			Date dayOfPrecense, SpecializationGroup specializationGroup) {
+		if (specializationGroup != null) {
+			return getEntityManager(em)
+					.createQuery(
+							"SELECT DISTINCT e FROM Employee AS e WHERE (e.currentEmployment.active IS TRUE AND e.currentEmployment.school=:school AND e.currentEmployment.schoolYear=:schoolYear) "
+									+ " AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g=:specialization AND e.lastSpecialization MEMBER OF g.specializations)"
+									+ " AND NOT EXISTS(SELECT s FROM Secondment s WHERE s.employee=e AND s.sourceUnit=:school AND (:dayOfInterest BETWEEN s.established AND s.dueTo)) "
+									+ " AND NOT EXISTS(SELECT l FROM Leave l WHERE l.employee=e AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
+									+ " AND NOT EXISTS(SELECT a FROM ServiceAllocation a WHERE a.employee=e AND a.sourceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo))")
+					.setParameter("specialization", specializationGroup).setParameter("school", school).setParameter(
+							"schoolYear", schoolYear).setParameter("dayOfInterest", dayOfPrecense).getResultList();
+
+		} else {
+			return getEntityManager(em)
+					.createQuery(
+							"SELECT DISTINCT e FROM Employee AS e WHERE (e.currentEmployment.active IS TRUE AND e.currentEmployment.school=:school AND e.currentEmployment.schoolYear=:schoolYear) "
+									+ " AND NOT EXISTS(SELECT s FROM Secondment s WHERE s.employee=e AND s.sourceUnit=:school AND (:dayOfInterest BETWEEN s.established AND s.dueTo)) "
+									+ " AND NOT EXISTS(SELECT l FROM Leave l WHERE l.employee=e AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
+									+ " AND NOT EXISTS(SELECT a FROM ServiceAllocation a WHERE a.employee=e AND a.sourceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo))")
+					.setParameter("school", school).setParameter("schoolYear", schoolYear).setParameter(
+							"dayOfInterest", dayOfPrecense).getResultList();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public Collection<School> getSchools(EntityManager em) {
+		return getEntityManager(em).createQuery("SELECT s from School s ORDER BY s.title ASC").getResultList();
+
+	}
+
+	@SuppressWarnings("unchecked")
+	public Collection<School> getSchools(EntityManager em, Character region) {
+		if (region != null)
+			return getEntityManager(em).createQuery(
+					"SELECT s from School s WHERE s.regionCode=:region ORDER BY s.title ASC").setParameter("region",
+					region).getResultList();
+		else
+			return getSchools(em);
+	}
+
+	public Collection<Secondment> getSchoolSecondments(EntityManager em, School school, SchoolYear schoolYear,
+			Date dayOfPrecense) {
+		return getSchoolSecondments(em, school, schoolYear, dayOfPrecense, null);
+	}
+
+	@SuppressWarnings("unchecked")
+	public Collection<Secondment> getSchoolSecondments(EntityManager em, School school, SchoolYear schoolYear,
+			Date dayOfPrecense, SpecializationGroup specializationGroup) {
+
+		if (specializationGroup != null) {
+			return getEntityManager(em)
+					.createQuery(
+							"SELECT DISTINCT s FROM Secondment s JOIN FETCH s.employee WHERE (s.targetUnit=:school AND s.schoolYear=:schoolYear AND (:dayOfInterest BETWEEN s.established AND s.dueTo))"
+							+ " AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g=:specialization AND s.employee.lastSpecialization MEMBER OF g.specializations)")
+					.setParameter("specialization", specializationGroup).setParameter("school", school).setParameter(
+							"schoolYear", schoolYear).setParameter("dayOfInterest", dayOfPrecense).getResultList();
+		} else {
+			return getEntityManager(em)
+					.createQuery(
+							"SELECT DISTINCT s FROM Secondment s JOIN FETCH s.employee WHERE (s.targetUnit=:school AND s.schoolYear=:schoolYear AND (:dayOfInterest BETWEEN s.established AND s.dueTo))")
+					.setParameter("school", school).setParameter("schoolYear", schoolYear).setParameter(
+							"dayOfInterest", dayOfPrecense).getResultList();
+		}
+	}
+
+	public Collection<ServiceAllocation> getSchoolServiceAllocations(EntityManager em, School school,
+			Date dayOfPrecense) {
+		return getSchoolServiceAllocations(em, school, dayOfPrecense, null);
+	}
+
+	@SuppressWarnings("unchecked")
+	public Collection<ServiceAllocation> getSchoolServiceAllocations(EntityManager em, School school,
+			Date dayOfPrecense, SpecializationGroup specializationGroup) {
+		if(specializationGroup!=null) {
+			return getEntityManager(em)
+			.createQuery(
+					"SELECT DISTINCT a FROM ServiceAllocation a JOIN FETCH a.employee WHERE (a.serviceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo))"
+					+ " AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g=:specialization AND a.employee.lastSpecialization MEMBER OF g.specializations)")
+			.setParameter("specialization", specializationGroup).setParameter("school", school).setParameter("dayOfInterest", dayOfPrecense).getResultList();
+	
+			
+		} else {
+			return getEntityManager(em)
+			.createQuery(
+					"SELECT DISTINCT a FROM ServiceAllocation a JOIN FETCH a.employee WHERE (a.serviceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo))")
+			.setParameter("school", school).setParameter("dayOfInterest", dayOfPrecense).getResultList();
+			
+		}
+		
+
+		
+	}
+
+	@SuppressWarnings("unchecked")
+	public Collection<TeachingRequirement> getSchoolTeachingRequirement(EntityManager entityManager, School school,
+			SchoolYear schoolYear) {
 		return getEntityManager(entityManager)
 				.createQuery(
-						"SELECT e FROM Employee e LEFT OUTER JOIN e.secondments sec WHERE (e.currentEmployment.active IS TRUE AND e.currentEmployment.school=:school AND e.currentEmployment.schoolYear=:schoolYear) AND (:dayOfPrecense >= sec.established AND :dayOfPrecense <= sec.dueTo)")
-				.setParameter("school", school).setParameter("schoolYear", schoolYear).setParameter("dayOfPrecense",
-						dayOfPrecense).getResultList();
+						"SELECT t FROM TeachingRequirement t WHERE t.school=:school AND t.schoolYear=:schoolYear ORDER BY t.specialization.title ASC")
+				.setParameter("school", school).setParameter("schoolYear", schoolYear).getResultList();
 	}
 
 	public Specialization getSpecialization(String id) {
@@ -356,25 +458,9 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 		info("found totally #0 school(s).", return_value.size());
 		return return_value;
 	}
-
+	
 	public List<School> searchShools(String school_search_pattern, String regionCode) {
 		throw new RuntimeException("not implemented yet");
 	}
-
-	@SuppressWarnings("unchecked")
-	public Collection<School> getSchools(EntityManager em) {
-		return getEntityManager(em).createQuery("SELECT s from School s ORDER BY s.title ASC").getResultList();
-
-	}
-
-	@SuppressWarnings("unchecked")
-	public Collection<School> getSchools(EntityManager em, Character region) {
-		if (region != null)
-			return getEntityManager(em).createQuery(
-					"SELECT s from School s WHERE s.regionCode=:region ORDER BY s.title ASC").setParameter("region",
-					region).getResultList();
-		else
-			return getSchools(em);
-	}
-
+	
 }

@@ -47,6 +47,31 @@
 												ajaxSingle="true" />
 										</rich:calendar>
 									</s:decorate>
+
+									<s:decorate template="/layout/doubleLineEdit.xhtml">
+										<ui:define name="label">
+											<h:outputText value="Ομάδα Ειδικοτήτων : " />
+										</ui:define>
+										<h:inputText id="specializationGroupFilter"
+											styleClass="fieldValueText" size="30">
+
+											<rich:suggestionbox height="100" width="250"
+												for="specializationGroupFilter" var="a_spec"
+												suggestionAction="#{specializationGroupSuggester.suggest}">
+												<f:facet name="nothingLabel">
+													<h:outputText value="Άγνωστη Ομάδα Ειδικοτήτων" />
+												</f:facet>
+												<h:column>
+													<h:outputText value="#{a_spec.title}" />
+												</h:column>
+												<a4j:support ajaxSingle="true" event="onselect">
+													<f:setPropertyActionListener value="#{a_spec}"
+														target="#{teachingVoidBySpecializationReport.specializationGroup}" />
+												</a4j:support>
+											</rich:suggestionbox>
+										</h:inputText>
+									</s:decorate>
+
 									<s:decorate template="/layout/doubleLineEdit.xhtml">
 										<ui:define name="label">
 											<h:outputText value="Μονάδα" />
@@ -103,9 +128,11 @@
 									<s:button action="#{secondmentReportByType.runReport}"
 										value="Εκτύπωση (PDF)" target="new" disabled="true" />
 
-									<a4j:commandButton id="showDecisionsButton" value="Προβολή Πρακτικών" ajaxSingle="true"
+									<a4j:commandButton id="showDecisionsButton"
+										value="Προβολή Πρακτικών" ajaxSingle="true"
 										oncomplete="#{rich:component('reportAnalysisModalPanel')}.show();"
-										reRender="reportAnalysisModalPanelContent" disabled="#{reportTextAnalysis.rowCount == 0}"/>
+										reRender="reportAnalysisModalPanelContent"
+										disabled="#{reportTextAnalysis.rowCount == 0}" />
 									<s:button id="endButton" action="endButton"
 										value="Τέλος Εργασίας" />
 								</h:panelGrid>
@@ -335,8 +362,8 @@
 					<a4j:outputPanel id="reportAnalysisModalPanelContent"
 						layout="inline">
 						<h:panelGroup>
-							<rich:dataTable id="reportAnalysisTable" value="#{reportTextAnalysis}" var="_report"
-								rows="8">
+							<rich:dataTable id="reportAnalysisTable"
+								value="#{reportTextAnalysis}" var="_report" rows="8">
 								<rich:column>
 									<f:facet name="header">
 										<h:outputText value="Πρακτικό - Ενέργεια" />
@@ -345,8 +372,8 @@
 								</rich:column>
 								<f:facet name="footer">
 
-									<rich:datascroller for="reportAnalysisTable"
-										align="center" maxPages="50">
+									<rich:datascroller for="reportAnalysisTable" align="center"
+										maxPages="50">
 										<f:facet name="first">
 											<h:outputText value="Πρώτη" />
 										</f:facet>
