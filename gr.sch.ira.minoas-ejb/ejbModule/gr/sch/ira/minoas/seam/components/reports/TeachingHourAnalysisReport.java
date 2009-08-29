@@ -1,4 +1,4 @@
-package gr.sch.ira.minoas.seam.components.reports.teachingResources;
+package gr.sch.ira.minoas.seam.components.reports;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -19,7 +19,10 @@ import gr.sch.ira.minoas.model.core.TeachingRequirement;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.ServiceAllocation;
-import gr.sch.ira.minoas.seam.components.reports.BaseReport;
+import gr.sch.ira.minoas.seam.components.reports.resource.SchoolVoidAnalysisItem;
+import gr.sch.ira.minoas.seam.components.reports.resource.SpecializationGroupVoidAnalysis;
+import gr.sch.ira.minoas.seam.components.reports.resource.SpecializationGroupVoidAnalysisItem;
+import gr.sch.ira.minoas.seam.components.reports.resource.TeachingResource;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.jboss.seam.ScopeType;
@@ -34,7 +37,7 @@ import org.jboss.seam.framework.EntityQuery;
  * @version $Id$
  */
 @Name(value = "teachingVoidBySpecializationReport")
-@Scope(ScopeType.PAGE)
+@Scope(ScopeType.CONVERSATION)
 public class TeachingHourAnalysisReport extends BaseReport {
 
 	public static final int HOURS_FOR_REGULAR_POSITION = 18;
@@ -47,7 +50,6 @@ public class TeachingHourAnalysisReport extends BaseReport {
 
 	private SpecializationGroup specializationGroup;
 
-	@DataModel(value = "reportData")
 	private List<SchoolVoidAnalysisItem> reportData;
 
 	@DataModel(value = "reportDataBySpecialization")
@@ -92,7 +94,7 @@ public class TeachingHourAnalysisReport extends BaseReport {
 				schools = new ArrayList<School>(1);
 				schools.add(school);
 				useTextAnalysis = true;
-
+				reportTextAnalysis.clear();
 			} else {
 				schools = getCoreSearching().getSchools(getEntityManager(), region);
 			}
@@ -223,6 +225,9 @@ public class TeachingHourAnalysisReport extends BaseReport {
 			}
 			reportDataBySpecialization = new ArrayList<SpecializationGroupVoidAnalysis>(reportDataBySpecializationMap
 					.values());
+			for(SpecializationGroupVoidAnalysis g : reportDataBySpecialization) {
+				g.sort();
+			}
 			Collections.sort(((List<SpecializationGroupVoidAnalysis>) reportDataBySpecialization));
 			info("report has been generated in #0 [ms]", (finished - started));
 			return "lalal";

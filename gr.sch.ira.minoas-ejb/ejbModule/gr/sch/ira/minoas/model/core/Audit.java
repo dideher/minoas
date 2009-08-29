@@ -33,7 +33,7 @@ public class Audit extends BaseIDModel {
 	private static final long serialVersionUID = 1L;
 
 	@Basic
-	@Column(name="AUDIT_COMMENT", length=450, nullable=true)
+	@Column(name="AUDIT_COMMENT", length=1024, nullable=true)
 	private String comment;
 
 	

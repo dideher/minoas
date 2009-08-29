@@ -154,8 +154,8 @@
 							<rich:column rowspan="2">
 								<h:outputText value="Ειδικότητα" />
 							</rich:column>
-							<rich:column colspan="8">
-								<h:outputText value="Αναλύση, μπλά, μπλά, μπλά. ....." />
+							<rich:column colspan="7">
+								<h:outputText value="Αναλύση Κενών και Ορών Διδασκαλίας" />
 							</rich:column>
 							<rich:column breakBefore="true">
 								<h:outputText value="Τίτλος Μονάδας" />
@@ -168,12 +168,21 @@
 							</rich:column>
 
 							<rich:column>
-								<h:outputText value="Ώρες" />
+								<h:outputText value="Απαι. Ώρες" />
 								<rich:toolTip>
 									<h:outputText
-										value="Εμφανίζονται οι απαιτούμενες και οι καλυπτόμενες ώρες διδασκαλίας." />
+										value="Εμφανίζονται οι απαιτούμενες ώρες διδασκαλίας." />
 								</rich:toolTip>
 							</rich:column>
+							
+							<rich:column>
+								<h:outputText value="Καλυπ. Ώρες" />
+								<rich:toolTip>
+									<h:outputText
+										value="Εμφανίζονται οι καλυπτόμενες ώρες διδασκαλίας." />
+								</rich:toolTip>
+							</rich:column>
+							
 							<rich:column>
 								<h:outputText value="Ώρες (+/-)" />
 								<rich:toolTip>
@@ -181,33 +190,17 @@
 										value="Εμφανίζεται το πλεόνασμα ή έλλειμα σε ώρες διδασκαλίας." />
 								</rich:toolTip>
 							</rich:column>
-
 							<rich:column>
-								<h:outputText value="Θέσεις" />
-								<rich:toolTip>
-									<h:outputText
-										value="Εμφανίζονται οι λειτουργικές και καλυπτόμενες θέσεις μονίμου προσωπικού βάση των ωρών διδασκαλίας." />
-								</rich:toolTip>
-							</rich:column>
-							<rich:column>
-								<h:outputText value="Κενά" />
+								<h:outputText value="Κενά (+/-)" />
 								<rich:toolTip>
 									<h:outputText
 										value="Εμφανίζονται τα πιθανά κενά μόνιμου προσωπικού, βάση των λειτουργικών και καλυπτόμενων θέσεων." />
 								</rich:toolTip>
 							</rich:column>
-
-							<rich:column>
-								<h:outputText value="Πληρώτητα" />
-								<rich:toolTip>
-									<h:outputText value="" />
-								</rich:toolTip>
-
-							</rich:column>
 						</rich:columnGroup>
 					</f:facet>
 
-					<rich:column colspan="9">
+					<rich:column colspan="8">
 						<h:outputText styleClass="fieldValueText"
 							value="#{_schoolTeachingResources.specializationGroup.title}" />
 					</rich:column>
@@ -249,15 +242,19 @@
 						<rich:column style="text-align:center">
 							<h:outputText value="#{_item.resource.required}"
 								style="color: blue" />
-							<h:outputText value=" / " />
-							<h:outputText value="#{_item.resource.available}"
-								style="color: red;font-weight:bold;" />
 							<f:facet name="footer">
 								<s:div style="text-align:center">
 									<h:outputText
 										value="#{_schoolTeachingResources.totalRequiredHours}"
 										style="color: blue" />
-									<h:outputText value=" / " />
+								</s:div>
+							</f:facet>
+						</rich:column>
+						<rich:column style="text-align:center">
+							<h:outputText value="#{_item.resource.available}"
+								style="color: red;font-weight:bold;" />
+							<f:facet name="footer">
+								<s:div style="text-align:center">
 									<h:outputText
 										value="#{_schoolTeachingResources.totalAvailableHours}"
 										style="color: red;font-weight:bold;" />
@@ -265,7 +262,11 @@
 							</f:facet>
 						</rich:column>
 						<rich:column style="text-align:center">
-							<h:outputText value="#{_item.resource.missingHours}"
+							<h:outputText value="#{_item.resource.missingHours}" rendered="#{_item.resource.missingHours &gt; 0 or _item.resource.missingHours == 0}"
+								style="color:green;">
+								<f:convertNumber type="number"/>
+							</h:outputText>
+							<h:outputText value="#{_item.resource.missingHours}" rendered="#{_item.resource.missingHours &lt; 0}"
 								style="color:green;font-weight:bold;">
 							</h:outputText>
 							<f:facet name="footer">
@@ -278,50 +279,26 @@
 							</f:facet>
 						</rich:column>
 						<rich:column style="text-align:center">
-							<h:outputText value="#{_item.resource.requiredRegularEmployees}"
-								style="color: blue" />
-							<h:outputText value=" / " />
-							<h:outputText
-								value="#{_item.resource.fullfilledRegularEmployees}"
-								style="color: red;font-weight:bold;" />
-							<f:facet name="footer">
-								<s:div style="text-align:center">
-									<h:outputText
-										value="#{_schoolTeachingResources.totalRequiredRegularEmployees}"
-										style="color: blue" />
-									<h:outputText value=" / " />
-									<h:outputText
-										value="#{_schoolTeachingResources.totalFullFilledRegularEmployees}"
-										style="color: red;font-weight:bold;" />
-								</s:div>
-							</f:facet>
-						</rich:column>
-						<rich:column style="text-align:center">
-							<h:outputText rendered="#{_item.resource.void}"
-								value="#{_item.resource.voids}"
-								style="color: blue;font-weight:bold;" />
-							<h:outputText rendered="#{!_item.resource.void}"
-								value="#{_item.resource.voids}"
-								style="color: red;font-weight:bold;" />
+							<s:div rendered="#{_item.resource.missingReqularEmployees &lt; 0 or _item.resource.missingReqularEmployees == 0}">
+								<h:outputText value="#{_item.resource.missingReqularEmployees}"
+									style="color: blue;" />
+							</s:div>
+							<s:div rendered="#{_item.resource.missingReqularEmployees &gt; 0}">
+								<h:outputText value="#{_item.resource.missingReqularEmployees} "
+									style="color: red;font-weight:bold;" />
+							</s:div>
+							
 							<f:facet name="footer">
 								<s:div style="text-align:center">
 									<h:outputText rendered="#{_schoolTeachingResources.void}"
-										value="#{_schoolTeachingResources.totalVoids}"
+										value="#{_schoolTeachingResources.totalMissingReqularEmployees}"
 										style="color: blue;font-weight:bold;" />
 									<h:outputText rendered="#{!_schoolTeachingResources.void}"
-										value="#{_schoolTeachingResources.totalVoids}"
+										value="#{_schoolTeachingResources.totalMissingReqularEmployees}"
 										style="color: red;font-weight:bold;" />
 								</s:div>
 							</f:facet>
 						</rich:column>
-
-						<rich:column>
-							<h:graphicImage
-								value="http://chart.apis.google.com/chart?chs=100x25&amp;chbh=a&amp;chd=t:#{_item.resource.required}|#{_item.resource.available}&amp;cht=bhs&amp;chco=C6D9FD,4D89F9" />
-						</rich:column>
-
-
-
 					</rich:subTable>
 
 

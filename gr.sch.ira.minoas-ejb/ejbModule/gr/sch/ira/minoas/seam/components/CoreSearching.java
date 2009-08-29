@@ -24,6 +24,7 @@ import gr.sch.ira.minoas.model.preparatory.PreparatoryUnitNatureType;
 import gr.sch.ira.minoas.model.preparatory.TeachingLanguage;
 import gr.sch.ira.minoas.model.security.Principal;
 import gr.sch.ira.minoas.model.security.Role;
+import gr.sch.ira.minoas.seam.components.criteria.DateSearchType;
 
 import java.util.Collection;
 import java.util.Date;
@@ -123,6 +124,11 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 	@Factory(value = "serviceAllocationTypes")
 	public ServiceAllocationType[] getAvailableServiceAllocationTypes() {
 		return ServiceAllocationType.values();
+	}
+	
+	@Factory(value = "dateSearchTypes")
+	public DateSearchType[] getAvailableDateSearchTypes() {
+		return DateSearchType.values();
 	}
 
 	@SuppressWarnings("unchecked")

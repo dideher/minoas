@@ -1,4 +1,4 @@
-package gr.sch.ira.minoas.seam.components.reports;
+package gr.sch.ira.minoas.seam.components.reports.resource;
 
 import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.employement.Secondment;

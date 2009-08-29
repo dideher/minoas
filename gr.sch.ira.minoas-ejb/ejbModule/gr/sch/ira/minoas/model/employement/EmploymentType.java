@@ -8,7 +8,13 @@ package gr.sch.ira.minoas.model.employement;
  *
  */
 public enum EmploymentType {
-	DEPUTY,
-	HOURLYBASED,
-	REGULAR
+	DEPUTY("DEPUTY_EMPLOYMENT_TYPE"),
+	HOURLYBASED("HOURLYBASE_EMPLOYMENT_TYPE"),
+	REGULAR("REGULAR_EMPLOYMENT_TYPE");
+	
+	private String key; 
+	
+	private EmploymentType(String key) {
+		this.key = key;
+	}
 }

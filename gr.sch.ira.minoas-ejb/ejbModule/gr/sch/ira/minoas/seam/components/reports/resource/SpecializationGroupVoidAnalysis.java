@@ -1,9 +1,11 @@
-package gr.sch.ira.minoas.seam.components.reports.teachingResources;
+package gr.sch.ira.minoas.seam.components.reports.resource;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import gr.sch.ira.minoas.model.core.SpecializationGroup;
+import gr.sch.ira.minoas.seam.components.reports.TeachingHourAnalysisReport;
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
@@ -18,6 +20,10 @@ public class SpecializationGroupVoidAnalysis implements Comparable<Specializatio
 	private Integer totalAvailableHours = 0;
 	
 	private Integer totalRequiredHours = 0;
+	
+	public void sort() {
+		Collections.sort(resources);
+	}
 	
 	
 
@@ -64,10 +70,13 @@ public class SpecializationGroupVoidAnalysis implements Comparable<Specializatio
 		return totalAvailableHours;
 	}
 
-	public Integer getTotalFullFilledRegularEmployees() {
-		return getTotalAvailableHours() / TeachingHourAnalysisReport.HOURS_FOR_REGULAR_POSITION;
+	public Integer getTotalMissingReqularEmployees() {
+		return ((-1) * getTotalMissingHours()) / TeachingHourAnalysisReport.HOURS_FOR_REGULAR_POSITION;
 	}
 
+	public Float getTotalMissingReqularEmployeesAsFloat() {
+		return (float) ((-1) * getTotalMissingHours()) / (float)TeachingHourAnalysisReport.HOURS_FOR_REGULAR_POSITION;
+	}
 	public Integer getTotalMissingHours() {
 		return getTotalAvailableHours() - getTotalRequiredHours();
 	}
@@ -86,13 +95,9 @@ public class SpecializationGroupVoidAnalysis implements Comparable<Specializatio
 	public boolean hasMissingHours() {
 		return getTotalMissingHours() > 0;
 	}
-
-	public Integer getTotalVoids() {
-		return getTotalRequiredRegularEmployees()-getTotalFullFilledRegularEmployees();
-	}
 	
 	public boolean isVoid() {
-		return getTotalVoids() > 0;
+		return getTotalMissingReqularEmployees() > 0;
 	}
 	
 	/**

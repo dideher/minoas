@@ -187,7 +187,6 @@ public class LeaveHome extends MinoasEntityHome<Leave> {
 	public String cancel() {
 		Leave current_leave = getInstance();
 		current_leave.setActive(Boolean.FALSE);
-		current_leave.setAffectedEmployment(null);
 		Employee employee = current_leave.getEmployee();
 		if (employee != null)
 			employee.setLeave(null);

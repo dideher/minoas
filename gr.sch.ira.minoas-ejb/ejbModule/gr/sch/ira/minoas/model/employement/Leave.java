@@ -70,10 +70,6 @@ public class Leave extends BaseIDModel {
 		return builder.toString();
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = true)
-	@JoinColumn(name = "PARENT_EMPLOYMENT_ID", nullable = true)
-	private Employment affectedEmployment;
-
 	@Basic
 	@Column(name="COMMENT", nullable=true, length=255)
 	private String comment;
@@ -96,9 +92,6 @@ public class Leave extends BaseIDModel {
 	@Column(name="LEAVE_TYPE", length=64, nullable=false)
 	private LeaveType leaveType;
 	
-	@Basic
-	@Column(name = "DAY_DURATION", nullable = true)
-	private Integer days;
 	
 	public Leave() {
 		super();
@@ -110,13 +103,6 @@ public class Leave extends BaseIDModel {
 	 */
 	public Boolean getActive() {
 		return active;
-	}
-
-	/**
-	 * @return the affectedEmployment
-	 */
-	public Employment getAffectedEmployment() {
-		return affectedEmployment;
 	}
 
 	/**
@@ -161,12 +147,7 @@ public class Leave extends BaseIDModel {
 		this.active = active;
 	}
 
-	/**
-	 * @param affectedEmployment the affectedEmployment to set
-	 */
-	public void setAffectedEmployment(Employment affectedEmployment) {
-		this.affectedEmployment = affectedEmployment;
-	}
+	
 
 	/**
 	 * @param comment the comment to set
@@ -203,19 +184,7 @@ public class Leave extends BaseIDModel {
 		this.leaveType = leaveType;
 	}
 
-	/**
-	 * @return the days
-	 */
-	public Integer getDays() {
-		return days;
-	}
-
-	/**
-	 * @param days the days to set
-	 */
-	public void setDays(Integer days) {
-		this.days = days;
-	}
+	
 
 	
 }

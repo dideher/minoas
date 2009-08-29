@@ -299,14 +299,14 @@
   location="/opt/jboss/jboss-4.2.2.GA/client/jbossws-jboss422.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-richfaces-api-3.2.2.SR1.jar"
   location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas-ear/EarContent/richfaces-api-3.2.2.SR1.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-richfaces-impl-3.2.2.SR1.jar"
-  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas/WebContent/WEB-INF/lib/richfaces-impl-3.2.2.SR1.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-richfaces-ui-3.2.2.SR1.jar"
-  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas/WebContent/WEB-INF/lib/richfaces-ui-3.2.2.SR1.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-iText-2.1.5.jar"
-  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas/WebContent/WEB-INF/lib/iText-2.1.5.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-iText-rtf-2.1.5.jar"
-  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas/WebContent/WEB-INF/lib/iText-rtf-2.1.5.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jasperreports-3.5.3.jar"
+  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas-ear/EarContent/jasperreports-3.5.3.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-richfaces-api-3.3.1.GA.jar"
+  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas-ear/EarContent/richfaces-api-3.3.1.GA.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-richfaces-impl-3.3.1.GA.jar"
+  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas/WebContent/WEB-INF/lib/richfaces-impl-3.3.1.GA.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-richfaces-ui-3.3.1.GA.jar"
+  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas/WebContent/WEB-INF/lib/richfaces-ui-3.3.1.GA.jar" model-entity="FileSystemJar"/>
  <web SERVLET_VERSION="2.4" model-entity="JstWeb" model-path="/web.xml">
   <module URI="/WEB-INF/faces-config.xml" model-entity="WebJSFModule"
    model-path="/faces-config.xml" src="src" web-root="WEB-ROOT"/>

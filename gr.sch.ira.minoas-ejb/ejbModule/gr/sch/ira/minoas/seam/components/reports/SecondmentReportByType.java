@@ -5,6 +5,7 @@ import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.SecondmentType;
 import gr.sch.ira.minoas.seam.components.CoreSearching;
 import gr.sch.ira.minoas.seam.components.criteria.SecondmentCriteria;
+import gr.sch.ira.minoas.seam.components.reports.resource.SecondmentItem;
 
 import java.util.ArrayList;
 import java.util.Date;

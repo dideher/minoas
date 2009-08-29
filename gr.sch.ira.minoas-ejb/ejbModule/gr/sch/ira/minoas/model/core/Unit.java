@@ -38,7 +38,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 @NamedQuery(name = Unit.NAMED_QUERY_FIND_UNIT_BY_TITLE, query = "SELECT u FROM Unit u WHERE u.title=:"
 		+ Unit.QUERY_PARAMETER_UNIT_TITLE)
-public class Unit extends AbstractArchivableEntity {
+public class Unit extends AbstractArchivableEntity implements Comparable<Unit> {
 
 	public static final String NAMED_QUERY_FIND_UNIT_BY_TITLE = "findUnitByTitle";
 
@@ -197,6 +197,13 @@ public class Unit extends AbstractArchivableEntity {
 	 */
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	/**
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
+	public int compareTo(Unit o) {
+		return this.title.compareTo(o.getTitle());
 	}
 
 	

@@ -1,4 +1,4 @@
-package gr.sch.ira.minoas.seam.components.reports.teachingResources;
+package gr.sch.ira.minoas.seam.components.reports.resource;
 
 import gr.sch.ira.minoas.model.core.School;
 
@@ -6,7 +6,7 @@ import gr.sch.ira.minoas.model.core.School;
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
  * @version $Id$
  */
-public class SpecializationGroupVoidAnalysisItem {
+public class SpecializationGroupVoidAnalysisItem implements Comparable<SpecializationGroupVoidAnalysisItem>{
 
 	private School school;
 	
@@ -48,6 +48,12 @@ public class SpecializationGroupVoidAnalysisItem {
 	 */
 	public void setResource(TeachingResource resource) {
 		this.resource = resource;
+	}
+	/**
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
+	public int compareTo(SpecializationGroupVoidAnalysisItem o) {
+		return this.school.compareTo(o.getSchool());
 	}
 
 }

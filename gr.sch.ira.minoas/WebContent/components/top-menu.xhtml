@@ -95,12 +95,11 @@
 						</s:link>
 					</rich:menuItem>
 					<rich:menuSeparator />
-					<rich:menuGroup value="Εκτύπωσεις και Σταστικά"
-						disabled="#{!(s:hasRole('ADMIN') or s:hasRole('VIEW_LEAVE'))}">
-						<rich:menuItem submitMode="none">
-							<s:link value="Θητείες Ανα Τύπο"
-								view="/serviceallocation/report-by-type.xhtml">
-								<f:param name="service_allocation_report_by_type_from" value="/home" />
+					<rich:menuGroup value="Εκτύπωσεις και Σταστικά">
+						<rich:menuItem submitMode="none" disabled="#{!(s:hasRole('ADMIN') or s:hasRole('VIEW_LEAVE'))}">
+							<s:link value="Άδειες Ανα Τύπο" propagation="nest"
+								view="/leave/leave-report-by-type.xhtml">
+								<f:param name="leaves_report_by_type_from" value="/home" />
 							</s:link>
 						</rich:menuItem>
 

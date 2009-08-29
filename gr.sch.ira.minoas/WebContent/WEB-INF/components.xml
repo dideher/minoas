@@ -313,13 +313,12 @@
    </framework:entity-query>
    
     
-     <framework:entity-query name="LeavesByTypeListQuery"
-  max-results="1000" scope="CONVERSATION">
-    <framework:ejbql>SELECT s FROM Leave s INNER JOIN FETCH s.employee WHERE s.active IS TRUE</framework:ejbql>
-    <framework:order>s.employee.lastName asc, s.employee.firstName asc</framework:order>
+     <framework:entity-query name="leavesByTypeListQuery" max-results="1000" scope="page">
+    <framework:ejbql>SELECT l FROM Leave l INNER JOIN FETCH l.employee WHERE l.active IS TRUE</framework:ejbql>
+    <framework:order>l.employee.lastName asc, l.employee.firstName asc</framework:order>
     <framework:restrictions>
-      <value>s.leaveType = #{exampleLeave.leaveType}</value>
-      <value>lower(s.comment) like lower(concat(#{exampleLeave.comment},'%') )</value>
+      <value>l.leaveType = #{employeeLeaveCriteria.leaveType}</value>
+      <value>#{employeeLeaveCriteria.effectiveDate} BETWEEN l.establishedOn AND l.dueTo</value>
     </framework:restrictions> 
    </framework:entity-query>
    
