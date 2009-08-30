@@ -1,24 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="secondmentByType" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<style name="Crosstab Data Text" isDefault="false" hAlign="Center"/>
-	<parameter name="SECONDMENT_TYPE" class="java.lang.String">
+	<parameter name="LEAVE_TYPE" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
-	<parameter name="SECONDMENT_TYPE_FILTER" class="java.lang.String"/>
+	<parameter name="LEAVE_TYPE_FILTER" class="java.lang.String"/>
 	<field name="dueTo" class="java.util.Date"/>
 	<field name="comment" class="java.lang.String"/>
-	<field name="targetUnit" class="java.lang.String"/>
 	<field name="employeeSpecialization" class="java.lang.String"/>
 	<field name="employeeFirstName" class="java.lang.String"/>
 	<field name="employeeLastName" class="java.lang.String"/>
 	<field name="employeeFatherName" class="java.lang.String"/>
 	<field name="employeeCode" class="java.lang.String"/>
-	<field name="requestByEmployee" class="java.lang.Boolean"/>
-	<field name="establishedIn" class="java.util.Date"/>
-	<field name="sourceUnit" class="java.lang.String"/>
+	<field name="established" class="java.util.Date"/>
+	<field name="school" class="java.lang.String"/>
 	<field name="employeeSpecializationID" class="java.lang.String"/>
 	<field name="region" class="java.lang.Character"/>
-	<field name="secondmentType" class="java.lang.String"/>
+	<field name="leaveType" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -63,7 +61,7 @@
 				<textElement textAlignment="Center">
 					<font size="22" isBold="false" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["Ενεργές Αποσπάσεις - " + $P{SECONDMENT_TYPE_FILTER}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA["Ενεργές Αποσπάσεις - " + $P{LEAVE_TYPE_FILTER}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
@@ -77,28 +75,28 @@
 				<text><![CDATA[Περ.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Crosstab Data Text" mode="Opaque" x="604" y="0" width="55" height="20" backcolor="#CCCCCC"/>
+				<reportElement style="Crosstab Data Text" mode="Opaque" x="602" y="0" width="55" height="20" backcolor="#CCCCCC"/>
 				<textElement verticalAlignment="Middle">
 					<font isBold="true" pdfFontName="/fonts/arial.ttf" pdfEncoding="Cp1253" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Έναρξη]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Crosstab Data Text" mode="Opaque" x="664" y="0" width="55" height="20" backcolor="#CCCCCC"/>
+				<reportElement style="Crosstab Data Text" mode="Opaque" x="662" y="0" width="55" height="20" backcolor="#CCCCCC"/>
 				<textElement verticalAlignment="Middle">
 					<font isBold="true" pdfFontName="/fonts/arial.ttf" pdfEncoding="Cp1253" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Λήξη]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Crosstab Data Text" mode="Opaque" x="724" y="0" width="79" height="20" backcolor="#CCCCCC"/>
+				<reportElement style="Crosstab Data Text" mode="Opaque" x="722" y="0" width="79" height="20" backcolor="#CCCCCC"/>
 				<textElement verticalAlignment="Middle">
 					<font isBold="true" pdfFontName="/fonts/arial.ttf" pdfEncoding="Cp1253" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[Σχόλιο]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Crosstab Data Text" mode="Opaque" x="426" y="0" width="93" height="20" backcolor="#CCCCCC"/>
+				<reportElement style="Crosstab Data Text" mode="Opaque" x="504" y="0" width="93" height="20" backcolor="#CCCCCC"/>
 				<textElement verticalAlignment="Middle">
 					<font isBold="true" pdfFontName="/fonts/arial.ttf" pdfEncoding="Cp1253" isPdfEmbedded="true"/>
 				</textElement>
@@ -119,13 +117,6 @@
 				<text><![CDATA[Ειδ.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Crosstab Data Text" mode="Opaque" x="524" y="0" width="75" height="20" backcolor="#CCCCCC"/>
-				<textElement verticalAlignment="Middle">
-					<font isBold="true" pdfFontName="/fonts/arial.ttf" pdfEncoding="Cp1253" isPdfEmbedded="true"/>
-				</textElement>
-				<text><![CDATA[Απόσπαση Σε]]></text>
-			</staticText>
-			<staticText>
 				<reportElement style="Crosstab Data Text" mode="Opaque" x="121" y="0" width="172" height="20" backcolor="#CCCCCC"/>
 				<textElement verticalAlignment="Middle">
 					<font isBold="true" pdfFontName="/fonts/arial.ttf" pdfEncoding="Cp1253" isPdfEmbedded="true"/>
@@ -133,7 +124,7 @@
 				<text><![CDATA[Εκπαιδευτικός]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Crosstab Data Text" mode="Opaque" x="326" y="0" width="95" height="20" backcolor="#CCCCCC"/>
+				<reportElement style="Crosstab Data Text" mode="Opaque" x="326" y="0" width="173" height="20" backcolor="#CCCCCC"/>
 				<textElement verticalAlignment="Middle">
 					<font isBold="true" pdfFontName="/fonts/arial.ttf" pdfEncoding="Cp1253" isPdfEmbedded="true"/>
 				</textElement>
@@ -148,79 +139,72 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="19" splitType="Stretch">
+		<band height="16" splitType="Stretch">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="724" y="0" width="79" height="17" backcolor="#FFFFFF"/>
+				<reportElement mode="Opaque" x="722" y="0" width="79" height="15" backcolor="#FFFFFF"/>
 				<textElement>
 					<font size="9" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{comment}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="664" y="0" width="55" height="17" backcolor="#FFFFFF"/>
+				<reportElement mode="Opaque" x="662" y="0" width="55" height="15" backcolor="#FFFFFF"/>
 				<textElement>
 					<font size="9" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.util.Date"><![CDATA[$F{dueTo}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
-				<reportElement style="Crosstab Data Text" mode="Opaque" x="121" y="0" width="172" height="17" backcolor="#FFFFFF"/>
+				<reportElement style="Crosstab Data Text" mode="Opaque" x="121" y="0" width="172" height="15" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left">
 					<font size="9" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{employeeLastName} + " " + $F{employeeFirstName} + " ("+  $F{employeeCode} + ")"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="604" y="0" width="55" height="17" backcolor="#FFFFFF"/>
+				<reportElement mode="Opaque" x="602" y="0" width="55" height="15" backcolor="#FFFFFF"/>
 				<textElement>
 					<font size="9" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H"/>
 				</textElement>
-				<textFieldExpression class="java.util.Date"><![CDATA[$F{establishedIn}]]></textFieldExpression>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{established}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="326" y="0" width="95" height="17" backcolor="#FFFFFF"/>
+				<reportElement mode="Opaque" x="326" y="0" width="173" height="15" backcolor="#FFFFFF"/>
 				<textElement>
 					<font size="9" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{sourceUnit}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{school}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="524" y="0" width="75" height="17" backcolor="#FFFFFF"/>
-				<textElement>
-					<font size="9" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{targetUnit}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="0" y="0" width="39" height="17" backcolor="#FFFFFF"/>
+				<reportElement mode="Opaque" x="0" y="0" width="39" height="15" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Right">
 					<font size="9" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{employeeSpecializationID}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="298" y="0" width="23" height="17" backcolor="#FFFFFF"/>
+				<reportElement mode="Opaque" x="298" y="0" width="23" height="15" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Center">
 					<font size="9" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{region}.toString()]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="426" y="0" width="90" height="17" backcolor="#FFFFFF"/>
+				<reportElement mode="Opaque" x="504" y="0" width="90" height="15" backcolor="#FFFFFF"/>
 				<textElement>
 					<font size="9" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{REPORT_PARAMETERS_MAP}.get($F{secondmentType})]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{REPORT_PARAMETERS_MAP}.get($F{leaveType})]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="44" y="0" width="72" height="17" backcolor="#FFFFFF"/>
+				<reportElement mode="Opaque" x="44" y="0" width="72" height="15" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Right">
 					<font size="9" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{employeeSpecialization}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement positionType="Float" x="0" y="18" width="802" height="1"/>
+				<reportElement positionType="Float" x="0" y="15" width="802" height="1"/>
 				<graphicElement>
 					<pen lineWidth="0.5" lineStyle="Dashed"/>
 				</graphicElement>

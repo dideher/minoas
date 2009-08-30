@@ -20,14 +20,15 @@ import org.jboss.seam.annotations.datamodel.DataModel;
  * @version $Id$
  */
 @Name("employeeLeaveCriteria")
-@Scope(ScopeType.PAGE)
 public class EmployeeLeaveCriteria {
 	
 	private DateSearchType dateSearchType;
 
 	private Date effectiveDate;
 
-	private Date effectiveDateDueTo;
+	private Date effectiveDateFrom;
+	
+	private Date effectiveDateUntil;
 
 	private LeaveType leaveType;
 
@@ -43,7 +44,8 @@ public class EmployeeLeaveCriteria {
 	public EmployeeLeaveCriteria() {
 		super();
 		effectiveDate = DateUtils.truncate(new Date(System.currentTimeMillis()), Calendar.DAY_OF_MONTH);
-		dateSearchType = DateSearchType.DURING_DATE_PERIOD;
+		effectiveDateFrom = DateUtils.truncate(new Date(System.currentTimeMillis()), Calendar.DAY_OF_MONTH);
+		dateSearchType = DateSearchType.DURING_DATE;
 	}
 
 	/**
@@ -63,8 +65,8 @@ public class EmployeeLeaveCriteria {
 	/**
 	 * @return the effectiveDateDueTo
 	 */
-	public Date getEffectiveDateDueTo() {
-		return effectiveDateDueTo;
+	public Date getEffectiveDateFrom() {
+		return effectiveDateFrom;
 	}
 
 	/**
@@ -112,8 +114,8 @@ public class EmployeeLeaveCriteria {
 	/**
 	 * @param effectiveDateDueTo the effectiveDateDueTo to set
 	 */
-	public void setEffectiveDateDueTo(Date effectiveDateDueTo) {
-		this.effectiveDateDueTo = effectiveDateDueTo;
+	public void setEffectiveDateFrom(Date effectiveDateDueTo) {
+		this.effectiveDateFrom = effectiveDateDueTo;
 	}
 
 	/**
@@ -142,6 +144,20 @@ public class EmployeeLeaveCriteria {
 	 */
 	public void setSpecializationGroup(SpecializationGroup specializationGroup) {
 		this.specializationGroup = specializationGroup;
+	}
+
+	/**
+	 * @return the effectiveDateUntil
+	 */
+	public Date getEffectiveDateUntil() {
+		return effectiveDateUntil;
+	}
+
+	/**
+	 * @param effectiveDateUntil the effectiveDateUntil to set
+	 */
+	public void setEffectiveDateUntil(Date effectiveDateUntil) {
+		this.effectiveDateUntil = effectiveDateUntil;
 	}
 
 }

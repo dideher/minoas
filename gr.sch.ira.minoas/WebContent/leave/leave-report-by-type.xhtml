@@ -112,7 +112,7 @@
 								</h:selectOneMenu>
 							</s:decorate>
 						</h:panelGrid>
-						<h:panelGrid columns="2">
+						<h:panelGrid columns="3">
 							<s:decorate template="/layout/doubleLineEdit.xhtml">
 								<ui:define name="label">
 									<h:outputText value="Ερμηνεία Ημερομηνίας Εφαρμογής" />
@@ -123,13 +123,14 @@
 										noSelectionLabel="Επιλέξτε Tύπο Αναζήτησης"
 										label="#{messages[dateSearchType.key]}">
 									</s:selectItems>
-									<a4j:support event="onchange" ajaxSingle="true" />
+									<a4j:support event="onchange" ajaxSingle="true"
+										reRender="dateSearchFiltersPanel" />
 								</h:selectOneMenu>
 							</s:decorate>
 							
 							<h:panelGroup>
-							<a4j:outputPanel ajaxRendered="true">
-								<s:div
+							<a4j:outputPanel id="dateSearchFiltersPanel">
+								<h:panelGroup
 									rendered="#{employeeLeaveCriteria.dateSearchType ne 'DURING_DATE_PERIOD'}">
 									<s:decorate id="effectiveDateDecoration"
 										template="/layout/doubleLineEdit.xhtml">
@@ -146,17 +147,17 @@
 										</rich:calendar>
 									</s:decorate>
 
-								</s:div>
-								<s:div
+								</h:panelGroup>
+
+								<h:panelGroup
 									rendered="#{employeeLeaveCriteria.dateSearchType eq 'DURING_DATE_PERIOD'}">
 									<s:decorate id="effectiveDateDecorationFrom"
-										rendered="#{employeeLeaveCriteria.dateSearchType == 'DURING_DATE_PERIOD'}"
 										template="/layout/doubleLineEdit.xhtml">
 										<ui:define name="label">
-											<h:outputText value="Ημερομηνία Εφαρμογής" />
+											<h:outputText value="Από" />
 										</ui:define>
 										<rich:calendar id="effectiveDate" enableManualInput="true"
-											value="#{employeeLeaveCriteria.effectiveDate}"
+											value="#{employeeLeaveCriteria.effectiveDateFrom}"
 											required="true" inputSize="10" mode="ajax" locale="el_GR"
 											inputClass="fieldValueText" datePattern="dd-MM-yyyy">
 											<a4j:support event="onblur"
@@ -165,13 +166,12 @@
 										</rich:calendar>
 									</s:decorate>
 									<s:decorate id="effectiveDateDecorationUntil"
-										rendered="#{employeeLeaveCriteria.dateSearchType == 'DURING_DATE_PERIOD'}"
 										template="/layout/doubleLineEdit.xhtml">
 										<ui:define name="label">
-											<h:outputText value="Ημερομηνία Εφαρμογής" />
+											<h:outputText value="Εώς" />
 										</ui:define>
 										<rich:calendar id="effectiveDate" enableManualInput="true"
-											value="#{employeeLeaveCriteria.effectiveDate}"
+											value="#{employeeLeaveCriteria.effectiveDateUntil}"
 											required="true" inputSize="10" mode="ajax" locale="el_GR"
 											inputClass="fieldValueText" datePattern="dd-MM-yyyy">
 											<a4j:support event="onblur"
@@ -179,7 +179,7 @@
 												ajaxSingle="true" />
 										</rich:calendar>
 									</s:decorate>
-								</s:div>
+								</h:panelGroup>
 							</a4j:outputPanel>
 							</h:panelGroup>
 						</h:panelGrid>
@@ -201,8 +201,8 @@
 									<a4j:support ajaxSingle="true" event="onclick"
 										reRender="leavesByTypeTable" />
 								</h:commandButton>
-								<s:button action="#{leaveReportByType.runReport}"
-									value="Εκτύπωση (PDF)" target="new" disabled="true" />
+								<s:button action="#{employeeLeavesReport.generatePDFReport}"
+									value="Εκτύπωση (PDF)" target="new" type="button" />
 								<s:button id="backButton" action="backButton"
 									value="Τέλος Εργασίας" />
 							</h:panelGrid>
@@ -224,20 +224,20 @@
 							<h:outputText value="Εκπαιδευτικός" />
 						</f:facet>
 						<h:outputText
-							value="#{_leave.lastName} #{_leave.firstName} του #{_leave.fatherName}" />
+							value="#{_leave.employeeLastName} #{_leave.employeeFirstName} του #{_leave.employeeFatherName}" />
 					</rich:column>
 					<rich:column>
 						<f:facet name="header">
 							<h:outputText value="Ειδ." />
 						</f:facet>
-						<h:outputText value="#{_leave.specializationCode}" />
+						<h:outputText value="#{_leave.employeeSpecializationID}" />
 					</rich:column>
 
 					<rich:column>
 						<f:facet name="header">
 							<h:outputText value="Λεκτικό Ειδ." />
 						</f:facet>
-						<h:outputText value="#{_leave.specialization}" />
+						<h:outputText value="#{_leave.employeeSpecialization}" />
 					</rich:column>
 
 

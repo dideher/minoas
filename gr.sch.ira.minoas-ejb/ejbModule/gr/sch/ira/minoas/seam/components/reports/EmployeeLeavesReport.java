@@ -3,23 +3,38 @@ package gr.sch.ira.minoas.seam.components.reports;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.ResourceBundle;
 
+import javax.faces.context.FacesContext;
 import javax.persistence.Query;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JasperRunManager;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.datamodel.DataModel;
+import org.jboss.seam.core.SeamResourceBundle;
 
 import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.core.SpecializationGroup;
 import gr.sch.ira.minoas.model.employement.Leave;
 import gr.sch.ira.minoas.model.employement.LeaveType;
+import gr.sch.ira.minoas.model.employement.Secondment;
+import gr.sch.ira.minoas.model.employement.SecondmentType;
+import gr.sch.ira.minoas.seam.components.criteria.DateSearchType;
 import gr.sch.ira.minoas.seam.components.criteria.EmployeeLeaveCriteria;
 import gr.sch.ira.minoas.seam.components.reports.resource.EmployeeLeaveReportItem;
 import gr.sch.ira.minoas.seam.components.reports.resource.EmployeeReportItem;
+import gr.sch.ira.minoas.seam.components.reports.resource.SecondmentItem;
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
@@ -27,7 +42,7 @@ import gr.sch.ira.minoas.seam.components.reports.resource.EmployeeReportItem;
  */
 
 @Name(value = "employeeLeavesReport")
-@Scope(ScopeType.PAGE)
+@Scope(ScopeType.CONVERSATION)
 public class EmployeeLeavesReport extends BaseReport {
 
 	@In(create = true, required = true)
@@ -42,23 +57,74 @@ public class EmployeeLeavesReport extends BaseReport {
 	public EmployeeLeavesReport() {
 	}
 
+	private static final String SEAM_MESSAGES_RESOURCE_BUNDLE_NAME = "messages";
+
+	protected ResourceBundle getResourceBundle(String resource_budle_name) {
+		return SeamResourceBundle.getBundle(SEAM_MESSAGES_RESOURCE_BUNDLE_NAME, FacesContext.getCurrentInstance()
+				.getViewRoot().getLocale());
+	}
+
+	protected String getLocalizedMessage(String message_key) {
+		return getResourceBundle(SEAM_MESSAGES_RESOURCE_BUNDLE_NAME).getString(message_key);
+	}
+
+	public void generatePDFReport() {
+
+		try {
+			Map<String, String> parameters = new HashMap<String, String>();
+			parameters.put("LEAVE_TYPE_FILTER",
+					employeeLeaveCriteria.getLeaveType() != null ? getLocalizedMessage(employeeLeaveCriteria
+							.getLeaveType().getKey()) : "Όλοι οι Τύποι");
+			/* create the leave type helper */
+			for (LeaveType leaveType : getCoreSearching().getAvailableLeaveTypes()) {
+				parameters.put(leaveType.name(), getLocalizedMessage(leaveType.getKey()));
+			}
+
+			JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(reportData);
+			byte[] bytes = JasperRunManager.runReportToPdf(this.getClass().getResourceAsStream(
+					"/reports/leaveByType.jasper"), parameters, (JRDataSource) ds);
+			HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext()
+					.getResponse();
+			response.setContentType("application/pdf");
+			response.addHeader("Content-Disposition", "attachment;filename=LeaveReportByType.pdf");
+			response.setContentLength(bytes.length);
+			ServletOutputStream servletOutputStream = response.getOutputStream();
+			servletOutputStream.write(bytes, 0, bytes.length);
+			servletOutputStream.flush();
+			servletOutputStream.close();
+			FacesContext.getCurrentInstance().responseComplete();
+		} catch (Exception ex) {
+			ex.printStackTrace(System.err);
+		}
+
+	}
+
 	public void generateReport() {
-		
-		System.err.println(getEmployeeLeaveCriteria().getDateSearchType());
 
 		Date effectiveDate = getEmployeeLeaveCriteria().getEffectiveDate();
-		Date effectiveDateDueTo = getEmployeeLeaveCriteria().getEffectiveDateDueTo();
+		Date effectiveDateFrom = getEmployeeLeaveCriteria().getEffectiveDateFrom();
+		Date effectiveDateUntil = getEmployeeLeaveCriteria().getEffectiveDateUntil();
 		LeaveType leaveType = getEmployeeLeaveCriteria().getLeaveType();
 		Character region = getEmployeeLeaveCriteria().getRegion();
 		School school = getEmployeeLeaveCriteria().getSchoolOfIntereset();
 		SpecializationGroup specializationGroup = getEmployeeLeaveCriteria().getSpecializationGroup();
+		DateSearchType dateSearchType = getEmployeeLeaveCriteria().getDateSearchType();
 
 		StringBuffer sb = new StringBuffer();
 		sb.append("SELECT l FROM Leave l WHERE l.active IS TRUE ");
-		if (effectiveDateDueTo == null || effectiveDateDueTo.equals(effectiveDate)) {
+		switch (dateSearchType) {
+		case AFTER_DATE:
+			sb.append("AND l.established >= :effectiveDate ");
+			break;
+		case BEFORE_DATE:
+			sb.append("AND l.dueTo <= :effectiveDate ");
+			break;
+		case DURING_DATE:
 			sb.append(" AND (:effectiveDate BETWEEN l.established AND l.dueTo) ");
-		} else {
-			sb.append(" AND (:effectiveDate >= l.established AND l.dueTo <= :effectiveDateDueTo) ");
+			break;
+		case DURING_DATE_PERIOD:
+			sb.append(" AND (:effectiveDateFrom <= l.established AND  :effectiveDateUntil >= l.dueTo) ");
+			break;
 		}
 		if (leaveType != null) {
 			sb.append(" AND l.leaveType=:leaveType ");
@@ -69,19 +135,20 @@ public class EmployeeLeavesReport extends BaseReport {
 		if (region != null) {
 			sb.append(" AND l.employee.currentEmployment.school.regionCode = :region");
 		}
-		if(specializationGroup!=null) {
-			sb.append(" AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g=:specializationGroup AND l.employee.lastSpecialization MEMBER OF g.specializations) ");
+		if (specializationGroup != null) {
+			sb
+					.append(" AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g=:specializationGroup AND l.employee.lastSpecialization MEMBER OF g.specializations) ");
 		}
-		
+
 		sb.append(" ORDER BY l.employee.lastName");
 
 		Query q = getEntityManager().createQuery(sb.toString());
-		if (effectiveDateDueTo == null || effectiveDateDueTo.equals(effectiveDate)) {
+		if (dateSearchType != DateSearchType.DURING_DATE_PERIOD) {
 			q.setParameter("effectiveDate", effectiveDate);
 
 		} else {
-			q.setParameter("effectiveDate", effectiveDate);
-			q.setParameter("effectiveDateDueTo", effectiveDateDueTo);
+			q.setParameter("effectiveDateFrom", effectiveDateFrom);
+			q.setParameter("effectiveDateUntil", effectiveDateUntil);
 		}
 		if (leaveType != null) {
 			q.setParameter("leaveType", leaveType);
@@ -92,7 +159,7 @@ public class EmployeeLeavesReport extends BaseReport {
 		if (region != null) {
 			q.setParameter("region", region);
 		}
-		if(specializationGroup!=null) {
+		if (specializationGroup != null) {
 			q.setParameter("specializationGroup", specializationGroup);
 		}
 

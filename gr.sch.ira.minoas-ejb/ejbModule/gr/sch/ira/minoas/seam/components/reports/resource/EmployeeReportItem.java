@@ -10,6 +10,26 @@ import java.util.Date;
  */
 public class EmployeeReportItem {
 
+	private Date employeeBirthday;
+
+	private String employeeCode;
+
+	private String employeeFatherName;
+
+	private String employeeFirstName;
+
+	private String employeeLastName;
+
+	private int employeeMandatoryHours;
+
+	private String employeeMotherName;
+
+	private String employeeSpecialization;
+
+	private String employeeSpecializationID;
+	
+	private String employeeType;
+
 	/**
 	 * 
 	 */
@@ -19,116 +39,72 @@ public class EmployeeReportItem {
 
 	public EmployeeReportItem(Employee employee) {
 		this();
-		this.lastName = employee.getLastName();
-		this.firstName = employee.getFirstName();
-		this.fatherName = employee.getFatherName();
-		this.motherName = employee.getMotherName();
+		this.employeeLastName = employee.getLastName();
+		this.employeeFirstName = employee.getFirstName();
+		this.employeeFatherName = employee.getFatherName();
+		this.employeeMotherName = employee.getMotherName();
 		if (employee.getLastSpecialization() != null) {
-			this.specialization = employee.getLastSpecialization().getTitle();
-			this.specializationCode = employee.getLastSpecialization().getId();
+			this.employeeSpecialization = employee.getLastSpecialization().getTitle();
+			this.employeeSpecializationID = employee.getLastSpecialization().getId();
 		}
-	}
-
-	private String lastName;
-
-	private String firstName;
-
-	private String fatherName;
-
-	private String motherName;
-
-	private String specializationCode;
-
-	private String specialization;
-
-	private String employeeType;
-
-	private Date birthday;
-
-	private int mandatoryHours;
-
-	/**
-	 * @return the lastName
-	 */
-	public String getLastName() {
-		return lastName;
+		if(employee.getRegularDetail()!=null)
+			this.employeeCode = employee.getRegularDetail().getRegistryID();
 	}
 
 	/**
-	 * @param lastName the lastName to set
+	 * @return the birthday
 	 */
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	/**
-	 * @return the firstName
-	 */
-	public String getFirstName() {
-		return firstName;
-	}
-
-	/**
-	 * @param firstName the firstName to set
-	 */
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+	public Date getEmployeeBirthday() {
+		return employeeBirthday;
 	}
 
 	/**
 	 * @return the fatherName
 	 */
-	public String getFatherName() {
-		return fatherName;
+	public String getEmployeeFatherName() {
+		return employeeFatherName;
 	}
 
 	/**
-	 * @param fatherName the fatherName to set
+	 * @return the firstName
 	 */
-	public void setFatherName(String fatherName) {
-		this.fatherName = fatherName;
+	public String getEmployeeFirstName() {
+		return employeeFirstName;
+	}
+
+	/**
+	 * @return the lastName
+	 */
+	public String getEmployeeLastName() {
+		return employeeLastName;
+	}
+
+	/**
+	 * @return the mandatoryHours
+	 */
+	public int getEmployeeMandatoryHours() {
+		return employeeMandatoryHours;
 	}
 
 	/**
 	 * @return the motherName
 	 */
-	public String getMotherName() {
-		return motherName;
-	}
-
-	/**
-	 * @param motherName the motherName to set
-	 */
-	public void setMotherName(String motherName) {
-		this.motherName = motherName;
-	}
-
-	/**
-	 * @return the specializationCode
-	 */
-	public String getSpecializationCode() {
-		return specializationCode;
-	}
-
-	/**
-	 * @param specializationCode the specializationCode to set
-	 */
-	public void setSpecializationCode(String specializationCode) {
-		this.specializationCode = specializationCode;
+	public String getEmployeeMotherName() {
+		return employeeMotherName;
 	}
 
 	/**
 	 * @return the specialization
 	 */
-	public String getSpecialization() {
-		return specialization;
+	public String getEmployeeSpecialization() {
+		return employeeSpecialization;
 	}
 
 	/**
-	 * @param specialization the specialization to set
+	 * @return the specializationCode
 	 */
-	public void setSpecialization(String specialization) {
-		this.specialization = specialization;
+	public String getEmployeeSpecializationID() {
+		return employeeSpecializationID;
 	}
 
 	/**
@@ -139,6 +115,62 @@ public class EmployeeReportItem {
 	}
 
 	/**
+	 * @param birthday the birthday to set
+	 */
+	public void setEmployeeBirthday(Date birthday) {
+		this.employeeBirthday = birthday;
+	}
+
+	/**
+	 * @param fatherName the fatherName to set
+	 */
+	public void setEmployeeFatherName(String fatherName) {
+		this.employeeFatherName = fatherName;
+	}
+
+	/**
+	 * @param firstName the firstName to set
+	 */
+	public void setEmployeeFirstName(String firstName) {
+		this.employeeFirstName = firstName;
+	}
+
+	/**
+	 * @param lastName the lastName to set
+	 */
+	public void setEmployeeLastName(String lastName) {
+		this.employeeLastName = lastName;
+	}
+
+	/**
+	 * @param mandatoryHours the mandatoryHours to set
+	 */
+	public void setEmployeeMandatoryHours(int mandatoryHours) {
+		this.employeeMandatoryHours = mandatoryHours;
+	}
+
+	/**
+	 * @param motherName the motherName to set
+	 */
+	public void setEmployeeMotherName(String motherName) {
+		this.employeeMotherName = motherName;
+	}
+
+	/**
+	 * @param specialization the specialization to set
+	 */
+	public void setEmployeeSpecialization(String specialization) {
+		this.employeeSpecialization = specialization;
+	}
+
+	/**
+	 * @param specializationCode the specializationCode to set
+	 */
+	public void setEmployeeSpecializationID(String specializationCode) {
+		this.employeeSpecializationID = specializationCode;
+	}
+
+	/**
 	 * @param employeeType the employeeType to set
 	 */
 	public void setEmployeeType(String employeeType) {
@@ -146,31 +178,17 @@ public class EmployeeReportItem {
 	}
 
 	/**
-	 * @return the birthday
+	 * @return the employeeCode
 	 */
-	public Date getBirthday() {
-		return birthday;
+	public String getEmployeeCode() {
+		return employeeCode;
 	}
 
 	/**
-	 * @param birthday the birthday to set
+	 * @param employeeCode the employeeCode to set
 	 */
-	public void setBirthday(Date birthday) {
-		this.birthday = birthday;
-	}
-
-	/**
-	 * @return the mandatoryHours
-	 */
-	public int getMandatoryHours() {
-		return mandatoryHours;
-	}
-
-	/**
-	 * @param mandatoryHours the mandatoryHours to set
-	 */
-	public void setMandatoryHours(int mandatoryHours) {
-		this.mandatoryHours = mandatoryHours;
+	public void setEmployeeCode(String employeeCode) {
+		this.employeeCode = employeeCode;
 	}
 
 }
