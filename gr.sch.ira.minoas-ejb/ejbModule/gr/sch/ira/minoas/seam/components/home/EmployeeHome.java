@@ -11,6 +11,7 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
 
 /**
@@ -18,6 +19,7 @@ import org.jboss.seam.annotations.Transactional;
  * @version $Id$
  */
 @Name("employeeHome")
+@Scope(ScopeType.CONVERSATION)
 public class EmployeeHome extends MinoasEntityHome<Employee> {
 
 	
@@ -38,6 +40,7 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 	@Factory(value = "employee", scope = ScopeType.PAGE)
 	public Employee getInstance() {
 		return (Employee) super.getInstance();
+		
 	}
 
 	public boolean hasEmployment() {

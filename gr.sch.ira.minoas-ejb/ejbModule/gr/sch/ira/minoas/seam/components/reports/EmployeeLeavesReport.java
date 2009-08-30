@@ -60,35 +60,71 @@ public class EmployeeLeavesReport extends BaseReport {
 	private static final String SEAM_MESSAGES_RESOURCE_BUNDLE_NAME = "messages";
 
 	protected ResourceBundle getResourceBundle(String resource_budle_name) {
-		return SeamResourceBundle.getBundle(SEAM_MESSAGES_RESOURCE_BUNDLE_NAME, FacesContext.getCurrentInstance()
-				.getViewRoot().getLocale());
+		return SeamResourceBundle.getBundle(SEAM_MESSAGES_RESOURCE_BUNDLE_NAME,
+				FacesContext.getCurrentInstance().getViewRoot().getLocale());
 	}
 
 	protected String getLocalizedMessage(String message_key) {
-		return getResourceBundle(SEAM_MESSAGES_RESOURCE_BUNDLE_NAME).getString(message_key);
+		return getResourceBundle(SEAM_MESSAGES_RESOURCE_BUNDLE_NAME).getString(
+				message_key);
 	}
 
 	public void generatePDFReport() {
 
 		try {
-			Map<String, String> parameters = new HashMap<String, String>();
-			parameters.put("LEAVE_TYPE_FILTER",
-					employeeLeaveCriteria.getLeaveType() != null ? getLocalizedMessage(employeeLeaveCriteria
-							.getLeaveType().getKey()) : "Όλοι οι Τύποι");
+			Map<String, Object> parameters = new HashMap<String, Object>();
+			parameters
+					.put(
+							"LEAVE_TYPE_FILTER",
+							employeeLeaveCriteria.getLeaveType() != null ? getLocalizedMessage(employeeLeaveCriteria
+									.getLeaveType().getKey())
+									: "Όλοι οι Τύποι");
+			parameters.put("LEAVE_SPECIALIZATION_FILTER", employeeLeaveCriteria
+					.getSpecializationGroup() != null ? employeeLeaveCriteria
+					.getSpecializationGroup().getTitle()
+					: "Όλες οι Ειδικότητες");
+
+			parameters.put("LEAVE_SCHOOL_FILTER", employeeLeaveCriteria
+					.getSchoolOfIntereset() != null ? employeeLeaveCriteria
+					.getSchoolOfIntereset().getTitle()
+					: "Όλες οι Σχολικές Μονάδες");
+
+			parameters.put("LEAVE_REGION_FILTER", employeeLeaveCriteria
+					.getRegion() != null ? employeeLeaveCriteria.getRegion()
+					.toString()
+					+ "' Ηρακλείου" : "Όλες οι Περιοχές");
+
+			parameters.put("LEAVE_DATE_SEARCH_FILTER",
+					getLocalizedMessage(employeeLeaveCriteria
+							.getDateSearchType().getKey()));
+
+			parameters.put("LEAVE_EFFECTIVE_DATE_FILTER", employeeLeaveCriteria
+					.getEffectiveDate());
+			parameters.put("LEAVE_EFFECTIVE_DATE_FROM_FILTER", employeeLeaveCriteria
+					.getEffectiveDateFrom());
+			parameters.put("LEAVE_EFFECTIVE_DATE_UNTIL_FILTER", employeeLeaveCriteria
+					.getEffectiveDateUntil());
+
 			/* create the leave type helper */
-			for (LeaveType leaveType : getCoreSearching().getAvailableLeaveTypes()) {
-				parameters.put(leaveType.name(), getLocalizedMessage(leaveType.getKey()));
+			for (LeaveType leaveType : getCoreSearching()
+					.getAvailableLeaveTypes()) {
+				parameters.put(leaveType.name(), getLocalizedMessage(leaveType
+						.getKey()));
 			}
 
-			JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(reportData);
-			byte[] bytes = JasperRunManager.runReportToPdf(this.getClass().getResourceAsStream(
-					"/reports/leaveByType.jasper"), parameters, (JRDataSource) ds);
-			HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext()
-					.getResponse();
+			JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(
+					reportData);
+			byte[] bytes = JasperRunManager.runReportToPdf(this.getClass()
+					.getResourceAsStream("/reports/leaveByType.jasper"),
+					parameters, (JRDataSource) ds);
+			HttpServletResponse response = (HttpServletResponse) FacesContext
+					.getCurrentInstance().getExternalContext().getResponse();
 			response.setContentType("application/pdf");
-			response.addHeader("Content-Disposition", "attachment;filename=LeaveReportByType.pdf");
+			response.addHeader("Content-Disposition",
+					"attachment;filename=LeaveReportByType.pdf");
 			response.setContentLength(bytes.length);
-			ServletOutputStream servletOutputStream = response.getOutputStream();
+			ServletOutputStream servletOutputStream = response
+					.getOutputStream();
 			servletOutputStream.write(bytes, 0, bytes.length);
 			servletOutputStream.flush();
 			servletOutputStream.close();
@@ -102,13 +138,17 @@ public class EmployeeLeavesReport extends BaseReport {
 	public void generateReport() {
 
 		Date effectiveDate = getEmployeeLeaveCriteria().getEffectiveDate();
-		Date effectiveDateFrom = getEmployeeLeaveCriteria().getEffectiveDateFrom();
-		Date effectiveDateUntil = getEmployeeLeaveCriteria().getEffectiveDateUntil();
+		Date effectiveDateFrom = getEmployeeLeaveCriteria()
+				.getEffectiveDateFrom();
+		Date effectiveDateUntil = getEmployeeLeaveCriteria()
+				.getEffectiveDateUntil();
 		LeaveType leaveType = getEmployeeLeaveCriteria().getLeaveType();
 		Character region = getEmployeeLeaveCriteria().getRegion();
 		School school = getEmployeeLeaveCriteria().getSchoolOfIntereset();
-		SpecializationGroup specializationGroup = getEmployeeLeaveCriteria().getSpecializationGroup();
-		DateSearchType dateSearchType = getEmployeeLeaveCriteria().getDateSearchType();
+		SpecializationGroup specializationGroup = getEmployeeLeaveCriteria()
+				.getSpecializationGroup();
+		DateSearchType dateSearchType = getEmployeeLeaveCriteria()
+				.getDateSearchType();
 
 		StringBuffer sb = new StringBuffer();
 		sb.append("SELECT l FROM Leave l WHERE l.active IS TRUE ");
@@ -120,20 +160,23 @@ public class EmployeeLeavesReport extends BaseReport {
 			sb.append("AND l.dueTo <= :effectiveDate ");
 			break;
 		case DURING_DATE:
-			sb.append(" AND (:effectiveDate BETWEEN l.established AND l.dueTo) ");
+			sb
+					.append(" AND (:effectiveDate BETWEEN l.established AND l.dueTo) ");
 			break;
 		case DURING_DATE_PERIOD:
-			sb.append(" AND (:effectiveDateFrom <= l.established AND  :effectiveDateUntil >= l.dueTo) ");
+			sb
+					.append(" AND (:effectiveDateFrom <= l.established AND  :effectiveDateUntil >= l.dueTo) ");
 			break;
 		}
 		if (leaveType != null) {
 			sb.append(" AND l.leaveType=:leaveType ");
 		}
 		if (school != null) {
-			sb.append(" AND l.employee.currentEmployment.school = :school");
+			sb.append(" AND l.employee.currentEmployment.school = :school ");
 		}
 		if (region != null) {
-			sb.append(" AND l.employee.currentEmployment.school.regionCode = :region");
+			sb
+					.append(" AND l.employee.currentEmployment.school.regionCode = :region ");
 		}
 		if (specializationGroup != null) {
 			sb
@@ -186,9 +229,11 @@ public class EmployeeLeavesReport extends BaseReport {
 	}
 
 	/**
-	 * @param employeeLeaveCriteria the employeeLeaveCriteria to set
+	 * @param employeeLeaveCriteria
+	 *            the employeeLeaveCriteria to set
 	 */
-	public void setEmployeeLeaveCriteria(EmployeeLeaveCriteria employeeLeaveCriteria) {
+	public void setEmployeeLeaveCriteria(
+			EmployeeLeaveCriteria employeeLeaveCriteria) {
 		this.employeeLeaveCriteria = employeeLeaveCriteria;
 	}
 

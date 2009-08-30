@@ -199,7 +199,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 	public Collection<Leave> getEmployeeLeaves(Person employee) {
 		Collection<Leave> result = null;
 		info("searching employee's '#0' leaves.", employee);
-		result = entityManager.createQuery("SELECT s from Leave s WHERE s.employee=:employee ORDER BY s.established")
+		result = entityManager.createQuery("SELECT s from Leave s WHERE s.active IS TRUE AND s.employee=:employee ORDER BY s.established")
 				.setParameter("employee", employee).getResultList();
 		info("found totally '#0' leave(s) for employee '#1'.", result.size(), employee);
 		return result;

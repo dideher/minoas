@@ -20,6 +20,7 @@ import org.jboss.seam.annotations.datamodel.DataModel;
  * @version $Id$
  */
 @Name("employeeLeaveCriteria")
+@Scope(ScopeType.CONVERSATION)
 public class EmployeeLeaveCriteria {
 	
 	private DateSearchType dateSearchType;

@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.Set;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -83,7 +84,7 @@ public class Employee extends Person {
 	@Column(name = "EMPLOYEE_TYPE", nullable = false, updatable = false)
 	private EmployeeType type;
 	
-	@OneToOne(optional = true, fetch = FetchType.LAZY)
+	@OneToOne(optional = true, fetch = FetchType.LAZY, cascade={ CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
 	@JoinColumn(name = "LEAVE_ID", nullable = true)
 	private Leave leave;
 

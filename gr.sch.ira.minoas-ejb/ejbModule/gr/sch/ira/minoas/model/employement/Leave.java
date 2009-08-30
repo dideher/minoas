@@ -1,6 +1,7 @@
 package gr.sch.ira.minoas.model.employement;
 
 import gr.sch.ira.minoas.model.BaseIDModel;
+import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.employee.Employee;
 
 import java.util.Date;
@@ -92,7 +93,25 @@ public class Leave extends BaseIDModel {
 	@Column(name="LEAVE_TYPE", length=64, nullable=false)
 	private LeaveType leaveType;
 	
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="REGULAR_SCHOOL_ID", nullable=true)
+	private School regularSchool;
 	
+	
+	/**
+	 * @return the regularSchool
+	 */
+	public School getRegularSchool() {
+		return regularSchool;
+	}
+
+	/**
+	 * @param regularSchool the regularSchool to set
+	 */
+	public void setRegularSchool(School regularSchool) {
+		this.regularSchool = regularSchool;
+	}
+
 	public Leave() {
 		super();
 		// TODO Auto-generated constructor stub

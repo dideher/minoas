@@ -33,16 +33,12 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "UNIT")
+@DiscriminatorColumn(name = "UNIT_TYPE")
 @Table(name = "UNIT")
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
-@NamedQuery(name = Unit.NAMED_QUERY_FIND_UNIT_BY_TITLE, query = "SELECT u FROM Unit u WHERE u.title=:"
-		+ Unit.QUERY_PARAMETER_UNIT_TITLE)
 public class Unit extends AbstractArchivableEntity implements Comparable<Unit> {
 
-	public static final String NAMED_QUERY_FIND_UNIT_BY_TITLE = "findUnitByTitle";
-
-	public static final String QUERY_PARAMETER_UNIT_TITLE = "title";
+	
 	
 	@Override
 	public String toString() {
@@ -70,10 +66,7 @@ public class Unit extends AbstractArchivableEntity implements Comparable<Unit> {
 	private Collection<UnitCategory> categories = new ArrayList<UnitCategory>();
 	
 	
-	/*@ManyToOne(fetch=FetchType.LAZY, targetEntity=Unit.class)
-	@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
-	@JoinTable(name = "UNIT_NEIGHBOURS", joinColumns = @JoinColumn(name = "UNIT_ID", referencedColumnName = "UNIT_ID"), inverseJoinColumns = @JoinColumn(name = "NEIGHBOOR_UNIT_ID", referencedColumnName = "UNIT_ID"))
-	private Collection<Unit> neighbours = new ArrayList<Unit>();*/
+
 
 	@Id
 	@Column(name = "UNIT_ID", length = 3)
