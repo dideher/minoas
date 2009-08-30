@@ -5,7 +5,7 @@
  <!-- Ajax4jsf -->
  <context-param>
   <param-name>org.richfaces.SKIN</param-name>
-  <param-value>blueSky</param-value>
+  <param-value>glassX</param-value>
  </context-param>
  <!-- Facelets development mode (disable in production) -->
  <context-param>

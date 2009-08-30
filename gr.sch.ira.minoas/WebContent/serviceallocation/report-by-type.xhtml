@@ -142,7 +142,7 @@
 
 					<rich:column>
 						<f:facet name="header">
-							<h:outputText value="Υπηρεσία Θητείας Στην Μονάδα" />
+							<h:outputText value="Μονάδα Θητείας" />
 						</f:facet>
 						<h:outputText value="#{_serviceAllocation.serviceUnit.title}" />
 					</rich:column>
@@ -174,14 +174,18 @@
 
 					<rich:column>
 						<f:facet name="header">
-							<h:outputText value="Ωράριο Οργανικής" />
+							<h:outputText value="Ωράριο Ορ.">
+								<rich:toolTip value="Ωράριο στην Οργανική" />
+							</h:outputText>
 						</f:facet>
 						<h:outputText value="#{_serviceAllocation.workingHoursOnRegularPosition}" />
 					</rich:column>
 					
 					<rich:column>
 						<f:facet name="header">
-							<h:outputText value="Ωράριο Υπηρεσίας" />
+							<h:outputText value="Ωράριο Υπ.">
+								<rich:toolTip value="Ωράριο στην Μονάδα Υπηρεσίας" />
+							</h:outputText>
 						</f:facet>
 						<h:outputText value="#{_serviceAllocation.workingHoursOnServicingPosition}" />
 					</rich:column>
