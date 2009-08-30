@@ -5,8 +5,9 @@
   <description>Διαχείρηση Αδειών του/της #{employeeUtil.prettyFormat(employee)}</description>
   
   <param name="leave_management_from"/>
-  <param name="employeeID" value="#{employeeHome.id}" converterId="javax.faces.Integer"/>
-  
+ <!-- 
+ <param name="employeeID" value="#{employeeHome.id}" converterId="javax.faces.Integer"/>
+  -->  
   
   <!-- navigation rules -->
   <navigation from-action="endButton">
@@ -16,6 +17,18 @@
   
   <navigation from-action="#{leaveHome.cancel()}">
     <rule if-outcome="updated">
+      <render view-id="/leave/employee-leave-management.xtml"></render>
+    </rule>
+  </navigation>
+  
+  <navigation from-action="#{leaveHome.update()}">
+    <rule if-outcome="updated">
+      <render view-id="/leave/employee-leave-management.xtml"></render>
+    </rule>
+  </navigation>
+  
+  <navigation from-action="#{leaveHome.persist()}">
+    <rule if-outcome="persisted">
       <render view-id="/leave/employee-leave-management.xtml"></render>
     </rule>
   </navigation>

@@ -17,4 +17,8 @@
     <redirect view-id="#{empty from ? '/home' : from}.xhtml}" />
   </navigation>
   
+  <navigation from-action="selectEmployee">
+  	  <redirect view-id="#{empty to ? '/home' : to}.xhtml}" />
+  </navigation>
+  
 </page>

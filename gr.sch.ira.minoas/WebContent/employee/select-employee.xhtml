@@ -131,13 +131,7 @@
 							</f:facet>
 							<h:outputText value="#{employee.motherName}" />
 						</rich:column>
-						<rich:column style="text-align:right">
-							<f:facet name="header">
-								<h:outputText value="Τύπος" />
-							</f:facet>
-							<h:outputText 
-								value="#{employee.type}" />
-						</rich:column>
+						
 						<rich:column style="text-align:center">
 							<f:facet name="header">
 								<h:outputText value="Ειδ." />
@@ -152,6 +146,13 @@
 							<h:outputText value="#{employee.lastSpecialization.title}">
 							</h:outputText>
 						</rich:column>
+						<rich:column style="text-align:right">
+							<f:facet name="header">
+								<h:outputText value="Τύπος" />
+							</f:facet>
+							<h:outputText 
+								value="#{messages[employee.type.key]}" />
+						</rich:column>
 						<rich:column style="text-align:center">
 							<f:facet name="header">
 								<h:outputText value="Ημ/νια Γεννήσεως" />
@@ -165,11 +166,12 @@
 								<h:outputText value="Ενέργεια" />
 							</f:facet>
 							<rich:toolBar itemSeparator="line">
-								<s:link rendered="#{!empty to}" value="Επιλογή"
-									view="#{to}.xhtml">
-									<f:param name="employeeID" value="#{employee.id}" />
-									<f:param name="from" value="/employee/select-employee" />
-								</s:link>
+								
+								<a4j:commandLink action="selectEmployee" value="Επιλογή">
+									<f:setPropertyActionListener value="#{employee.id}"
+														target="#{employeeHome.id}" />
+									<s:conversationPropagation type="join" />
+								</a4j:commandLink>
 							</rich:toolBar>
 						</rich:column>
 

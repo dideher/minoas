@@ -305,10 +305,10 @@
    <component name="exampleLeave" class="gr.sch.ira.minoas.model.employement.Leave" />
    
    <framework:entity-query name="employeeLeavesListQuery" max-results="200" scope="page">
-    <framework:ejbql>SELECT s FROM Leave s</framework:ejbql>
-    <framework:order>s.established desc</framework:order>
+    <framework:ejbql>SELECT l FROM Leave l WHERE l.active IS TRUE</framework:ejbql>
+    <framework:order>l.established desc</framework:order>
     <framework:restrictions>
-      <value>s.employee = #{employeeHome.instance}</value>
+      <value>l.employee = #{employeeHome.instance}</value>
     </framework:restrictions> 
    </framework:entity-query>
    

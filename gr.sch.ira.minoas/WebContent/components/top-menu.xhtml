@@ -79,7 +79,7 @@
 				<rich:menuGroup value="Διαχείρηση Αδειών">
 					<rich:menuItem submitMode="none"
 						disabled="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_LEAVE'))}">
-						<s:link value="Εισαγωγή Νέας Άδειας"
+						<s:link value="Εισαγωγή Νέας Άδειας" propagation="nest"
 							action="#{leaveHome.clearInstance()}"
 							view="/leave/add-new-leave.xhtml">
 							<f:param name="add_new_leave_from" value="/home" />
@@ -87,7 +87,7 @@
 					</rich:menuItem>
 					<rich:menuItem submitMode="none"
 						disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MANAGE_LEAVE'))}">
-						<s:link value="Διαχείρηση Αδειών Εκπαιδευτικού"
+						<s:link value="Διαχείρηση Αδειών Εκπαιδευτικού" propagation="nest"
 							view="/employee/select-employee.xhtml">
 							<f:param name="from" value="/home" />
 							<f:param name="to"
