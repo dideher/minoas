@@ -56,7 +56,7 @@
 				</f:facet>
 				<rich:menuItem submitMode="none"
 					disabled="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_EMPLOYEE'))}">
-					<s:link value="Εισαγωγή Εκπαιδευτικού"
+					<s:link value="Εισαγωγή Εκπαιδευτικού" propagation="nest"
 						view="/employee/add-new-employee.xhtml">
 						<f:param name="add_new_employee_from" value="/home" />
 					</s:link>
