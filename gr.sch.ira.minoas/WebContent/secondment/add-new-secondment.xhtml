@@ -20,26 +20,34 @@
 			</f:facet>
 			<h:form>
 				<h:panelGrid columns="1">
-
-					<rich:panel>
-						<f:facet name="header">
-							<h:outputText value="Στοιχεία Αποσπασμένου" />
-						</f:facet>
-						<a4j:outputPanel id="employeePanel">
-							<s:div rendered="#{employeeHome.managed}">
-								<ui:include src="/employee/basic-info.xhtml">
-									<ui:param name="employee" value="#{employeeHome.instance}" />
-								</ui:include>
-							</s:div>
-						</a4j:outputPanel>
-						<rich:separator lineType="dashed" height="2" />
-						<a4j:commandLink ajaxSingle="true" id="select-employee"
-							oncomplete="#{rich:component('employee_search_panel')}.show()"
-							value="Επιλογή Εκπαιδευτικού">
-						</a4j:commandLink>
+					<a4j:outputPanel id="employeePanel">
+						<rich:panel rendered="#{employeeHome.managed}">
+							<f:facet name="header">
+								<h:outputText value="Στοιχεία Αποσπασμένου" />
+							</f:facet>
 
 
-					</rich:panel>
+							<ui:include src="/employee/basic-info.xhtml">
+								<ui:param name="employee" value="#{employeeHome.instance}" />
+							</ui:include>
+
+
+						</rich:panel>
+					</a4j:outputPanel>
+					<h:panelGroup>
+						<rich:toolBar itemSeparator="line">
+							<a4j:commandLink ajaxSingle="true" id="select-employee"
+								oncomplete="#{rich:component('employee_search_panel')}.show()"
+								value="Επιλογή Εκπαιδευτικού">
+							</a4j:commandLink>
+							<a4j:commandLink ajaxSingle="true" id="fast_empoloyee_insert" action="#{employeeHome.clearInstance}"
+								onclick="if(!confirm('Σίγουρα ο εκπαιδευτικός δεν υπάρχει ήδει στην βάση του Μίνωα ?')) {form.reset(); return false;}"
+								oncomplete="#{rich:component('fastEmployeeInsertPanel')}.show()" reRender="fastEmployeeInsertPanel"
+								value="Εισαγωγή Εκπαιδευτικού Απο Άλλο ΠΥΣΔΕ">
+							</a4j:commandLink>
+						</rich:toolBar>
+					</h:panelGroup>
+					<rich:separator lineType="dashed" height="2" />
 					<a4j:region>
 						<a4j:outputPanel id="newSecondmentPanel">
 							<rich:panel rendered="#{employeeHome.managed}">
@@ -235,6 +243,145 @@
 				</h:panelGrid>
 			</h:form>
 		</rich:panel>
+
+
+		<rich:modalPanel id="fastEmployeeInsertPanel" autosized="true"
+			width="550">
+			<f:facet name="header">
+				<h:outputText
+					value="Γρήγορη Εισαγωγή Εκπαιδευτικόυ Απο Άλλο ΠΥΣΔΕ ...." />
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<h:graphicImage value="/img/modal/close.png"
+						id="fastEmployeeInsertPanel_hidelink" styleClass="hidelink"
+						width="18" height="18" />
+					<rich:componentControl for="fastEmployeeInsertPanel"
+						attachTo="fastEmployeeInsertPanel_hidelink" operation="hide"
+						event="onclick" />
+				</h:panelGroup>
+			</f:facet>
+			<h:form>
+				<rich:messages style="color:red;"></rich:messages>
+				<a4j:outputPanel id="fastEmployeeInsertPanel">
+					<h:panelGrid columns="1">
+						<h:outputText
+							value="Με την παρακάτω φόρμα μπορείτε να εισάγεται γρήγορα εναν καινούργιο εκπαιδευτικό (μόνο μόνιμο) με οργανική σε άλλο ΠΥΣΔΕ." />
+					</h:panelGrid>
+					<h:panelGrid columns="4">
+
+						<s:decorate template="/layout/doubleLineEdit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Επώνυμο" />
+							</ui:define>
+							<h:inputText value="#{employeeHome.instance.lastName}"
+								required="true" styleClass="fieldValueText" tabindex="1"
+								size="15" maxlength="30">
+							</h:inputText>
+						</s:decorate>
+
+						<s:decorate template="/layout/doubleLineEdit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Όνομα" />
+							</ui:define>
+							<h:inputText value="#{employeeHome.instance.firstName}"
+								required="true" styleClass="fieldValueText" tabindex="2"
+								size="15" maxlength="30">
+							</h:inputText>
+						</s:decorate>
+
+
+
+						<s:decorate template="/layout/doubleLineEdit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Έπωνυμο Πατρός" />
+							</ui:define>
+							<h:inputText value="#{employeeHome.instance.fatherSurname}"
+								required="true" styleClass="fieldValueText" tabindex="2"
+								size="15" maxlength="30">
+							</h:inputText>
+						</s:decorate>
+
+						<s:decorate template="/layout/doubleLineEdit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="ΑΜ" />
+							</ui:define>
+							<h:inputText
+								value="#{employeeHome.instance.regularDetail.registryID}"
+								required="false" styleClass="fieldValueText" tabindex="1"
+								size="15" maxlength="30">
+							</h:inputText>
+						</s:decorate>
+
+						<s:decorate template="/layout/doubleLineEdit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Ειδικότητα : " />
+							</ui:define>
+							<h:inputText id="specializationFilter"
+								styleClass="fieldValueText" size="7" maxlength="7">
+								<rich:suggestionbox height="150" width="350"
+									for="specializationFilter" var="a_spec"
+									suggestionAction="#{specializationSuggester.suggest}">
+									<f:facet name="nothingLabel">
+										<h:outputText value="Άγνωστη Ειδικότητα" />
+									</f:facet>
+									<h:column>
+										<h:outputText value="#{a_spec.id}" />
+									</h:column>
+									<h:column>
+										<h:outputText value="#{a_spec.title}" />
+									</h:column>
+									<a4j:support ajaxSingle="true" event="onselect">
+										<f:setPropertyActionListener value="#{a_spec}"
+											target="#{employeeHome.instance.lastSpecialization}" />
+									</a4j:support>
+								</rich:suggestionbox>
+							</h:inputText>
+						</s:decorate>
+
+						<s:decorate template="/layout/doubleLineEdit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Όνομα Πατρός" />
+							</ui:define>
+							<h:inputText value="#{employeeHome.instance.fatherName}"
+								required="true" styleClass="fieldValueText" tabindex="2"
+								size="15" maxlength="30">
+							</h:inputText>
+						</s:decorate>
+
+						<s:decorate template="/layout/doubleLineEdit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Ημ/νια Γέννησης : " />
+							</ui:define>
+							<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
+								style="width:50px" enableManualInput="true"
+								styleClass="fieldValueText" required="false"
+								value="#{employeeHome.instance.dateOfBirth}">
+							</rich:calendar>
+						</s:decorate>
+
+
+
+
+
+
+					</h:panelGrid>
+				</a4j:outputPanel>
+				<h:panelGrid columns="2">
+
+					<a4j:commandButton value="Καταχώρηση Άδειας !"
+						action="#{employeeHome.persist()}"
+						data="#{facesContext.maximumSeverity.ordinal ge 2}"
+						oncomplete="if(data == false) Richfaces.hideModalPanel('createModalPanel');"
+						reRender="employeePanel" />
+					<a4j:commandButton value="Επιστροφή .."
+						action="#{employeeHome.revert()}" reRender="employeePanel"
+						onclick="#{rich:component('fastEmployeeInsertPanel')}.hide();" />
+				</h:panelGrid>
+			</h:form>
+		</rich:modalPanel>
+
+
 		<rich:modalPanel id="employee_search_panel" autosized="true"
 			width="550">
 			<f:facet name="header">
