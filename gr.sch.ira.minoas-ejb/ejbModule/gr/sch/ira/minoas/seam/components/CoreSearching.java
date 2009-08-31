@@ -10,6 +10,7 @@ import gr.sch.ira.minoas.model.core.SpecializationGroup;
 import gr.sch.ira.minoas.model.core.TeachingRequirement;
 import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employee.Employee;
+import gr.sch.ira.minoas.model.employee.EmployeeType;
 import gr.sch.ira.minoas.model.employee.Person;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
@@ -81,6 +82,11 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 		return LeaveType.values();
 	}
 
+	@Factory(value = "employeeTypes")
+	public EmployeeType[] getEmployeeTypes() {
+		return EmployeeType.values();
+	}
+	
 	@SuppressWarnings("unchecked")
 	public List<OrganizationalOffice> getAvailableOrganizationalOffices() {
 		debug("fetching all available organizational offices");
