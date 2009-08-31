@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich">
+
+<ui:component>
+	<h:panelGrid columns="1">
+	</h:panelGrid>
+	<rich:panel>
+		<f:facet name="header">
+				<h:outputText value="Διεύθυνση Κατοικίας Εκπαιδευτικού" />
+	
+		</f:facet>
+		<h:panelGrid columns="2">
+
+			<s:decorate template="/layout/doubleLineEdit.xhtml">
+				<ui:define name="label">
+					<h:outputText value="Διεύθυνση" />
+				</ui:define>
+				<h:inputText value="#{address.address}" required="true"
+					styleClass="fieldValueText" tabindex="1" size="15" maxlength="30">
+				</h:inputText>
+			</s:decorate>
+
+			<s:decorate template="/layout/doubleLineEdit.xhtml">
+				<ui:define name="label">
+					<h:outputText value="Αριθμός" />
+				</ui:define>
+				<h:inputText value="#{address.number}" required="true"
+					styleClass="fieldValueText" tabindex="2" size="5" maxlength="5">
+				</h:inputText>
+			</s:decorate>
+
+			<s:decorate template="/layout/doubleLineEdit.xhtml">
+				<ui:define name="label">
+					<h:outputText value="TK" />
+				</ui:define>
+				<h:inputText value="#{address.postCode}" required="true"
+					styleClass="fieldValueText" tabindex="2" size="7" maxlength="7">
+				</h:inputText>
+			</s:decorate>
+
+			<s:decorate template="/layout/doubleLineEdit.xhtml">
+				<ui:define name="label">
+					<h:outputText value="Πόλη" />
+				</ui:define>
+				<h:inputText value="#{address.city}" required="true"
+					styleClass="fieldValueText" tabindex="2" size="15" maxlength="30">
+				</h:inputText>
+			</s:decorate>
+
+		
+		</h:panelGrid>
+	</rich:panel>
+
+
+</ui:component>
+</html>

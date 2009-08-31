@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich">
+
+<ui:component>
+	<h:panelGrid columns="1">
+	</h:panelGrid>
+	<rich:panel>
+		<f:facet name="header">
+			<h:outputText value="Βασικά Στοιχεία Εκπαιδευτικού" />
+
+		</f:facet>
+		<h:panelGrid columns="4">
+
+			<s:decorate template="/layout/doubleLineEdit.xhtml">
+				<ui:define name="label">
+					<h:outputText value="Επώνυμο" />
+				</ui:define>
+				<h:inputText value="#{employee.lastName}" required="true"
+					styleClass="fieldValueText" tabindex="1" size="15" maxlength="30">
+				</h:inputText>
+			</s:decorate>
+
+			<s:decorate template="/layout/doubleLineEdit.xhtml">
+				<ui:define name="label">
+					<h:outputText value="Όνομα" />
+				</ui:define>
+				<h:inputText value="#{employee.firstName}" required="true"
+					styleClass="fieldValueText" tabindex="2" size="15" maxlength="30">
+				</h:inputText>
+			</s:decorate>
+
+
+
+			<s:decorate template="/layout/doubleLineEdit.xhtml">
+				<ui:define name="label">
+					<h:outputText value="Έπωνυμο Πατρός" />
+				</ui:define>
+				<h:inputText value="#{employee.fatherSurname}" required="true"
+					styleClass="fieldValueText" tabindex="2" size="15" maxlength="30">
+				</h:inputText>
+			</s:decorate>
+
+			<s:decorate template="/layout/doubleLineEdit.xhtml">
+				<ui:define name="label">
+					<h:outputText value="Τύπος Εκπαιδευτικού" />
+				</ui:define>
+
+				<h:selectOneMenu id="employeeType" value="#{employee.type}"
+					required="true">
+					<s:selectItems hideNoSelectionLabel="true" var="_employeeType"
+						value="#{employeeTypes}" label="#{messages[_employeeType.key]}" />
+					<s:convertEnum />
+					<a4j:support event="onblur" ajaxSingle="true" bypassUpdates="true" />
+				</h:selectOneMenu>
+			</s:decorate>
+
+			<s:decorate template="/layout/doubleLineEdit.xhtml">
+				<ui:define name="label">
+					<h:outputText value="Όνομα Πατρός" />
+				</ui:define>
+				<h:inputText value="#{employee.fatherName}" required="true"
+					styleClass="fieldValueText" tabindex="2" size="15" maxlength="30">
+				</h:inputText>
+			</s:decorate>
+
+			<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Ημ/νια Γέννησης : " />
+									</ui:define>
+									<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
+										style="width:50px" enableManualInput="true"
+										styleClass="fieldValueText" required="true"
+										value="#{employee.dateOfBirth}">
+									</rich:calendar>
+								</s:decorate>
+
+			<s:decorate template="/layout/doubleLineEdit.xhtml">
+				<ui:define name="label">
+					<h:outputText value="Έπωνυμο Μητρός" />
+				</ui:define>
+				<h:inputText value="#{employee.motherSurname}" required="true"
+					styleClass="fieldValueText" tabindex="2" size="15" maxlength="30">
+				</h:inputText>
+			</s:decorate>
+
+			<s:decorate template="/layout/doubleLineEdit.xhtml">
+				<ui:define name="label">
+					<h:outputText value="Όνομα Μητρός" />
+				</ui:define>
+				<h:inputText value="#{employee.motherName}" required="true"
+					styleClass="fieldValueText" tabindex="2" size="15" maxlength="30">
+				</h:inputText>
+			</s:decorate>
+
+			<s:decorate template="/layout/doubleLineEdit.xhtml">
+				<ui:define name="label">
+					<h:outputText value="Α.Φ.Μ" />
+				</ui:define>
+				<h:inputText value="#{employee.vatNumber}" required="false"
+					styleClass="fieldValueText" tabindex="2" size="15" maxlength="30">
+				</h:inputText>
+			</s:decorate>
+
+			<s:decorate template="/layout/doubleLineEdit.xhtml">
+				<ui:define name="label">
+					<h:outputText value="Α.Δ.Τ" />
+				</ui:define>
+				<h:inputText value="#{employee.idNumber}" required="false"
+					styleClass="fieldValueText" tabindex="2" size="15" maxlength="30">
+				</h:inputText>
+			</s:decorate>
+
+
+
+		</h:panelGrid>
+	</rich:panel>
+
+
+</ui:component>
+</html>
