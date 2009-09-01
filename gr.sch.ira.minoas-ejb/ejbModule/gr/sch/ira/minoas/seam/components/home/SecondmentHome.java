@@ -1,10 +1,14 @@
 package gr.sch.ira.minoas.seam.components.home;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.SecondmentType;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
@@ -27,14 +31,22 @@ public class SecondmentHome extends MinoasEntityHome<Secondment> {
 	@In(create = true)
 	private EmployeeHome employeeHome;
 
-	protected boolean validateSecondment(Secondment secondment, boolean addMessages) {
+	public void prepareForNewSecondment() {
+		this.clearInstance();
+		employeeHome.clearInstance();
+	}
+
+	protected boolean validateSecondment(Secondment secondment,
+			boolean addMessages) {
 		/* source & target unit must not be same */
 
 		if (secondment.getSourceUnit() != null
-				&& secondment.getSourceUnit().getId().equals(secondment.getTargetUnit().getId())) {
+				&& secondment.getSourceUnit().getId().equals(
+						secondment.getTargetUnit().getId())) {
 			if (addMessages)
 				facesMessages
-						.add(Severity.ERROR,
+						.add(
+								Severity.ERROR,
 								"Η μονάδα αποσπάσης πρέπει να είναι διαφορετική απο την τρέχουσα οργανική του εκπαιδευτικού. Καφέ ήπιες ;");
 			return false;
 		}
@@ -43,7 +55,8 @@ public class SecondmentHome extends MinoasEntityHome<Secondment> {
 
 			if (addMessages)
 				facesMessages
-						.add(Severity.ERROR,
+						.add(
+								Severity.ERROR,
 								"Η ημ/νια λήξης της απόσπασης πρέπει να είναι μεταγενέστερη της έναρξης. Μήπως να κάνεις ένα διάλειμα ;");
 			return false;
 		}
@@ -57,16 +70,26 @@ public class SecondmentHome extends MinoasEntityHome<Secondment> {
 	@Transactional
 	@Override
 	public String persist() {
-
 		Employee employee = employeeHome.getInstance();
 		Employment currentEmployment = employee.getCurrentEmployment();
-		Secondment currentSecondment = currentEmployment != null ? currentEmployment.getSecondment() : null;
+		Secondment currentSecondment = currentEmployment != null ? currentEmployment
+				.getSecondment()
+				: null;
 		Secondment newSecondment = getInstance();
+
+		Date established = DateUtils.truncate(newSecondment.getEstablished(),
+				Calendar.DAY_OF_MONTH);
+		Date dueTo = DateUtils.truncate(newSecondment.getDueTo(),
+				Calendar.DAY_OF_MONTH);
+		Date today = DateUtils.truncate(new Date(System.currentTimeMillis()),
+				Calendar.DAY_OF_MONTH);
+
 		/* get some checking first */
 		if (!validateSecondment(newSecondment, true)) {
 			return VALIDATION_ERROR_OUTCOME;
 		}
-		newSecondment.setSchoolYear(getCoreSearching().getActiveSchoolYear(getEntityManager()));
+		newSecondment.setSchoolYear(getCoreSearching().getActiveSchoolYear(
+				getEntityManager()));
 		newSecondment.setActive(Boolean.TRUE);
 		newSecondment.setEmployee(employee);
 		newSecondment.setTargetPYSDE(newSecondment.getTargetUnit().getPysde());
@@ -88,8 +111,10 @@ public class SecondmentHome extends MinoasEntityHome<Secondment> {
 					.add(
 							Severity.WARN,
 							"Για τον εκπαιδευτικό #0 ο Μίνωας είχε καταχωρημένη και άλλη ενεργή απόσπαση στην μονάδα #1 με λήξη την #2, η οποία όμως ακυρώθηκε.",
-							(employee.getLastName() + " " + employee.getFirstName()), currentSecondment.getTargetUnit()
-									.getTitle(), currentSecondment.getDueTo());
+							(employee.getLastName() + " " + employee
+									.getFirstName()), currentSecondment
+									.getTargetUnit().getTitle(),
+							currentSecondment.getDueTo());
 		}
 		return super.persist();
 	}
@@ -101,33 +126,73 @@ public class SecondmentHome extends MinoasEntityHome<Secondment> {
 	@Transactional
 	public String update() {
 		Secondment current_secondment = getInstance();
+		Employment employment = current_secondment.getAffectedEmployment();
+		Date established = DateUtils.truncate(current_secondment
+				.getEstablished(), Calendar.DAY_OF_MONTH);
+		Date dueTo = DateUtils.truncate(current_secondment.getDueTo(),
+				Calendar.DAY_OF_MONTH);
+		Date today = DateUtils.truncate(new Date(System.currentTimeMillis()),
+				Calendar.DAY_OF_MONTH);
 		if (!validateSecondment(current_secondment, true)) {
 			return VALIDATION_ERROR_OUTCOME;
-		} else
-			return super.update();
+		}
+
+		/*
+		 * check if the secondment should be set as the employee's current
+		 * leave. A secondment can be set as the employee's current leave if and
+		 * only if the secondment's period is current (ie, today is after and
+		 * before secondment's established and dueTo dates respectively).
+		 */
+		if (employment != null) {
+			if (today.after(established) && today.before(dueTo)) {
+
+				employment.setSecondment(current_secondment);
+
+			} else {
+				/*
+				 * if the current secodnment is not the employee's current
+				 * secondment, then check if the leave secondment to be the
+				 * employee's current secodment and if so, remove it.
+				 */
+				if (employment.getSecondment() != null
+						&& employment.getSecondment().getId().equals(
+								current_secondment.getId())) {
+					employment.setSecondment(null);
+				}
+
+			}
+		}
+		return super.update();
 
 	}
 
 	@Transactional
 	public String cancel() {
 		Secondment current_secondment = getInstance();
-		current_secondment.setActive(Boolean.FALSE);
-		current_secondment.setAffectedEmployment(null);
 		Employee employee = current_secondment.getEmployee();
+		current_secondment.setActive(Boolean.FALSE);
 
 		Employment employment = current_secondment.getAffectedEmployment();
-		if (employment != null)
-			employment.setSecondment(null);
+		if (employment != null) {
+			/*
+			 * if the canceled secondment is the employee's current secondment
+			 * then update the employee as well.
+			 */
+			if (employment.getSecondment().getId().equals(
+					current_secondment.getId()))
+				employment.setSecondment(null);
+		}
 		super.update();
-		info("principal '#0' canceled employee #1 current secondment #1.", getPrincipalName(), employee,
-				current_secondment);
+		info("principal '#0' canceled employee #1 current secondment #1.",
+				getPrincipalName(), employee, current_secondment);
 		clearInstance();
 		return "updated";
 	}
 
 	@Transactional
 	public String revert() {
-		info("principal #0 is reverting updates to secondment #1", getPrincipalName(), getInstance());
+		info("principal #0 is reverting updates to secondment #1",
+				getPrincipalName(), getInstance());
 		getEntityManager().refresh(getInstance());
 		return "reverted";
 	}
@@ -149,9 +214,10 @@ public class SecondmentHome extends MinoasEntityHome<Secondment> {
 		Secondment instance = new Secondment();
 		instance.setSecondmentType(SecondmentType.FULL_TO_SCHOOL);
 		instance.setEmployeeRequested(Boolean.TRUE);
-		instance
-				.setEstablished(getCoreSearching().getActiveSchoolYear(getEntityManager()).getTeachingSchoolYearStart());
-		instance.setDueTo(getCoreSearching().getActiveSchoolYear(getEntityManager()).getTeachingSchoolYearStop());
+		instance.setEstablished(getCoreSearching().getActiveSchoolYear(
+				getEntityManager()).getTeachingSchoolYearStart());
+		instance.setDueTo(getCoreSearching().getActiveSchoolYear(
+				getEntityManager()).getTeachingSchoolYearStop());
 		return instance;
 	}
 
