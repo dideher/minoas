@@ -254,8 +254,8 @@
    
    <!--  All employee's secondments -->
    <framework:entity-query name="employeeSecondmentsListQuery" max-results="200" scope="page">
-    <framework:ejbql>SELECT s FROM Secondment s</framework:ejbql>
-    <framework:order>s.schoolYear desc, s.id desc</framework:order>
+    <framework:ejbql>SELECT s FROM Secondment s WHERE s.active IS TRUE</framework:ejbql>
+    <framework:order>s.schoolYear desc, s.established desc</framework:order>
     <framework:restrictions>
       <value>s.employee = #{employee}</value>
     </framework:restrictions> 

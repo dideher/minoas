@@ -140,7 +140,7 @@
 						disabled="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_SECONDMENT'))}">
 
 						<s:link value="Εισαγωγή Νέας Απόσπασης"
-							action="#{secondmentHome.clearInstance()}"
+							action="#{secondmentHome.prepareForNewSecondment}"
 							view="/secondment/add-new-secondment.xhtml">
 							<f:param name="add_new_secondment_from" value="/home" />
 						</s:link>
