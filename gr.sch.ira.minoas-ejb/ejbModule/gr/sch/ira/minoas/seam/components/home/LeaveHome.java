@@ -35,7 +35,16 @@ public class LeaveHome extends MinoasEntityHome<Leave> {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	
+	@Transactional
+	public boolean wire() {
+		Leave instance = getInstance();
+		if (!isManaged()) {
+			Employee employee = employeeHome != null ? employeeHome
+					.getInstance() : null;
+			instance.setEmployee(employee);
+		}
+		return true;
+	}
 
 	/**
 	 * @see org.jboss.seam.framework.Home#createInstance()
@@ -62,7 +71,7 @@ public class LeaveHome extends MinoasEntityHome<Leave> {
 				facesMessages
 						.add(
 								Severity.ERROR,
-								"Η ημ/νια λήξης της άδειας πρέπει να είναι μεταγενέστερη της έναρξης. Μήπως να κάνεις ένα διάλειμα ;");
+								"�? ημ/νια λ�?ξη�? �?η�? άδεια�? �?�?έ�?ει να είναι με�?αγενέ�?�?ε�?η �?η�? ένα�?ξη�?. �?�?�?�?�? να κάνει�? ένα διάλειμα ;");
 			return false;
 		}
 
@@ -81,7 +90,7 @@ public class LeaveHome extends MinoasEntityHome<Leave> {
 					facesMessages
 							.add(
 									Severity.ERROR,
-									"Υπάρχει ήδει άδεια με τις ημερομηνίες που εισάγατε. Μήπως να κάνεις ένα διάλειμα ;");
+									"�?�?ά�?�?ει �?δει άδεια με �?ι�? ημε�?ομηνίε�? �?ο�? ει�?άγα�?ε. �?�?�?�?�? να κάνει�? ένα διάλειμα ;");
 				return false;
 			}
 
@@ -91,7 +100,7 @@ public class LeaveHome extends MinoasEntityHome<Leave> {
 					facesMessages
 							.add(
 									Severity.ERROR,
-									"Η ημ/νια έναρξης της άδειας πρέπει να είναι μεταγενέστερη της λήξης της προηγούμενης άδειας. Μήπως να κάνεις ένα διάλειμα ;");
+									"�? ημ/νια ένα�?ξη�? �?η�? άδεια�? �?�?έ�?ει να είναι με�?αγενέ�?�?ε�?η �?η�? λ�?ξη�? �?η�? �?�?οηγο�?μενη�? άδεια�?. �?�?�?�?�? να κάνει�? ένα διάλειμα ;");
 				return false;
 			}
 
@@ -105,7 +114,7 @@ public class LeaveHome extends MinoasEntityHome<Leave> {
 					facesMessages
 							.add(
 									Severity.ERROR,
-									"Υπάρχει επικαλυπτόμενο διάστημα με υπάρχουσες άδειες! Μήπως να κάνεις ένα διάλειμα ;");
+									"�?�?ά�?�?ει ε�?ικαλ�?�?�?�?μενο διά�?�?ημα με �?�?ά�?�?ο�?�?ε�? άδειε�?! �?�?�?�?�? να κάνει�? ένα διάλειμα ;");
 				return false;
 			}
 

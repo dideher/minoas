@@ -69,7 +69,7 @@ public class Unit extends AbstractArchivableEntity implements Comparable<Unit> {
 
 
 	@Id
-	@Column(name = "UNIT_ID", length = 3)
+	@Column(name = "UNIT_ID", length = 4)
 	private String id;
 
 	@ManyToOne(fetch = FetchType.LAZY)

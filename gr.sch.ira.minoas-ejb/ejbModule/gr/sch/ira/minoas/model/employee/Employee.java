@@ -72,10 +72,10 @@ public class Employee extends Person {
 	private Specialization lastSpecialization;
 
 	@Basic
-	@Column(name = "LEGACY_CODE", nullable = false, updatable = false, unique = true, length = 10)
+	@Column(name = "LEGACY_CODE", nullable = true, updatable = false, length = 10)
 	private String legacyCode;
 
-	@OneToOne(optional = true, fetch = FetchType.LAZY)
+	@OneToOne(optional = true, fetch = FetchType.LAZY, cascade={CascadeType.ALL})
 	@PrimaryKeyJoinColumn(name = "ID")
 	//@JoinColumn(name="REGULAR_EMPLOYMEE_DETAIL_ID", nullable=true)
 	private RegularEmployeeInfo regularEmployeeInfo;

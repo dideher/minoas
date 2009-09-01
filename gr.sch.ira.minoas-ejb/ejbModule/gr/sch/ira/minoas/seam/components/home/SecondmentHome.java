@@ -27,15 +27,14 @@ public class SecondmentHome extends MinoasEntityHome<Secondment> {
 	@In(create = true)
 	private EmployeeHome employeeHome;
 
-	protected boolean validateSecondment(Secondment secondment,
-			boolean addMessages) {
+	protected boolean validateSecondment(Secondment secondment, boolean addMessages) {
 		/* source & target unit must not be same */
-		if (secondment.getSourceUnit().getId().equals(
-				secondment.getTargetUnit().getId())) {
+
+		if (secondment.getSourceUnit() != null
+				&& secondment.getSourceUnit().getId().equals(secondment.getTargetUnit().getId())) {
 			if (addMessages)
 				facesMessages
-						.add(
-								Severity.ERROR,
+						.add(Severity.ERROR,
 								"Η μονάδα αποσπάσης πρέπει να είναι διαφορετική απο την τρέχουσα οργανική του εκπαιδευτικού. Καφέ ήπιες ;");
 			return false;
 		}
@@ -44,8 +43,7 @@ public class SecondmentHome extends MinoasEntityHome<Secondment> {
 
 			if (addMessages)
 				facesMessages
-						.add(
-								Severity.ERROR,
+						.add(Severity.ERROR,
 								"Η ημ/νια λήξης της απόσπασης πρέπει να είναι μεταγενέστερη της έναρξης. Μήπως να κάνεις ένα διάλειμα ;");
 			return false;
 		}
@@ -62,16 +60,13 @@ public class SecondmentHome extends MinoasEntityHome<Secondment> {
 
 		Employee employee = employeeHome.getInstance();
 		Employment currentEmployment = employee.getCurrentEmployment();
-		Secondment currentSecondment = currentEmployment != null ? currentEmployment
-				.getSecondment()
-				: null;
+		Secondment currentSecondment = currentEmployment != null ? currentEmployment.getSecondment() : null;
 		Secondment newSecondment = getInstance();
 		/* get some checking first */
 		if (!validateSecondment(newSecondment, true)) {
 			return VALIDATION_ERROR_OUTCOME;
 		}
-		newSecondment.setSchoolYear(getCoreSearching().getActiveSchoolYear(
-				getEntityManager()));
+		newSecondment.setSchoolYear(getCoreSearching().getActiveSchoolYear(getEntityManager()));
 		newSecondment.setActive(Boolean.TRUE);
 		newSecondment.setEmployee(employee);
 		newSecondment.setTargetPYSDE(newSecondment.getTargetUnit().getPysde());
@@ -93,10 +88,8 @@ public class SecondmentHome extends MinoasEntityHome<Secondment> {
 					.add(
 							Severity.WARN,
 							"Για τον εκπαιδευτικό #0 ο Μίνωας είχε καταχωρημένη και άλλη ενεργή απόσπαση στην μονάδα #1 με λήξη την #2, η οποία όμως ακυρώθηκε.",
-							(employee.getLastName() + " " + employee
-									.getFirstName()), currentSecondment
-									.getTargetUnit().getTitle(),
-							currentSecondment.getDueTo());
+							(employee.getLastName() + " " + employee.getFirstName()), currentSecondment.getTargetUnit()
+									.getTitle(), currentSecondment.getDueTo());
 		}
 		return super.persist();
 	}
@@ -126,8 +119,8 @@ public class SecondmentHome extends MinoasEntityHome<Secondment> {
 		if (employment != null)
 			employment.setSecondment(null);
 		super.update();
-		info("principal '#0' canceled employee #1 current secondment #1.",
-				getPrincipalName(), employee, current_secondment);
+		info("principal '#0' canceled employee #1 current secondment #1.", getPrincipalName(), employee,
+				current_secondment);
 		clearInstance();
 		return "updated";
 	}
@@ -156,10 +149,9 @@ public class SecondmentHome extends MinoasEntityHome<Secondment> {
 		Secondment instance = new Secondment();
 		instance.setSecondmentType(SecondmentType.FULL_TO_SCHOOL);
 		instance.setEmployeeRequested(Boolean.TRUE);
-		instance.setEstablished(getCoreSearching().getActiveSchoolYear(
-				getEntityManager()).getTeachingSchoolYearStart());
-		instance.setDueTo(getCoreSearching().getActiveSchoolYear(
-				getEntityManager()).getTeachingSchoolYearStop());
+		instance
+				.setEstablished(getCoreSearching().getActiveSchoolYear(getEntityManager()).getTeachingSchoolYearStart());
+		instance.setDueTo(getCoreSearching().getActiveSchoolYear(getEntityManager()).getTeachingSchoolYearStop());
 		return instance;
 	}
 
