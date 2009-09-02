@@ -390,7 +390,7 @@
 				<h:panelGrid columns="2">
 
 					<a4j:commandButton value="Καταχώρηση Εκπαιδευτικού !"
-						action="#{employeeHome.persistForSecondment()}"
+						action="#{employeeHome.addNewEmployeeFromOtherPYSDE()}"
 						data="#{facesContext.maximumSeverity.ordinal ge 2}"
 						oncomplete="if(data == false) Richfaces.hideModalPanel('fastEmployeeInsertPanel');"
 						reRender="employeePanel,newSecondmentPanel" />

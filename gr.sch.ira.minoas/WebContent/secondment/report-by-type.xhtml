@@ -22,89 +22,176 @@
 			<h:form>
 				<h:panelGrid columns="1">
 
-					
-						<rich:panel>
-							<f:facet name="header">
-								<h:outputText value="Στοιχεία Απόσπασης" />
-							</f:facet>
 
-							<ui:include src="/components/messages-component.xhtml" />
-							
-								<h:panelGrid columns="5">
+					<rich:panel>
+						<f:facet name="header">
+							<h:outputText value="Στοιχεία Απόσπασης" />
+						</f:facet>
 
+						<ui:include src="/components/messages-component.xhtml" />
 
-
-									<s:decorate id="secondmentTypeDecoration"
-										template="/layout/doubleLineEdit.xhtml">
-										<ui:define name="label">
-											<h:outputText value="Τύπος Απόσπασης" />
-										</ui:define>
-
-										<h:selectOneMenu id="secondmentType"
-											value="#{secondmentCriteria.secondmentType}">
-											<s:selectItems 
-												hideNoSelectionLabel="false" noSelectionLabel="Όλοι οι Τύποι"
-												var="_secondmentType" value="#{secondmentTypes}"
-												label="#{messages[_secondmentType.key]}" />
-											<s:convertEnum />
-											<a4j:support event="onblur"
-												reRender="secondmentTargetDecoration" ajaxSingle="true" />
-										</h:selectOneMenu>
-									</s:decorate>
-
-									<s:decorate id="secondmentTargetDecoration"
-										template="/layout/doubleLineEdit.xhtml">
-										<ui:define name="label">
-											<h:outputText value="Μονάδα Απόσπασης" />
-										</ui:define>
-
-										<h:inputText value="#{secondmentCriteria.targetUnit}"
-											id="secondmentTarget" styleClass="fieldValueText"
-											converter="unitConverter">
-
-											<rich:suggestionbox for="secondmentTarget"
-												var="secondmentUnit"
-												suggestionAction="#{exampleSecondmentAwareUnitSuggester.suggest}">
-												<f:facet name="nothingLabel">
-													<h:outputText value="Άγνωστη Μονάδα Απόσπασης" />
-												</f:facet>
-												<h:column>
-													<h:outputText value="#{secondmentUnit.title}" />
-												</h:column>
-											</rich:suggestionbox>
-										</h:inputText>
-									</s:decorate>
-									
-									<s:decorate template="/layout/doubleLineEdit.xhtml">
-										<ui:define name="label">
-											<h:outputText value="Περιοχή Οργανικής Αποσπασμένου" />
-										</ui:define>
-
-										<h:selectOneMenu value="#{secondmentCriteria.region}">
-											<f:selectItem itemLabel="Όλες οι Περιοχές" itemValue="" />
-											<f:selectItem itemLabel="Α Ηρακλείου" itemValue="Α"/>
-											<f:selectItem itemLabel="Β Ηρακλείου" itemValue="Β"/>
-										</h:selectOneMenu>
-									</s:decorate>
-
-									<s:decorate template="/layout/doubleLineEdit.xhtml">
-										<ui:define name="label">
-											<h:outputText value="Με Αίτηση του ;" />
-										</ui:define>
-										<h:selectBooleanCheckbox  converterId="javax.faces.Boolean" 
-											value="#{secondmentCriteria.employeeRequested}" />
-									</s:decorate>
+						<h:panelGrid columns="5">
 
 
-									<s:decorate template="/layout/doubleLineEdit.xhtml">
-										<ui:define name="label">
-											<h:outputText value="Σχόλιο" />
-										</ui:define>
-										<h:inputText value="#{secondmentCriteria.comment}" />
-									</s:decorate>
 
-								</h:panelGrid>
-						</rich:panel>
+							<s:decorate id="secondmentTypeDecoration"
+								template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Τύπος Απόσπασης" />
+								</ui:define>
+
+								<h:selectOneMenu id="secondmentType"
+									value="#{secondmentCriteria.secondmentType}">
+									<s:selectItems hideNoSelectionLabel="false"
+										noSelectionLabel="Όλοι οι Τύποι" var="_secondmentType"
+										value="#{secondmentTypes}"
+										label="#{messages[_secondmentType.key]}" />
+									<s:convertEnum />
+									<a4j:support event="onblur"
+										reRender="secondmentTargetDecoration" ajaxSingle="true" />
+								</h:selectOneMenu>
+							</s:decorate>
+
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Ομάδα Ειδικοτήτων : " />
+								</ui:define>
+								<h:inputText id="specializationGroupFilter"
+									styleClass="fieldValueText" size="30">
+
+									<rich:suggestionbox height="200" width="350"
+										for="specializationGroupFilter" var="a_spec"
+										suggestionAction="#{specializationGroupSuggester.suggest}">
+										<f:facet name="nothingLabel">
+											<h:outputText value="Άγνωστη Ομάδα Ειδικοτήτων" />
+										</f:facet>
+										<h:column>
+											<h:outputText value="#{a_spec.title}" />
+										</h:column>
+										<a4j:support ajaxSingle="true" event="onselect">
+											<f:setPropertyActionListener value="#{a_spec}"
+												target="#{secondmentCriteria.specializationGroup}" />
+										</a4j:support>
+									</rich:suggestionbox>
+								</h:inputText>
+							</s:decorate>
+
+							<s:decorate id="secondmentTargetDecoration"
+								template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Μονάδα Απόσπασης" />
+								</ui:define>
+
+								<h:inputText value="#{secondmentCriteria.targetUnit}"
+									id="secondmentTarget" styleClass="fieldValueText"
+									converter="unitConverter">
+
+									<rich:suggestionbox for="secondmentTarget" var="secondmentUnit"
+										suggestionAction="#{exampleSecondmentAwareUnitSuggester.suggest}">
+										<f:facet name="nothingLabel">
+											<h:outputText value="Άγνωστη Μονάδα Απόσπασης" />
+										</f:facet>
+										<h:column>
+											<h:outputText value="#{secondmentUnit.title}" />
+										</h:column>
+									</rich:suggestionbox>
+								</h:inputText>
+							</s:decorate>
+
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Περιοχή Οργανικής Αποσπασμένου" />
+								</ui:define>
+
+								<h:selectOneMenu value="#{secondmentCriteria.region}">
+									<f:selectItem itemLabel="Όλες οι Περιοχές" itemValue="" />
+									<f:selectItem itemLabel="Α Ηρακλείου" itemValue="Α" />
+									<f:selectItem itemLabel="Β Ηρακλείου" itemValue="Β" />
+								</h:selectOneMenu>
+							</s:decorate>
+
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Με Αίτηση του ;" />
+								</ui:define>
+								<h:selectBooleanCheckbox converterId="javax.faces.Boolean"
+									value="#{secondmentCriteria.employeeRequested}" />
+							</s:decorate>
+
+						</h:panelGrid>
+						<h:panelGrid columns="3">
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Ερμηνεία Ημερομηνίας Εφαρμογής" />
+								</ui:define>
+
+								<h:selectOneMenu value="#{secondmentCriteria.dateSearchType}">
+									<s:selectItems var="dateSearchType" value="#{dateSearchTypes}"
+										label="#{messages[dateSearchType.key]}">
+									</s:selectItems>
+									<a4j:support event="onchange" ajaxSingle="true"
+										reRender="dateSearchFiltersPanel" />
+								</h:selectOneMenu>
+							</s:decorate>
+
+							<h:panelGroup>
+								<a4j:outputPanel id="dateSearchFiltersPanel">
+									<h:panelGroup
+										rendered="#{secondmentCriteria.dateSearchType ne 'DURING_DATE_PERIOD'}">
+										<s:decorate id="effectiveDateDecoration"
+											template="/layout/doubleLineEdit.xhtml">
+											<ui:define name="label">
+												<h:outputText value="Ημερομηνία Εφαρμογής" />
+											</ui:define>
+											<rich:calendar enableManualInput="true"
+												value="#{secondmentCriteria.effectiveDate}" required="true"
+												inputSize="10" mode="ajax" locale="el_GR"
+												inputClass="fieldValueText" datePattern="dd-MM-yyyy">
+												<a4j:support event="onblur"
+													reRender="establishedDateDecoration" bypassUpdates="true"
+													ajaxSingle="true" />
+											</rich:calendar>
+										</s:decorate>
+
+									</h:panelGroup>
+
+									<h:panelGroup
+										rendered="#{secondmentCriteria.dateSearchType eq 'DURING_DATE_PERIOD'}">
+										<s:decorate id="effectiveDateDecorationFrom"
+											template="/layout/doubleLineEdit.xhtml">
+											<ui:define name="label">
+												<h:outputText value="Από" />
+											</ui:define>
+											<rich:calendar id="effectiveDate" enableManualInput="true"
+												value="#{secondmentCriteria.effectiveDateFrom}"
+												required="true" inputSize="10" mode="ajax" locale="el_GR"
+												inputClass="fieldValueText" datePattern="dd-MM-yyyy">
+												<a4j:support event="onblur"
+													reRender="establishedDateDecoration" bypassUpdates="true"
+													ajaxSingle="true" />
+											</rich:calendar>
+										</s:decorate>
+										<s:decorate id="effectiveDateDecorationUntil"
+											template="/layout/doubleLineEdit.xhtml">
+											<ui:define name="label">
+												<h:outputText value="Εώς" />
+											</ui:define>
+											<rich:calendar id="effectiveDate" enableManualInput="true"
+												value="#{secondmentCriteria.effectiveDateUntil}"
+												required="true" inputSize="10" mode="ajax" locale="el_GR"
+												inputClass="fieldValueText" datePattern="dd-MM-yyyy">
+												<a4j:support event="onblur"
+													reRender="establishedDateDecoration" bypassUpdates="true"
+													ajaxSingle="true" />
+											</rich:calendar>
+										</s:decorate>
+									</h:panelGroup>
+								</a4j:outputPanel>
+							</h:panelGroup>
+						</h:panelGrid>
+
+
+					</rich:panel>
 					<rich:spacer height="5" />
 					<rich:separator lineType="dashed" height="2" />
 					<rich:spacer height="5" />
@@ -114,10 +201,11 @@
 						<s:div styleClass="actionButtons">
 							<h:panelGrid columns="3">
 								<h:commandButton id="searchButton" value="Αναζήτηση"
-									actionListener="#{secondmentsByTypeListQuery.refresh}">
+									actionListener="#{secondmentReportByType.generateReport()}">
 									<s:defaultAction />
 								</h:commandButton>
-								<s:button action="#{secondmentReportByType.runReport}" value="Εκτύπωση (PDF)" target="new" />
+								<s:button action="#{secondmentReportByType.generatePDFReport()}"
+									value="Εκτύπωση (PDF)" target="new" />
 								<s:button id="backButton" action="backButton"
 									value="Τέλος Εργασίας" />
 							</h:panelGrid>
@@ -126,14 +214,13 @@
 				</h:panelGrid>
 
 				<rich:dataTable id="secondmentsByTypeTable"
-					value="#{secondmentsByTypeListQuery.resultList}" var="_secondment"
+					value="#{secondmentReportByType.reportData}" var="_secondment"
 					rows="40" border="0"
 					onRowMouseOver="this.style.backgfroundColor='#F8F8F8'"
 					onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
 					width="100%">
 					<f:facet name="header">
-						<h:outputLabel
-							value="Ενεργές Αποσπάσεις Κατά Το Τρέχων Σχολικό Έτος" />
+						<h:outputLabel value="Ενεργές Αποσπάσεις" />
 					</f:facet>
 
 					<rich:column>
@@ -141,48 +228,46 @@
 							<h:outputText value="Εκπαιδευτικός" />
 						</f:facet>
 						<h:outputText
-							value="#{employeeUtil.prettyFormatNoSpecialization(_secondment.employee)}" />
+							value="#{_secondment.employeeLastName} #{_secondment.employeeFirstName} του #{_secondment.employeeFatherName}" />
 					</rich:column>
 					<rich:column>
 						<f:facet name="header">
 							<h:outputText value="Ειδ." />
 						</f:facet>
-						<h:outputText
-							value="#{_secondment.employee.lastSpecialization.id}" />
+						<h:outputText value="#{_secondment.employeeSpecializationID}" />
 					</rich:column>
-					
+
 					<rich:column>
 						<f:facet name="header">
 							<h:outputText value="Λεκτικό Ειδ." />
 						</f:facet>
-						<h:outputText
-							value="#{_secondment.employee.lastSpecialization.title}" />
+						<h:outputText value="#{_secondment.employeeSpecialization}" />
 					</rich:column>
 					<rich:column>
 						<f:facet name="header">
 							<h:outputText value="Οργανική Μονάδα" />
 						</f:facet>
-						<h:outputText value="#{_secondment.sourceUnit.title}" />
+						<h:outputText value="#{_secondment.sourceUnit}" />
 					</rich:column>
 					<rich:column>
 						<f:facet name="header">
 							<h:outputText value="Περ." />
 						</f:facet>
-						<h:outputText value="#{_secondment.affectedEmployment.school.regionCode}" />
+						<h:outputText value="#{_secondment.sourceUnitRegion}" />
 					</rich:column>
-					
+
 					<rich:column>
 						<f:facet name="header">
 							<h:outputText value="Tύπος Απόσπασης" />
 						</f:facet>
-						<h:outputText value="#{messages[_secondment.secondmentType.key]}" />
+						<h:outputText value="#{messages[_secondment.secondmentTypeKey]}" />
 					</rich:column>
 
 					<rich:column>
 						<f:facet name="header">
 							<h:outputText value="Απόσπαση Σε" />
 						</f:facet>
-						<h:outputText value="#{_secondment.targetUnit.title}" />
+						<h:outputText value="#{_secondment.targetUnit}" />
 					</rich:column>
 
 					<rich:column>
@@ -195,7 +280,7 @@
 						<f:facet name="header">
 							<h:outputText value="Απο" />
 						</f:facet>
-						<h:outputText value="#{_secondment.established}">
+						<h:outputText value="#{_secondment.establishedIn}">
 							<s:convertDateTime pattern="dd-MM-yyyy" />
 						</h:outputText>
 					</rich:column>
@@ -210,12 +295,12 @@
 
 					<rich:column>
 						<f:facet name="header">
-							<h:outputText value="Με Αίτηση Του" />
+							<h:outputText value="Αιτ.?" />
 						</f:facet>
 						<h:outputText value="Ναί"
-							rendered="#{_secondment.employeeRequested}" />
+							rendered="#{_secondment.requestByEmployee}" />
 						<h:outputText value="Οχι"
-							rendered="#{!_secondment.employeeRequested}" />
+							rendered="#{!_secondment.requestByEmployee}" />
 					</rich:column>
 
 					<rich:column>
