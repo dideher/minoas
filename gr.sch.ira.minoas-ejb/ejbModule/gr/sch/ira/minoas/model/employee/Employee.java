@@ -7,6 +7,8 @@ import gr.sch.ira.minoas.model.employement.Leave;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.ServiceAllocation;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 
@@ -54,19 +56,23 @@ public class Employee extends Person {
 
 	@OneToMany(mappedBy = "employee", fetch = FetchType.LAZY)
 	private Set<Employment> employments;
-	
-	@OneToMany(fetch=FetchType.LAZY, mappedBy="employee")
-	private Collection<Secondment> secondments;
-	
-	@OneToMany(fetch=FetchType.LAZY, mappedBy="employee")
-	private Collection<Leave> leaves;
-	
-	@OneToMany(fetch=FetchType.LAZY, mappedBy="employee")
-	private Collection<ServiceAllocation> serviceAllocations;
- 	/**
-	 * Each employee have a specialization, which is actually the last employment's 
-	 * specialization.
-	 */
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", cascade = { CascadeType.MERGE, CascadeType.PERSIST,
+			CascadeType.REFRESH })
+	private Collection<Secondment> secondments = new ArrayList<Secondment>();
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", cascade = { CascadeType.MERGE, CascadeType.PERSIST,
+			CascadeType.REFRESH })
+	private Collection<Leave> leaves = new ArrayList<Leave>();
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", cascade = { CascadeType.MERGE, CascadeType.PERSIST,
+			CascadeType.REFRESH })
+	private Collection<ServiceAllocation> serviceAllocations = new ArrayList<ServiceAllocation>();
+
+	/**
+	* Each employee have a specialization, which is actually the last employment's 
+	* specialization.
+	*/
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "LAST_SPECIALIZATION_ID", nullable = true)
 	private Specialization lastSpecialization;
@@ -75,7 +81,7 @@ public class Employee extends Person {
 	@Column(name = "LEGACY_CODE", nullable = true, updatable = false, length = 10)
 	private String legacyCode;
 
-	@OneToOne(optional = true, fetch = FetchType.LAZY, cascade={CascadeType.ALL})
+	@OneToOne(optional = true, fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
 	@PrimaryKeyJoinColumn(name = "ID")
 	//@JoinColumn(name="REGULAR_EMPLOYMEE_DETAIL_ID", nullable=true)
 	private RegularEmployeeInfo regularEmployeeInfo;
@@ -83,8 +89,9 @@ public class Employee extends Person {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "EMPLOYEE_TYPE", nullable = false, updatable = false)
 	private EmployeeType type;
-	
-	@OneToOne(optional = true, fetch = FetchType.LAZY, cascade={ CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+
+	@OneToOne(optional = true, fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.PERSIST,
+			CascadeType.REFRESH })
 	@JoinColumn(name = "LEAVE_ID", nullable = true)
 	private Leave leave;
 
@@ -277,6 +284,30 @@ public class Employee extends Person {
 	 */
 	public void setServiceAllocations(Collection<ServiceAllocation> serviceAllocations) {
 		this.serviceAllocations = serviceAllocations;
+	}
+
+	public Secondment addSecondment(Secondment secondment) {
+		if (!getSecondments().contains(secondment)) {
+			getSecondments().add(secondment);
+			secondment.setEmployee(this);
+		}
+		return secondment;
+	}
+
+	public ServiceAllocation addServiceAllocation(ServiceAllocation serviceAllocation) {
+		if (!getServiceAllocations().contains(serviceAllocation)) {
+			getServiceAllocations().add(serviceAllocation);
+			serviceAllocation.setEmployee(this);
+		}
+		return serviceAllocation;
+	}
+
+	public Leave addLeave(Leave leave) {
+		if (!getLeaves().contains(leave)) {
+			getLeaves().add(leave);
+			leave.setEmployee(this);
+		}
+		return leave;
 	}
 
 }
