@@ -57,17 +57,7 @@ public class EmployeeLeavesReport extends BaseReport {
 	public EmployeeLeavesReport() {
 	}
 
-	private static final String SEAM_MESSAGES_RESOURCE_BUNDLE_NAME = "messages";
-
-	protected ResourceBundle getResourceBundle(String resource_budle_name) {
-		return SeamResourceBundle.getBundle(SEAM_MESSAGES_RESOURCE_BUNDLE_NAME,
-				FacesContext.getCurrentInstance().getViewRoot().getLocale());
-	}
-
-	protected String getLocalizedMessage(String message_key) {
-		return getResourceBundle(SEAM_MESSAGES_RESOURCE_BUNDLE_NAME).getString(
-				message_key);
-	}
+	
 
 	public void generatePDFReport() {
 

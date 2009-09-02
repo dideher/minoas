@@ -127,12 +127,16 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 	}
 	
 	@Transactional
-	public String persistForSecondment() {
+	public String addNewEmployeeFromOtherPYSDE() {
+		/* we will quickly create an employee
+		 * to be used for secondment
+		 */
 		Employee new_employee = getInstance();
 		new_employee.setActive(Boolean.TRUE);
+		new_employee.setInsertedBy(getPrincipal());
 		if(!regularEmployeeInfoHome.isManaged()) {
 			RegularEmployeeInfo info = regularEmployeeInfoHome.getInstance();
-			System.err.println(info.getRegistryID());
+			info.setInsertedBy(getPrincipal());
 			new_employee.setRegularDetail(info);
 			
 		}

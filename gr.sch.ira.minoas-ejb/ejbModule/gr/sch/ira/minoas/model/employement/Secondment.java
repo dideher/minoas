@@ -233,7 +233,7 @@ public class Secondment extends BaseIDModel implements Cloneable {
 	/**
 	 * @return the supersededBy
 	 */
-	public Secondment getSupersededBy() {
+	public Secondment getSupersededBy2() {
 		return supersededBy;
 	}
 
@@ -364,7 +364,7 @@ public class Secondment extends BaseIDModel implements Cloneable {
 	/**
 	 * @param supersededBy the supersededBy to set
 	 */
-	public void setSupersededBy(Secondment supersededBy) {
+	public void setSupersededBy2(Secondment supersededBy) {
 		this.supersededBy = supersededBy;
 	}
 

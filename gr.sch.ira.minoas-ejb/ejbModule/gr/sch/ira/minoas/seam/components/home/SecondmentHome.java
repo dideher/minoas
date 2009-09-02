@@ -1,12 +1,13 @@
 package gr.sch.ira.minoas.seam.components.home;
 
-import java.util.Calendar;
-import java.util.Date;
-
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.SecondmentType;
+
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.jboss.seam.ScopeType;
@@ -36,29 +37,64 @@ public class SecondmentHome extends MinoasEntityHome<Secondment> {
 		employeeHome.clearInstance();
 	}
 
-	protected boolean validateSecondment(Secondment secondment,
-			boolean addMessages) {
+	protected boolean validateSecondment(Secondment secondment, boolean addMessages) {
+
+		Date established = DateUtils.truncate(secondment.getEstablished(), Calendar.DAY_OF_MONTH);
+		Date dueTo = DateUtils.truncate(secondment.getDueTo(), Calendar.DAY_OF_MONTH);
+		/* check if the dates are correct */
+		if (established.after(dueTo)) {
+
+			if (addMessages)
+				facesMessages
+						.add(Severity.ERROR,
+								"Η ημερομηνία λήξης της απόσπασης πρέπει να είναι μεταγενέστερη της ένερξης. Κάνε ένα διάλειμα για καφέ !");
+			return false;
+		}
 		/* source & target unit must not be same */
 
 		if (secondment.getSourceUnit() != null
-				&& secondment.getSourceUnit().getId().equals(
-						secondment.getTargetUnit().getId())) {
+				&& secondment.getSourceUnit().getId().equals(secondment.getTargetUnit().getId())) {
 			if (addMessages)
 				facesMessages
-						.add(
-								Severity.ERROR,
+						.add(Severity.ERROR,
 								"Η μονάδα αποσπάσης πρέπει να είναι διαφορετική απο την τρέχουσα οργανική του εκπαιδευτικού. Καφέ ήπιες ;");
 			return false;
 		}
-		/* check if the dates are correct */
-		if (secondment.getEstablished().after(secondment.getDueTo())) {
+		Collection<Secondment> current_secondments = getCoreSearching().getEmployeeSecondments(
+				employeeHome.getInstance());
+		for (Secondment current_secondment : current_secondments) {
+			if (current_secondment.getId().equals(secondment.getId()))
+				continue;
+			Date current_established = DateUtils.truncate(current_secondment.getEstablished(), Calendar.DAY_OF_MONTH);
+			Date current_dueTo = DateUtils.truncate(current_secondment.getDueTo(), Calendar.DAY_OF_MONTH);
+			if (DateUtils.isSameDay(established, current_established) || DateUtils.isSameDay(dueTo, current_dueTo)) {
+				if (addMessages)
+					facesMessages
+							.add(
+									Severity.ERROR,
+									"Υπάρχει ήδει καταχωρημένη απόσπαση για τον εκπαιδευτικό με τις ημερομηνίες που εισάγατε. Κάντε ενα διάλειμα να ξεσκωτίσεται.");
+				return false;
+			}
 
-			if (addMessages)
-				facesMessages
-						.add(
-								Severity.ERROR,
-								"Η ημ/νια λήξης της απόσπασης πρέπει να είναι μεταγενέστερη της έναρξης. Μήπως να κάνεις ένα διάλειμα ;");
-			return false;
+			if (DateUtils.isSameDay(established, current_dueTo)) {
+
+				if (addMessages)
+					facesMessages
+							.add(Severity.ERROR,
+									"Η ημ/νια έναρξης της απόσπασης πρέπει να είναι μεταγενέστερη της λήξης της προηγούμενης απόσπασης.");
+				return false;
+			}
+
+			if ((established.before(current_established) && dueTo.after(current_established))
+					|| (established.after(current_established) && dueTo.before(current_dueTo))
+					|| (established.before(current_dueTo) && dueTo.after(current_dueTo))) {
+				if (addMessages)
+					facesMessages
+							.add(Severity.ERROR,
+									"Υπάρχει επικαλυπτόμενο διάστημα της νέας απόσπασης με παλαιότερη. Μήπως να κάνεις ενα διάλειμα ;");
+				return false;
+			}
+
 		}
 		return true;
 
@@ -72,50 +108,55 @@ public class SecondmentHome extends MinoasEntityHome<Secondment> {
 	public String persist() {
 		Employee employee = employeeHome.getInstance();
 		Employment currentEmployment = employee.getCurrentEmployment();
-		Secondment currentSecondment = currentEmployment != null ? currentEmployment
-				.getSecondment()
-				: null;
+		Secondment currentSecondment = currentEmployment != null ? currentEmployment.getSecondment() : null;
 		Secondment newSecondment = getInstance();
 
-		Date established = DateUtils.truncate(newSecondment.getEstablished(),
-				Calendar.DAY_OF_MONTH);
-		Date dueTo = DateUtils.truncate(newSecondment.getDueTo(),
-				Calendar.DAY_OF_MONTH);
-		Date today = DateUtils.truncate(new Date(System.currentTimeMillis()),
-				Calendar.DAY_OF_MONTH);
+		Date established = DateUtils.truncate(newSecondment.getEstablished(), Calendar.DAY_OF_MONTH);
+		Date dueTo = DateUtils.truncate(newSecondment.getDueTo(), Calendar.DAY_OF_MONTH);
+		Date today = DateUtils.truncate(new Date(System.currentTimeMillis()), Calendar.DAY_OF_MONTH);
 
 		/* get some checking first */
 		if (!validateSecondment(newSecondment, true)) {
 			return VALIDATION_ERROR_OUTCOME;
 		}
-		newSecondment.setSchoolYear(getCoreSearching().getActiveSchoolYear(
-				getEntityManager()));
+		newSecondment.setSchoolYear(getCoreSearching().getActiveSchoolYear(getEntityManager()));
 		newSecondment.setActive(Boolean.TRUE);
-		newSecondment.setEmployee(employee);
 		newSecondment.setTargetPYSDE(newSecondment.getTargetUnit().getPysde());
 		newSecondment.setSourcePYSDE(newSecondment.getSourceUnit().getPysde());
 		newSecondment.setInsertedBy(getPrincipal());
+
+		employee.addSecondment(newSecondment);
+		/*
+		 * check if the secondment should be set as the employee's current secondment. A
+		 * leave can be set as the employee's current secondment if and only if the
+		 * secondments's period is current (ie, today is after and before leave's
+		 * established and dueTo dates respectively).
+		 */
 		if (currentEmployment != null) {
+			if (today.after(established) && today.before(dueTo)) {
+				currentEmployment.setSecondment(newSecondment);
+			}
 			newSecondment.setAffectedEmployment(currentEmployment);
-			currentEmployment.setSecondment(newSecondment);
+
 		}
 
-		/*
-		 * if there is a current secondment, disabled it and inform the user
-		 */
-		if (currentSecondment != null) {
-			currentSecondment.setActive(Boolean.FALSE);
-			currentSecondment.setSupersededBy(newSecondment);
-			getEntityManager().merge(currentSecondment);
-			facesMessages
-					.add(
-							Severity.WARN,
-							"Για τον εκπαιδευτικό #0 ο Μίνωας είχε καταχωρημένη και άλλη ενεργή απόσπαση στην μονάδα #1 με λήξη την #2, η οποία όμως ακυρώθηκε.",
-							(employee.getLastName() + " " + employee
-									.getFirstName()), currentSecondment
-									.getTargetUnit().getTitle(),
-							currentSecondment.getDueTo());
-		}
+		//
+		//		/*
+		//		 * if there is a current secondment, disabled it and inform the user
+		//		 */
+		//		if (currentSecondment != null) {
+		//			currentSecondment.setActive(Boolean.FALSE);
+		//			currentSecondment.setSupersededBy(newSecondment);
+		//			getEntityManager().merge(currentSecondment);
+		//			facesMessages
+		//					.add(
+		//							Severity.WARN,
+		//							"Για τον εκπαιδευτικό #0 ο Μίνωας είχε καταχωρημένη και άλλη ενεργή απόσπαση στην μονάδα #1 με λήξη την #2, η οποία όμως ακυρώθηκε.",
+		//							(employee.getLastName() + " " + employee
+		//									.getFirstName()), currentSecondment
+		//									.getTargetUnit().getTitle(),
+		//							currentSecondment.getDueTo());
+		//		}
 		return super.persist();
 	}
 
@@ -127,12 +168,9 @@ public class SecondmentHome extends MinoasEntityHome<Secondment> {
 	public String update() {
 		Secondment current_secondment = getInstance();
 		Employment employment = current_secondment.getAffectedEmployment();
-		Date established = DateUtils.truncate(current_secondment
-				.getEstablished(), Calendar.DAY_OF_MONTH);
-		Date dueTo = DateUtils.truncate(current_secondment.getDueTo(),
-				Calendar.DAY_OF_MONTH);
-		Date today = DateUtils.truncate(new Date(System.currentTimeMillis()),
-				Calendar.DAY_OF_MONTH);
+		Date established = DateUtils.truncate(current_secondment.getEstablished(), Calendar.DAY_OF_MONTH);
+		Date dueTo = DateUtils.truncate(current_secondment.getDueTo(), Calendar.DAY_OF_MONTH);
+		Date today = DateUtils.truncate(new Date(System.currentTimeMillis()), Calendar.DAY_OF_MONTH);
 		if (!validateSecondment(current_secondment, true)) {
 			return VALIDATION_ERROR_OUTCOME;
 		}
@@ -155,8 +193,7 @@ public class SecondmentHome extends MinoasEntityHome<Secondment> {
 				 * employee's current secodment and if so, remove it.
 				 */
 				if (employment.getSecondment() != null
-						&& employment.getSecondment().getId().equals(
-								current_secondment.getId())) {
+						&& employment.getSecondment().getId().equals(current_secondment.getId())) {
 					employment.setSecondment(null);
 				}
 
@@ -178,21 +215,19 @@ public class SecondmentHome extends MinoasEntityHome<Secondment> {
 			 * if the canceled secondment is the employee's current secondment
 			 * then update the employee as well.
 			 */
-			if (employment.getSecondment().getId().equals(
-					current_secondment.getId()))
+			if (employment.getSecondment().getId().equals(current_secondment.getId()))
 				employment.setSecondment(null);
 		}
 		super.update();
-		info("principal '#0' canceled employee #1 current secondment #1.",
-				getPrincipalName(), employee, current_secondment);
+		info("principal '#0' canceled employee #1 current secondment #1.", getPrincipalName(), employee,
+				current_secondment);
 		clearInstance();
 		return "updated";
 	}
 
 	@Transactional
 	public String revert() {
-		info("principal #0 is reverting updates to secondment #1",
-				getPrincipalName(), getInstance());
+		info("principal #0 is reverting updates to secondment #1", getPrincipalName(), getInstance());
 		getEntityManager().refresh(getInstance());
 		return "reverted";
 	}
@@ -214,10 +249,9 @@ public class SecondmentHome extends MinoasEntityHome<Secondment> {
 		Secondment instance = new Secondment();
 		instance.setSecondmentType(SecondmentType.FULL_TO_SCHOOL);
 		instance.setEmployeeRequested(Boolean.TRUE);
-		instance.setEstablished(getCoreSearching().getActiveSchoolYear(
-				getEntityManager()).getTeachingSchoolYearStart());
-		instance.setDueTo(getCoreSearching().getActiveSchoolYear(
-				getEntityManager()).getTeachingSchoolYearStop());
+		instance
+				.setEstablished(getCoreSearching().getActiveSchoolYear(getEntityManager()).getTeachingSchoolYearStart());
+		instance.setDueTo(getCoreSearching().getActiveSchoolYear(getEntityManager()).getTeachingSchoolYearStop());
 		return instance;
 	}
 

@@ -151,7 +151,7 @@ public class TeachingHourAnalysisReport extends BaseReport {
 
 					item.addEmployeeWorkingHours(employeesMappedSpecializationGroup, regularEmployee
 							.getCurrentEmployment().getFinalWorkingHours());
-
+					
 					if (useTextAnalysis)
 						reportTextAnalysis.add("Ο εκπαιδευτικός " + regularEmployee + " με ειδικότητα "
 								+ regularEmployee.getLastSpecialization() + " και ομαδοποιημένη ειδικότητα "
@@ -183,6 +183,9 @@ public class TeachingHourAnalysisReport extends BaseReport {
 					SpecializationGroup employeesMappedSpecializationGroup = specializationGroupMap.get(secondment
 							.getEmployee().getLastSpecialization());
 
+					if(employeesMappedSpecializationGroup == null) {
+						info("employeesMappedSpecializationGroup is null for employee with secondment #0", secondment);
+					}
 					item.addEmployeeWorkingHours(employeesMappedSpecializationGroup, secondment.getFinalWorkingHours());
 					if (useTextAnalysis)
 						reportTextAnalysis.add("Ο εκπαιδευτικός " + secondment.getEmployee() + " με ειδικότητα "
