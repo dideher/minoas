@@ -7,7 +7,6 @@ import gr.sch.ira.minoas.model.employement.Leave;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.ServiceAllocation;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
@@ -94,7 +93,18 @@ public class Employee extends Person {
 			CascadeType.REFRESH })
 	@JoinColumn(name = "LEAVE_ID", nullable = true)
 	private Leave leave;
+	
+	@Basic
+	@Column(name="BIG_FAMILY", nullable=true)
+	private Boolean bigFamily = Boolean.FALSE;
+	
+	@Basic
+	@Column(name="SPECIAL_CATEGORY", nullable=true)
+	private Boolean specialCategory = Boolean.FALSE;
 
+	@Basic
+	@Column(name="COMMENT", nullable=true, length=256)
+	private String comment;
 	/**
 	 * @return the leave
 	 */
@@ -308,6 +318,48 @@ public class Employee extends Person {
 			leave.setEmployee(this);
 		}
 		return leave;
+	}
+
+	/**
+	 * @return the bigFamily
+	 */
+	public Boolean getBigFamily() {
+		return bigFamily;
+	}
+
+	/**
+	 * @param bigFamily the bigFamily to set
+	 */
+	public void setBigFamily(Boolean bigFamily) {
+		this.bigFamily = bigFamily;
+	}
+
+	/**
+	 * @return the specialCategory
+	 */
+	public Boolean getSpecialCategory() {
+		return specialCategory;
+	}
+
+	/**
+	 * @param specialCategory the specialCategory to set
+	 */
+	public void setSpecialCategory(Boolean specialCategory) {
+		this.specialCategory = specialCategory;
+	}
+
+	/**
+	 * @return the comment
+	 */
+	public String getComment() {
+		return comment;
+	}
+
+	/**
+	 * @param comment the comment to set
+	 */
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 
 }

@@ -142,12 +142,14 @@
 							<h:outputText value="Ιστορικό Αποσπάσεων Εκπαιδευτικού" />
 						</f:facet>
 
-						<h:outputText
-							value="Δεν βρέθηκε ιστορικό αποσπάσων για τον εκπαιδευτικό."
-							rendered="#{employeeSecondmentsListQuery.resultCount==0}" />
-						<a4j:outputPanel id="secondmentsTable"
-							rendered="#{employeeSecondmentsListQuery.resultCount &gt; 0}">
-							<h:panelGrid columns="1">
+						<a4j:outputPanel id="secondmentsTable">
+							<h:panelGroup
+								rendered="#{employeeSecondmentsListQuery.resultCount==0}">
+								<h:outputText
+									value="Δεν βρέθηκε ιστορικό αποσπάσων για τον εκπαιδευτικό." />
+							</h:panelGroup>
+							<h:panelGrid columns="1"
+								rendered="#{employeeSecondmentsListQuery.resultCount gt 0}">
 								<h:outputText
 									value="Στον παρακάτω πίνακα εμφανίζεται το ιστορικό όλων των αποσπάσεων του εκπαιδευτικού. Μπορείτε να τροποποιήσεται, αν θέλετε, την ενεργή κατά το τρέχων σχολικό έτος απόσπαση." />
 
@@ -299,7 +301,7 @@
 						<a4j:commandButton value="Ακύρωση Απόσπασης !" ajaxSingle="true"
 							action="#{secondmentHome.cancel()}"
 							oncomplete="#{rich:component('cancelModalPanel')}.hide();"
-							reRender="activeSecondment,secondmentsTable" /> 
+							reRender="activeSecondment,secondmentsTable" />
 						<a4j:commandButton value="Επιστροφή .."
 							onclick="#{rich:component('cancelModalPanel')}.hide();return false;" />
 					</h:panelGrid>
@@ -425,7 +427,8 @@
 								data="#{facesContext.maximumSeverity.ordinal ge 2}"
 								oncomplete="if(data == false) Richfaces.hideModalPanel('updateModalPanel');"
 								reRender="activeSecondment,secondmentsTable" />
-							<a4j:commandButton value="Επιστροφή .." action="#{secondmentHome.revert}"
+							<a4j:commandButton value="Επιστροφή .."
+								action="#{secondmentHome.revert}"
 								onclick="#{rich:component('updateModalPanel')}.hide();" />
 						</h:panelGrid>
 					</h:form>

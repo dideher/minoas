@@ -87,6 +87,10 @@ public class Employment extends BaseIDModel {
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "SPECIALIZATION_ID", nullable = false, updatable = false)
 	private Specialization specialization;
+	
+	@Basic
+	@Column(name="IS_TEMPORAR", nullable=true)
+	private Boolean temporar;
 
 	/**
 	 * An employment may be superseded by another employment
@@ -337,6 +341,20 @@ public class Employment extends BaseIDModel {
 	 */
 	public void setServiceAllocation(ServiceAllocation serviceAllocation) {
 		this.serviceAllocation = serviceAllocation;
+	}
+
+	/**
+	 * @return the temporar
+	 */
+	public Boolean getTemporar() {
+		return temporar;
+	}
+
+	/**
+	 * @param temporar the temporar to set
+	 */
+	public void setTemporar(Boolean temporar) {
+		this.temporar = temporar;
 	}
 
 }

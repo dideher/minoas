@@ -33,6 +33,8 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 	@In(create = true)
 	private RegularEmployeeInfoHome regularEmployeeInfoHome;
 
+	@In(create = true)
+	private EmploymentHome employmentHome; 
 	/**
 	 * Comment for <code>serialVersionUID</code>
 	 */
@@ -114,6 +116,8 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 	@Override
 	@Transactional
 	public String persist() {
+		Employee employee = getInstance();
+		employee.setInsertedBy(getPrincipal());
 		return super.persist();
 	}
 
@@ -126,6 +130,20 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 		return super.update();
 	}
 	
+	public String addNewEmployeeInLocalPYSDE() {
+		Employee new_employee = getInstance();
+		new_employee.setActive(Boolean.TRUE);
+		if(!regularEmployeeInfoHome.isManaged()) {
+			RegularEmployeeInfo info = regularEmployeeInfoHome.getInstance();
+			info.setInsertedBy(getPrincipal());
+			new_employee.setRegularDetail(info);
+			
+		}
+		if(employmentHome)
+		wire();
+		return persist();
+	}
+	
 	@Transactional
 	public String addNewEmployeeFromOtherPYSDE() {
 		/* we will quickly create an employee
@@ -133,7 +151,6 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 		 */
 		Employee new_employee = getInstance();
 		new_employee.setActive(Boolean.TRUE);
-		new_employee.setInsertedBy(getPrincipal());
 		if(!regularEmployeeInfoHome.isManaged()) {
 			RegularEmployeeInfo info = regularEmployeeInfoHome.getInstance();
 			info.setInsertedBy(getPrincipal());
@@ -169,6 +186,10 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 	public void prepareForNewEmployee() {
 		this.clearInstance();
 		regularEmployeeInfoHome.clearInstance();
+		employmentHome.clearInstance();
+		employmentHome.getInstance().setEstablished(getCoreSearching().getActiveSchoolYear(getEntityManager()).getSchoolYearStart());
+		employmentHome.getInstance().setFinalWorkingHours(21);
+		employmentHome.getInstance().setMandatoryWorkingHours(21);
 	}
 
 

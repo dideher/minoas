@@ -11,8 +11,7 @@
 	<a4j:form id="menuform">
 		<rich:toolBar>
 
-			<rich:dropDownMenu
-				disabled="#{!(identity.loggedIn)}">
+			<rich:dropDownMenu disabled="#{!(identity.loggedIn)}">
 				<f:facet name="label">
 					<h:panelGroup>
 						<h:outputText value="Διαχείρηση Σχολικών Μονάδων" />
@@ -35,20 +34,20 @@
 					</s:link>
 				</rich:menuItem>
 				<rich:menuGroup value="Εκτύπωσεις και Στατιστικά"
-						disabled="#{!(s:hasRole('ADMIN') or s:hasRole('VIEW_SCHOOL_REPORT'))}">
-						<rich:menuItem submitMode="none">
-							<s:link value="Διδακτικά Κενά - Πλεονάσματα Ανα Ειδικότητα" 
-								view="/school/teaching-resources-report.xhtml">
-								<f:param name="service_allocation_report_by_type_from" value="/home" />
-							</s:link>
-						</rich:menuItem>
+					disabled="#{!(s:hasRole('ADMIN') or s:hasRole('VIEW_SCHOOL_REPORT'))}">
+					<rich:menuItem submitMode="none">
+						<s:link value="Διδακτικά Κενά - Πλεονάσματα Ανα Ειδικότητα"
+							view="/school/teaching-resources-report.xhtml">
+							<f:param name="service_allocation_report_by_type_from"
+								value="/home" />
+						</s:link>
+					</rich:menuItem>
 
-					</rich:menuGroup>
+				</rich:menuGroup>
 
 			</rich:dropDownMenu>
 
-			<rich:dropDownMenu
-				disabled="#{!(identity.loggedIn)}">
+			<rich:dropDownMenu disabled="#{!(identity.loggedIn)}">
 				<f:facet name="label">
 					<h:panelGroup>
 						<h:outputText value="Διαχείρηση Προσωπικού" />
@@ -57,6 +56,7 @@
 				<rich:menuItem submitMode="none"
 					disabled="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_EMPLOYEE'))}">
 					<s:link value="Εισαγωγή Εκπαιδευτικού" propagation="nest"
+						action="#{employeeHome.prepareForNewEmployee}"
 						view="/employee/add-new-employee.xhtml">
 						<f:param name="add_new_employee_from" value="/home" />
 					</s:link>
@@ -90,13 +90,13 @@
 						<s:link value="Διαχείρηση Αδειών Εκπαιδευτικού" propagation="nest"
 							view="/employee/select-employee.xhtml">
 							<f:param name="from" value="/home" />
-							<f:param name="to"
-								value="/leave/employee-leave-management" />
+							<f:param name="to" value="/leave/employee-leave-management" />
 						</s:link>
 					</rich:menuItem>
 					<rich:menuSeparator />
 					<rich:menuGroup value="Εκτύπωσεις και Σταστικά">
-						<rich:menuItem submitMode="none" disabled="#{!(s:hasRole('ADMIN') or s:hasRole('VIEW_LEAVE'))}">
+						<rich:menuItem submitMode="none"
+							disabled="#{!(s:hasRole('ADMIN') or s:hasRole('VIEW_LEAVE'))}">
 							<s:link value="Άδειες Ανα Τύπο" propagation="nest"
 								view="/leave/leave-report-by-type.xhtml">
 								<f:param name="leaves_report_by_type_from" value="/home" />
@@ -129,7 +129,8 @@
 						<rich:menuItem submitMode="none">
 							<s:link value="Θητείες Ανα Τύπο"
 								view="/serviceallocation/report-by-type.xhtml">
-								<f:param name="service_allocation_report_by_type_from" value="/home" />
+								<f:param name="service_allocation_report_by_type_from"
+									value="/home" />
 							</s:link>
 						</rich:menuItem>
 

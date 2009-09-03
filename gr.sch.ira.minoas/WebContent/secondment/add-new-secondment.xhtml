@@ -18,6 +18,7 @@
 				<h:outputText
 					value="Εισαγωγή Νέας Απόσπασης κατά το τρέχων Σχολικό Έτος" />
 			</f:facet>
+			<ui:include src="/components/messages-component.xhtml" />
 			<h:form>
 				<h:panelGrid columns="1">
 					<a4j:outputPanel id="employeePanel">
@@ -319,7 +320,7 @@
 								<ui:define name="label">
 									<h:outputText value="ΠΥΣΔΕ Οργανικής : " />
 								</ui:define>
-								<h:inputText id="PYSDEFilter"
+								<h:inputText id="PYSDEFilter" required="true"
 									styleClass="fieldValueText" size="15" maxlength="30">
 									<rich:suggestionbox height="150" width="150"
 										for="PYSDEFilter" var="_pysde"
