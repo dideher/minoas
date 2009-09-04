@@ -9,6 +9,7 @@ import gr.sch.ira.minoas.model.employee.Employee;
 import java.util.Date;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -48,7 +49,8 @@ public class Employment extends BaseIDModel {
 	@Column(name = "IS_ACTIVE", nullable = true)
 	private Boolean active;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER,cascade = { CascadeType.MERGE, CascadeType.PERSIST,
+			CascadeType.REFRESH })
 	@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 	@JoinColumn(name = "EMPLOYEE_ID", nullable = false)
 	private Employee employee;

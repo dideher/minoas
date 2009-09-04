@@ -23,234 +23,151 @@
 
 					<h:outputText
 						value="Με την παρακάτω φόρμα μπορείτε να εισάγεται έναν νέο εκπαιδευτικό στην βάση του Μίνωα. Κατά την εισαγωγή του εκπαιδευτικού μπορείται προαιρετικά να εισάγεται και τα στοιχεία της σχέσης εργασίας που θα έχει αυτός ο εκπαιδευτικός με την υπηρεσία." />
-					<a4j:region>
-						<rich:panel>
-							<f:facet name="header">
-								<h:outputText value="Βασικά Στοιχεία" />
-							</f:facet>
-							<h:panelGrid columns="4">
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
-									<ui:define name="label">
-										<h:outputText value="Επώνυμο" />
-									</ui:define>
-									<h:inputText value="#{employee.lastName}" required="true"
-										styleClass="fieldValueText" tabindex="1" size="25"
-										maxlength="30">
-									</h:inputText>
-								</s:decorate>
 
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
-									<ui:define name="label">
-										<h:outputText value="Όνομα" />
-									</ui:define>
-									<h:inputText value="#{employee.firstName}" required="true"
-										styleClass="fieldValueText" size="12" maxlength="30">
-									</h:inputText>
-								</s:decorate>
-
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
-									<ui:define name="label">
-										<h:outputText value="Όνομα Πατρός" />
-									</ui:define>
-									<h:inputText value="#{employee.fatherName}" required="true"
-										styleClass="fieldValueText" size="12" maxlength="30">
-									</h:inputText>
-								</s:decorate>
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
-									<ui:define name="label">
-										<h:outputText value="Έπωνυμο Πατρός" />
-									</ui:define>
-									<h:inputText value="#{employee.fatherSurname}" required="false"
-										styleClass="fieldValueText" size="25" maxlength="30">
-									</h:inputText>
-								</s:decorate>
-
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
-									<ui:define name="label">
-										<h:outputText value="Έπωνυμο Μητρός" />
-									</ui:define>
-									<h:inputText value="#{employee.motherSurname}" required="false"
-										styleClass="fieldValueText" size="25" maxlength="30">
-									</h:inputText>
-								</s:decorate>
-
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
-									<ui:define name="label">
-										<h:outputText value="Όνομα Μητρός" />
-									</ui:define>
-									<h:inputText value="#{employee.motherName}" required="false"
-										styleClass="fieldValueText" size="12" maxlength="30">
-									</h:inputText>
-								</s:decorate>
-
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
-									<ui:define name="label">
-										<h:outputText value="Ημ/μια Γεννήσεως : " />
-									</ui:define>
-									<rich:calendar datePattern="dd-MM-yyyy" style="width:50px"
-										enableManualInput="true" styleClass="fieldValueText" inputSize="10"
-										required="true" value="#{employee.dateOfBirth}">
-									</rich:calendar>
-								</s:decorate>
-
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
-									<ui:define name="label">
-										<h:outputText value="Τύπος Εκπαιδευτικού : " />
-									</ui:define>
-									<h:selectOneMenu value="#{employee.type}">
-										<s:selectItems noSelectionLabel="Επιλέξτε Τύπο Εκπαιδευτικού"
-											var="_employeeType" value="#{employeeTypes}"
-											label="#{messages[_employeeType.key]}">
-										</s:selectItems>
-										<a4j:support event="onchange" ajaxSingle="true"
-											reRender="employmentPanel" />
-									</h:selectOneMenu>
-								</s:decorate>
-
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
-									<ui:define name="label">
-										<h:outputText value="Ειδικότητα : " />
-									</ui:define>
-									<h:inputText id="specializationFilter" 
-										value="#{employment.specialization}"
-										styleClass="fieldValueText" size="25" maxlength="40">
-										<rich:suggestionbox height="100" width="250"
-											for="specializationFilter" var="a_spec"
-											suggestionAction="#{specializationSuggester.suggest}">
-											<f:facet name="nothingLabel">
-												<h:outputText value="Άγνωστη Ειδικότητα" />
-											</f:facet>
-											<h:column>
-												<h:outputText value="#{a_spec.id}" />
-											</h:column>
-											<h:column>
-												<h:outputText value="#{a_spec.title}" />
-											</h:column>
-											<a4j:support ajaxSingle="true" event="onselect">
-												<f:setPropertyActionListener value="#{a_spec}"
-													target="#{employee.lastSpecialization}" />
-											</a4j:support>
-										</rich:suggestionbox>
-									</h:inputText>
-								</s:decorate>
-
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
-									<ui:define name="label">
-										<h:outputText value="Άντρας ;" />
-									</ui:define>
-									<h:selectBooleanCheckbox value="#{employee.man}" />
-								</s:decorate>
-
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
-									<ui:define name="label">
-										<h:outputText value="Πολύτεκνος ;" />
-									</ui:define>
-									<h:selectBooleanCheckbox value="#{employee.bigFamily}" />
-								</s:decorate>
-
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
-									<ui:define name="label">
-										<h:outputText value="Ειδική Κατηγορία ;" />
-									</ui:define>
-									<h:selectBooleanCheckbox value="#{employee.specialCategory}" />
-								</s:decorate>
-
-							</h:panelGrid>
+					<rich:panel>
+						<f:facet name="header">
+							<h:outputText value="Βασικά Στοιχεία" />
+						</f:facet>
+						<h:panelGrid columns="4">
 							<s:decorate template="/layout/doubleLineEdit.xhtml">
 								<ui:define name="label">
-									<h:outputText value="Προαιρετικά Σχόλια ;" />
+									<h:outputText value="Επώνυμο" />
 								</ui:define>
-								<h:inputText value="#{employee.comment}" size="40" styleClass="fieldValueText"
-									maxlength="200" />
+								<h:inputText value="#{employee.lastName}" required="true"
+									styleClass="fieldValueText" tabindex="1" size="25"
+									maxlength="30">
+								</h:inputText>
 							</s:decorate>
-						</rich:panel>
-					</a4j:region>
-					<a4j:outputPanel id="employmentPanel">
-						<rich:panel rendered="#{employee.type == 'REGULAR'}">
-							<f:facet name="header">
-								<h:outputText value="Στοιχεία Μόνιμου Εκπαιδευτικού" />
-							</f:facet>
-							<h:panelGrid columns="4">
 
-
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
-									<ui:define name="label">
-										<h:outputText value="ΑΜ : " />
-									</ui:define>
-									<h:inputText value="#{regularEmployeeInfo.registryID}" styleClass="fieldValueText"
-										size="8" maxlength="8" required="false" />
-								</s:decorate>
-								
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
-									<ui:define name="label">
-										<h:outputText value="Αριθμός ΦΕΚ Διορισμού : " />
-									</ui:define>
-									<h:inputText value="#{regularEmployeeInfo.appointmentGOF}" styleClass="fieldValueText"
-										size="8" maxlength="8" required="false" />
-								</s:decorate>
-								
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
-									<ui:define name="label">
-										<h:outputText value="Ημ/νια ΦΕΚ Διορισμού : " />
-									</ui:define>
-									<rich:calendar datePattern="dd-MM-yyyy" style="width:50px" inputSize="10"
-										enableManualInput="true" styleClass="fieldValueText"
-										required="false" value="#{regularEmployeeInfo.appointmentGOFDate}">
-									</rich:calendar>
-								</s:decorate>
-								
-								<s:decorate id="sourceTargetDecoration"
-								template="/layout/doubleLineEdit.xhtml">
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
 								<ui:define name="label">
-									<h:outputText value="Μονάδα Οργανικής" />
+									<h:outputText value="Όνομα" />
 								</ui:define>
+								<h:inputText value="#{employee.firstName}" required="true"
+									styleClass="fieldValueText" size="12" maxlength="30">
+								</h:inputText>
+							</s:decorate>
 
-								<h:inputText id="sourceTarget" styleClass="fieldValueText">
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Όνομα Πατρός" />
+								</ui:define>
+								<h:inputText value="#{employee.fatherName}" required="true"
+									styleClass="fieldValueText" size="12" maxlength="30">
+								</h:inputText>
+							</s:decorate>
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Έπωνυμο Πατρός" />
+								</ui:define>
+								<h:inputText value="#{employee.fatherSurname}" required="false"
+									styleClass="fieldValueText" size="25" maxlength="30">
+								</h:inputText>
+							</s:decorate>
 
-									<rich:suggestionbox for="sourceTarget" var="_school"
-										height="200" width="300"
-										suggestionAction="#{schoolUnitSuggester.suggest}">
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Έπωνυμο Μητρός" />
+								</ui:define>
+								<h:inputText value="#{employee.motherSurname}" required="false"
+									styleClass="fieldValueText" size="25" maxlength="30">
+								</h:inputText>
+							</s:decorate>
+
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Όνομα Μητρός" />
+								</ui:define>
+								<h:inputText value="#{employee.motherName}" required="false"
+									styleClass="fieldValueText" size="12" maxlength="30">
+								</h:inputText>
+							</s:decorate>
+
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Ημ/μια Γεννήσεως : " />
+								</ui:define>
+								<rich:calendar datePattern="dd-MM-yyyy" style="width:50px"
+									enableManualInput="true" styleClass="fieldValueText"
+									inputSize="10" required="true" value="#{employee.dateOfBirth}">
+								</rich:calendar>
+							</s:decorate>
+
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Τύπος Εκπαιδευτικού : " />
+								</ui:define>
+								<h:selectOneMenu value="#{employee.type}">
+									<s:selectItems noSelectionLabel="Επιλέξτε Τύπο Εκπαιδευτικού"
+										var="_employeeType" value="#{employeeTypes}"
+										label="#{messages[_employeeType.key]}">
+									</s:selectItems>
+									<a4j:support event="onchange" ajaxSingle="true"
+										reRender="employmentPanel" />
+								</h:selectOneMenu>
+							</s:decorate>
+
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Ειδικότητα : " />
+								</ui:define>
+								<h:inputText id="specializationFilter" required="true"
+									styleClass="fieldValueText" size="25" maxlength="40">
+									<rich:suggestionbox height="100" width="250"
+										for="specializationFilter" var="a_spec"
+										suggestionAction="#{specializationSuggester.suggest}">
 										<f:facet name="nothingLabel">
-											<h:outputText value="Άγνωστη Μονάδα Οργανικής" />
+											<h:outputText value="Άγνωστη Ειδικότητα" />
 										</f:facet>
 										<h:column>
-											<h:outputText value="#{_school.title}" />
+											<h:outputText value="#{a_spec.id}" />
+										</h:column>
+										<h:column>
+											<h:outputText value="#{a_spec.title}" />
 										</h:column>
 										<a4j:support ajaxSingle="true" event="onselect">
-											<f:setPropertyActionListener value="#{_school}"
-												target="#{employment.school}" />
+											<f:setPropertyActionListener value="#{a_spec}"
+												target="#{employee.lastSpecialization}" />
 										</a4j:support>
 									</rich:suggestionbox>
 								</h:inputText>
 							</s:decorate>
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
-									<ui:define name="label">
-										<h:outputText value="Προσωρινή Οργανική / Τοποθέτηση ;" />
-									</ui:define>
-									<h:selectBooleanCheckbox value="#{employment.temporar}" />
-								</s:decorate>
-							
-							
 
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
-									<ui:define name="label">
-										<h:outputText value="Υποχρεωτικό Ωράριο : " />
-									</ui:define>
-									<h:inputText styleClass="fieldValueText" value="#{employment.mandatoryWorkingHours}"
-										size="3" maxlength="3" required="true" />
-								</s:decorate>
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Άντρας ;" />
+								</ui:define>
+								<h:selectBooleanCheckbox value="#{employee.man}" />
+							</s:decorate>
 
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
-									<ui:define name="label">
-										<h:outputText value="Πραγματικό Ωράριο : " />
-									</ui:define>
-									<h:inputText value="#{employment.finalWorkingHours}" size="3" styleClass="fieldValueText"
-										maxlength="3" required="true" />
-								</s:decorate>
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Πολύτεκνος ;" />
+								</ui:define>
+								<h:selectBooleanCheckbox value="#{employee.bigFamily}" />
+							</s:decorate>
 
-							</h:panelGrid>
-						</rich:panel>
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Ειδική Κατηγορία ;" />
+								</ui:define>
+								<h:selectBooleanCheckbox value="#{employee.specialCategory}" />
+							</s:decorate>
 
+						</h:panelGrid>
+						<s:decorate template="/layout/doubleLineEdit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Προαιρετικά Σχόλια ;" />
+							</ui:define>
+							<h:inputText value="#{employee.comment}" size="40"
+								styleClass="fieldValueText" maxlength="200" />
+						</s:decorate>
+					</rich:panel>
+
+					<a4j:outputPanel id="employmentPanel">
+						
+						<a4j:include viewId="/employee/regular-employment-component.xhtml" rendered="#{employee.type == 'REGULAR'}"/>
+						
 
 						<rich:panel rendered="#{employee.type == 'DEPUTY'}">
 							<f:facet name="header">
@@ -276,13 +193,13 @@
 					<h:panelGroup>
 
 						<s:div styleClass="actionButtons">
-						
-							<h:commandButton action="#{employeeHome.persist()}"
+
+							<h:commandButton action="#{employeeHome.addNewEmployeeInLocalPYSDE()}"
 								onclick="if(!confirm('Να καταχωρηθή ο νέος Εκπαιδευτικός ?')) {form.reset(); return false;}"
 								value="Καταχώρηση" id="persistButton" />
 							<rich:spacer width="10" />
-							
-														
+
+
 							<s:button id="revertButton" value="Επιστροφή"
 								rendered="#{employmentHome.managed}"
 								action="#{employmentHome.revert}"

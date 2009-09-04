@@ -140,7 +140,7 @@
 					<rich:menuItem submitMode="none"
 						disabled="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_SECONDMENT'))}">
 
-						<s:link value="Εισαγωγή Νέας Απόσπασης"
+						<s:link value="Εισαγωγή Νέας Απόσπασης" propagation="nest"
 							action="#{secondmentHome.prepareForNewSecondment}"
 							view="/secondment/add-new-secondment.xhtml">
 							<f:param name="add_new_secondment_from" value="/home" />
@@ -148,7 +148,7 @@
 					</rich:menuItem>
 					<rich:menuItem submitMode="none"
 						disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MANAGE_SECONDMENT'))}">
-						<s:link value="Διαχείρηση Απόσπασης Εκπαιδευτικού"
+						<s:link value="Διαχείρηση Απόσπασης Εκπαιδευτικού" propagation="nest"
 							view="/employee/select-employee.xhtml">
 							<f:param name="from" value="/home" />
 							<f:param name="to"
@@ -159,7 +159,7 @@
 					<rich:menuGroup value="Εκτύπωσεις και Σταστικά"
 						disabled="#{!(s:hasRole('ADMIN') or s:hasRole('VIEW_SECONDMENT'))}">
 						<rich:menuItem submitMode="none">
-							<s:link value="Αποσπάσεις Ανα Τύπο"
+							<s:link value="Αποσπάσεις Ανα Τύπο" propagation="nest"
 								view="/secondment/report-by-type.xhtml">
 								<f:param name="from" value="/home" />
 							</s:link>

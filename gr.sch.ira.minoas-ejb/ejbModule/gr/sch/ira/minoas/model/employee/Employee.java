@@ -45,7 +45,8 @@ public class Employee extends Person {
 	@Column(name = "IS_ACTIVE", nullable = true)
 	private Boolean active;
 
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.PERSIST,
+			CascadeType.REFRESH } )
 	@JoinColumn(name = "CURRENT_EMPLOYMENT_ID", nullable = true)
 	private Employment currentEmployment;
 
