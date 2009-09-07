@@ -5,9 +5,7 @@
   <description>Διαχείρηση Αδειών του/της #{employeeUtil.prettyFormat(employee)}</description>
   
   <param name="leave_management_from"/>
- <!-- 
- <param name="employeeID" value="#{employeeHome.id}" converterId="javax.faces.Integer"/>
-  -->  
+
   
   <!-- navigation rules -->
   <navigation from-action="endButton">
@@ -34,7 +32,7 @@
   </navigation>
   
   <navigation from-action="backButton">
-    <redirect view-id="#{empty leave_management_from ? '/home' : leave_management}.xhtml}" />
+    <redirect view-id="#{empty leave_management_from ? '/home' : leave_management_from}.xhtml}" />
   </navigation>
   
 </page>

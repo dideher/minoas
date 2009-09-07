@@ -13,17 +13,12 @@
     <redirect view-id="#{empty from ? '/home' : from}.xhtml}" />
   </navigation>
   
-  <navigation from-action="backButton">
-    <redirect view-id="#{empty from ? '/home' : from}.xhtml}">
-     
-    </redirect>
-  </navigation>
   
-  <navigation from-action="updateButton">
-    <redirect view-id="#{empty from ? '/home' : from}.xhtml}">
-     
-    </redirect>
+  <navigation from-action="#{employeeHome.addNewEmployeeInLocalPYSDE()}">
+    <rule if-outcome="persisted">
+			<redirect
+				view-id="/employee/employee.xhtml" />
+		</rule>
   </navigation>
-  
   
 </page>

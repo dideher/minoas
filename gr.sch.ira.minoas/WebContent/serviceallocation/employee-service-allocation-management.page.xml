@@ -5,7 +5,6 @@
   <description>Διαχείρηση Θητείας του/της #{employeeUtil.prettyFormat(employee)}</description>
   
   <param name="service_allocation_management_from"/>
-  <param name="employeeID" value="#{employeeHome.id}" converterId="javax.faces.Integer"/>
   
   
   <!-- navigation rules -->
@@ -21,7 +20,7 @@
   </navigation>
   
   <navigation from-action="backButton">
-    <redirect view-id="#{empty service_allocation_management_from ? '/home' : service_allocation_management}.xhtml}" />
+    <redirect view-id="#{empty service_allocation_management_from ? '/home' : service_allocation_management_from}.xhtml}" />
   </navigation>
   
 </page>

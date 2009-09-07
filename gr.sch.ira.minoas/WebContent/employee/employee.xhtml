@@ -19,6 +19,8 @@
 					value="Καρτέλα Εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}" />
 			</f:facet>
 
+			<ui:include src="/components/messages-component.xhtml" />
+
 			<h:panelGrid columns="1" width="100%">
 				<h:panelGroup>
 					<h:panelGrid columns="1">
@@ -33,31 +35,61 @@
 					</h:panelGrid>
 				</h:panelGroup>
 				<h:panelGroup>
-					<rich:toolBar itemSeparator="line">
-						<rich:toolBarGroup location="left">
-							<s:link disabled="#{empty from}" action="backButton"
-								value="Επιστροφή" />
-							<s:link action="endButton" value="Τέλος Ενέργειας" />
-						</rich:toolBarGroup>
-						<s:link value="Δια. Οργανικής Θέσης"
-							disabled="#{!employeeHome.hasRegularEmployment()}"
-							view="/employee/regular-employment-management.xhtml">
-							<f:param name="from" value="/employee/employee" />
-							<f:param name="employmentID"
-								value="#{employee.currentEmployment.id}" />
-						</s:link>
-						<s:link value="Δια. Απόσπασεωνς">
-							<ui:param name="from" value="/employee/employee" />
-						</s:link>
-						<s:link value="Δια. Διαθέσεων">
-							<ui:param name="from" value="/employee/employee" />
-						</s:link>
-						<s:link value="Δια. Αδειών">
-							<ui:param name="from" value="/employee/employee" />
-						</s:link>
-					</rich:toolBar>
+					<h:form>
+						<rich:toolBar>
+							<s:button action="backButton" value="Επιστροφή" />
+							<s:button action="endButton" value="Τέλος Ενέργειας" />
+							<rich:dropDownMenu value="Επιπλέον Ενέργειες">
+								<rich:menuItem submitMode="none" disabled="true">
+									<s:link value="Διαχείρηση Οργανικής Θέσης"
+										view="/employee/regular-employment-management">
+										<f:param name="leave_management_from"
+											value="/employee/employee" />
+									</s:link>
+								</rich:menuItem>
+								<rich:menuItem submitMode="none"
+									disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MANAGE_LEAVE'))}">
+									<s:link value="Διαχείρηση Αδειών Εκπαιδευτικού"
+										propagation="join"
+										view="/leave/employee-leave-management.xhtml">
+										<f:param name="leave_management_from"
+											value="/employee/employee" />
+									</s:link>
+								</rich:menuItem>
+								<rich:menuItem submitMode="none"
+									disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MANAGE_SERVICE_ALLOCATION'))}">
+									<s:link value="Διαχείρηση Θητείας Εκπαιδευτικού"
+										propagation="join"
+										view="/serviceallocation/employee-service-allocation-management.xhtml">
+										<f:param name="service_allocation_management_from"
+											value="/employee/employee" />
+									</s:link>
+								</rich:menuItem>
+								<rich:menuItem submitMode="none"
+									disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MANAGE_SECONDMENT'))}">
+									<s:link value="Διαχείρηση Απόσπασης Εκπαιδευτικού"
+										propagation="join"
+										view="/secondment/secondment-employment-management.xhtml">
+										<f:param name="secondment_management_from"
+											value="/employee/employee" />
+									</s:link>
+								</rich:menuItem>
+								<rich:menuItem submitMode="none"
+									rendered="#{(s:hasRole('ADMIN'))}">
+									<h:commandLink value="Διαγραφή Εκπαιδευτικού !!!!"
+										onclick="if(!confirm('Να διαγραφή ο εκπαιδευτικός ? Προσοχή!!!! Η Διαδικασία δεν είναι αναστρέψιμη.')) {form.reset(); return false;}"
+										action="#{employeeHome.remove()}" />
+										
+									
+								</rich:menuItem>
 
+
+							</rich:dropDownMenu>
+						</rich:toolBar>
+					</h:form>
 				</h:panelGroup>
+
+				<h:form>
 				<rich:simpleTogglePanel switchType="AJAX">
 					<f:facet name="header">
 						<h:outputText
@@ -223,6 +255,7 @@
 						</rich:tab>
 					</rich:tabPanel>
 				</rich:simpleTogglePanel>
+				</h:form>
 			</h:panelGrid>
 		</rich:panel>
 	</ui:define>

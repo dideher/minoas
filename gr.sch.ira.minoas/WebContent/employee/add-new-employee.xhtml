@@ -17,6 +17,8 @@
 			<f:facet name="header">
 				<h:outputText value="Εισαγωγή Νέου Εκπαιδευτικού" />
 			</f:facet>
+			
+			<ui:include src="/components/messages-component.xhtml" />
 
 			<h:form>
 				<h:panelGrid columns="1">
@@ -200,17 +202,8 @@
 							<rich:spacer width="10" />
 
 
-							<s:button id="revertButton" value="Επιστροφή"
-								rendered="#{employmentHome.managed}"
-								action="#{employmentHome.revert}"
-								view="#{empty from ? '/home' : from}.xhtml}" />
-
 							<rich:spacer width="10" />
-							<h:commandButton action="#{employmentHome.update}"
-								value="Ανανέωση" id="updateButton"
-								rendered="#{employmentHome.managed}"
-								disabled="#{!employment.active}" />
-							<rich:spacer width="3" />
+							<s:button action="endButton" value="Τέλος Ενέργειας" />
 
 
 						</s:div>
