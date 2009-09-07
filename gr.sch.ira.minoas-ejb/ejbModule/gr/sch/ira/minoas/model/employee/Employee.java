@@ -54,19 +54,16 @@ public class Employee extends Person {
 	@JoinColumn(name = "PYSDE_ID", nullable = false, updatable = true)
 	private PYSDE currentPYSDE;
 
-	@OneToMany(mappedBy = "employee", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "employee", fetch = FetchType.LAZY, cascade = {CascadeType.ALL} )
 	private Set<Employment> employments;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", cascade = { CascadeType.MERGE, CascadeType.PERSIST,
-			CascadeType.REFRESH })
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", cascade = {CascadeType.ALL})
 	private Collection<Secondment> secondments = new ArrayList<Secondment>();
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", cascade = { CascadeType.MERGE, CascadeType.PERSIST,
-			CascadeType.REFRESH })
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", cascade = {CascadeType.ALL})
 	private Collection<Leave> leaves = new ArrayList<Leave>();
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", cascade = { CascadeType.MERGE, CascadeType.PERSIST,
-			CascadeType.REFRESH })
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", cascade = {CascadeType.ALL})
 	private Collection<ServiceAllocation> serviceAllocations = new ArrayList<ServiceAllocation>();
 
 	/**

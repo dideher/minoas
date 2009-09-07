@@ -44,6 +44,11 @@ public class SecurityStartup {
 		Role adminRole = createRole("ADMIN", "Admin Role - The god him self", admin);
 		admin.addRole(adminRole);
 		
+		/* Employee */
+		createRole("ADD_EMPLOYEE", "Add New Employee", admin);
+		createRole("MANAGE_EMPLOYEE", "Manage Employee", admin);
+		createRole("VIEW_EMPLOYEE", "View Employee", admin);
+		
 		createRole("VIEW_PREPARATORY", "View Preparatory Data", admin);
 		createRole("MANAGE_PREPARATORY_OWNER", "Manage Preperatory Owner", admin);
 		createRole("MANAGE_PREPARATORY_EST_LICENSE", "Manage Preparatory Establishment License", admin);
