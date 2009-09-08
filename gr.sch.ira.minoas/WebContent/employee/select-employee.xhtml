@@ -34,14 +34,14 @@
 								<ui:define name="label">
 									<h:outputText value="Επώνυμο : " />
 								</ui:define>
-								<h:inputText value="#{exampleEmployee.lastName}" size="12" />
+								<h:inputText value="#{employeeCriteria.lastName}" size="12" />
 							</s:decorate>
 
 							<s:decorate template="/layout/doubleLineEdit.xhtml">
 								<ui:define name="label">
 									<h:outputText value="Όνομα : " />
 								</ui:define>
-								<h:inputText value="#{exampleEmployee.firstName}" size="12" />
+								<h:inputText value="#{employeeCriteria.firstName}" size="12" />
 							</s:decorate>
 
 							<s:decorate template="/layout/doubleLineEdit.xhtml">
@@ -49,8 +49,7 @@
 									<h:outputText value="Ειδικότητα : " />
 								</ui:define>
 								<h:inputText id="specializationFilter"
-									value="#{exampleEmployee.lastSpecialization}"
-									styleClass="fieldValueText" converter="specializationConverter">
+									styleClass="fieldValueText">
 									<rich:suggestionbox height="100" width="250"
 										for="specializationFilter" var="a_spec"
 										suggestionAction="#{specializationSuggester.suggest}">
@@ -63,8 +62,24 @@
 										<h:column>
 											<h:outputText value="#{a_spec.title}" />
 										</h:column>
+										<a4j:support ajaxSingle="true" event="onselect">
+											<f:setPropertyActionListener value="#{a_spec}"
+												target="#{employeeCriteria.specialization}" />
+										</a4j:support>
 									</rich:suggestionbox>
 								</h:inputText>
+							</s:decorate>
+
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Τύπος Εκπαιδευτικού : " />
+								</ui:define>
+								<h:selectOneMenu value="#{employeeCriteria.type}">
+									<s:selectItems noSelectionLabel="Επιλέξτε Τύπο Εκπαιδευτικού"
+										var="_employeeType" value="#{employeeTypes}"
+										label="#{messages[_employeeType.key]}">
+									</s:selectItems>
+								</h:selectOneMenu>
 							</s:decorate>
 
 							<s:decorate template="/layout/doubleLineEdit.xhtml">
@@ -131,13 +146,12 @@
 							</f:facet>
 							<h:outputText value="#{employee.motherName}" />
 						</rich:column>
-						
+
 						<rich:column style="text-align:center">
 							<f:facet name="header">
 								<h:outputText value="Ειδ." />
 							</f:facet>
-							<h:outputText 
-								value="#{employee.lastSpecialization.id}" />
+							<h:outputText value="#{employee.lastSpecialization.id}" />
 						</rich:column>
 						<rich:column>
 							<f:facet name="header">
@@ -150,8 +164,7 @@
 							<f:facet name="header">
 								<h:outputText value="Τύπος" />
 							</f:facet>
-							<h:outputText 
-								value="#{messages[employee.type.key]}" />
+							<h:outputText value="#{messages[employee.type.key]}" />
 						</rich:column>
 						<rich:column style="text-align:center">
 							<f:facet name="header">
@@ -166,10 +179,10 @@
 								<h:outputText value="Ενέργεια" />
 							</f:facet>
 							<rich:toolBar itemSeparator="line">
-								
+
 								<a4j:commandLink action="selectEmployee" value="Επιλογή">
 									<f:setPropertyActionListener value="#{employee.id}"
-														target="#{employeeHome.id}" />
+										target="#{employeeHome.id}" />
 									<s:conversationPropagation type="join" />
 								</a4j:commandLink>
 							</rich:toolBar>
