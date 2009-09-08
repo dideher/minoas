@@ -6,12 +6,13 @@
   xmlns:mail="http://jboss.com/products/seam/mail" xmlns:web="http://jboss.com/products/seam/web"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:theme="http://jboss.com/products/seam/theme"
   xmlns:transaction="http://jboss.com/products/seam/transaction" xmlns:document="http://jboss.com/products/seam/document"
-  xmlns:framework="http://jboss.com/products/seam/framework"
+  xmlns:framework="http://jboss.com/products/seam/framework" xmlns:async="http://jboss.com/products/seam/async"
   xsi:schemaLocation="http://jboss.com/products/seam/core http://jboss.com/products/seam/core-2.1.xsd 
                  http://jboss.com/products/seam/persistence http://jboss.com/products/seam/persistence-2.1.xsd 
                  http://jboss.com/products/seam/drools http://jboss.com/products/seam/drools-2.1.xsd
                  http://jboss.com/products/seam/bpm http://jboss.com/products/seam/bpm-2.1.xsd
                  http://jboss.com/products/seam/security http://jboss.com/products/seam/security-2.1.xsd
+                 http://jboss.com/products/seam/async http://jboss.com/products/seam/async-2.1.xsd
                  http://jboss.com/products/seam/mail http://jboss.com/products/seam/mail-2.1.xsd
                  http://jboss.com/products/seam/components http://jboss.com/products/seam/components-2.1.xsd
                  http://jboss.com/products/seam/theme http://jboss.com/products/seam/theme-2.1.xsd
@@ -37,7 +38,8 @@
   
   <ui:jpa-entity-loader entity-manager="#{entityManager}" />
 
-
+  
+  <async:timer-service-dispatcher/>
 
   <transaction:ejb-transaction />
 
@@ -149,9 +151,9 @@
     <framework:ejbql>SELECT e FROM Employee e</framework:ejbql>
     <framework:order>e.lastName asc, e.firstName asc</framework:order>
     <framework:restrictions>
-      <value>lower(e.lastName) like lower(concat('%', concat(#{exampleEmployee.lastName},'%')))</value>
-      <value>lower(e.firstName) like lower(concat('%', concat(#{exampleEmployee.firstName},'%')))</value>
-      <value>e.lastSpecialization = #{exampleEmployee.lastSpecialization}</value>
+      <value>lower(e.lastName) like lower(concat('%', concat(#{employeeCriteria.lastName},'%')))</value>
+      <value>lower(e.firstName) like lower(concat('%', concat(#{employeeCriteria.firstName},'%')))</value>
+      <value>e.lastSpecialization = #{employeeCriteria.specialization}</value>
       <value>e.active = #{employeeCriteria.onlyActive}</value>
       <value>e.type = #{employeeCriteria.type}</value>
     </framework:restrictions>
