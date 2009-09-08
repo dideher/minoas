@@ -1,11 +1,11 @@
 package gr.sch.ira.minoas.seam.components.criteria;
 
-import java.util.Calendar;
-import java.util.Date;
-
 import gr.sch.ira.minoas.model.core.SpecializationGroup;
 import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employement.SecondmentType;
+
+import java.util.Calendar;
+import java.util.Date;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.jboss.seam.ScopeType;

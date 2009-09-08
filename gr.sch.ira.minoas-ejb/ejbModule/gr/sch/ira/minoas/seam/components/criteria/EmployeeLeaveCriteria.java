@@ -3,17 +3,14 @@ package gr.sch.ira.minoas.seam.components.criteria;
 import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.core.SpecializationGroup;
 import gr.sch.ira.minoas.model.employement.LeaveType;
-import gr.sch.ira.minoas.seam.components.reports.resource.EmployeeLeaveReportItem;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
-import org.jboss.seam.annotations.datamodel.DataModel;
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>

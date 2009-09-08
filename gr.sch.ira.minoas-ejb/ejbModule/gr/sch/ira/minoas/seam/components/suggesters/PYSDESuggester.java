@@ -5,7 +5,6 @@ package gr.sch.ira.minoas.seam.components.suggesters;
 
 import gr.sch.ira.minoas.core.CoreUtils;
 import gr.sch.ira.minoas.model.core.PYSDE;
-import gr.sch.ira.minoas.model.core.Specialization;
 
 import java.util.Collection;
 

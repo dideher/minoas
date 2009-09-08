@@ -1,16 +1,14 @@
 package gr.sch.ira.minoas.seam.components.reports;
 
+import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
+import gr.sch.ira.minoas.seam.components.CoreSearching;
+
 import java.util.ResourceBundle;
 
 import javax.faces.context.FacesContext;
 
-import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
-import gr.sch.ira.minoas.seam.components.BaseSeamComponent;
-import gr.sch.ira.minoas.seam.components.CoreSearching;
-
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.core.SeamResourceBundle;
-import org.jboss.seam.faces.FacesMessages;
 
 public abstract class BaseReport  extends BaseDatabaseAwareSeamComponent {
 

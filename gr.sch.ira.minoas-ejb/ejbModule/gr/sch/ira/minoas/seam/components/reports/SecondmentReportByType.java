@@ -2,20 +2,16 @@ package gr.sch.ira.minoas.seam.components.reports;
 
 import gr.sch.ira.minoas.model.core.SpecializationGroup;
 import gr.sch.ira.minoas.model.core.Unit;
-import gr.sch.ira.minoas.model.employement.Leave;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.SecondmentType;
-import gr.sch.ira.minoas.seam.components.CoreSearching;
 import gr.sch.ira.minoas.seam.components.criteria.DateSearchType;
 import gr.sch.ira.minoas.seam.components.criteria.SecondmentCriteria;
-import gr.sch.ira.minoas.seam.components.reports.resource.EmployeeLeaveReportItem;
 import gr.sch.ira.minoas.seam.components.reports.resource.SecondmentItem;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.faces.context.FacesContext;
@@ -32,8 +28,6 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.datamodel.DataModel;
-import org.jboss.seam.core.SeamResourceBundle;
-import org.jboss.seam.framework.EntityQuery;
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>

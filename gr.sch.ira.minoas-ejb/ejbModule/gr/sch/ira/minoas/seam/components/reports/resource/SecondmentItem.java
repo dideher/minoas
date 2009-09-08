@@ -2,11 +2,8 @@ package gr.sch.ira.minoas.seam.components.reports.resource;
 
 import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.employement.Secondment;
-import gr.sch.ira.minoas.model.employement.SecondmentType;
 
 import java.util.Date;
-
-import javax.print.attribute.standard.Chromaticity;
 
 public class SecondmentItem extends EmployeeReportItem {
 	private String comment;

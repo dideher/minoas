@@ -1,11 +1,11 @@
 package gr.sch.ira.minoas.seam.components.reports.resource;
 
+import gr.sch.ira.minoas.model.core.SpecializationGroup;
+import gr.sch.ira.minoas.seam.components.reports.TeachingHourAnalysisReport;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import gr.sch.ira.minoas.model.core.SpecializationGroup;
-import gr.sch.ira.minoas.seam.components.reports.TeachingHourAnalysisReport;
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>

@@ -1,12 +1,19 @@
 package gr.sch.ira.minoas.seam.components.reports;
 
+import gr.sch.ira.minoas.model.core.School;
+import gr.sch.ira.minoas.model.core.SpecializationGroup;
+import gr.sch.ira.minoas.model.employement.Leave;
+import gr.sch.ira.minoas.model.employement.LeaveType;
+import gr.sch.ira.minoas.seam.components.criteria.DateSearchType;
+import gr.sch.ira.minoas.seam.components.criteria.EmployeeLeaveCriteria;
+import gr.sch.ira.minoas.seam.components.reports.resource.EmployeeLeaveReportItem;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.ResourceBundle;
 
 import javax.faces.context.FacesContext;
 import javax.persistence.Query;
@@ -22,19 +29,6 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.datamodel.DataModel;
-import org.jboss.seam.core.SeamResourceBundle;
-
-import gr.sch.ira.minoas.model.core.School;
-import gr.sch.ira.minoas.model.core.SpecializationGroup;
-import gr.sch.ira.minoas.model.employement.Leave;
-import gr.sch.ira.minoas.model.employement.LeaveType;
-import gr.sch.ira.minoas.model.employement.Secondment;
-import gr.sch.ira.minoas.model.employement.SecondmentType;
-import gr.sch.ira.minoas.seam.components.criteria.DateSearchType;
-import gr.sch.ira.minoas.seam.components.criteria.EmployeeLeaveCriteria;
-import gr.sch.ira.minoas.seam.components.reports.resource.EmployeeLeaveReportItem;
-import gr.sch.ira.minoas.seam.components.reports.resource.EmployeeReportItem;
-import gr.sch.ira.minoas.seam.components.reports.resource.SecondmentItem;
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>

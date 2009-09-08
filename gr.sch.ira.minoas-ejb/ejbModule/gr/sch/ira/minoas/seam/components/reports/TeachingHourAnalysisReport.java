@@ -1,16 +1,5 @@
 package gr.sch.ira.minoas.seam.components.reports;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.persistence.EntityManager;
-
 import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.core.SchoolYear;
 import gr.sch.ira.minoas.model.core.Specialization;
@@ -24,13 +13,21 @@ import gr.sch.ira.minoas.seam.components.reports.resource.SpecializationGroupVoi
 import gr.sch.ira.minoas.seam.components.reports.resource.SpecializationGroupVoidAnalysisItem;
 import gr.sch.ira.minoas.seam.components.reports.resource.TeachingResource;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.lang.time.DateUtils;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.annotations.datamodel.DataModel;
-import org.jboss.seam.framework.EntityQuery;
 
 /**
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>

@@ -9,8 +9,6 @@ import gr.sch.ira.minoas.model.employement.Secondment;
 
 import java.util.Date;
 
-import javax.management.RuntimeErrorException;
-
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
