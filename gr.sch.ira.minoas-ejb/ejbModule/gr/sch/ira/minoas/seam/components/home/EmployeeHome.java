@@ -3,6 +3,7 @@ package gr.sch.ira.minoas.seam.components.home;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
 import gr.sch.ira.minoas.model.employee.RegularEmployeeInfo;
+import gr.sch.ira.minoas.model.employement.DeputyEmploymentInfo;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
 import gr.sch.ira.minoas.model.employement.Secondment;
@@ -32,6 +33,9 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 	private RegularEmployeeInfoHome regularEmployeeInfoHome;
 
 	@In(create = true)
+	private DeputyEmploymentInfoHome deputyEmploymentInfoHome;
+	
+	@In(create = true)
 	private EmploymentHome employmentHome;
 
 	/**
@@ -59,33 +63,6 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 
 	public boolean hasDeputyEmployment() {
 		return hasEmployment() && getInstance().getCurrentEmployment().getType().equals(EmploymentType.DEPUTY);
-	}
-
-	@Transactional
-	public String addNewRegularEmployment(Employment employment) {
-		joinTransaction();
-		Employee employee = getInstance();
-		Employment old_employment = employee.getCurrentEmployment();
-
-		/* update the new emploment */
-		employment.setSchoolYear(getCoreSearching().getActiveSchoolYear(getEntityManager()));
-		employment.setEmployee(employee);
-		employment.setActive(Boolean.TRUE);
-		getEntityManager().persist(employment);
-
-		/* update the employee */
-		employee.setCurrentEmployment(employment);
-		employee.setLastSpecialization(employment.getSpecialization());
-
-		if (old_employment != null) {
-			/* modify the current employment */
-			old_employment.setActive(Boolean.FALSE);
-			old_employment.setTerminated(new Date(System.currentTimeMillis()));
-			old_employment.setSupersededBy(employment);
-		}
-		getEntityManager().flush();
-		raiseAfterTransactionSuccessEvent();
-		return "added";
 	}
 
 	@Transactional
@@ -125,25 +102,18 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 		return super.update();
 	}
 
+	@Transactional
 	public String addNewEmployeeInLocalPYSDE() {
-		if (employmentHome.isManaged() || regularEmployeeInfoHome.isManaged()) {
-			throw new RuntimeException("employment home or employeeRegularInfo is managed.");
+		if (employmentHome.isManaged() || regularEmployeeInfoHome.isManaged() || deputyEmploymentInfoHome.isManaged()) {
+			throw new RuntimeException("employment home or employeeRegularInfo or  deputyEmploymentInfoHome is managed.");
 		}
 
+		RegularEmployeeInfo info = null;
+		DeputyEmploymentInfo deputyEmploymentInfo = null;
 		Employee new_employee = getInstance();
+		Employment employment = employmentHome.getInstance();
 		new_employee.setActive(Boolean.TRUE);
 		new_employee.setCurrentPYSDE(getCoreSearching().getLocalPYSDE(getEntityManager()));
-
-		RegularEmployeeInfo info = regularEmployeeInfoHome.getInstance();
-		info.setInsertedBy(getPrincipal());
-		getEntityManager().persist(info);
-
-		Employment employment = employmentHome.getInstance();
-		employment.setEmployee(new_employee);
-		employment.setActive(Boolean.TRUE);
-		employment.setInsertedBy(getPrincipal());
-		employment.setSchoolYear(getCoreSearching().getActiveSchoolYear(getEntityManager()));
-		employment.setSpecialization(new_employee.getLastSpecialization());
 		switch (new_employee.getType()) {
 		case DEPUTY:
 			employment.setType(EmploymentType.DEPUTY);
@@ -155,13 +125,31 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 			employment.setType(EmploymentType.REGULAR);
 			break;
 		}
+		getEntityManager().persist(new_employee);
+		
+		employment.setEmployee(new_employee);
+		employment.setActive(Boolean.TRUE);
+		employment.setInsertedBy(getPrincipal());
+		employment.setSchoolYear(getCoreSearching().getActiveSchoolYear(getEntityManager()));
+		employment.setSpecialization(new_employee.getLastSpecialization());
+		new_employee.setCurrentEmployment(employment);
 		getEntityManager().persist(employment);
 
-		/* wire things */
-
-		new_employee.setRegularDetail(info);
-		new_employee.setCurrentEmployment(employment);
-
+		
+		if(new_employee.getType()==EmployeeType.REGULAR) {
+			info = regularEmployeeInfoHome.getInstance();
+			info.setInsertedBy(getPrincipal());
+			info.setEmployee(new_employee);
+			new_employee.setRegularDetail(info);
+			getEntityManager().persist(info);
+		}
+		
+		if(new_employee.getType()==EmployeeType.DEPUTY) {
+			deputyEmploymentInfo = new DeputyEmploymentInfo();
+			deputyEmploymentInfo.setEmployment(employment);
+			deputyEmploymentInfo.setInsertedBy(getPrincipal());
+			getEntityManager().persist(deputyEmploymentInfo);
+		}
 		return persist();
 	}
 
@@ -203,6 +191,7 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 		this.clearInstance();
 		regularEmployeeInfoHome.clearInstance();
 		employmentHome.clearInstance();
+		deputyEmploymentInfoHome.clearInstance();
 		employmentHome.getInstance().setEstablished(
 				getCoreSearching().getActiveSchoolYear(getEntityManager()).getSchoolYearStart());
 		employmentHome.getInstance().setFinalWorkingHours(21);
@@ -227,8 +216,25 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 		if (isManaged()) {
 			Employee employee = getInstance();
 			info("principal #0 is trying to remove employee #1", getPrincipalName(), employee);
+			if(employee.getType()==EmployeeType.REGULAR) {
+				getEntityManager().remove(employee.getRegularDetail());
+			}
 			return super.remove();
 		}
 		return null;
+	}
+
+	/**
+	 * @return the deputyEmploymentInfoHome
+	 */
+	public DeputyEmploymentInfoHome getDeputyEmploymentInfoHome() {
+		return deputyEmploymentInfoHome;
+	}
+
+	/**
+	 * @param deputyEmploymentInfoHome the deputyEmploymentInfoHome to set
+	 */
+	public void setDeputyEmploymentInfoHome(DeputyEmploymentInfoHome deputyEmploymentInfoHome) {
+		this.deputyEmploymentInfoHome = deputyEmploymentInfoHome;
 	}
 }

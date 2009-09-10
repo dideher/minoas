@@ -22,7 +22,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
@@ -79,9 +78,9 @@ public class Employee extends Person {
 	private String legacyCode;
 
 	@OneToOne(optional = true, fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
-	@PrimaryKeyJoinColumn(name = "ID")
-	//@JoinColumn(name="REGULAR_EMPLOYMEE_DETAIL_ID", nullable=true)
+	@JoinColumn(name="REGULAR_EMPLOYMEE_INFO_ID", nullable=true)
 	private RegularEmployeeInfo regularEmployeeInfo;
+	
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "EMPLOYEE_TYPE", nullable = false, updatable = false)

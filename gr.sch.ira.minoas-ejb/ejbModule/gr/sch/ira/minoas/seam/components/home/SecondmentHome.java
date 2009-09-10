@@ -215,7 +215,7 @@ public class SecondmentHome extends MinoasEntityHome<Secondment> {
 			 * if the canceled secondment is the employee's current secondment
 			 * then update the employee as well.
 			 */
-			if (employment.getSecondment().getId().equals(current_secondment.getId()))
+			if (employment.getSecondment()!=null && employment.getSecondment().getId().equals(current_secondment.getId()))
 				employment.setSecondment(null);
 		}
 		super.update();

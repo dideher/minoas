@@ -1,5 +1,8 @@
 package gr.sch.ira.minoas.seam.components.startup;
 
+import gr.sch.ira.minoas.seam.components.BaseSeamComponent;
+import gr.sch.ira.minoas.seam.components.async.SecondmentCleanup;
+
 import java.util.Calendar;
 
 import org.apache.commons.lang.time.DateUtils;
@@ -11,9 +14,6 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Startup;
 import org.jboss.seam.annotations.TransactionPropagationType;
 import org.jboss.seam.annotations.Transactional;
-
-import gr.sch.ira.minoas.seam.components.BaseSeamComponent;
-import gr.sch.ira.minoas.seam.components.async.SecondmentCleanup;
 
 /**
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
@@ -39,7 +39,7 @@ public class AsyncComponentsStartup extends BaseSeamComponent {
 		//secondmentCleanupHandler.processRecurringSecondmentCleanup(cal.getTime(), ONE_DAY);
 		
 		Calendar temp = Calendar.getInstance();
-		cal.add(Calendar.SECOND, 30);
-		secondmentCleanupHandler.processRecurringSecondmentCleanup(temp.getTime(), 30000L);
+		cal.add(Calendar.SECOND, 120);
+		//secondmentCleanupHandler.processRecurringSecondmentCleanup(temp.getTime(), 30000L);
 	}
 }

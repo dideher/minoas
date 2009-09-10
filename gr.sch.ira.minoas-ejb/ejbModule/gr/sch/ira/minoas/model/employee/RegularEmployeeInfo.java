@@ -7,8 +7,12 @@ import gr.sch.ira.minoas.model.BaseIDModel;
 import java.util.Date;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
@@ -43,6 +47,10 @@ public class RegularEmployeeInfo extends BaseIDModel {
 	@Basic
 	@Column(name = "APPOINTMENT_GOF_DATE")
 	private Date appointmentGOFDate;
+	
+	@OneToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="EMPLOYEE_ID", nullable=false)
+	private Employee employee;
 
 	
 
@@ -90,6 +98,20 @@ public class RegularEmployeeInfo extends BaseIDModel {
 	 */
 	public void setRegistryID(String registryID) {
 		this.registryID = registryID;
+	}
+
+	/**
+	 * @return the employee
+	 */
+	public Employee getEmployee() {
+		return employee;
+	}
+
+	/**
+	 * @param employee the employee to set
+	 */
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
 	}
 
 }

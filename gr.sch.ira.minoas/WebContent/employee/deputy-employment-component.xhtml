@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich">
+
+<ui:component>
+	<rich:panel >
+		<f:facet name="header">
+			<h:outputText value="Στοιχεία Αναπληρωτή Εκπαιδευτικού" />
+		</f:facet>
+		<h:panelGrid columns="4">
+
+
+			<s:decorate template="/layout/doubleLineEdit.xhtml">
+				<ui:define name="label">
+					<h:outputText value="Υπουργική Απόφαση : " />
+				</ui:define>
+				<h:inputText value="#{deputyEmploymentInfo.ministryVerdict}"
+					styleClass="fieldValueText" size="20" maxlength="64" required="true" />
+			</s:decorate>
+			
+			<s:decorate template="/layout/doubleLineEdit.xhtml">
+				<ui:define name="label">
+					<h:outputText value="Απόφαση Διευθυντή: " />
+				</ui:define>
+				<h:inputText value="#{deputyEmploymentInfo.chiefVerdict}"
+					styleClass="fieldValueText" size="20" maxlength="64" required="false" />
+			</s:decorate>
+			<s:decorate template="/layout/doubleLineEdit.xhtml">
+				<ui:define name="label">
+					<h:outputText value="Πράξη ΠΥΣΔΕ : " />
+				</ui:define>
+				<h:inputText value="#{deputyEmploymentInfo.pysdeAct}"
+					styleClass="fieldValueText" size="20" maxlength="64" required="false" />
+			</s:decorate>
+			<s:decorate template="/layout/doubleLineEdit.xhtml">
+				<ui:define name="label">
+					<h:outputText value="Πράξη Ανάληψης : " />
+				</ui:define>
+				<h:inputText value="#{deputyEmploymentInfo.analipsiAct}"
+					styleClass="fieldValueText" size="20" maxlength="64" required="false" />
+			</s:decorate>
+
+			<s:decorate id="sourceTargetDecoration"
+				template="/layout/doubleLineEdit.xhtml">
+				<ui:define name="label">
+					<h:outputText value="Μονάδα Τοποθέτησης" />
+				</ui:define>
+
+				<h:inputText id="sourceTarget" styleClass="fieldValueText" required="true">
+
+					<rich:suggestionbox for="sourceTarget" var="_school" height="200"
+						width="300" suggestionAction="#{schoolUnitSuggester.suggest}">
+						<f:facet name="nothingLabel">
+							<h:outputText value="Άγνωστη Μονάδα Τοποθέτησης" />
+						</f:facet>
+						<h:column>
+							<h:outputText value="#{_school.title}" />
+						</h:column>
+						<a4j:support ajaxSingle="true" event="onselect">
+							<f:setPropertyActionListener value="#{_school}"
+								target="#{employment.school}" />
+						</a4j:support>
+					</rich:suggestionbox>
+				</h:inputText>
+			</s:decorate>
+
+
+			
+
+			<s:decorate template="/layout/doubleLineEdit.xhtml">
+				<ui:define name="label">
+					<h:outputText value="Ημ/μια Ανάληψης Υπηρεσίας : " />
+				</ui:define>
+				<rich:calendar datePattern="dd-MM-yyyy" style="width:50px"
+					enableManualInput="true" styleClass="fieldValueText" inputSize="10"
+					required="true" value="#{employment.established}">
+				</rich:calendar>
+			</s:decorate>
+
+			<s:decorate template="/layout/doubleLineEdit.xhtml">
+				<ui:define name="label">
+					<h:outputText value="Υποχρεωτικό Ωράριο : " />
+				</ui:define>
+				<h:selectOneMenu required="true"  value="#{employment.mandatoryWorkingHours}">
+					<f:selectItem itemLabel="21 Ώρες" itemValue="21" />
+					<f:selectItem itemLabel="22 Ώρες" itemValue="22"/>
+					<f:selectItem itemLabel="28 Ώρες" itemValue="28"/>
+					<a4j:support event="onchange" ajaxSingle="true" rendered="deputyFinalWorkingHours">
+						<f:setPropertyActionListener value="#{employment.mandatoryWorkingHours}" target="#{employment.finalWorkingHours}" />
+					</a4j:support>
+				</h:selectOneMenu>
+			</s:decorate>
+
+			<s:decorate template="/layout/doubleLineEdit.xhtml" id="deputyFinalWorkingHours">
+				<ui:define name="label">
+					<h:outputText value="Πραγματικό Ωράριο : " />
+				</ui:define>
+				<h:inputText value="#{employment.finalWorkingHours}" size="3"
+					styleClass="fieldValueText" maxlength="3" required="true" />
+			</s:decorate>
+
+		</h:panelGrid>
+	</rich:panel>
+</ui:component>
+</html>

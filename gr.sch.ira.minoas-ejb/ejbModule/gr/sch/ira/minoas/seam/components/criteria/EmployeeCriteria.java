@@ -12,7 +12,7 @@ import org.jboss.seam.annotations.Scope;
  * @version $Id$
  */
 @Name("employeeCriteria")
-@Scope(ScopeType.PAGE)
+@Scope(ScopeType.CONVERSATION)
 public class EmployeeCriteria {
 	
 	private String firstName;

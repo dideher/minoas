@@ -54,6 +54,10 @@ public class Employment extends BaseIDModel {
 	@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 	@JoinColumn(name = "EMPLOYEE_ID", nullable = false)
 	private Employee employee;
+	
+	@OneToOne(fetch=FetchType.LAZY, cascade= {CascadeType.ALL})
+	@JoinColumn(name="DEPUTY_EMPLOYMENT_INFO_ID", nullable=true)
+	private DeputyEmploymentInfo deputyEmploymentInfo;
 
 	@Basic
 	@Column(name = "ESTABLISHED_DATE", nullable = true)
@@ -63,9 +67,8 @@ public class Employment extends BaseIDModel {
 	@Basic
 	@Column(name = "FINAL_WORKING_HOURS", nullable = true)
 	private Integer finalWorkingHours;
-
-
-
+	
+	
 	@Basic
 	@Column(name = "MANDATORY_WORK_HRS", nullable = false)
 	private Integer mandatoryWorkingHours;
@@ -359,4 +362,19 @@ public class Employment extends BaseIDModel {
 		this.temporar = temporar;
 	}
 
+	/**
+	 * @return the deputyEmploymentInfo
+	 */
+	public DeputyEmploymentInfo getDeputyEmploymentInfo() {
+		return deputyEmploymentInfo;
+	}
+
+	/**
+	 * @param deputyEmploymentInfo the deputyEmploymentInfo to set
+	 */
+	public void setDeputyEmploymentInfo(DeputyEmploymentInfo deputyEmploymentInfo) {
+		this.deputyEmploymentInfo = deputyEmploymentInfo;
+	}
+
+	
 }

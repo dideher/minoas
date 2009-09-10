@@ -170,14 +170,8 @@
 						
 						<a4j:include viewId="/employee/regular-employment-component.xhtml" rendered="#{employee.type == 'REGULAR'}"/>
 						
-
-						<rich:panel rendered="#{employee.type == 'DEPUTY'}">
-							<f:facet name="header">
-								<h:outputText value="Στοιχεία Αναπληρωτή" />
-							</f:facet>
-							<h:outputText value="Να φύγεται να πάτε αλλού !" />
-						</rich:panel>
-
+						<a4j:include viewId="/employee/deputy-employment-component.xhtml" rendered="#{employee.type == 'DEPUTY'}"/>
+						
 						<rich:panel rendered="#{employee.type == 'HOURLYPAID'}">
 							<f:facet name="header">
 								<h:outputText value="Στοιχεία Ωρομίσθιου" />
