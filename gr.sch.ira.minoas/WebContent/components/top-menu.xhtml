@@ -167,7 +167,18 @@
 
 					</rich:menuGroup>
 				</rich:menuGroup>
+				<rich:menuSeparator />
+					<rich:menuGroup value="Εκτύπωσεις και Στατιστικά"
+						disabled="#{!(s:hasRole('ADMIN') or s:hasRole('VIEW_EMPLOYEE'))}">
+						<rich:menuItem submitMode="none">
+							<s:link value="Εκπαιδευτικό Προσωπικό Ανα Τύπο"
+								view="/employee/employee-report-by-type.xhtml">
+								<f:param name="employee_report_by_type_from"
+									value="/home" />
+							</s:link>
+						</rich:menuItem>
 
+					</rich:menuGroup>
 			</rich:dropDownMenu>
 			<rich:dropDownMenu
 				disabled="#{!(identity.loggedIn and (s:hasRole('ADMIN') or s:hasRole('VIEW_PREPARATORY')))}">

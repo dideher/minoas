@@ -1,6 +1,9 @@
 package gr.sch.ira.minoas.seam.components.criteria;
 
+import java.util.Date;
+
 import gr.sch.ira.minoas.model.core.Specialization;
+import gr.sch.ira.minoas.model.core.SpecializationGroup;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
 
 import org.jboss.seam.ScopeType;
@@ -21,7 +24,23 @@ public class EmployeeCriteria {
 	
 	private Specialization specialization;
 	
+	private SpecializationSearchType specializationSearchType;
+	
+	private SpecializationGroup specializationGroup;
+	
 	private EmployeeType type;
+	
+	private DateSearchType dateSearchType;
+
+	private Date effectiveDate;
+
+	private Date effectiveDateFrom;
+	
+	private Date effectiveDateUntil;
+	
+	private Boolean bigFamily;
+	
+	private Boolean specialCategory;
 
 	/**
 	 * @return the type
@@ -41,6 +60,8 @@ public class EmployeeCriteria {
 	 */
 	public EmployeeCriteria() {
 		super();
+		this.dateSearchType = DateSearchType.AFTER_DATE;
+		this.specializationSearchType = SpecializationSearchType.SPECIALIZATION;
 	}
 	/**
 	 * @return the onlyActive
@@ -89,6 +110,102 @@ public class EmployeeCriteria {
 	 */
 	public void setSpecialization(Specialization specialization) {
 		this.specialization = specialization;
+	}
+	/**
+	 * @return the dateSearchType
+	 */
+	public DateSearchType getDateSearchType() {
+		return dateSearchType;
+	}
+	/**
+	 * @param dateSearchType the dateSearchType to set
+	 */
+	public void setDateSearchType(DateSearchType dateSearchType) {
+		this.dateSearchType = dateSearchType;
+	}
+	/**
+	 * @return the effectiveDate
+	 */
+	public Date getEffectiveDate() {
+		return effectiveDate;
+	}
+	/**
+	 * @param effectiveDate the effectiveDate to set
+	 */
+	public void setEffectiveDate(Date effectiveDate) {
+		this.effectiveDate = effectiveDate;
+	}
+	/**
+	 * @return the effectiveDateFrom
+	 */
+	public Date getEffectiveDateFrom() {
+		return effectiveDateFrom;
+	}
+	/**
+	 * @param effectiveDateFrom the effectiveDateFrom to set
+	 */
+	public void setEffectiveDateFrom(Date effectiveDateFrom) {
+		this.effectiveDateFrom = effectiveDateFrom;
+	}
+	/**
+	 * @return the effectiveDateUntil
+	 */
+	public Date getEffectiveDateUntil() {
+		return effectiveDateUntil;
+	}
+	/**
+	 * @param effectiveDateUntil the effectiveDateUntil to set
+	 */
+	public void setEffectiveDateUntil(Date effectiveDateUntil) {
+		this.effectiveDateUntil = effectiveDateUntil;
+	}
+	/**
+	 * @return the specializationSearchType
+	 */
+	public SpecializationSearchType getSpecializationSearchType() {
+		return specializationSearchType;
+	}
+	/**
+	 * @param specializationSearchType the specializationSearchType to set
+	 */
+	public void setSpecializationSearchType(SpecializationSearchType specializationSearchType) {
+		this.specializationSearchType = specializationSearchType;
+	}
+	/**
+	 * @return the specializationGroup
+	 */
+	public SpecializationGroup getSpecializationGroup() {
+		return specializationGroup;
+	}
+	/**
+	 * @param specializationGroup the specializationGroup to set
+	 */
+	public void setSpecializationGroup(SpecializationGroup specializationGroup) {
+		this.specializationGroup = specializationGroup;
+	}
+	/**
+	 * @return the bigFamily
+	 */
+	public Boolean getBigFamily() {
+		return bigFamily;
+	}
+	/**
+	 * @param bigFamily the bigFamily to set
+	 */
+	public void setBigFamily(Boolean bigFamily) {
+		this.bigFamily = bigFamily;
+	}
+	/**
+	 * @return the specialCategory
+	 */
+	public Boolean getSpecialCategory() {
+		return specialCategory;
+	}
+	/**
+	 * @param specialCategory the specialCategory to set
+	 */
+	public void setSpecialCategory(Boolean specialCategory) {
+		this.specialCategory = specialCategory;
 	}
 
 }

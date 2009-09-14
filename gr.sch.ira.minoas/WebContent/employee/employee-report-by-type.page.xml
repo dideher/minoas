@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page login-required="true" xmlns="http://jboss.com/products/seam/pages"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.1.xsd">
+  <description>Εκπαιδευτικό Προσωπικό Κατά Τύπο</description>
+  <begin-conversation flush-mode="manual" join="true"/>
+  <param name="employee_report_by_type_from" />
+  <navigation from-action="backButton">
+    <end-conversation />
+    <redirect view-id="#{employee_report_by_type_from ? '/home' : employee_report_by_type_from}.xhtml}" />
+  </navigation>
+</page>
+ 

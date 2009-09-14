@@ -27,6 +27,7 @@ import gr.sch.ira.minoas.model.preparatory.TeachingLanguage;
 import gr.sch.ira.minoas.model.security.Principal;
 import gr.sch.ira.minoas.model.security.Role;
 import gr.sch.ira.minoas.seam.components.criteria.DateSearchType;
+import gr.sch.ira.minoas.seam.components.criteria.SpecializationSearchType;
 
 import java.util.Collection;
 import java.util.Date;
@@ -90,6 +91,11 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 	@Factory(value = "employeeTypes")
 	public EmployeeType[] getEmployeeTypes() {
 		return EmployeeType.values();
+	}
+	
+	@Factory(value = "specializationSearchTypes")
+	public SpecializationSearchType[] getSpecializationSearchTypes() {
+		return SpecializationSearchType.values();
 	}
 
 	@SuppressWarnings("unchecked")
