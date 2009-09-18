@@ -31,7 +31,7 @@
 
 								<ui:include src="/components/messages-component.xhtml" />
 
-								<h:panelGrid columns="5">
+								<h:panelGrid columns="3">
 
 									<s:decorate id="establishedDateDecoration"
 										template="/layout/doubleLineEdit.xhtml">
@@ -50,27 +50,68 @@
 
 									<s:decorate template="/layout/doubleLineEdit.xhtml">
 										<ui:define name="label">
-											<h:outputText value="Ομάδα Ειδικοτήτων : " />
+											<h:outputText value="Τύπος Ειδικοτητών" />
 										</ui:define>
-										<h:inputText id="specializationGroupFilter"
-											styleClass="fieldValueText" size="30">
-
-											<rich:suggestionbox height="100" width="250"
-												for="specializationGroupFilter" var="a_spec"
-												suggestionAction="#{specializationGroupSuggester.suggest}">
-												<f:facet name="nothingLabel">
-													<h:outputText value="Άγνωστη Ομάδα Ειδικοτήτων" />
-												</f:facet>
-												<h:column>
-													<h:outputText value="#{a_spec.title}" />
-												</h:column>
-												<a4j:support ajaxSingle="true" event="onselect">
-													<f:setPropertyActionListener value="#{a_spec}"
-														target="#{teachingVoidBySpecializationReport.specializationGroup}" />
-												</a4j:support>
-											</rich:suggestionbox>
-										</h:inputText>
+										<h:selectOneMenu
+											value="#{teachingVoidBySpecializationReport.specializationGroupSearchType}">
+											<s:selectItems hideNoSelectionLabel="false"
+												noSelectionLabel="Επιλέξτε Τύπο Ομάδας Ειδικοτήτων"
+												var="_specializationGroupSearchType"
+												value="#{specializationGroupSearchTypes}"
+												label="#{messages[_specializationGroupSearchType.key]}" />
+											<s:convertEnum />
+											<a4j:support event="onchange"
+												reRender="specializationGroupTypesOutputPanel"
+												ajaxSingle="true" />
+										</h:selectOneMenu>
 									</s:decorate>
+									<a4j:outputPanel id="specializationGroupTypesOutputPanel">
+										<h:panelGrid columns="2">
+											<s:decorate template="/layout/doubleLineEdit.xhtml"
+												rendered="#{teachingVoidBySpecializationReport.specializationGroupSearchType == 'SINGLE_SPECIALIZATION_GROUP'}">
+												<ui:define name="label">
+													<h:outputText value="Ομάδα Ειδικοτήτων : " />
+												</ui:define>
+												<h:inputText id="specializationGroupFilter"
+													styleClass="fieldValueText" size="30">
+
+													<rich:suggestionbox height="100" width="250"
+														for="specializationGroupFilter" var="a_spec"
+														suggestionAction="#{specializationGroupSuggester.suggest}">
+														<f:facet name="nothingLabel">
+															<h:outputText value="Άγνωστη Ομάδα Ειδικοτήτων" />
+														</f:facet>
+														<h:column>
+															<h:outputText value="#{a_spec.title}" />
+														</h:column>
+														<a4j:support ajaxSingle="true" event="onselect">
+															<f:setPropertyActionListener value="#{a_spec}"
+																target="#{teachingVoidBySpecializationReport.specializationGroup}" />
+														</a4j:support>
+													</rich:suggestionbox>
+												</h:inputText>
+											</s:decorate>
+
+											<s:decorate template="/layout/doubleLineEdit.xhtml"
+												rendered="#{teachingVoidBySpecializationReport.specializationGroupSearchType == 'MULTIPLE_SPECIALIZATION_GROUPS'}">
+												<ui:define name="label">
+													<h:outputText value="Πολλάπλες Ομάδες Ειδικοτήτων : " />
+												</ui:define>
+												<rich:dataList var="_specializationGroup" type="disc"
+													value="#{teachingVoidBySpecializationReport.specializationGroups}">
+													<h:outputText styleClass="fieldValueText"
+														value="#{_specializationGroup.title}" />
+												</rich:dataList>
+
+
+											</s:decorate>
+											<a4j:commandButton
+												rendered="#{teachingVoidBySpecializationReport.specializationGroupSearchType == 'MULTIPLE_SPECIALIZATION_GROUPS'}"
+												action="lalal"
+												onclick="#{rich:component('selectSpecializationGroupsPanel')}.show()"
+												value="Επιλογή Ομάδων" />
+										</h:panelGrid>
+									</a4j:outputPanel>
 
 									<s:decorate template="/layout/doubleLineEdit.xhtml">
 										<ui:define name="label">
@@ -108,8 +149,6 @@
 											<f:selectItem itemLabel="Β Ηρακλείου" itemValue="Β" />
 										</h:selectOneMenu>
 									</s:decorate>
-
-
 								</h:panelGrid>
 							</rich:panel>
 						</a4j:outputPanel>
@@ -123,7 +162,7 @@
 							<s:div styleClass="actionButtons">
 								<h:panelGrid columns="4">
 									<a4j:commandButton value="Επεξεργασία ...."
-										action="#{teachingVoidBySpecializationReport.foo()}"
+										action="#{teachingVoidBySpecializationReport.generateReport}"
 										reRender="schoolTeachingResourcesAnalysisTable,reportAnalysisModalPanelContent,showDecisionsButton" />
 									<s:button action="#{secondmentReportByType.runReport}"
 										value="Εκτύπωση (PDF)" target="new" disabled="true" />
@@ -143,7 +182,7 @@
 
 
 				<rich:dataTable id="schoolTeachingResourcesAnalysisTable"
-					value="#{teachingVoidBySpecializationReport.reportDataBySpecialization}"
+					value="#{teachingVoidBySpecializationReport.reportData2}"
 					var="_schoolTeachingResources" rows="10" border="0"
 					onRowMouseOver="this.style.backgfroundColor='#F8F8F8'"
 					onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
@@ -174,7 +213,7 @@
 										value="Εμφανίζονται οι απαιτούμενες ώρες διδασκαλίας." />
 								</rich:toolTip>
 							</rich:column>
-							
+
 							<rich:column>
 								<h:outputText value="Καλυπ. Ώρες" />
 								<rich:toolTip>
@@ -182,7 +221,7 @@
 										value="Εμφανίζονται οι καλυπτόμενες ώρες διδασκαλίας." />
 								</rich:toolTip>
 							</rich:column>
-							
+
 							<rich:column>
 								<h:outputText value="Ώρες (+/-)" />
 								<rich:toolTip>
@@ -191,23 +230,26 @@
 								</rich:toolTip>
 							</rich:column>
 							<rich:column>
-								<h:outputText value="Κενά (+/-)" />
+								<h:outputText value="Πλ/Κν (+/-)" />
 								<rich:toolTip>
 									<h:outputText
-										value="Εμφανίζονται τα πιθανά κενά μόνιμου προσωπικού, βάση των λειτουργικών και καλυπτόμενων θέσεων." />
+										value="Εμφανίζονται τα πιθανά κενά μόνιμου προσωπικού, βάση των λειτουργικών και καλυπτόμενων θέσεων. Θετικό Νούμερο σημαίνει Πλαιόνασμα, αρνητικό κενό." />
 								</rich:toolTip>
 							</rich:column>
 						</rich:columnGroup>
 					</f:facet>
 
 					<rich:column colspan="8">
-						<h:outputText styleClass="fieldValueText"
-							value="#{_schoolTeachingResources.specializationGroup.title}" />
+						<ui:repeat var="_specializationGroup" value="#{_schoolTeachingResources.specializationGroups}">
+													<h:outputText styleClass="fieldValueText"
+							value="#{_specializationGroup.title} - " />
+							
+						</ui:repeat>
 					</rich:column>
 
-
-					<rich:subTable id="lla" var="_item"
-						value="#{_schoolTeachingResources.resources}" rows="120"
+					 
+					<rich:subTable id="lla" var="_item" 
+						value="#{_schoolTeachingResources.schools}" rows="120"
 						border="0" onRowMouseOver="this.style.backgfroundColor='#F8F8F8'"
 						onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
 						width="100%">
@@ -240,7 +282,7 @@
 						</rich:column>
 
 						<rich:column style="text-align:center">
-							<h:outputText value="#{_item.resource.required}"
+							<h:outputText value="#{_item.requiredHours}"
 								style="color: blue" />
 							<f:facet name="footer">
 								<s:div style="text-align:center">
@@ -251,7 +293,7 @@
 							</f:facet>
 						</rich:column>
 						<rich:column style="text-align:center">
-							<h:outputText value="#{_item.resource.available}"
+							<h:outputText value="#{_item.availableHours}"
 								style="color: red;font-weight:bold;" />
 							<f:facet name="footer">
 								<s:div style="text-align:center">
@@ -262,11 +304,13 @@
 							</f:facet>
 						</rich:column>
 						<rich:column style="text-align:center">
-							<h:outputText value="#{_item.resource.missingHours}" rendered="#{_item.resource.missingHours &gt; 0 or _item.resource.missingHours == 0}"
+							<h:outputText value="#{_item.missingHours}"
+								rendered="#{_item.missingHours &gt; 0 or _item.missingHours == 0}"
 								style="color:green;">
-								<f:convertNumber type="number"/>
+								<f:convertNumber type="number" />
 							</h:outputText>
-							<h:outputText value="#{_item.resource.missingHours}" rendered="#{_item.resource.missingHours &lt; 0}"
+							<h:outputText value="#{_item.missingHours}"
+								rendered="#{_item.missingHours &lt; 0}"
 								style="color:green;font-weight:bold;">
 							</h:outputText>
 							<f:facet name="footer">
@@ -279,15 +323,17 @@
 							</f:facet>
 						</rich:column>
 						<rich:column style="text-align:center">
-							<s:div rendered="#{_item.resource.missingReqularEmployees &lt; 0 or _item.resource.missingReqularEmployees == 0}">
-								<h:outputText value="#{_item.resource.missingReqularEmployees}"
+							<s:div
+								rendered="#{_item.missingReqularEmployees &lt; 0 or _item.missingReqularEmployees == 0}">
+								<h:outputText value="#{_item.missingReqularEmployees}"
 									style="color: blue;" />
 							</s:div>
-							<s:div rendered="#{_item.resource.missingReqularEmployees &gt; 0}">
-								<h:outputText value="#{_item.resource.missingReqularEmployees} "
+							<s:div
+								rendered="#{_item.missingReqularEmployees &gt; 0}">
+								<h:outputText value="#{_item.missingReqularEmployees} "
 									style="color: red;font-weight:bold;" />
 							</s:div>
-							
+
 							<f:facet name="footer">
 								<s:div style="text-align:center">
 									<h:outputText rendered="#{_schoolTeachingResources.void}"
@@ -300,8 +346,7 @@
 							</f:facet>
 						</rich:column>
 					</rich:subTable>
-
-
+					
 					<f:facet name="footer">
 
 						<rich:datascroller for="schoolTeachingResourcesAnalysisTable"
@@ -367,6 +412,63 @@
 						<a4j:commandButton value="Επιστροφή .."
 							onclick="#{rich:component('reportAnalysisModalPanel')}.hide();return false;" />
 					</h:panelGrid>
+				</h:panelGrid>
+			</h:form>
+		</rich:modalPanel>
+
+
+		<rich:modalPanel id="selectSpecializationGroupsPanel" autosized="true"
+			width="550">
+			<f:facet name="header">
+				<h:outputText value="Επιλογή Πολλαπλών Ειδικοτήτων ...." />
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<h:graphicImage value="/img/modal/close.png"
+						id="selectSpecializationGroupsPanel_hidelink"
+						styleClass="hidelink" width="18" height="18" />
+					<rich:componentControl for="selectSpecializationGroupsPanel"
+						attachTo="selectSpecializationGroupsPanel_hidelink"
+						operation="hide" event="onclick" />
+				</h:panelGroup>
+			</f:facet>
+			<h:form>
+				<rich:messages style="color:red;"></rich:messages>
+				<a4j:region>
+					<a4j:outputPanel id="selectSpecializationGroupsPanel">
+
+						<h:panelGrid columns="1">
+							<h:outputText
+								value="Απο την παρακάτω λίστα επιλέξτε τις ομάδες ειδικοτήτων που σας ενδιαφέρουν." />
+						</h:panelGrid>
+						<h:panelGrid columns="1">
+
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Ομάδες Ειδικοτήτων" />
+								</ui:define>
+								<rich:pickList
+									value="#{teachingVoidBySpecializationReport.specializationGroups}"
+									sourceListWidth="240" targetListWidth="240">
+									<s:selectItems var="item"
+										value="#{specializationGroupsListQuery.resultList}"
+										label="#{item.title}">
+
+									</s:selectItems>
+									<s:convertEntity></s:convertEntity>
+								</rich:pickList>
+							</s:decorate>
+
+
+						</h:panelGrid>
+					</a4j:outputPanel>
+				</a4j:region>
+				<h:panelGrid columns="1">
+
+					<a4j:commandButton value="Eπιλογή και Επιστροφή .."
+						onclick="#{rich:component('selectSpecializationGroupsPanel')}.hide();"
+						reRender="specializationGroupTypesOutputPanel" />
+
 				</h:panelGrid>
 			</h:form>
 		</rich:modalPanel>

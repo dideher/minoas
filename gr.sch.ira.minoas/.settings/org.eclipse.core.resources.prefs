@@ -1,4 +1,4 @@
-#Fri Aug 28 19:09:11 EEST 2009
+#Thu Sep 10 11:27:51 EEST 2009
 eclipse.preferences.version=1
 encoding//WebContent/admin/manage-principals.xhtml=UTF-8
 encoding//WebContent/admin/manage-specialization-groups.xhtml=UTF-8
@@ -11,11 +11,15 @@ encoding//WebContent/components/school/basicInfo.xhtml=UTF-8
 encoding//WebContent/components/school/regularEmploymentsList.xhtml=UTF-8
 encoding//WebContent/components/school/schoolEmployeesList.xhtml=UTF-8
 encoding//WebContent/components/school/schoolList.xhtml=UTF-8
+encoding//WebContent/components/select-employee-component.xhtml=UTF-8
 encoding//WebContent/components/top-menu.xhtml=UTF-8
 encoding//WebContent/components/void/teachingVoidComponent.xhtml=UTF-8
 encoding//WebContent/components/void/voidListComponent.xhtml=UTF-8
 encoding//WebContent/components/wait-modal-panel.xhtml=UTF-8
 encoding//WebContent/employee/basic-info.xhtml=UTF-8
+encoding//WebContent/employee/deputy-employment-component.xhtml=UTF-8
+encoding//WebContent/employee/employee-report-by-type.xhtml=UTF-8
+encoding//WebContent/employee/regular-employment-component.xhtml=UTF-8
 encoding//WebContent/error.xhtml=UTF-8
 encoding//WebContent/home.xhtml=UTF-8
 encoding//WebContent/login.xhtml=UTF-8

@@ -307,6 +307,10 @@
   location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas/WebContent/WEB-INF/lib/richfaces-impl-3.3.1.GA.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-richfaces-ui-3.3.1.GA.jar"
   location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas/WebContent/WEB-INF/lib/richfaces-ui-3.3.1.GA.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-darkX-3.3.1.GA.jar"
+  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas/WebContent/WEB-INF/lib/darkX-3.3.1.GA.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-glassX-3.3.1.GA.jar"
+  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas/WebContent/WEB-INF/lib/glassX-3.3.1.GA.jar" model-entity="FileSystemJar"/>
  <web SERVLET_VERSION="2.4" model-entity="JstWeb" model-path="/web.xml">
   <module URI="/WEB-INF/faces-config.xml" model-entity="WebJSFModule"
    model-path="/faces-config.xml" src="src" web-root="WEB-ROOT"/>
