@@ -247,6 +247,9 @@ public class Employee extends Person {
 		sb.append(getFirstName());
 		sb.append(" ");
 		sb.append(getFatherName());
+		sb.append(" ( ");
+		sb.append(getType());
+		sb.append(" )");
 		sb.append(" ]");
 		return sb.toString();
 	}

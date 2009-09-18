@@ -7,6 +7,7 @@ import gr.sch.ira.minoas.model.employement.DeputyEmploymentInfo;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
 import gr.sch.ira.minoas.model.employement.Secondment;
+import gr.sch.ira.minoas.model.employement.ServiceAllocation;
 
 import java.util.Date;
 
@@ -28,6 +29,9 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 
 	@In(create = true)
 	private SecondmentHome secondmentHome;
+	
+	@In(create = true)
+	private ServiceAllocationHome serviceAllocationHome;
 
 	@In(create = true)
 	private RegularEmployeeInfoHome regularEmployeeInfoHome;
@@ -77,6 +81,18 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 				newSecondment.setFinalWorkingHours(currentEmployment.getFinalWorkingHours());
 			} else {
 				newSecondment.setSourceUnit(employee.getCurrentPYSDE().getRepresentedByUnit());
+			}
+		}
+		if(!serviceAllocationHome.isManaged()) {
+			Employee employee = getInstance();
+			ServiceAllocation newServiceAllocation = serviceAllocationHome.getInstance();
+			Employment currentEmployment = employee != null ? employee
+					.getCurrentEmployment() : null;
+			if (currentEmployment != null) {
+				newServiceAllocation.setSourceUnit(currentEmployment.getSchool());
+			} else {
+				newServiceAllocation.setSourceUnit(employee.getCurrentPYSDE()
+						.getRepresentedByUnit());
 			}
 		}
 		return true;
@@ -160,10 +176,13 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 		 */
 		Employee new_employee = getInstance();
 		new_employee.setActive(Boolean.TRUE);
+		getEntityManager().persist(new_employee);
 		if (!regularEmployeeInfoHome.isManaged()) {
 			RegularEmployeeInfo info = regularEmployeeInfoHome.getInstance();
+			info.setEmployee(new_employee);
 			info.setInsertedBy(getPrincipal());
 			new_employee.setRegularDetail(info);
+			getEntityManager().persist(info);
 
 		}
 		wire();

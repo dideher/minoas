@@ -8,15 +8,13 @@ import gr.sch.ira.minoas.model.core.TeachingRequirement;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.ServiceAllocation;
-import gr.sch.ira.minoas.seam.components.reports.resource.SchoolVoidAnalysisItem;
-import gr.sch.ira.minoas.seam.components.reports.resource.SpecializationGroupVoidAnalysis;
-import gr.sch.ira.minoas.seam.components.reports.resource.SpecializationGroupVoidAnalysisItem;
-import gr.sch.ira.minoas.seam.components.reports.resource.TeachingResource;
+import gr.sch.ira.minoas.seam.components.criteria.SpecializationGroupSearchType;
+import gr.sch.ira.minoas.seam.components.reports.resource.SchoolTeachingHoursItem;
+import gr.sch.ira.minoas.seam.components.reports.resource.TeachingHoursAnalysisItem;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +24,6 @@ import org.apache.commons.lang.time.DateUtils;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
-import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.annotations.datamodel.DataModel;
 
 /**
@@ -47,16 +44,18 @@ public class TeachingHourAnalysisReport extends BaseReport {
 
 	private SpecializationGroup specializationGroup;
 
-	private List<SchoolVoidAnalysisItem> reportData;
+	private List<SpecializationGroup> specializationGroups = new ArrayList<SpecializationGroup>();
 
-	@DataModel(value = "reportDataBySpecialization")
-	private Collection<SpecializationGroupVoidAnalysis> reportDataBySpecialization;
+	private SpecializationGroupSearchType specializationGroupSearchType = SpecializationGroupSearchType.SINGLE_SPECIALIZATION_GROUP;
 
 	@DataModel(value = "reportTextAnalysis")
 	private Collection<String> reportTextAnalysis = new ArrayList<String>(100);
 
-	@Transactional
-	public Object foo() {
+	@DataModel(value = "reportData2")
+	private Collection<TeachingHoursAnalysisItem> reportData2;
+
+	public void generateReport() {
+
 		boolean useTextAnalysis = false;
 		try {
 			long started = System.currentTimeMillis(), finished;
@@ -64,22 +63,40 @@ public class TeachingHourAnalysisReport extends BaseReport {
 
 			info("generating report ");
 
-			reportData = new ArrayList<SchoolVoidAnalysisItem>(100);
-
 			/* get the active school year */
 			SchoolYear activeSchoolYear = getCoreSearching().getActiveSchoolYear(getEntityManager());
 
-			/* fetch all specialization groups */
-			Collection<SpecializationGroup> specializationGroups = null;
-			if(specializationGroup!=null) {
-				specializationGroups = new ArrayList<SpecializationGroup>(1);
-				specializationGroups.add(specializationGroup);
+			/* According to the user's request, construct an array of all specialization groups
+			 * that need to appear in the report
+			 */
+			Collection<SpecializationGroup> reportSpecializationGroups = null;
+			if (getSpecializationGroupSearchType() == SpecializationGroupSearchType.SINGLE_SPECIALIZATION_GROUP) {
+				/* One specialization group type requested, therefore the report will contain 
+				 * either the user's selected specialization group or all specialization groups if
+				 * the user left the field unspecified
+				 */
+				if (getSpecializationGroup() != null) {
+					/* user has specified a concrete specialization group */
+					reportSpecializationGroups = new ArrayList<SpecializationGroup>(1);
+					reportSpecializationGroups.add(getSpecializationGroup());
+				} else {
+					/* user did not specified a concrete specialization group,
+					 * so fetch all groups
+					 */
+					reportSpecializationGroups = getCoreSearching().getSpecializationGroups(activeSchoolYear,
+							getEntityManager());
+				}
 			} else {
-				specializationGroups = getCoreSearching().getSpecializationGroups(activeSchoolYear, getEntityManager());
+				/* user has selected many specialization groups */
+				reportSpecializationGroups = new ArrayList<SpecializationGroup>(getSpecializationGroups().size());
+				reportSpecializationGroups.addAll(getSpecializationGroups());
 			}
-			
+
+			/* Construct a hash so we can quickly find a specializationGroup from the employee's specialization. */
+			Collection<SpecializationGroup> allSpecializationGroups = getCoreSearching().getSpecializationGroups(
+					activeSchoolYear, getEntityManager());
 			HashMap<Specialization, SpecializationGroup> specializationGroupMap = new HashMap<Specialization, SpecializationGroup>();
-			for (SpecializationGroup specializationGroup : specializationGroups) {
+			for (SpecializationGroup specializationGroup : allSpecializationGroups) {
 				for (Specialization specialization : specializationGroup.getSpecializations())
 					specializationGroupMap.put(specialization, specializationGroup);
 			}
@@ -95,142 +112,94 @@ public class TeachingHourAnalysisReport extends BaseReport {
 			} else {
 				schools = getCoreSearching().getSchools(getEntityManager(), region);
 			}
-			for (School school : schools) {
 
-				Collection<TeachingRequirement> schoolTeachingRequirments = getCoreSearching()
-						.getSchoolTeachingRequirement(getEntityManager(), school, activeSchoolYear);
-
-				Map<SpecializationGroup, TeachingRequirement> schoolTeachingRequirementMap = new HashMap<SpecializationGroup, TeachingRequirement>(
-						schoolTeachingRequirments.size());
-				for (TeachingRequirement requirement : schoolTeachingRequirments) {
-					schoolTeachingRequirementMap.put(requirement.getSpecialization(), requirement);
-				}
-
-				SchoolVoidAnalysisItem item = new SchoolVoidAnalysisItem(school);
-				item.populateResourcesUsingSpecializationGroups(specializationGroups);
-				item.updateWithTeachingRequirements(schoolTeachingRequirments);
-
-				Collection<Employee> schoolRegularEmployees = getCoreSearching().getSchoolRegularEmployees(
-						getEntityManager(), school, activeSchoolYear, today, specializationGroup);
-				info("found #0 employee(s) in school #1 with precence during day #2.", schoolRegularEmployees.size(),
-						school, today);
-
-				Collection<Secondment> secondments = getCoreSearching().getSchoolSecondments(getEntityManager(),
-						school, activeSchoolYear, today, specializationGroup);
-
-				Collection<ServiceAllocation> serviceAllocations = getCoreSearching().getSchoolServiceAllocations(
-						getEntityManager(), school, today, specializationGroup);
-
-				/* for all employees we know :
-				 * 1) They don't appear to have a leave
-				 * 2) They don't appear to have a secondment
-				 * 3) They don't appear to have a service allocation
+			if (getSpecializationGroupSearchType() == SpecializationGroupSearchType.MULTIPLE_SPECIALIZATION_GROUPS) {
+				/* Since the specialization group search type is MULTIPLE, then the report will contain
+				 * one single instance with the selected specialization groups 
 				 */
-				for (Employee regularEmployee : schoolRegularEmployees) {
-					SpecializationGroup employeesMappedSpecializationGroup = specializationGroupMap.get(regularEmployee
-							.getLastSpecialization());
+				Collection<TeachingHoursAnalysisItem> r = new ArrayList<TeachingHoursAnalysisItem>();
+				TeachingHoursAnalysisItem item = new TeachingHoursAnalysisItem(reportSpecializationGroups);
+				r.add(item);
+				setReportData2(r);
+			} else {
+				/* Since the specialization group search type is *NOT* MULTIPLE, then the report will
+				 * contain either one instance with the selected specialization groups or all specialization
+				 * groups, each in it's private instance.
+				 */
+				Collection<TeachingHoursAnalysisItem> r = new ArrayList<TeachingHoursAnalysisItem>(
+						reportSpecializationGroups.size());
+				for (SpecializationGroup specializationGroup : reportSpecializationGroups) {
+					r.add(new TeachingHoursAnalysisItem(specializationGroup));
+				}
+				setReportData2(r);
+			}
 
-					if (employeesMappedSpecializationGroup == null) {
-						/* the employee's specialization could not be mapped to a specialization group, so create
-						 * a dynamic one
-						 */
-						employeesMappedSpecializationGroup = new SpecializationGroup();
-						employeesMappedSpecializationGroup.setTitle(regularEmployee.getLastSpecialization().getId()
-								+ " - " + regularEmployee.getLastSpecialization().getTitle()
-								+ " [** ΔΕΝ ΑΝΗΚΕΙ ΣΕ ΟΜΑΔΑ ** ]");
-						specializationGroupMap.put(regularEmployee.getLastSpecialization(),
-								employeesMappedSpecializationGroup);
-					}
+			for (TeachingHoursAnalysisItem reportItem : getReportData2()) {
+				/* iterate through all schools */
+				for (School school : schools) {
 
-					/* since we know that the employee has no leave or secondment is almost safe 
-					 * to assume his is providing his working hour(s). 
+					SchoolTeachingHoursItem schoolItem = new SchoolTeachingHoursItem();
+					schoolItem.setSchool(school);
+
+					/******************** we need to cache this *************************/
+					/* fetch the teaching requirement for the given school */
+					Collection<TeachingRequirement> schoolTeachingRequirments = getCoreSearching()
+							.getSchoolTeachingRequirement(getEntityManager(), school, activeSchoolYear);
+
+					/* 
+					 * construct a map so we can easily find a teaching requirement according to the
+					 * specializationGroup
 					 */
-
-					item.addEmployeeWorkingHours(employeesMappedSpecializationGroup, regularEmployee
-							.getCurrentEmployment().getFinalWorkingHours());
-					
-					if (useTextAnalysis)
-						reportTextAnalysis.add("Ο εκπαιδευτικός " + regularEmployee + " με ειδικότητα "
-								+ regularEmployee.getLastSpecialization() + " και ομαδοποιημένη ειδικότητα "
-								+ employeesMappedSpecializationGroup.getTitle() + " προσφέρει στην μονάδα συνολικά "
-								+ regularEmployee.getCurrentEmployment().getFinalWorkingHours() + " διδακτικές ώρες.");
-
-				}
-
-				/* handle service allocations that are servicing
-				 * in this very unit
-				 */
-
-				for (ServiceAllocation serviceAllocation : serviceAllocations) {
-					SpecializationGroup employeesMappedSpecializationGroup = specializationGroupMap
-							.get(serviceAllocation.getEmployee().getLastSpecialization());
-
-					item.addEmployeeWorkingHours(employeesMappedSpecializationGroup, serviceAllocation
-							.getWorkingHoursOnServicingPosition());
-					if (useTextAnalysis)
-						reportTextAnalysis.add("Ο εκπαιδευτικός " + serviceAllocation.getEmployee() + " με ειδικότητα "
-								+ serviceAllocation.getEmployee().getLastSpecialization()
-								+ " και ομαδοποιημένη ειδικότητα " + employeesMappedSpecializationGroup.getTitle()
-								+ " που εκτελεί θητεία " + serviceAllocation + " προσφέρει στην μονάδα συνολικά "
-								+ serviceAllocation.getWorkingHoursOnServicingPosition() + " διδακτικές ώρες.");
-				}
-
-				/* handle secondments that are teaching in this very unit */
-				for (Secondment secondment : secondments) {
-					SpecializationGroup employeesMappedSpecializationGroup = specializationGroupMap.get(secondment
-							.getEmployee().getLastSpecialization());
-
-					if(employeesMappedSpecializationGroup == null) {
-						info("employeesMappedSpecializationGroup is null for employee with secondment #0", secondment);
+					Map<SpecializationGroup, TeachingRequirement> schoolTeachingRequirementMap = new HashMap<SpecializationGroup, TeachingRequirement>(
+							schoolTeachingRequirments.size());
+					for (TeachingRequirement requirement : schoolTeachingRequirments) {
+						schoolTeachingRequirementMap.put(requirement.getSpecialization(), requirement);
 					}
-					item.addEmployeeWorkingHours(employeesMappedSpecializationGroup, secondment.getFinalWorkingHours());
-					if (useTextAnalysis)
-						reportTextAnalysis.add("Ο εκπαιδευτικός " + secondment.getEmployee() + " με ειδικότητα "
-								+ secondment.getEmployee().getLastSpecialization() + " και ομαδοποιημένη ειδικότητα "
-								+ employeesMappedSpecializationGroup.getTitle()
-								+ " που έχει αποπαστεί στην μονάδα με την απόσπαση " + secondment
-								+ " προσφέρει στην μονάδα συνολικά " + secondment.getFinalWorkingHours()
-								+ " διδακτικές ώρες.");
+					/******************** we need to cache this *************************/
 
+					int requiredHours = 0;
+					for (SpecializationGroup specializationGroup : reportItem.getSpecializationGroups()) {
+						TeachingRequirement requirement = schoolTeachingRequirementMap.get(specializationGroup);
+						if (requirement != null)
+							requiredHours += requirement.getHours();
+					}
+
+					schoolItem.setRequiredHours(requiredHours);
+
+					/* for the given school, get all regular employees with a compatible specialization */
+
+					Collection<Employee> regularEmployees = getCoreSearching().getSchoolRegularEmployees(
+							getEntityManager(), school, activeSchoolYear, today, reportSpecializationGroups);
+
+					int hours = 0;
+					for (Employee regularEmployee : regularEmployees) {
+						hours += regularEmployee.getCurrentEmployment().getFinalWorkingHours();
+					}
+
+					Collection<Secondment> schoolSecondments = getCoreSearching().getSchoolSecondments(
+							getEntityManager(), school, activeSchoolYear, today, reportSpecializationGroups);
+
+					for (Secondment secondment : schoolSecondments) {
+						hours += secondment.getFinalWorkingHours();
+					}
+
+					Collection<ServiceAllocation> schoolServiceAllocations = getCoreSearching()
+							.getSchoolServiceAllocations(getEntityManager(), school, today, reportSpecializationGroups);
+
+					for (ServiceAllocation serviceAllocation : schoolServiceAllocations) {
+						hours += serviceAllocation.getWorkingHoursOnServicingPosition();
+					}
+
+					schoolItem.setAvailableHours(hours);
+					if (!(hours == 0 && requiredHours == 0))
+						reportItem.addSchoolItem(schoolItem);
 				}
-
-				reportData.add(item);
-
 			}
 
 			/* first fetch the teaching requirement */
 
 			finished = System.currentTimeMillis();
-
-			Map<SpecializationGroup, SpecializationGroupVoidAnalysis> reportDataBySpecializationMap = new HashMap<SpecializationGroup, SpecializationGroupVoidAnalysis>(
-					100);
-			for (SchoolVoidAnalysisItem schoolVoid : reportData) {
-				for (TeachingResource resource : schoolVoid.getTeachingResources()) {
-
-					if (resource.getRequired() == 0 && resource.getAvailable() == 0)
-						continue;
-
-					SpecializationGroupVoidAnalysis groupResources = reportDataBySpecializationMap.get(resource
-							.getSpecializationGroup());
-					if (groupResources == null) {
-						groupResources = new SpecializationGroupVoidAnalysis();
-						groupResources.setSpecializationGroup(resource.getSpecializationGroup());
-						reportDataBySpecializationMap.put(resource.getSpecializationGroup(), groupResources);
-					}
-					SpecializationGroupVoidAnalysisItem item = new SpecializationGroupVoidAnalysisItem(schoolVoid
-							.getSchool(), resource);
-					groupResources.addTeachingResource(item);
-
-				}
-			}
-			reportDataBySpecialization = new ArrayList<SpecializationGroupVoidAnalysis>(reportDataBySpecializationMap
-					.values());
-			for(SpecializationGroupVoidAnalysis g : reportDataBySpecialization) {
-				g.sort();
-			}
-			Collections.sort(((List<SpecializationGroupVoidAnalysis>) reportDataBySpecialization));
 			info("report has been generated in #0 [ms]", (finished - started));
-			return "lalal";
 		} catch (Exception ex) {
 			ex.printStackTrace(System.err);
 			throw new RuntimeException(ex);
@@ -281,34 +250,6 @@ public class TeachingHourAnalysisReport extends BaseReport {
 	}
 
 	/**
-	 * @return the reportData
-	 */
-	public List<SchoolVoidAnalysisItem> getReportData() {
-		return reportData;
-	}
-
-	/**
-	 * @param reportData the reportData to set
-	 */
-	public void setReportData(List<SchoolVoidAnalysisItem> reportData) {
-		this.reportData = reportData;
-	}
-
-	/**
-	 * @return the reportDataBySpecialization
-	 */
-	public Collection<SpecializationGroupVoidAnalysis> getReportDataBySpecialization() {
-		return reportDataBySpecialization;
-	}
-
-	/**
-	 * @param reportDataBySpecialization the reportDataBySpecialization to set
-	 */
-	public void setReportDataBySpecialization(Collection<SpecializationGroupVoidAnalysis> reportDataBySpecialization) {
-		this.reportDataBySpecialization = reportDataBySpecialization;
-	}
-
-	/**
 	 * @return the reportTextAnalysis
 	 */
 	public Collection<String> getReportTextAnalysis() {
@@ -336,6 +277,46 @@ public class TeachingHourAnalysisReport extends BaseReport {
 		this.specializationGroup = specializationGroup;
 	}
 
-	
+	/**
+	 * @return the specializationGroupSearchType
+	 */
+	public SpecializationGroupSearchType getSpecializationGroupSearchType() {
+		return specializationGroupSearchType;
+	}
+
+	/**
+	 * @param specializationGroupSearchType the specializationGroupSearchType to set
+	 */
+	public void setSpecializationGroupSearchType(SpecializationGroupSearchType specializationGroupSearchType) {
+		this.specializationGroupSearchType = specializationGroupSearchType;
+	}
+
+	/**
+	 * @return the specializationGroups
+	 */
+	public List<SpecializationGroup> getSpecializationGroups() {
+		return specializationGroups;
+	}
+
+	/**
+	 * @param specializationGroups the specializationGroups to set
+	 */
+	public void setSpecializationGroups(List<SpecializationGroup> specializationGroups) {
+		this.specializationGroups = specializationGroups;
+	}
+
+	/**
+	 * @return the reportData2
+	 */
+	public Collection<TeachingHoursAnalysisItem> getReportData2() {
+		return reportData2;
+	}
+
+	/**
+	 * @param reportData2 the reportData2 to set
+	 */
+	public void setReportData2(Collection<TeachingHoursAnalysisItem> reportData2) {
+		this.reportData2 = reportData2;
+	}
 
 }

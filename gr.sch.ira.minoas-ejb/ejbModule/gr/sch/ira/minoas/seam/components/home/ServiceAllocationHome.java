@@ -158,6 +158,7 @@ public class ServiceAllocationHome extends MinoasEntityHome<ServiceAllocation> {
 		return instance;
 	}
 
+	/*
 	@Transactional
 	public boolean wire() {
 		ServiceAllocation instance = getInstance();
@@ -175,6 +176,7 @@ public class ServiceAllocationHome extends MinoasEntityHome<ServiceAllocation> {
 		}
 		return true;
 	}
+	*/
 
 	public void suggestHours() {
 		ServiceAllocation instance = getInstance();
