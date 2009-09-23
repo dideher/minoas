@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page login-required="true" xmlns="http://jboss.com/products/seam/pages"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.1.xsd">
+  <begin-conversation join="true" flush-mode="manual"/> 
+  <description>Διαχείρηση Διαθέσεων του/της #{employeeUtil.prettyFormat(employee)}</description>
+  
+  <param name="disposal_management_from"/>
+
+  
+  <!-- navigation rules -->
+  <navigation from-action="endButton">
+    <end-conversation />
+    <redirect view-id="/home.xhtml" />
+  </navigation>
+  
+  <navigation from-action="#{disposal.cancel()}">
+    <rule if-outcome="updated">
+      <render view-id="/disposal/employee-disposal-management.xtml"></render>
+    </rule>
+  </navigation>
+  
+  <navigation from-action="#{disposalHome.update()}">
+    <rule if-outcome="updated">
+      <render view-id="/disposal/employee-disposal-management.xtml"></render>
+    </rule>
+  </navigation>
+  
+  <navigation from-action="#{disposalHome.persist()}">
+    <rule if-outcome="persisted">
+      <render view-id="/disposal/employee-disposal-management.xtml"></render>
+    </rule>
+  </navigation>
+  
+  <navigation from-action="backButton">
+    <redirect view-id="#{empty disposal_management_from ? '/home' : disposal_management_from}.xhtml}" />
+  </navigation>
+  
+</page>

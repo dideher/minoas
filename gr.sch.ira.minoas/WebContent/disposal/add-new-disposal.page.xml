@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page login-required="true" xmlns="http://jboss.com/products/seam/pages"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.1.xsd">
+	<begin-conversation join="true" flush-mode="manual" />
+	<description>Εισαγωγή Νέας Διάθεσης</description>
+
+	<param name="add_new_disposal_from" />
+
+
+	<!-- navigation rules -->
+
+	<navigation from-action="#{disposalHome.persist()}">
+		<rule if-outcome="persisted">
+			<render
+				view-id="/disposal/employee-disposal-management.xhtml" />
+		</rule>
+	</navigation>
+
+	<navigation from-action="backButton">
+		<end-conversation />
+		<redirect
+			view-id="#{empty add_new_disposal_from ? '/home' : add_new_disposal_from}.xhtml}">
+		</redirect>
+	</navigation>
+
+
+</page>

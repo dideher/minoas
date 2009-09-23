@@ -119,6 +119,40 @@
 
 					</rich:menuGroup>
 				</rich:menuGroup>
+				
+				<rich:menuGroup value="Διαχείρηση Διαθέσεων">
+					<rich:menuItem submitMode="none"
+						disabled="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_DISPOSAL'))}">
+						<s:link value="Εισαγωγή Νέας Διάθεσης"
+							action="#{disposalHome.prepareForNewDisposal}"
+							view="/disposal/add-new-disposal.xhtml">
+							<f:param name="add_new_disposal_from" value="/home" />
+						</s:link>
+					</rich:menuItem>
+					<rich:menuItem submitMode="none"
+						disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MANAGE_DISPOSAL'))}">
+						<s:link value="Διαχείρηση Διάθεσης Εκπαιδευτικού"
+							view="/employee/select-employee.xhtml">
+							<f:param name="from" value="/home" />
+							<f:param name="to"
+								value="/disposal/employee-disposal-management" />
+						</s:link>
+					</rich:menuItem>
+					<rich:menuSeparator />
+					<rich:menuGroup value="Εκτύπωσεις και Σταστικά"
+						disabled="#{!(s:hasRole('ADMIN') or s:hasRole('VIEW_DISPOSAL'))}">
+						<rich:menuItem submitMode="none">
+							<s:link value="Θητείες Ανα Τύπο"
+								view="/serviceallocation/report-by-type.xhtml">
+								<f:param name="service_allocation_report_by_type_from"
+									value="/home" />
+							</s:link>
+						</rich:menuItem>
+
+					</rich:menuGroup>
+				</rich:menuGroup>
+				
+				
 				<rich:menuGroup value="Διαχείρηση Θητειών">
 					<rich:menuItem submitMode="none"
 						disabled="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_SERVICE_ALLOCATION'))}">

@@ -324,6 +324,25 @@
     </framework:restrictions> 
    </framework:entity-query>
    
+   <!-- Disposal -->
+   
+   <framework:entity-query name="employeeCurrentDisposalsListQuery" max-results="200" scope="page">
+    <framework:ejbql>SELECT d FROM Disposal d WHERE d.active IS TRUE</framework:ejbql>
+    <framework:order>d.established desc</framework:order>
+    <framework:restrictions>
+      <value>d.employee = #{employeeHome.instance}</value>
+      <value>d.schoolYear.id = #{activeShoolYear.id}</value>
+    </framework:restrictions> 
+   </framework:entity-query>
+   
+   <framework:entity-query name="employeeDisposalsListQuery" max-results="200" scope="page">
+    <framework:ejbql>SELECT d FROM Disposal d WHERE d.active IS TRUE</framework:ejbql>
+    <framework:order>d.schoolYear, d.established desc</framework:order>
+    <framework:restrictions>
+      <value>d.employee = #{employeeHome.instance}</value>
+    </framework:restrictions> 
+   </framework:entity-query>
+   
    <!-- Principals and Roles -->
    
    <framework:entity-query name="principalsListQuery" max-results="200" scope="page">
@@ -339,6 +358,11 @@
    <!-- Events -->
    <event type="org.jboss.seam.afterTransactionSuccess.Employee">
       <action execute="#{employeeRegularEmploymentsListQuery.refresh}" />
+   </event>
+   
+   <event type="org.jboss.seam.afterTransactionSuccess.Disposal">
+      <action execute="#{employeeDisposalsListQuery.refresh}" />
+      <action execute="#{employeeCurrentDisposalsListQuery.refresh}" />
    </event>
    
    <event type="org.jboss.seam.afterTransactionSuccess.SpecializationGroup">

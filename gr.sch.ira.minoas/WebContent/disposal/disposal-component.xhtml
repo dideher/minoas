@@ -1,0 +1,177 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich">
+
+<ui:component>
+
+
+	<h:panelGrid columns="4">
+
+		<s:decorate id="sourceUnit" template="/layout/doubleLineEdit.xhtml">
+			<ui:define name="label">
+				<h:outputText value="Σχολική Μονάδα Οργανικής" />
+			</ui:define>
+
+			<h:inputText value="#{secondment.sourceUnit}" tabindex="1"
+				required="true" id="schoolTarget" styleClass="fieldValueText"
+				converter="unitConverter" size="20" maxlength="22" readonly="true">
+			</h:inputText>
+		</s:decorate>
+
+		<s:decorate id="disposalTypeDecoration"
+			template="/layout/doubleLineEdit.xhtml">
+			<ui:define name="label">
+				<h:outputText value="Τύπος Διαθεσης" />
+			</ui:define>
+
+			<h:selectOneMenu id="secondmentType" tabindex="1"
+				value="#{disposalHome.instance.type}" required="true">
+				<s:selectItems hideNoSelectionLabel="true" var="_disposalType"
+					value="#{disposalTypes}" label="#{messages[_disposalType.key]}" />
+				<s:convertEnum />
+			</h:selectOneMenu>
+		</s:decorate>
+
+		<s:decorate id="disposalTargetTypeDecoration"
+			template="/layout/doubleLineEdit.xhtml">
+			<ui:define name="label">
+				<h:outputText value="Τύπος Προορισμού Διάθεσης" />
+			</ui:define>
+
+			<h:selectOneMenu id="disposalTargetType" tabindex="1"
+				value="#{disposalHome.instance.targetType}" required="true">
+				<s:selectItems hideNoSelectionLabel="true" var="_disposalTargetType"
+					value="#{disposalTargetTypes}"
+					label="#{messages[_disposalTargetType.key]}" />
+				<s:convertEnum />
+				<a4j:support event="onblur" reRender="secondmentTargetDecoration"
+					ajaxSingle="true" />
+			</h:selectOneMenu>
+		</s:decorate>
+
+		<s:decorate id="secondmentTargetDecoration"
+			template="/layout/doubleLineEdit.xhtml">
+			<ui:define name="label">
+				<h:outputText value="Μονάδα Διάθεσης" />
+			</ui:define>
+
+			<h:inputText required="true" id="disposalTarget"
+				styleClass="fieldValueText" tabindex="2" value="#{disposalHome.instance.disposalUnit.title}">
+
+				<rich:suggestionbox for="disposalTarget" var="_disposalUnit"
+					suggestionAction="#{disposalAwareUnitSuggester.suggest}">
+					<f:facet name="nothingLabel">
+						<h:outputText value="Άγνωστη Μονάδα Διάθεσης" />
+					</f:facet>
+					<h:column>
+						<h:outputText value="#{_disposalUnit.title}" />
+					</h:column>
+					<a4j:support ajaxSingle="true" event="onselect">
+						<f:setPropertyActionListener value="#{_disposalUnit}"
+							target="#{disposalHome.instance.disposalUnit}" />
+					</a4j:support>
+				</rich:suggestionbox>
+			</h:inputText>
+		</s:decorate>
+	</h:panelGrid>
+	<h:panelGrid columns="5">
+		<s:decorate id="establishedDateDecoration"
+			template="/layout/doubleLineEdit.xhtml">
+			<ui:define name="label">
+				<h:outputText value="Έναρξη Διάθεσης" />
+			</ui:define>
+			<rich:calendar id="establishedDate" enableManualInput="true"
+				value="#{disposalHome.instance.established}" required="true" inputSize="10"
+				mode="ajax" locale="el_GR" inputClass="fieldValueText"
+				datePattern="dd-MM-yyyy">
+				<a4j:support event="onblur" reRender="establishedDateDecoration"
+					bypassUpdates="true" ajaxSingle="true" />
+			</rich:calendar>
+		</s:decorate>
+		<s:decorate id="dueToDateDecoration"
+			template="/layout/doubleLineEdit.xhtml">
+			<ui:define name="label">
+				<h:outputText value="Λήξη Διάθεσης" />
+			</ui:define>
+			<rich:calendar id="dueToDate" value="#{disposalHome.instance.dueTo}"
+				required="true" mode="ajax" locale="el_GR" inputSize="10"
+				enableManualInput="true" inputClass="fieldValueText"
+				datePattern="dd-MM-yyyy">
+
+				<a4j:support event="onblur" reRender="dueToDateDecoration"
+					bypassUpdates="true" ajaxSingle="true" />
+			</rich:calendar>
+		</s:decorate>
+
+		<s:decorate template="/layout/doubleLineEdit.xhtml">
+			<ui:define name="label">
+				<h:outputText value="Υποχρεωτικό Ωράριο : " />
+			</ui:define>
+			<h:inputText value="#{secondment.mandatoryWorkingHours}" tabindex="4"
+				size="3" maxlength="3" readonly="true" required="true" />
+		</s:decorate>
+
+		<s:decorate template="/layout/doubleLineEdit.xhtml">
+			<ui:define name="label">
+				<h:outputText value="Ωράριο Διάθεσης : " />
+			</ui:define>
+			<h:inputText value="#{disposalHome.instance.hours}" size="3" tabindex="5"
+				maxlength="3" required="true" />
+		</s:decorate>
+
+		<s:decorate template="/layout/doubleLineEdit.xhtml">
+			<ui:define name="label">
+				<h:outputText value="Ημέρες Διάθεσης : " />
+			</ui:define>
+			<h:inputText value="#{disposalHome.instance.days}" size="3" tabindex="5"
+				maxlength="3" required="true" />
+		</s:decorate>
+
+
+
+		<s:decorate id="pysdeOrderDecoration"
+			template="/layout/doubleLineEdit.xhtml">
+			<ui:define name="label">
+				<h:outputText value="Πρόταση ΠΥΣΔΕ" />
+			</ui:define>
+			<h:inputText id="pysdeOrder" value="#{disposalHome.instance.pysdeOrder}"
+				tabindex="6" styleClass="fieldValueText" required="false" size="16"
+				maxlength="25">
+				<a4j:support event="onblur" ajaxSingle="true"
+					reRender="pysdeOrderDecoration" bypassUpdates="true" />
+				<f:validateLength minimum="5" maximum="25" />
+			</h:inputText>
+		</s:decorate>
+
+
+		<s:decorate id="headMasterOrderDecoration"
+			template="/layout/doubleLineEdit.xhtml">
+			<ui:define name="label">
+				<h:outputText value="Απόφαση Διευθυντή" />
+			</ui:define>
+			<h:inputText id="headMasterOrder" tabindex="7"
+				value="#{disposalHome.instance.headMasterOrder}" styleClass="fieldValueText"
+				required="false" size="16" maxlength="25">
+				<a4j:support event="onblur" reRender="headMasterOrderDecoration"
+					bypassUpdates="true" ajaxSingle="true" />
+				<f:validateLength minimum="5" maximum="25" />
+			</h:inputText>
+		</s:decorate>
+
+
+		<s:decorate template="/layout/doubleLineEdit.xhtml">
+			<ui:define name="label">
+				<h:outputText value="Σχόλιο Διάθεσης" />
+			</ui:define>
+			<h:inputTextarea value="#{disposalHome.instance.comment}" />
+		</s:decorate>
+
+	</h:panelGrid>
+
+</ui:component>
+</html>
