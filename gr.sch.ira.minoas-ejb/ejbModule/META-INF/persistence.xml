@@ -56,16 +56,18 @@
     <class>gr.sch.ira.minoas.model.BaseIDModel</class>
     <class>gr.sch.ira.minoas.model.employement.ServiceAllocation</class>
     <class>gr.sch.ira.minoas.model.employement.Leave</class>
+    <class>gr.sch.ira.minoas.model.employement.DeputyEmploymentInfo</class>
+    <class>gr.sch.ira.minoas.model.employement.Disposal</class>
+    <class>gr.sch.ira.minoas.model.employement.DisposalUnit</class>
     <properties>
-        <!-- 
+      <!--
         <property name="hibernate.dialect"
         value="org.hibernate.dialect.SQLServerDialect"/>
-         -->
-         <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect" />
-      <!--  
+        <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect" />
+      -->
       <property name="hibernate.dialect"
         value="org.hibernate.dialect.SQLServerDialect"/>
-        -->
+        
       <!--
         <property name="hibernate.dialect"
         value="org.hibernate.dialect.HSQLDialect"/> property
