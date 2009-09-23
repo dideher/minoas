@@ -13,6 +13,8 @@ import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
 import gr.sch.ira.minoas.model.employee.Person;
+import gr.sch.ira.minoas.model.employement.DisposalTargetType;
+import gr.sch.ira.minoas.model.employement.DisposalType;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
 import gr.sch.ira.minoas.model.employement.Leave;
@@ -141,6 +143,16 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 		return SecondmentType.values();
 	}
 
+	@Factory(value = "disposalTypes")
+	public DisposalType[] getAvailableDisposalTypes() {
+		return DisposalType.values();
+	}
+
+	@Factory(value = "disposalTargetTypes")
+	public DisposalTargetType[] getAvailableDisposalTargetTypes() {
+		return DisposalTargetType.values();
+	}
+
 	@Factory(value = "serviceAllocationTypes")
 	public ServiceAllocationType[] getAvailableServiceAllocationTypes() {
 		return ServiceAllocationType.values();
@@ -157,31 +169,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 		return getEntityManager().createQuery("FROM TeachingLanguage e ORDER BY (e.language)").getResultList();
 	}
 
-	/**
-	 * Returns the active secondment (if any) for the given employee.
-	 * 
-	 * @param employee
-	 * @return
-	 */
-	public Secondment getEmployeeActiveSecondment(EntityManager entityManager, Person employee) {
-		Secondment result = null;
-		EntityManager em = getEntityManager(entityManager);
-		try {
-			info("searching employee's '#0' active secondment.");
-			SchoolYear activeSchoolYear = getActiveSchoolYear(em);
-			result = (Secondment) em
-					.createQuery(
-							"SELECT s from Secondment s WHERE s.employee=:employee AND s.active=TRUE AND s.supersededBy IS NULL and s.schoolYear=:schoolYear")
-					.setParameter("employee", employee).setParameter("schoolYear", activeSchoolYear).getSingleResult();
-			info("found an active secondment '#0', for employee '#1' in school year '#2'", result, employee,
-					activeSchoolYear);
-			return result;
-		} catch (NoResultException ex) {
-			return null;
-		}
-	}
-
-	public PYSDE getLocalPYSDE(EntityManager entityManager) {
+		public PYSDE getLocalPYSDE(EntityManager entityManager) {
 		return (PYSDE) getEntityManager(entityManager).createQuery("SELECT p FROM PYSDE p WHERE p.localPYSDE IS TRUE")
 				.getSingleResult();
 	}
@@ -229,6 +217,18 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 				.setParameter("employee", employee).getResultList();
 		info("found totally '#0' leave(s) for employee '#1'.", result.size(), employee);
 		return result;
+	}
+
+	public Secondment getEmployeeActiveSecondment(EntityManager entityManager, Person employee, Date onDate) {
+		EntityManager em = getEntityManager(entityManager);
+		try {
+			return (Secondment) em
+					.createQuery(
+							"SELECT s from Secondment s WHERE s.active IS TRUE AND s.employee=:employee AND :onDate BETWEEN s.established AND s.dueTo ORDER BY s.insertedOn")
+					.setParameter("employee", employee).setParameter("onDate", onDate).getSingleResult();
+		} catch (NoResultException nre) {
+			return null;
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -376,7 +376,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 
 	public Collection<Secondment> getSchoolSecondments(EntityManager em, School school, SchoolYear schoolYear,
 			Date dayOfPrecense) {
-		return getSchoolSecondments(em, school, schoolYear, dayOfPrecense, (SpecializationGroup)null);
+		return getSchoolSecondments(em, school, schoolYear, dayOfPrecense, (SpecializationGroup) null);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -420,7 +420,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 	}
 
 	public Collection<ServiceAllocation> getSchoolServiceAllocations(EntityManager em, School school, Date dayOfPrecense) {
-		return getSchoolServiceAllocations(em, school, dayOfPrecense, (SpecializationGroup)null);
+		return getSchoolServiceAllocations(em, school, dayOfPrecense, (SpecializationGroup) null);
 	}
 
 	@SuppressWarnings("unchecked")

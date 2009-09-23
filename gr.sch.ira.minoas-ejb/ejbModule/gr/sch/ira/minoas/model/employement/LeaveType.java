@@ -25,6 +25,11 @@ public enum LeaveType {
 	 * Ασθενείας
 	 */
 	MEDICAL_LEAVE("MEDICAL_LEAVE_TYPE", 0),
+	
+	/** 
+	 * Αναρρωτική Λόγω Κύησης 
+	 */
+	MEDICAL_LABOUR_LEAVE("MEDICAL_LABOUR_LEAVE_TYPE", (30*2)),
 	/**
 	 * 9-μήνη
 	 */
