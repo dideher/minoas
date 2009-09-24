@@ -51,12 +51,12 @@ public class TeachingHourAnalysisReport extends BaseReport {
 	@DataModel(value = "reportTextAnalysis")
 	private Collection<String> reportTextAnalysis = new ArrayList<String>(100);
 
-	@DataModel(value = "reportData2")
-	private Collection<TeachingHoursAnalysisItem> reportData2;
+	@DataModel(value = "reportData")
+	private Collection<TeachingHoursAnalysisItem> reportData;
 
 	public void generateReport() {
 
-		boolean useTextAnalysis = false;
+		boolean useTextAnalysis = (school != null);
 		try {
 			long started = System.currentTimeMillis(), finished;
 			Date today = DateUtils.truncate(effectiveDay, Calendar.DAY_OF_MONTH);
@@ -120,7 +120,7 @@ public class TeachingHourAnalysisReport extends BaseReport {
 				Collection<TeachingHoursAnalysisItem> r = new ArrayList<TeachingHoursAnalysisItem>();
 				TeachingHoursAnalysisItem item = new TeachingHoursAnalysisItem(reportSpecializationGroups);
 				r.add(item);
-				setReportData2(r);
+				setReportData(r);
 			} else {
 				/* Since the specialization group search type is *NOT* MULTIPLE, then the report will
 				 * contain either one instance with the selected specialization groups or all specialization
@@ -131,17 +131,14 @@ public class TeachingHourAnalysisReport extends BaseReport {
 				for (SpecializationGroup specializationGroup : reportSpecializationGroups) {
 					r.add(new TeachingHoursAnalysisItem(specializationGroup));
 				}
-				setReportData2(r);
+				setReportData(r);
 			}
 
-			for (TeachingHoursAnalysisItem reportItem : getReportData2()) {
-				/* iterate through all schools */
+			/* Create a cache map for fast retrieving a requirment (in a school) based on
+			 * the specialization group */ 
+			
+				Map<String, Map<SpecializationGroup, TeachingRequirement>> schoolsTeachingRequirementMap = new HashMap<String, Map<SpecializationGroup, TeachingRequirement>>(schools.size());
 				for (School school : schools) {
-
-					SchoolTeachingHoursItem schoolItem = new SchoolTeachingHoursItem();
-					schoolItem.setSchool(school);
-
-					/******************** we need to cache this *************************/
 					/* fetch the teaching requirement for the given school */
 					Collection<TeachingRequirement> schoolTeachingRequirments = getCoreSearching()
 							.getSchoolTeachingRequirement(getEntityManager(), school, activeSchoolYear);
@@ -155,11 +152,22 @@ public class TeachingHourAnalysisReport extends BaseReport {
 					for (TeachingRequirement requirement : schoolTeachingRequirments) {
 						schoolTeachingRequirementMap.put(requirement.getSpecialization(), requirement);
 					}
-					/******************** we need to cache this *************************/
+					schoolsTeachingRequirementMap.put(school.getId(), schoolTeachingRequirementMap);
+				}
+			
+			
+			
+			for (TeachingHoursAnalysisItem reportItem : getReportData()) {
+				/* iterate through all schools */
+				for (School school : schools) {
 
+					SchoolTeachingHoursItem schoolItem = new SchoolTeachingHoursItem();
+					schoolItem.setSchool(school);
+
+			
 					int requiredHours = 0;
 					for (SpecializationGroup specializationGroup : reportItem.getSpecializationGroups()) {
-						TeachingRequirement requirement = schoolTeachingRequirementMap.get(specializationGroup);
+						TeachingRequirement requirement = schoolsTeachingRequirementMap.get(school.getId()).get(specializationGroup);
 						if (requirement != null)
 							requiredHours += requirement.getHours();
 					}
@@ -173,21 +181,33 @@ public class TeachingHourAnalysisReport extends BaseReport {
 
 					int hours = 0;
 					for (Employee regularEmployee : regularEmployees) {
-						hours += regularEmployee.getCurrentEmployment().getFinalWorkingHours();
+						int employeeHours = regularEmployee.getCurrentEmployment().getFinalWorkingHours();
+						hours += employeeHours;
+						if(useTextAnalysis) {
+							reportTextAnalysis.add("Ο μόνιμος εκπαιδευτικός "+regularEmployee.toPrettyString()+" προσφέρει στην μονάδα "+employeeHours+" ωρες με ειδικότητα "+regularEmployee.getLastSpecialization());
+						}
 					}
 
 					Collection<Secondment> schoolSecondments = getCoreSearching().getSchoolSecondments(
 							getEntityManager(), school, activeSchoolYear, today, reportSpecializationGroups);
 
 					for (Secondment secondment : schoolSecondments) {
-						hours += secondment.getFinalWorkingHours();
+						int employeeHours = secondment.getFinalWorkingHours();
+						hours += employeeHours;
+						if(useTextAnalysis) {
+							reportTextAnalysis.add("Ο εκπαιδευτικός "+secondment.getEmployee().toPrettyString()+" που υπηρετεί στην μονάδα με απόσπαση απο το \""+secondment.getSourceUnit().getTitle()+"\", προσφέρει "+employeeHours+" ωρες με ειδικότητα "+secondment.getEmployee().getLastSpecialization());
+						}
 					}
 
 					Collection<ServiceAllocation> schoolServiceAllocations = getCoreSearching()
 							.getSchoolServiceAllocations(getEntityManager(), school, today, reportSpecializationGroups);
 
 					for (ServiceAllocation serviceAllocation : schoolServiceAllocations) {
-						hours += serviceAllocation.getWorkingHoursOnServicingPosition();
+						int employeeHours = serviceAllocation.getWorkingHoursOnServicingPosition();
+						hours += employeeHours;
+						if(useTextAnalysis) {
+							reportTextAnalysis.add("Ο εκπαιδευτικός "+serviceAllocation.getEmployee().toPrettyString()+" που υπηρετεί στην μονάδα με θητεία \""+serviceAllocation.getServiceType()+"\", προσφέρει "+employeeHours+" ωρες με ειδικότητα "+serviceAllocation.getEmployee().getLastSpecialization());
+						}
 					}
 
 					schoolItem.setAvailableHours(hours);
@@ -196,7 +216,7 @@ public class TeachingHourAnalysisReport extends BaseReport {
 				}
 			}
 
-			/* first fetch the teaching requirement */
+			schoolsTeachingRequirementMap.clear();
 
 			finished = System.currentTimeMillis();
 			info("report has been generated in #0 [ms]", (finished - started));
@@ -308,15 +328,15 @@ public class TeachingHourAnalysisReport extends BaseReport {
 	/**
 	 * @return the reportData2
 	 */
-	public Collection<TeachingHoursAnalysisItem> getReportData2() {
-		return reportData2;
+	public Collection<TeachingHoursAnalysisItem> getReportData() {
+		return reportData;
 	}
 
 	/**
 	 * @param reportData2 the reportData2 to set
 	 */
-	public void setReportData2(Collection<TeachingHoursAnalysisItem> reportData2) {
-		this.reportData2 = reportData2;
+	public void setReportData(Collection<TeachingHoursAnalysisItem> reportData2) {
+		this.reportData = reportData2;
 	}
 
 }
