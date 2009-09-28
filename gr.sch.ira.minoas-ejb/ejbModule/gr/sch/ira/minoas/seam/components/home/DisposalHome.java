@@ -1,16 +1,11 @@
 package gr.sch.ira.minoas.seam.components.home;
 
-import java.util.Calendar;
-import java.util.Date;
-
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employement.Disposal;
 import gr.sch.ira.minoas.model.employement.DisposalTargetType;
 import gr.sch.ira.minoas.model.employement.DisposalType;
-import gr.sch.ira.minoas.model.employement.Leave;
 import gr.sch.ira.minoas.model.employement.Secondment;
 
-import org.apache.commons.lang.time.DateUtils;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;

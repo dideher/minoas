@@ -7,8 +7,6 @@ import gr.sch.ira.minoas.core.CoreUtils;
 import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employement.Disposal;
 import gr.sch.ira.minoas.model.employement.DisposalTargetType;
-import gr.sch.ira.minoas.model.employement.Secondment;
-import gr.sch.ira.minoas.model.employement.SecondmentType;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 
 import java.util.Collection;

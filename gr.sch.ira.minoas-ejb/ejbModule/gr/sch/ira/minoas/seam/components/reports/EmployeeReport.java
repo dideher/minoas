@@ -1,17 +1,12 @@
 package gr.sch.ira.minoas.seam.components.reports;
 
-import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.core.Specialization;
 import gr.sch.ira.minoas.model.core.SpecializationGroup;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
-import gr.sch.ira.minoas.model.employement.Leave;
-import gr.sch.ira.minoas.model.employement.LeaveType;
-import gr.sch.ira.minoas.model.employement.SecondmentType;
 import gr.sch.ira.minoas.seam.components.criteria.DateSearchType;
 import gr.sch.ira.minoas.seam.components.criteria.EmployeeCriteria;
 import gr.sch.ira.minoas.seam.components.criteria.SpecializationSearchType;
-import gr.sch.ira.minoas.seam.components.reports.resource.EmployeeLeaveReportItem;
 import gr.sch.ira.minoas.seam.components.reports.resource.EmployeeReportItem;
 
 import java.util.ArrayList;

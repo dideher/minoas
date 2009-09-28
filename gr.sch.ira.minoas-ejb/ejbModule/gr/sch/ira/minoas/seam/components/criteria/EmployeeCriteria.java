@@ -1,10 +1,10 @@
 package gr.sch.ira.minoas.seam.components.criteria;
 
-import java.util.Date;
-
 import gr.sch.ira.minoas.model.core.Specialization;
 import gr.sch.ira.minoas.model.core.SpecializationGroup;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
+
+import java.util.Date;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;

@@ -9,8 +9,6 @@ import gr.sch.ira.minoas.model.employement.EmploymentType;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.ServiceAllocation;
 
-import java.util.Date;
-
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;

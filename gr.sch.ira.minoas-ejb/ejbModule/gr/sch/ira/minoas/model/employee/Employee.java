@@ -235,6 +235,15 @@ public class Employee extends Person {
 		this.type = type;
 	}
 
+	public String toPrettyString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append(getLastName());
+		sb.append(" ");
+		sb.append(getFirstName());
+		sb.append(" του ");
+		sb.append(getFatherName());
+		return sb.toString();
+	}
 	/**
 	 * @see java.lang.Object#toString()
 	 */

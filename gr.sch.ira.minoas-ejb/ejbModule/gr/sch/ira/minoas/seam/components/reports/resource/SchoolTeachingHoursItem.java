@@ -28,6 +28,18 @@ public class SchoolTeachingHoursItem {
 	public SchoolTeachingHoursItem() {
 	}
 	/**
+	 * @param school
+	 * @param availableHours
+	 * @param requiredHours
+	 */
+	public SchoolTeachingHoursItem(School school, Integer availableHours, Integer requiredHours) {
+		super();
+		this.school = school;
+		this.availableHours = availableHours;
+		this.requiredHours = requiredHours;
+	}
+
+	/**
 	 * @return the school
 	 */
 	public School getSchool() {

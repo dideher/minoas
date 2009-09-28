@@ -3,14 +3,11 @@
 package gr.sch.ira.minoas.model.employement;
 
 import gr.sch.ira.minoas.model.BaseIDModel;
-import gr.sch.ira.minoas.model.employee.Employee;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 

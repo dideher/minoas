@@ -13,6 +13,7 @@ import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
 import gr.sch.ira.minoas.model.employee.Person;
+import gr.sch.ira.minoas.model.employement.Disposal;
 import gr.sch.ira.minoas.model.employement.DisposalTargetType;
 import gr.sch.ira.minoas.model.employement.DisposalType;
 import gr.sch.ira.minoas.model.employement.Employment;
@@ -39,7 +40,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
-import org.drools.rule.Collect;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.AutoCreate;
 import org.jboss.seam.annotations.Factory;
@@ -241,6 +241,16 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 		info("found totally '#0' secondments for employee '#1'.", result.size(), employee);
 		return result;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public Collection<Disposal> getEmployeeDisposals(EntityManager em, Person employee, Date dayOfIntereset) {
+		
+		Collection<Disposal> result = null;
+		result = getEntityManager(em).createQuery(
+				"SELECT s FROM Disposal s WHERE s.active IS TRUE AND s.employee=:employee AND :dayOfInterest BETWEEN s.established AND s.dueTo ORDER BY s.insertedOn")
+				.setParameter("employee", employee).setParameter("dayOfInterest", dayOfIntereset).getResultList();
+		return result;
+	}
 
 	protected EntityManager getEntityManager() {
 		return this.entityManager;
@@ -418,6 +428,28 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 							"dayOfInterest", dayOfPrecense).getResultList();
 		}
 	}
+	
+	@SuppressWarnings("unchecked")
+	public Collection<Disposal> getSchoolDisposals(EntityManager em, School school, SchoolYear schoolYear,
+			Date dayOfPrecense, Collection<SpecializationGroup> specializationGroups) {
+
+		if (specializationGroups != null && specializationGroups.size() > 0) {
+			return getEntityManager(em)
+					.createQuery(
+							"SELECT DISTINCT s FROM Disposal s JOIN FETCH s.employee WHERE (s.active IS TRUE AND s.disposalUnit=:school AND s.schoolYear=:schoolYear AND (:dayOfInterest BETWEEN s.established AND s.dueTo))"
+									+ " AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g IN (:specializations) AND s.employee.lastSpecialization MEMBER OF g.specializations)")
+					.setParameter("specializations", specializationGroups).setParameter("school", school).setParameter(
+							"schoolYear", schoolYear).setParameter("dayOfInterest", dayOfPrecense).getResultList();
+		} else {
+			return getEntityManager(em)
+					.createQuery(
+							"SELECT DISTINCT s FROM Disposal s JOIN FETCH s.employee WHERE (s.active IS TRUE AND s.disposalUnit=:school AND s.schoolYear=:schoolYear AND (:dayOfInterest BETWEEN s.established AND s.dueTo))")
+					.setParameter("school", school).setParameter("schoolYear", schoolYear).setParameter(
+							"dayOfInterest", dayOfPrecense).getResultList();
+		}
+	}
+	
+	
 
 	public Collection<ServiceAllocation> getSchoolServiceAllocations(EntityManager em, School school, Date dayOfPrecense) {
 		return getSchoolServiceAllocations(em, school, dayOfPrecense, (SpecializationGroup) null);
