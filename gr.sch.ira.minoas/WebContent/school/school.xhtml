@@ -13,27 +13,184 @@
 
 <ui:composition template="/layout/simple-beauty-template.xhtml">
 	<ui:define name="body">
-	
 
-			<rich:simpleTogglePanel switchType="Ajax">
+		<rich:panel>
+			<f:facet name="header">
+				<h:outputText value="Καρτέλα Σχολικής Μονάδας #{school.title}" />
+			</f:facet>
+
+			<rich:panel>
 				<f:facet name="header">
-					<h:outputText
-						value="Καρτέλα Σχολικής Μονάδας #{school.title}" />
+					<h:outputText value="Βασικά Στοιχεία" />
 				</f:facet>
 
-				<ui:include src="/components/school/basicInfo.xhtml">
+				<ui:include src="/school/basicInfo.xhtml">
 					<ui:param name="activeSchool" value="#{school}" />
 				</ui:include>
-			</rich:simpleTogglePanel>
+			</rich:panel>
+			<rich:panel>
+				<f:facet name="header">
+					<h:outputText value="Διευθυντής και Υποδιευθυντές Μονάδας" />
+				</f:facet>
+
+				<rich:dataTable id="schoolChiefsTable" var="_schoolchief"
+					value="#{schoolChiefs}" sortMode="multi" border="0" rows="20"
+					onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+					onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+					width="100%">
+					<rich:column>
+						<f:facet name="header">AM</f:facet>
+						<h:outputText value="#{_schoolchief.employeeCode}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">Θητεία</f:facet>
+						<h:outputText
+							value="#{messages[_schoolchief.serviceAllocationTypeKey]}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">Επώνυμο</f:facet>
+						<h:outputText value="#{_schoolchief.employeeLastName}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">Όνομα</f:facet>
+						<h:outputText value="#{_schoolchief.employeeFirstName}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">Όνομα Πατρός</f:facet>
+						<h:outputText value="#{_schoolchief.employeeFatherName}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">Ειδ.</f:facet>
+						<h:outputText value="#{_schoolchief.employeeSpecializationID}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">Λεκτικό Ειδ.</f:facet>
+						<h:outputText value="#{_schoolchief.employeeSpecialization}" />
+					</rich:column>
+				</rich:dataTable>
+			</rich:panel>
 			
-			<h:panelGroup>
-					<s:div styleClass="actionButtons">
-						<s:button disabled="#{empty from}"
-							action="backButton" value="Επιστροφή" />
-						<rich:spacer width="20" />
-						<s:button action="endButton" value="Τέλος Ενέργειας" />
-					</s:div>
-				</h:panelGroup>
+			<rich:spacer height="10"/>
+			<rich:separator lineType="dashed" height="2" />
+			<rich:spacer height="10"/>
+			<rich:panel>
+				<f:facet name="header">
+					<h:outputText value="Προσωπικό που Υπηρετή" />
+				</f:facet>
+				<rich:panel>
+					<f:facet name="header">
+						<h:outputLabel value="Με Απόσπαση" />
+					</f:facet>
+					<rich:dataTable id="schoolSecondmentsTable" var="_schoolSecondment"
+					value="#{incomingSecondments}" sortMode="multi" border="0" rows="20"
+					onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+					onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+					width="100%">
+					<rich:column>
+						<f:facet name="header">AM</f:facet>
+						<h:outputText value="#{_schoolSecondment.employeeCode}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">Επώνυμο</f:facet>
+						<h:outputText value="#{_schoolSecondment.employeeLastName}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">Όνομα</f:facet>
+						<h:outputText value="#{_schoolSecondment.employeeFirstName}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">Όνομα Πατρός</f:facet>
+						<h:outputText value="#{_schoolSecondment.employeeFatherName}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">Tύπος</f:facet>
+						<h:outputText value="#{messages[_schoolSecondment.secondmentTypeKey]}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">Από</f:facet>
+						<h:outputText value="#{_schoolSecondment.sourceUnit}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">Ειδ.</f:facet>
+						<h:outputText value="#{_schoolSecondment.employeeSpecializationID}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">Λεκτικό Ειδ.</f:facet>
+						<h:outputText value="#{_schoolSecondment.employeeSpecialization}" />
+					</rich:column>
+				</rich:dataTable>
+				</rich:panel>
+
+				<rich:panel>
+					<f:facet name="header">
+						<h:outputLabel value="Με Διάθεση" />
+					</f:facet>
+					
+					<rich:dataTable id="schoolDisposalsTable" var="_schoolDisposal"
+					value="#{incomingDisposals}" sortMode="multi" border="0" rows="20"
+					onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+					onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+					width="100%">
+					<rich:column>
+						<f:facet name="header">AM</f:facet>
+						<h:outputText value="#{_schoolDisposal.employeeCode}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">Επώνυμο</f:facet>
+						<h:outputText value="#{_schoolDisposal.employeeLastName}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">Όνομα</f:facet>
+						<h:outputText value="#{_schoolDisposal.employeeFirstName}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">Όνομα Πατρός</f:facet>
+						<h:outputText value="#{_schoolDisposal.employeeFatherName}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">Tύπος</f:facet>
+						<h:outputText value="#{messages[_schoolDisposal.disposalTypeKey]}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">Ώρες</f:facet>
+						<h:outputText value="#{_schoolDisposal.hours}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">Ημέρες</f:facet>
+						<h:outputText value="#{_schoolDisposal.days}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">Από</f:facet>
+						<h:outputText value="#{_schoolDisposal.sourceUnit}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">Ειδ.</f:facet>
+						<h:outputText value="#{_schoolDisposal.employeeSpecializationID}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">Λεκτικό Ειδ.</f:facet>
+						<h:outputText value="#{_schoolDisposal.employeeSpecialization}" />
+					</rich:column>
+				</rich:dataTable>
+					
+					
+				</rich:panel>
+
+				<rich:panel>
+					<f:facet name="header">
+						<h:outputLabel value="Με Θητεία" />
+					</f:facet>
+				</rich:panel>
+
+
+
+
+
+
+
+			</rich:panel>
+
+
 
 
 			<rich:tabPanel mode="Ajax">
@@ -43,46 +200,47 @@
 					</f:facet>
 					<!-- <ui:include src="/components/school/schoolEmployeesList.xhtml" />  -->
 					<h:panelGrid columns="1">
-					<h:outputText value="Στις παρακάτω καρτέλες εμφανίζεται η δύναμη της σχολικής μονάδας, σε εκπαιδευτικό προσωπικό, κατά την τρέχουσα σχολική χρονία (#{activeSchoolYear.title}). " />
-					<rich:separator  lineType="dashed" height="2"/>
-					
-					<rich:tabPanel mode="Ajax">
-						<rich:tab>
-							<f:facet name="label">
-							<h:outputText value="Οργανικά Ανοίκωντες" />
-							</f:facet>
-							<ui:include src="/school/school-regular-employee.xhtml">
-								<ui:param name="school" value="#{school}" />
-							</ui:include>
-						</rich:tab>
-						<rich:tab>
-							<f:facet name="label">
-							<h:outputText value="Με Απόσπαση" />
-							</f:facet>
+						<h:outputText
+							value="Στις παρακάτω καρτέλες εμφανίζεται η δύναμη της σχολικής μονάδας, σε εκπαιδευτικό προσωπικό, κατά την τρέχουσα σχολική χρονία (#{activeSchoolYear.title}). " />
+						<rich:separator lineType="dashed" height="2" />
+
+						<rich:tabPanel mode="Ajax">
+							<rich:tab>
+								<f:facet name="label">
+									<h:outputText value="Οργανικά Ανοίκωντες" />
+								</f:facet>
+								<ui:include src="/school/school-regular-employee.xhtml">
+									<ui:param name="school" value="#{school}" />
+								</ui:include>
+							</rich:tab>
+							<rich:tab>
+								<f:facet name="label">
+									<h:outputText value="Με Απόσπαση" />
+								</f:facet>
 								<ui:include src="/school/school-secondment-employee.xhtml">
-								<ui:param name="school" value="#{school}" />
-							</ui:include>
-						
-						</rich:tab>
-						<rich:tab disabled="true">
-							<f:facet name="label">
-							<h:outputText value="Με Διάθεση" />
-							</f:facet>
-						</rich:tab>
-						<rich:tab>
-							<f:facet name="label">
-							<h:outputText value="Αναπληρωτές" />
-							</f:facet>
-							<ui:include src="/school/school-deputy-employee.xhtml">
-								
-							</ui:include>
-						</rich:tab>
-						<rich:tab disabled="true">
-							<f:facet name="label">
-							<h:outputText value="Ωρομίσθιοι" />
-							</f:facet>
-						</rich:tab>
-					</rich:tabPanel>
+									<ui:param name="school" value="#{school}" />
+								</ui:include>
+
+							</rich:tab>
+							<rich:tab disabled="true">
+								<f:facet name="label">
+									<h:outputText value="Με Διάθεση" />
+								</f:facet>
+							</rich:tab>
+							<rich:tab>
+								<f:facet name="label">
+									<h:outputText value="Αναπληρωτές" />
+								</f:facet>
+								<ui:include src="/school/school-deputy-employee.xhtml">
+
+								</ui:include>
+							</rich:tab>
+							<rich:tab disabled="true">
+								<f:facet name="label">
+									<h:outputText value="Ωρομίσθιοι" />
+								</f:facet>
+							</rich:tab>
+						</rich:tabPanel>
 					</h:panelGrid>
 				</rich:tab>
 				<rich:tab>
@@ -92,13 +250,27 @@
 
 					<ui:include src="/school/teaching-resources.xhtml">
 					</ui:include>
-					
+
 				</rich:tab>
 			</rich:tabPanel>
+		</rich:panel>
 
-		
 
-		
+		<h:panelGroup>
+			<s:div styleClass="actionButtons">
+				<s:button disabled="#{empty from}" action="backButton"
+					value="Επιστροφή" />
+				<rich:spacer width="20" />
+				<s:button action="endButton" value="Τέλος Ενέργειας" />
+			</s:div>
+		</h:panelGroup>
+
+
+
+
+
+
+
 	</ui:define>
 
 </ui:composition>
