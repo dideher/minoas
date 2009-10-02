@@ -26,6 +26,10 @@ public class ServiceAllocationItem extends EmployeeReportItem {
 
 	private String serviceAllocationTypeKey;
 
+	private Integer workingHoursOnRegularPosition;
+
+	private Integer workingHoursOnServicingPosition;
+
 	/**
 	 * 
 	 */
@@ -44,6 +48,8 @@ public class ServiceAllocationItem extends EmployeeReportItem {
 		this.sourceUnit = serviceAllocation.getServiceUnit().getTitle();
 		this.serviceAllocationType = serviceAllocation.getServiceType().name();
 		this.serviceAllocationTypeKey = serviceAllocation.getServiceType().getKey();
+		this.workingHoursOnRegularPosition = serviceAllocation.getWorkingHoursOnRegularPosition();
+		this.workingHoursOnServicingPosition = serviceAllocation.getWorkingHoursOnServicingPosition();
 	}
 
 	/**
@@ -128,6 +134,34 @@ public class ServiceAllocationItem extends EmployeeReportItem {
 	 */
 	public void setServiceAllocationTypeKey(String serviceAllocationTypeKey) {
 		this.serviceAllocationTypeKey = serviceAllocationTypeKey;
+	}
+
+	/**
+	 * @return the workingHoursOnRegularPosition
+	 */
+	public Integer getWorkingHoursOnRegularPosition() {
+		return workingHoursOnRegularPosition;
+	}
+
+	/**
+	 * @param workingHoursOnRegularPosition the workingHoursOnRegularPosition to set
+	 */
+	public void setWorkingHoursOnRegularPosition(Integer workingHoursOnRegularPosition) {
+		this.workingHoursOnRegularPosition = workingHoursOnRegularPosition;
+	}
+
+	/**
+	 * @return the workingHoursOnServicingPosition
+	 */
+	public Integer getWorkingHoursOnServicingPosition() {
+		return workingHoursOnServicingPosition;
+	}
+
+	/**
+	 * @param workingHoursOnServicingPosition the workingHoursOnServicingPosition to set
+	 */
+	public void setWorkingHoursOnServicingPosition(Integer workingHoursOnServicingPosition) {
+		this.workingHoursOnServicingPosition = workingHoursOnServicingPosition;
 	}
 
 }

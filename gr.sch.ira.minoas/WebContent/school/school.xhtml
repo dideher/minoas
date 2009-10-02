@@ -34,7 +34,7 @@
 				</f:facet>
 
 				<rich:dataTable id="schoolChiefsTable" var="_schoolchief"
-					value="#{schoolChiefs}" sortMode="multi" border="0" rows="20"
+					value="#{schoolChiefs}" sortMode="multi" border="0" 
 					onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
 					onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
 					width="100%">
@@ -60,6 +60,11 @@
 						<h:outputText value="#{_schoolchief.employeeFatherName}" />
 					</rich:column>
 					<rich:column>
+						<f:facet name="header">Ώρες</f:facet>
+						<h:outputText
+							value="#{_schoolchief.workingHoursOnServicingPosition}" />
+					</rich:column>
+					<rich:column>
 						<f:facet name="header">Ειδ.</f:facet>
 						<h:outputText value="#{_schoolchief.employeeSpecializationID}" />
 					</rich:column>
@@ -69,117 +74,222 @@
 					</rich:column>
 				</rich:dataTable>
 			</rich:panel>
-			
-			<rich:spacer height="10"/>
+
+			<rich:spacer height="10" />
 			<rich:separator lineType="dashed" height="2" />
-			<rich:spacer height="10"/>
+			<rich:spacer height="10" />
 			<rich:panel>
 				<f:facet name="header">
 					<h:outputText value="Προσωπικό που Υπηρετή" />
 				</f:facet>
+				
+				<rich:panel>
+					<f:facet name="header">
+						<h:outputLabel value="Οργανικά Ανοίκωντες" />
+					</f:facet>
+					<rich:dataTable id="schoolRegularEmployeesTable" var="_schoolRegularEmployee"
+						value="#{schoolRegularsEmployees}" sortMode="multi" border="0"
+						 onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+						onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+						width="100%">
+						<rich:column>
+							<f:facet name="header">AM</f:facet>
+							<h:outputText value="#{_schoolRegularEmployee.employeeCode}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Επώνυμο</f:facet>
+							<h:outputText value="#{_schoolRegularEmployee.employeeLastName}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Όνομα</f:facet>
+							<h:outputText value="#{_schoolRegularEmployee.employeeFirstName}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Όνομα Πατρός</f:facet>
+							<h:outputText value="#{_schoolRegularEmployee.employeeFatherName}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Υπ Ωρ.</f:facet>
+							<h:outputText value="#{_schoolRegularEmployee.employeeMandatoryHours}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Ωράριο</f:facet>
+							<h:outputText value="#{_schoolRegularEmployee.employeeFinalWorkingHours}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Ειδ.</f:facet>
+							<h:outputText
+								value="#{_schoolRegularEmployee.employeeSpecializationID}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Λεκτικό Ειδ.</f:facet>
+							<h:outputText value="#{_schoolRegularEmployee.employeeSpecialization}" />
+						</rich:column>
+					</rich:dataTable>
+				</rich:panel>
+				
 				<rich:panel>
 					<f:facet name="header">
 						<h:outputLabel value="Με Απόσπαση" />
 					</f:facet>
 					<rich:dataTable id="schoolSecondmentsTable" var="_schoolSecondment"
-					value="#{incomingSecondments}" sortMode="multi" border="0" rows="20"
-					onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
-					onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
-					width="100%">
-					<rich:column>
-						<f:facet name="header">AM</f:facet>
-						<h:outputText value="#{_schoolSecondment.employeeCode}" />
-					</rich:column>
-					<rich:column>
-						<f:facet name="header">Επώνυμο</f:facet>
-						<h:outputText value="#{_schoolSecondment.employeeLastName}" />
-					</rich:column>
-					<rich:column>
-						<f:facet name="header">Όνομα</f:facet>
-						<h:outputText value="#{_schoolSecondment.employeeFirstName}" />
-					</rich:column>
-					<rich:column>
-						<f:facet name="header">Όνομα Πατρός</f:facet>
-						<h:outputText value="#{_schoolSecondment.employeeFatherName}" />
-					</rich:column>
-					<rich:column>
-						<f:facet name="header">Tύπος</f:facet>
-						<h:outputText value="#{messages[_schoolSecondment.secondmentTypeKey]}" />
-					</rich:column>
-					<rich:column>
-						<f:facet name="header">Από</f:facet>
-						<h:outputText value="#{_schoolSecondment.sourceUnit}" />
-					</rich:column>
-					<rich:column>
-						<f:facet name="header">Ειδ.</f:facet>
-						<h:outputText value="#{_schoolSecondment.employeeSpecializationID}" />
-					</rich:column>
-					<rich:column>
-						<f:facet name="header">Λεκτικό Ειδ.</f:facet>
-						<h:outputText value="#{_schoolSecondment.employeeSpecialization}" />
-					</rich:column>
-				</rich:dataTable>
+						value="#{incomingSecondments}" sortMode="multi" border="0"
+						 onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+						onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+						width="100%">
+						<rich:column>
+							<f:facet name="header">AM</f:facet>
+							<h:outputText value="#{_schoolSecondment.employeeCode}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Επώνυμο</f:facet>
+							<h:outputText value="#{_schoolSecondment.employeeLastName}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Όνομα</f:facet>
+							<h:outputText value="#{_schoolSecondment.employeeFirstName}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Όνομα Πατρός</f:facet>
+							<h:outputText value="#{_schoolSecondment.employeeFatherName}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Tύπος</f:facet>
+							<h:outputText
+								value="#{messages[_schoolSecondment.secondmentTypeKey]}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Ώρες</f:facet>
+							<h:outputText value="#{_schoolSecondment.finalWorkingHours}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Από</f:facet>
+							<h:outputText value="#{_schoolSecondment.sourceUnit}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Ειδ.</f:facet>
+							<h:outputText
+								value="#{_schoolSecondment.employeeSpecializationID}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Λεκτικό Ειδ.</f:facet>
+							<h:outputText value="#{_schoolSecondment.employeeSpecialization}" />
+						</rich:column>
+					</rich:dataTable>
 				</rich:panel>
 
 				<rich:panel>
 					<f:facet name="header">
 						<h:outputLabel value="Με Διάθεση" />
 					</f:facet>
-					
+
 					<rich:dataTable id="schoolDisposalsTable" var="_schoolDisposal"
-					value="#{incomingDisposals}" sortMode="multi" border="0" rows="20"
-					onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
-					onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
-					width="100%">
-					<rich:column>
-						<f:facet name="header">AM</f:facet>
-						<h:outputText value="#{_schoolDisposal.employeeCode}" />
-					</rich:column>
-					<rich:column>
-						<f:facet name="header">Επώνυμο</f:facet>
-						<h:outputText value="#{_schoolDisposal.employeeLastName}" />
-					</rich:column>
-					<rich:column>
-						<f:facet name="header">Όνομα</f:facet>
-						<h:outputText value="#{_schoolDisposal.employeeFirstName}" />
-					</rich:column>
-					<rich:column>
-						<f:facet name="header">Όνομα Πατρός</f:facet>
-						<h:outputText value="#{_schoolDisposal.employeeFatherName}" />
-					</rich:column>
-					<rich:column>
-						<f:facet name="header">Tύπος</f:facet>
-						<h:outputText value="#{messages[_schoolDisposal.disposalTypeKey]}" />
-					</rich:column>
-					<rich:column>
-						<f:facet name="header">Ώρες</f:facet>
-						<h:outputText value="#{_schoolDisposal.hours}" />
-					</rich:column>
-					<rich:column>
-						<f:facet name="header">Ημέρες</f:facet>
-						<h:outputText value="#{_schoolDisposal.days}" />
-					</rich:column>
-					<rich:column>
-						<f:facet name="header">Από</f:facet>
-						<h:outputText value="#{_schoolDisposal.sourceUnit}" />
-					</rich:column>
-					<rich:column>
-						<f:facet name="header">Ειδ.</f:facet>
-						<h:outputText value="#{_schoolDisposal.employeeSpecializationID}" />
-					</rich:column>
-					<rich:column>
-						<f:facet name="header">Λεκτικό Ειδ.</f:facet>
-						<h:outputText value="#{_schoolDisposal.employeeSpecialization}" />
-					</rich:column>
-				</rich:dataTable>
-					
-					
+						value="#{incomingDisposals}" sortMode="multi" border="0" 
+						onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+						onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+						width="100%">
+						<rich:column>
+							<f:facet name="header">AM</f:facet>
+							<h:outputText value="#{_schoolDisposal.employeeCode}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Επώνυμο</f:facet>
+							<h:outputText value="#{_schoolDisposal.employeeLastName}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Όνομα</f:facet>
+							<h:outputText value="#{_schoolDisposal.employeeFirstName}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Όνομα Πατρός</f:facet>
+							<h:outputText value="#{_schoolDisposal.employeeFatherName}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Tύπος</f:facet>
+							<h:outputText
+								value="#{messages[_schoolDisposal.disposalTypeKey]}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Ώρες</f:facet>
+							<h:outputText value="#{_schoolDisposal.hours}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Ημέρες</f:facet>
+							<h:outputText value="#{_schoolDisposal.days}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Από</f:facet>
+							<h:outputText value="#{_schoolDisposal.sourceUnit}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Ειδ.</f:facet>
+							<h:outputText value="#{_schoolDisposal.employeeSpecializationID}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Λεκτικό Ειδ.</f:facet>
+							<h:outputText value="#{_schoolDisposal.employeeSpecialization}" />
+						</rich:column>
+					</rich:dataTable>
+
+
 				</rich:panel>
 
 				<rich:panel>
 					<f:facet name="header">
 						<h:outputLabel value="Με Θητεία" />
 					</f:facet>
+
+					<rich:dataTable id="serviceAllocationDisposalsTable"
+						var="_schoolServiceAllocation"
+						value="#{incomingServiceAllocations}" sortMode="multi" border="0"
+						 onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+						onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+						width="100%">
+						<rich:column>
+							<f:facet name="header">AM</f:facet>
+							<h:outputText value="#{_schoolServiceAllocation.employeeCode}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Επώνυμο</f:facet>
+							<h:outputText
+								value="#{_schoolServiceAllocation.employeeLastName}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Όνομα</f:facet>
+							<h:outputText
+								value="#{_schoolServiceAllocation.employeeFirstName}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Όνομα Πατρός</f:facet>
+							<h:outputText
+								value="#{_schoolServiceAllocation.employeeFatherName}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Tύπος</f:facet>
+							<h:outputText
+								value="#{messages[_schoolServiceAllocation.serviceAllocationTypeKey]}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Ώρες</f:facet>
+							<h:outputText
+								value="#{_schoolServiceAllocation.workingHoursOnServicingPosition}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Από</f:facet>
+							<h:outputText value="#{_schoolServiceAllocation.sourceUnit}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Ειδ.</f:facet>
+							<h:outputText
+								value="#{_schoolServiceAllocation.employeeSpecializationID}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Λεκτικό Ειδ.</f:facet>
+							<h:outputText
+								value="#{_schoolServiceAllocation.employeeSpecialization}" />
+						</rich:column>
+					</rich:dataTable>
+
 				</rich:panel>
 
 
@@ -189,9 +299,69 @@
 
 
 			</rich:panel>
+		
+		
+			<rich:spacer height="30"/>
 
-
-
+			<rich:panel>
+				<f:facet name="header">
+							<h:outputText value="Απουσιάζουν" />
+				</f:facet>
+				
+				
+				<rich:panel>
+					<f:facet name="header">
+						<h:outputLabel value="Με Απόσπαση" />
+					</f:facet>
+					<rich:dataTable id="schoolOutgoingSecondmentsTable" var="_schoolSecondment"
+						value="#{schoolOutgoingSecondments}" sortMode="multi" border="0"
+						 onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+						onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+						width="100%">
+						<rich:column>
+							<f:facet name="header">AM</f:facet>
+							<h:outputText value="#{_schoolSecondment.employeeCode}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Επώνυμο</f:facet>
+							<h:outputText value="#{_schoolSecondment.employeeLastName}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Όνομα</f:facet>
+							<h:outputText value="#{_schoolSecondment.employeeFirstName}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Όνομα Πατρός</f:facet>
+							<h:outputText value="#{_schoolSecondment.employeeFatherName}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Tύπος</f:facet>
+							<h:outputText
+								value="#{messages[_schoolSecondment.secondmentTypeKey]}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Ώρες</f:facet>
+							<h:outputText value="#{_schoolSecondment.finalWorkingHours}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Στην Μονάδα</f:facet>
+							<h:outputText value="#{_schoolSecondment.targetUnit}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Ειδ.</f:facet>
+							<h:outputText
+								value="#{_schoolSecondment.employeeSpecializationID}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Λεκτικό Ειδ.</f:facet>
+							<h:outputText value="#{_schoolSecondment.employeeSpecialization}" />
+						</rich:column>
+					</rich:dataTable>
+				</rich:panel>
+				
+				
+				
+			</rich:panel>
 
 			<rich:tabPanel mode="Ajax">
 				<rich:tab>

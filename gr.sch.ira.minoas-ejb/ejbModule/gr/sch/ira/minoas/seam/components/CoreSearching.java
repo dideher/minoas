@@ -326,9 +326,9 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 					.createQuery(
 							"SELECT DISTINCT e FROM Employee AS e WHERE (e.currentEmployment.active IS TRUE AND e.currentEmployment.school=:school AND e.currentEmployment.schoolYear=:schoolYear) "
 									+ " AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g=:specialization AND e.lastSpecialization MEMBER OF g.specializations)"
-									+ " AND NOT EXISTS(SELECT s FROM Secondment s WHERE s.employee=e AND s.sourceUnit=:school AND (:dayOfInterest BETWEEN s.established AND s.dueTo)) "
-									+ " AND NOT EXISTS(SELECT l FROM Leave l WHERE l.employee=e AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
-									+ " AND NOT EXISTS(SELECT a FROM ServiceAllocation a WHERE a.employee=e AND a.sourceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo))")
+									+ " AND NOT EXISTS(SELECT s FROM Secondment s WHERE s.employee=e AND s.active IS TRUE AND s.sourceUnit=:school AND (:dayOfInterest BETWEEN s.established AND s.dueTo)) "
+									+ " AND NOT EXISTS(SELECT l FROM Leave l WHERE l.employee=e AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
+									+ " AND NOT EXISTS(SELECT a FROM ServiceAllocation a WHERE a.employee=e AND a.active IS TRUE AND a.sourceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo))")
 					.setParameter("specialization", specializationGroup).setParameter("school", school).setParameter(
 							"schoolYear", schoolYear).setParameter("dayOfInterest", dayOfPrecense).getResultList();
 
@@ -336,9 +336,9 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 			return getEntityManager(em)
 					.createQuery(
 							"SELECT DISTINCT e FROM Employee AS e WHERE (e.currentEmployment.active IS TRUE AND e.currentEmployment.school=:school AND e.currentEmployment.schoolYear=:schoolYear) "
-									+ " AND NOT EXISTS(SELECT s FROM Secondment s WHERE s.employee=e AND s.sourceUnit=:school AND (:dayOfInterest BETWEEN s.established AND s.dueTo)) "
-									+ " AND NOT EXISTS(SELECT l FROM Leave l WHERE l.employee=e AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
-									+ " AND NOT EXISTS(SELECT a FROM ServiceAllocation a WHERE a.employee=e AND a.sourceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo))")
+									+ " AND NOT EXISTS(SELECT s FROM Secondment s WHERE s.employee=e AND s.active IS TRUE AND s.sourceUnit=:school AND (:dayOfInterest BETWEEN s.established AND s.dueTo)) "
+									+ " AND NOT EXISTS(SELECT l FROM Leave l WHERE l.employee=e AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
+									+ " AND NOT EXISTS(SELECT a FROM ServiceAllocation a WHERE a.employee=e AND a.active IS TRUE AND a.sourceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo))")
 					.setParameter("school", school).setParameter("schoolYear", schoolYear).setParameter(
 							"dayOfInterest", dayOfPrecense).getResultList();
 		}
@@ -384,6 +384,51 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 					region).getResultList();
 		else
 			return getSchools(em);
+	}
+
+	public Collection<Secondment> getSchoolOutgoingSecondments(EntityManager em, School school, SchoolYear schoolYear,
+			Date dayOfPrecense) {
+		return getSchoolOutgoingSecondments(em, school, schoolYear, dayOfPrecense, (SpecializationGroup) null);
+	}
+
+	@SuppressWarnings("unchecked")
+	public Collection<Secondment> getSchoolOutgoingSecondments(EntityManager em, School school, SchoolYear schoolYear,
+			Date dayOfPrecense, SpecializationGroup specializationGroup) {
+
+		if (specializationGroup != null) {
+			return getEntityManager(em)
+					.createQuery(
+							"SELECT DISTINCT s FROM Secondment s JOIN FETCH s.employee WHERE (s.active IS TRUE AND s.sourceUnit=:school AND s.schoolYear=:schoolYear AND (:dayOfInterest BETWEEN s.established AND s.dueTo))"
+									+ " AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g=:specialization AND s.employee.lastSpecialization MEMBER OF g.specializations)")
+					.setParameter("specialization", specializationGroup).setParameter("school", school).setParameter(
+							"schoolYear", schoolYear).setParameter("dayOfInterest", dayOfPrecense).getResultList();
+		} else {
+			return getEntityManager(em)
+					.createQuery(
+							"SELECT DISTINCT s FROM Secondment s JOIN FETCH s.employee WHERE (s.active IS TRUE AND s.sourceUnit=:school AND s.schoolYear=:schoolYear AND (:dayOfInterest BETWEEN s.established AND s.dueTo))")
+					.setParameter("school", school).setParameter("schoolYear", schoolYear).setParameter(
+							"dayOfInterest", dayOfPrecense).getResultList();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public Collection<Secondment> getSchoolOutgoingSecondments(EntityManager em, School school, SchoolYear schoolYear,
+			Date dayOfPrecense, Collection<SpecializationGroup> specializationGroups) {
+
+		if (specializationGroups != null && specializationGroups.size() > 0) {
+			return getEntityManager(em)
+					.createQuery(
+							"SELECT DISTINCT s FROM Secondment s JOIN FETCH s.employee WHERE (s.active IS TRUE AND s.sourceUnit=:school AND s.schoolYear=:schoolYear AND (:dayOfInterest BETWEEN s.established AND s.dueTo))"
+									+ " AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g IN (:specializations) AND s.employee.lastSpecialization MEMBER OF g.specializations)")
+					.setParameter("specializations", specializationGroups).setParameter("school", school).setParameter(
+							"schoolYear", schoolYear).setParameter("dayOfInterest", dayOfPrecense).getResultList();
+		} else {
+			return getEntityManager(em)
+					.createQuery(
+							"SELECT DISTINCT s FROM Secondment s JOIN FETCH s.employee WHERE (s.active IS TRUE AND s.sourceUnit=:school AND s.schoolYear=:schoolYear AND (:dayOfInterest BETWEEN s.established AND s.dueTo))")
+					.setParameter("school", school).setParameter("schoolYear", schoolYear).setParameter(
+							"dayOfInterest", dayOfPrecense).getResultList();
+		}
 	}
 
 	public Collection<Secondment> getSchoolSecondments(EntityManager em, School school, SchoolYear schoolYear,
@@ -450,7 +495,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 							"dayOfInterest", dayOfPrecense).getResultList();
 		}
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public Collection<Leave> getSchoolLeaves(EntityManager em, School school, SchoolYear schoolYear,
 			Date effectiveDate, Collection<SpecializationGroup> specializationGroups) {
