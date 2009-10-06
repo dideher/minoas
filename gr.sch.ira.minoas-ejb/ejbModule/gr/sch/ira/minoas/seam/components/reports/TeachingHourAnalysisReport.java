@@ -179,7 +179,7 @@ public class TeachingHourAnalysisReport extends BaseReport {
 
 					/* for the given school, get all regular employees with a compatible specialization */
 
-					Collection<Employee> regularEmployees = getCoreSearching().getSchoolRegularEmployees(
+					Collection<Employee> regularEmployees = getCoreSearching().getSchoolActiveEmployees(
 							getEntityManager(), schoolItem, activeSchoolYear, today,
 							reportItem.getSpecializationGroups());
 

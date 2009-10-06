@@ -2,6 +2,7 @@ package gr.sch.ira.minoas.seam.components.reports;
 
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employement.Disposal;
+import gr.sch.ira.minoas.model.employement.EmploymentType;
 import gr.sch.ira.minoas.model.employement.Leave;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.ServiceAllocation;
@@ -9,6 +10,7 @@ import gr.sch.ira.minoas.model.employement.ServiceAllocationType;
 import gr.sch.ira.minoas.seam.components.home.SchoolHome;
 import gr.sch.ira.minoas.seam.components.reports.resource.DisposalItem;
 import gr.sch.ira.minoas.seam.components.reports.resource.EmployeeReportItem;
+import gr.sch.ira.minoas.seam.components.reports.resource.LeaveItem;
 import gr.sch.ira.minoas.seam.components.reports.resource.SecondmentItem;
 import gr.sch.ira.minoas.seam.components.reports.resource.ServiceAllocationItem;
 
@@ -56,11 +58,15 @@ public class SchoolReport extends BaseReport {
 	private Collection<DisposalItem> outcomingDisposals;
 	
 	@DataModel(value = "schoolLeaves")
-	private Collection<Leave> schoolLeaves;
+	private Collection<LeaveItem> schoolLeaves;
 	
 	@DataModel(value = "schoolRegularsEmployees")
 	private Collection<EmployeeReportItem> schoolRegularsEmployees;
 
+	@DataModel(value = "schoolDeputyEmployees")
+	private Collection<EmployeeReportItem> schoolDeputyEmployees;
+
+	
 	@In
 	private SchoolHome schoolHome;
 
@@ -95,6 +101,14 @@ public class SchoolReport extends BaseReport {
 		return returnValue;
 	}
 	
+	protected Collection<LeaveItem> convertLeaveCollection(Collection<Leave> leaves) {
+		Collection<LeaveItem> returnValue = new ArrayList<LeaveItem>(leaves.size());
+		for (Leave leave : leaves) {
+			returnValue.add(new LeaveItem(leave));
+		}
+		return returnValue;
+	}
+	
 	protected Collection<EmployeeReportItem> convertEmployeeCollection(Collection<Employee> employees) {
 		Collection<EmployeeReportItem> returnValue = new ArrayList<EmployeeReportItem>(employees.size());
 		for (Employee employee : employees) {
@@ -102,6 +116,8 @@ public class SchoolReport extends BaseReport {
 		}
 		return returnValue;
 	}
+	
+	
 
 	public void generateReport() {
 
@@ -114,7 +130,9 @@ public class SchoolReport extends BaseReport {
 				Arrays.asList(ServiceAllocationType.SCHOOL_HEADMASTER, ServiceAllocationType.SCHOOL_SUBHEADMASTER)));
 
 		
-		schoolRegularsEmployees = convertEmployeeCollection(getCoreSearching().getSchoolRegularEmployees(getEntityManager(), schoolHome.getInstance(), getCoreSearching().getActiveSchoolYear(getEntityManager()), today));
+		schoolRegularsEmployees = convertEmployeeCollection(getCoreSearching().getSchoolActiveEmployeesOfEmploymentType(getEntityManager(), schoolHome.getInstance(), getCoreSearching().getActiveSchoolYear(getEntityManager()), today, EmploymentType.REGULAR));
+
+		schoolDeputyEmployees = convertEmployeeCollection(getCoreSearching().getSchoolActiveEmployeesOfEmploymentType(getEntityManager(), schoolHome.getInstance(), getCoreSearching().getActiveSchoolYear(getEntityManager()), today, EmploymentType.DEPUTY));
 
 		incomingSecondments = convertSecondmentCollection(getCoreSearching().getSchoolSecondments(getEntityManager(),
 				schoolHome.getInstance(), getCoreSearching().getActiveSchoolYear(getEntityManager()), today));
@@ -128,6 +146,8 @@ public class SchoolReport extends BaseReport {
 		
 		outcomingSecondments = convertSecondmentCollection(getCoreSearching().getSchoolOutgoingSecondments(getEntityManager(),
 				schoolHome.getInstance(), getCoreSearching().getActiveSchoolYear(getEntityManager()), today));
+		
+		schoolLeaves = convertLeaveCollection(getCoreSearching().getSchoolLeaves(getEntityManager(), schoolHome.getInstance(),getCoreSearching().getActiveSchoolYear(getEntityManager()), today, null));
 
 		finished = System.currentTimeMillis();
 		info("report has been generated in #0 [ms]", (finished - started));
@@ -232,19 +252,6 @@ public class SchoolReport extends BaseReport {
 		this.outcomingDisposals = outcomingDisposals;
 	}
 
-	/**
-	 * @return the schoolLeaves
-	 */
-	public Collection<Leave> getSchoolLeaves() {
-		return schoolLeaves;
-	}
-
-	/**
-	 * @param schoolLeaves the schoolLeaves to set
-	 */
-	public void setSchoolLeaves(Collection<Leave> schoolLeaves) {
-		this.schoolLeaves = schoolLeaves;
-	}
 
 	/**
 	 * @return the schoolRegularsEmployees
@@ -258,6 +265,34 @@ public class SchoolReport extends BaseReport {
 	 */
 	public void setSchoolRegularsEmployees(Collection<EmployeeReportItem> schoolRegularsEmployees) {
 		this.schoolRegularsEmployees = schoolRegularsEmployees;
+	}
+
+	/**
+	 * @return the schoolDeputysEmployees
+	 */
+	public Collection<EmployeeReportItem> getSchoolDeputyEmployees() {
+		return schoolDeputyEmployees;
+	}
+
+	/**
+	 * @param schoolDeputysEmployees the schoolDeputysEmployees to set
+	 */
+	public void setSchoolDeputyEmployees(Collection<EmployeeReportItem> schoolDeputysEmployees) {
+		this.schoolDeputyEmployees = schoolDeputysEmployees;
+	}
+
+	/**
+	 * @return the schoolLeaves
+	 */
+	public Collection<LeaveItem> getSchoolLeaves() {
+		return schoolLeaves;
+	}
+
+	/**
+	 * @param schoolLeaves the schoolLeaves to set
+	 */
+	public void setSchoolLeaves(Collection<LeaveItem> schoolLeaves) {
+		this.schoolLeaves = schoolLeaves;
 	}
 
 }
