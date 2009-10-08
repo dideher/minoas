@@ -24,7 +24,8 @@ public class LeaveItem extends EmployeeReportItem {
 		this.comment = leave.getComment();
 		this.dueTo = leave.getDueTo();
 		this.establishedIn = leave.getEstablished();
-		this.regularUnit = leave.getRegularSchool().getTitle();
+		if(leave.getEmployee().getCurrentEmployment()!=null)
+			this.regularUnit = leave.getEmployee().getCurrentEmployment().getSchool().getTitle(); 
 		this.leaveType = leave.getLeaveType().name();
 		this.leaveTypeKey = leave.getLeaveType().getKey();
 	}

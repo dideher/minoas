@@ -457,7 +457,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 		if (specializationGroups != null && specializationGroups.size() > 0) {
 			return getEntityManager(em)
 					.createQuery(
-							"SELECT DISTINCT l FROM Leave l JOIN FETCH l.employee WHERE (l.active IS TRUE AND l.regularSchool=:school AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
+							"SELECT DISTINCT l FROM Leave l JOIN FETCH l.employee WHERE (l.active IS TRUE AND l.employee.currentEmployment.school=:school AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
 									+ " AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g IN (:specializations) AND s.employee.lastSpecialization MEMBER OF g.specializations) "
 									+ " ORDER BY l.employee.lastSpecialization.id, l.employee.lastName ").setParameter(
 							"specializations", specializationGroups).setParameter("school", school).setParameter(
@@ -465,7 +465,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 		} else {
 			return getEntityManager(em)
 					.createQuery(
-							"SELECT DISTINCT l FROM Leave l JOIN FETCH l.employee WHERE (l.active IS TRUE AND l.regularSchool=:school AND (:dayOfInterest BETWEEN l.established AND l.dueTo)) "
+							"SELECT DISTINCT l FROM Leave l JOIN FETCH l.employee WHERE (l.active IS TRUE AND l.employee.currentEmployment.school=:school AND (:dayOfInterest BETWEEN l.established AND l.dueTo)) "
 									+ " ORDER BY l.employee.lastSpecialization.id, l.employee.lastName ").setParameter(
 							"school", school).setParameter("dayOfInterest", effectiveDate).getResultList();
 		}
