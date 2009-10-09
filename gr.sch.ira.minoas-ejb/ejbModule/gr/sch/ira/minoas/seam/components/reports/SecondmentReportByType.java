@@ -58,11 +58,14 @@ public class SecondmentReportByType extends BaseReport {
 		Unit targetUnit = getSecondmentCriteria().getTargetUnit();
 		SpecializationGroup specializationGroup = getSecondmentCriteria()
 		.getSpecializationGroup();
-		Boolean employeeRequested = getSecondmentCriteria().isEmployeeRequested();
+		Boolean employeeRequested = getSecondmentCriteria().getEmployeeRequested();
 		DateSearchType dateSearchType = getSecondmentCriteria().getDateSearchType();
 
 		StringBuffer sb = new StringBuffer();
-		sb.append("SELECT s FROM Secondment s INNER JOIN FETCH s.employee WHERE s.active IS TRUE AND s.employeeRequested = :employeeRequested  ");
+		sb.append("SELECT s FROM Secondment s INNER JOIN FETCH s.employee WHERE s.active IS TRUE ");
+		if(employeeRequested!=null) {
+			sb.append("AND s.employeeRequested = :employeeRequested");
+		}
 		switch (dateSearchType) {
 		case AFTER_DATE:
 			sb.append("AND s.established >= :effectiveDate ");
@@ -112,7 +115,9 @@ public class SecondmentReportByType extends BaseReport {
 		if (specializationGroup != null) {
 			q.setParameter("specializationGroup", specializationGroup);
 		}
+		if(employeeRequested!=null) {
 		q.setParameter("employeeRequested", employeeRequested);
+		}
 		Collection<Secondment> secondments = q.getResultList();
 		info("found totally #0 secondments matching criteria", secondments.size());
 		reportData = new ArrayList<SecondmentItem>(secondments.size());

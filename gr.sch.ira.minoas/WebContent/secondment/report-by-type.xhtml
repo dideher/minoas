@@ -114,8 +114,16 @@
 								<ui:define name="label">
 									<h:outputText value="Με Αίτηση του ;" />
 								</ui:define>
+								<h:selectOneMenu value="#{secondmentCriteria.employeeRequested}">
+									<f:selectItem itemLabel="Επιλέξτε τιμή"    />
+									<f:selectItem itemLabel="Ναι" itemValue="true"   />
+									<f:selectItem itemLabel="Όχι" itemValue="false"/>
+									<f:converter converterId="javax.faces.Boolean"/>
+								</h:selectOneMenu>
+								<!-- 
 								<h:selectBooleanCheckbox converterId="javax.faces.Boolean"
 									value="#{secondmentCriteria.employeeRequested}" />
+								 -->
 							</s:decorate>
 
 						</h:panelGrid>

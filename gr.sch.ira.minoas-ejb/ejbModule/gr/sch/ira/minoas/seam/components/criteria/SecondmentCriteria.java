@@ -29,7 +29,7 @@ public class SecondmentCriteria  {
 	
 	private Date effectiveDateUntil;
 	
-	private boolean employeeRequested = true;
+	private Boolean employeeRequested;
 
 	private Character region;
 
@@ -105,12 +105,7 @@ public class SecondmentCriteria  {
 		return targetUnit;
 	}
 
-	/**
-	 * @return the employeeRequested
-	 */
-	public boolean isEmployeeRequested() {
-		return employeeRequested;
-	}
+	
 
 	/**
 	 * @param comment the comment to set
@@ -147,12 +142,7 @@ public class SecondmentCriteria  {
 		this.effectiveDateUntil = effectiveDateUntil;
 	}
 
-	/**
-	 * @param employeeRequested the employeeRequested to set
-	 */
-	public void setEmployeeRequested(boolean employeeRequested) {
-		this.employeeRequested = employeeRequested;
-	}
+	
 
 	/**
 	 * @param region the region to set
@@ -187,5 +177,19 @@ public class SecondmentCriteria  {
 	 */
 	public void setSpecializationGroup(SpecializationGroup specializationGroup) {
 		this.specializationGroup = specializationGroup;
+	}
+
+	/**
+	 * @return the employeeRequested
+	 */
+	public Boolean getEmployeeRequested() {
+		return employeeRequested;
+	}
+
+	/**
+	 * @param employeeRequested the employeeRequested to set
+	 */
+	public void setEmployeeRequested(Boolean employeeRequested) {
+		this.employeeRequested = employeeRequested;
 	}
 }
