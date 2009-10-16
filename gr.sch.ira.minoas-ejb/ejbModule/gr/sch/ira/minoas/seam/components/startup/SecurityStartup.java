@@ -46,6 +46,10 @@ public class SecurityStartup {
 		
 		/* Employee */
 		createRole("ADD_EMPLOYEE", "Add New Employee", admin);
+		createRole("ADD_EMPLOYEE_HOURLY_BASED", "Add New Hourly Based Employee", admin);
+		createRole("ADD_EMPLOYEE_DEPUTY", "Add New Deputy Employee", admin);
+		createRole("ADD_EMPLOYEE_REGULAR", "Add New Regular Employee", admin);
+		
 		createRole("MANAGE_EMPLOYEE", "Manage Employee", admin);
 		createRole("VIEW_EMPLOYEE", "View Employee", admin);
 		

@@ -119,19 +119,19 @@ public class EmployeeReport extends BaseReport {
 		DateSearchType dateSearchType = getEmployeeCriteria().getDateSearchType();
 		//
 		StringBuffer sb = new StringBuffer();
-		sb.append("SELECT e FROM Employee e INNER JOIN e.currentEmployment em WHERE e.active IS TRUE ");
+		sb.append("SELECT e FROM Employee e WHERE e.active IS TRUE ");
 		switch (dateSearchType) {
 		case AFTER_DATE:
-			sb.append("AND em.established >= :effectiveDate ");
+			sb.append(" AND EXISTS (SELECT em FROM Employment em WHERE em.employee=e AND em.active IS TRUE AND em.established >= :effectiveDate) ");
 			break;
 		case BEFORE_DATE:
-			sb.append("AND em.established <= :effectiveDate ");
+			sb.append(" AND EXISTS (SELECT em FROM Employment em WHERE em.employee=e AND em.active IS TRUE AND em.established <= :effectiveDate) ");
 			break;
 		case DURING_DATE:
-			sb.append(" AND (:effectiveDate BETWEEN em.established AND em.terminated) ");
+			sb.append(" AND EXISTS (SELECT em FROM Employment em WHERE em.employee=e AND em.active IS TRUE AND (:effectiveDate BETWEEN em.established AND em.terminated)) ");
 			break;
 		case DURING_DATE_PERIOD:
-			sb.append(" AND (:effectiveDateFrom <= em.established AND  :effectiveDateUntil >= em.terminated) ");
+			sb.append(" AND EXISTS (SELECT em FROM Employment em WHERE em.employee=e AND em.active IS TRUE AND (:effectiveDateFrom <= em.established AND  :effectiveDateUntil >= em.terminated)) ");
 			break;
 		}
 		if (employeeTye != null) {

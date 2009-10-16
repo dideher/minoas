@@ -1,5 +1,9 @@
 package gr.sch.ira.minoas.seam.components.home;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
 import gr.sch.ira.minoas.model.employee.RegularEmployeeInfo;
@@ -9,13 +13,17 @@ import gr.sch.ira.minoas.model.employement.EmploymentType;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.ServiceAllocation;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Out;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
+import org.jboss.seam.annotations.datamodel.DataModel;
 import org.jboss.seam.annotations.security.Restrict;
+import org.mvel.optimizers.impl.refl.ArrayLength;
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
@@ -27,7 +35,7 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 
 	@In(create = true)
 	private SecondmentHome secondmentHome;
-	
+
 	@In(create = true)
 	private ServiceAllocationHome serviceAllocationHome;
 
@@ -36,9 +44,12 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 
 	@In(create = true)
 	private DeputyEmploymentInfoHome deputyEmploymentInfoHome;
-	
+
 	@In(create = true)
 	private EmploymentHome employmentHome;
+
+	@DataModel(value = "hourlyBasedEmployments")
+	private Collection<Employment> hourlyBasedEmployments = new ArrayList<Employment>();
 
 	/**
 	 * Comment for <code>serialVersionUID</code>
@@ -81,16 +92,14 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 				newSecondment.setSourceUnit(employee.getCurrentPYSDE().getRepresentedByUnit());
 			}
 		}
-		if(!serviceAllocationHome.isManaged()) {
+		if (!serviceAllocationHome.isManaged()) {
 			Employee employee = getInstance();
 			ServiceAllocation newServiceAllocation = serviceAllocationHome.getInstance();
-			Employment currentEmployment = employee != null ? employee
-					.getCurrentEmployment() : null;
+			Employment currentEmployment = employee != null ? employee.getCurrentEmployment() : null;
 			if (currentEmployment != null) {
 				newServiceAllocation.setSourceUnit(currentEmployment.getSchool());
 			} else {
-				newServiceAllocation.setSourceUnit(employee.getCurrentPYSDE()
-						.getRepresentedByUnit());
+				newServiceAllocation.setSourceUnit(employee.getCurrentPYSDE().getRepresentedByUnit());
 			}
 		}
 		return true;
@@ -118,8 +127,12 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 
 	@Transactional
 	public String addNewEmployeeInLocalPYSDE() {
+
+		
+
 		if (employmentHome.isManaged() || regularEmployeeInfoHome.isManaged() || deputyEmploymentInfoHome.isManaged()) {
-			throw new RuntimeException("employment home or employeeRegularInfo or  deputyEmploymentInfoHome is managed.");
+			throw new RuntimeException(
+					"employment home or employeeRegularInfo or  deputyEmploymentInfoHome is managed.");
 		}
 
 		RegularEmployeeInfo info = null;
@@ -140,29 +153,43 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 			break;
 		}
 		getEntityManager().persist(new_employee);
-		
+
 		employment.setEmployee(new_employee);
 		employment.setActive(Boolean.TRUE);
 		employment.setInsertedBy(getPrincipal());
 		employment.setSchoolYear(getCoreSearching().getActiveSchoolYear(getEntityManager()));
 		employment.setSpecialization(new_employee.getLastSpecialization());
-		new_employee.setCurrentEmployment(employment);
-		getEntityManager().persist(employment);
 
-		
-		if(new_employee.getType()==EmployeeType.REGULAR) {
+		if (new_employee.getType() == EmployeeType.REGULAR) {
+			new_employee.setCurrentEmployment(employment);
+			getEntityManager().persist(employment);
+
 			info = regularEmployeeInfoHome.getInstance();
 			info.setInsertedBy(getPrincipal());
 			info.setEmployee(new_employee);
 			new_employee.setRegularDetail(info);
 			getEntityManager().persist(info);
 		}
-		
-		if(new_employee.getType()==EmployeeType.DEPUTY) {
+
+		if (new_employee.getType() == EmployeeType.DEPUTY) {
+			new_employee.setCurrentEmployment(employment);
+			getEntityManager().persist(employment);
+
 			deputyEmploymentInfo = new DeputyEmploymentInfo();
 			deputyEmploymentInfo.setEmployment(employment);
 			deputyEmploymentInfo.setInsertedBy(getPrincipal());
 			getEntityManager().persist(deputyEmploymentInfo);
+		}
+
+		if (new_employee.getType() == EmployeeType.HOURLYPAID) {
+			for (Employment hemployment : getHourlyBasedEmployments()) {
+				hemployment.setEmployee(new_employee);
+				hemployment.setActive(Boolean.TRUE);
+				hemployment.setInsertedBy(getPrincipal());
+				hemployment.setSchoolYear(getCoreSearching().getActiveSchoolYear(getEntityManager()));
+				hemployment.setSpecialization(new_employee.getLastSpecialization());
+				getEntityManager().persist(hemployment);
+			}
 		}
 		return persist();
 	}
@@ -185,6 +212,24 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 		}
 		wire();
 		return persist();
+	}
+
+	public void addNewHourlyBasedEmploymentItem() {
+		Employment e = new Employment();
+		e.setEmployee(getInstance());
+		e.setActive(Boolean.TRUE);
+		e.setSchoolYear(getCoreSearching().getActiveSchoolYear(getEntityManager()));
+		e.setInsertedBy(getPrincipal());
+		e.setType(EmploymentType.HOURLYBASED);
+		e.setEstablished(new Date());
+		e.setFinalWorkingHours(11);
+		e.setMandatoryWorkingHours(0);
+		getHourlyBasedEmployments().add(e);
+
+	}
+
+	public void removeNewHourlyBasedEmploymentItem(Employment newEmployment) {
+		getHourlyBasedEmployments().remove(newEmployment);
 	}
 
 	/**
@@ -213,6 +258,7 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 				getCoreSearching().getActiveSchoolYear(getEntityManager()).getSchoolYearStart());
 		employmentHome.getInstance().setFinalWorkingHours(21);
 		employmentHome.getInstance().setMandatoryWorkingHours(21);
+		addNewHourlyBasedEmploymentItem();
 	}
 
 	/**
@@ -233,7 +279,7 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 		if (isManaged()) {
 			Employee employee = getInstance();
 			info("principal #0 is trying to remove employee #1", getPrincipalName(), employee);
-			if(employee.getType()==EmployeeType.REGULAR) {
+			if (employee.getType() == EmployeeType.REGULAR) {
 				getEntityManager().remove(employee.getRegularDetail());
 			}
 			return super.remove();
@@ -253,5 +299,19 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 	 */
 	public void setDeputyEmploymentInfoHome(DeputyEmploymentInfoHome deputyEmploymentInfoHome) {
 		this.deputyEmploymentInfoHome = deputyEmploymentInfoHome;
+	}
+
+	/**
+	 * @return the hourlyBasedEmployments
+	 */
+	public Collection<Employment> getHourlyBasedEmployments() {
+		return hourlyBasedEmployments;
+	}
+
+	/**
+	 * @param hourlyBasedEmployments the hourlyBasedEmployments to set
+	 */
+	public void setHourlyBasedEmployments(Collection<Employment> hourlyBasedEmployments) {
+		this.hourlyBasedEmployments = hourlyBasedEmployments;
 	}
 }

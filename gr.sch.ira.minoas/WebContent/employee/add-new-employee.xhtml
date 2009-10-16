@@ -17,7 +17,7 @@
 			<f:facet name="header">
 				<h:outputText value="Εισαγωγή Νέου Εκπαιδευτικού" />
 			</f:facet>
-			
+
 			<ui:include src="/components/messages-component.xhtml" />
 
 			<h:form>
@@ -58,6 +58,16 @@
 									styleClass="fieldValueText" size="12" maxlength="30">
 								</h:inputText>
 							</s:decorate>
+
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Α.Φ.Μ" />
+								</ui:define>
+								<h:inputText value="#{employee.vatNumber}" required="true"
+									styleClass="fieldValueText" size="9" maxlength="9">
+								</h:inputText>
+							</s:decorate>
+
 							<s:decorate template="/layout/doubleLineEdit.xhtml">
 								<ui:define name="label">
 									<h:outputText value="Έπωνυμο Πατρός" />
@@ -134,7 +144,18 @@
 									</rich:suggestionbox>
 								</h:inputText>
 							</s:decorate>
+							
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+							<ui:define name="label">
+								<h:outputText value="Προαιρετικά Σχόλια ;" />
+							</ui:define>
+							<h:inputText value="#{employee.comment}" size="40"
+								styleClass="fieldValueText" maxlength="200" />
+						</s:decorate>
 
+						</h:panelGrid>
+
+						<h:panelGrid columns="3">
 							<s:decorate template="/layout/doubleLineEdit.xhtml">
 								<ui:define name="label">
 									<h:outputText value="Άντρας ;" />
@@ -157,27 +178,21 @@
 							</s:decorate>
 
 						</h:panelGrid>
-						<s:decorate template="/layout/doubleLineEdit.xhtml">
-							<ui:define name="label">
-								<h:outputText value="Προαιρετικά Σχόλια ;" />
-							</ui:define>
-							<h:inputText value="#{employee.comment}" size="40"
-								styleClass="fieldValueText" maxlength="200" />
-						</s:decorate>
+						
 					</rich:panel>
 
 					<a4j:outputPanel id="employmentPanel">
+
+						<a4j:include viewId="/employee/regular-employment-component.xhtml"
+							rendered="#{employee.type == 'REGULAR'}" />
+
+						<a4j:include viewId="/employee/deputy-employment-component.xhtml"
+							rendered="#{employee.type == 'DEPUTY'}" />
+
+						<a4j:include viewId="/employee/hourly-based-employment-component.xhtml"
+							rendered="#{employee.type == 'HOURLYPAID'}" />
+							
 						
-						<a4j:include viewId="/employee/regular-employment-component.xhtml" rendered="#{employee.type == 'REGULAR'}"/>
-						
-						<a4j:include viewId="/employee/deputy-employment-component.xhtml" rendered="#{employee.type == 'DEPUTY'}"/>
-						
-						<rich:panel rendered="#{employee.type == 'HOURLYPAID'}">
-							<f:facet name="header">
-								<h:outputText value="Στοιχεία Ωρομίσθιου" />
-							</f:facet>
-							<h:outputText value="Το άλλο με το Τοτό, το ξέρεις ;" />
-						</rich:panel>
 					</a4j:outputPanel>
 
 
@@ -190,7 +205,8 @@
 
 						<s:div styleClass="actionButtons">
 
-							<h:commandButton action="#{employeeHome.addNewEmployeeInLocalPYSDE()}"
+							<h:commandButton
+								action="#{employeeHome.addNewEmployeeInLocalPYSDE()}"
 								onclick="if(!confirm('Να καταχωρηθή ο νέος Εκπαιδευτικός ?')) {form.reset(); return false;}"
 								value="Καταχώρηση" id="persistButton" />
 							<rich:spacer width="10" />

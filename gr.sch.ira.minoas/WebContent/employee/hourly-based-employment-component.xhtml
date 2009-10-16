@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich">
+
+<ui:component>
+	<h:outputText styleClass="fieldValueText"
+		value="Δεν έχεται το δικαίωμα καταχώρησης αυτού του τύπου εκπαιδευτικού."
+		rendered="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_EMPLOYEE_HOURLY_BASED'))}" />
+	<rich:panel rendered="false">
+		<f:facet name="header">
+			<h:outputText value="Στοιχεία Ωρομίσθιου Εκπαιδευτικού" />
+		</f:facet>
+
+		<h:panelGrid columns="4">
+
+
+			<s:decorate template="/layout/doubleLineEdit.xhtml">
+				<ui:define name="label">
+					<h:outputText value="Απόφαση Διευθυντή: " />
+				</ui:define>
+				<h:inputText value="#{deputyEmploymentInfo.chiefVerdict}"
+					styleClass="fieldValueText" size="20" maxlength="64"
+					required="false" />
+			</s:decorate>
+
+		</h:panelGrid>
+
+
+
+	</rich:panel>
+
+	<rich:panel
+		rendered="#{(s:hasRole('ADMIN') or s:hasRole('ADD_EMPLOYEE_HOURLY_BASED'))}">
+		<f:facet name="header">
+			<h:outputText value="Τοποθετήσεις Ωρομίσθιου Εκπαιδευτικού" />
+		</f:facet>
+		<a4j:outputPanel id="hourlyBasedEmploymentItemsPanel">
+
+			<rich:dataGrid value="#{hourlyBasedEmployments}"
+				var="_hourlyBasedEmploymentItem">
+				<f:facet name="header">
+
+					<h:outputText value="Τοποθετήσεις Ωρομίσθιου"></h:outputText>
+
+				</f:facet>
+				<a4j:region>
+					<h:panelGrid columns="5">
+						<s:decorate template="/layout/doubleLineEdit.xhtml"
+							id="schoolUnit">
+							<ui:define name="label">
+								<h:outputText value="Σχολική Μονάδα : " />
+							</ui:define>
+							<h:inputText id="schoolUnitTarget" styleClass="fieldValueText"
+								value="#{_hourlyBasedEmploymentItem.school.title}"
+								required="true">
+
+								<rich:suggestionbox for="schoolUnitTarget" var="_school"
+									height="200" width="300"
+									suggestionAction="#{schoolUnitSuggester.suggest}">
+									<f:facet name="nothingLabel">
+										<h:outputText value="Άγνωστη Μονάδα Τοποθέτησης" />
+									</f:facet>
+									<h:column>
+										<h:outputText value="#{_school.title}" />
+									</h:column>
+									<a4j:support ajaxSingle="true" event="onselect"
+										reRender="schoolUnit">
+										<f:setPropertyActionListener value="#{_school}"
+											target="#{_hourlyBasedEmploymentItem.school}" />
+									</a4j:support>
+								</rich:suggestionbox>
+							</h:inputText>
+						</s:decorate>
+						<s:decorate template="/layout/doubleLineEdit.xhtml"
+							id="workingHours">
+							<ui:define name="label">
+								<h:outputText value="Ώρες Διδασκαλίας : " />
+							</ui:define>
+							<h:inputText
+								value="#{_hourlyBasedEmploymentItem.finalWorkingHours}" size="3"
+								styleClass="fieldValueText" maxlength="3" required="true">
+								<a4j:support event="onblur" ajaxSingle="true"
+									reRender="workingHours" />
+							</h:inputText>
+						</s:decorate>
+						<s:decorate template="/layout/doubleLineEdit.xhtml" id="from">
+							<ui:define name="label">
+								<h:outputText value="Από : " />
+							</ui:define>
+							<rich:calendar datePattern="dd-MM-yyyy" style="width:50px"
+								enableManualInput="true" styleClass="fieldValueText"
+								inputSize="10" required="true"
+								value="${_hourlyBasedEmploymentItem.established}">
+								<a4j:support event="onchanged" ajaxSingle="true" reRender="from" />
+							</rich:calendar>
+						</s:decorate>
+						<s:decorate template="/layout/doubleLineEdit.xhtml" id="until">
+							<ui:define name="label">
+								<h:outputText value="Εώς : " />
+							</ui:define>
+							<rich:calendar id="untilCalendar" datePattern="dd-MM-yyyy"
+								style="width:50px" enableManualInput="true"
+								styleClass="fieldValueText" inputSize="10" required="true"
+								value="${_hourlyBasedEmploymentItem.terminated}">
+								<a4j:support event="onchanged" ajaxSingle="true"
+									reRender="until" />
+							</rich:calendar>
+						</s:decorate>
+						<a4j:commandButton id="deleteEmployment" ajaxSingle="true"
+							action="#{employeeHome.removeNewHourlyBasedEmploymentItem(_hourlyBasedEmploymentItem)}"
+							reRender="hourlyBasedEmploymentItemsPanel"
+							value="Διαγραφή">
+							<h:graphicImage value="/img/icons/delete.png" width="12"
+								height="12" style="border:0" />
+						</a4j:commandButton>
+
+					</h:panelGrid>
+				</a4j:region>
+			</rich:dataGrid>
+
+
+		</a4j:outputPanel>
+		<a4j:commandButton
+			action="#{employeeHome.addNewHourlyBasedEmploymentItem()}"
+			value="Προσθήκη Ωρών Και Σε Άλλη Μονάδα"
+			reRender="hourlyBasedEmploymentItemsPanel" ajaxSingle="true" />
+	</rich:panel>
+</ui:component>
+</html>

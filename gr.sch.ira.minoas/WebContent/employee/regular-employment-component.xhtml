@@ -8,7 +8,12 @@
 	xmlns:rich="http://richfaces.org/rich">
 
 <ui:component>
-	<rich:panel >
+	<h:outputText styleClass="fieldValueText"
+		value="Δεν έχεται το δικαίωμα καταχώρησης αυτού του τύπου εκπαιδευτικού."
+		rendered="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_EMPLOYEE_REGULAR'))}" />
+	<rich:panel
+		rendered="#{(s:hasRole('ADMIN') or s:hasRole('ADD_EMPLOYEE_REGULAR'))}">
+
 		<f:facet name="header">
 			<h:outputText value="Στοιχεία Μόνιμου Εκπαιδευτικού" />
 		</f:facet>
@@ -47,7 +52,8 @@
 					<h:outputText value="Μονάδα Οργανικής" />
 				</ui:define>
 
-				<h:inputText id="sourceTarget" styleClass="fieldValueText" required="true">
+				<h:inputText id="sourceTarget" styleClass="fieldValueText"
+					required="true">
 
 					<rich:suggestionbox for="sourceTarget" var="_school" height="200"
 						width="300" suggestionAction="#{schoolUnitSuggester.suggest}">

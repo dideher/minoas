@@ -159,8 +159,8 @@ public class TeachingHourAnalysisReport extends BaseReport {
 				}
 				schoolsTeachingRequirementMap.put(school.getId(), schoolTeachingRequirementMap);
 			}
-			for(Iterator<TeachingHoursAnalysisItem> it = getReportData().iterator(); it.hasNext() ;) {
-				
+			for (Iterator<TeachingHoursAnalysisItem> it = getReportData().iterator(); it.hasNext();) {
+
 				TeachingHoursAnalysisItem reportItem = it.next();
 				for (SchoolTeachingHoursItem item : reportItem.getSchools()) {
 					School schoolItem = item.getSchool();
@@ -185,26 +185,29 @@ public class TeachingHourAnalysisReport extends BaseReport {
 
 					for (Employee regularEmployee : regularEmployees) {
 						int employeeHours = regularEmployee.getCurrentEmployment().getFinalWorkingHours();
-						Collection<Disposal> disposals = getCoreSearching().getEmployeeDisposals(getEntityManager(), regularEmployee, today);
+						Collection<Disposal> disposals = getCoreSearching().getEmployeeDisposals(getEntityManager(),
+								regularEmployee, today);
 						int disposalHours = 0;
-						for(Disposal disposal : disposals) {
-							disposalHours+=disposal.getHours();
+						for (Disposal disposal : disposals) {
+							disposalHours += disposal.getHours();
 						}
-						hours += (employeeHours-disposalHours);
+						hours += (employeeHours - disposalHours);
 						if (useTextAnalysis) {
-							if(disposalHours>0) {
+							if (disposalHours > 0) {
 								reportTextAnalysis.add("Ο εκπαιδευτικός " + regularEmployee.toPrettyString() + " ("
-										+ regularEmployee.getType() + ") προσφέρει στην μονάδα " + (employeeHours-disposalHours)
-										+ " (["+employeeHours+" - "+disposalHours+ "] λόγω διάθεσης ) ωρες με ειδικότητα " + regularEmployee.getLastSpecialization());
-									
+										+ getLocalizedMessage(regularEmployee.getType().getKey())
+										+ ") προσφέρει στην μονάδα " + (employeeHours - disposalHours) + " (["
+										+ employeeHours + " - " + disposalHours
+										+ "] λόγω διάθεσης ) ωρες με ειδικότητα "
+										+ regularEmployee.getLastSpecialization());
+
 							} else {
-							reportTextAnalysis.add("Ο εκπαιδευτικός " + regularEmployee.toPrettyString() + " ("
-									+ regularEmployee.getType() + ") προσφέρει στην μονάδα " + employeeHours
-									+ " ωρες με ειδικότητα " + regularEmployee.getLastSpecialization());
+								reportTextAnalysis.add("Ο εκπαιδευτικός " + regularEmployee.toPrettyString() + " ("
+										+ regularEmployee.getType() + ") προσφέρει στην μονάδα " + employeeHours
+										+ " ωρες με ειδικότητα " + regularEmployee.getLastSpecialization());
 							}
 						}
 					}
-					
 
 					Collection<Secondment> schoolSecondments = getCoreSearching().getSchoolSecondments(
 							getEntityManager(), schoolItem, activeSchoolYear, today,
@@ -215,49 +218,74 @@ public class TeachingHourAnalysisReport extends BaseReport {
 						hours += employeeHours;
 						if (useTextAnalysis) {
 							reportTextAnalysis.add("Ο εκπαιδευτικός " + secondment.getEmployee().toPrettyString()
-									+ " που υπηρετεί στην μονάδα με απόσπαση απο το \""
+									+ " (" + getLocalizedMessage(secondment.getEmployee().getType().getKey())
+									+ ") που υπηρετεί στην μονάδα με απόσπαση απο το \""
 									+ secondment.getSourceUnit().getTitle() + "\", προσφέρει " + employeeHours
 									+ " ωρες με ειδικότητα " + secondment.getEmployee().getLastSpecialization());
 						}
 					}
 
-					Collection<ServiceAllocation> schoolServiceAllocations = getCoreSearching()
-							.getSchoolServiceAllocations(getEntityManager(), schoolItem, today,
+					/* handle service allocation that are serving here */
+					Collection<ServiceAllocation> schoolIncomingServiceAllocations = getCoreSearching()
+							.getSchoolIncomingServiceAllocations(getEntityManager(), schoolItem, today,
 									reportItem.getSpecializationGroups());
 
-					for (ServiceAllocation serviceAllocation : schoolServiceAllocations) {
+					for (ServiceAllocation serviceAllocation : schoolIncomingServiceAllocations) {
 						int employeeHours = serviceAllocation.getWorkingHoursOnServicingPosition();
 						hours += employeeHours;
 						if (useTextAnalysis) {
 							reportTextAnalysis.add("Ο εκπαιδευτικός "
 									+ serviceAllocation.getEmployee().toPrettyString()
-									+ " που υπηρετεί στην μονάδα με θητεία \"" + serviceAllocation.getServiceType()
+									+ " που υπηρετεί στην μονάδα με θητεία \""
+									+ getLocalizedMessage(serviceAllocation.getServiceType().getKey())
 									+ "\", προσφέρει " + employeeHours + " ωρες με ειδικότητα "
 									+ serviceAllocation.getEmployee().getLastSpecialization());
 						}
 					}
 
-					Collection<Disposal> schoolDisposals = getCoreSearching().getSchoolDisposals(getEntityManager(), schoolItem, activeSchoolYear, today,
-							reportItem.getSpecializationGroups());
-							
+					/* handle service allocations that are still serving teaching hours
+					 * in their regular school
+					 */
+					Collection<ServiceAllocation> schoolOutgoingServiceAllocations = getCoreSearching()
+							.getSchoolOutgoingServiceAllocations(getEntityManager(), schoolItem, today,
+									reportItem.getSpecializationGroups());
+
+					for (ServiceAllocation serviceAllocation : schoolOutgoingServiceAllocations) {
+						int employeeHours = serviceAllocation.getWorkingHoursOnRegularPosition();
+						if (employeeHours > 0) {
+							hours += employeeHours;
+							if (useTextAnalysis) {
+								reportTextAnalysis.add("Ο εκπαιδευτικός "
+										+ serviceAllocation.getEmployee().toPrettyString()
+										+ " που υπηρετεί στην μονάδα \""
+										+ serviceAllocation.getServiceUnit().getTitle() + "\" με θητεία \""
+										+ getLocalizedMessage(serviceAllocation.getServiceType().getKey())
+										+ "\", προσφέρει στην οργανική του μονάδα συνολικά " + employeeHours
+										+ " ωρες με ειδικότητα "
+										+ serviceAllocation.getEmployee().getLastSpecialization());
+							}
+						} else
+							continue;
+					}
+
+					Collection<Disposal> schoolDisposals = getCoreSearching().getSchoolDisposals(getEntityManager(),
+							schoolItem, activeSchoolYear, today, reportItem.getSpecializationGroups());
 
 					for (Disposal disposal : schoolDisposals) {
 						int employeeHours = disposal.getHours();
 						hours += employeeHours;
 						if (useTextAnalysis) {
-							reportTextAnalysis.add("Ο εκπαιδευτικός "
-									+ disposal.getEmployee().toPrettyString()
-									+ " που υπηρετεί στην μονάδα με διάθεση προσφέρει " + employeeHours + " ωρες με ειδικότητα "
-									+ disposal.getEmployee().getLastSpecialization());
+							reportTextAnalysis.add("Ο εκπαιδευτικός " + disposal.getEmployee().toPrettyString()
+									+ " που υπηρετεί στην μονάδα με διάθεση προσφέρει " + employeeHours
+									+ " ωρες με ειδικότητα " + disposal.getEmployee().getLastSpecialization());
 						}
 					}
 
 					reportItem.addSchoolAvailableHours(schoolItem, hours);
-					
 
 				}
 				reportItem.removeItemsWithZeroHours();
-				if(reportItem.getSchools().size()==0) {
+				if (reportItem.getSchools().size() == 0) {
 					it.remove();
 				}
 			}
