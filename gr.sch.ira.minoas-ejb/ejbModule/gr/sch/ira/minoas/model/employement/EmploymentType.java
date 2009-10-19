@@ -17,4 +17,11 @@ public enum EmploymentType {
 	private EmploymentType(String key) {
 		this.key = key;
 	}
+
+	/**
+	 * @return the key
+	 */
+	public String getKey() {
+		return key;
+	}
 }

@@ -210,7 +210,7 @@
 							<s:div styleClass="actionButtons">
 								<s:button action="backButton" value="Επιστροφή" />
 								<s:button action="endButton" value="Τέλος Ενέργειας" />
-								<a4j:commandButton id="createButton"
+								<a4j:commandButton id="createButton" disabled="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_LEAVE'))}"
 									action="#{leaveHome.clearInstance()}"
 									reRender="createModalPanelContent" immediate="true"
 									oncomplete="#{rich:component('createModalPanel')}.show()"

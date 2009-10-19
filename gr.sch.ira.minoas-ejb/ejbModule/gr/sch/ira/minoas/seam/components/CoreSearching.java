@@ -424,7 +424,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 		info("fetching all employments in school unit #0 during school year #1", school, schoolyear);
 		List<Employment> return_value = getEntityManager(entityManager)
 				.createQuery(
-						"SELECT e FROM Employment e WHERE e.school=:school AND e.schoolYear=:schoolyear ORDER BY e.specialization.id, e.employee.lastName")
+						"SELECT e FROM Employment e WHERE e.school=:school AND e.schoolYear=:schoolyear AND e.active IS TRUE ORDER BY e.specialization.id, e.employee.lastName")
 				.setParameter("school", school).setParameter("schoolyear", schoolyear).getResultList();
 		finished = System.currentTimeMillis();
 		info(
@@ -440,7 +440,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 		info("fetching all employments of type #3 in school unit #0 during school year #1", school, schoolyear, type);
 		List<Employment> return_value = getEntityManager(entityManager)
 				.createQuery(
-						"SELECT e FROM Employment e WHERE e.school=:school AND e.schoolYear=:schoolyear AND e.type=:type ORDER BY e.specialization.id, e.employee.lastName")
+						"SELECT e FROM Employment e WHERE e.school=:school AND e.schoolYear=:schoolyear AND e.type=:type AND e.active IS TRUE ORDER BY e.specialization.id, e.employee.lastName")
 				.setParameter("school", school).setParameter("schoolyear", schoolyear).setParameter("type", type)
 				.getResultList();
 		finished = System.currentTimeMillis();

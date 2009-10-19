@@ -6,7 +6,7 @@ import gr.sch.ira.minoas.model.employement.Secondment;
 
 import java.util.Date;
 
-public class DisposalItem extends EmployeeReportItem {
+public class DisposalReportItem extends EmployeeReportItem {
 	private String comment;
 	private Date dueTo;
 	private Date establishedIn;
@@ -22,11 +22,11 @@ public class DisposalItem extends EmployeeReportItem {
 	private Integer days;
 	private Integer hours;
 	
-	public DisposalItem() {
+	public DisposalReportItem() {
 		super();
 	}
 	
-	public DisposalItem(Disposal disposal) {
+	public DisposalReportItem(Disposal disposal) {
 		super(disposal.getEmployee());
 		this.comment = disposal.getComment();
 		this.dueTo = disposal.getDueTo();

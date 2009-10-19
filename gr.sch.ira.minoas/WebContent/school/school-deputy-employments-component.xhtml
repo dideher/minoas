@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+
+<ui:component>
+
+	<rich:panel>
+		<f:facet name="header">
+			<h:outputLabel value="Αναπληρωτές Εκπαιδευτικοί" />
+		</f:facet>
+		<h:panelGrid columns="1" width="100%">
+
+			<rich:spacer height="2" />
+			<h:outputText
+				value="Εμφανίζονται οι Αναπληρωτές Εκπαιδευτικοί της σχολικής μονάδας, άσχετα αν προσφέρουν στην μονάδα διδακτικές ώρες." />
+			<rich:spacer height="5" />
+
+			<rich:dataTable id="schoolDeputyEmploymentsTable"
+				var="_schoolDeputyEmployment" value="#{schoolDeputyEmployments}"
+				sortMode="multi" border="0" rowKeyVar="_row"
+				onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+				onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+				width="100%">
+				<rich:column style="text-align:center">
+					<f:facet name="header">A/A</f:facet>
+					<h:outputText styleClass="fieldValueText" value="#{_row+1}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">Επώνυμο</f:facet>
+					<h:outputText value="#{_schoolDeputyEmployment.employeeLastName}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">Όνομα</f:facet>
+					<h:outputText value="#{_schoolDeputyEmployment.employeeFirstName}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">Όνομα Πατρός</f:facet>
+					<h:outputText value="#{_schoolDeputyEmployment.employeeFatherName}" />
+				</rich:column>
+				<rich:column style="text-align:center">
+					<f:facet name="header">Από</f:facet>
+					<h:outputText
+						value="#{_schoolDeputyEmployment.established}" />
+				</rich:column>
+				
+				<rich:column style="text-align:right">
+					<f:facet name="header">Υπ Ωρ.</f:facet>
+					<h:outputText
+						value="#{_schoolDeputyEmployment.employeeMandatoryHours}" />
+				</rich:column>
+				<rich:column style="text-align:right">
+					<f:facet name="header">Ωράριο</f:facet>
+					<h:outputText
+						value="#{_schoolDeputyEmployment.employeeFinalWorkingHours}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">Ειδ.</f:facet>
+					<h:outputText
+						value="#{_schoolDeputyEmployment.employeeSpecializationID}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">Λεκτικό Ειδ.</f:facet>
+					<h:outputText
+						value="#{_schoolDeputyEmployment.employeeSpecialization}" />
+				</rich:column>
+			</rich:dataTable>
+		</h:panelGrid>
+	</rich:panel>
+</ui:component>
+</html>

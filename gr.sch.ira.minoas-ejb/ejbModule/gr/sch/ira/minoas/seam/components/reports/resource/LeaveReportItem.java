@@ -6,7 +6,7 @@ import gr.sch.ira.minoas.model.employement.Secondment;
 
 import java.util.Date;
 
-public class LeaveItem extends EmployeeReportItem {
+public class LeaveReportItem extends EmployeeReportItem {
 	private String comment;
 	private Date dueTo;
 	private Date establishedIn;
@@ -15,11 +15,11 @@ public class LeaveItem extends EmployeeReportItem {
 	private String regularUnit;
 	
 	
-	public LeaveItem() {
+	public LeaveReportItem() {
 		super();
 	}
 	
-	public LeaveItem(Leave leave) {
+	public LeaveReportItem(Leave leave) {
 		super(leave.getEmployee());
 		this.comment = leave.getComment();
 		this.dueTo = leave.getDueTo();
