@@ -179,6 +179,9 @@ public class SchoolReport extends BaseReport {
 		schoolHourlyBasedEmployments = convertEmploymentCollection(getCoreSearching().getSchoolEmploymentsOfType(
 				getEntityManager(), activeSchoolYear, schoolHome.getInstance(), EmploymentType.HOURLYBASED));
 
+		outcomingServiceAllocations = convertServiceAllocationCollection(getCoreSearching()
+				.getSchoolReallyOutgoingServiceAllocations(getEntityManager(), schoolHome.getInstance(), today, null));
+
 		finished = System.currentTimeMillis();
 		info("report has been generated in #0 [ms]", (finished - started));
 
@@ -365,7 +368,5 @@ public class SchoolReport extends BaseReport {
 	public void setSchoolHourlyBasedEmployments(Collection<EmploymentReportItem> schoolHourlyBasedEmployments) {
 		this.schoolHourlyBasedEmployments = schoolHourlyBasedEmployments;
 	}
-
-
 
 }

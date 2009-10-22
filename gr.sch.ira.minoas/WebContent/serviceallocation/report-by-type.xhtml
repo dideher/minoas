@@ -15,72 +15,69 @@
 	<ui:define name="body">
 		<rich:panel>
 			<f:facet name="header">
-				<h:outputText
-					value="Λίστα Θητειών Ανα Τύπο" />
+				<h:outputText value="Λίστα Θητειών Ανα Τύπο" />
 			</f:facet>
 
 			<h:form>
 				<h:panelGrid columns="1">
 
-					
-						<rich:panel>
-							<f:facet name="header">
-								<h:outputText value="Στοιχεία Θητείας" />
-							</f:facet>
 
-							<ui:include src="/components/messages-component.xhtml" />
-							
-								<h:panelGrid columns="4">
+					<rich:panel>
+						<f:facet name="header">
+							<h:outputText value="Στοιχεία Θητείας" />
+						</f:facet>
+
+						<ui:include src="/components/messages-component.xhtml" />
+
+						<h:panelGrid columns="4">
 
 
 
-									<s:decorate template="/layout/doubleLineEdit.xhtml">
-										<ui:define name="label">
-											<h:outputText value="Τύπος Θητείας" />
-										</ui:define>
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Τύπος Θητείας" />
+								</ui:define>
 
-										<h:selectOneMenu id="serviceAllocationType"
-											value="#{exampleServiceAllocation.serviceType}">
-											<s:selectItems hideNoSelectionLabel="true"
-												var="_serviceAllocationType"
-												value="#{serviceAllocationTypes}"
-												label="#{messages[_serviceAllocationType.key]}" />
-											<s:convertEnum />
-										</h:selectOneMenu>
-									</s:decorate>
+								<h:selectOneMenu id="serviceAllocationType"
+									value="#{exampleServiceAllocation.serviceType}">
+									<s:selectItems hideNoSelectionLabel="true"
+										var="_serviceAllocationType" value="#{serviceAllocationTypes}"
+										label="#{messages[_serviceAllocationType.key]}" />
+									<s:convertEnum />
+								</h:selectOneMenu>
+							</s:decorate>
 
-									<s:decorate template="/layout/doubleLineEdit.xhtml">
-										<ui:define name="label">
-											<h:outputText value="Μονάδα Θητείας" />
-										</ui:define>
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Μονάδα Θητείας" />
+								</ui:define>
 
-										<h:inputText value="#{exampleServiceAllocation.serviceUnit}"
-											  id="serviceUnit"
-											styleClass="fieldValueText" converter="unitConverter"
-											size="12" maxlength="22">
-											
+								<h:inputText value="#{exampleServiceAllocation.serviceUnit}"
+									id="serviceUnit" styleClass="fieldValueText"
+									converter="unitConverter" size="12" maxlength="22">
 
-											<rich:suggestionbox for="serviceUnit" var="serviceUnit"
-												suggestionAction="#{schoolUnitSuggester.suggest}">
-												<f:facet name="nothingLabel">
-													<h:outputText value="Άγνωστη Μονάδα Θητείας" />
-												</f:facet>
-												<h:column>
-													<h:outputText value="#{serviceUnit.title}" />
-												</h:column>
-											</rich:suggestionbox>
-										</h:inputText>
-									</s:decorate>
 
-									<s:decorate template="/layout/doubleLineEdit.xhtml">
-										<ui:define name="label">
-											<h:outputText value="Σχόλιο" />
-										</ui:define>
-										<h:inputText value="#{exampleServiceAllocation.comment}" />
-									</s:decorate>
+									<rich:suggestionbox for="serviceUnit" var="serviceUnit"
+										suggestionAction="#{schoolUnitSuggester.suggest}">
+										<f:facet name="nothingLabel">
+											<h:outputText value="Άγνωστη Μονάδα Θητείας" />
+										</f:facet>
+										<h:column>
+											<h:outputText value="#{serviceUnit.title}" />
+										</h:column>
+									</rich:suggestionbox>
+								</h:inputText>
+							</s:decorate>
 
-								</h:panelGrid>
-						</rich:panel>
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Σχόλιο" />
+								</ui:define>
+								<h:inputText value="#{exampleServiceAllocation.comment}" />
+							</s:decorate>
+
+						</h:panelGrid>
+					</rich:panel>
 					<rich:spacer height="5" />
 					<rich:separator lineType="dashed" height="2" />
 					<rich:spacer height="5" />
@@ -93,7 +90,8 @@
 									actionListener="#{serviceAllocationsByTypeListQuery.refresh}">
 									<s:defaultAction />
 								</h:commandButton>
-								<s:button action="#{secondmentReportByType.runReport}" value="Εκτύπωση (PDF)" target="new" disabled="true"/>
+								<s:button action="#{secondmentReportByType.runReport}"
+									value="Εκτύπωση (PDF)" target="new" disabled="true" />
 								<s:button id="backButton" action="backButton"
 									value="Τέλος Εργασίας" />
 							</h:panelGrid>
@@ -102,16 +100,18 @@
 				</h:panelGrid>
 
 				<rich:dataTable id="serviceAllocationsByTypeTable"
-					value="#{serviceAllocationsByTypeListQuery.resultList}" var="_serviceAllocation"
-					rows="25" border="0"
+					value="#{serviceAllocationsByTypeListQuery.resultList}"
+					var="_serviceAllocation" rows="25" border="0" rowKeyVar="_row"
 					onRowMouseOver="this.style.backgfroundColor='#F8F8F8'"
 					onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
 					width="100%">
 					<f:facet name="header">
-						<h:outputLabel
-							value="Ενεργές Θητείες" />
+						<h:outputLabel value="Ενεργές Θητείες" />
 					</f:facet>
-
+					<rich:column style="text-align:center">
+						<f:facet name="header">A/A</f:facet>
+						<h:outputText styleClass="fieldValueText" value="#{_row+1}" />
+					</rich:column>
 					<rich:column>
 						<f:facet name="header">
 							<h:outputText value="Εκπαιδευτικός" />
@@ -137,7 +137,8 @@
 						<f:facet name="header">
 							<h:outputText value="Tύπος Θητείας" />
 						</f:facet>
-						<h:outputText value="#{messages[_serviceAllocation.serviceType.key]}" />
+						<h:outputText
+							value="#{messages[_serviceAllocation.serviceType.key]}" />
 					</rich:column>
 
 					<rich:column>
@@ -170,7 +171,7 @@
 						</h:outputText>
 					</rich:column>
 
-					
+
 
 					<rich:column>
 						<f:facet name="header">
@@ -178,16 +179,18 @@
 								<rich:toolTip value="Ωράριο στην Οργανική" />
 							</h:outputText>
 						</f:facet>
-						<h:outputText value="#{_serviceAllocation.workingHoursOnRegularPosition}" />
+						<h:outputText
+							value="#{_serviceAllocation.workingHoursOnRegularPosition}" />
 					</rich:column>
-					
+
 					<rich:column>
 						<f:facet name="header">
 							<h:outputText value="Ωράριο Υπ.">
 								<rich:toolTip value="Ωράριο στην Μονάδα Υπηρεσίας" />
 							</h:outputText>
 						</f:facet>
-						<h:outputText value="#{_serviceAllocation.workingHoursOnServicingPosition}" />
+						<h:outputText
+							value="#{_serviceAllocation.workingHoursOnServicingPosition}" />
 					</rich:column>
 					<f:facet name="footer">
 						<rich:datascroller for="serviceAllocationsByTypeTable">

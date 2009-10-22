@@ -21,8 +21,9 @@
 			<rich:spacer height="5" />
 
 			<rich:dataTable id="schoolHourlyEmploymentsTable"
-				var="_schoolHourlyEmployment" value="#{schoolHourlyBasedEmployments}"
-				sortMode="multi" border="0" rowKeyVar="_row"
+				var="_schoolHourlyEmployment"
+				value="#{schoolHourlyBasedEmployments}" sortMode="multi" border="0"
+				rowKeyVar="_row"
 				onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
 				onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
 				width="100%">
@@ -45,13 +46,22 @@
 				<rich:column style="text-align:center">
 					<f:facet name="header">Από</f:facet>
 					<h:outputText
-						value="#{_schoolHourlyEmployment.established}" />
+						value="#{_schoolHourlyEmployment.employeeEmploymentEstablishedDate}">
+						<s:convertDateTime pattern="dd-MM-yyyy" />
+					</h:outputText>
 				</rich:column>
-				
+				<rich:column style="text-align:center">
+					<f:facet name="header">Εώς</f:facet>
+					<h:outputText
+						value="#{_schoolHourlyEmployment.employeeEmploymentTerminatedDate}">
+						<s:convertDateTime pattern="dd-MM-yyyy" />
+					</h:outputText>
+				</rich:column>
+
 				<rich:column style="text-align:right">
 					<f:facet name="header">Υπ Ωρ.</f:facet>
 					<h:outputText
-						value="#{_schoolHourlyEmployment.employeeMandatoryHours}" />
+						value="#{_schoolHourlyEmployment.employeeMandatoryHours}"></h:outputText>
 				</rich:column>
 				<rich:column style="text-align:right">
 					<f:facet name="header">Ωράριο</f:facet>

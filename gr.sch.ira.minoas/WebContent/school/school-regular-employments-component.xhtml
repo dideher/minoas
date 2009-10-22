@@ -49,7 +49,9 @@
 				<rich:column>
 					<f:facet name="header">Από</f:facet>
 					<h:outputText
-						value="#{_schoolRegularEmployment.established}" />
+						value="#{_schoolRegularEmployment.employeeEmploymentEstablishedDate}">
+						<s:convertDateTime pattern="dd-MM-yyyy"/>
+						</h:outputText>
 				</rich:column>
 				
 				<rich:column style="text-align:right">

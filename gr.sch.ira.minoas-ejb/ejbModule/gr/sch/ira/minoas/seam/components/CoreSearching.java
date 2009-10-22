@@ -45,6 +45,8 @@ import org.jboss.seam.annotations.AutoCreate;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.annotations.TransactionPropagationType;
+import org.jboss.seam.annotations.Transactional;
 
 @Name("coreSearching")
 @Scope(ScopeType.EVENT)
@@ -152,6 +154,17 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 	@Factory(value = "teachingLanguages")
 	public Collection<TeachingLanguage> getAvailableTeachingLanguages() {
 		return getEntityManager().createQuery("FROM TeachingLanguage e ORDER BY (e.language)").getResultList();
+	}
+
+	@Transactional(TransactionPropagationType.REQUIRED)
+	public Employee getEmployeeByVatNumber(EntityManager entityManager, String vatNumber) {
+		EntityManager em = getEntityManager(entityManager);
+		try {
+			return (Employee) em.createQuery("SELECT e from Employee e WHERE e.vatNumber=:vatNumber").setParameter(
+					"vatNumber", vatNumber).getSingleResult();
+		} catch (NoResultException nre) {
+			return null;
+		}
 	}
 
 	public Secondment getEmployeeActiveSecondment(EntityManager entityManager, Person employee, Date onDate) {
@@ -606,7 +619,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 		}
 
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public Collection<ServiceAllocation> getSchoolOutgoingServiceAllocations(EntityManager em, School school,
 			Date dayOfPrecense, Collection<SpecializationGroup> specializationGroups) {
@@ -627,6 +640,37 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 		}
 
 	}
+	
+	/**
+	 * Returns all service allocations with source the given school and target unit
+	 * different than the source
+	 * @param em
+	 * @param school
+	 * @param dayOfPrecense
+	 * @param specializationGroups
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public Collection<ServiceAllocation> getSchoolReallyOutgoingServiceAllocations(EntityManager em, School school,
+			Date dayOfPrecense, Collection<SpecializationGroup> specializationGroups) {
+		if (specializationGroups != null && specializationGroups.size() > 0) {
+			return getEntityManager(em)
+					.createQuery(
+							"SELECT DISTINCT a FROM ServiceAllocation a JOIN FETCH a.employee WHERE (a.active IS TRUE AND a.sourceUnit=:school AND a.serviceUnit != :school AND (:dayOfInterest BETWEEN a.established AND a.dueTo))"
+									+ " AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g IN (:specializations) AND a.employee.lastSpecialization MEMBER OF g.specializations)")
+					.setParameter("specializations", specializationGroups).setParameter("school", school).setParameter(
+							"dayOfInterest", dayOfPrecense).getResultList();
+
+		} else {
+			return getEntityManager(em)
+					.createQuery(
+							"SELECT DISTINCT a FROM ServiceAllocation a JOIN FETCH a.employee WHERE (a.active IS TRUE AND a.sourceUnit=:school AND a.serviceUnit != :school AND (:dayOfInterest BETWEEN a.established AND a.dueTo))")
+					.setParameter("school", school).setParameter("dayOfInterest", dayOfPrecense).getResultList();
+
+		}
+
+	}
+
 
 	@SuppressWarnings("unchecked")
 	public Collection<ServiceAllocation> getSchoolIncomingServiceAllocations(EntityManager em, School school,

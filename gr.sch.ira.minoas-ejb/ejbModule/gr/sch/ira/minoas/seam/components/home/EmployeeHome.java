@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
+import javax.faces.event.ValueChangeEvent;
+
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
 import gr.sch.ira.minoas.model.employee.RegularEmployeeInfo;
@@ -66,6 +68,15 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 
 	}
 
+	public void verifyVATNumberForNewEmployee(ValueChangeEvent e) {
+		String vatNumber = String.valueOf(e.getNewValue());
+		if(vatNumber.trim().length()==9) {
+			Employee employee = getCoreSearching().getEmployeeByVatNumber(getEntityManager(), vatNumber);
+			if(employee!=null) {
+				facesMessages.addToControl(e.getComponent().getId(), "Το ΑΦΜ που δηλώσατε είναι σε χρήση.");
+			}
+		} 
+	}
 	public boolean hasEmployment() {
 		return getInstance().getCurrentEmployment() != null;
 	}
@@ -223,7 +234,7 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 		e.setType(EmploymentType.HOURLYBASED);
 		e.setEstablished(new Date());
 		e.setFinalWorkingHours(11);
-		e.setMandatoryWorkingHours(0);
+		e.setMandatoryWorkingHours(21);
 		getHourlyBasedEmployments().add(e);
 
 	}

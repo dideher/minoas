@@ -1,9 +1,6 @@
 package gr.sch.ira.minoas.seam.components.reports.resource;
 
 import gr.sch.ira.minoas.model.employement.Employment;
-import gr.sch.ira.minoas.model.employement.Leave;
-
-import java.util.Date;
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
@@ -15,16 +12,10 @@ public class EmploymentReportItem extends EmployeeReportItem {
 	
 	private String employmentTypeKey;
 	
-	private Date established;
-	
-	private Date dueTo;
-	
 	private String school;
 	
 	
-	private Integer hours;
 	
-	private Integer mandatoryHours;
 	
 	/**
 	 * 
@@ -37,10 +28,10 @@ public class EmploymentReportItem extends EmployeeReportItem {
 		super(employment.getEmployee());
 		this.employmentType = employment.getType().toString();
 		this.employmentTypeKey = employment.getType().getKey();
-		this.established = employment.getEstablished();
-		this.dueTo = employment.getTerminated();
-		this.hours = employment.getFinalWorkingHours();
-		
+		setEmployeeFinalWorkingHours(employment.getFinalWorkingHours());
+		setEmployeeMandatoryHours(employment.getMandatoryWorkingHours());
+		setEmployeeEmploymentEstablishedDate(employment.getEstablished());
+		setEmployeeEmploymentTerminatedDate(employment.getTerminated());
 	}
 
 	/**
@@ -72,34 +63,6 @@ public class EmploymentReportItem extends EmployeeReportItem {
 	}
 
 	/**
-	 * @return the established
-	 */
-	public Date getEstablished() {
-		return established;
-	}
-
-	/**
-	 * @param established the established to set
-	 */
-	public void setEstablished(Date established) {
-		this.established = established;
-	}
-
-	/**
-	 * @return the dueTo
-	 */
-	public Date getDueTo() {
-		return dueTo;
-	}
-
-	/**
-	 * @param dueTo the dueTo to set
-	 */
-	public void setDueTo(Date dueTo) {
-		this.dueTo = dueTo;
-	}
-
-	/**
 	 * @return the school
 	 */
 	public String getSchool() {
@@ -113,32 +76,5 @@ public class EmploymentReportItem extends EmployeeReportItem {
 		this.school = school;
 	}
 
-	
-	/**
-	 * @return the mandatoryHours
-	 */
-	public Integer getMandatoryHours() {
-		return mandatoryHours;
-	}
 
-	/**
-	 * @param mandatoryHours the mandatoryHours to set
-	 */
-	public void setMandatoryHours(Integer mandatoryHours) {
-		this.mandatoryHours = mandatoryHours;
-	}
-
-	/**
-	 * @return the hours
-	 */
-	public Integer getHours() {
-		return hours;
-	}
-
-	/**
-	 * @param hours the hours to set
-	 */
-	public void setHours(Integer hours) {
-		this.hours = hours;
-	}
 }

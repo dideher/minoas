@@ -45,7 +45,8 @@ public class ServiceAllocationItem extends EmployeeReportItem {
 		this.comment = serviceAllocation.getComment();
 		this.dueTo = serviceAllocation.getDueTo();
 		this.establishedIn = serviceAllocation.getEstablished();
-		this.sourceUnit = serviceAllocation.getServiceUnit().getTitle();
+		this.sourceUnit = serviceAllocation.getSourceUnit().getTitle();
+		this.servicingUnit = serviceAllocation.getServiceUnit().getTitle();
 		this.serviceAllocationType = serviceAllocation.getServiceType().name();
 		this.serviceAllocationTypeKey = serviceAllocation.getServiceType().getKey();
 		this.workingHoursOnRegularPosition = serviceAllocation.getWorkingHoursOnRegularPosition();

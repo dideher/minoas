@@ -219,18 +219,18 @@
    </framework:entity-query>
    
    <framework:entity-query name="schoolServiceAllocationListQuery" max-results="200" scope="page">
-    <framework:ejbql>SELECT s FROM ServiceAllocation s WHERE s.active IS TRUE</framework:ejbql>
-    <framework:order>s.id desc</framework:order>
+    <framework:ejbql>SELECT s FROM ServiceAllocation s INNER JOIN FETCH s.employee WHERE s.active IS TRUE AND s.employee.active IS TRUE</framework:ejbql>
+    <framework:order>s.employee.lastName asc, s.employee.firstName asc</framework:order>
     <framework:restrictions>
-      <value>s.serviceUnit = #{schoolHome.instance}</value>
+        <value>s.serviceUnit = #{schoolHome.instance}</value>
     </framework:restrictions> 
    </framework:entity-query>
    
     
    	 <framework:entity-query name="serviceAllocationsByTypeListQuery"
 	max-results="1000" scope="CONVERSATION">
-    <framework:ejbql>SELECT s FROM ServiceAllocation s INNER JOIN FETCH s.employee WHERE s.active IS TRUE</framework:ejbql>
-    <framework:order>s.employee.lastName asc, s.employee.firstName asc</framework:order>
+    <framework:ejbql>SELECT s FROM ServiceAllocation s INNER JOIN FETCH s.employee WHERE s.active IS TRUE AND s.employee.active IS TRUE</framework:ejbql>
+    <framework:order>s.serviceUnit.title, s.employee.lastName asc, s.employee.firstName asc</framework:order>
     <framework:restrictions>
       <value>s.serviceType = #{exampleServiceAllocation.serviceType}</value>
       <value>s.serviceUnit = #{exampleServiceAllocation.serviceUnit}</value>

@@ -210,13 +210,17 @@
 				</h:panelGrid>
 
 				<rich:dataTable id="leavesByTypeTable"
-					value="#{employeeLeavesReport.reportData}" var="_leave" rows="40"
+					value="#{employeeLeavesReport.reportData}" var="_leave" rows="40" rowKeyVar="_row"
 					border="0" onRowMouseOver="this.style.backgfroundColor='#F8F8F8'"
 					onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
 					width="100%">
 					<f:facet name="header">
 						<h:outputLabel value="Λίστα Αδείων" />
 					</f:facet>
+					<rich:column style="text-align:center">
+						<f:facet name="header">A/A</f:facet>
+						<h:outputText styleClass="fieldValueText" value="#{_row+1}" />
+					</rich:column>
 
 					<rich:column>
 						<f:facet name="header">
