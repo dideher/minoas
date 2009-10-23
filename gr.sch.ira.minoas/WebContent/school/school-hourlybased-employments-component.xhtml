@@ -8,78 +8,92 @@
 	xmlns:a4j="http://richfaces.org/a4j">
 
 <ui:component>
+	<h:form>
+		<rich:panel>
+			<f:facet name="header">
+				<h:outputLabel value="Ωρομίσθιοι Εκπαιδευτικοί" />
+			</f:facet>
+			<h:panelGrid columns="1" width="100%">
 
-	<rich:panel>
-		<f:facet name="header">
-			<h:outputLabel value="Ωρομίσθιοι Εκπαιδευτικοί" />
-		</f:facet>
-		<h:panelGrid columns="1" width="100%">
+				<rich:spacer height="2" />
+				<h:outputText
+					value="Εμφανίζονται οι Ωρομίσθιοι Εκπαιδευτικοί της σχολικής μονάδας, άσχετα αν προσφέρουν στην μονάδα διδακτικές ώρες." />
+				<rich:spacer height="5" />
 
-			<rich:spacer height="2" />
-			<h:outputText
-				value="Εμφανίζονται οι Ωρομίσθιοι Εκπαιδευτικοί της σχολικής μονάδας, άσχετα αν προσφέρουν στην μονάδα διδακτικές ώρες." />
-			<rich:spacer height="5" />
+				<rich:dataTable id="schoolHourlyEmploymentsTable"
+					var="_schoolHourlyEmployment"
+					value="#{schoolHourlyBasedEmployments}" sortMode="multi" border="0"
+					rowKeyVar="_row"
+					onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+					onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+					width="100%">
+					<rich:column style="text-align:center">
+						<f:facet name="header">A/A</f:facet>
+						<h:outputText styleClass="fieldValueText" value="#{_row+1}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">Επώνυμο</f:facet>
+						<a4j:commandLink action="selectEmployee"
+							value="#{_schoolHourlyEmployment.employeeLastName}">
+							<f:setPropertyActionListener
+								value="#{_schoolHourlyEmployment.id}"
+								target="#{employeeHome.id}" />
+							<s:conversationPropagation type="nest" />
+						</a4j:commandLink>
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">Όνομα</f:facet>
+						<a4j:commandLink action="selectEmployee"
+							value="#{_schoolHourlyEmployment.employeeFirstName}">
+							<f:setPropertyActionListener
+								value="#{_schoolHourlyEmployment.id}"
+								target="#{employeeHome.id}" />
+							<s:conversationPropagation type="nest" />
+						</a4j:commandLink>
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">Όνομα Πατρός</f:facet>
+						<h:outputText
+							value="#{_schoolHourlyEmployment.employeeFatherName}" />
+					</rich:column>
+					<rich:column style="text-align:center">
+						<f:facet name="header">Από</f:facet>
+						<h:outputText
+							value="#{_schoolHourlyEmployment.employeeEmploymentEstablishedDate}">
+							<s:convertDateTime pattern="dd-MM-yyyy" />
+						</h:outputText>
+					</rich:column>
+					<rich:column style="text-align:center">
+						<f:facet name="header">Εώς</f:facet>
+						<h:outputText
+							value="#{_schoolHourlyEmployment.employeeEmploymentTerminatedDate}">
+							<s:convertDateTime pattern="dd-MM-yyyy" />
+						</h:outputText>
+					</rich:column>
 
-			<rich:dataTable id="schoolHourlyEmploymentsTable"
-				var="_schoolHourlyEmployment"
-				value="#{schoolHourlyBasedEmployments}" sortMode="multi" border="0"
-				rowKeyVar="_row"
-				onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
-				onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
-				width="100%">
-				<rich:column style="text-align:center">
-					<f:facet name="header">A/A</f:facet>
-					<h:outputText styleClass="fieldValueText" value="#{_row+1}" />
-				</rich:column>
-				<rich:column>
-					<f:facet name="header">Επώνυμο</f:facet>
-					<h:outputText value="#{_schoolHourlyEmployment.employeeLastName}" />
-				</rich:column>
-				<rich:column>
-					<f:facet name="header">Όνομα</f:facet>
-					<h:outputText value="#{_schoolHourlyEmployment.employeeFirstName}" />
-				</rich:column>
-				<rich:column>
-					<f:facet name="header">Όνομα Πατρός</f:facet>
-					<h:outputText value="#{_schoolHourlyEmployment.employeeFatherName}" />
-				</rich:column>
-				<rich:column style="text-align:center">
-					<f:facet name="header">Από</f:facet>
-					<h:outputText
-						value="#{_schoolHourlyEmployment.employeeEmploymentEstablishedDate}">
-						<s:convertDateTime pattern="dd-MM-yyyy" />
-					</h:outputText>
-				</rich:column>
-				<rich:column style="text-align:center">
-					<f:facet name="header">Εώς</f:facet>
-					<h:outputText
-						value="#{_schoolHourlyEmployment.employeeEmploymentTerminatedDate}">
-						<s:convertDateTime pattern="dd-MM-yyyy" />
-					</h:outputText>
-				</rich:column>
-
-				<rich:column style="text-align:right">
-					<f:facet name="header">Υπ Ωρ.</f:facet>
-					<h:outputText
-						value="#{_schoolHourlyEmployment.employeeMandatoryHours}"></h:outputText>
-				</rich:column>
-				<rich:column style="text-align:right">
-					<f:facet name="header">Ωράριο</f:facet>
-					<h:outputText
-						value="#{_schoolHourlyEmployment.employeeFinalWorkingHours}" />
-				</rich:column>
-				<rich:column>
-					<f:facet name="header">Ειδ.</f:facet>
-					<h:outputText
-						value="#{_schoolHourlyEmployment.employeeSpecializationID}" />
-				</rich:column>
-				<rich:column>
-					<f:facet name="header">Λεκτικό Ειδ.</f:facet>
-					<h:outputText
-						value="#{_schoolHourlyEmployment.employeeSpecialization}" />
-				</rich:column>
-			</rich:dataTable>
-		</h:panelGrid>
-	</rich:panel>
+					<rich:column style="text-align:right">
+						<f:facet name="header">Υπ Ωρ.</f:facet>
+						<h:outputText
+							value="#{_schoolHourlyEmployment.employeeMandatoryHours}"></h:outputText>
+					</rich:column>
+					<rich:column style="text-align:right">
+						<f:facet name="header">Ωράριο</f:facet>
+						<h:outputText
+							value="#{_schoolHourlyEmployment.employeeFinalWorkingHours}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">Ειδ.</f:facet>
+						<h:outputText
+							value="#{_schoolHourlyEmployment.employeeSpecializationID}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">Λεκτικό Ειδ.</f:facet>
+						<h:outputText
+							value="#{_schoolHourlyEmployment.employeeSpecialization}" />
+					</rich:column>
+				</rich:dataTable>
+			</h:panelGrid>
+		</rich:panel>
+	</h:form>
 </ui:component>
 </html>

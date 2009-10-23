@@ -269,8 +269,12 @@
 						<f:facet name="header">
 							<h:outputText value="Εκπαιδευτικός" />
 						</f:facet>
-						<h:outputText
-							value="#{_employee.employeeLastName} #{_employee.employeeFirstName} του #{_employee.employeeFatherName}" />
+						<a4j:commandLink action="selectEmployee"
+							value="#{_employee.employeeLastName} #{_employee.employeeFirstName} του #{_employee.employeeFatherName}">
+							<f:setPropertyActionListener value="#{_employee.id}"
+								target="#{employeeHome.id}" />
+							<s:conversationPropagation type="nest" />
+						</a4j:commandLink>
 					</rich:column>
 					<rich:column>
 						<f:facet name="header">

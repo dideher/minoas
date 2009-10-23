@@ -22,4 +22,8 @@
     </redirect>
   </navigation>
   
+  <navigation from-action="selectEmployee">
+      <redirect view-id="/employee/employee.xhtml" />
+  </navigation>
+  
 </page>

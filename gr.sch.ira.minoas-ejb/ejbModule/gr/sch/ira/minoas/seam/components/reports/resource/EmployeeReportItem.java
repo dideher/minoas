@@ -9,10 +9,11 @@ import java.util.Date;
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
  * @version $Id$
  */
-public class EmployeeReportItem {
+public class EmployeeReportItem extends BaseIDReportItem {
 
 	private Date employeeBirthday;
 
+	
 	private String employeeCode;
 
 	private String employeeFatherName;
@@ -51,7 +52,7 @@ public class EmployeeReportItem {
 	}
 
 	public EmployeeReportItem(Employee employee) {
-		this();
+		super(employee);
 		this.employeeLastName = employee.getLastName();
 		this.employeeFirstName = employee.getFirstName();
 		this.employeeFatherName = employee.getFatherName();

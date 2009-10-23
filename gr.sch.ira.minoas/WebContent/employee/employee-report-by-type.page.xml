@@ -9,5 +9,8 @@
     <end-conversation />
     <redirect view-id="#{employee_report_by_type_from ? '/home' : employee_report_by_type_from}.xhtml}" />
   </navigation>
+   <navigation from-action="selectEmployee">
+      <redirect view-id="/employee/employee.xhtml" />
+  </navigation>
 </page>
  

@@ -49,11 +49,21 @@
 					</rich:column>
 					<rich:column>
 						<f:facet name="header">Επώνυμο</f:facet>
-						<h:outputText value="#{_schoolchief.employeeLastName}" />
+						<a4j:commandLink action="selectEmployee"
+							value="#{_schoolchief.employeeLastName}">
+							<f:setPropertyActionListener value="#{_schoolchief.id}"
+								target="#{employeeHome.id}" />
+							<s:conversationPropagation type="nest" />
+						</a4j:commandLink>
 					</rich:column>
 					<rich:column>
 						<f:facet name="header">Όνομα</f:facet>
-						<h:outputText value="#{_schoolchief.employeeFirstName}" />
+						<a4j:commandLink action="selectEmployee"
+							value="#{_schoolchief.employeeFirstName}">
+							<f:setPropertyActionListener value="#{_schoolchief.id}"
+								target="#{employeeHome.id}" />
+							<s:conversationPropagation type="nest" />
+						</a4j:commandLink>
 					</rich:column>
 					<rich:column>
 						<f:facet name="header">Όνομα Πατρός</f:facet>
@@ -99,7 +109,7 @@
 						viewId="/school/school-regular-employments-component.xhtml" />
 
 				</rich:tab>
-				
+
 				<rich:tab switchType="ajax">
 					<f:facet name="label">
 						<h:outputText value="Αναπληρωτές" />
@@ -109,7 +119,7 @@
 						viewId="/school/school-deputy-employments-component.xhtml" />
 
 				</rich:tab>
-				
+
 				<rich:tab switchType="ajax">
 					<f:facet name="label">
 						<h:outputText value="Ωρομίσθιοι" />
@@ -119,8 +129,8 @@
 						viewId="/school/school-hourlybased-employments-component.xhtml" />
 
 				</rich:tab>
-				
-				
+
+
 
 			</rich:tabPanel>
 
