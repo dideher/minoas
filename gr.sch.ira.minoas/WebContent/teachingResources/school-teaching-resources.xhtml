@@ -24,7 +24,7 @@
 				<h:panelGrid columns="1" rowClasses="vertTop">
 					<h:outputText
 						value="Στον παρακάτω πίνακα εμφανίζονται οι απαιτήσεις σε διδακτικές ώρες στην σχολική μονάδα που επιλέξατε, κατά την τρέχουσα σχολική χρονία. " />
-					<a4j:region>
+					<a4j:outputPanel id="teachingHoursPanel">
 						<rich:dataTable id="resourcesTable" var="requirement" rows="13"
 							value="#{schoolTeachingRequirement.resultList}">
 							<rich:column>
@@ -65,8 +65,9 @@
 
 									<a4j:commandLink ajaxSingle="true" id="updatelink"
 										oncomplete="#{rich:component('updatePanel')}.show()"
-										value="Τροποποίηση">
-										<h:graphicImage value="/img/icons/update.png" style="border:0" />
+										value="Τροποποίηση" reRender="updateModalPanelContent">
+										<h:graphicImage value="/img/icons/edit.png" style="border:0"
+											width="12" height="12" />
 										<f:setPropertyActionListener value="#{requirement.id}"
 											target="#{teachingRequirementHome.id}" />
 									</a4j:commandLink>
@@ -84,7 +85,7 @@
 
 							</f:facet>
 						</rich:dataTable>
-					</a4j:region>
+					</a4j:outputPanel>
 					<s:div styleClass="actionButtons">
 
 						<s:button id="revertButton" value="Τέλος Διαχείρησης"
@@ -116,30 +117,35 @@
 						operation="hide" event="onclick" />
 				</h:panelGroup>
 			</f:facet>
-			<h:form>
-				<rich:messages style="color:red;"></rich:messages>
-				<h:panelGrid columns="1">
-					<h:outputText
-						value="Με την παρακάτω φόρμα μπορείτε να τροποποιήσετε την απαίτηση σε διδακτικές ώρες." />
-					<a4j:outputPanel id="editAjaxPanel" ajaxRendered="true">
-						<ui:include
-							src="/teachingResources/teaching-resource-component.xhtml">
-							<ui:param name="teachingRequirement"
-								value="#{teachingRequirementHome.definedInstace}" />
-						</ui:include>
-					</a4j:outputPanel>
-					<h:panelGroup>
-						<a4j:commandButton value="Αποθήκευση Αλλαγών" reRender="resourceTables"
-							action="#{teachingRequirementHome.update()}"
-							oncomplete="#{rich:component('updatePanel')}.hide();return true;" />
-						<a4j:commandButton value="Ακύρωση Αλλαγών"
-							action="#{teachingRequirementHome.revert()}"
-							oncomplete="#{rich:component('updatePanel')}.hide();return false;" />
-					</h:panelGroup>
-				</h:panelGrid>
-			</h:form>
+			<a4j:region>
+				<h:form>
+
+					<rich:messages style="color:red;"></rich:messages>
+					<h:panelGrid columns="1">
+						<h:outputText
+							value="Με την παρακάτω φόρμα μπορείτε να τροποποιήσετε την απαίτηση σε διδακτικές ώρες." />
+
+						<a4j:outputPanel id="updateModalPanelContent" layout="inline">
+							<ui:include
+								src="/teachingResources/teaching-resource-component.xhtml">
+								<ui:param name="teachingRequirement"
+									value="#{teachingRequirementHome.definedInstace}" />
+							</ui:include>
+						</a4j:outputPanel>
+						<h:panelGroup>
+							<a4j:commandButton value="Αποθήκευση Αλλαγών"
+								reRender="teachingHoursPanel"
+								action="#{teachingRequirementHome.update()}"
+								oncomplete="#{rich:component('updatePanel')}.hide();return true;" />
+							<a4j:commandButton value="Ακύρωση Αλλαγών"
+								action="#{teachingRequirementHome.revert()}"
+								oncomplete="#{rich:component('updatePanel')}.hide();return false;" />
+						</h:panelGroup>
+					</h:panelGrid>
+				</h:form>
+			</a4j:region>
 		</rich:modalPanel>
-		<rich:modalPanel id="deletePanel" autosized="true" width="200">
+		<rich:modalPanel id="deletePanel" autosized="true" width="350">
 			<f:facet name="header">
 				<h:outputText value="Να γίνει διαγραφή ?"
 					style="padding-right:15px;" />
@@ -175,7 +181,7 @@
 					<a4j:commandButton value="Ναι, διαγραφή !" ajaxSingle="true"
 						action="#{teachingRequirementHome.remove()}"
 						oncomplete="#{rich:component('deletePanel')}.hide();"
-						reRender="resourcesTable" />
+						reRender="teachingHoursPanel" />
 					<a4j:commandButton value="Οχι !"
 						onclick="#{rich:component('deletePanel')}.hide();return false;" />
 				</h:panelGrid>
