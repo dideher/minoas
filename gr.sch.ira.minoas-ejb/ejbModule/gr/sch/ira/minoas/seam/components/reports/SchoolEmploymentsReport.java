@@ -35,9 +35,9 @@ import org.jboss.seam.annotations.datamodel.DataModel;
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
  * @version $Id$
  */
-@Name(value = "schoolReport")
+@Name(value = "schoolEmploymentsReport")
 @Scope(ScopeType.CONVERSATION)
-public class SchoolReport extends BaseReport {
+public class SchoolEmploymentsReport extends BaseReport {
 
 	@DataModel(value = "schoolChiefs")
 	private Collection<ServiceAllocationItem> schoolChiefs;
@@ -84,7 +84,7 @@ public class SchoolReport extends BaseReport {
 	/**
 	 * 
 	 */
-	public SchoolReport() {
+	public SchoolEmploymentsReport() {
 	}
 
 	

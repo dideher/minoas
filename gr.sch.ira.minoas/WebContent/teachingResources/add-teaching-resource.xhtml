@@ -15,7 +15,7 @@
 	<ui:define name="body">
 
 
-				
+
 
 
 		<h:form id="form2">
@@ -26,19 +26,19 @@
 				</f:facet>
 				<h:outputText
 					value="Συμπληρώστε τα παρακάτω πεδία για να εισάγετε νέες διδακτικές ώρες" />
-				<ui:include src="/teachingResources/teaching-resource-component.xhtml" />
+				<ui:include
+					src="/teachingResources/teaching-resource-component.xhtml" />
 				<s:div styleClass="actionButtons">
 
-						<s:button id="backButton" value="Ακύρωση Αλλαγών"
-						action="back" />
-						<rich:spacer width="20" />
-
-				<h:commandButton value="Προσθήκη Ωρών"
+					<h:commandButton value="Προσθήκη Ωρών"
 						action="#{teachingRequirementHome.persist()}">
 					</h:commandButton>
-				
+					<rich:spacer width="20" />
 
-					</s:div>
+					<s:button id="backButton" value="Ακύρωση Αλλαγών" action="back" />
+
+
+				</s:div>
 			</rich:panel>
 		</h:form>
 

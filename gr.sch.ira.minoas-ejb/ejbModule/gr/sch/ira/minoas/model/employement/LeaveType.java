@@ -45,7 +45,13 @@ public enum LeaveType {
 	/**
 	 * Άνευ Αποδοχών
 	 */
-	UNPAID_LEAVE("UNPAID_LEAVE_TYPE", (30*12));
+	UNPAID_LEAVE("UNPAID_LEAVE_TYPE", (30*12)),
+	
+	/**
+	 * Κυοφορίας
+	 */
+	KIOFORIA_LEAVE("KIOFORIA_LEAVE_TYPE", (30*1))
+	;
 	
 	private Integer durationInDays;
 	private String key;

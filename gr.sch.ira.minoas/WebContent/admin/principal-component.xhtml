@@ -59,6 +59,20 @@
 		</s:decorate>
 	</h:panelGrid>
 
+	<h:panelGrid columns="2">
+		<s:decorate template="/layout/doubleLineEdit.xhtml">
+			<ui:define name="label">
+				<h:outputText value="Ρόλοι Χρήστη" />
+			</ui:define>
+			<rich:pickList value="${principal.roles}" sourceListWidth="240" 
+				targetListWidth="240">
+				<s:selectItems var="item" value="#{rolesListQuery.resultList}"
+					label="#{item.name} - #{item.description}">
+				</s:selectItems>
+				<s:convertEntity></s:convertEntity>
+			</rich:pickList>
+		</s:decorate> 
+	</h:panelGrid>
 
 </ui:component>
 </html>

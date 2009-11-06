@@ -183,7 +183,7 @@
 
 				<rich:dataTable id="schoolTeachingResourcesAnalysisTable"
 					value="#{teachingVoidBySpecializationReport.reportData}"
-					var="_schoolTeachingResources" rows="10" border="0"
+					var="_schoolTeachingResources" rows="30" border="0"
 					onRowMouseOver="this.style.backgfroundColor='#F8F8F8'"
 					onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
 					width="100%">
@@ -248,7 +248,7 @@
 					</rich:column>
 
 					 
-					<rich:subTable id="lla" var="_item" 
+					<rich:subTable id="subtable_with_totals" var="_item" rendered="#{_schoolTeachingResources.schools.size gt 1}"
 						value="#{_schoolTeachingResources.schools}" rows="120"
 						border="0" onRowMouseOver="this.style.backgfroundColor='#F8F8F8'"
 						onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
@@ -292,6 +292,8 @@
 								</s:div>
 							</f:facet>
 						</rich:column>
+						
+						
 						<rich:column style="text-align:center">
 							<h:outputText value="#{_item.availableHours}"
 								style="color: red;font-weight:bold;" />
@@ -344,6 +346,63 @@
 										style="color: red;font-weight:bold;" />
 								</s:div>
 							</f:facet>
+						</rich:column>
+					</rich:subTable>
+					
+					<!-- this version is rendered when we have one school per line, basicaly the total
+					     footer is removed -->
+					<rich:subTable id="subtable_without_totals" var="_item" rendered="#{_schoolTeachingResources.schools.size eq 1}"
+						value="#{_schoolTeachingResources.schools}" rows="120"
+						border="0" onRowMouseOver="this.style.backgfroundColor='#F8F8F8'"
+						onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+						width="100%">
+						<rich:column>
+							<rich:spacer />
+						</rich:column>
+
+						<rich:column>
+							<h:outputText value="#{_item.school.title}" />
+						</rich:column>
+						<rich:column>
+							<h:outputText value="#{_item.school.ministryCode} " />
+						</rich:column>
+						<rich:column>
+							<h:outputText value="#{_item.school.regionCode}' Ηρακλείου" />
+						</rich:column>
+
+						<rich:column style="text-align:center">
+							<h:outputText value="#{_item.requiredHours}"
+								style="color: blue" />
+						</rich:column>
+						
+						
+						<rich:column style="text-align:center">
+							<h:outputText value="#{_item.availableHours}"
+								style="color: red;font-weight:bold;" />
+						</rich:column>
+						<rich:column style="text-align:center">
+							<h:outputText value="#{_item.missingHours}"
+								rendered="#{_item.missingHours &gt; 0 or _item.missingHours == 0}"
+								style="color:green;">
+								<f:convertNumber type="number" />
+							</h:outputText>
+							<h:outputText value="#{_item.missingHours}"
+								rendered="#{_item.missingHours &lt; 0}"
+								style="color:green;font-weight:bold;">
+							</h:outputText>
+						</rich:column>
+						<rich:column style="text-align:center">
+							<s:div
+								rendered="#{_item.missingReqularEmployees &lt; 0 or _item.missingReqularEmployees == 0}">
+								<h:outputText value="#{_item.missingReqularEmployees}"
+									style="color: blue;" />
+							</s:div>
+							<s:div
+								rendered="#{_item.missingReqularEmployees &gt; 0}">
+								<h:outputText value="#{_item.missingReqularEmployees} "
+									style="color: red;font-weight:bold;" />
+							</s:div>
+
 						</rich:column>
 					</rich:subTable>
 					
