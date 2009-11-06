@@ -185,7 +185,7 @@ public class TeachingHourAnalysisReport extends BaseReport {
 
 					for (Employee regularEmployee : regularEmployees) {
 						int employeeHours = regularEmployee.getCurrentEmployment().getFinalWorkingHours();
-						Collection<Disposal> disposals = getCoreSearching().getEmployeeDisposals(getEntityManager(),
+						Collection<Disposal> disposals = getCoreSearching().getEmployeeActiveDisposals(getEntityManager(),
 								regularEmployee, today);
 						int disposalHours = 0;
 						for (Disposal disposal : disposals) {

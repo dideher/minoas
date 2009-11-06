@@ -1,4 +1,3 @@
-
 package gr.sch.ira.minoas.seam.components.reports.resource;
 
 import gr.sch.ira.minoas.model.employement.Employment;
@@ -8,6 +7,8 @@ import gr.sch.ira.minoas.model.employement.Employment;
  * @version $Id$
  */
 public class SchoolUniversalEmploymentItem extends EmploymentReportItem {
+
+	private String employmentComment;
 
 	/**
 	 * 
@@ -21,6 +22,20 @@ public class SchoolUniversalEmploymentItem extends EmploymentReportItem {
 	 */
 	public SchoolUniversalEmploymentItem(Employment employment) {
 		super(employment);
+	}
+
+	/**
+	 * @return the employmentComment
+	 */
+	public String getEmploymentComment() {
+		return employmentComment;
+	}
+
+	/**
+	 * @param employmentComment the employmentComment to set
+	 */
+	public void setEmploymentComment(String employmentComment) {
+		this.employmentComment = employmentComment;
 	}
 
 }

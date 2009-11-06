@@ -167,6 +167,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 		}
 	}
 
+	@Transactional(TransactionPropagationType.REQUIRED)
 	public Secondment getEmployeeActiveSecondment(EntityManager entityManager, Person employee, Date onDate) {
 		EntityManager em = getEntityManager(entityManager);
 		try {
@@ -179,8 +180,22 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 		}
 	}
 
+	@Transactional(TransactionPropagationType.REQUIRED)
+	public Leave getEmployeeActiveLeave(EntityManager entityManager, Person employee, Date onDate) {
+		EntityManager em = getEntityManager(entityManager);
+
+		try {
+			return (Leave) em.createQuery(
+					"SELECT s from Leave s WHERE s.active IS TRUE AND s.employee=:employee AND :onDate BETWEEN s.established AND s.dueTo ORDER BY s.established")
+					.setParameter("employee", employee).setParameter("onDate", onDate).getSingleResult();
+		} catch (NoResultException nre) {
+			return null;
+		}
+	}
+
 	@SuppressWarnings("unchecked")
-	public Collection<Disposal> getEmployeeDisposals(EntityManager em, Person employee, Date dayOfIntereset) {
+	@Transactional(TransactionPropagationType.REQUIRED)
+	public Collection<Disposal> getEmployeeActiveDisposals(EntityManager em, Person employee, Date dayOfIntereset) {
 
 		Collection<Disposal> result = null;
 		result = getEntityManager(em)
@@ -190,6 +205,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 		return result;
 	}
 
+	@Transactional(TransactionPropagationType.REQUIRED)
 	@SuppressWarnings("unchecked")
 	public Collection<Employment> getEmployeeEmployments(Person employee) {
 		List<Employment> result;
@@ -202,6 +218,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 	}
 
 	@SuppressWarnings("unchecked")
+	@Transactional(TransactionPropagationType.REQUIRED)
 	public Collection<Employment> getEmployeeEmployments(Person employee, SchoolYear schoolyear) {
 		List<Employment> result;
 		debug("trying to featch all  employments for employee '#0' during school year '#1'.", employee, schoolyear);
@@ -214,6 +231,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 	}
 
 	@SuppressWarnings("unchecked")
+	@Transactional(TransactionPropagationType.REQUIRED)
 	public Collection<Employment> getEmployeeEmploymentsOfType(Person employee, EmploymentType type) {
 		List<Employment> result;
 		debug("trying to featch all  employments for employee '#0'", employee);
@@ -225,6 +243,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 	}
 
 	@SuppressWarnings("unchecked")
+	@Transactional(TransactionPropagationType.REQUIRED)
 	public Collection<Leave> getEmployeeLeaves(Person employee) {
 		Collection<Leave> result = null;
 		info("searching employee's '#0' leaves.", employee);
@@ -640,7 +659,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 		}
 
 	}
-	
+
 	/**
 	 * Returns all service allocations with source the given school and target unit
 	 * different than the source
@@ -670,7 +689,6 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 		}
 
 	}
-
 
 	@SuppressWarnings("unchecked")
 	public Collection<ServiceAllocation> getSchoolIncomingServiceAllocations(EntityManager em, School school,

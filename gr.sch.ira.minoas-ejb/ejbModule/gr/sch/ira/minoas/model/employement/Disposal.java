@@ -62,6 +62,7 @@ public class Disposal extends BaseIDModel {
 
 	@Basic
 	@Column(name = "ESTABLISHED", nullable = true)
+	@Temporal(TemporalType.DATE)
 	private Date established;
 
 	@Basic
