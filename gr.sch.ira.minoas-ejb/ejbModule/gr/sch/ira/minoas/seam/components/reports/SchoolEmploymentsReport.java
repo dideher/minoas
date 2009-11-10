@@ -1,6 +1,8 @@
 package gr.sch.ira.minoas.seam.components.reports;
 
 import gr.sch.ira.minoas.model.core.SchoolYear;
+import gr.sch.ira.minoas.model.core.Specialization;
+import gr.sch.ira.minoas.model.core.SpecializationGroup;
 import gr.sch.ira.minoas.model.employement.Disposal;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
@@ -9,6 +11,8 @@ import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.ServiceAllocation;
 import gr.sch.ira.minoas.seam.components.home.SchoolHome;
 import gr.sch.ira.minoas.seam.components.reports.resource.SchoolUniversalEmploymentItem;
+import gr.sch.ira.minoas.seam.components.reports.resource.SchoolUniversalEmployments;
+import gr.sch.ira.minoas.seam.components.reports.resource.SchoolUniversalEmploymentsGroup;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -16,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.jboss.seam.ScopeType;
@@ -34,6 +39,9 @@ public class SchoolEmploymentsReport extends BaseReport {
 
 	@DataModel(value = "schoolEmploymentsAnalysis")
 	private Collection<SchoolUniversalEmploymentItem> schoolEmploymentsAnalysis;
+
+	@DataModel(value = "schoolEmployments")
+	private SchoolUniversalEmployments schoolEmployments;
 
 	private DateFormat dateFormat;
 
@@ -181,6 +189,8 @@ public class SchoolEmploymentsReport extends BaseReport {
 
 		SchoolYear activeSchoolYear = getCoreSearching().getActiveSchoolYear(getEntityManager());
 
+		schoolEmployments = new SchoolUniversalEmployments(getCoreSearching().getSpecializationGroups(activeSchoolYear,
+				getEntityManager()));
 		schoolEmploymentsAnalysis = new ArrayList<SchoolUniversalEmploymentItem>();
 
 		/* ************************************************************************************ */
@@ -235,6 +245,7 @@ public class SchoolEmploymentsReport extends BaseReport {
 			}
 
 			schoolEmploymentsAnalysis.add(item);
+			schoolEmployments.add(item);
 		}
 
 		/* ************************************************************************************ */
@@ -279,6 +290,7 @@ public class SchoolEmploymentsReport extends BaseReport {
 			}
 
 			schoolEmploymentsAnalysis.add(item);
+			schoolEmployments.add(item);
 		}
 
 		/* ************************************************************************************ */
@@ -300,6 +312,7 @@ public class SchoolEmploymentsReport extends BaseReport {
 			}
 
 			schoolEmploymentsAnalysis.add(item);
+			schoolEmployments.add(item);
 		}
 
 		/* now handle incomming employees */
@@ -338,6 +351,7 @@ public class SchoolEmploymentsReport extends BaseReport {
 				}
 
 				schoolEmploymentsAnalysis.add(item);
+				schoolEmployments.add(item);
 			} catch (Exception ex) {
 				continue;
 			}
@@ -360,6 +374,7 @@ public class SchoolEmploymentsReport extends BaseReport {
 				}
 
 				schoolEmploymentsAnalysis.add(item);
+				schoolEmployments.add(item);
 			} catch (Exception ex) {
 				continue;
 			}
@@ -381,6 +396,7 @@ public class SchoolEmploymentsReport extends BaseReport {
 			}
 
 			schoolEmploymentsAnalysis.add(item);
+			schoolEmployments.add(item);
 
 		}
 

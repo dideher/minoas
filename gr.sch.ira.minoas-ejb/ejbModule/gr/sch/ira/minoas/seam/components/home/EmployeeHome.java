@@ -216,7 +216,6 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 			info.setInsertedBy(getPrincipal());
 			new_employee.setRegularDetail(info);
 			getEntityManager().persist(info);
-
 		}
 		wire();
 		return persist();
