@@ -1,10 +1,8 @@
 package gr.sch.ira.minoas.seam.components.reports.resource;
 
-import java.util.Date;
-
-import gr.sch.ira.minoas.model.employee.Employee;
-import gr.sch.ira.minoas.model.employement.Leave;
 import gr.sch.ira.minoas.model.employement.ServiceAllocation;
+
+import java.util.Date;
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>

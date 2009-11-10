@@ -185,8 +185,9 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 		EntityManager em = getEntityManager(entityManager);
 
 		try {
-			return (Leave) em.createQuery(
-					"SELECT s from Leave s WHERE s.active IS TRUE AND s.employee=:employee AND :onDate BETWEEN s.established AND s.dueTo ORDER BY s.established")
+			return (Leave) em
+					.createQuery(
+							"SELECT s from Leave s WHERE s.active IS TRUE AND s.employee=:employee AND :onDate BETWEEN s.established AND s.dueTo ORDER BY s.established")
 					.setParameter("employee", employee).setParameter("onDate", onDate).getSingleResult();
 		} catch (NoResultException nre) {
 			return null;
@@ -203,6 +204,18 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 						"SELECT s FROM Disposal s WHERE s.active IS TRUE AND s.employee=:employee AND :dayOfInterest BETWEEN s.established AND s.dueTo ORDER BY s.insertedOn")
 				.setParameter("employee", employee).setParameter("dayOfInterest", dayOfIntereset).getResultList();
 		return result;
+	}
+
+	@Transactional(TransactionPropagationType.REQUIRED)
+	public ServiceAllocation getEmployeeActiveServiceAllocation(EntityManager em, Person employee, Date dayOfIntereset) {
+		try {
+			return (ServiceAllocation) getEntityManager(em)
+					.createQuery(
+							"SELECT s FROM ServiceAllocation s WHERE s.active IS TRUE AND s.employee=:employee AND :dayOfInterest BETWEEN s.established AND s.dueTo ORDER BY s.insertedOn")
+					.setParameter("employee", employee).setParameter("dayOfInterest", dayOfIntereset).getSingleResult();
+		} catch (NoResultException nre) {
+			return null;
+		}
 	}
 
 	@Transactional(TransactionPropagationType.REQUIRED)

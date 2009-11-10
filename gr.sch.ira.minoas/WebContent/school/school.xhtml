@@ -100,6 +100,15 @@
 
 				</rich:tab>
 
+				<rich:tab switchType="ajax" ontabenter="#{schoolEmploymentsReport.generateReport()}">
+					<f:facet name="label">
+						<h:outputText value="Καρτέλα Όλων" />
+					</f:facet>
+
+					<a4j:include
+						viewId="/school/school-employments-analysis-component.xhtml" />
+
+				</rich:tab>
 				<rich:tab switchType="ajax">
 					<f:facet name="label">
 						<h:outputText value="Οργανικά Ανήκωντες" />

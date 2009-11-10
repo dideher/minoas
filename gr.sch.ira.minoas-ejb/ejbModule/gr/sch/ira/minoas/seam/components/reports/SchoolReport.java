@@ -1,13 +1,7 @@
 package gr.sch.ira.minoas.seam.components.reports;
 
 import gr.sch.ira.minoas.model.core.SchoolYear;
-import gr.sch.ira.minoas.model.employee.Employee;
-import gr.sch.ira.minoas.model.employement.Disposal;
-import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
-import gr.sch.ira.minoas.model.employement.Leave;
-import gr.sch.ira.minoas.model.employement.Secondment;
-import gr.sch.ira.minoas.model.employement.ServiceAllocation;
 import gr.sch.ira.minoas.model.employement.ServiceAllocationType;
 import gr.sch.ira.minoas.seam.components.home.SchoolHome;
 import gr.sch.ira.minoas.seam.components.reports.resource.DisposalReportItem;
@@ -17,11 +11,9 @@ import gr.sch.ira.minoas.seam.components.reports.resource.LeaveReportItem;
 import gr.sch.ira.minoas.seam.components.reports.resource.SecondmentItem;
 import gr.sch.ira.minoas.seam.components.reports.resource.ServiceAllocationItem;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 
 import org.apache.commons.lang.time.DateUtils;

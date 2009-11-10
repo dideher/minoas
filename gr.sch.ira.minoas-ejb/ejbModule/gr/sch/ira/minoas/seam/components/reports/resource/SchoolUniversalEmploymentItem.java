@@ -1,6 +1,9 @@
 package gr.sch.ira.minoas.seam.components.reports.resource;
 
+import gr.sch.ira.minoas.model.employement.Disposal;
 import gr.sch.ira.minoas.model.employement.Employment;
+import gr.sch.ira.minoas.model.employement.Secondment;
+import gr.sch.ira.minoas.model.employement.ServiceAllocation;
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
@@ -23,7 +26,19 @@ public class SchoolUniversalEmploymentItem extends EmploymentReportItem {
 	public SchoolUniversalEmploymentItem(Employment employment) {
 		super(employment);
 	}
+	
+	public SchoolUniversalEmploymentItem(Secondment secondment) {
+		
+		super(secondment.getAffectedEmployment());
+	}
 
+	public SchoolUniversalEmploymentItem(Disposal disposal) {
+		super(disposal.getAffectedEmployment());
+	}
+	
+	public SchoolUniversalEmploymentItem(ServiceAllocation serviceAllocation) {
+		super(serviceAllocation.getAffectedEmployment());
+	}
 	/**
 	 * @return the employmentComment
 	 */

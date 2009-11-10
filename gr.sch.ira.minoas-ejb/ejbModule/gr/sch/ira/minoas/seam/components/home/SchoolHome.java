@@ -2,7 +2,6 @@ package gr.sch.ira.minoas.seam.components.home;
 
 import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.core.TeachingRequirement;
-import gr.sch.ira.minoas.model.employement.Secondment;
 
 import java.util.Date;
 import java.util.Iterator;

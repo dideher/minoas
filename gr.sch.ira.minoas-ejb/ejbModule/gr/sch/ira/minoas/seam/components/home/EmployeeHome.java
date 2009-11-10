@@ -1,11 +1,5 @@
 package gr.sch.ira.minoas.seam.components.home;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-
-import javax.faces.event.ValueChangeEvent;
-
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
 import gr.sch.ira.minoas.model.employee.RegularEmployeeInfo;
@@ -15,17 +9,20 @@ import gr.sch.ira.minoas.model.employement.EmploymentType;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.ServiceAllocation;
 
-import org.apache.commons.lang.time.DateUtils;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+
+import javax.faces.event.ValueChangeEvent;
+
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Out;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.annotations.datamodel.DataModel;
 import org.jboss.seam.annotations.security.Restrict;
-import org.mvel.optimizers.impl.refl.ArrayLength;
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
