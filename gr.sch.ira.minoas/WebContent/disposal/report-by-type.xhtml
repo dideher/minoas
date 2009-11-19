@@ -1,0 +1,318 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<ui:composition template="/layout/simple-beauty-template.xhtml">
+	<ui:define name="body">
+		<rich:panel>
+			<f:facet name="header">
+				<h:outputText
+					value="Λίστα Διαθέσεων Ανα Τύπο για το Τρέχων Σχολικό Έτος" />
+			</f:facet>
+
+			<h:form>
+				<h:panelGrid columns="1">
+
+
+					<rich:panel>
+						<f:facet name="header">
+							<h:outputText value="Στοιχεία Διάθεσης" />
+						</f:facet>
+
+						<ui:include src="/components/messages-component.xhtml" />
+
+						<h:panelGrid columns="5">
+
+
+
+							<s:decorate id="secondmentTypeDecoration"
+								template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Τύπος Διάθεσεις" />
+								</ui:define>
+
+								<h:selectOneMenu id="disposalType"
+									value="#{disposalCriteria.disposalType}">
+									<s:selectItems hideNoSelectionLabel="false"
+										noSelectionLabel="Όλοι οι Τύποι" var="_disposalType"
+										value="#{disposalTypes}"
+										label="#{messages[_disposalType.key]}" />
+									<s:convertEnum />
+									<a4j:support event="onblur"
+										reRender="secondmentTargetDecoration" ajaxSingle="true" />
+								</h:selectOneMenu>
+							</s:decorate>
+
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Ομάδα Ειδικοτήτων : " />
+								</ui:define>
+								<h:inputText id="specializationGroupFilter"
+									styleClass="fieldValueText" size="30">
+
+									<rich:suggestionbox height="200" width="350"
+										for="specializationGroupFilter" var="a_spec"
+										suggestionAction="#{specializationGroupSuggester.suggest}">
+										<f:facet name="nothingLabel">
+											<h:outputText value="Άγνωστη Ομάδα Ειδικοτήτων" />
+										</f:facet>
+										<h:column>
+											<h:outputText value="#{a_spec.title}" />
+										</h:column>
+										<a4j:support ajaxSingle="true" event="onselect">
+											<f:setPropertyActionListener value="#{a_spec}"
+												target="#{disposalCriteria.specializationGroup}" />
+										</a4j:support>
+									</rich:suggestionbox>
+								</h:inputText>
+							</s:decorate>
+
+							<s:decorate id="secondmentTargetDecoration"
+								template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Μονάδα Διάθεσεις" />
+								</ui:define>
+
+								<h:inputText value="#{disposalCriteria.targetUnit}"
+									id="secondmentTarget" styleClass="fieldValueText"
+									converter="unitConverter">
+
+									<rich:suggestionbox for="secondmentTarget" var="disposalUnit"
+										suggestionAction="#{disposalAwareUnitSuggester.suggest}">
+										<f:facet name="nothingLabel">
+											<h:outputText value="Άγνωστη Μονάδα Διάθεσεις" />
+										</f:facet>
+										<h:column>
+											<h:outputText value="#{disposalUnit.title}" />
+										</h:column>
+									</rich:suggestionbox>
+								</h:inputText>
+							</s:decorate>
+
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Περιοχή Οργανικής Διαθετημένου" />
+								</ui:define>
+
+								<h:selectOneMenu value="#{disposalCriteria.region}">
+									<f:selectItem itemLabel="Όλες οι Περιοχές" itemValue="" />
+									<f:selectItem itemLabel="Α Ηρακλείου" itemValue="Α" />
+									<f:selectItem itemLabel="Β Ηρακλείου" itemValue="Β" />
+								</h:selectOneMenu>
+							</s:decorate>
+
+							
+
+						</h:panelGrid>
+						<h:panelGrid columns="3">
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Ερμηνεία Ημερομηνίας Εφαρμογής" />
+								</ui:define>
+
+								<h:selectOneMenu value="#{disposalCriteria.dateSearchType}">
+									<s:selectItems var="dateSearchType" value="#{dateSearchTypes}"
+										label="#{messages[dateSearchType.key]}">
+									</s:selectItems>
+									<a4j:support event="onchange" ajaxSingle="true"
+										reRender="dateSearchFiltersPanel" />
+								</h:selectOneMenu>
+							</s:decorate>
+
+							<h:panelGroup>
+								<a4j:outputPanel id="dateSearchFiltersPanel">
+									<h:panelGroup
+										rendered="#{disposalCriteria.dateSearchType ne 'DURING_DATE_PERIOD'}">
+										<s:decorate id="effectiveDateDecoration"
+											template="/layout/doubleLineEdit.xhtml">
+											<ui:define name="label">
+												<h:outputText value="Ημερομηνία Εφαρμογής" />
+											</ui:define>
+											<rich:calendar enableManualInput="true"
+												value="#{disposalCriteria.effectiveDate}" required="true"
+												inputSize="10" mode="ajax" locale="el_GR"
+												inputClass="fieldValueText" datePattern="dd-MM-yyyy">
+												<a4j:support event="onblur"
+													reRender="establishedDateDecoration" bypassUpdates="true"
+													ajaxSingle="true" />
+											</rich:calendar>
+										</s:decorate>
+
+									</h:panelGroup>
+
+									<h:panelGroup
+										rendered="#{disposalCriteria.dateSearchType eq 'DURING_DATE_PERIOD'}">
+										<s:decorate id="effectiveDateDecorationFrom"
+											template="/layout/doubleLineEdit.xhtml">
+											<ui:define name="label">
+												<h:outputText value="Από" />
+											</ui:define>
+											<rich:calendar id="effectiveDate" enableManualInput="true"
+												value="#{disposalCriteria.effectiveDateFrom}"
+												required="true" inputSize="10" mode="ajax" locale="el_GR"
+												inputClass="fieldValueText" datePattern="dd-MM-yyyy">
+												<a4j:support event="onblur"
+													reRender="establishedDateDecoration" bypassUpdates="true"
+													ajaxSingle="true" />
+											</rich:calendar>
+										</s:decorate>
+										<s:decorate id="effectiveDateDecorationUntil"
+											template="/layout/doubleLineEdit.xhtml">
+											<ui:define name="label">
+												<h:outputText value="Εώς" />
+											</ui:define>
+											<rich:calendar id="effectiveDate" enableManualInput="true"
+												value="#{disposalCriteria.effectiveDateUntil}"
+												required="true" inputSize="10" mode="ajax" locale="el_GR"
+												inputClass="fieldValueText" datePattern="dd-MM-yyyy">
+												<a4j:support event="onblur"
+													reRender="establishedDateDecoration" bypassUpdates="true"
+													ajaxSingle="true" />
+											</rich:calendar>
+										</s:decorate>
+									</h:panelGroup>
+								</a4j:outputPanel>
+							</h:panelGroup>
+						</h:panelGrid>
+
+
+					</rich:panel>
+					<rich:spacer height="5" />
+					<rich:separator lineType="dashed" height="2" />
+					<rich:spacer height="5" />
+
+					<h:panelGroup>
+
+						<s:div styleClass="actionButtons">
+							<h:panelGrid columns="3">
+								<h:commandButton id="searchButton" value="Αναζήτηση"
+									actionListener="#{disposalReportByType.generateReport()}">
+									<s:defaultAction />
+								</h:commandButton>
+								<s:button action="#{disposalReportByType.generatePDFReport()}"
+									value="Εκτύπωση (PDF)" target="new" disabled="true"/>
+								<s:button id="backButton" action="backButton"
+									value="Τέλος Εργασίας" />
+							</h:panelGrid>
+						</s:div>
+					</h:panelGroup>
+				</h:panelGrid>
+
+				<rich:dataTable id="disposalsByTypeTable"
+					value="#{disposalReportByType.reportData}" var="_disposal"
+					 border="0" rowKeyVar="_row"
+					onRowMouseOver="this.style.backgfroundColor='#F8F8F8'"
+					onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+					width="100%">
+					<f:facet name="header">
+						<h:outputLabel value="Ενεργές Διαθέσεις" />
+					</f:facet>
+					<rich:column style="text-align:center">
+						<f:facet name="header">A/A</f:facet>
+						<h:outputText styleClass="fieldValueText" value="#{_row+1}" />
+					</rich:column>
+
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Εκπαιδευτικός" />
+						</f:facet>
+						<h:outputText
+							value="#{_disposal.employeeLastName} #{_disposal.employeeFirstName} του #{_disposal.employeeFatherName}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Ειδ." />
+						</f:facet>
+						<h:outputText value="#{_disposal.employeeSpecializationID}" />
+					</rich:column>
+
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Λεκτικό Ειδ." />
+						</f:facet>
+						<h:outputText value="#{_disposal.employeeSpecialization}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Οργανική Μονάδα" />
+						</f:facet>
+						<h:outputText value="#{_disposal.sourceUnit}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Περ." />
+						</f:facet>
+						<h:outputText value="#{_disposal.sourceUnitRegion}" />
+					</rich:column>
+
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Tύπος Διάθεσης" />
+						</f:facet>
+						<h:outputText value="#{messages[_disposal.disposalTypeKey]}" />
+					</rich:column>
+
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Διάθεση Σε" />
+						</f:facet>
+						<h:outputText value="#{_disposal.disposalUnit}" />
+					</rich:column>
+
+					
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Απο" />
+						</f:facet>
+						<h:outputText value="#{_disposal.establishedIn}">
+							<s:convertDateTime pattern="dd-MM-yyyy" />
+						</h:outputText>
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Εώς" />
+						</f:facet>
+						<h:outputText value="#{_disposal.dueTo}">
+							<s:convertDateTime pattern="dd-MM-yyyy" />
+						</h:outputText>
+					</rich:column>
+
+					
+
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Ώρες" />
+						</f:facet>
+						<h:outputText value="#{_disposal.hours}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Ημέρες" />
+						</f:facet>
+						<h:outputText value="#{_disposal.days}" />
+					</rich:column>
+					<f:facet name="footer">
+						<rich:datascroller for="disposalsByTypeTable">
+							<f:facet name="first">
+								<h:outputText value="Πρώτη" />
+							</f:facet>
+							<f:facet name="last">
+								<h:outputText value="Τελευταία" />
+							</f:facet>
+						</rich:datascroller>
+					</f:facet>
+				</rich:dataTable>
+			</h:form>
+		</rich:panel>
+	</ui:define>
+</ui:composition>
+</html>

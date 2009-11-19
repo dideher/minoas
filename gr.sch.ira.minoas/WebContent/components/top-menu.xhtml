@@ -134,13 +134,11 @@
 					<rich:menuGroup value="Εκτύπωσεις και Σταστικά"
 						disabled="#{!(s:hasRole('ADMIN') or s:hasRole('VIEW_DISPOSAL'))}">
 						<rich:menuItem submitMode="none">
-							<s:link value="Θητείες Ανα Τύπο"
-								view="/serviceallocation/report-by-type.xhtml">
-								<f:param name="service_allocation_report_by_type_from"
-									value="/home" />
+							<s:link value="Διαθέσεις Ανα Τύπο" propagation="nest"
+								view="/disposal/report-by-type.xhtml">
+								<f:param name="from" value="/home" />
 							</s:link>
 						</rich:menuItem>
-
 					</rich:menuGroup>
 				</rich:menuGroup>
 				
