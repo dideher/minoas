@@ -21,13 +21,12 @@
 				<rich:spacer height="5" />
 
 				<a4j:repeat var="_group" value="#{schoolEmployments}">
-					<rich:panel rendered="#{_group.size gt 0}">
-						
-						<h:outputText value="#{_group}"/>
-						<h:outputText value="#{_group.size}" />
-						
-						
-						<rich:dataTable var="_schoolRegularEmployment" value="#{_group}"
+					<rich:panel rendered="#{_group.size() gt 0}">
+						<f:facet name="header">
+							<h:outputText value="#{_group.specializationGroup.title}" />
+						</f:facet>
+
+						<rich:dataTable var="_schoolRegularEmployment" value="#{_group.items}"
 							sortMode="multi" border="0" rowKeyVar="_row"
 							onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
 							onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
@@ -59,21 +58,12 @@
 										<h:outputText value="Υπ. Ωρ." />
 									</rich:column>
 									<rich:column style="text-align:right">
-										<h:outputText styleClass="Ωρ." />
+										<h:outputText value="Ωρ." />
 									</rich:column>
 									<rich:column style="text-align:right">
-										<h:outputText styleClass="fieldValueText" value="Σχόλιο" />
+										<h:outputText value="Σχόλιο" />
 									</rich:column>
-									<rich:column breakBefore="true" colspan="7">
-									</rich:column>
-									<rich:column>
-									</rich:column>
-																		<rich:column>
-									</rich:column>
-									
-																		<rich:column>
-									</rich:column>
-									
+
 								</rich:columnGroup>
 							</f:facet>
 							<rich:column style="text-align:center">
@@ -113,7 +103,7 @@
 							<rich:column>
 								<h:outputText
 									value="#{messages[_schoolRegularEmployment.employeeTypeKey]}" />
-									<f:facet name="footer">
+								<f:facet name="footer">
 									<h:outputText value="Σύνολα" />
 								</f:facet>
 							</rich:column>
@@ -122,14 +112,14 @@
 								<h:outputText
 									value="#{_schoolRegularEmployment.employeeMandatoryHours}" />
 								<f:facet name="footer">
-									<h:outputText value="group.availableHours" />
+									<h:outputText value="#{_group.availableHours}" />
 								</f:facet>
 							</rich:column>
 							<rich:column style="text-align:right">
 								<h:outputText styleClass="fieldValueText"
 									value="#{_schoolRegularEmployment.employeeFinalWorkingHours}" />
 								<f:facet name="footer">
-									<h:outputText value="group.availableHours" />
+									<h:outputText value="#{_group.availableHours}" />
 								</f:facet>
 							</rich:column>
 							<rich:column style="text-align:right">
