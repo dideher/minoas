@@ -3,18 +3,21 @@ package gr.sch.ira.minoas.seam.components.reports.resource;
 import gr.sch.ira.minoas.model.core.Specialization;
 import gr.sch.ira.minoas.model.core.SpecializationGroup;
 
+import java.util.AbstractList;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-public class SchoolUniversalEmployments implements Collection<SchoolUniversalEmploymentsGroup> {
+public class SchoolUniversalEmployments extends AbstractList<SchoolUniversalEmploymentsGroup> {
 
 	private HashMap<String, SpecializationGroup> specializationGroupMap = new HashMap<String, SpecializationGroup>();
 
 	private HashMap<SpecializationGroup, SchoolUniversalEmploymentsGroup> employmentsGroupMap = new HashMap<SpecializationGroup, SchoolUniversalEmploymentsGroup>();
 
+	private List<SchoolUniversalEmploymentsGroup> employmentsGroupIndexList = new ArrayList<SchoolUniversalEmploymentsGroup>();
 	/**
 	 * 
 	 */
@@ -25,7 +28,9 @@ public class SchoolUniversalEmployments implements Collection<SchoolUniversalEmp
 	public SchoolUniversalEmployments(Collection<SpecializationGroup> specializationGroups) {
 		this();
 		for (SpecializationGroup specializationGroup : specializationGroups) {
-			employmentsGroupMap.put(specializationGroup, new SchoolUniversalEmploymentsGroup());
+			SchoolUniversalEmploymentsGroup item = new SchoolUniversalEmploymentsGroup(specializationGroup);
+			employmentsGroupIndexList.add(item);
+			employmentsGroupMap.put(specializationGroup, item);
 			for (Specialization specialization : specializationGroup.getSpecializations())
 				specializationGroupMap.put(specialization.getId(), specializationGroup);
 		}
@@ -43,75 +48,38 @@ public class SchoolUniversalEmployments implements Collection<SchoolUniversalEmp
 		
 	}
 
-	public Collection<SchoolUniversalEmploymentsGroup> getEmploymentGroups() {
-		return employmentsGroupMap.values();
-	}
-
-	public boolean add(SchoolUniversalEmploymentsGroup o) {
-		return false;
-	}
-
+	/**
+	 * @see java.util.AbstractList#add(int, java.lang.Object)
+	 */
+	@Override
 	public void add(int index, SchoolUniversalEmploymentsGroup element) {
+		super.add(index, element);
 	}
 
-	public boolean addAll(Collection<? extends SchoolUniversalEmploymentsGroup> c) {
-		return false;
-	}
-
-	public boolean addAll(int index, Collection<? extends SchoolUniversalEmploymentsGroup> c) {
-		return false;
-	}
-
-	public void clear() {
-	}
-
-	public boolean contains(Object o) {
-		return false;
-	}
-
-	public boolean containsAll(Collection<?> c) {
-		return false;
-	}
-
+	/**
+	 * @see java.util.AbstractList#get(int)
+	 */
+	@Override
 	public SchoolUniversalEmploymentsGroup get(int index) {
-		return null;
+		return employmentsGroupIndexList.get(index);
 	}
 
-	public int indexOf(Object o) {
-		return 0;
+	/**
+	 * @see java.util.AbstractList#remove(int)
+	 */
+	@Override
+	public SchoolUniversalEmploymentsGroup remove(int index) {
+		return super.remove(index);
 	}
 
-	public boolean isEmpty() {
-		return false;
-	}
-
-	public Iterator<SchoolUniversalEmploymentsGroup> iterator() {
-		return null;
-	}
-
-	public boolean remove(Object o) {
-		return false;
-	}
-
-	public boolean removeAll(Collection<?> c) {
-		return false;
-	}
-
-	public boolean retainAll(Collection<?> c) {
-		return false;
-	}
-
+	/**
+	 * @see java.util.AbstractCollection#size()
+	 */
+	@Override
 	public int size() {
-		return 0;
+		return employmentsGroupMap.size();
 	}
 
-	public Object[] toArray() {
-		return null;
-	}
-
-	public <T> T[] toArray(T[] a) {
-		return null;
-	}
 
 
 }

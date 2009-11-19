@@ -26,6 +26,7 @@ import org.apache.commons.lang.time.DateUtils;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Out;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.datamodel.DataModel;
 
@@ -37,10 +38,8 @@ import org.jboss.seam.annotations.datamodel.DataModel;
 @Scope(ScopeType.CONVERSATION)
 public class SchoolEmploymentsReport extends BaseReport {
 
-	@DataModel(value = "schoolEmploymentsAnalysis")
-	private Collection<SchoolUniversalEmploymentItem> schoolEmploymentsAnalysis;
-
-	@DataModel(value = "schoolEmployments")
+	//@DataModel(value = "schoolEmployments")
+	@Out
 	private SchoolUniversalEmployments schoolEmployments;
 
 	private DateFormat dateFormat;
@@ -191,7 +190,6 @@ public class SchoolEmploymentsReport extends BaseReport {
 
 		schoolEmployments = new SchoolUniversalEmployments(getCoreSearching().getSpecializationGroups(activeSchoolYear,
 				getEntityManager()));
-		schoolEmploymentsAnalysis = new ArrayList<SchoolUniversalEmploymentItem>();
 
 		/* ************************************************************************************ */
 		/* REGULAR EMPLOYMENTS 																	*/
@@ -244,7 +242,6 @@ public class SchoolEmploymentsReport extends BaseReport {
 				item.setEmploymentComment(constructComment(leave));
 			}
 
-			schoolEmploymentsAnalysis.add(item);
 			schoolEmployments.add(item);
 		}
 
@@ -289,7 +286,6 @@ public class SchoolEmploymentsReport extends BaseReport {
 				item.setEmploymentComment(constructComment(leave));
 			}
 
-			schoolEmploymentsAnalysis.add(item);
 			schoolEmployments.add(item);
 		}
 
@@ -311,7 +307,6 @@ public class SchoolEmploymentsReport extends BaseReport {
 				item.setEmploymentComment(constructComment(leave));
 			}
 
-			schoolEmploymentsAnalysis.add(item);
 			schoolEmployments.add(item);
 		}
 
@@ -350,7 +345,6 @@ public class SchoolEmploymentsReport extends BaseReport {
 					item.setEmploymentComment(item.getEmploymentComment().concat(constructComment(leave)));
 				}
 
-				schoolEmploymentsAnalysis.add(item);
 				schoolEmployments.add(item);
 			} catch (Exception ex) {
 				continue;
@@ -373,7 +367,6 @@ public class SchoolEmploymentsReport extends BaseReport {
 					item.setEmploymentComment(item.getEmploymentComment().concat(constructComment(leave)));
 				}
 
-				schoolEmploymentsAnalysis.add(item);
 				schoolEmployments.add(item);
 			} catch (Exception ex) {
 				continue;
@@ -395,7 +388,6 @@ public class SchoolEmploymentsReport extends BaseReport {
 				item.setEmploymentComment(item.getEmploymentComment().concat(constructComment(leave)));
 			}
 
-			schoolEmploymentsAnalysis.add(item);
 			schoolEmployments.add(item);
 
 		}
