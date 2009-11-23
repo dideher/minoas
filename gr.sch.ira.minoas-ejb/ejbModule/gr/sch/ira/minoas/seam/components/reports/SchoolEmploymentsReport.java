@@ -124,9 +124,9 @@ public class SchoolEmploymentsReport extends BaseReport {
 		sb.append(disposal.getDisposalUnit().getTitle());
 		sb.append(" για ");
 		sb.append(disposal.getHours());
-		sb.append(" (");
+		sb.append(" ωρες και ");
 		sb.append(disposal.getDays());
-		sb.append(" ημέρες). ");
+		sb.append(" ημέρες. ");
 		return sb.toString();
 
 	}
@@ -141,9 +141,9 @@ public class SchoolEmploymentsReport extends BaseReport {
 		sb.append(disposal.getAffectedEmployment().getSchool().getTitle());
 		sb.append(" για ");
 		sb.append(disposal.getHours());
-		sb.append(" (");
+		sb.append(" ώρες και ");
 		sb.append(disposal.getDays());
-		sb.append(" ημέρες). ");
+		sb.append(" ημέρες. ");
 		return sb.toString();
 
 	}
@@ -302,7 +302,7 @@ public class SchoolEmploymentsReport extends BaseReport {
 
 		for (Employment employment : schoolHourlyBasedEmployments) {
 			SchoolUniversalEmploymentItem item = new SchoolUniversalEmploymentItem(employment);
-
+			item.setEmployeeMandatoryHours(11);
 			/* check if the employment is associated with a leave */
 			Leave leave = getCoreSearching()
 					.getEmployeeActiveLeave(getEntityManager(), employment.getEmployee(), today);
@@ -362,7 +362,8 @@ public class SchoolEmploymentsReport extends BaseReport {
 			try {
 				SchoolUniversalEmploymentItem item = new SchoolUniversalEmploymentItem(disposal);
 				item.setEmploymentComment(constructIncommingComment(disposal));
-
+				item.setEmployeeFinalWorkingHours(disposal.getHours());
+				
 				/* check if the employment is associated with a leave */
 				Leave leave = getCoreSearching().getEmployeeActiveLeave(getEntityManager(), disposal.getEmployee(),
 						today);
@@ -381,6 +382,13 @@ public class SchoolEmploymentsReport extends BaseReport {
 		Collection<ServiceAllocation> incomingServiceAllocation = getCoreSearching()
 				.getSchoolIncomingServiceAllocations(getEntityManager(), schoolHome.getInstance(), today);
 		for (ServiceAllocation serviceAllocation : incomingServiceAllocation) {
+			
+			/* check if the incoming service allocation has regular position in the school. 
+			 * If so, then it has been already handled.
+			 */
+			if(serviceAllocation.getServiceUnit().getId().equals(serviceAllocation.getSourceUnit().getId())) {
+				continue;
+			}
 			SchoolUniversalEmploymentItem item = new SchoolUniversalEmploymentItem(serviceAllocation);
 			item.setEmploymentComment(constructIncomingComment(serviceAllocation));
 
@@ -397,47 +405,7 @@ public class SchoolEmploymentsReport extends BaseReport {
 
 		}
 
-		/*
-		
-		schoolChiefs = convertServiceAllocationCollection(getCoreSearching().getSchoolIncomingServiceAllocationsOfType(
-				getEntityManager(), schoolHome.getInstance(), today,
-				Arrays.asList(ServiceAllocationType.SCHOOL_HEADMASTER, ServiceAllocationType.SCHOOL_SUBHEADMASTER)));
-
-		schoolRegularsEmployees = convertEmployeeCollection(getCoreSearching()
-				.getSchoolActiveEmployeesOfEmploymentType(getEntityManager(), schoolHome.getInstance(),
-						getCoreSearching().getActiveSchoolYear(getEntityManager()), today, EmploymentType.REGULAR));
-
-		schoolDeputyEmployees = convertEmployeeCollection(getCoreSearching().getSchoolActiveEmployeesOfEmploymentType(
-				getEntityManager(), schoolHome.getInstance(),
-				getCoreSearching().getActiveSchoolYear(getEntityManager()), today, EmploymentType.DEPUTY));
-
-		incomingSecondments = convertSecondmentCollection(getCoreSearching().getSchoolSecondments(getEntityManager(),
-				schoolHome.getInstance(), activeSchoolYear, today));
-
-		incomingServiceAllocations = convertServiceAllocationCollection(getCoreSearching()
-				.getSchoolIncomingServiceAllocations(getEntityManager(), schoolHome.getInstance(), today));
-
-		incomingDisposals = convertDisposalCollection(getCoreSearching().getSchoolDisposals(getEntityManager(),
-				schoolHome.getInstance(), activeSchoolYear, today, null));
-
-		outcomingSecondments = convertSecondmentCollection(getCoreSearching().getSchoolOutgoingSecondments(
-				getEntityManager(), schoolHome.getInstance(), activeSchoolYear, today));
-
-		schoolLeaves = convertLeaveCollection(getCoreSearching().getSchoolLeaves(getEntityManager(),
-				schoolHome.getInstance(), activeSchoolYear, today, null));
-
-		schoolRegularEmployments = convertEmploymentCollection(getCoreSearching().getSchoolEmploymentsOfType(
-				getEntityManager(), activeSchoolYear, schoolHome.getInstance(), EmploymentType.REGULAR));
-
-		schoolDeputyEmployments = convertEmploymentCollection(getCoreSearching().getSchoolEmploymentsOfType(
-				getEntityManager(), activeSchoolYear, schoolHome.getInstance(), EmploymentType.DEPUTY));
-
-		schoolHourlyBasedEmployments = convertEmploymentCollection(getCoreSearching().getSchoolEmploymentsOfType(
-				getEntityManager(), activeSchoolYear, schoolHome.getInstance(), EmploymentType.HOURLYBASED));
-
-		outcomingServiceAllocations = convertServiceAllocationCollection(getCoreSearching()
-				.getSchoolReallyOutgoingServiceAllocations(getEntityManager(), schoolHome.getInstance(), today, null));
-		*/
+	
 		setSchoolEmployments(reportData);
 		finished = System.currentTimeMillis();
 		info("report has been generated in #0 [ms]", (finished - started));
