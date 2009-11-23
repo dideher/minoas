@@ -2,6 +2,7 @@ package gr.sch.ira.minoas.seam.components.reports.resource;
 
 import gr.sch.ira.minoas.model.core.Specialization;
 import gr.sch.ira.minoas.model.core.SpecializationGroup;
+import gr.sch.ira.minoas.model.core.TeachingRequirement;
 
 import java.util.AbstractList;
 import java.util.ArrayList;
@@ -25,15 +26,25 @@ public class SchoolUniversalEmployments extends AbstractList<SchoolUniversalEmpl
 		super();
 	}
 
-	public SchoolUniversalEmployments(Collection<SpecializationGroup> specializationGroups) {
+	public SchoolUniversalEmployments(Collection<TeachingRequirement> schoolRequirements, Collection<SpecializationGroup> specializationGroups) {
 		this();
+		HashMap<SpecializationGroup, TeachingRequirement> schoolRequirementsMap = new HashMap<SpecializationGroup, TeachingRequirement>(specializationGroups.size());
+		for(TeachingRequirement requirement : schoolRequirements) {
+			schoolRequirementsMap.put(requirement.getSpecialization(), requirement);
+		}
 		for (SpecializationGroup specializationGroup : specializationGroups) {
 			SchoolUniversalEmploymentsGroup item = new SchoolUniversalEmploymentsGroup(specializationGroup);
+			/* check if we have a teaching requirement for the given specialization group */
+			TeachingRequirement requirement = schoolRequirementsMap.get(specializationGroup);
+			if(requirement!=null)
+				item.setRequiredHours(requirement.getHours());
+			
 			employmentsGroupIndexList.add(item);
 			employmentsGroupMap.put(specializationGroup, item);
 			for (Specialization specialization : specializationGroup.getSpecializations())
 				specializationGroupMap.put(specialization.getId(), specializationGroup);
 		}
+		
 	}
 
 	public void add(SchoolUniversalEmploymentItem item) {

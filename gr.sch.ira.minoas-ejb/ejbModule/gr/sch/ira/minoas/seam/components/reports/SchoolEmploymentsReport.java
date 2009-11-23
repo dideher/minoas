@@ -3,6 +3,7 @@ package gr.sch.ira.minoas.seam.components.reports;
 import gr.sch.ira.minoas.model.core.SchoolYear;
 import gr.sch.ira.minoas.model.core.Specialization;
 import gr.sch.ira.minoas.model.core.SpecializationGroup;
+import gr.sch.ira.minoas.model.core.TeachingRequirement;
 import gr.sch.ira.minoas.model.employement.Disposal;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
@@ -187,8 +188,13 @@ public class SchoolEmploymentsReport extends BaseReport {
 
 		SchoolYear activeSchoolYear = getCoreSearching().getActiveSchoolYear(getEntityManager());
 
-		SchoolUniversalEmployments reportData = new SchoolUniversalEmployments(getCoreSearching().getSpecializationGroups(activeSchoolYear,
+		
+		
+		SchoolUniversalEmployments reportData = new SchoolUniversalEmployments(getCoreSearching()
+				.getSchoolTeachingRequirement(getEntityManager(), schoolHome.getInstance(), activeSchoolYear), getCoreSearching().getSpecializationGroups(activeSchoolYear,
 				getEntityManager()));
+		
+		
 
 		/* ************************************************************************************ */
 		/* REGULAR EMPLOYMENTS 																	*/

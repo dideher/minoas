@@ -11,13 +11,13 @@
 	<h:form>
 		<rich:panel>
 			<f:facet name="header">
-				<h:outputLabel value="Οργανικά Ανήκωντες" />
+				<h:outputLabel value="Τρέχουσα Κατάσταση" />
 			</f:facet>
 			<h:panelGrid columns="1" width="100%">
 
 				<rich:spacer height="2" />
 				<h:outputText
-					value="Εμφανίζεται το μόνιμο προσωπικό με οργανική θέση στην σχολική μονάδα, άσχετα αν προσφέρει στην μονάδα διδακτικές ώρες." />
+					value="Παρακάτω εμφανίζεται όλο το διδακτικό προσωπικού που προσφέρει ή δεν προσφέρει διδακτικό έργο στην μονάδα. To προσωπικό που εμφανίζεται στην κατάσταση ανήκει οργανικά στην μονάδα ή έχει τοποθετηθεί στην μονάδα με οποιαδήποτε ιδιότητα." />
 				<rich:spacer height="5" />
 
 				<a4j:repeat var="_group" value="#{schoolEmployments}">
@@ -104,27 +104,46 @@
 								<h:outputText
 									value="#{messages[_schoolRegularEmployment.employeeTypeKey]}" />
 								<f:facet name="footer">
-									<h:outputText value="Σύνολα" />
-								</f:facet>
+								<s:div style="text-align:right">
+									<h:outputText value="Σύνολα : " style="font-weight:bold;" />
+								</s:div>
+								</f:facet>	
 							</rich:column>
 
 							<rich:column style="text-align:right">
 								<h:outputText
 									value="#{_schoolRegularEmployment.employeeMandatoryHours}" />
 								<f:facet name="footer">
-									<h:outputText value="#{_group.availableHours}" />
+								<s:div style="text-align:right">
+									<h:outputText value="#{_group.mandatoryHours}" style="color:green;font-weight:bold;" />
+								</s:div>
 								</f:facet>
 							</rich:column>
 							<rich:column style="text-align:right">
 								<h:outputText styleClass="fieldValueText"
 									value="#{_schoolRegularEmployment.employeeFinalWorkingHours}" />
 								<f:facet name="footer">
-									<h:outputText value="#{_group.availableHours}" />
+									<s:div style="text-align:right">
+									<h:outputText value="#{_group.availableHours}" style="color:green;font-weight:bold; text-align:right" />
+									</s:div>
 								</f:facet>
 							</rich:column>
 							<rich:column style="text-align:right">
 								<h:outputText styleClass="fieldValueText"
 									value="#{_schoolRegularEmployment.employmentComment}" />
+								<f:facet name="footer">	
+								<s:div style="text-align:center">
+									<h:outputText value="Απαιτούμενες ώρες : " />
+										<h:outputText value="#{_group.requiredHours}" style="color:blue;font-weight:bold; text-align:right" />
+									<h:outputText value=", Πλ/Κν (+/-) : " />
+									<h:outputText rendered="#{!_group.hasMissingHours()}"
+										value="#{_group.missingHours}"
+										style="color: blue;font-weight:bold;" />
+									<h:outputText rendered="#{_group.hasMissingHours()}"
+										value="#{_group.missingHours}"
+										style="color: red;font-weight:bold;" />
+								</s:div>
+								</f:facet>
 							</rich:column>
 
 

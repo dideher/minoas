@@ -11,6 +11,8 @@ import java.util.List;
 public class SchoolUniversalEmploymentsGroup   {
 
 	private Integer availableHours = 0 ;
+	
+	private Integer mandatoryHours = 0;
 
 	private List<SchoolUniversalEmploymentItem> items = new ArrayList<SchoolUniversalEmploymentItem>();
 
@@ -39,6 +41,7 @@ public class SchoolUniversalEmploymentsGroup   {
 	public boolean add(SchoolUniversalEmploymentItem item) {
 		
 		this.availableHours += item.getEmployeeFinalWorkingHours();
+		this.mandatoryHours += item.getEmployeeMandatoryHours();
 		return items.add(item);
 	}
 
@@ -52,8 +55,7 @@ public class SchoolUniversalEmploymentsGroup   {
 	}
 
 	public Integer getMissingHours() {
-		return null;
-		//return getAvailableHours() - getRequiredHours();
+		return getAvailableHours() - getRequiredHours();
 	}
 
 	/**
@@ -100,6 +102,20 @@ public class SchoolUniversalEmploymentsGroup   {
 
 	public int size() {
 		return items.size();
+	}
+
+	/**
+	 * @return the mandatoryHours
+	 */
+	public Integer getMandatoryHours() {
+		return mandatoryHours;
+	}
+
+	/**
+	 * @param mandatoryHours the mandatoryHours to set
+	 */
+	public void setMandatoryHours(Integer mandatoryHours) {
+		this.mandatoryHours = mandatoryHours;
 	}
 
 	
