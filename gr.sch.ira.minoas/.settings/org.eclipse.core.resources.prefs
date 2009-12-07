@@ -1,4 +1,4 @@
-#Mon Nov 02 12:05:19 EET 2009
+#Fri Nov 06 12:03:36 EET 2009
 eclipse.preferences.version=1
 encoding//WebContent/admin/manage-principals.xhtml=UTF-8
 encoding//WebContent/admin/manage-specialization-groups.xhtml=UTF-8
@@ -28,6 +28,7 @@ encoding//WebContent/login.xhtml=UTF-8
 encoding//WebContent/school/basicInfo.xhtml=UTF-8
 encoding//WebContent/school/detailed-school-status-component.xhtml=UTF-8
 encoding//WebContent/school/school-deputy-employments-component.xhtml=UTF-8
+encoding//WebContent/school/school-employments-analysis-component.xhtml=UTF-8
 encoding//WebContent/school/school-hourlybased-employments-component.xhtml=UTF-8
 encoding//WebContent/school/school-regular-employments-component.xhtml=UTF-8
 encoding//WebContent/school/school.xhtml=UTF-8

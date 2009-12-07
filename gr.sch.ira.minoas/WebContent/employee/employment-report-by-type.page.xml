@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page login-required="true" xmlns="http://jboss.com/products/seam/pages"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.1.xsd">
+  <description>Σχέσεις Εργασίας Ανά Τύπο</description>
+  <begin-conversation flush-mode="manual" join="true"/>
+  <param name="employment_report_by_type_from" />
+  <navigation from-action="backButton">
+    <end-conversation />
+    <redirect view-id="#{employment_report_by_type_from ? '/home' : employment_report_by_type_from}.xhtml}" />
+  </navigation>
+   <navigation from-action="selectEmployee">
+      <redirect view-id="/employment/employment.xhtml" />
+  </navigation>
+</page>
+ 
