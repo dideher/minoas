@@ -282,6 +282,11 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 	public EmployeeType[] getEmployeeTypes() {
 		return EmployeeType.values();
 	}
+	
+	@Factory(value = "employmentTypes")
+	public EmploymentType[] getEmploymentTypes() {
+		return EmploymentType.values();
+	}
 
 	protected EntityManager getEntityManager() {
 		return this.entityManager;

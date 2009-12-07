@@ -28,6 +28,8 @@ public class EmploymentReportItem extends EmployeeReportItem {
 		super(employment.getEmployee());
 		this.employmentType = employment.getType().toString();
 		this.employmentTypeKey = employment.getType().getKey();
+		if(employment.getSchool()!=null)
+			setSchool(employment.getSchool().getTitle());
 		setEmployeeFinalWorkingHours(employment.getFinalWorkingHours());
 		setEmployeeMandatoryHours(employment.getMandatoryWorkingHours());
 		setEmployeeEmploymentEstablishedDate(employment.getEstablished());

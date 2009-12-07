@@ -321,12 +321,27 @@ public class SchoolEmploymentsReport extends BaseReport {
 		Collection<Secondment> incomingSecondents = getCoreSearching().getSchoolSecondments(getEntityManager(),
 				schoolHome.getInstance(), activeSchoolYear, today);
 		for (Secondment secondment : incomingSecondents) {
+			System.err.println(secondment.getEmployee().toString()+" "+secondment.getAffectedEmployment());
 			try {
 				SchoolUniversalEmploymentItem item = secondment.getAffectedEmployment() != null ? new SchoolUniversalEmploymentItem(
 						secondment)
-						: new SchoolUniversalEmploymentItem();
+						: new SchoolUniversalEmploymentItem(secondment.getEmployee());
 				item.setEmploymentComment(constructIncomingComment(secondment));
-
+				
+				if(secondment.getAffectedEmployment()==null) {
+					/* this is a special case of secondement when it is not
+					 * associated with an employment
+					 * 
+					 * This shit happens with secondments from other PYSDE
+					 */
+					
+					//item.setEmployeeFinalWorkingHours(employment.getFinalWorkingHours());
+					//item.setEmployeeMandatoryHours(employment.getMandatoryWorkingHours());
+					//item.setEmployeeEmploymentEstablishedDate(employment.getEstablished());
+					//item.setEmployeeEmploymentTerminatedDate(employment.getTerminated());
+					
+				}
+				
 				/* check if the employment is associated with a disposal */
 				Collection<Disposal> disposals = getCoreSearching().getEmployeeActiveDisposals(getEntityManager(),
 						secondment.getEmployee(), today);
@@ -352,6 +367,8 @@ public class SchoolEmploymentsReport extends BaseReport {
 
 				reportData.add(item);
 			} catch (Exception ex) {
+				System.err.println(ex);
+				error("error with secondment #1", incomingSecondents);
 				continue;
 			}
 		}
@@ -391,6 +408,7 @@ public class SchoolEmploymentsReport extends BaseReport {
 			}
 			SchoolUniversalEmploymentItem item = new SchoolUniversalEmploymentItem(serviceAllocation);
 			item.setEmploymentComment(constructIncomingComment(serviceAllocation));
+			item.setEmployeeFinalWorkingHours(serviceAllocation.getWorkingHoursOnServicingPosition());
 
 			/* check if the employment is associated with a leave */
 			Leave leave = getCoreSearching().getEmployeeActiveLeave(getEntityManager(),

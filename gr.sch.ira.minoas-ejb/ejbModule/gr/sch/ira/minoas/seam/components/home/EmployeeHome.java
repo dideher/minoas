@@ -220,6 +220,9 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 		wire();
 		return persist();
 	}
+	
+	
+	
 
 	public void addNewHourlyBasedEmploymentItem() {
 		Employment e = new Employment();
