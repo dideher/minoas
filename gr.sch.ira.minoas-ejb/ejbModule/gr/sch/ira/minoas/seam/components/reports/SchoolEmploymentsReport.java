@@ -335,8 +335,10 @@ public class SchoolEmploymentsReport extends BaseReport {
 					 * This shit happens with secondments from other PYSDE
 					 */
 					
-					//item.setEmployeeFinalWorkingHours(employment.getFinalWorkingHours());
-					//item.setEmployeeMandatoryHours(employment.getMandatoryWorkingHours());
+					if(secondment.getFinalWorkingHours()!=null)
+						item.setEmployeeFinalWorkingHours(secondment.getFinalWorkingHours());
+					if(secondment.getMandatoryWorkingHours()!=null)
+						item.setEmployeeMandatoryHours(secondment.getMandatoryWorkingHours());
 					//item.setEmployeeEmploymentEstablishedDate(employment.getEstablished());
 					//item.setEmployeeEmploymentTerminatedDate(employment.getTerminated());
 					
