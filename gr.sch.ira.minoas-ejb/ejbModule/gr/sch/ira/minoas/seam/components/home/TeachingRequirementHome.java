@@ -21,11 +21,9 @@ public class TeachingRequirementHome extends MinoasEntityHome<TeachingRequiremen
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@In(create=true)
+	@In(create = true)
 	private SchoolHome schoolHome;
 
-
-	
 	/**
 	 * @see org.jboss.seam.framework.Home#createInstance()
 	 */
@@ -41,7 +39,7 @@ public class TeachingRequirementHome extends MinoasEntityHome<TeachingRequiremen
 	@Override
 	@Factory(value = "teachingRequirement", scope = ScopeType.PAGE)
 	public TeachingRequirement getInstance() {
-		TeachingRequirement req =(TeachingRequirement)super.getInstance();
+		TeachingRequirement req = (TeachingRequirement) super.getInstance();
 		return req;
 	}
 
@@ -60,7 +58,6 @@ public class TeachingRequirementHome extends MinoasEntityHome<TeachingRequiremen
 		getLogger().info("principal '#0' created teaching requirement #1.", getPrincipalName(), req);
 		return super.persist();
 	}
-	
 
 	/**
 	 * @see org.jboss.seam.framework.EntityHome#remove()
@@ -90,7 +87,5 @@ public class TeachingRequirementHome extends MinoasEntityHome<TeachingRequiremen
 		getLogger().info("principal '#0' updated teaching requirement #1.", getPrincipalName(), getInstance());
 		return super.update();
 	}
-	
-	
 
 }

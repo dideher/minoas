@@ -44,8 +44,15 @@ public class Employee extends Person {
 	@Column(name = "IS_ACTIVE", nullable = true)
 	private Boolean active;
 
-	@OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.PERSIST,
-			CascadeType.REFRESH } )
+	@Basic
+	@Column(name = "BIG_FAMILY", nullable = true)
+	private Boolean bigFamily = Boolean.FALSE;
+
+	@Basic
+	@Column(name = "COMMENT", nullable = true, length = 256)
+	private String comment;
+
+	@OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
 	@JoinColumn(name = "CURRENT_EMPLOYMENT_ID", nullable = true)
 	private Employment currentEmployment;
 
@@ -53,17 +60,8 @@ public class Employee extends Person {
 	@JoinColumn(name = "PYSDE_ID", nullable = false, updatable = true)
 	private PYSDE currentPYSDE;
 
-	@OneToMany(mappedBy = "employee", fetch = FetchType.LAZY, cascade = {CascadeType.ALL} )
+	@OneToMany(mappedBy = "employee", fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
 	private Set<Employment> employments;
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", cascade = {CascadeType.ALL})
-	private Collection<Secondment> secondments = new ArrayList<Secondment>();
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", cascade = {CascadeType.ALL})
-	private Collection<Leave> leaves = new ArrayList<Leave>();
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", cascade = {CascadeType.ALL})
-	private Collection<ServiceAllocation> serviceAllocations = new ArrayList<ServiceAllocation>();
 
 	/**
 	* Each employee have a specialization, which is actually the last employment's 
@@ -73,48 +71,35 @@ public class Employee extends Person {
 	@JoinColumn(name = "LAST_SPECIALIZATION_ID", nullable = true)
 	private Specialization lastSpecialization;
 
+	@OneToOne(optional = true, fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.PERSIST,
+			CascadeType.REFRESH })
+	@JoinColumn(name = "LEAVE_ID", nullable = true)
+	private Leave leave;
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", cascade = { CascadeType.ALL })
+	private Collection<Leave> leaves = new ArrayList<Leave>();
+
 	@Basic
 	@Column(name = "LEGACY_CODE", nullable = true, updatable = false, length = 10)
 	private String legacyCode;
 
 	@OneToOne(optional = true, fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
-	@JoinColumn(name="REGULAR_EMPLOYMEE_INFO_ID", nullable=true)
+	@JoinColumn(name = "REGULAR_EMPLOYMEE_INFO_ID", nullable = true)
 	private RegularEmployeeInfo regularEmployeeInfo;
-	
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", cascade = { CascadeType.ALL })
+	private Collection<Secondment> secondments = new ArrayList<Secondment>();
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", cascade = { CascadeType.ALL })
+	private Collection<ServiceAllocation> serviceAllocations = new ArrayList<ServiceAllocation>();
+
+	@Basic
+	@Column(name = "SPECIAL_CATEGORY", nullable = true)
+	private Boolean specialCategory = Boolean.FALSE;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "EMPLOYEE_TYPE", nullable = false, updatable = false)
 	private EmployeeType type;
-
-	@OneToOne(optional = true, fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.PERSIST,
-			CascadeType.REFRESH })
-	@JoinColumn(name = "LEAVE_ID", nullable = true)
-	private Leave leave;
-	
-	@Basic
-	@Column(name="BIG_FAMILY", nullable=true)
-	private Boolean bigFamily = Boolean.FALSE;
-	
-	@Basic
-	@Column(name="SPECIAL_CATEGORY", nullable=true)
-	private Boolean specialCategory = Boolean.FALSE;
-
-	@Basic
-	@Column(name="COMMENT", nullable=true, length=256)
-	private String comment;
-	/**
-	 * @return the leave
-	 */
-	public Leave getLeave() {
-		return leave;
-	}
-
-	/**
-	 * @param leave the leave to set
-	 */
-	public void setLeave(Leave leave) {
-		this.leave = leave;
-	}
 
 	/**
 	 * 
@@ -123,11 +108,49 @@ public class Employee extends Person {
 		super();
 	}
 
+	public Leave addLeave(Leave leave) {
+		if (!getLeaves().contains(leave)) {
+			getLeaves().add(leave);
+			leave.setEmployee(this);
+		}
+		return leave;
+	}
+
+	public Secondment addSecondment(Secondment secondment) {
+		if (!getSecondments().contains(secondment)) {
+			getSecondments().add(secondment);
+			secondment.setEmployee(this);
+		}
+		return secondment;
+	}
+
+	public ServiceAllocation addServiceAllocation(ServiceAllocation serviceAllocation) {
+		if (!getServiceAllocations().contains(serviceAllocation)) {
+			getServiceAllocations().add(serviceAllocation);
+			serviceAllocation.setEmployee(this);
+		}
+		return serviceAllocation;
+	}
+
 	/**
 	 * @return the active
 	 */
 	public Boolean getActive() {
 		return active;
+	}
+
+	/**
+	 * @return the bigFamily
+	 */
+	public Boolean getBigFamily() {
+		return bigFamily;
+	}
+
+	/**
+	 * @return the comment
+	 */
+	public String getComment() {
+		return comment;
 	}
 
 	/**
@@ -159,6 +182,20 @@ public class Employee extends Person {
 	}
 
 	/**
+	 * @return the leave
+	 */
+	public Leave getLeave() {
+		return leave;
+	}
+
+	/**
+	 * @return the leaves
+	 */
+	public Collection<Leave> getLeaves() {
+		return leaves;
+	}
+
+	/**
 	 * @return the legacyCode
 	 */
 	public String getLegacyCode() {
@@ -173,6 +210,27 @@ public class Employee extends Person {
 	}
 
 	/**
+	 * @return the secondments
+	 */
+	public Collection<Secondment> getSecondments() {
+		return secondments;
+	}
+
+	/**
+	 * @return the serviceAllocations
+	 */
+	public Collection<ServiceAllocation> getServiceAllocations() {
+		return serviceAllocations;
+	}
+
+	/**
+	 * @return the specialCategory
+	 */
+	public Boolean getSpecialCategory() {
+		return specialCategory;
+	}
+
+	/**
 	 * @return the type
 	 */
 	public EmployeeType getType() {
@@ -184,6 +242,20 @@ public class Employee extends Person {
 	 */
 	public void setActive(Boolean active) {
 		this.active = active;
+	}
+
+	/**
+	 * @param bigFamily the bigFamily to set
+	 */
+	public void setBigFamily(Boolean bigFamily) {
+		this.bigFamily = bigFamily;
+	}
+
+	/**
+	 * @param comment the comment to set
+	 */
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 
 	/**
@@ -215,6 +287,20 @@ public class Employee extends Person {
 	}
 
 	/**
+	 * @param leave the leave to set
+	 */
+	public void setLeave(Leave leave) {
+		this.leave = leave;
+	}
+
+	/**
+	 * @param leaves the leaves to set
+	 */
+	public void setLeaves(Collection<Leave> leaves) {
+		this.leaves = leaves;
+	}
+
+	/**
 	 * @param legacyCode the legacyCode to set
 	 */
 	public void setLegacyCode(String legacyCode) {
@@ -226,6 +312,27 @@ public class Employee extends Person {
 	 */
 	public void setRegularDetail(RegularEmployeeInfo regularDetail) {
 		this.regularEmployeeInfo = regularDetail;
+	}
+
+	/**
+	 * @param secondments the secondments to set
+	 */
+	public void setSecondments(Collection<Secondment> secondments) {
+		this.secondments = secondments;
+	}
+
+	/**
+	 * @param serviceAllocations the serviceAllocations to set
+	 */
+	public void setServiceAllocations(Collection<ServiceAllocation> serviceAllocations) {
+		this.serviceAllocations = serviceAllocations;
+	}
+
+	/**
+	 * @param specialCategory the specialCategory to set
+	 */
+	public void setSpecialCategory(Boolean specialCategory) {
+		this.specialCategory = specialCategory;
 	}
 
 	/**
@@ -244,6 +351,7 @@ public class Employee extends Person {
 		sb.append(getFatherName());
 		return sb.toString();
 	}
+
 	/**
 	 * @see java.lang.Object#toString()
 	 */
@@ -261,114 +369,6 @@ public class Employee extends Person {
 		sb.append(" )");
 		sb.append(" ]");
 		return sb.toString();
-	}
-
-	/**
-	 * @return the secondments
-	 */
-	public Collection<Secondment> getSecondments() {
-		return secondments;
-	}
-
-	/**
-	 * @param secondments the secondments to set
-	 */
-	public void setSecondments(Collection<Secondment> secondments) {
-		this.secondments = secondments;
-	}
-
-	/**
-	 * @return the leaves
-	 */
-	public Collection<Leave> getLeaves() {
-		return leaves;
-	}
-
-	/**
-	 * @param leaves the leaves to set
-	 */
-	public void setLeaves(Collection<Leave> leaves) {
-		this.leaves = leaves;
-	}
-
-	/**
-	 * @return the serviceAllocations
-	 */
-	public Collection<ServiceAllocation> getServiceAllocations() {
-		return serviceAllocations;
-	}
-
-	/**
-	 * @param serviceAllocations the serviceAllocations to set
-	 */
-	public void setServiceAllocations(Collection<ServiceAllocation> serviceAllocations) {
-		this.serviceAllocations = serviceAllocations;
-	}
-
-	public Secondment addSecondment(Secondment secondment) {
-		if (!getSecondments().contains(secondment)) {
-			getSecondments().add(secondment);
-			secondment.setEmployee(this);
-		}
-		return secondment;
-	}
-
-	public ServiceAllocation addServiceAllocation(ServiceAllocation serviceAllocation) {
-		if (!getServiceAllocations().contains(serviceAllocation)) {
-			getServiceAllocations().add(serviceAllocation);
-			serviceAllocation.setEmployee(this);
-		}
-		return serviceAllocation;
-	}
-
-	public Leave addLeave(Leave leave) {
-		if (!getLeaves().contains(leave)) {
-			getLeaves().add(leave);
-			leave.setEmployee(this);
-		}
-		return leave;
-	}
-
-	/**
-	 * @return the bigFamily
-	 */
-	public Boolean getBigFamily() {
-		return bigFamily;
-	}
-
-	/**
-	 * @param bigFamily the bigFamily to set
-	 */
-	public void setBigFamily(Boolean bigFamily) {
-		this.bigFamily = bigFamily;
-	}
-
-	/**
-	 * @return the specialCategory
-	 */
-	public Boolean getSpecialCategory() {
-		return specialCategory;
-	}
-
-	/**
-	 * @param specialCategory the specialCategory to set
-	 */
-	public void setSpecialCategory(Boolean specialCategory) {
-		this.specialCategory = specialCategory;
-	}
-
-	/**
-	 * @return the comment
-	 */
-	public String getComment() {
-		return comment;
-	}
-
-	/**
-	 * @param comment the comment to set
-	 */
-	public void setComment(String comment) {
-		this.comment = comment;
 	}
 
 }

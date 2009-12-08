@@ -28,7 +28,6 @@ public class SecondmentCleanup extends BaseSeamComponent {
 	@Transactional(TransactionPropagationType.REQUIRED)
 	public void processRecurringSecondmentCleanup(@Expiration Date date, @IntervalDuration Long interval) {
 		info("We're runninggg!!!!");
-		
-		
+
 	}
 }

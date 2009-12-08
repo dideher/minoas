@@ -5,14 +5,14 @@ import gr.sch.ira.minoas.model.BaseIDModel;
 public abstract class BaseIDReportItem {
 
 	private Integer id;
-	
+
 	public BaseIDReportItem() {
 	}
-	
+
 	public BaseIDReportItem(BaseIDModel entity) {
 		this();
 		setId(entity.getId());
-	}	
+	}
 
 	/**
 	 * @return the id

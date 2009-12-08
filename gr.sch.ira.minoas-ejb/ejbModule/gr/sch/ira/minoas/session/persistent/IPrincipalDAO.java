@@ -1,5 +1,3 @@
-
-
 package gr.sch.ira.minoas.session.persistent;
 
 import gr.sch.ira.minoas.model.security.Principal;
@@ -9,6 +7,6 @@ import gr.sch.ira.minoas.model.security.Principal;
  * @version $Id$
  */
 public interface IPrincipalDAO extends IGenericDAO<Principal, Long> {
-	
+
 	public Principal findByUsername(String username);
 }

@@ -22,20 +22,42 @@ import org.jboss.seam.international.StatusMessage.Severity;
 @Name("serviceAllocationHome")
 public class ServiceAllocationHome extends MinoasEntityHome<ServiceAllocation> {
 
-	@In(create = true)
-	private EmployeeHome employeeHome;
-	
-	@Transactional
-	public String revert() {
-		info("principal #0 is reverting updates to service allocation #1", getPrincipalName(), getInstance());
-		getEntityManager().refresh(getInstance());
-		return "reverted";
-	}
-
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
+	@In(create = true)
+	private EmployeeHome employeeHome;
+
+	@Transactional
+	public String cancel() {
+		ServiceAllocation currentServiceAllocation = getInstance();
+		currentServiceAllocation.setActive(Boolean.FALSE);
+		Employee employee = currentServiceAllocation.getEmployee();
+
+		Employment employment = employee.getCurrentEmployment();
+		if (employment != null)
+			employment.setServiceAllocation(null);
+		super.update();
+		info("principal '#0' canceled employee #1 current service allocation #1.", getPrincipalName(), employee,
+				currentServiceAllocation);
+		clearInstance();
+		return "updated";
+	}
+
+	/**
+	 * @see org.jboss.seam.framework.Home#createInstance()
+	 */
+	@Override
+	protected Object createInstance() {
+		ServiceAllocation instance = new ServiceAllocation();
+		instance.setServiceType(ServiceAllocationType.SCHOOL_HEADMASTER);
+		instance.setEstablished(getCoreSearching().getActiveSchoolYear(getEntityManager()).getSchoolYearStart());
+		instance.setDueTo(getCoreSearching().getActiveSchoolYear(getEntityManager()).getSchoolYearStop());
+		instance.setActive(Boolean.TRUE);
+		return instance;
+	}
 
 	/**
 	 * @see org.jboss.seam.framework.Home#getInstance()
@@ -44,24 +66,6 @@ public class ServiceAllocationHome extends MinoasEntityHome<ServiceAllocation> {
 	@Factory(value = "serviceAllocation", scope = ScopeType.PAGE)
 	public ServiceAllocation getInstance() {
 		return (ServiceAllocation) super.getInstance();
-	}
-
-	protected boolean validateSecondment(ServiceAllocation serviceAllocation,
-			boolean addMessages) {
-
-		/* check if the dates are correct */
-		if (serviceAllocation.getEstablished().after(
-				serviceAllocation.getDueTo())) {
-
-			if (addMessages)
-				facesMessages
-						.add(
-								Severity.ERROR,
-								"Η ημ/νια λήξης της θητείας πρέπει να είναι μεταγενέστερη της έναρξης. Μήπως να κάνεις ένα διάλειμα ;");
-			return false;
-		}
-		return true;
-
 	}
 
 	/**
@@ -73,8 +77,7 @@ public class ServiceAllocationHome extends MinoasEntityHome<ServiceAllocation> {
 		Employee employee = employeeHome.getInstance();
 		Employment currentEmployment = employee.getCurrentEmployment();
 		ServiceAllocation currentServiceAllocation = currentEmployment != null ? currentEmployment
-				.getServiceAllocation()
-				: null;
+				.getServiceAllocation() : null;
 		ServiceAllocation serviceAllocation = getInstance();
 		if (!validateSecondment(serviceAllocation, true)) {
 			return VALIDATION_ERROR_OUTCOME;
@@ -97,28 +100,10 @@ public class ServiceAllocationHome extends MinoasEntityHome<ServiceAllocation> {
 					.add(
 							Severity.WARN,
 							"Για τον εκπαιδευτικό #0 ο Μίνωας είχε καταχωρημένη και άλλη ενεργή θητεία στην μονάδα #1 με λήξη την #2, η οποία όμως ακυρώθηκε.",
-							(employee.getLastName() + " " + employee
-									.getFirstName()), currentServiceAllocation
-									.getServiceUnit().getTitle(),
-							currentServiceAllocation.getDueTo());
+							(employee.getLastName() + " " + employee.getFirstName()), currentServiceAllocation
+									.getServiceUnit().getTitle(), currentServiceAllocation.getDueTo());
 		}
 		return super.persist();
-	}
-
-	@Transactional
-	public String cancel() {
-		ServiceAllocation currentServiceAllocation = getInstance();
-		currentServiceAllocation.setActive(Boolean.FALSE);
-		Employee employee = currentServiceAllocation.getEmployee();
-
-		Employment employment = employee.getCurrentEmployment();
-		if (employment != null)
-			employment.setServiceAllocation(null);
-		super.update();
-		info("principal '#0' canceled employee #1 current service allocation #1.",
-				getPrincipalName(), employee, currentServiceAllocation);
-		clearInstance();
-		return "updated";
 	}
 
 	/**
@@ -128,6 +113,30 @@ public class ServiceAllocationHome extends MinoasEntityHome<ServiceAllocation> {
 	@Transactional
 	public String remove() {
 		return super.remove();
+	}
+
+	@Transactional
+	public String revert() {
+		info("principal #0 is reverting updates to service allocation #1", getPrincipalName(), getInstance());
+		getEntityManager().refresh(getInstance());
+		return "reverted";
+	}
+
+	public void suggestHours() {
+		ServiceAllocation instance = getInstance();
+		switch (instance.getServiceType()) {
+		case GRAND_HEADMASTER:
+		case SCHOOL_HEADMASTER:
+		case OFFICE_CHIEF:
+			instance.setWorkingHoursOnRegularPosition(0);
+			instance.setWorkingHoursOnServicingPosition(0);
+			break;
+		case SCHOOL_SUBHEADMASTER:
+			instance.setWorkingHoursOnRegularPosition(0);
+			instance.setWorkingHoursOnServicingPosition(8);
+			break;
+		}
+		return;
 	}
 
 	/**
@@ -141,21 +150,6 @@ public class ServiceAllocationHome extends MinoasEntityHome<ServiceAllocation> {
 			return VALIDATION_ERROR_OUTCOME;
 		} else
 			return super.update();
-	}
-
-	/**
-	 * @see org.jboss.seam.framework.Home#createInstance()
-	 */
-	@Override
-	protected Object createInstance() {
-		ServiceAllocation instance = new ServiceAllocation();
-		instance.setServiceType(ServiceAllocationType.SCHOOL_HEADMASTER);
-		instance.setEstablished(getCoreSearching().getActiveSchoolYear(
-				getEntityManager()).getSchoolYearStart());
-		instance.setDueTo(getCoreSearching().getActiveSchoolYear(
-				getEntityManager()).getSchoolYearStop());
-		instance.setActive(Boolean.TRUE);
-		return instance;
 	}
 
 	/*
@@ -178,20 +172,18 @@ public class ServiceAllocationHome extends MinoasEntityHome<ServiceAllocation> {
 	}
 	*/
 
-	public void suggestHours() {
-		ServiceAllocation instance = getInstance();
-		switch(instance.getServiceType()) {
-		case GRAND_HEADMASTER :
-		case SCHOOL_HEADMASTER :
-		case OFFICE_CHIEF:
-			instance.setWorkingHoursOnRegularPosition(0);
-			instance.setWorkingHoursOnServicingPosition(0);
-			break;
-		case SCHOOL_SUBHEADMASTER :
-			instance.setWorkingHoursOnRegularPosition(0);
-			instance.setWorkingHoursOnServicingPosition(8);
-			break;
+	protected boolean validateSecondment(ServiceAllocation serviceAllocation, boolean addMessages) {
+
+		/* check if the dates are correct */
+		if (serviceAllocation.getEstablished().after(serviceAllocation.getDueTo())) {
+
+			if (addMessages)
+				facesMessages
+						.add(Severity.ERROR,
+								"Η ημ/νια λήξης της θητείας πρέπει να είναι μεταγενέστερη της έναρξης. Μήπως να κάνεις ένα διάλειμα ;");
+			return false;
 		}
-		return;
+		return true;
+
 	}
 }

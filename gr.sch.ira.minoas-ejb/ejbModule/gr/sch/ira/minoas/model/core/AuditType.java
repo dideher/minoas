@@ -8,5 +8,8 @@ package gr.sch.ira.minoas.model.core;
  * 
  */
 public enum AuditType {
-	INSERT, UPDATE, REMOVE, GENERAL;
+	GENERAL,
+	INSERT,
+	REMOVE,
+	UPDATE;
 }

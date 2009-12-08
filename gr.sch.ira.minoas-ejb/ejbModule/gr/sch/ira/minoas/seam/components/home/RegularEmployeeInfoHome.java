@@ -16,15 +16,19 @@ import org.jboss.seam.annotations.Transactional;
 @Scope(ScopeType.CONVERSATION)
 public class RegularEmployeeInfoHome extends MinoasEntityHome<RegularEmployeeInfo> {
 
-	
-
-	
-	
-
 	/**
 	 * Comment for <code>serialVersionUID</code>
 	 */
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * @see org.jboss.seam.framework.Home#createInstance()
+	 */
+	@Override
+	protected Object createInstance() {
+		RegularEmployeeInfo new_instance = new RegularEmployeeInfo();
+		return new_instance;
+	}
 
 	/**
 	 * @see org.jboss.seam.framework.Home#getInstance()
@@ -33,16 +37,7 @@ public class RegularEmployeeInfoHome extends MinoasEntityHome<RegularEmployeeInf
 	@Factory(value = "regularEmployeeInfo", scope = ScopeType.PAGE)
 	public RegularEmployeeInfo getInstance() {
 		return (RegularEmployeeInfo) super.getInstance();
-		
-	}
 
-	
-
-	
-
-	@Transactional
-	public boolean wire() {
-		return true;
 	}
 
 	/**
@@ -62,15 +57,9 @@ public class RegularEmployeeInfoHome extends MinoasEntityHome<RegularEmployeeInf
 	public String update() {
 		return super.update();
 	}
-	
-	
 
-	/**
-	 * @see org.jboss.seam.framework.Home#createInstance()
-	 */
-	@Override
-	protected Object createInstance() {
-		RegularEmployeeInfo new_instance = new RegularEmployeeInfo();
-		return new_instance;
+	@Transactional
+	public boolean wire() {
+		return true;
 	}
 }

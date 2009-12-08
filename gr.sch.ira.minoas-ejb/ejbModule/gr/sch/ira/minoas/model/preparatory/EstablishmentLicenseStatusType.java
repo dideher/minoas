@@ -5,7 +5,7 @@ package gr.sch.ira.minoas.model.preparatory;
  * @version $Id$
  */
 public enum EstablishmentLicenseStatusType {
-	
+
 	/**
 	 * Establishment license has been canceled
 	 */
@@ -30,7 +30,7 @@ public enum EstablishmentLicenseStatusType {
 	 * Established license is valid
 	 */
 	VALID("EST_LICENSE_STATUS_VALID_KEY");
-	
+
 	private String key;
 
 	/**

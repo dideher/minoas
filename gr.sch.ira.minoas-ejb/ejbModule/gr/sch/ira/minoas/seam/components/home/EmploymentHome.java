@@ -19,10 +19,6 @@ import org.jboss.seam.annotations.Transactional;
 @Scope(ScopeType.CONVERSATION)
 public class EmploymentHome extends MinoasEntityHome<Employment> {
 
-	
-
-	
-
 	/**
 	 * 
 	 */
@@ -32,10 +28,11 @@ public class EmploymentHome extends MinoasEntityHome<Employment> {
 	 * @see org.jboss.seam.framework.Home#getInstance()
 	 */
 	@Override
-	@Factory(value="employment", scope=ScopeType.PAGE)
+	@Factory(value = "employment", scope = ScopeType.PAGE)
 	public Employment getInstance() {
-		return (Employment)super.getInstance();
+		return (Employment) super.getInstance();
 	}
+
 	@Transactional
 	public String revert() {
 		getEntityManager().refresh(getInstance());
@@ -55,7 +52,7 @@ public class EmploymentHome extends MinoasEntityHome<Employment> {
 		Employment current_employment = getInstance();
 		Employee employee = current_employment.getEmployee();
 		Employment new_employment = new Employment();
-		
+
 		/* clone the employment */
 		new_employment.setEmployee(current_employment.getEmployee());
 		new_employment.setActive(Boolean.TRUE);
@@ -69,23 +66,21 @@ public class EmploymentHome extends MinoasEntityHome<Employment> {
 		new_employment.setType(current_employment.getType());
 		new_employment.setSecondment(current_employment.getSecondment());
 		getEntityManager().persist(new_employment);
-		
+
 		/* get a fresh copy of the current employment */
 		getEntityManager().refresh(current_employment);
-		
+
 		/* update the current (now old) employment */
-		
+
 		current_employment.setSupersededBy(new_employment);
 		current_employment.setActive(Boolean.FALSE);
 		current_employment.setTerminated(new_employment.getEstablished());
-		
+
 		/* update the employee */
 		employee.setCurrentEmployment(new_employment);
 		employee.setLastSpecialization(new_employment.getSpecialization());
-		
-		
-		
-		return super.update(); 
-	  }
+
+		return super.update();
+	}
 
 }

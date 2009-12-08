@@ -25,22 +25,9 @@ public class SchoolHome extends MinoasEntityHome<School> {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	
-
 	@In(required = false)
 	@Out(required = false)
 	private TeachingRequirement exampleTeachingRequirement;
-
-	/**
-	 * @see org.jboss.seam.framework.Home#getInstance()
-	 */
-	@Override
-	@Factory(value = "school", scope=ScopeType.PAGE)
-	public School getInstance() {
-		return (School) super.getInstance();
-	}
-	
-	
 
 	public String addTeachingResource() {
 		School instance = getDefinedInstace();
@@ -55,14 +42,24 @@ public class SchoolHome extends MinoasEntityHome<School> {
 			req.setSpecialization(exampleTeachingRequirement.getSpecialization());
 			req.setComment(exampleTeachingRequirement.getComment());
 			exampleTeachingRequirement = new TeachingRequirement();
-			
 
 		}
 		instance.addTeachingRequirement(req);
 		joinTransaction();
 		getEntityManager().flush();
-		facesMessages.add("Οι συνολικά #0 διδακτίκες ώρες, ειδικότητας #1, προστέθηκαν με επιτυχία στην σχολική μονάδα #2.", req.getHours(), req.getSpecialization().getTitle(), req.getSchool().getTitle());
-				return "added";
+		facesMessages.add(
+				"Οι συνολικά #0 διδακτίκες ώρες, ειδικότητας #1, προστέθηκαν με επιτυχία στην σχολική μονάδα #2.", req
+						.getHours(), req.getSpecialization().getTitle(), req.getSchool().getTitle());
+		return "added";
+	}
+
+	/**
+	 * @see org.jboss.seam.framework.Home#getInstance()
+	 */
+	@Override
+	@Factory(value = "school", scope = ScopeType.PAGE)
+	public School getInstance() {
+		return (School) super.getInstance();
 	}
 
 	@Transactional
@@ -75,9 +72,9 @@ public class SchoolHome extends MinoasEntityHome<School> {
 	public String updateTeachingResources() {
 		School school = getDefinedInstace();
 		school.setModifiedOn(new Date(System.currentTimeMillis()));
-		for(Iterator<TeachingRequirement> it = school.getTeachingRequirements().iterator() ; it.hasNext();) {
+		for (Iterator<TeachingRequirement> it = school.getTeachingRequirements().iterator(); it.hasNext();) {
 			TeachingRequirement r = it.next();
-			if(r.getHours()<=0) {
+			if (r.getHours() <= 0) {
 				r.setSchool(null);
 				r.setSchoolYear(null);
 				getEntityManager().remove(r);

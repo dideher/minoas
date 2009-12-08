@@ -23,12 +23,12 @@ import org.jboss.seam.annotations.Transactional;
 @Scope(ScopeType.APPLICATION)
 @Name("AsyncStartup")
 public class AsyncComponentsStartup extends BaseSeamComponent {
-	
-	private long ONE_DAY = 24*60*60*1000;
-	
-	@In(create=true, value="secondmentCleanupHandler")
+
+	private long ONE_DAY = 24 * 60 * 60 * 1000;
+
+	@In(create = true, value = "secondmentCleanupHandler")
 	private SecondmentCleanup secondmentCleanupHandler;
-	
+
 	@Create
 	@Transactional(TransactionPropagationType.REQUIRED)
 	public void init() {
@@ -37,7 +37,7 @@ public class AsyncComponentsStartup extends BaseSeamComponent {
 		cal = DateUtils.truncate(cal, Calendar.DAY_OF_MONTH);
 		cal.add(Calendar.DAY_OF_MONTH, 1);
 		//secondmentCleanupHandler.processRecurringSecondmentCleanup(cal.getTime(), ONE_DAY);
-		
+
 		Calendar temp = Calendar.getInstance();
 		cal.add(Calendar.SECOND, 120);
 		//secondmentCleanupHandler.processRecurringSecondmentCleanup(temp.getTime(), 30000L);

@@ -41,8 +41,6 @@ public class Address extends BaseIDModel {
 	@Column(name = "CITY", length = 15, nullable = true)
 	private String city;
 
-	
-
 	@Basic
 	@Column(name = "LATITUDE", nullable = true)
 	private Double latitude;

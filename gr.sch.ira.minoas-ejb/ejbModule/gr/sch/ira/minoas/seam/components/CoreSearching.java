@@ -156,12 +156,27 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 		return getEntityManager().createQuery("FROM TeachingLanguage e ORDER BY (e.language)").getResultList();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Transactional(TransactionPropagationType.REQUIRED)
-	public Employee getEmployeeByVatNumber(EntityManager entityManager, String vatNumber) {
+	public Collection<Disposal> getEmployeeActiveDisposals(EntityManager em, Person employee, Date dayOfIntereset) {
+
+		Collection<Disposal> result = null;
+		result = getEntityManager(em)
+				.createQuery(
+						"SELECT s FROM Disposal s WHERE s.active IS TRUE AND s.employee=:employee AND :dayOfInterest BETWEEN s.established AND s.dueTo ORDER BY s.insertedOn")
+				.setParameter("employee", employee).setParameter("dayOfInterest", dayOfIntereset).getResultList();
+		return result;
+	}
+
+	@Transactional(TransactionPropagationType.REQUIRED)
+	public Leave getEmployeeActiveLeave(EntityManager entityManager, Person employee, Date onDate) {
 		EntityManager em = getEntityManager(entityManager);
+
 		try {
-			return (Employee) em.createQuery("SELECT e from Employee e WHERE e.vatNumber=:vatNumber").setParameter(
-					"vatNumber", vatNumber).getSingleResult();
+			return (Leave) em
+					.createQuery(
+							"SELECT s from Leave s WHERE s.active IS TRUE AND s.employee=:employee AND :onDate BETWEEN s.established AND s.dueTo ORDER BY s.established")
+					.setParameter("employee", employee).setParameter("onDate", onDate).getSingleResult();
 		} catch (NoResultException nre) {
 			return null;
 		}
@@ -181,38 +196,23 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 	}
 
 	@Transactional(TransactionPropagationType.REQUIRED)
-	public Leave getEmployeeActiveLeave(EntityManager entityManager, Person employee, Date onDate) {
-		EntityManager em = getEntityManager(entityManager);
-
-		try {
-			return (Leave) em
-					.createQuery(
-							"SELECT s from Leave s WHERE s.active IS TRUE AND s.employee=:employee AND :onDate BETWEEN s.established AND s.dueTo ORDER BY s.established")
-					.setParameter("employee", employee).setParameter("onDate", onDate).getSingleResult();
-		} catch (NoResultException nre) {
-			return null;
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	@Transactional(TransactionPropagationType.REQUIRED)
-	public Collection<Disposal> getEmployeeActiveDisposals(EntityManager em, Person employee, Date dayOfIntereset) {
-
-		Collection<Disposal> result = null;
-		result = getEntityManager(em)
-				.createQuery(
-						"SELECT s FROM Disposal s WHERE s.active IS TRUE AND s.employee=:employee AND :dayOfInterest BETWEEN s.established AND s.dueTo ORDER BY s.insertedOn")
-				.setParameter("employee", employee).setParameter("dayOfInterest", dayOfIntereset).getResultList();
-		return result;
-	}
-
-	@Transactional(TransactionPropagationType.REQUIRED)
 	public ServiceAllocation getEmployeeActiveServiceAllocation(EntityManager em, Person employee, Date dayOfIntereset) {
 		try {
 			return (ServiceAllocation) getEntityManager(em)
 					.createQuery(
 							"SELECT s FROM ServiceAllocation s WHERE s.active IS TRUE AND s.employee=:employee AND :dayOfInterest BETWEEN s.established AND s.dueTo ORDER BY s.insertedOn")
 					.setParameter("employee", employee).setParameter("dayOfInterest", dayOfIntereset).getSingleResult();
+		} catch (NoResultException nre) {
+			return null;
+		}
+	}
+
+	@Transactional(TransactionPropagationType.REQUIRED)
+	public Employee getEmployeeByVatNumber(EntityManager entityManager, String vatNumber) {
+		EntityManager em = getEntityManager(entityManager);
+		try {
+			return (Employee) em.createQuery("SELECT e from Employee e WHERE e.vatNumber=:vatNumber").setParameter(
+					"vatNumber", vatNumber).getSingleResult();
 		} catch (NoResultException nre) {
 			return null;
 		}
@@ -282,7 +282,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 	public EmployeeType[] getEmployeeTypes() {
 		return EmployeeType.values();
 	}
-	
+
 	@Factory(value = "employmentTypes")
 	public EmploymentType[] getEmploymentTypes() {
 		return EmploymentType.values();
@@ -316,12 +316,6 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 		return getSchoolActiveEmployees(em, school, schoolYear, dayOfPrecense, (SpecializationGroup) null);
 	}
 
-	public Collection<Employee> getSchoolActiveEmployeesOfEmploymentType(EntityManager em, School school,
-			SchoolYear schoolYear, Date dayOfPrecense, EmploymentType employmentType) {
-		return getSchoolActiveEmployeesOfEmploymentType(em, school, schoolYear, dayOfPrecense,
-				(SpecializationGroup) null, employmentType);
-	}
-
 	public Collection<Employee> getSchoolActiveEmployees(EntityManager em, School school, SchoolYear schoolYear,
 			Date dayOfPrecense, Collection<SpecializationGroup> specializationGroups) {
 		if (specializationGroups != null && specializationGroups.size() > 0) {
@@ -334,6 +328,34 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 									+ " AND NOT EXISTS(SELECT a FROM ServiceAllocation a WHERE a.employee=e AND a.active IS TRUE AND a.sourceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo)) "
 									+ " ORDER BY e.lastSpecialization.id, e.lastName ").setParameter("school", school)
 					.setParameter("specializations", specializationGroups).setParameter("schoolYear", schoolYear)
+					.setParameter("dayOfInterest", dayOfPrecense).getResultList();
+
+		} else {
+			return getEntityManager(em)
+					.createQuery(
+							"SELECT DISTINCT e FROM Employee AS e WHERE (e.active IS TRUE AND  e.currentEmployment.active IS TRUE AND e.currentEmployment.school=:school AND e.currentEmployment.schoolYear=:schoolYear) "
+									+ " AND NOT EXISTS(SELECT s FROM Secondment s WHERE s.employee=e AND s.active IS TRUE AND s.sourceUnit=:school AND (:dayOfInterest BETWEEN s.established AND s.dueTo)) "
+									+ " AND NOT EXISTS(SELECT l FROM Leave l WHERE l.employee=e AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
+									+ " AND NOT EXISTS(SELECT a FROM ServiceAllocation a WHERE a.employee=e AND a.active IS TRUE AND a.sourceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo)) "
+									+ " ORDER BY e.lastSpecialization.id, e.lastName ").setParameter("school", school)
+					.setParameter("schoolYear", schoolYear).setParameter("dayOfInterest", dayOfPrecense)
+					.getResultList();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public Collection<Employee> getSchoolActiveEmployees(EntityManager em, School school, SchoolYear schoolYear,
+			Date dayOfPrecense, SpecializationGroup specializationGroup) {
+		if (specializationGroup != null) {
+			return getEntityManager(em)
+					.createQuery(
+							"SELECT DISTINCT e FROM Employee AS e WHERE (e.active IS TRUE AND e.currentEmployment.active IS TRUE AND e.currentEmployment.school=:school AND e.currentEmployment.schoolYear=:schoolYear) "
+									+ " AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g=:specialization AND e.lastSpecialization MEMBER OF g.specializations)"
+									+ " AND NOT EXISTS(SELECT s FROM Secondment s WHERE s.employee=e AND s.active IS TRUE AND s.sourceUnit=:school AND (:dayOfInterest BETWEEN s.established AND s.dueTo)) "
+									+ " AND NOT EXISTS(SELECT l FROM Leave l WHERE l.employee=e AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
+									+ " AND NOT EXISTS(SELECT a FROM ServiceAllocation a WHERE a.employee=e AND a.active IS TRUE AND a.sourceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo)) "
+									+ " ORDER BY e.lastSpecialization.id, e.lastName ").setParameter("specialization",
+							specializationGroup).setParameter("school", school).setParameter("schoolYear", schoolYear)
 					.setParameter("dayOfInterest", dayOfPrecense).getResultList();
 
 		} else {
@@ -378,6 +400,12 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 		}
 	}
 
+	public Collection<Employee> getSchoolActiveEmployeesOfEmploymentType(EntityManager em, School school,
+			SchoolYear schoolYear, Date dayOfPrecense, EmploymentType employmentType) {
+		return getSchoolActiveEmployeesOfEmploymentType(em, school, schoolYear, dayOfPrecense,
+				(SpecializationGroup) null, employmentType);
+	}
+
 	@SuppressWarnings("unchecked")
 	public Collection<Employee> getSchoolActiveEmployeesOfEmploymentType(EntityManager em, School school,
 			SchoolYear schoolYear, Date dayOfPrecense, SpecializationGroup specializationGroup,
@@ -405,34 +433,6 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 									+ " ORDER BY e.lastSpecialization.id, e.lastName ").setParameter("school", school)
 					.setParameter("employmentType", employmentType).setParameter("schoolYear", schoolYear)
 					.setParameter("dayOfInterest", dayOfPrecense).getResultList();
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public Collection<Employee> getSchoolActiveEmployees(EntityManager em, School school, SchoolYear schoolYear,
-			Date dayOfPrecense, SpecializationGroup specializationGroup) {
-		if (specializationGroup != null) {
-			return getEntityManager(em)
-					.createQuery(
-							"SELECT DISTINCT e FROM Employee AS e WHERE (e.active IS TRUE AND e.currentEmployment.active IS TRUE AND e.currentEmployment.school=:school AND e.currentEmployment.schoolYear=:schoolYear) "
-									+ " AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g=:specialization AND e.lastSpecialization MEMBER OF g.specializations)"
-									+ " AND NOT EXISTS(SELECT s FROM Secondment s WHERE s.employee=e AND s.active IS TRUE AND s.sourceUnit=:school AND (:dayOfInterest BETWEEN s.established AND s.dueTo)) "
-									+ " AND NOT EXISTS(SELECT l FROM Leave l WHERE l.employee=e AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
-									+ " AND NOT EXISTS(SELECT a FROM ServiceAllocation a WHERE a.employee=e AND a.active IS TRUE AND a.sourceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo)) "
-									+ " ORDER BY e.lastSpecialization.id, e.lastName ").setParameter("specialization",
-							specializationGroup).setParameter("school", school).setParameter("schoolYear", schoolYear)
-					.setParameter("dayOfInterest", dayOfPrecense).getResultList();
-
-		} else {
-			return getEntityManager(em)
-					.createQuery(
-							"SELECT DISTINCT e FROM Employee AS e WHERE (e.active IS TRUE AND  e.currentEmployment.active IS TRUE AND e.currentEmployment.school=:school AND e.currentEmployment.schoolYear=:schoolYear) "
-									+ " AND NOT EXISTS(SELECT s FROM Secondment s WHERE s.employee=e AND s.active IS TRUE AND s.sourceUnit=:school AND (:dayOfInterest BETWEEN s.established AND s.dueTo)) "
-									+ " AND NOT EXISTS(SELECT l FROM Leave l WHERE l.employee=e AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
-									+ " AND NOT EXISTS(SELECT a FROM ServiceAllocation a WHERE a.employee=e AND a.active IS TRUE AND a.sourceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo)) "
-									+ " ORDER BY e.lastSpecialization.id, e.lastName ").setParameter("school", school)
-					.setParameter("schoolYear", schoolYear).setParameter("dayOfInterest", dayOfPrecense)
-					.getResultList();
 		}
 	}
 
@@ -498,6 +498,75 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 				"found totally #0 employment(s) of type #3 in school unit #1 during school year #2. The operation took #4 [ms] to complete. ",
 				return_value.size(), school, schoolyear, type, Long.valueOf(finished - started));
 		return return_value;
+	}
+
+	public Collection<ServiceAllocation> getSchoolIncomingServiceAllocations(EntityManager em, School school,
+			Date dayOfPrecense) {
+		return getSchoolIncomingServiceAllocations(em, school, dayOfPrecense, (SpecializationGroup) null);
+	}
+
+	@SuppressWarnings("unchecked")
+	public Collection<ServiceAllocation> getSchoolIncomingServiceAllocations(EntityManager em, School school,
+			Date dayOfPrecense, Collection<SpecializationGroup> specializationGroups) {
+		if (specializationGroups != null && specializationGroups.size() > 0) {
+			return getEntityManager(em)
+					.createQuery(
+							"SELECT DISTINCT a FROM ServiceAllocation a JOIN FETCH a.employee WHERE (a.active IS TRUE AND a.serviceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo))"
+									+ " AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g IN (:specializations) AND a.employee.lastSpecialization MEMBER OF g.specializations)")
+					.setParameter("specializations", specializationGroups).setParameter("school", school).setParameter(
+							"dayOfInterest", dayOfPrecense).getResultList();
+
+		} else {
+			return getEntityManager(em)
+					.createQuery(
+							"SELECT DISTINCT a FROM ServiceAllocation a JOIN FETCH a.employee WHERE (a.active IS TRUE AND a.serviceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo))")
+					.setParameter("school", school).setParameter("dayOfInterest", dayOfPrecense).getResultList();
+
+		}
+
+	}
+
+	@SuppressWarnings("unchecked")
+	public Collection<ServiceAllocation> getSchoolIncomingServiceAllocations(EntityManager em, School school,
+			Date dayOfPrecense, SpecializationGroup specializationGroup) {
+		if (specializationGroup != null) {
+			return getEntityManager(em)
+					.createQuery(
+							"SELECT DISTINCT a FROM ServiceAllocation a JOIN FETCH a.employee WHERE (a.active IS TRUE AND a.serviceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo)) "
+									+ " AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g=:specialization AND a.employee.lastSpecialization MEMBER OF g.specializations) "
+									+ " ORDER BY a.employee.lastSpecialization.id, a.employee.lastName ").setParameter(
+							"specialization", specializationGroup).setParameter("school", school).setParameter(
+							"dayOfInterest", dayOfPrecense).getResultList();
+
+		} else {
+			return getEntityManager(em)
+					.createQuery(
+							"SELECT DISTINCT a FROM ServiceAllocation a JOIN FETCH a.employee WHERE (a.active IS TRUE AND a.serviceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo)) "
+									+ " ORDER BY a.employee.lastSpecialization.id, a.employee.lastName ").setParameter(
+							"school", school).setParameter("dayOfInterest", dayOfPrecense).getResultList();
+
+		}
+
+	}
+
+	@SuppressWarnings("unchecked")
+	public Collection<ServiceAllocation> getSchoolIncomingServiceAllocationsOfType(EntityManager em, School school,
+			Date dayOfPrecense, Collection<ServiceAllocationType> serviceAllocationTypes) {
+		if (serviceAllocationTypes != null && serviceAllocationTypes.size() > 0) {
+			return getEntityManager(em)
+					.createQuery(
+							"SELECT DISTINCT a FROM ServiceAllocation a JOIN FETCH a.employee WHERE (a.active IS TRUE AND a.serviceUnit=:school AND a.serviceType IN (:serviceTypes)) AND (:dayOfInterest BETWEEN a.established AND a.dueTo))")
+					.setParameter("serviceTypes", serviceAllocationTypes).setParameter("school", school).setParameter(
+							"dayOfInterest", dayOfPrecense).getResultList();
+
+		} else {
+			return getEntityManager(em)
+					.createQuery(
+							"SELECT DISTINCT a FROM ServiceAllocation a JOIN FETCH a.employee WHERE (a.active IS TRUE AND a.serviceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo))")
+					.setParameter("school", school).setParameter("dayOfInterest", dayOfPrecense).getResultList();
+
+		}
+
 	}
 
 	@SuppressWarnings("unchecked")
@@ -569,6 +638,57 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 	}
 
 	@SuppressWarnings("unchecked")
+	public Collection<ServiceAllocation> getSchoolOutgoingServiceAllocations(EntityManager em, School school,
+			Date dayOfPrecense, Collection<SpecializationGroup> specializationGroups) {
+		if (specializationGroups != null && specializationGroups.size() > 0) {
+			return getEntityManager(em)
+					.createQuery(
+							"SELECT DISTINCT a FROM ServiceAllocation a JOIN FETCH a.employee WHERE (a.active IS TRUE AND a.sourceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo))"
+									+ " AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g IN (:specializations) AND a.employee.lastSpecialization MEMBER OF g.specializations)")
+					.setParameter("specializations", specializationGroups).setParameter("school", school).setParameter(
+							"dayOfInterest", dayOfPrecense).getResultList();
+
+		} else {
+			return getEntityManager(em)
+					.createQuery(
+							"SELECT DISTINCT a FROM ServiceAllocation a JOIN FETCH a.employee WHERE (a.active IS TRUE AND a.sourceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo))")
+					.setParameter("school", school).setParameter("dayOfInterest", dayOfPrecense).getResultList();
+
+		}
+
+	}
+
+	/**
+	 * Returns all service allocations with source the given school and target unit
+	 * different than the source
+	 * @param em
+	 * @param school
+	 * @param dayOfPrecense
+	 * @param specializationGroups
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public Collection<ServiceAllocation> getSchoolReallyOutgoingServiceAllocations(EntityManager em, School school,
+			Date dayOfPrecense, Collection<SpecializationGroup> specializationGroups) {
+		if (specializationGroups != null && specializationGroups.size() > 0) {
+			return getEntityManager(em)
+					.createQuery(
+							"SELECT DISTINCT a FROM ServiceAllocation a JOIN FETCH a.employee WHERE (a.active IS TRUE AND a.sourceUnit=:school AND a.serviceUnit != :school AND (:dayOfInterest BETWEEN a.established AND a.dueTo))"
+									+ " AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g IN (:specializations) AND a.employee.lastSpecialization MEMBER OF g.specializations)")
+					.setParameter("specializations", specializationGroups).setParameter("school", school).setParameter(
+							"dayOfInterest", dayOfPrecense).getResultList();
+
+		} else {
+			return getEntityManager(em)
+					.createQuery(
+							"SELECT DISTINCT a FROM ServiceAllocation a JOIN FETCH a.employee WHERE (a.active IS TRUE AND a.sourceUnit=:school AND a.serviceUnit != :school AND (:dayOfInterest BETWEEN a.established AND a.dueTo))")
+					.setParameter("school", school).setParameter("dayOfInterest", dayOfPrecense).getResultList();
+
+		}
+
+	}
+
+	@SuppressWarnings("unchecked")
 	public Collection<School> getSchools(EntityManager em) {
 		return getEntityManager(em).createQuery("SELECT s from School s ORDER BY s.title ASC").getResultList();
 
@@ -629,126 +749,6 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 							"school", school).setParameter("schoolYear", schoolYear).setParameter("dayOfInterest",
 							dayOfPrecense).getResultList();
 		}
-	}
-
-	public Collection<ServiceAllocation> getSchoolIncomingServiceAllocations(EntityManager em, School school,
-			Date dayOfPrecense) {
-		return getSchoolIncomingServiceAllocations(em, school, dayOfPrecense, (SpecializationGroup) null);
-	}
-
-	@SuppressWarnings("unchecked")
-	public Collection<ServiceAllocation> getSchoolIncomingServiceAllocations(EntityManager em, School school,
-			Date dayOfPrecense, Collection<SpecializationGroup> specializationGroups) {
-		if (specializationGroups != null && specializationGroups.size() > 0) {
-			return getEntityManager(em)
-					.createQuery(
-							"SELECT DISTINCT a FROM ServiceAllocation a JOIN FETCH a.employee WHERE (a.active IS TRUE AND a.serviceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo))"
-									+ " AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g IN (:specializations) AND a.employee.lastSpecialization MEMBER OF g.specializations)")
-					.setParameter("specializations", specializationGroups).setParameter("school", school).setParameter(
-							"dayOfInterest", dayOfPrecense).getResultList();
-
-		} else {
-			return getEntityManager(em)
-					.createQuery(
-							"SELECT DISTINCT a FROM ServiceAllocation a JOIN FETCH a.employee WHERE (a.active IS TRUE AND a.serviceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo))")
-					.setParameter("school", school).setParameter("dayOfInterest", dayOfPrecense).getResultList();
-
-		}
-
-	}
-
-	@SuppressWarnings("unchecked")
-	public Collection<ServiceAllocation> getSchoolOutgoingServiceAllocations(EntityManager em, School school,
-			Date dayOfPrecense, Collection<SpecializationGroup> specializationGroups) {
-		if (specializationGroups != null && specializationGroups.size() > 0) {
-			return getEntityManager(em)
-					.createQuery(
-							"SELECT DISTINCT a FROM ServiceAllocation a JOIN FETCH a.employee WHERE (a.active IS TRUE AND a.sourceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo))"
-									+ " AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g IN (:specializations) AND a.employee.lastSpecialization MEMBER OF g.specializations)")
-					.setParameter("specializations", specializationGroups).setParameter("school", school).setParameter(
-							"dayOfInterest", dayOfPrecense).getResultList();
-
-		} else {
-			return getEntityManager(em)
-					.createQuery(
-							"SELECT DISTINCT a FROM ServiceAllocation a JOIN FETCH a.employee WHERE (a.active IS TRUE AND a.sourceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo))")
-					.setParameter("school", school).setParameter("dayOfInterest", dayOfPrecense).getResultList();
-
-		}
-
-	}
-
-	/**
-	 * Returns all service allocations with source the given school and target unit
-	 * different than the source
-	 * @param em
-	 * @param school
-	 * @param dayOfPrecense
-	 * @param specializationGroups
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	public Collection<ServiceAllocation> getSchoolReallyOutgoingServiceAllocations(EntityManager em, School school,
-			Date dayOfPrecense, Collection<SpecializationGroup> specializationGroups) {
-		if (specializationGroups != null && specializationGroups.size() > 0) {
-			return getEntityManager(em)
-					.createQuery(
-							"SELECT DISTINCT a FROM ServiceAllocation a JOIN FETCH a.employee WHERE (a.active IS TRUE AND a.sourceUnit=:school AND a.serviceUnit != :school AND (:dayOfInterest BETWEEN a.established AND a.dueTo))"
-									+ " AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g IN (:specializations) AND a.employee.lastSpecialization MEMBER OF g.specializations)")
-					.setParameter("specializations", specializationGroups).setParameter("school", school).setParameter(
-							"dayOfInterest", dayOfPrecense).getResultList();
-
-		} else {
-			return getEntityManager(em)
-					.createQuery(
-							"SELECT DISTINCT a FROM ServiceAllocation a JOIN FETCH a.employee WHERE (a.active IS TRUE AND a.sourceUnit=:school AND a.serviceUnit != :school AND (:dayOfInterest BETWEEN a.established AND a.dueTo))")
-					.setParameter("school", school).setParameter("dayOfInterest", dayOfPrecense).getResultList();
-
-		}
-
-	}
-
-	@SuppressWarnings("unchecked")
-	public Collection<ServiceAllocation> getSchoolIncomingServiceAllocations(EntityManager em, School school,
-			Date dayOfPrecense, SpecializationGroup specializationGroup) {
-		if (specializationGroup != null) {
-			return getEntityManager(em)
-					.createQuery(
-							"SELECT DISTINCT a FROM ServiceAllocation a JOIN FETCH a.employee WHERE (a.active IS TRUE AND a.serviceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo)) "
-									+ " AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g=:specialization AND a.employee.lastSpecialization MEMBER OF g.specializations) "
-									+ " ORDER BY a.employee.lastSpecialization.id, a.employee.lastName ").setParameter(
-							"specialization", specializationGroup).setParameter("school", school).setParameter(
-							"dayOfInterest", dayOfPrecense).getResultList();
-
-		} else {
-			return getEntityManager(em)
-					.createQuery(
-							"SELECT DISTINCT a FROM ServiceAllocation a JOIN FETCH a.employee WHERE (a.active IS TRUE AND a.serviceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo)) "
-									+ " ORDER BY a.employee.lastSpecialization.id, a.employee.lastName ").setParameter(
-							"school", school).setParameter("dayOfInterest", dayOfPrecense).getResultList();
-
-		}
-
-	}
-
-	@SuppressWarnings("unchecked")
-	public Collection<ServiceAllocation> getSchoolIncomingServiceAllocationsOfType(EntityManager em, School school,
-			Date dayOfPrecense, Collection<ServiceAllocationType> serviceAllocationTypes) {
-		if (serviceAllocationTypes != null && serviceAllocationTypes.size() > 0) {
-			return getEntityManager(em)
-					.createQuery(
-							"SELECT DISTINCT a FROM ServiceAllocation a JOIN FETCH a.employee WHERE (a.active IS TRUE AND a.serviceUnit=:school AND a.serviceType IN (:serviceTypes)) AND (:dayOfInterest BETWEEN a.established AND a.dueTo))")
-					.setParameter("serviceTypes", serviceAllocationTypes).setParameter("school", school).setParameter(
-							"dayOfInterest", dayOfPrecense).getResultList();
-
-		} else {
-			return getEntityManager(em)
-					.createQuery(
-							"SELECT DISTINCT a FROM ServiceAllocation a JOIN FETCH a.employee WHERE (a.active IS TRUE AND a.serviceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo))")
-					.setParameter("school", school).setParameter("dayOfInterest", dayOfPrecense).getResultList();
-
-		}
-
 	}
 
 	@SuppressWarnings("unchecked")

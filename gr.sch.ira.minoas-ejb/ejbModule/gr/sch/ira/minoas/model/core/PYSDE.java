@@ -38,7 +38,6 @@ public class PYSDE extends BaseIDModel {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "currentPYSDE")
 	private Collection<Employee> employees;
 
-
 	/**
 	 * 
 	 */
@@ -72,8 +71,6 @@ public class PYSDE extends BaseIDModel {
 		return employees;
 	}
 
-	
-
 	/**
 	 * @return the representedByUnit
 	 */
@@ -106,7 +103,6 @@ public class PYSDE extends BaseIDModel {
 		this.employees = employees;
 	}
 
-	
 	/**
 	 * @param localPYSDE the localPYSDE to set
 	 */

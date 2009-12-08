@@ -26,10 +26,7 @@ public class EstablishmentLicenseHome extends MinoasEntityHome<EstablishmentLice
 	 */
 	private static final long serialVersionUID = 1L;
 
-	
-
-	
-	@In(required=false)
+	@In(required = false)
 	private PreparatoryOwnerHome preparatoryOwnerHome;
 
 	/**
@@ -76,25 +73,25 @@ public class EstablishmentLicenseHome extends MinoasEntityHome<EstablishmentLice
 	@Transactional
 	public String update() {
 		EstablishmentLicense license = getInstance();
-		
+
 		/* If the license status is PENDING, check 
 		 * if the user just specified an judgment date & number. 
 		 * If so, update the status of the license to VALID.
 		 */
-		if(license.getStatusType().equals(EstablishmentLicenseStatusType.PENDING)) {
-			if(license.getRequestJudgmentDate()!=null && license.getRequestJudgmentNumber()!=null) {
+		if (license.getStatusType().equals(EstablishmentLicenseStatusType.PENDING)) {
+			if (license.getRequestJudgmentDate() != null && license.getRequestJudgmentNumber() != null) {
 				license.setStatusType(EstablishmentLicenseStatusType.VALID);
 			}
 		}
 		return super.update();
 	}
-	
+
 	public void wire() {
-		if(preparatoryOwnerHome!=null) {
-		PreparatoryOwner owner = preparatoryOwnerHome.getDefinedInstace();
-		if (owner != null) {
-			getInstance().setOwner(owner);
-		}
+		if (preparatoryOwnerHome != null) {
+			PreparatoryOwner owner = preparatoryOwnerHome.getDefinedInstace();
+			if (owner != null) {
+				getInstance().setOwner(owner);
+			}
 		}
 	}
 

@@ -18,31 +18,30 @@ public class SpecializationGroupHome extends MinoasEntityHome<SpecializationGrou
 	 * Comment for <code>serialVersionUID</code>
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	/**
 	 * @see org.jboss.seam.framework.Home#getInstance()
 	 */
 	@Override
-	@Factory(value = "specializationGroup", scope=ScopeType.PAGE)
+	@Factory(value = "specializationGroup", scope = ScopeType.PAGE)
 	public SpecializationGroup getInstance() {
 		return (SpecializationGroup) super.getInstance();
 	}
 
-	
 	/**
 	 * @see org.jboss.seam.framework.EntityHome#persist()
 	 */
 	@Override
 	@Transactional
 	public String persist() {
-		SpecializationGroup group = (SpecializationGroup)getInstance();
+		SpecializationGroup group = (SpecializationGroup) getInstance();
 		group.setSchoolYear(getCoreSearching().getActiveSchoolYear(getEntityManager()));
 		group.setInsertedBy(getPrincipal());
 		getEntityManager().persist(group);
-		getLogger().info("specialization group #0 has been created by #1", getInstance().getTitle(), getPrincipalName());
+		getLogger()
+				.info("specialization group #0 has been created by #1", getInstance().getTitle(), getPrincipalName());
 		return super.persist();
 	}
-
 
 	/**
 	 * @see org.jboss.seam.framework.EntityHome#remove()
@@ -50,17 +49,16 @@ public class SpecializationGroupHome extends MinoasEntityHome<SpecializationGrou
 	@Override
 	@Transactional
 	public String remove() {
-		getLogger().info("specialiaztion group #0 has been deleted by #1", getInstance().getTitle(), getPrincipalName());
+		getLogger()
+				.info("specialiaztion group #0 has been deleted by #1", getInstance().getTitle(), getPrincipalName());
 		return super.remove();
 	}
-
 
 	@Transactional
 	public String revert() {
 		getEntityManager().refresh(getInstance());
 		return "reverted";
 	}
-
 
 	/**
 	 * @see org.jboss.seam.framework.EntityHome#update()
@@ -72,8 +70,5 @@ public class SpecializationGroupHome extends MinoasEntityHome<SpecializationGrou
 		getLogger().info("specialiaztion group #0 has been updated by #1", instance.getTitle(), getPrincipalName());
 		return super.update();
 	}
-
-
-
 
 }

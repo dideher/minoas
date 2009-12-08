@@ -1,4 +1,3 @@
-
 package gr.sch.ira.minoas.model.core;
 
 import gr.sch.ira.minoas.model.BaseIDModel;
@@ -20,34 +19,18 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Table(name = "SCHOOL_GROUP")
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public class SchoolGroup extends BaseIDModel {
-	
+
 	/**
 	 * Comment for <code>serialVersionUID</code>
 	 */
 	private static final long serialVersionUID = 1L;
 
-	
-	
-	@Basic
-	@Column(name="TITLE", unique=true, nullable=false)
-	private String title;
-	
-	@OneToMany(mappedBy="group", fetch=FetchType.EAGER)
+	@OneToMany(mappedBy = "group", fetch = FetchType.EAGER)
 	private Collection<School> schools = new ArrayList<School>();
 
-	/**
-	 * @return the title
-	 */
-	public String getTitle() {
-		return title;
-	}
-
-	/**
-	 * @param title the title to set
-	 */
-	public void setTitle(String title) {
-		this.title = title;
-	}
+	@Basic
+	@Column(name = "TITLE", unique = true, nullable = false)
+	private String title;
 
 	/**
 	 * @return the schools
@@ -57,9 +40,23 @@ public class SchoolGroup extends BaseIDModel {
 	}
 
 	/**
+	 * @return the title
+	 */
+	public String getTitle() {
+		return title;
+	}
+
+	/**
 	 * @param schools the schools to set
 	 */
 	public void setSchools(Collection<School> schools) {
 		this.schools = schools;
+	}
+
+	/**
+	 * @param title the title to set
+	 */
+	public void setTitle(String title) {
+		this.title = title;
 	}
 }

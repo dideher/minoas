@@ -15,7 +15,7 @@ import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
 public abstract class PreparatoryOwnerOrDirector extends Person {
-	
+
 	/**
 	 * Comment for <code>serialVersionUID</code>
 	 */
@@ -24,7 +24,7 @@ public abstract class PreparatoryOwnerOrDirector extends Person {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "SPECIALIZATION_ID", nullable = true)
 	private Specialization specialization;
-	
+
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "PERSON_LANG_SUFFICIENCY")
 	private List<TeachingLanguage> teachingSufficiency = new ArrayList<TeachingLanguage>();
@@ -37,17 +37,17 @@ public abstract class PreparatoryOwnerOrDirector extends Person {
 	}
 
 	/**
-	 * @param specialization the specialization to set
-	 */
-	public void setSpecialization(Specialization specialization) {
-		this.specialization = specialization;
-	}
-
-	/**
 	 * @return the teachingSufficiency
 	 */
 	public List<TeachingLanguage> getTeachingSufficiency() {
 		return teachingSufficiency;
+	}
+
+	/**
+	 * @param specialization the specialization to set
+	 */
+	public void setSpecialization(Specialization specialization) {
+		this.specialization = specialization;
 	}
 
 	/**
@@ -56,6 +56,5 @@ public abstract class PreparatoryOwnerOrDirector extends Person {
 	public void setTeachingSufficiency(List<TeachingLanguage> teachingSufficiency) {
 		this.teachingSufficiency = teachingSufficiency;
 	}
-
 
 }

@@ -1,4 +1,3 @@
-
 package gr.sch.ira.minoas.seam.components.home;
 
 import gr.sch.ira.minoas.model.preparatory.PreparatoryOwner;
@@ -19,7 +18,6 @@ public class PreparatoryOwnerHome extends MinoasEntityHome<PreparatoryOwner> {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	
 	/**
 	 * @see org.jboss.seam.framework.EntityHome#persist()
 	 * 
@@ -27,9 +25,15 @@ public class PreparatoryOwnerHome extends MinoasEntityHome<PreparatoryOwner> {
 	@Override
 	@Transactional
 	public String persist() {
-		PreparatoryOwner owner = (PreparatoryOwner)getInstance();
+		PreparatoryOwner owner = (PreparatoryOwner) getInstance();
 		owner.setInsertedBy(getPrincipal());
 		return super.persist();
+	}
+
+	@Transactional
+	public String revert() {
+		getEntityManager().refresh(getInstance());
+		return "reverted";
 	}
 
 	/**
@@ -39,15 +43,9 @@ public class PreparatoryOwnerHome extends MinoasEntityHome<PreparatoryOwner> {
 	@Transactional
 	@Restrict("#{s:hasRole('MANAGE_PREPARATORY_OWNER') or s:hasRole('ADMIN')}")
 	public String update() {
-		PreparatoryOwner owner = (PreparatoryOwner)getInstance();
+		PreparatoryOwner owner = (PreparatoryOwner) getInstance();
 		getLogger().info("principal '#0' updated preparatory owner #1", getPrincipalName(), owner);
 		return super.update();
 	}
-	
-	@Transactional
-	public String revert() {
-		getEntityManager().refresh(getInstance());
-		return "reverted";
-	}
-	
+
 }

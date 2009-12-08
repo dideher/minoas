@@ -31,55 +31,53 @@ import org.jboss.seam.annotations.datamodel.DataModel;
 @Scope(ScopeType.CONVERSATION)
 public class SchoolReport extends BaseReport {
 
-	@DataModel(value = "schoolChiefs")
-	private Collection<ServiceAllocationItem> schoolChiefs;
-
-	@DataModel(value = "incomingServiceAllocations")
-	private Collection<ServiceAllocationItem> incomingServiceAllocations;
+	@DataModel(value = "incomingDisposals")
+	private Collection<DisposalReportItem> incomingDisposals;
 
 	@DataModel(value = "incomingSecondments")
 	private Collection<SecondmentItem> incomingSecondments;
 
-	@DataModel(value = "incomingDisposals")
-	private Collection<DisposalReportItem> incomingDisposals;
-
-	@DataModel(value = "schoolOutgoingServiceAllocations")
-	private Collection<ServiceAllocationItem> outcomingServiceAllocations;
-
-	@DataModel(value = "schoolOutgoingSecondments")
-	private Collection<SecondmentItem> outcomingSecondments;
+	@DataModel(value = "incomingServiceAllocations")
+	private Collection<ServiceAllocationItem> incomingServiceAllocations;
 
 	@DataModel(value = "schoolOutgoingDisposals")
 	private Collection<DisposalReportItem> outcomingDisposals;
 
-	@DataModel(value = "schoolLeaves")
-	private Collection<LeaveReportItem> schoolLeaves;
+	@DataModel(value = "schoolOutgoingSecondments")
+	private Collection<SecondmentItem> outcomingSecondments;
 
-	@DataModel(value = "schoolRegularsEmployees")
-	private Collection<EmployeeReportItem> schoolRegularsEmployees;
+	@DataModel(value = "schoolOutgoingServiceAllocations")
+	private Collection<ServiceAllocationItem> outcomingServiceAllocations;
 
-	@DataModel(value = "schoolRegularEmployments")
-	private Collection<EmploymentReportItem> schoolRegularEmployments;
-
-	@DataModel(value = "schoolDeputyEmployments")
-	private Collection<EmploymentReportItem> schoolDeputyEmployments;
-
-	@DataModel(value = "schoolHourlyBasedEmployments")
-	private Collection<EmploymentReportItem> schoolHourlyBasedEmployments;
+	@DataModel(value = "schoolChiefs")
+	private Collection<ServiceAllocationItem> schoolChiefs;
 
 	@DataModel(value = "schoolDeputyEmployees")
 	private Collection<EmployeeReportItem> schoolDeputyEmployees;
 
+	@DataModel(value = "schoolDeputyEmployments")
+	private Collection<EmploymentReportItem> schoolDeputyEmployments;
+
 	@In
 	private SchoolHome schoolHome;
+
+	@DataModel(value = "schoolHourlyBasedEmployments")
+	private Collection<EmploymentReportItem> schoolHourlyBasedEmployments;
+
+	@DataModel(value = "schoolLeaves")
+	private Collection<LeaveReportItem> schoolLeaves;
+
+	@DataModel(value = "schoolRegularEmployments")
+	private Collection<EmploymentReportItem> schoolRegularEmployments;
+
+	@DataModel(value = "schoolRegularsEmployees")
+	private Collection<EmployeeReportItem> schoolRegularsEmployees;
 
 	/**
 	 * 
 	 */
 	public SchoolReport() {
 	}
-
-	
 
 	public void generateReport() {
 
@@ -133,31 +131,10 @@ public class SchoolReport extends BaseReport {
 	}
 
 	/**
-	 * @return the schoolChiefs
+	 * @return the incomingDisposals
 	 */
-	public Collection<ServiceAllocationItem> getSchoolChiefs() {
-		return schoolChiefs;
-	}
-
-	/**
-	 * @param schoolChiefs the schoolChiefs to set
-	 */
-	public void setSchoolChiefs(Collection<ServiceAllocationItem> schoolChiefs) {
-		this.schoolChiefs = schoolChiefs;
-	}
-
-	/**
-	 * @return the incomingServiceAllocations
-	 */
-	public Collection<ServiceAllocationItem> getIncomingServiceAllocations() {
-		return incomingServiceAllocations;
-	}
-
-	/**
-	 * @param incomingServiceAllocations the incomingServiceAllocations to set
-	 */
-	public void setIncomingServiceAllocations(Collection<ServiceAllocationItem> incomingServiceAllocations) {
-		this.incomingServiceAllocations = incomingServiceAllocations;
+	public Collection<DisposalReportItem> getIncomingDisposals() {
+		return incomingDisposals;
 	}
 
 	/**
@@ -168,52 +145,10 @@ public class SchoolReport extends BaseReport {
 	}
 
 	/**
-	 * @param incomingSecondments the incomingSecondments to set
+	 * @return the incomingServiceAllocations
 	 */
-	public void setIncomingSecondments(Collection<SecondmentItem> incomingSecondments) {
-		this.incomingSecondments = incomingSecondments;
-	}
-
-	/**
-	 * @return the incomingDisposals
-	 */
-	public Collection<DisposalReportItem> getIncomingDisposals() {
-		return incomingDisposals;
-	}
-
-	/**
-	 * @param incomingDisposals the incomingDisposals to set
-	 */
-	public void setIncomingDisposals(Collection<DisposalReportItem> incomingDisposals) {
-		this.incomingDisposals = incomingDisposals;
-	}
-
-	/**
-	 * @return the outcomingServiceAllocations
-	 */
-	public Collection<ServiceAllocationItem> getOutcomingServiceAllocations() {
-		return outcomingServiceAllocations;
-	}
-
-	/**
-	 * @param outcomingServiceAllocations the outcomingServiceAllocations to set
-	 */
-	public void setOutcomingServiceAllocations(Collection<ServiceAllocationItem> outcomingServiceAllocations) {
-		this.outcomingServiceAllocations = outcomingServiceAllocations;
-	}
-
-	/**
-	 * @return the outcomingSecondments
-	 */
-	public Collection<SecondmentItem> getOutcomingSecondments() {
-		return outcomingSecondments;
-	}
-
-	/**
-	 * @param outcomingSecondments the outcomingSecondments to set
-	 */
-	public void setOutcomingSecondments(Collection<SecondmentItem> outcomingSecondments) {
-		this.outcomingSecondments = outcomingSecondments;
+	public Collection<ServiceAllocationItem> getIncomingServiceAllocations() {
+		return incomingServiceAllocations;
 	}
 
 	/**
@@ -224,24 +159,24 @@ public class SchoolReport extends BaseReport {
 	}
 
 	/**
-	 * @param outcomingDisposals the outcomingDisposals to set
+	 * @return the outcomingSecondments
 	 */
-	public void setOutcomingDisposals(Collection<DisposalReportItem> outcomingDisposals) {
-		this.outcomingDisposals = outcomingDisposals;
+	public Collection<SecondmentItem> getOutcomingSecondments() {
+		return outcomingSecondments;
 	}
 
 	/**
-	 * @return the schoolRegularsEmployees
+	 * @return the outcomingServiceAllocations
 	 */
-	public Collection<EmployeeReportItem> getSchoolRegularsEmployees() {
-		return schoolRegularsEmployees;
+	public Collection<ServiceAllocationItem> getOutcomingServiceAllocations() {
+		return outcomingServiceAllocations;
 	}
 
 	/**
-	 * @param schoolRegularsEmployees the schoolRegularsEmployees to set
+	 * @return the schoolChiefs
 	 */
-	public void setSchoolRegularsEmployees(Collection<EmployeeReportItem> schoolRegularsEmployees) {
-		this.schoolRegularsEmployees = schoolRegularsEmployees;
+	public Collection<ServiceAllocationItem> getSchoolChiefs() {
+		return schoolChiefs;
 	}
 
 	/**
@@ -252,52 +187,10 @@ public class SchoolReport extends BaseReport {
 	}
 
 	/**
-	 * @param schoolDeputysEmployees the schoolDeputysEmployees to set
-	 */
-	public void setSchoolDeputyEmployees(Collection<EmployeeReportItem> schoolDeputysEmployees) {
-		this.schoolDeputyEmployees = schoolDeputysEmployees;
-	}
-
-	/**
-	 * @return the schoolLeaves
-	 */
-	public Collection<LeaveReportItem> getSchoolLeaves() {
-		return schoolLeaves;
-	}
-
-	/**
-	 * @param schoolLeaves the schoolLeaves to set
-	 */
-	public void setSchoolLeaves(Collection<LeaveReportItem> schoolLeaves) {
-		this.schoolLeaves = schoolLeaves;
-	}
-
-	/**
-	 * @return the schoolRegularEmployments
-	 */
-	public Collection<EmploymentReportItem> getSchoolRegularEmployments() {
-		return schoolRegularEmployments;
-	}
-
-	/**
-	 * @param schoolRegularEmployments the schoolRegularEmployments to set
-	 */
-	public void setSchoolRegularEmployments(Collection<EmploymentReportItem> schoolRegularEmployments) {
-		this.schoolRegularEmployments = schoolRegularEmployments;
-	}
-
-	/**
 	 * @return the schoolDeputyEmployments
 	 */
 	public Collection<EmploymentReportItem> getSchoolDeputyEmployments() {
 		return schoolDeputyEmployments;
-	}
-
-	/**
-	 * @param schoolDeputyEmployments the schoolDeputyEmployments to set
-	 */
-	public void setSchoolDeputyEmployments(Collection<EmploymentReportItem> schoolDeputyEmployments) {
-		this.schoolDeputyEmployments = schoolDeputyEmployments;
 	}
 
 	/**
@@ -308,10 +201,115 @@ public class SchoolReport extends BaseReport {
 	}
 
 	/**
+	 * @return the schoolLeaves
+	 */
+	public Collection<LeaveReportItem> getSchoolLeaves() {
+		return schoolLeaves;
+	}
+
+	/**
+	 * @return the schoolRegularEmployments
+	 */
+	public Collection<EmploymentReportItem> getSchoolRegularEmployments() {
+		return schoolRegularEmployments;
+	}
+
+	/**
+	 * @return the schoolRegularsEmployees
+	 */
+	public Collection<EmployeeReportItem> getSchoolRegularsEmployees() {
+		return schoolRegularsEmployees;
+	}
+
+	/**
+	 * @param incomingDisposals the incomingDisposals to set
+	 */
+	public void setIncomingDisposals(Collection<DisposalReportItem> incomingDisposals) {
+		this.incomingDisposals = incomingDisposals;
+	}
+
+	/**
+	 * @param incomingSecondments the incomingSecondments to set
+	 */
+	public void setIncomingSecondments(Collection<SecondmentItem> incomingSecondments) {
+		this.incomingSecondments = incomingSecondments;
+	}
+
+	/**
+	 * @param incomingServiceAllocations the incomingServiceAllocations to set
+	 */
+	public void setIncomingServiceAllocations(Collection<ServiceAllocationItem> incomingServiceAllocations) {
+		this.incomingServiceAllocations = incomingServiceAllocations;
+	}
+
+	/**
+	 * @param outcomingDisposals the outcomingDisposals to set
+	 */
+	public void setOutcomingDisposals(Collection<DisposalReportItem> outcomingDisposals) {
+		this.outcomingDisposals = outcomingDisposals;
+	}
+
+	/**
+	 * @param outcomingSecondments the outcomingSecondments to set
+	 */
+	public void setOutcomingSecondments(Collection<SecondmentItem> outcomingSecondments) {
+		this.outcomingSecondments = outcomingSecondments;
+	}
+
+	/**
+	 * @param outcomingServiceAllocations the outcomingServiceAllocations to set
+	 */
+	public void setOutcomingServiceAllocations(Collection<ServiceAllocationItem> outcomingServiceAllocations) {
+		this.outcomingServiceAllocations = outcomingServiceAllocations;
+	}
+
+	/**
+	 * @param schoolChiefs the schoolChiefs to set
+	 */
+	public void setSchoolChiefs(Collection<ServiceAllocationItem> schoolChiefs) {
+		this.schoolChiefs = schoolChiefs;
+	}
+
+	/**
+	 * @param schoolDeputysEmployees the schoolDeputysEmployees to set
+	 */
+	public void setSchoolDeputyEmployees(Collection<EmployeeReportItem> schoolDeputysEmployees) {
+		this.schoolDeputyEmployees = schoolDeputysEmployees;
+	}
+
+	/**
+	 * @param schoolDeputyEmployments the schoolDeputyEmployments to set
+	 */
+	public void setSchoolDeputyEmployments(Collection<EmploymentReportItem> schoolDeputyEmployments) {
+		this.schoolDeputyEmployments = schoolDeputyEmployments;
+	}
+
+	/**
 	 * @param schoolHourlyBasedEmployments the schoolHourlyBasedEmployments to set
 	 */
 	public void setSchoolHourlyBasedEmployments(Collection<EmploymentReportItem> schoolHourlyBasedEmployments) {
 		this.schoolHourlyBasedEmployments = schoolHourlyBasedEmployments;
+	}
+
+	/**
+	 * @param schoolLeaves the schoolLeaves to set
+	 */
+	public void setSchoolLeaves(Collection<LeaveReportItem> schoolLeaves) {
+		this.schoolLeaves = schoolLeaves;
+	}
+
+	/**
+	 * @param schoolRegularEmployments the schoolRegularEmployments to set
+	 */
+	public void setSchoolRegularEmployments(Collection<EmploymentReportItem> schoolRegularEmployments) {
+		this.schoolRegularEmployments = schoolRegularEmployments;
+	}
+
+	/**
+	 * @param schoolRegularsEmployees the schoolRegularsEmployees to set
+	 */
+	public void setSchoolRegularsEmployees(Collection<EmployeeReportItem> schoolRegularsEmployees) {
+		this.schoolRegularsEmployees = schoolRegularsEmployees;
 	}
 
 }

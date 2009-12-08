@@ -17,7 +17,7 @@ public class Authenticator extends BaseDatabaseAwareSeamComponent {
 	 * Comment for <code>serialVersionUID</code>
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	@In
 	protected Identity identity;
 
@@ -27,12 +27,12 @@ public class Authenticator extends BaseDatabaseAwareSeamComponent {
 		try {
 			info("authenticating user #0", username);
 			Principal p = (Principal) getEntityManager().createQuery(
-					"SELECT OBJECT(p) FROM Principal p WHERE p.username = :username").setParameter("username", username)
-					.getSingleResult();
-			if(p.getActive()==false) {
+					"SELECT OBJECT(p) FROM Principal p WHERE p.username = :username")
+					.setParameter("username", username).getSingleResult();
+			if (p.getActive() == false) {
 				info("principal '#0' is disabled, therefore access is denied.", username, p.getRoles());
 				return false;
-				
+
 			}
 			if (p.getPassword().equals(identity.getCredentials().getPassword())) {
 

@@ -19,13 +19,13 @@ import org.jboss.seam.annotations.Scope;
 @Name("employeeLeaveCriteria")
 @Scope(ScopeType.CONVERSATION)
 public class EmployeeLeaveCriteria {
-	
+
 	private DateSearchType dateSearchType;
 
 	private Date effectiveDate;
 
 	private Date effectiveDateFrom;
-	
+
 	private Date effectiveDateUntil;
 
 	private LeaveType leaveType;
@@ -65,6 +65,13 @@ public class EmployeeLeaveCriteria {
 	 */
 	public Date getEffectiveDateFrom() {
 		return effectiveDateFrom;
+	}
+
+	/**
+	 * @return the effectiveDateUntil
+	 */
+	public Date getEffectiveDateUntil() {
+		return effectiveDateUntil;
 	}
 
 	/**
@@ -117,6 +124,13 @@ public class EmployeeLeaveCriteria {
 	}
 
 	/**
+	 * @param effectiveDateUntil the effectiveDateUntil to set
+	 */
+	public void setEffectiveDateUntil(Date effectiveDateUntil) {
+		this.effectiveDateUntil = effectiveDateUntil;
+	}
+
+	/**
 	 * @param leaveType the leaveType to set
 	 */
 	public void setLeaveType(LeaveType leaveType) {
@@ -142,20 +156,6 @@ public class EmployeeLeaveCriteria {
 	 */
 	public void setSpecializationGroup(SpecializationGroup specializationGroup) {
 		this.specializationGroup = specializationGroup;
-	}
-
-	/**
-	 * @return the effectiveDateUntil
-	 */
-	public Date getEffectiveDateUntil() {
-		return effectiveDateUntil;
-	}
-
-	/**
-	 * @param effectiveDateUntil the effectiveDateUntil to set
-	 */
-	public void setEffectiveDateUntil(Date effectiveDateUntil) {
-		this.effectiveDateUntil = effectiveDateUntil;
 	}
 
 }

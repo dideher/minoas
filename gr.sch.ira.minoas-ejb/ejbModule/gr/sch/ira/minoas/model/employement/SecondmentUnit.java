@@ -30,33 +30,19 @@ public class SecondmentUnit extends BaseIDModel {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "UNIT_ID", nullable = false)
-	private Unit unit;
-
 	@Enumerated(EnumType.STRING)
 	@Column(name = "SECONDMENT_TYPE", nullable = false)
 	private SecondmentType type;
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "UNIT_ID", nullable = false)
+	private Unit unit;
 
 	/**
 	 * 
 	 */
 	public SecondmentUnit() {
 		super();
-	}
-
-	/**
-	 * @return the unit
-	 */
-	public Unit getUnit() {
-		return unit;
-	}
-
-	/**
-	 * @param unit the unit to set
-	 */
-	public void setUnit(Unit unit) {
-		this.unit = unit;
 	}
 
 	/**
@@ -67,9 +53,23 @@ public class SecondmentUnit extends BaseIDModel {
 	}
 
 	/**
+	 * @return the unit
+	 */
+	public Unit getUnit() {
+		return unit;
+	}
+
+	/**
 	 * @param type the type to set
 	 */
 	public void setType(SecondmentType type) {
 		this.type = type;
+	}
+
+	/**
+	 * @param unit the unit to set
+	 */
+	public void setUnit(Unit unit) {
+		this.unit = unit;
 	};
 }

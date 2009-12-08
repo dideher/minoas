@@ -32,14 +32,10 @@ import org.jboss.seam.annotations.security.Restrict;
 @Scope(ScopeType.CONVERSATION)
 public class EmployeeHome extends MinoasEntityHome<Employee> {
 
-	@In(create = true)
-	private SecondmentHome secondmentHome;
-
-	@In(create = true)
-	private ServiceAllocationHome serviceAllocationHome;
-
-	@In(create = true)
-	private RegularEmployeeInfoHome regularEmployeeInfoHome;
+	/**
+	 * Comment for <code>serialVersionUID</code>
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@In(create = true)
 	private DeputyEmploymentInfoHome deputyEmploymentInfoHome;
@@ -50,93 +46,36 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 	@DataModel(value = "hourlyBasedEmployments")
 	private Collection<Employment> hourlyBasedEmployments = new ArrayList<Employment>();
 
-	/**
-	 * Comment for <code>serialVersionUID</code>
-	 */
-	private static final long serialVersionUID = 1L;
+	@In(create = true)
+	private RegularEmployeeInfoHome regularEmployeeInfoHome;
 
-	/**
-	 * @see org.jboss.seam.framework.Home#getInstance()
-	 */
-	@Override
-	@Factory(value = "employee", scope = ScopeType.PAGE)
-	public Employee getInstance() {
-		return (Employee) super.getInstance();
+	@In(create = true)
+	private SecondmentHome secondmentHome;
 
-	}
-
-	public void verifyVATNumberForNewEmployee(ValueChangeEvent e) {
-		String vatNumber = String.valueOf(e.getNewValue());
-		if(vatNumber.trim().length()==9) {
-			Employee employee = getCoreSearching().getEmployeeByVatNumber(getEntityManager(), vatNumber);
-			if(employee!=null) {
-				facesMessages.addToControl(e.getComponent().getId(), "Το ΑΦΜ που δηλώσατε είναι σε χρήση.");
-			}
-		} 
-	}
-	public boolean hasEmployment() {
-		return getInstance().getCurrentEmployment() != null;
-	}
-
-	public boolean hasRegularEmployment() {
-		return hasEmployment() && getInstance().getCurrentEmployment().getType().equals(EmploymentType.REGULAR);
-	}
-
-	public boolean hasDeputyEmployment() {
-		return hasEmployment() && getInstance().getCurrentEmployment().getType().equals(EmploymentType.DEPUTY);
-	}
+	@In(create = true)
+	private ServiceAllocationHome serviceAllocationHome;
 
 	@Transactional
-	public boolean wire() {
-		if (!secondmentHome.isManaged()) {
-			Employee employee = getInstance();
-			Secondment newSecondment = secondmentHome.getInstance();
-			Employment currentEmployment = employee.getCurrentEmployment();
-			if (currentEmployment != null) {
-				newSecondment.setSourceUnit(currentEmployment.getSchool());
-				newSecondment.setMandatoryWorkingHours(currentEmployment.getMandatoryWorkingHours());
-				newSecondment.setFinalWorkingHours(currentEmployment.getFinalWorkingHours());
-			} else {
-				newSecondment.setSourceUnit(employee.getCurrentPYSDE().getRepresentedByUnit());
-			}
+	public String addNewEmployeeFromOtherPYSDE() {
+		/*
+		 * we will quickly create an employee to be used for secondment
+		 */
+		Employee new_employee = getInstance();
+		new_employee.setActive(Boolean.TRUE);
+		getEntityManager().persist(new_employee);
+		if (!regularEmployeeInfoHome.isManaged()) {
+			RegularEmployeeInfo info = regularEmployeeInfoHome.getInstance();
+			info.setEmployee(new_employee);
+			info.setInsertedBy(getPrincipal());
+			new_employee.setRegularDetail(info);
+			getEntityManager().persist(info);
 		}
-		if (!serviceAllocationHome.isManaged()) {
-			Employee employee = getInstance();
-			ServiceAllocation newServiceAllocation = serviceAllocationHome.getInstance();
-			Employment currentEmployment = employee != null ? employee.getCurrentEmployment() : null;
-			if (currentEmployment != null) {
-				newServiceAllocation.setSourceUnit(currentEmployment.getSchool());
-			} else {
-				newServiceAllocation.setSourceUnit(employee.getCurrentPYSDE().getRepresentedByUnit());
-			}
-		}
-		return true;
-	}
-
-	/**
-	 * @see gr.sch.ira.minoas.seam.components.home.MinoasEntityHome#persist()
-	 */
-	@Override
-	@Transactional
-	public String persist() {
-		Employee employee = getInstance();
-		employee.setInsertedBy(getPrincipal());
-		return super.persist();
-	}
-
-	/**
-	 * @see gr.sch.ira.minoas.seam.components.home.MinoasEntityHome#update()
-	 */
-	@Override
-	@Transactional
-	public String update() {
-		return super.update();
+		wire();
+		return persist();
 	}
 
 	@Transactional
 	public String addNewEmployeeInLocalPYSDE() {
-
-		
 
 		if (employmentHome.isManaged() || regularEmployeeInfoHome.isManaged() || deputyEmploymentInfoHome.isManaged()) {
 			throw new RuntimeException(
@@ -202,28 +141,6 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 		return persist();
 	}
 
-	@Transactional
-	public String addNewEmployeeFromOtherPYSDE() {
-		/*
-		 * we will quickly create an employee to be used for secondment
-		 */
-		Employee new_employee = getInstance();
-		new_employee.setActive(Boolean.TRUE);
-		getEntityManager().persist(new_employee);
-		if (!regularEmployeeInfoHome.isManaged()) {
-			RegularEmployeeInfo info = regularEmployeeInfoHome.getInstance();
-			info.setEmployee(new_employee);
-			info.setInsertedBy(getPrincipal());
-			new_employee.setRegularDetail(info);
-			getEntityManager().persist(info);
-		}
-		wire();
-		return persist();
-	}
-	
-	
-	
-
 	public void addNewHourlyBasedEmploymentItem() {
 		Employment e = new Employment();
 		e.setEmployee(getInstance());
@@ -238,10 +155,6 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 
 	}
 
-	public void removeNewHourlyBasedEmploymentItem(Employment newEmployment) {
-		getHourlyBasedEmployments().remove(newEmployment);
-	}
-
 	/**
 	 * @see org.jboss.seam.framework.Home#createInstance()
 	 */
@@ -253,10 +166,57 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 	}
 
 	/**
+	 * @return the deputyEmploymentInfoHome
+	 */
+	public DeputyEmploymentInfoHome getDeputyEmploymentInfoHome() {
+		return deputyEmploymentInfoHome;
+	}
+
+	/**
+	 * @return the hourlyBasedEmployments
+	 */
+	public Collection<Employment> getHourlyBasedEmployments() {
+		return hourlyBasedEmployments;
+	}
+
+	/**
+	 * @see org.jboss.seam.framework.Home#getInstance()
+	 */
+	@Override
+	@Factory(value = "employee", scope = ScopeType.PAGE)
+	public Employee getInstance() {
+		return (Employee) super.getInstance();
+
+	}
+
+	/**
 	 * @return the regularEmployeeInfoHome
 	 */
 	public RegularEmployeeInfoHome getRegularEmployeeInfoHome() {
 		return regularEmployeeInfoHome;
+	}
+
+	public boolean hasDeputyEmployment() {
+		return hasEmployment() && getInstance().getCurrentEmployment().getType().equals(EmploymentType.DEPUTY);
+	}
+
+	public boolean hasEmployment() {
+		return getInstance().getCurrentEmployment() != null;
+	}
+
+	public boolean hasRegularEmployment() {
+		return hasEmployment() && getInstance().getCurrentEmployment().getType().equals(EmploymentType.REGULAR);
+	}
+
+	/**
+	 * @see gr.sch.ira.minoas.seam.components.home.MinoasEntityHome#persist()
+	 */
+	@Override
+	@Transactional
+	public String persist() {
+		Employee employee = getInstance();
+		employee.setInsertedBy(getPrincipal());
+		return super.persist();
 	}
 
 	public void prepareForNewEmployee() {
@@ -269,14 +229,6 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 		employmentHome.getInstance().setFinalWorkingHours(21);
 		employmentHome.getInstance().setMandatoryWorkingHours(21);
 		addNewHourlyBasedEmploymentItem();
-	}
-
-	/**
-	 * @param regularEmployeeInfoHome
-	 *            the regularEmployeeInfoHome to set
-	 */
-	public void setRegularEmployeeInfoHome(RegularEmployeeInfoHome regularEmployeeInfoHome) {
-		this.regularEmployeeInfoHome = regularEmployeeInfoHome;
 	}
 
 	/**
@@ -297,11 +249,8 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 		return null;
 	}
 
-	/**
-	 * @return the deputyEmploymentInfoHome
-	 */
-	public DeputyEmploymentInfoHome getDeputyEmploymentInfoHome() {
-		return deputyEmploymentInfoHome;
+	public void removeNewHourlyBasedEmploymentItem(Employment newEmployment) {
+		getHourlyBasedEmployments().remove(newEmployment);
 	}
 
 	/**
@@ -312,16 +261,63 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 	}
 
 	/**
-	 * @return the hourlyBasedEmployments
-	 */
-	public Collection<Employment> getHourlyBasedEmployments() {
-		return hourlyBasedEmployments;
-	}
-
-	/**
 	 * @param hourlyBasedEmployments the hourlyBasedEmployments to set
 	 */
 	public void setHourlyBasedEmployments(Collection<Employment> hourlyBasedEmployments) {
 		this.hourlyBasedEmployments = hourlyBasedEmployments;
+	}
+
+	/**
+	 * @param regularEmployeeInfoHome
+	 *            the regularEmployeeInfoHome to set
+	 */
+	public void setRegularEmployeeInfoHome(RegularEmployeeInfoHome regularEmployeeInfoHome) {
+		this.regularEmployeeInfoHome = regularEmployeeInfoHome;
+	}
+
+	/**
+	 * @see gr.sch.ira.minoas.seam.components.home.MinoasEntityHome#update()
+	 */
+	@Override
+	@Transactional
+	public String update() {
+		return super.update();
+	}
+
+	public void verifyVATNumberForNewEmployee(ValueChangeEvent e) {
+		String vatNumber = String.valueOf(e.getNewValue());
+		if (vatNumber.trim().length() == 9) {
+			Employee employee = getCoreSearching().getEmployeeByVatNumber(getEntityManager(), vatNumber);
+			if (employee != null) {
+				facesMessages.addToControl(e.getComponent().getId(), "Το ΑΦΜ που δηλώσατε είναι σε χρήση.");
+			}
+		}
+	}
+
+	@Transactional
+	public boolean wire() {
+		if (!secondmentHome.isManaged()) {
+			Employee employee = getInstance();
+			Secondment newSecondment = secondmentHome.getInstance();
+			Employment currentEmployment = employee.getCurrentEmployment();
+			if (currentEmployment != null) {
+				newSecondment.setSourceUnit(currentEmployment.getSchool());
+				newSecondment.setMandatoryWorkingHours(currentEmployment.getMandatoryWorkingHours());
+				newSecondment.setFinalWorkingHours(currentEmployment.getFinalWorkingHours());
+			} else {
+				newSecondment.setSourceUnit(employee.getCurrentPYSDE().getRepresentedByUnit());
+			}
+		}
+		if (!serviceAllocationHome.isManaged()) {
+			Employee employee = getInstance();
+			ServiceAllocation newServiceAllocation = serviceAllocationHome.getInstance();
+			Employment currentEmployment = employee != null ? employee.getCurrentEmployment() : null;
+			if (currentEmployment != null) {
+				newServiceAllocation.setSourceUnit(currentEmployment.getSchool());
+			} else {
+				newServiceAllocation.setSourceUnit(employee.getCurrentPYSDE().getRepresentedByUnit());
+			}
+		}
+		return true;
 	}
 }

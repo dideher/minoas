@@ -23,8 +23,7 @@ public class PrincipalHome extends MinoasEntityHome<Principal> {
 	public String disablePrincipal() {
 		Principal p = getInstance();
 		p.setActive(Boolean.FALSE);
-		getLogger().info("Principal '#0' disabled principal '#1'",
-				getPrincipalName(), p.getUsername());
+		getLogger().info("Principal '#0' disabled principal '#1'", getPrincipalName(), p.getUsername());
 		return super.update();
 	}
 
@@ -32,8 +31,7 @@ public class PrincipalHome extends MinoasEntityHome<Principal> {
 	public String enablePrincipal() {
 		Principal p = getInstance();
 		p.setActive(Boolean.TRUE);
-		getLogger().info("Principal '#0' enabled principal '#1'",
-				getPrincipalName(), p.getUsername());
+		getLogger().info("Principal '#0' enabled principal '#1'", getPrincipalName(), p.getUsername());
 		return super.update();
 
 	}
@@ -55,13 +53,10 @@ public class PrincipalHome extends MinoasEntityHome<Principal> {
 	public String persist() {
 		/* check if the username is already in use */
 		Principal newPrincipal = getInstance();
-		Principal temp = getCoreSearching().getPrincipal(getEntityManager(),
-				newPrincipal.getUsername());
+		Principal temp = getCoreSearching().getPrincipal(getEntityManager(), newPrincipal.getUsername());
 		if (temp != null) {
-			getLogger()
-					.warn(
-							"principal '#0' tried to insert a principal with an existing username '#1'.",
-							getPrincipalName(), temp.getUsername());
+			getLogger().warn("principal '#0' tried to insert a principal with an existing username '#1'.",
+					getPrincipalName(), temp.getUsername());
 			return DUPLICATE_VALUE_OUTCOME;
 		}
 		newPrincipal.setInsertedBy(getPrincipal());

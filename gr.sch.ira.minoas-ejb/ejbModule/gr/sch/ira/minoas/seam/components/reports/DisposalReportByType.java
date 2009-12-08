@@ -4,28 +4,15 @@ import gr.sch.ira.minoas.model.core.SpecializationGroup;
 import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employement.Disposal;
 import gr.sch.ira.minoas.model.employement.DisposalType;
-import gr.sch.ira.minoas.model.employement.Secondment;
-import gr.sch.ira.minoas.model.employement.SecondmentType;
 import gr.sch.ira.minoas.seam.components.criteria.DateSearchType;
 import gr.sch.ira.minoas.seam.components.criteria.DisposalCriteria;
-import gr.sch.ira.minoas.seam.components.criteria.SecondmentCriteria;
 import gr.sch.ira.minoas.seam.components.reports.resource.DisposalReportItem;
-import gr.sch.ira.minoas.seam.components.reports.resource.SecondmentItem;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
-import javax.faces.context.FacesContext;
 import javax.persistence.Query;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
-
-import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JasperRunManager;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
@@ -131,17 +118,17 @@ public class DisposalReportByType extends BaseReport {
 	}
 
 	/**
-	 * @param disposalCriteria the disposalCriteria to set
-	 */
-	public void setDisposalCriteria(DisposalCriteria disposalCriteria) {
-		this.disposalCriteria = disposalCriteria;
-	}
-
-	/**
 	 * @return the reportData
 	 */
 	public Collection<DisposalReportItem> getReportData() {
 		return reportData;
+	}
+
+	/**
+	 * @param disposalCriteria the disposalCriteria to set
+	 */
+	public void setDisposalCriteria(DisposalCriteria disposalCriteria) {
+		this.disposalCriteria = disposalCriteria;
 	}
 
 	/**

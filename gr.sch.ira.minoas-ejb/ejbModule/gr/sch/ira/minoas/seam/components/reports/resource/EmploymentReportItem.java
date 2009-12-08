@@ -9,14 +9,11 @@ import gr.sch.ira.minoas.model.employement.Employment;
 public class EmploymentReportItem extends EmployeeReportItem {
 
 	private String employmentType;
-	
+
 	private String employmentTypeKey;
-	
+
 	private String school;
-	
-	
-	
-	
+
 	/**
 	 * 
 	 */
@@ -28,7 +25,7 @@ public class EmploymentReportItem extends EmployeeReportItem {
 		super(employment.getEmployee());
 		this.employmentType = employment.getType().toString();
 		this.employmentTypeKey = employment.getType().getKey();
-		if(employment.getSchool()!=null)
+		if (employment.getSchool() != null)
 			setSchool(employment.getSchool().getTitle());
 		setEmployeeFinalWorkingHours(employment.getFinalWorkingHours());
 		setEmployeeMandatoryHours(employment.getMandatoryWorkingHours());
@@ -44,24 +41,10 @@ public class EmploymentReportItem extends EmployeeReportItem {
 	}
 
 	/**
-	 * @param leaveType the leaveType to set
-	 */
-	public void setEmploymentType(String leaveType) {
-		this.employmentType = leaveType;
-	}
-
-	/**
 	 * @return the leaveTypeKey
 	 */
 	public String getEmploymentTypeKey() {
 		return employmentTypeKey;
-	}
-
-	/**
-	 * @param leaveTypeKey the leaveTypeKey to set
-	 */
-	public void setEmploymentTypeKey(String leaveTypeKey) {
-		this.employmentTypeKey = leaveTypeKey;
 	}
 
 	/**
@@ -72,11 +55,24 @@ public class EmploymentReportItem extends EmployeeReportItem {
 	}
 
 	/**
+	 * @param leaveType the leaveType to set
+	 */
+	public void setEmploymentType(String leaveType) {
+		this.employmentType = leaveType;
+	}
+
+	/**
+	 * @param leaveTypeKey the leaveTypeKey to set
+	 */
+	public void setEmploymentTypeKey(String leaveTypeKey) {
+		this.employmentTypeKey = leaveTypeKey;
+	}
+
+	/**
 	 * @param school the school to set
 	 */
 	public void setSchool(String school) {
 		this.school = school;
 	}
-
 
 }

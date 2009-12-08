@@ -27,12 +27,12 @@ public class UnitSuggester extends BaseDatabaseAwareSeamComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	
 	@SuppressWarnings("unchecked")
 	@Transactional
 	public Collection<Unit> suggest(Object secondmemt_search_pattern) {
-		return getEntityManager().createQuery("SELECT s FROM School s WHERE LOWER(s.title) LIKE LOWER(:search_pattern)")
-				.setParameter("search_pattern", CoreUtils.getSearchPattern(String.valueOf(secondmemt_search_pattern)))
+		return getEntityManager()
+				.createQuery("SELECT s FROM School s WHERE LOWER(s.title) LIKE LOWER(:search_pattern)").setParameter(
+						"search_pattern", CoreUtils.getSearchPattern(String.valueOf(secondmemt_search_pattern)))
 				.getResultList();
 	}
 

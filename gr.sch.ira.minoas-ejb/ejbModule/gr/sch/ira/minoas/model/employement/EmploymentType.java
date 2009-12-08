@@ -11,9 +11,9 @@ public enum EmploymentType {
 	DEPUTY("DEPUTY_EMPLOYMENT_TYPE"),
 	HOURLYBASED("HOURLYBASE_EMPLOYMENT_TYPE"),
 	REGULAR("REGULAR_EMPLOYMENT_TYPE");
-	
-	private String key; 
-	
+
+	private String key;
+
 	private EmploymentType(String key) {
 		this.key = key;
 	}

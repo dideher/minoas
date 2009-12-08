@@ -16,13 +16,13 @@ public class ServiceAllocationItem extends EmployeeReportItem {
 
 	private Date establishedIn;
 
-	private String sourceUnit;
-
-	private String servicingUnit;
-
 	private String serviceAllocationType;
 
 	private String serviceAllocationTypeKey;
+
+	private String servicingUnit;
+
+	private String sourceUnit;
 
 	private Integer workingHoursOnRegularPosition;
 
@@ -59,52 +59,10 @@ public class ServiceAllocationItem extends EmployeeReportItem {
 	}
 
 	/**
-	 * @param dueTo the dueTo to set
-	 */
-	public void setDueTo(Date dueTo) {
-		this.dueTo = dueTo;
-	}
-
-	/**
 	 * @return the establishedIn
 	 */
 	public Date getEstablishedIn() {
 		return establishedIn;
-	}
-
-	/**
-	 * @param establishedIn the establishedIn to set
-	 */
-	public void setEstablishedIn(Date establishedIn) {
-		this.establishedIn = establishedIn;
-	}
-
-	/**
-	 * @return the sourceUnit
-	 */
-	public String getSourceUnit() {
-		return sourceUnit;
-	}
-
-	/**
-	 * @param sourceUnit the sourceUnit to set
-	 */
-	public void setSourceUnit(String sourceUnit) {
-		this.sourceUnit = sourceUnit;
-	}
-
-	/**
-	 * @return the servicingUnit
-	 */
-	public String getServicingUnit() {
-		return servicingUnit;
-	}
-
-	/**
-	 * @param servicingUnit the servicingUnit to set
-	 */
-	public void setServicingUnit(String servicingUnit) {
-		this.servicingUnit = servicingUnit;
 	}
 
 	/**
@@ -115,13 +73,6 @@ public class ServiceAllocationItem extends EmployeeReportItem {
 	}
 
 	/**
-	 * @param serviceAllocationType the serviceAllocationType to set
-	 */
-	public void setServiceAllocationType(String serviceAllocationType) {
-		this.serviceAllocationType = serviceAllocationType;
-	}
-
-	/**
 	 * @return the serviceAllocationTypeKey
 	 */
 	public String getServiceAllocationTypeKey() {
@@ -129,10 +80,17 @@ public class ServiceAllocationItem extends EmployeeReportItem {
 	}
 
 	/**
-	 * @param serviceAllocationTypeKey the serviceAllocationTypeKey to set
+	 * @return the servicingUnit
 	 */
-	public void setServiceAllocationTypeKey(String serviceAllocationTypeKey) {
-		this.serviceAllocationTypeKey = serviceAllocationTypeKey;
+	public String getServicingUnit() {
+		return servicingUnit;
+	}
+
+	/**
+	 * @return the sourceUnit
+	 */
+	public String getSourceUnit() {
+		return sourceUnit;
 	}
 
 	/**
@@ -143,17 +101,59 @@ public class ServiceAllocationItem extends EmployeeReportItem {
 	}
 
 	/**
-	 * @param workingHoursOnRegularPosition the workingHoursOnRegularPosition to set
-	 */
-	public void setWorkingHoursOnRegularPosition(Integer workingHoursOnRegularPosition) {
-		this.workingHoursOnRegularPosition = workingHoursOnRegularPosition;
-	}
-
-	/**
 	 * @return the workingHoursOnServicingPosition
 	 */
 	public Integer getWorkingHoursOnServicingPosition() {
 		return workingHoursOnServicingPosition;
+	}
+
+	/**
+	 * @param dueTo the dueTo to set
+	 */
+	public void setDueTo(Date dueTo) {
+		this.dueTo = dueTo;
+	}
+
+	/**
+	 * @param establishedIn the establishedIn to set
+	 */
+	public void setEstablishedIn(Date establishedIn) {
+		this.establishedIn = establishedIn;
+	}
+
+	/**
+	 * @param serviceAllocationType the serviceAllocationType to set
+	 */
+	public void setServiceAllocationType(String serviceAllocationType) {
+		this.serviceAllocationType = serviceAllocationType;
+	}
+
+	/**
+	 * @param serviceAllocationTypeKey the serviceAllocationTypeKey to set
+	 */
+	public void setServiceAllocationTypeKey(String serviceAllocationTypeKey) {
+		this.serviceAllocationTypeKey = serviceAllocationTypeKey;
+	}
+
+	/**
+	 * @param servicingUnit the servicingUnit to set
+	 */
+	public void setServicingUnit(String servicingUnit) {
+		this.servicingUnit = servicingUnit;
+	}
+
+	/**
+	 * @param sourceUnit the sourceUnit to set
+	 */
+	public void setSourceUnit(String sourceUnit) {
+		this.sourceUnit = sourceUnit;
+	}
+
+	/**
+	 * @param workingHoursOnRegularPosition the workingHoursOnRegularPosition to set
+	 */
+	public void setWorkingHoursOnRegularPosition(Integer workingHoursOnRegularPosition) {
+		this.workingHoursOnRegularPosition = workingHoursOnRegularPosition;
 	}
 
 	/**

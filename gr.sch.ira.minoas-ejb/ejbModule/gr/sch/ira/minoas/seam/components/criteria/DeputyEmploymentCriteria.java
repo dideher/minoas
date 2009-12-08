@@ -1,4 +1,3 @@
-
 package gr.sch.ira.minoas.seam.components.criteria;
 
 import gr.sch.ira.minoas.model.core.School;
@@ -17,55 +16,61 @@ import org.jboss.seam.annotations.Scope;
 @Scope(ScopeType.CONVERSATION)
 public class DeputyEmploymentCriteria {
 
+	private boolean onlyActive = true;
+
 	@In
 	private School school;
-	
-	private boolean onlyActive = true;
-	
-	@In(value="activeSchoolYear")
+
+	@In(value = "activeSchoolYear")
 	private SchoolYear schoolYear;
-	/**
-	 * @return the schoolYear
-	 */
-	public SchoolYear getSchoolYear() {
-		return schoolYear;
-	}
-	/**
-	 * @param schoolYear the schoolYear to set
-	 */
-	public void setSchoolYear(SchoolYear schoolYear) {
-		this.schoolYear = schoolYear;
-	}
-	/**
-	 * @return the onlyActive
-	 */
-	public boolean isOnlyActive() {
-		return onlyActive;
-	}
-	/**
-	 * @param onlyActive the onlyActive to set
-	 */
-	public void setOnlyActive(boolean onlyActive) {
-		this.onlyActive = onlyActive;
-	}
+
 	/**
 	 * 
 	 */
 	public DeputyEmploymentCriteria() {
 	}
-	
+
 	/**
 	 * @return the school
 	 */
 	public School getSchool() {
 		return school;
 	}
+
+	/**
+	 * @return the schoolYear
+	 */
+	public SchoolYear getSchoolYear() {
+		return schoolYear;
+	}
+
+	/**
+	 * @return the onlyActive
+	 */
+	public boolean isOnlyActive() {
+		return onlyActive;
+	}
+
+	/**
+	 * @param onlyActive the onlyActive to set
+	 */
+	public void setOnlyActive(boolean onlyActive) {
+		this.onlyActive = onlyActive;
+	}
+
 	/**
 	 * @param school the school to set
 	 */
 	public void setSchool(School school) {
-		System.err.println("******** someone set the school : "+school);
+		System.err.println("******** someone set the school : " + school);
 		this.school = school;
+	}
+
+	/**
+	 * @param schoolYear the schoolYear to set
+	 */
+	public void setSchoolYear(SchoolYear schoolYear) {
+		this.schoolYear = schoolYear;
 	}
 
 }

@@ -22,6 +22,17 @@ import org.jboss.seam.international.StatusMessage.Severity;
 @Scope(ScopeType.CONVERSATION)
 public class DisposalHome extends MinoasEntityHome<Disposal> {
 
+	/**
+	 * Comment for <code>serialVersionUID</code>
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@In(create = true)
+	private EmployeeHome employeeHome;
+
+	@In(create = true)
+	private EmploymentHome employmentHome;
+
 	@Transactional
 	public String cancel() {
 		Disposal current_disposal = getInstance();
@@ -32,23 +43,18 @@ public class DisposalHome extends MinoasEntityHome<Disposal> {
 		return "updated";
 	}
 
-	@Transactional
-	public String revert() {
-		info("principal #0 is reverting updates to disposal #1", getPrincipalName(), getInstance());
-		getEntityManager().refresh(getInstance());
-		return "reverted";
-	}
-
-	@In(create = true)
-	private EmploymentHome employmentHome;
-
-	@In(create = true)
-	private EmployeeHome employeeHome;
-
 	/**
-	 * Comment for <code>serialVersionUID</code>
+	 * @see org.jboss.seam.framework.Home#createInstance()
 	 */
-	private static final long serialVersionUID = 1L;
+	@Override
+	protected Object createInstance() {
+		Disposal new_instance = new Disposal();
+		new_instance.setActive(Boolean.TRUE);
+		new_instance.setDueTo(getCoreSearching().getActiveSchoolYear(getEntityManager()).getTeachingSchoolYearStop());
+		new_instance.setType(DisposalType.PARTIAL);
+		new_instance.setTargetType(DisposalTargetType.TO_SCHOOL);
+		return new_instance;
+	}
 
 	/**
 	 * @see org.jboss.seam.framework.Home#getInstance()
@@ -58,11 +64,6 @@ public class DisposalHome extends MinoasEntityHome<Disposal> {
 	public Disposal getInstance() {
 		return (Disposal) super.getInstance();
 
-	}
-
-	@Transactional
-	public boolean wire() {
-		return true;
 	}
 
 	/**
@@ -99,6 +100,19 @@ public class DisposalHome extends MinoasEntityHome<Disposal> {
 		return super.persist();
 	}
 
+	@Transactional
+	public void prepareForNewDisposal() {
+		this.clearInstance();
+		employmentHome.clearInstance();
+	}
+
+	@Transactional
+	public String revert() {
+		info("principal #0 is reverting updates to disposal #1", getPrincipalName(), getInstance());
+		getEntityManager().refresh(getInstance());
+		return "reverted";
+	}
+
 	/**
 	 * @see gr.sch.ira.minoas.seam.components.home.MinoasEntityHome#update()
 	 */
@@ -108,23 +122,9 @@ public class DisposalHome extends MinoasEntityHome<Disposal> {
 		return super.update();
 	}
 
-	/**
-	 * @see org.jboss.seam.framework.Home#createInstance()
-	 */
-	@Override
-	protected Object createInstance() {
-		Disposal new_instance = new Disposal();
-		new_instance.setActive(Boolean.TRUE);
-		new_instance.setDueTo(getCoreSearching().getActiveSchoolYear(getEntityManager()).getTeachingSchoolYearStop());
-		new_instance.setType(DisposalType.PARTIAL);
-		new_instance.setTargetType(DisposalTargetType.TO_SCHOOL);
-		return new_instance;
-	}
-
 	@Transactional
-	public void prepareForNewDisposal() {
-		this.clearInstance();
-		employmentHome.clearInstance();
+	public boolean wire() {
+		return true;
 	}
 
 }

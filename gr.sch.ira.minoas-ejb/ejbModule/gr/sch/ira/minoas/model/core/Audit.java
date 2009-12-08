@@ -33,27 +33,20 @@ public class Audit extends BaseIDModel {
 	private static final long serialVersionUID = 1L;
 
 	@Basic
-	@Column(name="AUDIT_COMMENT", length=1024, nullable=true)
+	@Column(name = "AUDIT_COMMENT", length = 1024, nullable = true)
 	private String comment;
 
-	
-	
 	@Enumerated(EnumType.STRING)
-	@Column(name="AUDIT_TYPE", nullable=false)
+	@Column(name = "AUDIT_TYPE", nullable = false)
 	private AuditType type;
+
 	/**
 	 * 
 	 */
 	public Audit() {
 		// TODO Auto-generated constructor stub
 	}
-	
-	
-	
-	public Audit(String comment, Principal principal) {
-		this(AuditType.GENERAL, comment, principal);
-	}
-	
+
 	public Audit(AuditType type, String comment, Principal principal) {
 		super();
 		this.comment = comment;
@@ -62,12 +55,12 @@ public class Audit extends BaseIDModel {
 		setInsertedOn(new Date(System.currentTimeMillis()));
 	}
 
-	public String getComment() {
-		return comment;
+	public Audit(String comment, Principal principal) {
+		this(AuditType.GENERAL, comment, principal);
 	}
 
-	public void setComment(String comment) {
-		this.comment = comment;
+	public String getComment() {
+		return comment;
 	}
 
 	/**
@@ -77,7 +70,9 @@ public class Audit extends BaseIDModel {
 		return type;
 	}
 
-
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
 
 	/**
 	 * @param type the type to set

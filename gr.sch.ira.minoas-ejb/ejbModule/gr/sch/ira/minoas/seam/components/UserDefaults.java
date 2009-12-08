@@ -29,16 +29,16 @@ public class UserDefaults {
 	@In
 	private CoreSearching coreSearching;
 
-	@Observer("org.jboss.seam.security.loginSuccessful")
-	public void loginSuccesful() {
-		this.activeSchoolYear = coreSearching.getActiveSchoolYear(null);
-	}
-
 	/**
 	 * @return the activeSchoolYear
 	 */
 	public SchoolYear getActiveSchoolYear() {
 		return activeSchoolYear;
+	}
+
+	@Observer("org.jboss.seam.security.loginSuccessful")
+	public void loginSuccesful() {
+		this.activeSchoolYear = coreSearching.getActiveSchoolYear(null);
 	}
 
 	/**

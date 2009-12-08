@@ -32,21 +32,14 @@ import javax.persistence.TemporalType;
 @Table(name = "PREP_EST_LCS")
 public class EstablishmentLicense extends BaseIDModel {
 
-	@Enumerated(EnumType.STRING)
-	@JoinColumn(name = "STATUS_TYPE", nullable = false)
-	private EstablishmentLicenseStatusType statusType;
-
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "ESTABLISHMENT_LOCATION_ID", nullable = false)
 	private EstablishmentLocation establishmentLocation;
 
-
-
 	@Enumerated(EnumType.STRING)
 	@Column(name = "NATURE_TYPE", nullable = false)
 	private PreparatoryUnitNatureType natureType;
-	
-	
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "PREPARATORY_OWNER_ID", nullable = false)
 	private PreparatoryOwner owner;
@@ -73,6 +66,10 @@ public class EstablishmentLicense extends BaseIDModel {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "SCHOOL_YEAR_ID")
 	private SchoolYear schoolYear;
+
+	@Enumerated(EnumType.STRING)
+	@JoinColumn(name = "STATUS_TYPE", nullable = false)
+	private EstablishmentLicenseStatusType statusType;
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "PREP_EST_LCS_LANGUAGES")

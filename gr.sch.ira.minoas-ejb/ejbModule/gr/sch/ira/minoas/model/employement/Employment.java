@@ -49,15 +49,14 @@ public class Employment extends BaseIDModel {
 	@Column(name = "IS_ACTIVE", nullable = true)
 	private Boolean active;
 
-	@ManyToOne(fetch = FetchType.EAGER,cascade = { CascadeType.MERGE, CascadeType.PERSIST,
-			CascadeType.REFRESH })
+	@OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
+	@JoinColumn(name = "DEPUTY_EMPLOYMENT_INFO_ID", nullable = true)
+	private DeputyEmploymentInfo deputyEmploymentInfo;
+
+	@ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
 	@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 	@JoinColumn(name = "EMPLOYEE_ID", nullable = false)
 	private Employee employee;
-	
-	@OneToOne(fetch=FetchType.LAZY, cascade= {CascadeType.ALL})
-	@JoinColumn(name="DEPUTY_EMPLOYMENT_INFO_ID", nullable=true)
-	private DeputyEmploymentInfo deputyEmploymentInfo;
 
 	@Basic
 	@Column(name = "ESTABLISHED_DATE", nullable = true)
@@ -67,8 +66,7 @@ public class Employment extends BaseIDModel {
 	@Basic
 	@Column(name = "FINAL_WORKING_HOURS", nullable = true)
 	private Integer finalWorkingHours;
-	
-	
+
 	@Basic
 	@Column(name = "MANDATORY_WORK_HRS", nullable = false)
 	private Integer mandatoryWorkingHours;
@@ -84,7 +82,7 @@ public class Employment extends BaseIDModel {
 	@OneToOne(optional = true, fetch = FetchType.LAZY)
 	@JoinColumn(name = "SECONDMENT_ID", nullable = true)
 	private Secondment secondment;
-	
+
 	@OneToOne(optional = true, fetch = FetchType.LAZY)
 	@JoinColumn(name = "SERVICE_ALLOCATION_ID", nullable = true)
 	private ServiceAllocation serviceAllocation;
@@ -92,10 +90,6 @@ public class Employment extends BaseIDModel {
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "SPECIALIZATION_ID", nullable = false, updatable = false)
 	private Specialization specialization;
-	
-	@Basic
-	@Column(name="IS_TEMPORAR", nullable=true)
-	private Boolean temporar;
 
 	/**
 	 * An employment may be superseded by another employment
@@ -103,6 +97,10 @@ public class Employment extends BaseIDModel {
 	@OneToOne
 	@JoinColumn(name = "SUPERSEDED_BY_ID", nullable = true)
 	private Employment supersededBy;
+
+	@Basic
+	@Column(name = "IS_TEMPORAR", nullable = true)
+	private Boolean temporar;
 
 	@Basic
 	@Column(name = "TERMINATED_DATE", nullable = true)
@@ -134,6 +132,13 @@ public class Employment extends BaseIDModel {
 	 */
 	public Boolean getActive() {
 		return active;
+	}
+
+	/**
+	 * @return the deputyEmploymentInfo
+	 */
+	public DeputyEmploymentInfo getDeputyEmploymentInfo() {
+		return deputyEmploymentInfo;
 	}
 
 	/**
@@ -183,6 +188,13 @@ public class Employment extends BaseIDModel {
 	}
 
 	/**
+	 * @return the serviceAllocation
+	 */
+	public ServiceAllocation getServiceAllocation() {
+		return serviceAllocation;
+	}
+
+	/**
 	 * @return the specialization
 	 */
 	public Specialization getSpecialization() {
@@ -194,6 +206,13 @@ public class Employment extends BaseIDModel {
 	 */
 	public Employment getSupersededBy() {
 		return supersededBy;
+	}
+
+	/**
+	 * @return the temporar
+	 */
+	public Boolean getTemporar() {
+		return temporar;
 	}
 
 	/**
@@ -229,6 +248,13 @@ public class Employment extends BaseIDModel {
 	 */
 	public void setActive(Boolean active) {
 		this.active = active;
+	}
+
+	/**
+	 * @param deputyEmploymentInfo the deputyEmploymentInfo to set
+	 */
+	public void setDeputyEmploymentInfo(DeputyEmploymentInfo deputyEmploymentInfo) {
+		this.deputyEmploymentInfo = deputyEmploymentInfo;
 	}
 
 	/**
@@ -278,6 +304,13 @@ public class Employment extends BaseIDModel {
 	}
 
 	/**
+	 * @param serviceAllocation the serviceAllocation to set
+	 */
+	public void setServiceAllocation(ServiceAllocation serviceAllocation) {
+		this.serviceAllocation = serviceAllocation;
+	}
+
+	/**
 	 * @param specialization the specialization to set
 	 */
 	public void setSpecialization(Specialization specialization) {
@@ -289,6 +322,13 @@ public class Employment extends BaseIDModel {
 	 */
 	public void setSupersededBy(Employment supersededBy) {
 		this.supersededBy = supersededBy;
+	}
+
+	/**
+	 * @param temporar the temporar to set
+	 */
+	public void setTemporar(Boolean temporar) {
+		this.temporar = temporar;
 	}
 
 	/**
@@ -334,47 +374,4 @@ public class Employment extends BaseIDModel {
 		return sb.toString();
 	}
 
-	/**
-	 * @return the serviceAllocation
-	 */
-	public ServiceAllocation getServiceAllocation() {
-		return serviceAllocation;
-	}
-
-	/**
-	 * @param serviceAllocation the serviceAllocation to set
-	 */
-	public void setServiceAllocation(ServiceAllocation serviceAllocation) {
-		this.serviceAllocation = serviceAllocation;
-	}
-
-	/**
-	 * @return the temporar
-	 */
-	public Boolean getTemporar() {
-		return temporar;
-	}
-
-	/**
-	 * @param temporar the temporar to set
-	 */
-	public void setTemporar(Boolean temporar) {
-		this.temporar = temporar;
-	}
-
-	/**
-	 * @return the deputyEmploymentInfo
-	 */
-	public DeputyEmploymentInfo getDeputyEmploymentInfo() {
-		return deputyEmploymentInfo;
-	}
-
-	/**
-	 * @param deputyEmploymentInfo the deputyEmploymentInfo to set
-	 */
-	public void setDeputyEmploymentInfo(DeputyEmploymentInfo deputyEmploymentInfo) {
-		this.deputyEmploymentInfo = deputyEmploymentInfo;
-	}
-
-	
 }

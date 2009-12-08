@@ -11,8 +11,6 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
 
-
-
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
  * @version $Id$
@@ -25,8 +23,6 @@ public class AddressHome extends MinoasEntityHome<Address> {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	
-
 	/**
 	 * @see org.jboss.seam.framework.Home#createInstance()
 	 */
@@ -35,28 +31,6 @@ public class AddressHome extends MinoasEntityHome<Address> {
 		Address instance = new Address();
 		return instance;
 	}
-
-	/**
-	 * @see gr.sch.ira.minoas.seam.components.home.MinoasEntityHome#persist()
-	 */
-	@Override
-	@Transactional
-	public String persist() {
-		return super.persist();
-		
-	}
-
-	/**
-	 * @see gr.sch.ira.minoas.seam.components.home.MinoasEntityHome#update()
-	 */
-	@Override
-	@Transactional
-	public String update() {
-		
-		return super.update();
-	}
-
-	
 
 	/**
 	 * @see org.jboss.seam.framework.Home#getInstance()
@@ -68,12 +42,31 @@ public class AddressHome extends MinoasEntityHome<Address> {
 		return (Address) super.getInstance();
 	}
 
+	/**
+	 * @see gr.sch.ira.minoas.seam.components.home.MinoasEntityHome#persist()
+	 */
+	@Override
+	@Transactional
+	public String persist() {
+		return super.persist();
+
+	}
+
 	@Transactional
 	public String revert() {
-		info("principal #0 is reverting updates to adress #1",
-				getPrincipalName(), getInstance());
+		info("principal #0 is reverting updates to adress #1", getPrincipalName(), getInstance());
 		getEntityManager().refresh(getInstance());
 		return "reverted";
+	}
+
+	/**
+	 * @see gr.sch.ira.minoas.seam.components.home.MinoasEntityHome#update()
+	 */
+	@Override
+	@Transactional
+	public String update() {
+
+		return super.update();
 	}
 
 }

@@ -20,14 +20,11 @@ public class SchoolYearHome extends MinoasEntityHome<SchoolYear> {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	
-
-	
 	/**
 	 * @see org.jboss.seam.framework.Home#getInstance()
 	 */
 	@Override
-	@Factory(value = "schoolYear", scope=ScopeType.PAGE)
+	@Factory(value = "schoolYear", scope = ScopeType.PAGE)
 	public School getInstance() {
 		return (School) super.getInstance();
 	}
@@ -37,7 +34,5 @@ public class SchoolYearHome extends MinoasEntityHome<SchoolYear> {
 		getEntityManager().refresh(getInstance());
 		return "reverted";
 	}
-
-	
 
 }

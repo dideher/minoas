@@ -3,20 +3,15 @@ package gr.sch.ira.minoas.seam.components.reports;
 import gr.sch.ira.minoas.model.core.SchoolYear;
 import gr.sch.ira.minoas.model.core.Specialization;
 import gr.sch.ira.minoas.model.core.SpecializationGroup;
-import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
-import gr.sch.ira.minoas.seam.components.criteria.DateSearchType;
-import gr.sch.ira.minoas.seam.components.criteria.EmployeeCriteria;
 import gr.sch.ira.minoas.seam.components.criteria.EmploymentCriteria;
 import gr.sch.ira.minoas.seam.components.criteria.SpecializationSearchType;
-import gr.sch.ira.minoas.seam.components.reports.resource.EmployeeReportItem;
 import gr.sch.ira.minoas.seam.components.reports.resource.EmploymentReportItem;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,13 +61,13 @@ public class EmploymentReport extends BaseReport {
 			switch (getEmploymentCriteria().getSpecializationSearchType()) {
 			case SPECIALIZATION_GROUP:
 				parameters.put("EMPLOYEE_SPECIALIZATION_FILTER",
-						employmentCriteria.getSpecializationGroup() != null ? employmentCriteria.getSpecializationGroup()
-								.getTitle() : "Όλες οι Ομάδες Ειδικοτήτων");
+						employmentCriteria.getSpecializationGroup() != null ? employmentCriteria
+								.getSpecializationGroup().getTitle() : "Όλες οι Ομάδες Ειδικοτήτων");
 				break;
 			case SPECIALIZATION:
 				parameters.put("EMPLOYEE_SPECIALIZATION_FILTER",
-						employmentCriteria.getSpecialization() != null ? employmentCriteria.getSpecialization().getTitle()
-								: "Όλες οι Ομάδες Ειδικοτήτων");
+						employmentCriteria.getSpecialization() != null ? employmentCriteria.getSpecialization()
+								.getTitle() : "Όλες οι Ομάδες Ειδικοτήτων");
 				break;
 			}
 			parameters.put("EMPLOYEE_DATE_SEARCH_FILTER", getLocalizedMessage(employmentCriteria.getDateSearchType()
@@ -123,8 +118,9 @@ public class EmploymentReport extends BaseReport {
 		//DateSearchType dateSearchType = getEmploymentCriteria().getDateSearchType();
 		//
 		StringBuffer sb = new StringBuffer();
-		sb.append("SELECT em FROM Employment em JOIN FETCH em.employee WHERE em.active IS TRUE AND em.employee.active IS TRUE AND em.schoolYear=:schoolYear ");
-		
+		sb
+				.append("SELECT em FROM Employment em JOIN FETCH em.employee WHERE em.active IS TRUE AND em.employee.active IS TRUE AND em.schoolYear=:schoolYear ");
+
 		/*
 		switch (dateSearchType) {
 		case AFTER_DATE:
@@ -144,7 +140,6 @@ public class EmploymentReport extends BaseReport {
 		if (employeeTye != null) {
 			sb.append(" AND em.type=:employmentType ");
 		}
-		
 
 		if (specializationSearchType == SpecializationSearchType.SPECIALIZATION_GROUP && specializationGroup != null) {
 			sb
@@ -159,7 +154,7 @@ public class EmploymentReport extends BaseReport {
 
 		Query q = getEntityManager().createQuery(sb.toString());
 		q.setParameter("schoolYear", schoolYear);
-		
+
 		/*
 		if (dateSearchType != DateSearchType.DURING_DATE_PERIOD) {
 			q.setParameter("effectiveDate", effectiveDate);
@@ -172,7 +167,7 @@ public class EmploymentReport extends BaseReport {
 		if (employeeTye != null) {
 			q.setParameter("employmentType", employeeTye);
 		}
-		
+
 		if (specializationSearchType == SpecializationSearchType.SPECIALIZATION_GROUP && specializationGroup != null) {
 			q.setParameter("specializationGroup", specializationGroup);
 		}
@@ -197,17 +192,17 @@ public class EmploymentReport extends BaseReport {
 	}
 
 	/**
-	 * @param employeeCriteria the employeeCriteria to set
-	 */
-	public void setEmploymentCriteria(EmploymentCriteria employeeCriteria) {
-		this.employmentCriteria = employeeCriteria;
-	}
-
-	/**
 	 * @return the reportData
 	 */
 	public List<EmploymentReportItem> getReportData() {
 		return reportData;
+	}
+
+	/**
+	 * @param employeeCriteria the employeeCriteria to set
+	 */
+	public void setEmploymentCriteria(EmploymentCriteria employeeCriteria) {
+		this.employmentCriteria = employeeCriteria;
 	}
 
 	/**
@@ -216,10 +211,5 @@ public class EmploymentReport extends BaseReport {
 	public void setReportData(List<EmploymentReportItem> reportData) {
 		this.reportData = reportData;
 	}
-
-	
-
-	
-	
 
 }

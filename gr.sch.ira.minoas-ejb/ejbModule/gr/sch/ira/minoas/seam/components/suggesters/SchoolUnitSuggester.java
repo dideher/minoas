@@ -24,7 +24,6 @@ public class SchoolUnitSuggester extends BaseDatabaseAwareSeamComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	
 	@SuppressWarnings("unchecked")
 	@Transactional
 	public Collection<Unit> suggest(Object unit_search_pattern) {

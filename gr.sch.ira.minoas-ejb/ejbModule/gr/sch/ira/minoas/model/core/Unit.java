@@ -37,18 +37,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public class Unit extends AbstractArchivableEntity implements Comparable<Unit> {
 
-	
-	
-	@Override
-	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("[ ");
-		sb.append("");
-		sb.append(getTitle());
-		sb.append("] ");
-		return sb.toString();
-	}
-
 	/**
 	 * 
 	 */
@@ -63,9 +51,6 @@ public class Unit extends AbstractArchivableEntity implements Comparable<Unit> {
 	@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 	@JoinTable(name = "MINOAS_UNIT_GATEGORIES", joinColumns = @JoinColumn(name = "UNIT_ID", referencedColumnName = "UNIT_ID"), inverseJoinColumns = @JoinColumn(name = "CATEGORY_ID", referencedColumnName = "ID"))
 	private Collection<UnitCategory> categories = new ArrayList<UnitCategory>();
-	
-	
-
 
 	@Id
 	@Column(name = "UNIT_ID", length = 4)
@@ -93,6 +78,13 @@ public class Unit extends AbstractArchivableEntity implements Comparable<Unit> {
 	 */
 	public Unit() {
 		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
+	public int compareTo(Unit o) {
+		return this.title.compareTo(o.getTitle());
 	}
 
 	/**
@@ -191,13 +183,14 @@ public class Unit extends AbstractArchivableEntity implements Comparable<Unit> {
 		this.title = title;
 	}
 
-	/**
-	 * @see java.lang.Comparable#compareTo(java.lang.Object)
-	 */
-	public int compareTo(Unit o) {
-		return this.title.compareTo(o.getTitle());
+	@Override
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("[ ");
+		sb.append("");
+		sb.append(getTitle());
+		sb.append("] ");
+		return sb.toString();
 	}
-
-	
 
 }

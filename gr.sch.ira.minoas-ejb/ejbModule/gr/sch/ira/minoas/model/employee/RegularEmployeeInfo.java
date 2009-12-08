@@ -1,5 +1,3 @@
-
-
 package gr.sch.ira.minoas.model.employee;
 
 import gr.sch.ira.minoas.model.BaseIDModel;
@@ -46,12 +44,10 @@ public class RegularEmployeeInfo extends BaseIDModel {
 	@Basic
 	@Column(name = "APPOINTMENT_GOF_DATE")
 	private Date appointmentGOFDate;
-	
-	@OneToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="EMPLOYEE_ID", nullable=false)
-	private Employee employee;
 
-	
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "EMPLOYEE_ID", nullable = false)
+	private Employee employee;
 
 	@Basic
 	@Column(name = "REGISTRY_ID", length = 7)
@@ -69,6 +65,13 @@ public class RegularEmployeeInfo extends BaseIDModel {
 	 */
 	public Date getAppointmentGOFDate() {
 		return appointmentGOFDate;
+	}
+
+	/**
+	 * @return the employee
+	 */
+	public Employee getEmployee() {
+		return employee;
 	}
 
 	/**
@@ -93,24 +96,17 @@ public class RegularEmployeeInfo extends BaseIDModel {
 	}
 
 	/**
-	 * @param registryID the registryID to set
-	 */
-	public void setRegistryID(String registryID) {
-		this.registryID = registryID;
-	}
-
-	/**
-	 * @return the employee
-	 */
-	public Employee getEmployee() {
-		return employee;
-	}
-
-	/**
 	 * @param employee the employee to set
 	 */
 	public void setEmployee(Employee employee) {
 		this.employee = employee;
+	}
+
+	/**
+	 * @param registryID the registryID to set
+	 */
+	public void setRegistryID(String registryID) {
+		this.registryID = registryID;
 	}
 
 }

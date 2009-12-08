@@ -25,8 +25,6 @@ import javax.persistence.UniqueConstraint;
 @Table(name = "SPECIALIZATION_GROUP", uniqueConstraints = { @UniqueConstraint(columnNames = { "TITLE", "SCHOOL_YEAR_ID" }) })
 public class SpecializationGroup extends BaseIDModel implements Comparable<SpecializationGroup> {
 
-	
-
 	@ManyToOne
 	@JoinColumn(name = "SCHOOL_YEAR_ID", nullable = false)
 	private SchoolYear schoolYear;
@@ -43,6 +41,13 @@ public class SpecializationGroup extends BaseIDModel implements Comparable<Speci
 	 * 
 	 */
 	public SpecializationGroup() {
+	}
+
+	/**
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
+	public int compareTo(SpecializationGroup o) {
+		return title.compareTo(o.getTitle());
 	}
 
 	/**
@@ -97,13 +102,6 @@ public class SpecializationGroup extends BaseIDModel implements Comparable<Speci
 		}
 		builder.append("]");
 		return builder.toString();
-	}
-
-	/**
-	 * @see java.lang.Comparable#compareTo(java.lang.Object)
-	 */
-	public int compareTo(SpecializationGroup o) {
-		return title.compareTo(o.getTitle());
 	}
 
 }

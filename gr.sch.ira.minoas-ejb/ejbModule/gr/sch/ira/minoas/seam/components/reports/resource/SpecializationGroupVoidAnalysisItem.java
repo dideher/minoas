@@ -6,11 +6,18 @@ import gr.sch.ira.minoas.model.core.School;
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
  * @version $Id$
  */
-public class SpecializationGroupVoidAnalysisItem implements Comparable<SpecializationGroupVoidAnalysisItem>{
+public class SpecializationGroupVoidAnalysisItem implements Comparable<SpecializationGroupVoidAnalysisItem> {
+
+	private TeachingResource resource;
 
 	private School school;
-	
-	private TeachingResource resource;
+
+	/**
+	 * 
+	 */
+	public SpecializationGroupVoidAnalysisItem() {
+	}
+
 	/**
 	 * @param school
 	 * @param resource
@@ -20,40 +27,40 @@ public class SpecializationGroupVoidAnalysisItem implements Comparable<Specializ
 		this.school = school;
 		this.resource = resource;
 	}
+
 	/**
-	 * 
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
-	public SpecializationGroupVoidAnalysisItem() {
+	public int compareTo(SpecializationGroupVoidAnalysisItem o) {
+		return this.school.compareTo(o.getSchool());
 	}
-	/**
-	 * @return the school
-	 */
-	public School getSchool() {
-		return school;
-	}
-	/**
-	 * @param school the school to set
-	 */
-	public void setSchool(School school) {
-		this.school = school;
-	}
+
 	/**
 	 * @return the resource
 	 */
 	public TeachingResource getResource() {
 		return resource;
 	}
+
+	/**
+	 * @return the school
+	 */
+	public School getSchool() {
+		return school;
+	}
+
 	/**
 	 * @param resource the resource to set
 	 */
 	public void setResource(TeachingResource resource) {
 		this.resource = resource;
 	}
+
 	/**
-	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 * @param school the school to set
 	 */
-	public int compareTo(SpecializationGroupVoidAnalysisItem o) {
-		return this.school.compareTo(o.getSchool());
+	public void setSchool(School school) {
+		this.school = school;
 	}
 
 }

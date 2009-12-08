@@ -7,21 +7,31 @@ import java.util.Date;
 
 public class SecondmentItem extends EmployeeReportItem {
 	private String comment;
+
 	private Date dueTo;
+
 	private Date establishedIn;
-	private Character sourceUnitRegion;
-	private Character targetUnitRegion;
-	private boolean requestByEmployee;
-	private String secondmentType;
-	private String secondmentTypeKey;
+
 	private Integer finalWorkingHours;
+
+	private boolean requestByEmployee;
+
+	private String secondmentType;
+
+	private String secondmentTypeKey;
+
 	private String sourceUnit;
+
+	private Character sourceUnitRegion;
+
 	private String targetUnit;
+
+	private Character targetUnitRegion;
 
 	public SecondmentItem() {
 		super();
 	}
-	
+
 	public SecondmentItem(Secondment secondment) {
 		super(secondment.getEmployee());
 		this.comment = secondment.getComment();
@@ -30,18 +40,17 @@ public class SecondmentItem extends EmployeeReportItem {
 		this.requestByEmployee = secondment.isEmployeeRequested();
 		this.sourceUnit = secondment.getSourceUnit().getTitle();
 		this.targetUnit = secondment.getTargetUnit().getTitle();
-		if(secondment.getSourceUnit() instanceof School) {
-			this.sourceUnitRegion = ((School)secondment.getSourceUnit()).getRegionCode();
+		if (secondment.getSourceUnit() instanceof School) {
+			this.sourceUnitRegion = ((School) secondment.getSourceUnit()).getRegionCode();
 		}
-		if(secondment.getTargetUnit() instanceof School) {
-			this.targetUnitRegion = ((School)secondment.getTargetUnit()).getRegionCode();
+		if (secondment.getTargetUnit() instanceof School) {
+			this.targetUnitRegion = ((School) secondment.getTargetUnit()).getRegionCode();
 		}
 		this.secondmentType = secondment.getSecondmentType().name();
 		this.secondmentTypeKey = secondment.getSecondmentType().getKey();
 		this.finalWorkingHours = secondment.getFinalWorkingHours();
 	}
 
-	
 	public String getComment() {
 		return comment;
 	}
@@ -55,10 +64,14 @@ public class SecondmentItem extends EmployeeReportItem {
 	}
 
 	/**
-	 * @return the region
+	 * @return the finalWorkingHours
 	 */
-	public Character getSourceUnitRegion() {
-		return sourceUnitRegion;
+	public Integer getFinalWorkingHours() {
+		return finalWorkingHours;
+	}
+
+	public Character getRegion() {
+		return getSourceUnitRegion();
 	}
 
 	/**
@@ -68,12 +81,33 @@ public class SecondmentItem extends EmployeeReportItem {
 		return secondmentType;
 	}
 
+	/**
+	 * @return the secondmentTypeKey
+	 */
+	public String getSecondmentTypeKey() {
+		return secondmentTypeKey;
+	}
+
 	public String getSourceUnit() {
 		return sourceUnit;
 	}
 
+	/**
+	 * @return the region
+	 */
+	public Character getSourceUnitRegion() {
+		return sourceUnitRegion;
+	}
+
 	public String getTargetUnit() {
 		return targetUnit;
+	}
+
+	/**
+	 * @return the targetUnitRegion
+	 */
+	public Character getTargetUnitRegion() {
+		return targetUnitRegion;
 	}
 
 	public boolean isRequestByEmployee() {
@@ -93,10 +127,10 @@ public class SecondmentItem extends EmployeeReportItem {
 	}
 
 	/**
-	 * @param region the region to set
+	 * @param finalWorkingHours the finalWorkingHours to set
 	 */
-	public void setSourceUnitRegion(Character region) {
-		this.sourceUnitRegion = region;
+	public void setFinalWorkingHours(Integer finalWorkingHours) {
+		this.finalWorkingHours = finalWorkingHours;
 	}
 
 	public void setRequestByEmployee(boolean requestByEmployee) {
@@ -110,21 +144,6 @@ public class SecondmentItem extends EmployeeReportItem {
 		this.secondmentType = secondmentType;
 	}
 
-	public void setSourceUnit(String sourceUnit) {
-		this.sourceUnit = sourceUnit;
-	}
-
-	public void setTargetUnit(String targetUnit) {
-		this.targetUnit = targetUnit;
-	}
-
-	/**
-	 * @return the secondmentTypeKey
-	 */
-	public String getSecondmentTypeKey() {
-		return secondmentTypeKey;
-	}
-
 	/**
 	 * @param secondmentTypeKey the secondmentTypeKey to set
 	 */
@@ -132,25 +151,19 @@ public class SecondmentItem extends EmployeeReportItem {
 		this.secondmentTypeKey = secondmentTypeKey;
 	}
 
-	/**
-	 * @return the finalWorkingHours
-	 */
-	public Integer getFinalWorkingHours() {
-		return finalWorkingHours;
+	public void setSourceUnit(String sourceUnit) {
+		this.sourceUnit = sourceUnit;
 	}
 
 	/**
-	 * @param finalWorkingHours the finalWorkingHours to set
+	 * @param region the region to set
 	 */
-	public void setFinalWorkingHours(Integer finalWorkingHours) {
-		this.finalWorkingHours = finalWorkingHours;
+	public void setSourceUnitRegion(Character region) {
+		this.sourceUnitRegion = region;
 	}
 
-	/**
-	 * @return the targetUnitRegion
-	 */
-	public Character getTargetUnitRegion() {
-		return targetUnitRegion;
+	public void setTargetUnit(String targetUnit) {
+		this.targetUnit = targetUnit;
 	}
 
 	/**
@@ -159,10 +172,5 @@ public class SecondmentItem extends EmployeeReportItem {
 	public void setTargetUnitRegion(Character targetUnitRegion) {
 		this.targetUnitRegion = targetUnitRegion;
 	}
-	
-	public Character getRegion() {
-		return getSourceUnitRegion();
-	}
-
 
 }

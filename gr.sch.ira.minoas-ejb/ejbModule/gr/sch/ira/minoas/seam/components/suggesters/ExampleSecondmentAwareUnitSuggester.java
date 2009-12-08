@@ -30,7 +30,7 @@ public class ExampleSecondmentAwareUnitSuggester extends BaseDatabaseAwareSeamCo
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@In(required = false, value="exampleSecondment")
+	@In(required = false, value = "exampleSecondment")
 	private Secondment secondment;
 
 	@SuppressWarnings("unchecked")

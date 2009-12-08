@@ -59,8 +59,6 @@ public abstract class Person extends BaseIDModel {
 	@Column(name = "FIRST_NAME", nullable = false, length = 25)
 	private String firstName;
 
-	
-
 	@Basic
 	@Column(name = "ID_NUMBER", unique = false, nullable = true, length = 10)
 	private String idNumber;
@@ -91,7 +89,7 @@ public abstract class Person extends BaseIDModel {
 	private Collection<Telephone> telephones = new ArrayList<Telephone>();
 
 	@Basic
-	@Column(name = "VAT_NUMBER", nullable=true, length = 10)
+	@Column(name = "VAT_NUMBER", nullable = true, length = 10)
 	private String vatNumber;
 
 	/**

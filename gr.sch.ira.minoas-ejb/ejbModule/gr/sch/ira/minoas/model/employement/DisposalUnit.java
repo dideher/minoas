@@ -21,7 +21,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  * @version $Id$
  */
 @Entity
-@Table(name = "DISPOSAL_UNIT", uniqueConstraints = { @UniqueConstraint(columnNames = { "UNIT_ID", "DISPOSAL_TARGET_TYPE" }) })
+@Table(name = "DISPOSAL_UNIT", uniqueConstraints = { @UniqueConstraint(columnNames = { "UNIT_ID",
+		"DISPOSAL_TARGET_TYPE" }) })
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public class DisposalUnit extends BaseIDModel {
 
@@ -30,33 +31,19 @@ public class DisposalUnit extends BaseIDModel {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "UNIT_ID", nullable = false)
-	private Unit unit;
-
 	@Enumerated(EnumType.STRING)
 	@Column(name = "DISPOSAL_TARGET_TYPE", nullable = false)
 	private DisposalTargetType type;
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "UNIT_ID", nullable = false)
+	private Unit unit;
 
 	/**
 	 * 
 	 */
 	public DisposalUnit() {
 		super();
-	}
-
-	/**
-	 * @return the unit
-	 */
-	public Unit getUnit() {
-		return unit;
-	}
-
-	/**
-	 * @param unit the unit to set
-	 */
-	public void setUnit(Unit unit) {
-		this.unit = unit;
 	}
 
 	/**
@@ -67,12 +54,24 @@ public class DisposalUnit extends BaseIDModel {
 	}
 
 	/**
+	 * @return the unit
+	 */
+	public Unit getUnit() {
+		return unit;
+	}
+
+	/**
 	 * @param type the type to set
 	 */
 	public void setType(DisposalTargetType type) {
 		this.type = type;
 	}
 
-	
-	
+	/**
+	 * @param unit the unit to set
+	 */
+	public void setUnit(Unit unit) {
+		this.unit = unit;
+	}
+
 }

@@ -40,21 +40,21 @@ public class TeachingHourAnalysisReport extends BaseReport {
 
 	private Date effectiveDay = new Date(System.currentTimeMillis());
 
-	private School school;
-
 	private Character region;
+
+	@DataModel(value = "reportData")
+	private Collection<TeachingHoursAnalysisItem> reportData;
+
+	@DataModel(value = "reportTextAnalysis")
+	private Collection<String> reportTextAnalysis = new ArrayList<String>(100);
+
+	private School school;
 
 	private SpecializationGroup specializationGroup;
 
 	private List<SpecializationGroup> specializationGroups = new ArrayList<SpecializationGroup>();
 
 	private SpecializationGroupSearchType specializationGroupSearchType = SpecializationGroupSearchType.SINGLE_SPECIALIZATION_GROUP;
-
-	@DataModel(value = "reportTextAnalysis")
-	private Collection<String> reportTextAnalysis = new ArrayList<String>(100);
-
-	@DataModel(value = "reportData")
-	private Collection<TeachingHoursAnalysisItem> reportData;
 
 	public void generateReport() {
 
@@ -185,8 +185,8 @@ public class TeachingHourAnalysisReport extends BaseReport {
 
 					for (Employee regularEmployee : regularEmployees) {
 						int employeeHours = regularEmployee.getCurrentEmployment().getFinalWorkingHours();
-						Collection<Disposal> disposals = getCoreSearching().getEmployeeActiveDisposals(getEntityManager(),
-								regularEmployee, today);
+						Collection<Disposal> disposals = getCoreSearching().getEmployeeActiveDisposals(
+								getEntityManager(), regularEmployee, today);
 						int disposalHours = 0;
 						for (Disposal disposal : disposals) {
 							disposalHours += disposal.getHours();
@@ -309,94 +309,10 @@ public class TeachingHourAnalysisReport extends BaseReport {
 	}
 
 	/**
-	 * @param effectiveDay the effectiveDay to set
-	 */
-	public void setEffectiveDay(Date effectiveDay) {
-		this.effectiveDay = effectiveDay;
-	}
-
-	/**
-	 * @return the school
-	 */
-	public School getSchool() {
-		return school;
-	}
-
-	/**
-	 * @param school the school to set
-	 */
-	public void setSchool(School school) {
-		this.school = school;
-	}
-
-	/**
 	 * @return the region
 	 */
 	public Character getRegion() {
 		return region;
-	}
-
-	/**
-	 * @param region the region to set
-	 */
-	public void setRegion(Character region) {
-		this.region = region;
-	}
-
-	/**
-	 * @return the reportTextAnalysis
-	 */
-	public Collection<String> getReportTextAnalysis() {
-		return reportTextAnalysis;
-	}
-
-	/**
-	 * @param reportTextAnalysis the reportTextAnalysis to set
-	 */
-	public void setReportTextAnalysis(Collection<String> reportTextAnalysis) {
-		this.reportTextAnalysis = reportTextAnalysis;
-	}
-
-	/**
-	 * @return the specializationGroup
-	 */
-	public SpecializationGroup getSpecializationGroup() {
-		return specializationGroup;
-	}
-
-	/**
-	 * @param specializationGroup the specializationGroup to set
-	 */
-	public void setSpecializationGroup(SpecializationGroup specializationGroup) {
-		this.specializationGroup = specializationGroup;
-	}
-
-	/**
-	 * @return the specializationGroupSearchType
-	 */
-	public SpecializationGroupSearchType getSpecializationGroupSearchType() {
-		return specializationGroupSearchType;
-	}
-
-	/**
-	 * @param specializationGroupSearchType the specializationGroupSearchType to set
-	 */
-	public void setSpecializationGroupSearchType(SpecializationGroupSearchType specializationGroupSearchType) {
-		this.specializationGroupSearchType = specializationGroupSearchType;
-	}
-
-	/**
-	 * @return the specializationGroups
-	 */
-	public List<SpecializationGroup> getSpecializationGroups() {
-		return specializationGroups;
-	}
-
-	/**
-	 * @param specializationGroups the specializationGroups to set
-	 */
-	public void setSpecializationGroups(List<SpecializationGroup> specializationGroups) {
-		this.specializationGroups = specializationGroups;
 	}
 
 	/**
@@ -407,10 +323,94 @@ public class TeachingHourAnalysisReport extends BaseReport {
 	}
 
 	/**
+	 * @return the reportTextAnalysis
+	 */
+	public Collection<String> getReportTextAnalysis() {
+		return reportTextAnalysis;
+	}
+
+	/**
+	 * @return the school
+	 */
+	public School getSchool() {
+		return school;
+	}
+
+	/**
+	 * @return the specializationGroup
+	 */
+	public SpecializationGroup getSpecializationGroup() {
+		return specializationGroup;
+	}
+
+	/**
+	 * @return the specializationGroups
+	 */
+	public List<SpecializationGroup> getSpecializationGroups() {
+		return specializationGroups;
+	}
+
+	/**
+	 * @return the specializationGroupSearchType
+	 */
+	public SpecializationGroupSearchType getSpecializationGroupSearchType() {
+		return specializationGroupSearchType;
+	}
+
+	/**
+	 * @param effectiveDay the effectiveDay to set
+	 */
+	public void setEffectiveDay(Date effectiveDay) {
+		this.effectiveDay = effectiveDay;
+	}
+
+	/**
+	 * @param region the region to set
+	 */
+	public void setRegion(Character region) {
+		this.region = region;
+	}
+
+	/**
 	 * @param reportData2 the reportData2 to set
 	 */
 	public void setReportData(Collection<TeachingHoursAnalysisItem> reportData2) {
 		this.reportData = reportData2;
+	}
+
+	/**
+	 * @param reportTextAnalysis the reportTextAnalysis to set
+	 */
+	public void setReportTextAnalysis(Collection<String> reportTextAnalysis) {
+		this.reportTextAnalysis = reportTextAnalysis;
+	}
+
+	/**
+	 * @param school the school to set
+	 */
+	public void setSchool(School school) {
+		this.school = school;
+	}
+
+	/**
+	 * @param specializationGroup the specializationGroup to set
+	 */
+	public void setSpecializationGroup(SpecializationGroup specializationGroup) {
+		this.specializationGroup = specializationGroup;
+	}
+
+	/**
+	 * @param specializationGroups the specializationGroups to set
+	 */
+	public void setSpecializationGroups(List<SpecializationGroup> specializationGroups) {
+		this.specializationGroups = specializationGroups;
+	}
+
+	/**
+	 * @param specializationGroupSearchType the specializationGroupSearchType to set
+	 */
+	public void setSpecializationGroupSearchType(SpecializationGroupSearchType specializationGroupSearchType) {
+		this.specializationGroupSearchType = specializationGroupSearchType;
 	}
 
 }

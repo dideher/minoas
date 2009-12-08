@@ -21,13 +21,10 @@ public class SchoolUniversalEmploymentItem extends EmploymentReportItem {
 		super();
 	}
 
-	/**
-	 * @param employment
-	 */
-	public SchoolUniversalEmploymentItem(Employment employment) {
-		super(employment);
+	public SchoolUniversalEmploymentItem(Disposal disposal) {
+		super(disposal.getAffectedEmployment());
 	}
-	
+
 	public SchoolUniversalEmploymentItem(Employee employee) {
 		this();
 		setId(employee.getId());
@@ -44,33 +41,35 @@ public class SchoolUniversalEmploymentItem extends EmploymentReportItem {
 			setEmployeeSpecialization(employee.getLastSpecialization().getTitle());
 			setEmployeeSpecializationID(employee.getLastSpecialization().getId());
 		}
-		if(employee.getRegularDetail()!=null)
+		if (employee.getRegularDetail() != null)
 			setEmployeeCode(employee.getRegularDetail().getRegistryID());
-		
-		if(employee.getCurrentEmployment()!=null) {
-			Employment employment = employee.getCurrentEmployment(); 
+
+		if (employee.getCurrentEmployment() != null) {
+			Employment employment = employee.getCurrentEmployment();
 			setEmployeeFinalWorkingHours(employment.getFinalWorkingHours());
 			setEmployeeMandatoryHours(employment.getMandatoryWorkingHours());
 			setEmployeeEmploymentEstablishedDate(employment.getEstablished());
 			setEmployeeEmploymentTerminatedDate(employment.getTerminated());
 		}
-		
-		
-		
+
 	}
-	
+
+	/**
+	 * @param employment
+	 */
+	public SchoolUniversalEmploymentItem(Employment employment) {
+		super(employment);
+	}
+
 	public SchoolUniversalEmploymentItem(Secondment secondment) {
-		
+
 		super(secondment.getAffectedEmployment());
 	}
 
-	public SchoolUniversalEmploymentItem(Disposal disposal) {
-		super(disposal.getAffectedEmployment());
-	}
-	
 	public SchoolUniversalEmploymentItem(ServiceAllocation serviceAllocation) {
 		super(serviceAllocation.getAffectedEmployment());
 	}
+
 	/**
 	 * @return the employmentComment
 	 */

@@ -1,5 +1,3 @@
-
-
 package gr.sch.ira.minoas.model.employement;
 
 import gr.sch.ira.minoas.model.BaseIDModel;
@@ -41,40 +39,39 @@ public class ServiceAllocation extends BaseIDModel {
 	private Employment affectedEmployment;
 
 	@Basic
-	@Column(name="COMMENT", nullable=true, length=255)
+	@Column(name = "COMMENT", nullable = true, length = 255)
 	private String comment;
-	
+
 	@Basic
 	@Column(name = "DUE_TO", nullable = true)
 	@Temporal(TemporalType.DATE)
 	private Date dueTo;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "EMPLOYEE_ID", nullable = false)
 	private Employee employee;
-	
+
 	@Basic
 	@Column(name = "ESTABLISHED", nullable = true)
 	@Temporal(TemporalType.DATE)
 	private Date established;
-	
-	@Enumerated(EnumType.STRING)
-	@Column(name="SERVICE_TYPE")
-	private ServiceAllocationType serviceType;
-	
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "SOURCE_UNIT_ID", nullable = true)
-	private Unit sourceUnit;
 
 	@Basic
 	@Column(name = "PYSDE_ORDER", nullable = true, length = 25)
 	private String pysdeOrder;
 
-	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "SERVICE_TYPE")
+	private ServiceAllocationType serviceType;
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "SERVICE_UNIT_ID", nullable = false)
 	private Unit serviceUnit;
-	
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "SOURCE_UNIT_ID", nullable = true)
+	private Unit sourceUnit;
+
 	@Basic
 	@Column(name = "WORKING_HOURS_ON_REGULAR", nullable = true)
 	private Integer workingHoursOnRegularPosition;
@@ -136,13 +133,25 @@ public class ServiceAllocation extends BaseIDModel {
 		return pysdeOrder;
 	}
 
-	
+	/**
+	 * @return the serviceType
+	 */
+	public ServiceAllocationType getServiceType() {
+		return serviceType;
+	}
 
 	/**
 	 * @return the serviceUnit
 	 */
 	public Unit getServiceUnit() {
 		return serviceUnit;
+	}
+
+	/**
+	 * @return the sourceUnit
+	 */
+	public Unit getSourceUnit() {
+		return sourceUnit;
 	}
 
 	/**
@@ -208,7 +217,12 @@ public class ServiceAllocation extends BaseIDModel {
 		this.pysdeOrder = pysdeOrder;
 	}
 
-	
+	/**
+	 * @param serviceType the serviceType to set
+	 */
+	public void setServiceType(ServiceAllocationType serviceType) {
+		this.serviceType = serviceType;
+	}
 
 	/**
 	 * @param serviceUnit the serviceUnit to set
@@ -218,18 +232,23 @@ public class ServiceAllocation extends BaseIDModel {
 	}
 
 	/**
+	 * @param sourceUnit the sourceUnit to set
+	 */
+	public void setSourceUnit(Unit sourceUnit) {
+		this.sourceUnit = sourceUnit;
+	}
+
+	/**
 	 * @param workingHoursOnRegularPosition the workingHoursOnRegularPosition to set
 	 */
-	public void setWorkingHoursOnRegularPosition(
-			Integer workingHoursOnRegularPosition) {
+	public void setWorkingHoursOnRegularPosition(Integer workingHoursOnRegularPosition) {
 		this.workingHoursOnRegularPosition = workingHoursOnRegularPosition;
 	}
 
 	/**
 	 * @param workingHoursOnServicingPosition the workingHoursOnServicingPosition to set
 	 */
-	public void setWorkingHoursOnServicingPosition(
-			Integer workingHoursOnServicingPosition) {
+	public void setWorkingHoursOnServicingPosition(Integer workingHoursOnServicingPosition) {
 		this.workingHoursOnServicingPosition = workingHoursOnServicingPosition;
 	}
 
@@ -245,7 +264,7 @@ public class ServiceAllocation extends BaseIDModel {
 			builder.append(employee);
 			builder.append(", ");
 		}
-		if (serviceType!=null) {
+		if (serviceType != null) {
 			builder.append("serviceType=");
 			builder.append(serviceType);
 			builder.append(", ");
@@ -266,33 +285,5 @@ public class ServiceAllocation extends BaseIDModel {
 		}
 		builder.append("]");
 		return builder.toString();
-	}
-
-	/**
-	 * @return the serviceType
-	 */
-	public ServiceAllocationType getServiceType() {
-		return serviceType;
-	}
-
-	/**
-	 * @param serviceType the serviceType to set
-	 */
-	public void setServiceType(ServiceAllocationType serviceType) {
-		this.serviceType = serviceType;
-	}
-
-	/**
-	 * @return the sourceUnit
-	 */
-	public Unit getSourceUnit() {
-		return sourceUnit;
-	}
-
-	/**
-	 * @param sourceUnit the sourceUnit to set
-	 */
-	public void setSourceUnit(Unit sourceUnit) {
-		this.sourceUnit = sourceUnit;
 	}
 }

@@ -25,34 +25,58 @@ import org.jboss.seam.log.Log;
 @Name("SecurityStartup")
 public class SecurityStartup {
 
-	
 	@Logger
 	private Log log;
 
-	@In(create=true)
-	private IRoleDAO roleDAO;
-	
-	@In(create=true)
+	@In(create = true)
 	private IPrincipalDAO principalDAO;
-	
+
+	@In(create = true)
+	private IRoleDAO roleDAO;
+
+	protected Principal createPrincipal(String username, String password, String realname) {
+		Principal principal = principalDAO.findByUsername(username);
+		if (principal == null) {
+			principal = new Principal(username, password, realname);
+			principalDAO.persist(principal);
+		} else {
+			log.info("principal \"#0\" already exists in the database", username);
+		}
+		return principal;
+	}
+
+	protected Role createRole(String name, String desc, Principal creator) {
+		Role role = roleDAO.findByName(name);
+		if (role == null) {
+			role = new Role(name, desc);
+			role.setInsertedBy(creator);
+			roleDAO.persist(role);
+			log.info("successfully created role \"#0\" with description \"#1\" in database.", role.getName(), role
+					.getDescription());
+		} else {
+			log.info("role \"#0\" already exists in the database.", name);
+		}
+		return role;
+	}
+
 	@Create
 	@Transactional(TransactionPropagationType.REQUIRED)
 	public void init() {
 		log.info("initializing security model");
-		
+
 		Principal admin = createPrincipal("admin", "admin", "Ο Θέος");
 		Role adminRole = createRole("ADMIN", "Admin Role - The god him self", admin);
 		admin.addRole(adminRole);
-		
+
 		/* Employee */
 		createRole("ADD_EMPLOYEE", "Add New Employee", admin);
 		createRole("ADD_EMPLOYEE_HOURLY_BASED", "Add New Hourly Based Employee", admin);
 		createRole("ADD_EMPLOYEE_DEPUTY", "Add New Deputy Employee", admin);
 		createRole("ADD_EMPLOYEE_REGULAR", "Add New Regular Employee", admin);
-		
+
 		createRole("MANAGE_EMPLOYEE", "Manage Employee", admin);
 		createRole("VIEW_EMPLOYEE", "View Employee", admin);
-		
+
 		createRole("VIEW_PREPARATORY", "View Preparatory Data", admin);
 		createRole("MANAGE_PREPARATORY_OWNER", "Manage Preperatory Owner", admin);
 		createRole("MANAGE_PREPARATORY_EST_LICENSE", "Manage Preparatory Establishment License", admin);
@@ -75,29 +99,6 @@ public class SecurityStartup {
 		createRole("VIEW_DISPOSAL", "View Disposal", admin);
 		/* Reports */
 		createRole("VIEW_SCHOOL_REPORT", "View School Oriented Reports", admin);
-		
-	}
-	
-	protected Principal createPrincipal(String username, String password, String realname) {
-		Principal principal = principalDAO.findByUsername(username);
-		if(principal==null) {
-			principal = new Principal(username, password, realname);
-			principalDAO.persist(principal);
-		} else {
-			log.info("principal \"#0\" already exists in the database", username);
-		}
-		return principal;
-	}
-	protected Role createRole(String name, String desc, Principal creator) {
-		Role role = roleDAO.findByName(name);
-		if(role==null) {
-			role = new Role(name, desc);
-			role.setInsertedBy(creator);
-			roleDAO.persist(role);
-			log.info("successfully created role \"#0\" with description \"#1\" in database.", role.getName(), role.getDescription());
-		} else {
-			log.info("role \"#0\" already exists in the database.", name);
-		}
-		return role;
+
 	}
 }

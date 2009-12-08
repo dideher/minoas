@@ -3,7 +3,6 @@ package gr.sch.ira.minoas.seam.components.criteria;
 import gr.sch.ira.minoas.model.core.SpecializationGroup;
 import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employement.DisposalType;
-import gr.sch.ira.minoas.model.employement.SecondmentType;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -24,6 +23,8 @@ public class DisposalCriteria {
 
 	private DateSearchType dateSearchType;
 
+	private DisposalType disposalType;
+
 	private Date effectiveDate;
 
 	private Date effectiveDateFrom;
@@ -34,11 +35,9 @@ public class DisposalCriteria {
 
 	private Character region;
 
-	private DisposalType disposalType;
+	private SpecializationGroup specializationGroup;
 
 	private Unit targetUnit;
-
-	private SpecializationGroup specializationGroup;
 
 	/**
 	 * 
@@ -65,6 +64,13 @@ public class DisposalCriteria {
 	}
 
 	/**
+	 * @return the disposalType
+	 */
+	public DisposalType getDisposalType() {
+		return disposalType;
+	}
+
+	/**
 	 * @return the effectiveDate
 	 */
 	public Date getEffectiveDate() {
@@ -86,10 +92,24 @@ public class DisposalCriteria {
 	}
 
 	/**
+	 * @return the employeeRequested
+	 */
+	public Boolean getEmployeeRequested() {
+		return employeeRequested;
+	}
+
+	/**
 	 * @return the region
 	 */
 	public Character getRegion() {
 		return region;
+	}
+
+	/**
+	 * @return the specializationGroup
+	 */
+	public SpecializationGroup getSpecializationGroup() {
+		return specializationGroup;
 	}
 
 	/**
@@ -114,6 +134,13 @@ public class DisposalCriteria {
 	}
 
 	/**
+	 * @param disposalType the disposalType to set
+	 */
+	public void setDisposalType(DisposalType disposalType) {
+		this.disposalType = disposalType;
+	}
+
+	/**
 	 * @param effectiveDate the effectiveDate to set
 	 */
 	public void setEffectiveDate(Date effectiveDate) {
@@ -135,24 +162,17 @@ public class DisposalCriteria {
 	}
 
 	/**
+	 * @param employeeRequested the employeeRequested to set
+	 */
+	public void setEmployeeRequested(Boolean employeeRequested) {
+		this.employeeRequested = employeeRequested;
+	}
+
+	/**
 	 * @param region the region to set
 	 */
 	public void setRegion(Character region) {
 		this.region = region;
-	}
-
-	/**
-	 * @param targetUnit the targetUnit to set
-	 */
-	public void setTargetUnit(Unit targetUnit) {
-		this.targetUnit = targetUnit;
-	}
-
-	/**
-	 * @return the specializationGroup
-	 */
-	public SpecializationGroup getSpecializationGroup() {
-		return specializationGroup;
 	}
 
 	/**
@@ -163,30 +183,9 @@ public class DisposalCriteria {
 	}
 
 	/**
-	 * @return the employeeRequested
+	 * @param targetUnit the targetUnit to set
 	 */
-	public Boolean getEmployeeRequested() {
-		return employeeRequested;
-	}
-
-	/**
-	 * @param employeeRequested the employeeRequested to set
-	 */
-	public void setEmployeeRequested(Boolean employeeRequested) {
-		this.employeeRequested = employeeRequested;
-	}
-
-	/**
-	 * @return the disposalType
-	 */
-	public DisposalType getDisposalType() {
-		return disposalType;
-	}
-
-	/**
-	 * @param disposalType the disposalType to set
-	 */
-	public void setDisposalType(DisposalType disposalType) {
-		this.disposalType = disposalType;
+	public void setTargetUnit(Unit targetUnit) {
+		this.targetUnit = targetUnit;
 	}
 }

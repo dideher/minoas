@@ -20,18 +20,6 @@ import org.jboss.seam.annotations.Name;
 public class PrincipalDAOImpl extends GenericDAOImpl<Principal, Long> implements IPrincipalDAO {
 
 	/**
-	 * @see gr.sch.ira.minoas.session.persistent.IPrincipalDAO#findByUsername(java.lang.String)
-	 */
-	public Principal findByUsername(String username) {
-		try {
-			return (Principal) getEntityManager().createQuery("FROM Principal p WHERE p.username=:username")
-					.setParameter("username", username).getSingleResult();
-		} catch (NoResultException nre) {
-			return null;
-		}
-	}
-
-	/**
 	 * @see gr.sch.ira.minoas.session.persistent.IGenericDAO#findAll()
 	 */
 	@SuppressWarnings("unchecked")
@@ -44,6 +32,18 @@ public class PrincipalDAOImpl extends GenericDAOImpl<Principal, Long> implements
 	 */
 	public Principal findByExample(Principal entityInstance) {
 		throw new RuntimeException("not implemented yet.");
+	}
+
+	/**
+	 * @see gr.sch.ira.minoas.session.persistent.IPrincipalDAO#findByUsername(java.lang.String)
+	 */
+	public Principal findByUsername(String username) {
+		try {
+			return (Principal) getEntityManager().createQuery("FROM Principal p WHERE p.username=:username")
+					.setParameter("username", username).getSingleResult();
+		} catch (NoResultException nre) {
+			return null;
+		}
 	}
 
 }

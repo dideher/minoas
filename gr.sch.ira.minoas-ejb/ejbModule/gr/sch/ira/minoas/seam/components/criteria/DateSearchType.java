@@ -1,4 +1,3 @@
-
 package gr.sch.ira.minoas.seam.components.criteria;
 
 /**
@@ -6,13 +5,13 @@ package gr.sch.ira.minoas.seam.components.criteria;
  * @version $Id$
  */
 public enum DateSearchType {
-	BEFORE_DATE("BEFORE_DATE_DATE_SEARCH_TYPE"),
 	AFTER_DATE("AFTER_DATE_DATE_SEARCH_TYPE"),
+	BEFORE_DATE("BEFORE_DATE_DATE_SEARCH_TYPE"),
 	DURING_DATE("DURING_DATE_DATE_SEARCH_TYPE"),
 	DURING_DATE_PERIOD("DURING_DATE_PERIOD_DATE_SEARCH_TYPE");
-	
+
 	private String key;
-	
+
 	private DateSearchType(String key) {
 		this.key = key;
 	}
@@ -30,7 +29,5 @@ public enum DateSearchType {
 	public void setKey(String key) {
 		this.key = key;
 	}
-	
-	
-	
+
 }

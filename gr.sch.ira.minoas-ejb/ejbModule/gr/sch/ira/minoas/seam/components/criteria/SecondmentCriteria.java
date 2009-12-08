@@ -18,26 +18,26 @@ import org.jboss.seam.annotations.Scope;
  */
 @Name("secondmentCriteria")
 @Scope(ScopeType.CONVERSATION)
-public class SecondmentCriteria  {
+public class SecondmentCriteria {
 	private String comment;
-	
+
 	private DateSearchType dateSearchType;
-	
+
 	private Date effectiveDate;
-	
+
 	private Date effectiveDateFrom;
-	
+
 	private Date effectiveDateUntil;
-	
+
 	private Boolean employeeRequested;
 
 	private Character region;
 
 	private SecondmentType secondmentType;
-	
-	private Unit targetUnit;
-	
+
 	private SpecializationGroup specializationGroup;
+
+	private Unit targetUnit;
 
 	/**
 	 * 
@@ -85,6 +85,13 @@ public class SecondmentCriteria  {
 	}
 
 	/**
+	 * @return the employeeRequested
+	 */
+	public Boolean getEmployeeRequested() {
+		return employeeRequested;
+	}
+
+	/**
 	 * @return the region
 	 */
 	public Character getRegion() {
@@ -99,13 +106,18 @@ public class SecondmentCriteria  {
 	}
 
 	/**
+	 * @return the specializationGroup
+	 */
+	public SpecializationGroup getSpecializationGroup() {
+		return specializationGroup;
+	}
+
+	/**
 	 * @return the targetUnit
 	 */
 	public Unit getTargetUnit() {
 		return targetUnit;
 	}
-
-	
 
 	/**
 	 * @param comment the comment to set
@@ -142,7 +154,12 @@ public class SecondmentCriteria  {
 		this.effectiveDateUntil = effectiveDateUntil;
 	}
 
-	
+	/**
+	 * @param employeeRequested the employeeRequested to set
+	 */
+	public void setEmployeeRequested(Boolean employeeRequested) {
+		this.employeeRequested = employeeRequested;
+	}
 
 	/**
 	 * @param region the region to set
@@ -159,20 +176,6 @@ public class SecondmentCriteria  {
 	}
 
 	/**
-	 * @param targetUnit the targetUnit to set
-	 */
-	public void setTargetUnit(Unit targetUnit) {
-		this.targetUnit = targetUnit;
-	}
-
-	/**
-	 * @return the specializationGroup
-	 */
-	public SpecializationGroup getSpecializationGroup() {
-		return specializationGroup;
-	}
-
-	/**
 	 * @param specializationGroup the specializationGroup to set
 	 */
 	public void setSpecializationGroup(SpecializationGroup specializationGroup) {
@@ -180,16 +183,9 @@ public class SecondmentCriteria  {
 	}
 
 	/**
-	 * @return the employeeRequested
+	 * @param targetUnit the targetUnit to set
 	 */
-	public Boolean getEmployeeRequested() {
-		return employeeRequested;
-	}
-
-	/**
-	 * @param employeeRequested the employeeRequested to set
-	 */
-	public void setEmployeeRequested(Boolean employeeRequested) {
-		this.employeeRequested = employeeRequested;
+	public void setTargetUnit(Unit targetUnit) {
+		this.targetUnit = targetUnit;
 	}
 }

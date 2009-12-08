@@ -41,6 +41,10 @@ public class Principal extends BaseIDModel {
 	private static final long serialVersionUID = 1L;
 
 	@Basic
+	@Column(name = "IS_ACTIVE", nullable = true)
+	private Boolean active = Boolean.TRUE;
+
+	@Basic
 	@Column(name = "EMAIL", length = 60, nullable = true)
 	private String email;
 
@@ -57,13 +61,9 @@ public class Principal extends BaseIDModel {
 	@Column(name = "REAL_NAME", length = 90, nullable = false)
 	private String realName;
 
-	@ManyToMany(fetch = FetchType.LAZY, cascade={ CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
 	@JoinTable(name = "PRINCIPAL_ROLE", joinColumns = @JoinColumn(name = "PRINCIPAL_ID"), inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))
 	private List<Role> roles = new ArrayList<Role>();
-	
-	@Basic
-	@Column(name = "IS_ACTIVE", nullable = true)
-	private Boolean active = Boolean.TRUE;
 
 	@Basic
 	@Column(updatable = false, name = "USERNAME", length = 16, nullable = false, unique = true)
@@ -74,7 +74,34 @@ public class Principal extends BaseIDModel {
 	 */
 	public Principal() {
 		super();
-		
+
+	}
+
+	/**
+	 * @param username
+	 * @param realName
+	 * @param password
+	 */
+	public Principal(String username, String password, String realName) {
+		super();
+		this.username = username;
+		this.realName = realName;
+		this.password = password;
+		this.active = Boolean.TRUE;
+	}
+
+	public Role addRole(Role aRole) {
+		if (!roles.contains(aRole)) {
+			getRoles().add(aRole);
+		}
+		return aRole;
+	}
+
+	/**
+	 * @return the active
+	 */
+	public Boolean getActive() {
+		return active;
 	}
 
 	/**
@@ -99,19 +126,6 @@ public class Principal extends BaseIDModel {
 	}
 
 	/**
-	 * @param username
-	 * @param realName
-	 * @param password
-	 */
-	public Principal(String username, String password, String realName) {
-		super();
-		this.username = username;
-		this.realName = realName;
-		this.password = password;
-		this.active = Boolean.TRUE;
-	}
-
-	/**
 	 * @return the realName
 	 */
 	public String getRealName() {
@@ -130,6 +144,13 @@ public class Principal extends BaseIDModel {
 	 */
 	public String getUsername() {
 		return username;
+	}
+
+	/**
+	 * @param active the active to set
+	 */
+	public void setActive(Boolean active) {
+		this.active = active;
 	}
 
 	/**
@@ -174,13 +195,6 @@ public class Principal extends BaseIDModel {
 		this.username = username;
 	}
 
-	public Role addRole(Role aRole) {
-		if(!roles.contains(aRole)) {
-			getRoles().add(aRole);
-		}
-		return aRole;
-	}
-
 	/**
 	 * @see java.lang.Object#toString()
 	 */
@@ -193,20 +207,6 @@ public class Principal extends BaseIDModel {
 		sb.append(getRealName());
 		sb.append("]");
 		return sb.toString();
-	}
-
-	/**
-	 * @return the active
-	 */
-	public Boolean getActive() {
-		return active;
-	}
-
-	/**
-	 * @param active the active to set
-	 */
-	public void setActive(Boolean active) {
-		this.active = active;
 	}
 
 }

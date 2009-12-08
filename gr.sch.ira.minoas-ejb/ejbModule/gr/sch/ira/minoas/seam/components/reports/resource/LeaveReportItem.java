@@ -6,29 +6,32 @@ import java.util.Date;
 
 public class LeaveReportItem extends EmployeeReportItem {
 	private String comment;
+
 	private Date dueTo;
+
 	private Date establishedIn;
+
 	private String leaveType;
+
 	private String leaveTypeKey;
+
 	private String regularUnit;
-	
-	
+
 	public LeaveReportItem() {
 		super();
 	}
-	
+
 	public LeaveReportItem(Leave leave) {
 		super(leave.getEmployee());
 		this.comment = leave.getComment();
 		this.dueTo = leave.getDueTo();
 		this.establishedIn = leave.getEstablished();
-		if(leave.getEmployee().getCurrentEmployment()!=null)
-			this.regularUnit = leave.getEmployee().getCurrentEmployment().getSchool().getTitle(); 
+		if (leave.getEmployee().getCurrentEmployment() != null)
+			this.regularUnit = leave.getEmployee().getCurrentEmployment().getSchool().getTitle();
 		this.leaveType = leave.getLeaveType().name();
 		this.leaveTypeKey = leave.getLeaveType().getKey();
 	}
 
-	
 	public String getComment() {
 		return comment;
 	}
@@ -49,13 +52,6 @@ public class LeaveReportItem extends EmployeeReportItem {
 	}
 
 	/**
-	 * @param leaveType the leaveType to set
-	 */
-	public void setLeaveType(String leaveType) {
-		this.leaveType = leaveType;
-	}
-
-	/**
 	 * @return the leaveTypeKey
 	 */
 	public String getLeaveTypeKey() {
@@ -63,24 +59,10 @@ public class LeaveReportItem extends EmployeeReportItem {
 	}
 
 	/**
-	 * @param leaveTypeKey the leaveTypeKey to set
-	 */
-	public void setLeaveTypeKey(String leaveTypeKey) {
-		this.leaveTypeKey = leaveTypeKey;
-	}
-
-	/**
 	 * @return the regularUnit
 	 */
 	public String getRegularUnit() {
 		return regularUnit;
-	}
-
-	/**
-	 * @param regularUnit the regularUnit to set
-	 */
-	public void setRegularUnit(String regularUnit) {
-		this.regularUnit = regularUnit;
 	}
 
 	/**
@@ -104,6 +86,25 @@ public class LeaveReportItem extends EmployeeReportItem {
 		this.establishedIn = establishedIn;
 	}
 
-	
+	/**
+	 * @param leaveType the leaveType to set
+	 */
+	public void setLeaveType(String leaveType) {
+		this.leaveType = leaveType;
+	}
+
+	/**
+	 * @param leaveTypeKey the leaveTypeKey to set
+	 */
+	public void setLeaveTypeKey(String leaveTypeKey) {
+		this.leaveTypeKey = leaveTypeKey;
+	}
+
+	/**
+	 * @param regularUnit the regularUnit to set
+	 */
+	public void setRegularUnit(String regularUnit) {
+		this.regularUnit = regularUnit;
+	}
 
 }

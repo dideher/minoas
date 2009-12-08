@@ -1,9 +1,6 @@
 package gr.sch.ira.minoas.seam.components.reports;
 
 import gr.sch.ira.minoas.model.core.SchoolYear;
-import gr.sch.ira.minoas.model.core.Specialization;
-import gr.sch.ira.minoas.model.core.SpecializationGroup;
-import gr.sch.ira.minoas.model.core.TeachingRequirement;
 import gr.sch.ira.minoas.model.employement.Disposal;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
@@ -13,21 +10,17 @@ import gr.sch.ira.minoas.model.employement.ServiceAllocation;
 import gr.sch.ira.minoas.seam.components.home.SchoolHome;
 import gr.sch.ira.minoas.seam.components.reports.resource.SchoolUniversalEmploymentItem;
 import gr.sch.ira.minoas.seam.components.reports.resource.SchoolUniversalEmployments;
-import gr.sch.ira.minoas.seam.components.reports.resource.SchoolUniversalEmploymentsGroup;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Out;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.datamodel.DataModel;
 
@@ -39,10 +32,10 @@ import org.jboss.seam.annotations.datamodel.DataModel;
 @Scope(ScopeType.CONVERSATION)
 public class SchoolEmploymentsReport extends BaseReport {
 
+	private DateFormat dateFormat;
+
 	@DataModel(value = "schoolEmployments")
 	private SchoolUniversalEmployments schoolEmployments;
-
-	private DateFormat dateFormat;
 
 	@In
 	private SchoolHome schoolHome;
@@ -54,12 +47,55 @@ public class SchoolEmploymentsReport extends BaseReport {
 		dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 	}
 
+	private String constructComment(Disposal disposal) {
+		StringBuffer sb = new StringBuffer();
+		sb.append("Διάθεση απο τις ");
+		sb.append(this.dateFormat.format(disposal.getEstablished()));
+		sb.append(" εως και ");
+		sb.append(this.dateFormat.format(disposal.getDueTo()));
+		sb.append(" στο/σε ");
+		sb.append(disposal.getDisposalUnit().getTitle());
+		sb.append(" για ");
+		sb.append(disposal.getHours());
+		sb.append(" ωρες και ");
+		sb.append(disposal.getDays());
+		sb.append(" ημέρες. ");
+		return sb.toString();
+
+	}
+
+	private String constructComment(Leave leave) {
+		StringBuffer sb = new StringBuffer();
+		sb.append("Άδεια τύπου ");
+		sb.append(getLocalizedMessage(leave.getLeaveType().getKey()));
+		sb.append(" απο τις ");
+		sb.append(this.dateFormat.format(leave.getEstablished()));
+		sb.append(" εως και ");
+		sb.append(this.dateFormat.format(leave.getDueTo()));
+		sb.append(". ");
+		return sb.toString();
+	}
+
 	private String constructComment(Secondment secondment) {
 		StringBuffer sb = new StringBuffer();
 		sb.append("Αποσπάση απο τις ");
 		sb.append(this.dateFormat.format(secondment.getEstablished()));
 		sb.append(" στο/σε ");
 		sb.append(secondment.getTargetUnit().getTitle());
+		sb.append(". ");
+		return sb.toString();
+	}
+
+	private String constructComment(ServiceAllocation serviceAllocation) {
+		StringBuffer sb = new StringBuffer();
+		sb.append("Θητεία τύπου ");
+		sb.append(getLocalizedMessage(serviceAllocation.getServiceType().getKey()));
+		sb.append(" απο τις ");
+		sb.append(this.dateFormat.format(serviceAllocation.getEstablished()));
+		sb.append(" εως και ");
+		sb.append(this.dateFormat.format(serviceAllocation.getDueTo()));
+		sb.append(" στο/σε ");
+		sb.append(serviceAllocation.getServiceUnit().getTitle());
 		sb.append(". ");
 		return sb.toString();
 	}
@@ -86,49 +122,6 @@ public class SchoolEmploymentsReport extends BaseReport {
 		sb.append(serviceAllocation.getSourceUnit().getTitle());
 		sb.append(". ");
 		return sb.toString();
-	}
-
-	private String constructComment(ServiceAllocation serviceAllocation) {
-		StringBuffer sb = new StringBuffer();
-		sb.append("Θητεία τύπου ");
-		sb.append(getLocalizedMessage(serviceAllocation.getServiceType().getKey()));
-		sb.append(" απο τις ");
-		sb.append(this.dateFormat.format(serviceAllocation.getEstablished()));
-		sb.append(" εως και ");
-		sb.append(this.dateFormat.format(serviceAllocation.getDueTo()));
-		sb.append(" στο/σε ");
-		sb.append(serviceAllocation.getServiceUnit().getTitle());
-		sb.append(". ");
-		return sb.toString();
-	}
-
-	private String constructComment(Leave leave) {
-		StringBuffer sb = new StringBuffer();
-		sb.append("Άδεια τύπου ");
-		sb.append(getLocalizedMessage(leave.getLeaveType().getKey()));
-		sb.append(" απο τις ");
-		sb.append(this.dateFormat.format(leave.getEstablished()));
-		sb.append(" εως και ");
-		sb.append(this.dateFormat.format(leave.getDueTo()));
-		sb.append(". ");
-		return sb.toString();
-	}
-
-	private String constructComment(Disposal disposal) {
-		StringBuffer sb = new StringBuffer();
-		sb.append("Διάθεση απο τις ");
-		sb.append(this.dateFormat.format(disposal.getEstablished()));
-		sb.append(" εως και ");
-		sb.append(this.dateFormat.format(disposal.getDueTo()));
-		sb.append(" στο/σε ");
-		sb.append(disposal.getDisposalUnit().getTitle());
-		sb.append(" για ");
-		sb.append(disposal.getHours());
-		sb.append(" ωρες και ");
-		sb.append(disposal.getDays());
-		sb.append(" ημέρες. ");
-		return sb.toString();
-
 	}
 
 	private String constructIncommingComment(Disposal disposal) {
@@ -188,13 +181,9 @@ public class SchoolEmploymentsReport extends BaseReport {
 
 		SchoolYear activeSchoolYear = getCoreSearching().getActiveSchoolYear(getEntityManager());
 
-		
-		
 		SchoolUniversalEmployments reportData = new SchoolUniversalEmployments(getCoreSearching()
-				.getSchoolTeachingRequirement(getEntityManager(), schoolHome.getInstance(), activeSchoolYear), getCoreSearching().getSpecializationGroups(activeSchoolYear,
-				getEntityManager()));
-		
-		
+				.getSchoolTeachingRequirement(getEntityManager(), schoolHome.getInstance(), activeSchoolYear),
+				getCoreSearching().getSpecializationGroups(activeSchoolYear, getEntityManager()));
 
 		/* ************************************************************************************ */
 		/* REGULAR EMPLOYMENTS 																	*/
@@ -321,29 +310,29 @@ public class SchoolEmploymentsReport extends BaseReport {
 		Collection<Secondment> incomingSecondents = getCoreSearching().getSchoolSecondments(getEntityManager(),
 				schoolHome.getInstance(), activeSchoolYear, today);
 		for (Secondment secondment : incomingSecondents) {
-			System.err.println(secondment.getEmployee().toString()+" "+secondment.getAffectedEmployment());
+			System.err.println(secondment.getEmployee().toString() + " " + secondment.getAffectedEmployment());
 			try {
 				SchoolUniversalEmploymentItem item = secondment.getAffectedEmployment() != null ? new SchoolUniversalEmploymentItem(
 						secondment)
 						: new SchoolUniversalEmploymentItem(secondment.getEmployee());
 				item.setEmploymentComment(constructIncomingComment(secondment));
-				
-				if(secondment.getAffectedEmployment()==null) {
+
+				if (secondment.getAffectedEmployment() == null) {
 					/* this is a special case of secondement when it is not
 					 * associated with an employment
 					 * 
 					 * This shit happens with secondments from other PYSDE
 					 */
-					
-					if(secondment.getFinalWorkingHours()!=null)
+
+					if (secondment.getFinalWorkingHours() != null)
 						item.setEmployeeFinalWorkingHours(secondment.getFinalWorkingHours());
-					if(secondment.getMandatoryWorkingHours()!=null)
+					if (secondment.getMandatoryWorkingHours() != null)
 						item.setEmployeeMandatoryHours(secondment.getMandatoryWorkingHours());
 					//item.setEmployeeEmploymentEstablishedDate(employment.getEstablished());
 					//item.setEmployeeEmploymentTerminatedDate(employment.getTerminated());
-					
+
 				}
-				
+
 				/* check if the employment is associated with a disposal */
 				Collection<Disposal> disposals = getCoreSearching().getEmployeeActiveDisposals(getEntityManager(),
 						secondment.getEmployee(), today);
@@ -382,7 +371,7 @@ public class SchoolEmploymentsReport extends BaseReport {
 				SchoolUniversalEmploymentItem item = new SchoolUniversalEmploymentItem(disposal);
 				item.setEmploymentComment(constructIncommingComment(disposal));
 				item.setEmployeeFinalWorkingHours(disposal.getHours());
-				
+
 				/* check if the employment is associated with a leave */
 				Leave leave = getCoreSearching().getEmployeeActiveLeave(getEntityManager(), disposal.getEmployee(),
 						today);
@@ -401,11 +390,11 @@ public class SchoolEmploymentsReport extends BaseReport {
 		Collection<ServiceAllocation> incomingServiceAllocation = getCoreSearching()
 				.getSchoolIncomingServiceAllocations(getEntityManager(), schoolHome.getInstance(), today);
 		for (ServiceAllocation serviceAllocation : incomingServiceAllocation) {
-			
+
 			/* check if the incoming service allocation has regular position in the school. 
 			 * If so, then it has been already handled.
 			 */
-			if(serviceAllocation.getServiceUnit().getId().equals(serviceAllocation.getSourceUnit().getId())) {
+			if (serviceAllocation.getServiceUnit().getId().equals(serviceAllocation.getSourceUnit().getId())) {
 				continue;
 			}
 			SchoolUniversalEmploymentItem item = new SchoolUniversalEmploymentItem(serviceAllocation);
@@ -425,7 +414,6 @@ public class SchoolEmploymentsReport extends BaseReport {
 
 		}
 
-	
 		setSchoolEmployments(reportData);
 		finished = System.currentTimeMillis();
 		info("report has been generated in #0 [ms]", (finished - started));

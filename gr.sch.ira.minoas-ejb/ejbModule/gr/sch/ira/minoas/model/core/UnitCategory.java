@@ -31,7 +31,6 @@ public class UnitCategory extends BaseIDModel {
 	 */
 	private static final long serialVersionUID = 1L;
 
-
 	@Basic
 	@Column(name = "TITLE", nullable = false, unique = true, length = 64)
 	private String title;

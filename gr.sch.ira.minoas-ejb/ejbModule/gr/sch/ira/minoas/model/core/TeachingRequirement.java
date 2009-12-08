@@ -39,8 +39,6 @@ public class TeachingRequirement extends BaseIDModel implements Cloneable {
 	@Column(name = "HOURS", nullable = false)
 	private Integer hours;
 
-	
-
 	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
 	@JoinColumn(name = "SCHOOL_ID", nullable = false)
 	private School school;

@@ -39,8 +39,8 @@ public class RoleDAOImpl extends GenericDAOImpl<Role, Long> implements IRoleDAO 
 	 */
 	public Role findByName(String name) {
 		try {
-			return (Role) getEntityManager().createQuery("FROM Role r WHERE r.name=:name").setParameter("name",
-					name).getSingleResult();
+			return (Role) getEntityManager().createQuery("FROM Role r WHERE r.name=:name").setParameter("name", name)
+					.getSingleResult();
 		} catch (NoResultException nre) {
 			return null;
 		}

@@ -20,6 +20,7 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 /**
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * 
@@ -28,89 +29,41 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Table(name = "EMPLOYEE_LEAVE")
 @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public class Leave extends BaseIDModel {
-	
+
 	/**
 	 * Comment for <code>serialVersionUID</code>
 	 */
 	private static final long serialVersionUID = 1L;
 
-
-
 	@Basic
 	@Column(name = "IS_ACTIVE", nullable = false)
 	private Boolean active;
 
-	
-	/**
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("Leave [");
-		if (employee != null) {
-			builder.append("employee=");
-			builder.append(employee);
-			builder.append(", ");
-		}
-		if (leaveType != null) {
-			builder.append("leaveType=");
-			builder.append(leaveType);
-			builder.append(", ");
-		}
-		if (established != null) {
-			builder.append("established=");
-			builder.append(established);
-			builder.append(", ");
-		}
-		if (dueTo != null) {
-			builder.append("dueTo=");
-			builder.append(dueTo);
-		}
-		builder.append("]");
-		return builder.toString();
-	}
-
 	@Basic
-	@Column(name="COMMENT", nullable=true, length=255)
+	@Column(name = "COMMENT", nullable = true, length = 255)
 	private String comment;
 
 	@Basic
 	@Column(name = "DUE_TO", nullable = false)
 	@Temporal(TemporalType.DATE)
 	private Date dueTo;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "EMPLOYEE_ID", nullable = false)
 	private Employee employee;
-	
+
 	@Basic
 	@Column(name = "ESTABLISHED", nullable = false)
 	@Temporal(TemporalType.DATE)
 	private Date established;
-	
-	@Enumerated(EnumType.STRING)
-	@Column(name="LEAVE_TYPE", length=64, nullable=false)
-	private LeaveType leaveType;
-	
-	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="REGULAR_SCHOOL_ID", nullable=true)
-	private School regularSchool;
-	
-	
-	/**
-	 * @return the regularSchool
-	 */
-	public School getRegularSchool() {
-		return regularSchool;
-	}
 
-	/**
-	 * @param regularSchool the regularSchool to set
-	 */
-	public void setRegularSchool(School regularSchool) {
-		this.regularSchool = regularSchool;
-	}
+	@Enumerated(EnumType.STRING)
+	@Column(name = "LEAVE_TYPE", length = 64, nullable = false)
+	private LeaveType leaveType;
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "REGULAR_SCHOOL_ID", nullable = true)
+	private School regularSchool;
 
 	public Leave() {
 		super();
@@ -160,13 +113,18 @@ public class Leave extends BaseIDModel {
 	}
 
 	/**
+	 * @return the regularSchool
+	 */
+	public School getRegularSchool() {
+		return regularSchool;
+	}
+
+	/**
 	 * @param active the active to set
 	 */
 	public void setActive(Boolean active) {
 		this.active = active;
 	}
-
-	
 
 	/**
 	 * @param comment the comment to set
@@ -203,7 +161,41 @@ public class Leave extends BaseIDModel {
 		this.leaveType = leaveType;
 	}
 
-	
+	/**
+	 * @param regularSchool the regularSchool to set
+	 */
+	public void setRegularSchool(School regularSchool) {
+		this.regularSchool = regularSchool;
+	}
 
-	
+	/**
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Leave [");
+		if (employee != null) {
+			builder.append("employee=");
+			builder.append(employee);
+			builder.append(", ");
+		}
+		if (leaveType != null) {
+			builder.append("leaveType=");
+			builder.append(leaveType);
+			builder.append(", ");
+		}
+		if (established != null) {
+			builder.append("established=");
+			builder.append(established);
+			builder.append(", ");
+		}
+		if (dueTo != null) {
+			builder.append("dueTo=");
+			builder.append(dueTo);
+		}
+		builder.append("]");
+		return builder.toString();
+	}
+
 }

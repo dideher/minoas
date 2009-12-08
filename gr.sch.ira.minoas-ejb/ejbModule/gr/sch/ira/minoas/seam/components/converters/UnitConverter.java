@@ -36,7 +36,8 @@ public class UnitConverter extends DatabaseAwareBaseConverter {
 	 */
 	public Object getAsObject(FacesContext context, UIComponent component, String value) {
 		try {
-			return getMinoasDatabase().createQuery("SELECT u FROM Unit u WHERE u.title = :title").setParameter("title", value).getSingleResult();
+			return getMinoasDatabase().createQuery("SELECT u FROM Unit u WHERE u.title = :title").setParameter("title",
+					value).getSingleResult();
 		} catch (NoResultException nres) {
 			return null;
 		} catch (Exception ex) {

@@ -54,7 +54,6 @@ public class EstablishmentLicenseRenewal extends BaseIDModel {
 	 */
 	private static final long serialVersionUID = 1L;
 
-
 	@ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinColumn(name = "LICENSE_ID", nullable = false, updatable = false)
 	private EstablishmentLicense license;

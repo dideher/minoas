@@ -4,11 +4,11 @@ import gr.sch.ira.minoas.model.core.SpecializationGroup;
 import gr.sch.ira.minoas.seam.components.reports.TeachingHourAnalysisReport;
 
 public class TeachingResource {
+	private Integer available;
+
 	private Integer required;
 
 	private SpecializationGroup specializationGroup;
-
-	private Integer available;
 
 	/**
 	 * 
@@ -32,20 +32,24 @@ public class TeachingResource {
 		available += hours;
 	}
 
+	/**
+	 * @return the total
+	 */
+	public Integer getAvailable() {
+		return available;
+	}
+
+	public Integer getMissingHours() {
+		return available - required;
+	}
+
 	public Integer getMissingReqularEmployees() {
 		return ((-1) * getMissingHours()) / TeachingHourAnalysisReport.HOURS_FOR_REGULAR_POSITION;
 	}
 
 	public Float getMissingReqularEmployeesAsFloat() {
-		return new Float((float) ((-1) * getMissingHours()) / (float) TeachingHourAnalysisReport.HOURS_FOR_REGULAR_POSITION);
-	}
-
-	public boolean isVoid() {
-		return getMissingReqularEmployees() > 0;
-	}
-
-	public Integer getMissingHours() {
-		return available - required;
+		return new Float((float) ((-1) * getMissingHours())
+				/ (float) TeachingHourAnalysisReport.HOURS_FOR_REGULAR_POSITION);
 	}
 
 	/**
@@ -66,19 +70,23 @@ public class TeachingResource {
 		return specializationGroup;
 	}
 
-	/**
-	 * @return the total
-	 */
-	public Integer getAvailable() {
-		return available;
-	}
-
 	public boolean hasMissingHours() {
 		return getMissingHours() > 0;
 	}
 
+	public boolean isVoid() {
+		return getMissingReqularEmployees() > 0;
+	}
+
 	public void removeHours(Integer hours) {
 		available -= hours;
+	}
+
+	/**
+	 * @param total the total to set
+	 */
+	public void setAvailable(Integer total) {
+		this.available = total;
 	}
 
 	/**
@@ -93,12 +101,5 @@ public class TeachingResource {
 	 */
 	public void setSpecializationGroup(SpecializationGroup specializationGroup) {
 		this.specializationGroup = specializationGroup;
-	}
-
-	/**
-	 * @param total the total to set
-	 */
-	public void setAvailable(Integer total) {
-		this.available = total;
 	}
 }

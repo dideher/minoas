@@ -1,4 +1,3 @@
-
 package gr.sch.ira.minoas.seam.components.home;
 
 import gr.sch.ira.minoas.model.core.Audit;
@@ -23,22 +22,23 @@ import org.jboss.seam.security.Identity;
  */
 public abstract class MinoasEntityHome<E> extends EntityHome {
 
-	public static final String PERSITESTENCE_CONTEXT_NAME = "entityManager";
-	
 	public static final String DUPLICATE_VALUE_OUTCOME = "duplicateValue";
-	
-	public static final String VALIDATION_ERROR_OUTCOME = "validationError";
+
+	public static final String PERSITESTENCE_CONTEXT_NAME = "entityManager";
 
 	/**
 	 * Comment for <code>serialVersionUID</code>
 	 */
 	private static final long serialVersionUID = 1L;
 
+	public static final String VALIDATION_ERROR_OUTCOME = "validationError";
+
 	@In()
 	private CoreSearching coreSearching;
-	
-	@In(required=false) FacesMessages facesMessages;
-	
+
+	@In(required = false)
+	FacesMessages facesMessages;
+
 	@In(required = false)
 	private Identity identity;
 
@@ -46,13 +46,7 @@ public abstract class MinoasEntityHome<E> extends EntityHome {
 	private Log logger;
 
 	private Class<E> persistentClass;
-	
-	
-	protected void logAudit(AuditType type, String comment) {
-		Audit audit = new Audit(type, comment, getPrincipal());
-		getEntityManager().persist(audit);
-	}
-	
+
 	/**
 	 * @see org.jboss.seam.framework.EntityHome#create()
 	 */
@@ -79,14 +73,14 @@ public abstract class MinoasEntityHome<E> extends EntityHome {
 	protected Identity getIdentity() {
 		return identity;
 	}
-	
+
 	/**
 	 * @return the logger
 	 */
 	protected Log getLogger() {
 		return logger;
 	}
-	
+
 	/**
 	 * @see org.jboss.seam.framework.EntityHome#getPersistenceContextName()
 	 */
@@ -100,7 +94,12 @@ public abstract class MinoasEntityHome<E> extends EntityHome {
 	}
 
 	protected String getPrincipalName() {
-		return getIdentity()!=null ? getIdentity().getPrincipal().getName() : "<anonymous>";
+		return getIdentity() != null ? getIdentity().getPrincipal().getName() : "<anonymous>";
+	}
+
+	protected void logAudit(AuditType type, String comment) {
+		Audit audit = new Audit(type, comment, getPrincipal());
+		getEntityManager().persist(audit);
 	}
 
 	/**
@@ -111,7 +110,7 @@ public abstract class MinoasEntityHome<E> extends EntityHome {
 	public String persist() {
 		logAudit(AuditType.INSERT, getInstance().toString());
 		String result = super.persist();
-		getLogger().info("principal '#0' successfully created '#1'", getPrincipalName(), getInstance()); 
+		getLogger().info("principal '#0' successfully created '#1'", getPrincipalName(), getInstance());
 		return result;
 	}
 
@@ -123,7 +122,7 @@ public abstract class MinoasEntityHome<E> extends EntityHome {
 	public String remove() {
 		logAudit(AuditType.REMOVE, getInstance().toString());
 		String result = super.remove();
-		getLogger().info("principal '#0' successfully removed '#1'", getPrincipalName(), getInstance()); 
+		getLogger().info("principal '#0' successfully removed '#1'", getPrincipalName(), getInstance());
 		return result;
 	}
 
@@ -135,7 +134,7 @@ public abstract class MinoasEntityHome<E> extends EntityHome {
 	public String update() {
 		logAudit(AuditType.UPDATE, getInstance().toString());
 		String result = super.update();
-		getLogger().info("principal '#0' successfully updated '#1'", getPrincipalName(), getInstance()); 
+		getLogger().info("principal '#0' successfully updated '#1'", getPrincipalName(), getInstance());
 		return result;
 	}
 

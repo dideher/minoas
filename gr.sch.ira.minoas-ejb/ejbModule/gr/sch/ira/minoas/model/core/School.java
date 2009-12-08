@@ -41,6 +41,10 @@ public class School extends Unit {
 
 	private static final long serialVersionUID = 1L;
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "SCHOOL_GROUP_ID", nullable = true)
+	private SchoolGroup group;
+
 	@Basic
 	@Column(name = "MINISTRY_CODE", length = 7, unique = false, nullable = true)
 	private String ministryCode;
@@ -52,46 +56,26 @@ public class School extends Unit {
 	@Basic
 	@Column(name = "REGION")
 	private Character regionCode;
-	
-	@OneToMany(fetch=FetchType.LAZY, mappedBy="school", cascade={ CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "school", cascade = { CascadeType.MERGE, CascadeType.REFRESH,
+			CascadeType.PERSIST })
 	@OrderBy("specialization ASC")
 	private Collection<TeachingRequirement> teachingRequirements = new ArrayList<TeachingRequirement>();
-	
+
 	@Enumerated(EnumType.STRING)
-	@Column(name="SCHOOL_TYPE", nullable=true)
+	@Column(name = "SCHOOL_TYPE", nullable = true)
 	private SchoolType type;
-	
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="SCHOOL_GROUP_ID", nullable=true)
-	private SchoolGroup group;
-	
+
+	public void addTeachingRequirement(TeachingRequirement req) {
+		req.setSchool(this);
+		getTeachingRequirements().add(req);
+	}
 
 	/**
 	 * @return the group
 	 */
 	public SchoolGroup getGroup() {
 		return group;
-	}
-
-	/**
-	 * @param group the group to set
-	 */
-	public void setGroup(SchoolGroup group) {
-		this.group = group;
-	}
-
-	/**
-	 * @return the teachingRequirements
-	 */
-	public Collection<TeachingRequirement> getTeachingRequirements() {
-		return teachingRequirements;
-	}
-
-	/**
-	 * @param teachingRequirements the teachingRequirements to set
-	 */
-	public void setTeachingRequirements(Collection<TeachingRequirement> teachingRequirements) {
-		this.teachingRequirements = teachingRequirements;
 	}
 
 	/**
@@ -116,6 +100,27 @@ public class School extends Unit {
 	}
 
 	/**
+	 * @return the teachingRequirements
+	 */
+	public Collection<TeachingRequirement> getTeachingRequirements() {
+		return teachingRequirements;
+	}
+
+	/**
+	 * @return the type
+	 */
+	public SchoolType getType() {
+		return type;
+	}
+
+	/**
+	 * @param group the group to set
+	 */
+	public void setGroup(SchoolGroup group) {
+		this.group = group;
+	}
+
+	/**
 	 * @param ministryCode the ministryCode to set
 	 */
 	public void setMinistryCode(String ministryCode) {
@@ -137,6 +142,20 @@ public class School extends Unit {
 	}
 
 	/**
+	 * @param teachingRequirements the teachingRequirements to set
+	 */
+	public void setTeachingRequirements(Collection<TeachingRequirement> teachingRequirements) {
+		this.teachingRequirements = teachingRequirements;
+	}
+
+	/**
+	 * @param type the type to set
+	 */
+	public void setType(SchoolType type) {
+		this.type = type;
+	}
+
+	/**
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -150,25 +169,6 @@ public class School extends Unit {
 		sb.append(getRegionCode());
 		sb.append(")] ");
 		return sb.toString();
-	}
-	
-	public void addTeachingRequirement(TeachingRequirement req) {
-		req.setSchool(this);
-		getTeachingRequirements().add(req);
-	}
-
-	/**
-	 * @return the type
-	 */
-	public SchoolType getType() {
-		return type;
-	}
-
-	/**
-	 * @param type the type to set
-	 */
-	public void setType(SchoolType type) {
-		this.type = type;
 	}
 
 }

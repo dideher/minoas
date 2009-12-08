@@ -6,35 +6,48 @@ import java.util.Date;
 
 public class DisposalReportItem extends EmployeeReportItem {
 	private String comment;
-	private Date dueTo;
-	private Date establishedIn;
-	private Character sourceUnitRegion;
-	private Character targetUnitRegion;
-	private boolean requestByEmployee;
-	private String disposalType;
-	private String disposalTypeKey;
-	private String disposalTargetType;
-	private String disposalTargetTypeKey;
-	private String sourceUnit;
-	private String disposalUnit;
+
 	private Integer days;
+
+	private String disposalTargetType;
+
+	private String disposalTargetTypeKey;
+
+	private String disposalType;
+
+	private String disposalTypeKey;
+
+	private String disposalUnit;
+
+	private Date dueTo;
+
+	private Date establishedIn;
+
 	private Integer hours;
-	
+
+	private boolean requestByEmployee;
+
+	private String sourceUnit;
+
+	private Character sourceUnitRegion;
+
+	private Character targetUnitRegion;
+
 	public DisposalReportItem() {
 		super();
 	}
-	
+
 	public DisposalReportItem(Disposal disposal) {
 		super(disposal.getEmployee());
 		this.comment = disposal.getComment();
 		this.dueTo = disposal.getDueTo();
 		this.establishedIn = disposal.getEstablished();
 		this.disposalUnit = disposal.getDisposalUnit().getTitle();
-		
-		if(disposal.getAffectedEmployment()!=null) {
+
+		if (disposal.getAffectedEmployment() != null) {
 			this.sourceUnit = disposal.getAffectedEmployment().getSchool().getTitle();
 		}
-		if(disposal.getAffectedSecondment()!=null) {
+		if (disposal.getAffectedSecondment() != null) {
 			this.sourceUnit = disposal.getAffectedSecondment().getSourceUnit().getTitle();
 		}
 		this.disposalType = disposal.getType().name();
@@ -51,108 +64,10 @@ public class DisposalReportItem extends EmployeeReportItem {
 	}
 
 	/**
-	 * @param comment the comment to set
+	 * @return the days
 	 */
-	public void setComment(String comment) {
-		this.comment = comment;
-	}
-
-	/**
-	 * @return the dueTo
-	 */
-	public Date getDueTo() {
-		return dueTo;
-	}
-
-	/**
-	 * @param dueTo the dueTo to set
-	 */
-	public void setDueTo(Date dueTo) {
-		this.dueTo = dueTo;
-	}
-
-	/**
-	 * @return the establishedIn
-	 */
-	public Date getEstablishedIn() {
-		return establishedIn;
-	}
-
-	/**
-	 * @param establishedIn the establishedIn to set
-	 */
-	public void setEstablishedIn(Date establishedIn) {
-		this.establishedIn = establishedIn;
-	}
-
-	/**
-	 * @return the sourceUnitRegion
-	 */
-	public Character getSourceUnitRegion() {
-		return sourceUnitRegion;
-	}
-
-	/**
-	 * @param sourceUnitRegion the sourceUnitRegion to set
-	 */
-	public void setSourceUnitRegion(Character sourceUnitRegion) {
-		this.sourceUnitRegion = sourceUnitRegion;
-	}
-
-	/**
-	 * @return the targetUnitRegion
-	 */
-	public Character getTargetUnitRegion() {
-		return targetUnitRegion;
-	}
-
-	/**
-	 * @param targetUnitRegion the targetUnitRegion to set
-	 */
-	public void setTargetUnitRegion(Character targetUnitRegion) {
-		this.targetUnitRegion = targetUnitRegion;
-	}
-
-	/**
-	 * @return the requestByEmployee
-	 */
-	public boolean isRequestByEmployee() {
-		return requestByEmployee;
-	}
-
-	/**
-	 * @param requestByEmployee the requestByEmployee to set
-	 */
-	public void setRequestByEmployee(boolean requestByEmployee) {
-		this.requestByEmployee = requestByEmployee;
-	}
-
-	/**
-	 * @return the disposalType
-	 */
-	public String getDisposalType() {
-		return disposalType;
-	}
-
-	/**
-	 * @param disposalType the disposalType to set
-	 */
-	public void setDisposalType(String disposalType) {
-		this.disposalType = disposalType;
-	}
-
-	/**
-	 * @return the disposalTypeKey
-	 */
-	public String getDisposalTypeKey() {
-		return disposalTypeKey;
-	}
-
-	/**
-	 * @param disposalTypeKey the disposalTypeKey to set
-	 */
-	public void setDisposalTypeKey(String disposalTypeKey) {
-		this.disposalTypeKey = disposalTypeKey;
+	public Integer getDays() {
+		return days;
 	}
 
 	/**
@@ -163,13 +78,6 @@ public class DisposalReportItem extends EmployeeReportItem {
 	}
 
 	/**
-	 * @param disposalTargetType the disposalTargetType to set
-	 */
-	public void setDisposalTargetType(String disposalTargetType) {
-		this.disposalTargetType = disposalTargetType;
-	}
-
-	/**
 	 * @return the disposalTargetTypeKey
 	 */
 	public String getDisposalTargetTypeKey() {
@@ -177,24 +85,17 @@ public class DisposalReportItem extends EmployeeReportItem {
 	}
 
 	/**
-	 * @param disposalTargetTypeKey the disposalTargetTypeKey to set
+	 * @return the disposalType
 	 */
-	public void setDisposalTargetTypeKey(String disposalTargetTypeKey) {
-		this.disposalTargetTypeKey = disposalTargetTypeKey;
+	public String getDisposalType() {
+		return disposalType;
 	}
 
 	/**
-	 * @return the sourceUnit
+	 * @return the disposalTypeKey
 	 */
-	public String getSourceUnit() {
-		return sourceUnit;
-	}
-
-	/**
-	 * @param sourceUnit the sourceUnit to set
-	 */
-	public void setSourceUnit(String sourceUnit) {
-		this.sourceUnit = sourceUnit;
+	public String getDisposalTypeKey() {
+		return disposalTypeKey;
 	}
 
 	/**
@@ -205,24 +106,17 @@ public class DisposalReportItem extends EmployeeReportItem {
 	}
 
 	/**
-	 * @param disposalUnit the disposalUnit to set
+	 * @return the dueTo
 	 */
-	public void setDisposalUnit(String disposalUnit) {
-		this.disposalUnit = disposalUnit;
+	public Date getDueTo() {
+		return dueTo;
 	}
 
 	/**
-	 * @return the days
+	 * @return the establishedIn
 	 */
-	public Integer getDays() {
-		return days;
-	}
-
-	/**
-	 * @param days the days to set
-	 */
-	public void setDays(Integer days) {
-		this.days = days;
+	public Date getEstablishedIn() {
+		return establishedIn;
 	}
 
 	/**
@@ -233,10 +127,129 @@ public class DisposalReportItem extends EmployeeReportItem {
 	}
 
 	/**
+	 * @return the sourceUnit
+	 */
+	public String getSourceUnit() {
+		return sourceUnit;
+	}
+
+	/**
+	 * @return the sourceUnitRegion
+	 */
+	public Character getSourceUnitRegion() {
+		return sourceUnitRegion;
+	}
+
+	/**
+	 * @return the targetUnitRegion
+	 */
+	public Character getTargetUnitRegion() {
+		return targetUnitRegion;
+	}
+
+	/**
+	 * @return the requestByEmployee
+	 */
+	public boolean isRequestByEmployee() {
+		return requestByEmployee;
+	}
+
+	/**
+	 * @param comment the comment to set
+	 */
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
+	/**
+	 * @param days the days to set
+	 */
+	public void setDays(Integer days) {
+		this.days = days;
+	}
+
+	/**
+	 * @param disposalTargetType the disposalTargetType to set
+	 */
+	public void setDisposalTargetType(String disposalTargetType) {
+		this.disposalTargetType = disposalTargetType;
+	}
+
+	/**
+	 * @param disposalTargetTypeKey the disposalTargetTypeKey to set
+	 */
+	public void setDisposalTargetTypeKey(String disposalTargetTypeKey) {
+		this.disposalTargetTypeKey = disposalTargetTypeKey;
+	}
+
+	/**
+	 * @param disposalType the disposalType to set
+	 */
+	public void setDisposalType(String disposalType) {
+		this.disposalType = disposalType;
+	}
+
+	/**
+	 * @param disposalTypeKey the disposalTypeKey to set
+	 */
+	public void setDisposalTypeKey(String disposalTypeKey) {
+		this.disposalTypeKey = disposalTypeKey;
+	}
+
+	/**
+	 * @param disposalUnit the disposalUnit to set
+	 */
+	public void setDisposalUnit(String disposalUnit) {
+		this.disposalUnit = disposalUnit;
+	}
+
+	/**
+	 * @param dueTo the dueTo to set
+	 */
+	public void setDueTo(Date dueTo) {
+		this.dueTo = dueTo;
+	}
+
+	/**
+	 * @param establishedIn the establishedIn to set
+	 */
+	public void setEstablishedIn(Date establishedIn) {
+		this.establishedIn = establishedIn;
+	}
+
+	/**
 	 * @param hours the hours to set
 	 */
 	public void setHours(Integer hours) {
 		this.hours = hours;
+	}
+
+	/**
+	 * @param requestByEmployee the requestByEmployee to set
+	 */
+	public void setRequestByEmployee(boolean requestByEmployee) {
+		this.requestByEmployee = requestByEmployee;
+	}
+
+	/**
+	 * @param sourceUnit the sourceUnit to set
+	 */
+	public void setSourceUnit(String sourceUnit) {
+		this.sourceUnit = sourceUnit;
+	}
+
+	/**
+	 * @param sourceUnitRegion the sourceUnitRegion to set
+	 */
+	public void setSourceUnitRegion(Character sourceUnitRegion) {
+		this.sourceUnitRegion = sourceUnitRegion;
+	}
+
+	/**
+	 * @param targetUnitRegion the targetUnitRegion to set
+	 */
+	public void setTargetUnitRegion(Character targetUnitRegion) {
+		this.targetUnitRegion = targetUnitRegion;
 	}
 
 }

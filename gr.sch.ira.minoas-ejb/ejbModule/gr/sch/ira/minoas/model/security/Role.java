@@ -28,13 +28,13 @@ public class Role extends BaseIDModel {
 	private static final long serialVersionUID = 1L;
 
 	@Basic
-	@Column(name="DESCR", nullable=true, length=250)
+	@Column(name = "DESCR", nullable = true, length = 250)
 	private String description;
 
 	@Basic
-	@Column(name = "NAME", nullable = false, length = 32, unique=true )
+	@Column(name = "NAME", nullable = false, length = 32, unique = true)
 	private String name;
-	
+
 	/**
 	 * 
 	 */
@@ -50,65 +50,6 @@ public class Role extends BaseIDModel {
 		super();
 		this.name = name;
 		this.description = description;
-	}
-
-	
-	
-
-	/**
-	 * @return the description
-	 */
-	public String getDescription() {
-		return description;
-	}
-
-	/**
-	 * @return the title
-	 */
-	public String getName() {
-		return name;
-	}
-
-	
-
-	/**
-	 * @param description the description to set
-	 */
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	/**
-	 * @param title the title to set
-	 */
-	public void setName(String title) {
-		this.name = title;
-	}
-
-	/**
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("<Role:");
-		sb.append(getName());
-		sb.append(">");
-		return sb.toString();
-	}
-
-	/**
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result
-				+ ((description == null) ? 0 : description.hashCode());
-		result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
 	}
 
 	/**
@@ -139,5 +80,58 @@ public class Role extends BaseIDModel {
 		} else if (!name.equals(other.name))
 			return false;
 		return true;
+	}
+
+	/**
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * @return the title
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((description == null) ? 0 : description.hashCode());
+		result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
+	}
+
+	/**
+	 * @param description the description to set
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	/**
+	 * @param title the title to set
+	 */
+	public void setName(String title) {
+		this.name = title;
+	}
+
+	/**
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("<Role:");
+		sb.append(getName());
+		sb.append(">");
+		return sb.toString();
 	}
 }

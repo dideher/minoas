@@ -179,8 +179,6 @@ public class Secondment extends BaseIDModel implements Cloneable {
 		return established;
 	}
 
-	
-
 	public Integer getFinalWorkingHours() {
 		return finalWorkingHours;
 	}
@@ -277,8 +275,6 @@ public class Secondment extends BaseIDModel implements Cloneable {
 	public void setAffectedEmployment(Employment affectedEmployment) {
 		this.affectedEmployment = affectedEmployment;
 	}
-
-	
 
 	/**
 	 * @param comment the comment to set
