@@ -157,8 +157,14 @@ public class EmployeeReport extends BaseReport {
 		if (specializationSearchType == SpecializationSearchType.SPECIALIZATION && specialization != null) {
 			sb.append(" AND e.lastSpecialization=:specialization) ");
 		}
+		
+		if(String.valueOf(getEmployeeCriteria().getSorting()).equals("specialization"))
+			sb.append(" ORDER BY e.lastSpecialization.id, e.lastName, e.firstName ");
+		else if(String.valueOf(getEmployeeCriteria().getSorting()).equals("surname"))
+			sb.append(" ORDER BY e.lastName, e.firstName, e.lastSpecialization.id");
+		else sb.append(" ORDER BY e.lastName, e.firstName, e.lastSpecialization.id");
 
-		sb.append(" ORDER BY e.lastName, e.firstName, e.lastSpecialization.id");
+		
 
 		Query q = getEntityManager().createQuery(sb.toString());
 		if (dateSearchType != DateSearchType.DURING_DATE_PERIOD) {

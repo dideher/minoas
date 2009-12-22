@@ -43,6 +43,8 @@ public class EmployeeCriteria {
 	private SpecializationSearchType specializationSearchType;
 
 	private EmployeeType type;
+	
+	private String sorting;
 
 	/**
 	 * 
@@ -233,6 +235,20 @@ public class EmployeeCriteria {
 	 */
 	public void setType(EmployeeType type) {
 		this.type = type;
+	}
+
+	/**
+	 * @return the sorting
+	 */
+	public String getSorting() {
+		return sorting;
+	}
+
+	/**
+	 * @param sorting the sorting to set
+	 */
+	public void setSorting(String sorting) {
+		this.sorting = sorting;
 	}
 
 }

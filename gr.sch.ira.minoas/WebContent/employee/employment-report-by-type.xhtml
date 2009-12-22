@@ -136,6 +136,18 @@
 									<s:convertEntity />
 								</h:selectOneMenu>
 							</s:decorate>
+							
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Ταξινόμιση Κατά" />
+								</ui:define>
+
+								<h:selectOneMenu
+									value="#{employmentCriteria.sorting}">
+										<f:selectItem itemLabel="Κατά Ειδικότητα" itemValue="specialization"/>
+										<f:selectItem itemLabel="Κατά Επώνυμο" itemValue="surname"/>
+								</h:selectOneMenu>
+							</s:decorate>
 
 						</h:panelGrid>
 						

@@ -42,6 +42,8 @@ public class EmploymentCriteria {
 	private SpecializationSearchType specializationSearchType;
 
 	private EmploymentType type;
+	
+	private String sorting;
 
 	/**
 	 * 
@@ -218,6 +220,20 @@ public class EmploymentCriteria {
 	 */
 	public void setType(EmploymentType type) {
 		this.type = type;
+	}
+
+	/**
+	 * @return the sorting
+	 */
+	public String getSorting() {
+		return sorting;
+	}
+
+	/**
+	 * @param sorting the sorting to set
+	 */
+	public void setSorting(String sorting) {
+		this.sorting = sorting;
 	}
 
 }

@@ -217,9 +217,21 @@
 										</h:panelGrid>
 
 									</a4j:outputPanel>
+									
 								</h:panelGroup>
 							</h:panelGrid>
 						</rich:panel>
+<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Ταξινόμιση Κατά" />
+								</ui:define>
+
+								<h:selectOneMenu
+									value="#{employeeCriteria.sorting}">
+										<f:selectItem itemLabel="Κατά Ειδικότητα" itemValue="specialization"/>
+										<f:selectItem itemLabel="Κατά Επώνυμο" itemValue="surname"/>
+								</h:selectOneMenu>
+							</s:decorate>
 
 					</rich:panel>
 					<rich:spacer height="5" />

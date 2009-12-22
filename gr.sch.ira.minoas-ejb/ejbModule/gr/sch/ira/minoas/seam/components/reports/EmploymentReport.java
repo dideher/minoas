@@ -150,8 +150,12 @@ public class EmploymentReport extends BaseReport {
 			sb.append(" AND em.specialization=:specialization) ");
 		}
 
-		sb.append(" ORDER BY em.type,em.specialization.id, em.employee.lastName, em.employee.firstName");
-
+		if (String.valueOf(getEmploymentCriteria().getSorting()).equals("specialization"))
+			sb.append(" ORDER BY em.type,em.specialization.id, em.employee.lastName, em.employee.firstName");
+		else if (String.valueOf(getEmploymentCriteria().getSorting()).equals("surname"))
+			sb.append(" ORDER BY em.employee.lastName, em.employee.firstName");
+		else
+			sb.append(" ORDER BY em.type,em.specialization.id, em.employee.lastName, em.employee.firstName");
 		Query q = getEntityManager().createQuery(sb.toString());
 		q.setParameter("schoolYear", schoolYear);
 
