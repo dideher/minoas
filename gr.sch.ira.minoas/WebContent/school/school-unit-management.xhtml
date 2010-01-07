@@ -1,0 +1,174 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<ui:composition template="/layout/simple-beauty-template.xhtml">
+	<ui:define name="body">
+		<rich:panel>
+			<f:facet name="header">
+				<h:outputText
+					value="Διαχείρηση Σχολικής Μονάδας - ${schoolHome.instance.title}" />
+			</f:facet>
+
+			<ui:include src="/components/messages-component.xhtml" />
+			
+			<h:form>
+					<rich:panel>
+						<f:facet name="header">
+							<h:outputText value="Βασικά Στοιχεία Σχολικής Μονάδας" />
+						</f:facet>
+						<h:panelGrid columns="1">
+							<h:panelGrid columns="5">
+								
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Κωδικός Υπουργείου : " />
+									</ui:define>
+									<h:inputText value="#{schoolHome.instance.ministryCode}" size="7"
+										required="false" maxlength="7" />
+								</s:decorate>
+								
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Τίτλος Μονάδας : " />
+									</ui:define>
+									<h:inputText value="#{schoolHome.instance.title}" size="20"
+										required="true" maxlength="80" />
+								</s:decorate>
+
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Τύπος Σχολικής Μονάδας : " />
+									</ui:define>
+									<h:selectOneMenu value="#{school.type}" required="true">
+										<s:selectItems noSelectionLabel="Επιλέξτε Τύπο Μονάδας"
+											var="_schoolType" value="#{schoolTypes}"
+											label="#{messages[_schoolType.key]}">
+										</s:selectItems>
+									</h:selectOneMenu>
+								</s:decorate>
+								
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Περιοχή Μονάδας : " />
+									</ui:define>
+									<h:selectOneMenu value="#{schoolHome.instance.regionCode}" required="true">
+										<f:selectItem itemLabel="Α' Ηρακλείου" itemValue="Α" />
+										<f:selectItem itemLabel="Β' Ηρακλείου" itemValue="Β" />
+									</h:selectOneMenu>
+								</s:decorate>
+								
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Γραφείο Αρμοδιότητας : " />
+									</ui:define>
+									<h:inputText id="organizationalOffice" required="true"
+									value="#{schoolHome.instance.office}" converter="organizationalOfficeConverter"
+									styleClass="fieldValueText" size="25" maxlength="40">
+									<a4j:region renderRegionOnly="true">
+									<rich:suggestionbox height="100" width="200" eventsQueue="foo"
+										for="organizationalOffice" var="_office" ignoreDupResponses="true"
+										suggestionAction="#{organizationalOfficeSuggester.suggest}">
+										<f:facet name="nothingLabel">
+											<h:outputText value="Άγνωστο Γραφείο" />
+										</f:facet>
+										<h:column>
+											<h:outputText value="#{_office.title}" />
+										</h:column>
+										<a4j:support ajaxSingle="true" event="onselect">
+											<f:setPropertyActionListener value="#{_office}"
+												target="#{schoolHome.instance.office}" />
+										</a4j:support>
+									</rich:suggestionbox>
+									</a4j:region>
+								</h:inputText>
+								</s:decorate>
+								
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Ομάδα Σχολικής Μονάδας : " />
+									</ui:define>
+									<h:inputText id="schoolGroup" required="false"
+									value="#{schoolHome.instance.group}" converter="schoolGroupConverter"
+									styleClass="fieldValueText" size="25" maxlength="40">
+									<a4j:region renderRegionOnly="true">
+									<rich:suggestionbox height="100" width="200" eventsQueue="foo"
+										for="schoolGroup" var="_schoolgroup" ignoreDupResponses="true"
+										suggestionAction="#{schoolGroupSuggester.suggest}">
+										<f:facet name="nothingLabel">
+											<h:outputText value="Άγνωστη Σχολική Ομάδα" />
+										</f:facet>
+										<h:column>
+											<h:outputText value="#{_schoolGroup.title}" />
+										</h:column>
+										<a4j:support ajaxSingle="true" event="onselect">
+											<f:setPropertyActionListener value="#{_schoolGroup}"
+												target="#{schoolHome.instance.group}" />
+										</a4j:support>
+									</rich:suggestionbox>
+									</a4j:region>
+								</h:inputText>
+								</s:decorate>
+																
+								
+
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Μόρια Σχολικής Μονάδας : " />
+									</ui:define>
+									<h:selectOneMenu value="#{school.points}" required="true">
+										<f:selectItem itemLabel="1" itemValue="1" />
+										<f:selectItem itemLabel="2" itemValue="2" />
+										<f:selectItem itemLabel="3" itemValue="3" />
+										<f:selectItem itemLabel="4" itemValue="4" />
+										<f:selectItem itemLabel="5" itemValue="5" />
+										<f:selectItem itemLabel="6" itemValue="6" />
+										<f:selectItem itemLabel="7" itemValue="7" />
+										<f:selectItem itemLabel="8" itemValue="8" />
+										<f:selectItem itemLabel="9" itemValue="9" />
+										<f:selectItem itemLabel="10" itemValue="10" />
+									</h:selectOneMenu>
+								</s:decorate>
+
+							</h:panelGrid>
+
+							<h:panelGroup>
+								<rich:separator height="2" lineType="double" />
+							</h:panelGroup>
+							<h:panelGroup>
+
+								<s:div styleClass="actionButtons">
+
+									<h:commandButton rendered="${schoolHome.managed}"
+										action="#{schoolHome.update}"
+										onclick="if(!confirm('Να καταχωρηθούν οι αλλαγές ?')) {form.reset(); return false;}"
+										value="Τροποποίηση" id="persistButton" />
+									<rich:spacer width="10" />
+
+
+									<rich:spacer width="10" />
+									<s:button action="endButton" value="Τέλος Ενέργειας" />
+
+
+								</s:div>
+							</h:panelGroup>
+						</h:panelGrid>
+					</rich:panel>
+			</h:form>
+		</rich:panel>
+
+
+		
+
+	</ui:define>
+</ui:composition>
+</html>

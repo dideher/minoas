@@ -111,7 +111,7 @@ public class Unit extends AbstractArchivableEntity implements Comparable<Unit> {
 	/**
 	 * @return the office
 	 */
-	protected OrganizationalOffice getOffice() {
+	public OrganizationalOffice getOffice() {
 		return office;
 	}
 
@@ -159,7 +159,7 @@ public class Unit extends AbstractArchivableEntity implements Comparable<Unit> {
 	/**
 	 * @param office the office to set
 	 */
-	protected void setOffice(OrganizationalOffice office) {
+	public void setOffice(OrganizationalOffice office) {
 		this.office = office;
 	}
 

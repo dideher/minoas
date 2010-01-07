@@ -5,6 +5,7 @@ import gr.sch.ira.minoas.model.core.EstablishmentLocation;
 import gr.sch.ira.minoas.model.core.OrganizationalOffice;
 import gr.sch.ira.minoas.model.core.PYSDE;
 import gr.sch.ira.minoas.model.core.School;
+import gr.sch.ira.minoas.model.core.SchoolType;
 import gr.sch.ira.minoas.model.core.SchoolYear;
 import gr.sch.ira.minoas.model.core.Specialization;
 import gr.sch.ira.minoas.model.core.SpecializationGroup;
@@ -103,6 +104,11 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 	@Factory(value = "leaveTypes")
 	public LeaveType[] getAvailableLeaveTypes() {
 		return LeaveType.values();
+	}
+	
+	@Factory(value = "schoolTypes")
+	public SchoolType[] getAvailableSchoolTypes() {
+		return SchoolType.values();
 	}
 
 	@SuppressWarnings("unchecked")

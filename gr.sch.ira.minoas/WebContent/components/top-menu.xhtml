@@ -18,6 +18,15 @@
 					</h:panelGroup>
 				</f:facet>
 
+				<rich:menuItem submitMode="none" disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MANAGE_SCHOOL_BASIC'))}">
+					<s:link value="Επεξεργασία Σχολικής Μονάδας "
+						view="/school/select-school.xhtml" propagation="nest">
+						<f:param name="from" value="/home" />
+						<f:param name="to"
+							value="/school/school-unit-management" />
+					</s:link>
+				</rich:menuItem>
+				<rich:menuSeparator />
 				<rich:menuItem submitMode="none">
 					<s:link value="Καρτέλα Σχολικής Μονάδας"
 						view="/school/select-school.xhtml">

@@ -21,10 +21,10 @@ import org.jboss.seam.framework.EntityController;
  * 
  */
 @Converter
-@Name("organizationalOfficeConverter")
+@Name("schoolGroupConverter")
 @BypassInterceptors
 @Scope(ScopeType.STATELESS)
-public class OrganizationalOfficeConverter extends DatabaseAwareBaseConverter {
+public class SchoolGroupConverter extends DatabaseAwareBaseConverter {
 
 	/**
 	 * 

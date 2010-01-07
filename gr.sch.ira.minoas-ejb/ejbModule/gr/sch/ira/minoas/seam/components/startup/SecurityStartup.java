@@ -99,6 +99,10 @@ public class SecurityStartup {
 		createRole("VIEW_DISPOSAL", "View Disposal", admin);
 		/* Reports */
 		createRole("VIEW_SCHOOL_REPORT", "View School Oriented Reports", admin);
+		
+		/* School Unit */
+		createRole("MANAGE_SCHOOL_BASIC", "Basic School Unit Management", admin);
+		
 
 	}
 }

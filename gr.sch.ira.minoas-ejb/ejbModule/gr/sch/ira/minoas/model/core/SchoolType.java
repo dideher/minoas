@@ -6,10 +6,10 @@ package gr.sch.ira.minoas.model.core;
  */
 public enum SchoolType {
 
-	EPAL("EPAL_SCHOOL_TYPE_KEY"),
-	EPAS("EPAS_SCHOOL_TYPE_KEY"),
-	GEL("GEL_SCHOOL_TYPE_KEY"),
-	GYM("GYM_SCHOOL_TYPE_KEY");
+	EPAL("EPAL_SCHOOL_TYPE"),
+	EPAS("EPAS_SCHOOL_TYPE"),
+	GEL("GEL_SCHOOL_TYPE"),
+	GYM("GYM_SCHOOL_TYPE");
 
 	private String key;
 
