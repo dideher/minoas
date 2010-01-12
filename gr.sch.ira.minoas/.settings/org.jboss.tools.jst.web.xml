@@ -251,38 +251,6 @@
   location="/opt/jboss/jboss-4.2.2.GA/server/default/deploy/jboss-aop-jdk50.deployer/jboss-aspect-library-jdk50.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-jboss-ejb3.jar"
   location="/opt/jboss/jboss-4.2.2.GA/server/default/deploy/ejb3.deployer/jboss-ejb3.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-commons-beanutils.jar"
-  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas/WebContent/WEB-INF/lib/commons-beanutils.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-commons-digester.jar"
-  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas/WebContent/WEB-INF/lib/commons-digester.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-jboss-seam-debug.jar"
-  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jboss-seam-debug.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-jboss-seam-ioc.jar"
-  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jboss-seam-ioc.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-jboss-seam-mail.jar"
-  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jboss-seam-mail.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-jboss-seam-pdf.jar"
-  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jboss-seam-pdf.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-jboss-seam-remoting.jar"
-  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jboss-seam-remoting.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-jboss-seam-ui.jar"
-  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jboss-seam-ui.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-jsf-facelets.jar"
-  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jsf-facelets.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-jbpm-jpdl.jar"
-  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas-ear/EarContent/jbpm-jpdl.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-drools-core.jar"
-  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas-ear/EarContent/drools-core.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-mvel14.jar"
-  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas-ear/EarContent/mvel14.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-drools-compiler.jar"
-  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas-ear/EarContent/drools-compiler.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-jboss-seam.jar"
-  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas-ear/EarContent/jboss-seam.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-jboss-el.jar"
-  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas-ear/EarContent/jboss-el.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-antlr-runtime.jar"
-  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas-ear/EarContent/antlr-runtime.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-jbossws-native-jaxws.jar"
   location="/opt/jboss/jboss-4.2.2.GA/client/jbossws-native-jaxws.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-jbossws-native-client.jar"
@@ -297,20 +265,50 @@
   location="/opt/jboss/jboss-4.2.2.GA/client/jbossws-native-core.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-jbossws-jboss422.jar"
   location="/opt/jboss/jboss-4.2.2.GA/client/jbossws-jboss422.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-richfaces-api-3.2.2.SR1.jar"
-  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas-ear/EarContent/richfaces-api-3.2.2.SR1.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jbpm-jpdl.jar"
+  location="/home/fsla/work/java/eclipse-workspace-galileo/gr.sch.ira.minoas-ear/EarContent/jbpm-jpdl.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-drools-core.jar"
+  location="/home/fsla/work/java/eclipse-workspace-galileo/gr.sch.ira.minoas-ear/EarContent/drools-core.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-mvel14.jar"
+  location="/home/fsla/work/java/eclipse-workspace-galileo/gr.sch.ira.minoas-ear/EarContent/mvel14.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-drools-compiler.jar"
+  location="/home/fsla/work/java/eclipse-workspace-galileo/gr.sch.ira.minoas-ear/EarContent/drools-compiler.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jboss-seam.jar"
+  location="/home/fsla/work/java/eclipse-workspace-galileo/gr.sch.ira.minoas-ear/EarContent/jboss-seam.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jboss-el.jar"
+  location="/home/fsla/work/java/eclipse-workspace-galileo/gr.sch.ira.minoas-ear/EarContent/jboss-el.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-antlr-runtime.jar"
+  location="/home/fsla/work/java/eclipse-workspace-galileo/gr.sch.ira.minoas-ear/EarContent/antlr-runtime.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-jasperreports-3.5.3.jar"
-  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas-ear/EarContent/jasperreports-3.5.3.jar" model-entity="FileSystemJar"/>
+  location="/home/fsla/work/java/eclipse-workspace-galileo/gr.sch.ira.minoas-ear/EarContent/jasperreports-3.5.3.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-richfaces-api-3.3.1.GA.jar"
-  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas-ear/EarContent/richfaces-api-3.3.1.GA.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-richfaces-impl-3.3.1.GA.jar"
-  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas/WebContent/WEB-INF/lib/richfaces-impl-3.3.1.GA.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-richfaces-ui-3.3.1.GA.jar"
-  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas/WebContent/WEB-INF/lib/richfaces-ui-3.3.1.GA.jar" model-entity="FileSystemJar"/>
+  location="/home/fsla/work/java/eclipse-workspace-galileo/gr.sch.ira.minoas-ear/EarContent/richfaces-api-3.3.1.GA.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-commons-beanutils.jar"
+  location="/home/fsla/work/java/eclipse-workspace-galileo/gr.sch.ira.minoas/WebContent/WEB-INF/lib/commons-beanutils.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-commons-digester.jar"
+  location="/home/fsla/work/java/eclipse-workspace-galileo/gr.sch.ira.minoas/WebContent/WEB-INF/lib/commons-digester.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-darkX-3.3.1.GA.jar"
-  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas/WebContent/WEB-INF/lib/darkX-3.3.1.GA.jar" model-entity="FileSystemJar"/>
+  location="/home/fsla/work/java/eclipse-workspace-galileo/gr.sch.ira.minoas/WebContent/WEB-INF/lib/darkX-3.3.1.GA.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-glassX-3.3.1.GA.jar"
-  location="/home/fsla/work/java/eclipse-workspace-ganymede/gr.sch.ira.minoas/WebContent/WEB-INF/lib/glassX-3.3.1.GA.jar" model-entity="FileSystemJar"/>
+  location="/home/fsla/work/java/eclipse-workspace-galileo/gr.sch.ira.minoas/WebContent/WEB-INF/lib/glassX-3.3.1.GA.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jboss-seam-debug.jar"
+  location="/home/fsla/work/java/eclipse-workspace-galileo/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jboss-seam-debug.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jboss-seam-ioc.jar"
+  location="/home/fsla/work/java/eclipse-workspace-galileo/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jboss-seam-ioc.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jboss-seam-mail.jar"
+  location="/home/fsla/work/java/eclipse-workspace-galileo/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jboss-seam-mail.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jboss-seam-pdf.jar"
+  location="/home/fsla/work/java/eclipse-workspace-galileo/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jboss-seam-pdf.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jboss-seam-remoting.jar"
+  location="/home/fsla/work/java/eclipse-workspace-galileo/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jboss-seam-remoting.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jboss-seam-ui.jar"
+  location="/home/fsla/work/java/eclipse-workspace-galileo/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jboss-seam-ui.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jsf-facelets.jar"
+  location="/home/fsla/work/java/eclipse-workspace-galileo/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jsf-facelets.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-richfaces-impl-3.3.1.GA.jar"
+  location="/home/fsla/work/java/eclipse-workspace-galileo/gr.sch.ira.minoas/WebContent/WEB-INF/lib/richfaces-impl-3.3.1.GA.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-richfaces-ui-3.3.1.GA.jar"
+  location="/home/fsla/work/java/eclipse-workspace-galileo/gr.sch.ira.minoas/WebContent/WEB-INF/lib/richfaces-ui-3.3.1.GA.jar" model-entity="FileSystemJar"/>
  <web SERVLET_VERSION="2.4" model-entity="JstWeb" model-path="/web.xml">
   <module URI="/WEB-INF/faces-config.xml" model-entity="WebJSFModule"
    model-path="/faces-config.xml" src="src" web-root="WEB-ROOT"/>

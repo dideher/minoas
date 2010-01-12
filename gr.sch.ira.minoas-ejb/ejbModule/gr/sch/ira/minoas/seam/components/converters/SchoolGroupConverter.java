@@ -4,6 +4,7 @@
 package gr.sch.ira.minoas.seam.components.converters;
 
 import gr.sch.ira.minoas.model.core.OrganizationalOffice;
+import gr.sch.ira.minoas.model.core.SchoolGroup;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -38,7 +39,7 @@ public class SchoolGroupConverter extends DatabaseAwareBaseConverter {
 	public Object getAsObject(FacesContext context, UIComponent component, String value) {
 		if (value != null) {
 			try {
-				return getMinoasDatabase().createQuery("FROM OrganizationalOffice s WHERE s.title=:value").setParameter(
+				return getMinoasDatabase().createQuery("FROM SchoolGroup s WHERE s.title=:value").setParameter(
 						"value", value).getSingleResult();
 			} catch (NoResultException nre) {
 				return null;
@@ -53,8 +54,8 @@ public class SchoolGroupConverter extends DatabaseAwareBaseConverter {
 	 */
 	public String getAsString(FacesContext context, UIComponent component, Object value) {
 		if (value != null) {
-			if (value instanceof OrganizationalOffice) {
-				return ((OrganizationalOffice) value).getTitle();
+			if (value instanceof SchoolGroup) {
+				return ((SchoolGroup) value).getTitle();
 			} else {
 				return value.toString();
 			}

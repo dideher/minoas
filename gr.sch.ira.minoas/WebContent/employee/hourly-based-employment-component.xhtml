@@ -16,7 +16,7 @@
 			<h:outputText value="Στοιχεία Ωρομίσθιου Εκπαιδευτικού" />
 		</f:facet>
 
-		<h:panelGrid columns="4">
+		<h:panelGrid columns="4" width="100%">
 
 
 			<s:decorate template="/layout/doubleLineEdit.xhtml">
@@ -41,7 +41,7 @@
 		</f:facet>
 		<a4j:outputPanel id="hourlyBasedEmploymentItemsPanel">
 
-			<rich:dataGrid value="#{hourlyBasedEmployments}"
+			<rich:dataGrid value="#{hourlyBasedEmployments}" width="100%"
 				var="_hourlyBasedEmploymentItem">
 				<f:facet name="header">
 
@@ -49,7 +49,7 @@
 
 				</f:facet>
 				<a4j:region>
-					<h:panelGrid columns="5">
+					<h:panelGrid columns="6">
 						<s:decorate template="/layout/doubleLineEdit.xhtml"
 							id="schoolUnit">
 							<ui:define name="label">
@@ -110,6 +110,12 @@
 								<a4j:support event="onchanged" ajaxSingle="true"
 									reRender="until" />
 							</rich:calendar>
+						</s:decorate>
+						<s:decorate template="/layout/doubleLineEdit.xhtml" id="homebased">
+							<ui:define name="label">
+								<h:outputText value="Κατοίκον ; " />
+							</ui:define>
+							<h:selectBooleanCheckbox value="#{_hourlyBasedEmploymentItem.homeBased}" />
 						</s:decorate>
 						<a4j:commandButton id="deleteEmployment" ajaxSingle="true"
 							action="#{employeeHome.removeNewHourlyBasedEmploymentItem(_hourlyBasedEmploymentItem)}"

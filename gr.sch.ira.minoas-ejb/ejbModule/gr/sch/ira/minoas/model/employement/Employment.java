@@ -48,6 +48,10 @@ public class Employment extends BaseIDModel {
 	@Basic
 	@Column(name = "IS_ACTIVE", nullable = true)
 	private Boolean active;
+	
+	@Basic
+	@Column(name="HOME_BASED", nullable = true)
+	private Boolean homeBased = Boolean.FALSE;
 
 	@OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
 	@JoinColumn(name = "DEPUTY_EMPLOYMENT_INFO_ID", nullable = true)
@@ -372,6 +376,20 @@ public class Employment extends BaseIDModel {
 		sb.append(getSchool());
 		sb.append(" ]");
 		return sb.toString();
+	}
+
+	/**
+	 * @return the homeBased
+	 */
+	public Boolean getHomeBased() {
+		return homeBased;
+	}
+
+	/**
+	 * @param homeBased the homeBased to set
+	 */
+	public void setHomeBased(Boolean homeBased) {
+		this.homeBased = homeBased;
 	}
 
 }
