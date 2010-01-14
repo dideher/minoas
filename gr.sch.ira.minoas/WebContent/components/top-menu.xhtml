@@ -18,12 +18,12 @@
 					</h:panelGroup>
 				</f:facet>
 
-				<rich:menuItem submitMode="none" disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MANAGE_SCHOOL_BASIC'))}">
+				<rich:menuItem submitMode="none"
+					disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MANAGE_SCHOOL_BASIC'))}">
 					<s:link value="Επεξεργασία Σχολικής Μονάδας "
 						view="/school/select-school.xhtml" propagation="nest">
 						<f:param name="from" value="/home" />
-						<f:param name="to"
-							value="/school/school-unit-management" />
+						<f:param name="to" value="/school/school-unit-management" />
 					</s:link>
 				</rich:menuItem>
 				<rich:menuSeparator />
@@ -62,8 +62,17 @@
 						<h:outputText value="Διαχείρηση Προσωπικού" />
 					</h:panelGroup>
 				</f:facet>
-				<rich:menuGroup value="Διαχείρηση Εκπαιδευτικών">
-					<rich:menuItem submitMode="none"
+				<rich:menuItem submitMode="none"
+					disabled="#{!(s:hasRole('ADMIN') or s:hasRole('VIEW_EMPLOYEE'))}">
+					<s:link value="Προβολή Καρτέλας" propagation="nest"
+						view="/employee/select-employee.xhtml">
+						<f:param name="from" value="/home" />
+						<f:param name="to" value="/employee/employee" />
+					</s:link>
+				</rich:menuItem>
+
+				<rich:menuSeparator />
+				<rich:menuItem submitMode="none"
 					disabled="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_EMPLOYEE'))}">
 					<s:link value="Εισαγωγή Εκπαιδευτικού" propagation="nest"
 						action="#{employeeHome.prepareForNewEmployee}"
@@ -71,33 +80,7 @@
 						<f:param name="add_new_employee_from" value="/home" />
 					</s:link>
 				</rich:menuItem>
-				<rich:menuSeparator />
-					<rich:menuGroup value="Εκτύπωσεις και Στατιστικά"
-						disabled="#{!(s:hasRole('ADMIN') or s:hasRole('VIEW_EMPLOYEE'))}">
-						<rich:menuItem submitMode="none">
-							<s:link value="Εκπαιδευτικό Προσωπικό Ανα Τύπο"
-								view="/employee/employee-report-by-type.xhtml">
-								<f:param name="employee_report_by_type_from"
-									value="/home" />
-							</s:link>
-						</rich:menuItem>
-						<rich:menuItem submitMode="none">
-							<s:link value="Σχέσεις Εργασίας Ανά Τύπο"
-								view="/employee/employment-report-by-type.xhtml">
-								<f:param name="employment_report_by_type_from"
-									value="/home" />
-							</s:link>
-						</rich:menuItem>
-					</rich:menuGroup>	
-				</rich:menuGroup>
-				
-				<rich:menuItem submitMode="none" disabled="#{!(s:hasRole('ADMIN') or s:hasRole('VIEW_EMPLOYEE'))}">
-					<s:link value="Προβολή Καρτέλας"
-						view="/employee/select-employee.xhtml">
-						<f:param name="from" value="/home" />
-						<f:param name="to" value="/employee/employee" />
-					</s:link>
-				</rich:menuItem>
+
 				<rich:menuItem submitMode="none" disabled="#{!(s:hasRole('ADMIN'))}">
 					<s:link value="Διαχείρηση Οργανικής Θέσης"
 						view="/employee/select-employee.xhtml">
@@ -126,7 +109,7 @@
 
 					</rich:menuGroup>
 				</rich:menuGroup>
-				
+
 				<rich:menuGroup value="Διαχείρηση Διαθέσεων">
 					<rich:menuItem submitMode="none"
 						disabled="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_DISPOSAL'))}">
@@ -141,8 +124,7 @@
 						<s:link value="Διαχείρηση Διάθεσης Εκπαιδευτικού"
 							view="/employee/select-employee.xhtml">
 							<f:param name="from" value="/home" />
-							<f:param name="to"
-								value="/disposal/employee-disposal-management" />
+							<f:param name="to" value="/disposal/employee-disposal-management" />
 						</s:link>
 					</rich:menuItem>
 					<rich:menuSeparator />
@@ -156,8 +138,8 @@
 						</rich:menuItem>
 					</rich:menuGroup>
 				</rich:menuGroup>
-				
-				
+
+
 				<rich:menuGroup value="Διαχείρηση Θητειών">
 					<rich:menuItem submitMode="none"
 						disabled="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_SERVICE_ALLOCATION'))}">
@@ -188,7 +170,9 @@
 						</rich:menuItem>
 
 					</rich:menuGroup>
+					
 				</rich:menuGroup>
+				
 				<rich:menuGroup value="Διαχείρηση Αποσπάσεων">
 					<rich:menuItem submitMode="none"
 						disabled="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_SECONDMENT'))}">
@@ -201,8 +185,8 @@
 					</rich:menuItem>
 					<rich:menuItem submitMode="none"
 						disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MANAGE_SECONDMENT'))}">
-						<s:link value="Διαχείρηση Απόσπασης Εκπαιδευτικού" propagation="nest"
-							view="/employee/select-employee.xhtml">
+						<s:link value="Διαχείρηση Απόσπασης Εκπαιδευτικού"
+							propagation="nest" view="/employee/select-employee.xhtml">
 							<f:param name="from" value="/home" />
 							<f:param name="to"
 								value="/secondment/secondment-employment-management" />
@@ -219,7 +203,24 @@
 						</rich:menuItem>
 
 					</rich:menuGroup>
-				</rich:menuGroup>
+					</rich:menuGroup>
+
+					<rich:menuSeparator />
+					<rich:menuGroup value="Εκτύπωσεις και Στατιστικά"
+						disabled="#{!(s:hasRole('ADMIN') or s:hasRole('VIEW_EMPLOYEE'))}">
+						<rich:menuItem submitMode="none">
+							<s:link value="Εκπαιδευτικό Προσωπικό Ανα Τύπο"
+								view="/employee/employee-report-by-type.xhtml">
+								<f:param name="employee_report_by_type_from" value="/home" />
+							</s:link>
+						</rich:menuItem>
+						<rich:menuItem submitMode="none">
+							<s:link value="Σχέσεις Εργασίας Ανά Τύπο"
+								view="/employee/employment-report-by-type.xhtml">
+								<f:param name="employment_report_by_type_from" value="/home" />
+							</s:link>
+						</rich:menuItem>
+					</rich:menuGroup>
 				
 			</rich:dropDownMenu>
 			<rich:dropDownMenu

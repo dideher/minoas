@@ -138,17 +138,17 @@
 
 					<rich:panel>
 						<f:facet name="header">
-							<h:outputText value="Ιστορικό Αποσπάσεων Εκπαιδευτικού" />
+							<h:outputText value="Ιστορικό Θητείων Εκπαιδευτικού" />
 						</f:facet>
 
 						<h:outputText
-							value="Δεν βρέθηκε ιστορικό αποσπάσων για τον εκπαιδευτικό."
-							rendered="#{employeeSecondmentsListQuery.resultCount==0}" />
+							value="Δεν βρέθηκε ιστορικό θητείων για τον εκπαιδευτικό."
+							rendered="#{employeeServiceAllocationsListQuery.resultCount eq 0}" />
 						<a4j:outputPanel id="employmentsTable"
-							rendered="#{employeeSecondmentsListQuery.resultCount &gt; 0}">
+							rendered="#{employeeServiceAllocationsListQuery.resultCount gt 0}">
 							<h:panelGrid columns="1">
 								<h:outputText
-									value="Στον παρακάτω πίνακα εμφανίζεται το ιστορικό όλων των αποσπάσεων του εκπαιδευτικού. Μπορείτε να τροποποιήσεται, αν θέλετε, την ενεργή κατά το τρέχων σχολικό έτος απόσπαση." />
+									value="Στον παρακάτω πίνακα εμφανίζεται το ιστορικό όλων των θητειών του εκπαιδευτικού. Μπορείτε να τροποποιήσεται, αν θέλετε, την ενεργή κατά το τρέχων σχολικό έτος απόσπαση." />
 
 								<rich:dataTable id="employeeSecondmentsList"
 									value="#{employeeServiceAllocationsListQuery.resultList}"
@@ -157,7 +157,7 @@
 									onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
 									width="100%">
 									<f:facet name="header">
-										<h:outputLabel value="Ιστορικό Αποσπάσεων Εκπαιδευτικού" />
+										<h:outputLabel value="Ιστορικό Θητείων Εκπαιδευτικού" />
 									</f:facet>
 									<rich:column>
 										<f:facet name="header">
