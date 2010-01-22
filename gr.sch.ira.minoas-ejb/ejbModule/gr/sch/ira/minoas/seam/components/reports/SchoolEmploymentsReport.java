@@ -310,7 +310,6 @@ public class SchoolEmploymentsReport extends BaseReport {
 		Collection<Secondment> incomingSecondents = getCoreSearching().getSchoolSecondments(getEntityManager(),
 				schoolHome.getInstance(), activeSchoolYear, today);
 		for (Secondment secondment : incomingSecondents) {
-			System.err.println(secondment.getEmployee().toString() + " " + secondment.getAffectedEmployment());
 			try {
 				SchoolUniversalEmploymentItem item = secondment.getAffectedEmployment() != null ? new SchoolUniversalEmploymentItem(
 						secondment)

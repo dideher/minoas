@@ -10,28 +10,31 @@
 <ui:component>
 	<a4j:form id="menuform">
 		<rich:toolBar>
-
+			
+			
+			
 			<rich:dropDownMenu disabled="#{!(identity.loggedIn)}">
 				<f:facet name="label">
 					<h:panelGroup>
 						<h:outputText value="Διαχείρηση Σχολικών Μονάδων" />
 					</h:panelGroup>
 				</f:facet>
-
+				<rich:menuItem submitMode="none">
+					<s:link value="Προβολή Καρτέλας"
+						view="/school/select-school.xhtml">
+						<f:param name="from" value="/home" />
+						<f:param name="to" value="/school/school" />
+					</s:link>
+				</rich:menuItem>
+					
+				<rich:menuSeparator />
+				
 				<rich:menuItem submitMode="none"
 					disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MANAGE_SCHOOL_BASIC'))}">
 					<s:link value="Επεξεργασία Σχολικής Μονάδας "
 						view="/school/select-school.xhtml" propagation="nest">
 						<f:param name="from" value="/home" />
 						<f:param name="to" value="/school/school-unit-management" />
-					</s:link>
-				</rich:menuItem>
-				<rich:menuSeparator />
-				<rich:menuItem submitMode="none">
-					<s:link value="Καρτέλα Σχολικής Μονάδας"
-						view="/school/select-school.xhtml">
-						<f:param name="from" value="/home" />
-						<f:param name="to" value="/school/school" />
 					</s:link>
 				</rich:menuItem>
 				<rich:menuItem submitMode="none">

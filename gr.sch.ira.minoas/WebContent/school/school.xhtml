@@ -90,6 +90,16 @@
 			<rich:spacer height="10" />
 
 			<rich:tabPanel switchType="ajax">
+				
+				<rich:tab switchType="ajax" ontabenter="#{schoolEmploymentsReport.generateReport()}">
+					<f:facet name="label">
+						<h:outputText value="Συνγκετρωτική Τρέχουσα Κατάσταση" />
+					</f:facet>
+
+					<a4j:include
+						viewId="/school/school-employments-analysis-component.xhtml" />
+
+				</rich:tab>
 				<rich:tab switchType="ajax">
 					<f:facet name="label">
 						<h:outputText value="Αναλυτική Τρέχουσα Κατάσταση" />
@@ -100,15 +110,7 @@
 
 				</rich:tab>
 
-				<rich:tab switchType="ajax" ontabenter="#{schoolEmploymentsReport.generateReport()}">
-					<f:facet name="label">
-						<h:outputText value="Τρέχουσα Κατάσταση" />
-					</f:facet>
-
-					<a4j:include
-						viewId="/school/school-employments-analysis-component.xhtml" />
-
-				</rich:tab>
+				
 				<rich:tab switchType="ajax">
 					<f:facet name="label">
 						<h:outputText value="Οργανικά Ανήκωντες" />

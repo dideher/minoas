@@ -149,6 +149,13 @@
 											<f:selectItem itemLabel="Β Ηρακλείου" itemValue="Β" />
 										</h:selectOneMenu>
 									</s:decorate>
+									
+									<s:decorate template="/layout/doubleLineEdit.xhtml">
+										<ui:define name="label">
+											<h:outputText value="Μόνο Οργανικές" />
+										</ui:define>
+										<h:selectBooleanCheckbox value="#{teachingVoidBySpecializationReport.regularEmploymentsOnly}" />
+									</s:decorate>
 								</h:panelGrid>
 							</rich:panel>
 						</a4j:outputPanel>

@@ -35,7 +35,7 @@ body {
 }
 
 #main_content_bottom {
-	height: 35px;
+	height: 45px;
 	padding: 0 10px 0 10px;
 	background: #FFFFFF url(../img/simple-beauty/background_bottom.gif);
 }
@@ -43,7 +43,7 @@ body {
 #footer {
 	text-align: center;
 	font-size: 12px;
-	 margin: 10px auto 
+	margin: 10px auto; 
 }
 
 .content {

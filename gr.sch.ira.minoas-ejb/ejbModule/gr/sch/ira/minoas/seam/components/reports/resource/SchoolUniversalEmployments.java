@@ -3,6 +3,7 @@ package gr.sch.ira.minoas.seam.components.reports.resource;
 import gr.sch.ira.minoas.model.core.Specialization;
 import gr.sch.ira.minoas.model.core.SpecializationGroup;
 import gr.sch.ira.minoas.model.core.TeachingRequirement;
+import gr.sch.ira.minoas.seam.components.CoreSearching;
 
 import java.util.AbstractList;
 import java.util.ArrayList;
@@ -62,8 +63,14 @@ public class SchoolUniversalEmployments extends AbstractList<SchoolUniversalEmpl
 			SchoolUniversalEmploymentsGroup group = employmentsGroupMap.get(specializationGroup);
 			group.add(item);
 		} else {
+			/* if we could not find a specialization group here, then it means that
+			 * the school unit has no interest for the given specialization. But we
+			 * need to incluse the item in the report, so construct the specializationGroup now
+			 */
 			System.err.println("WE COULD NOT FIND A SPECIALIZATION GROUP FOR SPECIALIZATION "
 					+ item.getEmployeeSpecializationID());
+			
+			
 
 		}
 
