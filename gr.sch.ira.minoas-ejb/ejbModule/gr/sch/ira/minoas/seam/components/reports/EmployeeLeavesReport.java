@@ -9,6 +9,7 @@ import gr.sch.ira.minoas.seam.components.criteria.EmployeeLeaveCriteria;
 import gr.sch.ira.minoas.seam.components.reports.resource.EmployeeLeaveReportItem;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -24,6 +25,7 @@ import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JasperRunManager;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -106,6 +108,7 @@ public class EmployeeLeavesReport extends BaseReport {
 		Date effectiveDate = getEmployeeLeaveCriteria().getEffectiveDate();
 		Date effectiveDateFrom = getEmployeeLeaveCriteria().getEffectiveDateFrom();
 		Date effectiveDateUntil = getEmployeeLeaveCriteria().getEffectiveDateUntil();
+		Date today = DateUtils.truncate(new Date(System.currentTimeMillis()), Calendar.DAY_OF_MONTH);
 		LeaveType leaveType = getEmployeeLeaveCriteria().getLeaveType();
 		Character region = getEmployeeLeaveCriteria().getRegion();
 		School school = getEmployeeLeaveCriteria().getSchoolOfIntereset();
@@ -116,10 +119,10 @@ public class EmployeeLeavesReport extends BaseReport {
 		sb.append("SELECT l FROM Leave l WHERE l.active IS TRUE ");
 		switch (dateSearchType) {
 		case AFTER_DATE:
-			sb.append("AND l.established >= :effectiveDate ");
+			sb.append("AND l.dueTo >= :effectiveDate ");
 			break;
 		case BEFORE_DATE:
-			sb.append("AND l.dueTo <= :effectiveDate ");
+			sb.append("AND (l.dueTo >= :today AND l.dueTo <= :effectiveDate)");
 			break;
 		case DURING_DATE:
 			sb.append(" AND (:effectiveDate BETWEEN l.established AND l.dueTo) ");
@@ -148,11 +151,17 @@ public class EmployeeLeavesReport extends BaseReport {
 		Query q = getEntityManager().createQuery(sb.toString());
 		if (dateSearchType != DateSearchType.DURING_DATE_PERIOD) {
 			q.setParameter("effectiveDate", effectiveDate);
-
+			
 		} else {
 			q.setParameter("effectiveDateFrom", effectiveDateFrom);
+			
 			q.setParameter("effectiveDateUntil", effectiveDateUntil);
 		}
+		/* also if the date search type is BEFORE add the toady parameter */
+		if (dateSearchType == DateSearchType.BEFORE_DATE) {
+			q.setParameter("today", today);
+		}
+		
 		if (leaveType != null) {
 			q.setParameter("leaveType", leaveType);
 		}

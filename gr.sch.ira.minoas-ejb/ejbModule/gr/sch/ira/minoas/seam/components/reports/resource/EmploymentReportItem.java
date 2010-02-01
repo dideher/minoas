@@ -13,6 +13,8 @@ public class EmploymentReportItem extends EmployeeReportItem {
 	private String employmentTypeKey;
 
 	private String school;
+	
+	private Character schoolRegion;
 
 	/**
 	 * 
@@ -25,8 +27,10 @@ public class EmploymentReportItem extends EmployeeReportItem {
 		super(employment.getEmployee());
 		this.employmentType = employment.getType().toString();
 		this.employmentTypeKey = employment.getType().getKey();
-		if (employment.getSchool() != null)
+		if (employment.getSchool() != null) {
 			setSchool(employment.getSchool().getTitle());
+			setSchoolRegion(employment.getSchool().getRegionCode());
+		}
 		setEmployeeFinalWorkingHours(employment.getFinalWorkingHours());
 		setEmployeeMandatoryHours(employment.getMandatoryWorkingHours());
 		setEmployeeEmploymentEstablishedDate(employment.getEstablished());
@@ -73,6 +77,20 @@ public class EmploymentReportItem extends EmployeeReportItem {
 	 */
 	public void setSchool(String school) {
 		this.school = school;
+	}
+
+	/**
+	 * @return the schoolRegion
+	 */
+	public Character getSchoolRegion() {
+		return schoolRegion;
+	}
+
+	/**
+	 * @param schoolRegion the schoolRegion to set
+	 */
+	public void setSchoolRegion(Character schoolRegion) {
+		this.schoolRegion = schoolRegion;
 	}
 
 }

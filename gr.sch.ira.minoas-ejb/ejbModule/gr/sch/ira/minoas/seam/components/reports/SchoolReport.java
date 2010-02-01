@@ -79,6 +79,37 @@ public class SchoolReport extends BaseReport {
 	public SchoolReport() {
 	}
 
+	public void lookupRegularEmployments() {
+		long started = System.currentTimeMillis(), finished;
+		SchoolYear activeSchoolYear = getCoreSearching().getActiveSchoolYear(getEntityManager());
+		info("regular employee lookup in school unit #0 during school year #1", schoolHome.getInstance(), activeSchoolYear);
+		schoolRegularEmployments = convertEmploymentCollection(getCoreSearching().getSchoolEmploymentsOfType(
+				getEntityManager(), activeSchoolYear, schoolHome.getInstance(), EmploymentType.REGULAR));
+		finished = System.currentTimeMillis();
+		info("lookup found #0 regular employment(s) totally in #1 [ms]", schoolRegularEmployments.size(),  (finished - started));
+	}
+	
+	public void lookupDeputyEmployments() {
+		long started = System.currentTimeMillis(), finished;
+		SchoolYear activeSchoolYear = getCoreSearching().getActiveSchoolYear(getEntityManager());
+		info("deputy employee lookup in school unit #0 during school year #1", schoolHome.getInstance(), activeSchoolYear);
+		schoolDeputyEmployments = convertEmploymentCollection(getCoreSearching().getSchoolEmploymentsOfType(
+				getEntityManager(), activeSchoolYear, schoolHome.getInstance(), EmploymentType.DEPUTY));
+		finished = System.currentTimeMillis();
+		info("lookup found #0 deputy employment(s) totally in #1 [ms]", schoolRegularEmployments.size(),  (finished - started));
+	}
+	
+	public void lookupHourlyBasedEmployments() {
+		long started = System.currentTimeMillis(), finished;
+		SchoolYear activeSchoolYear = getCoreSearching().getActiveSchoolYear(getEntityManager());
+		info("hourly based employee lookup in school unit #0 during school year #1", schoolHome.getInstance(), activeSchoolYear);
+		schoolHourlyBasedEmployments = convertEmploymentCollection(getCoreSearching().getSchoolEmploymentsOfType(
+				getEntityManager(), activeSchoolYear, schoolHome.getInstance(), EmploymentType.HOURLYBASED));
+		finished = System.currentTimeMillis();
+		info("lookup found #0 hourly based employment(s) totally in #1 [ms]", schoolRegularEmployments.size(),  (finished - started));
+	}
+	
+	
 	public void generateReport() {
 
 		long started = System.currentTimeMillis(), finished;

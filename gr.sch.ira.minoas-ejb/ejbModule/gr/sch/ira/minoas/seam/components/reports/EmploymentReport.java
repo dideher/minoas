@@ -55,27 +55,25 @@ public class EmploymentReport extends BaseReport {
 
 		try {
 			Map<String, Object> parameters = new HashMap<String, Object>();
-			parameters.put("EMPLOYEE_TYPE_FILTER",
+			parameters.put("EMPLOYMENT_TYPE_FILTER",
 					employmentCriteria.getType() != null ? getLocalizedMessage(employmentCriteria.getType().getKey())
 							: "Όλοι οι Τύποι");
 			switch (getEmploymentCriteria().getSpecializationSearchType()) {
 			case SPECIALIZATION_GROUP:
-				parameters.put("EMPLOYEE_SPECIALIZATION_FILTER",
+				parameters.put("EMPLOYMENT_SPECIALIZATION_FILTER",
 						employmentCriteria.getSpecializationGroup() != null ? employmentCriteria
 								.getSpecializationGroup().getTitle() : "Όλες οι Ομάδες Ειδικοτήτων");
 				break;
 			case SPECIALIZATION:
-				parameters.put("EMPLOYEE_SPECIALIZATION_FILTER",
+				parameters.put("EMPLOYMENT_SPECIALIZATION_FILTER",
 						employmentCriteria.getSpecialization() != null ? employmentCriteria.getSpecialization()
 								.getTitle() : "Όλες οι Ομάδες Ειδικοτήτων");
 				break;
 			}
-			parameters.put("EMPLOYEE_DATE_SEARCH_FILTER", getLocalizedMessage(employmentCriteria.getDateSearchType()
-					.getKey()));
-
-			parameters.put("EMPLOYEE_EFFECTIVE_DATE_FILTER", employmentCriteria.getEffectiveDate());
-			parameters.put("EMPLOYEE_EFFECTIVE_DATE_FROM_FILTER", employmentCriteria.getEffectiveDateFrom());
-			parameters.put("EMPLOYEE_EFFECTIVE_DATE_UNTIL_FILTER", employmentCriteria.getEffectiveDateUntil());
+			if(employmentCriteria.getRegion()!=null)
+				parameters.put("EMPLOYMENT_SCHOOL_REGION_FILTER", employmentCriteria.getRegion()+ " ΗΡΑΚΛΕΙΟΥ");
+			else parameters.put("EMPLOYMENT_SCHOOL_REGION_FILTER", "Όλες οι Περιοχές");
+			parameters.put("EMPLOYMENT_SCHOOL_YEAR_FILTER", employmentCriteria.getSchoolYear().getDescription());
 
 			/* create the leave type helper */
 			for (EmployeeType employeeType : getCoreSearching().getEmployeeTypes()) {
@@ -84,7 +82,7 @@ public class EmploymentReport extends BaseReport {
 
 			JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(reportData);
 			byte[] bytes = JasperRunManager.runReportToPdf(this.getClass().getResourceAsStream(
-					"/reports/employeeByType.jasper"), parameters, (JRDataSource) ds);
+					"/reports/employmentByType.jasper"), parameters, (JRDataSource) ds);
 			HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext()
 					.getResponse();
 			response.setContentType("application/pdf");
@@ -106,37 +104,17 @@ public class EmploymentReport extends BaseReport {
 	 */
 	public void generateReport() {
 
-		//Date effectiveDate = getEmploymentCriteria().getEffectiveDate();
-		//Date effectiveDateFrom = getEmploymentCriteria().getEffectiveDateFrom();
-		//Date effectiveDateUntil = getEmploymentCriteria().getEffectiveDateUntil();
 		EmploymentType employeeTye = getEmploymentCriteria().getType();
 		SpecializationSearchType specializationSearchType = getEmploymentCriteria().getSpecializationSearchType();
 		SpecializationGroup specializationGroup = getEmploymentCriteria().getSpecializationGroup();
 		Specialization specialization = getEmploymentCriteria().getSpecialization();
 		SchoolYear schoolYear = getEmploymentCriteria().getSchoolYear();
+		Character region = getEmploymentCriteria().getRegion();
 
-		//DateSearchType dateSearchType = getEmploymentCriteria().getDateSearchType();
-		//
 		StringBuffer sb = new StringBuffer();
 		sb
 				.append("SELECT em FROM Employment em JOIN FETCH em.employee WHERE em.active IS TRUE AND em.employee.active IS TRUE AND em.schoolYear=:schoolYear ");
 
-		/*
-		switch (dateSearchType) {
-		case AFTER_DATE:
-			sb.append(" AND em.established >= :effectiveDate) ");
-			break;
-		case BEFORE_DATE:
-			sb.append(" AND em.established <= :effectiveDate) ");
-			break;
-		case DURING_DATE:
-			sb.append(" AND (:effectiveDate BETWEEN em.established AND em.terminated)) ");
-			break;
-		case DURING_DATE_PERIOD:
-			sb.append(" AND (:effectiveDateFrom <= em.established AND  :effectiveDateUntil >= em.terminated)) ");
-			break;
-		}
-		*/
 		if (employeeTye != null) {
 			sb.append(" AND em.type=:employmentType ");
 		}
@@ -147,7 +125,11 @@ public class EmploymentReport extends BaseReport {
 		}
 
 		if (specializationSearchType == SpecializationSearchType.SPECIALIZATION && specialization != null) {
-			sb.append(" AND em.specialization=:specialization) ");
+			sb.append(" AND em.specialization = :specialization ");
+		}
+		
+		if (region != null) {
+			sb.append(" AND em.school.regionCode = :region ");
 		}
 
 		if (String.valueOf(getEmploymentCriteria().getSorting()).equals("specialization"))
@@ -159,15 +141,7 @@ public class EmploymentReport extends BaseReport {
 		Query q = getEntityManager().createQuery(sb.toString());
 		q.setParameter("schoolYear", schoolYear);
 
-		/*
-		if (dateSearchType != DateSearchType.DURING_DATE_PERIOD) {
-			q.setParameter("effectiveDate", effectiveDate);
-
-		} else {
-			q.setParameter("effectiveDateFrom", effectiveDateFrom);
-			q.setParameter("effectiveDateUntil", effectiveDateUntil);
-		}
-		*/
+		
 		if (employeeTye != null) {
 			q.setParameter("employmentType", employeeTye);
 		}
@@ -178,6 +152,10 @@ public class EmploymentReport extends BaseReport {
 
 		if (specializationSearchType == SpecializationSearchType.SPECIALIZATION && specialization != null) {
 			q.setParameter("specialization", specialization);
+		}
+		
+		if (region != null) {
+			q.setParameter("region", region);
 		}
 
 		Collection<Employment> employments = q.getResultList();

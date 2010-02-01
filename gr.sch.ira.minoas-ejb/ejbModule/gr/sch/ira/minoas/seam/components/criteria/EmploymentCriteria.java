@@ -44,6 +44,8 @@ public class EmploymentCriteria {
 	private EmploymentType type;
 	
 	private String sorting;
+	
+	private Character region;
 
 	/**
 	 * 
@@ -234,6 +236,20 @@ public class EmploymentCriteria {
 	 */
 	public void setSorting(String sorting) {
 		this.sorting = sorting;
+	}
+
+	/**
+	 * @return the region
+	 */
+	public Character getRegion() {
+		return region;
+	}
+
+	/**
+	 * @param region the region to set
+	 */
+	public void setRegion(Character region) {
+		this.region = region;
 	}
 
 }

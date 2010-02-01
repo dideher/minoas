@@ -9,7 +9,8 @@ public enum SchoolType {
 	EPAL("EPAL_SCHOOL_TYPE"),
 	EPAS("EPAS_SCHOOL_TYPE"),
 	GEL("GEL_SCHOOL_TYPE"),
-	GYM("GYM_SCHOOL_TYPE");
+	GYM("GYM_SCHOOL_TYPE"),
+	SMEAE("SMEAE_SCHOOL_TYPE")	;
 
 	private String key;
 
