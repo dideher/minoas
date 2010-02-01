@@ -119,13 +119,15 @@
 
 						<s:div styleClass="actionButtons">
 								<s:button id="revertButton" value="Επιστροφή"
-									rendered="#{employmentHome.managed}"
+									rendered="#{employmentHome.managed}" propagation="end"
 									action="#{employmentHome.revert}"  view="#{empty from ? '/home' : from}.xhtml}"/>
 							
 							<rich:spacer width="10" />
 							<h:commandButton action="#{employmentHome.update}"
 								value="Ανανέωση" id="updateButton" rendered="#{employmentHome.managed}"
-								disabled="#{!employment.active}"/>
+								disabled="#{!employment.active}">
+								<s:conversationPropagation type="end"/>
+								</h:commandButton>
 								<rich:spacer width="3" />
 							
 

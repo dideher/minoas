@@ -89,14 +89,15 @@
 									<h:outputText value="Ενέργεια" />
 								</f:facet>
 								<rich:toolBar itemSeparator="line">
-									<s:link id="modifyEmployment" value="Τροποποίηση"
-										rendered="#{_employment.active}"
-										view="/employee/modify-regular-employment.xhtml">
-										<f:param name="employmentID" value="#{_employment.id}" />
-										<f:param name="from"
-											value="/employee/regular-employment-management" />
-									</s:link>
-
+									<a4j:commandLink id="updateLink"
+										disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE'))}"
+										reRender="updateModalPanelContent" immediate="true"
+										oncomplete="#{rich:component('updateModalPanel')}.show()"
+										value="Τροποποίηση">
+										<a4j:actionparam name="employmentID" value="#{_employment.id}"
+											assignTo="#{employmentHome.id}"
+											converter="javax.faces.Integer" />
+									</a4j:commandLink>
 								</rich:toolBar>
 							</rich:column>
 						</rich:dataTable>
@@ -104,126 +105,309 @@
 					<h:panelGroup>
 
 						<s:div styleClass="actionButtons">
-							<s:button 
-								view="#{empty from ? '/home' : from}.xhtml}" value="Επιστροφή" />
+							<s:button view="#{empty from ? '/home' : from}.xhtml}"
+								value="Τέλος Εργασίας" propagation="end" />
+							<a4j:commandButton id="createButton"
+								disabled="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_LEAVE'))}"
+								action="#{employmentHome.prepareForNewRegularEmploymentOfEmployee}"
+								reRender="createModalPanelContent" immediate="true"
+								oncomplete="#{rich:component('createModalPanel')}.show()"
+								value="Καταχώρηση Νέας Οργανικής">
+							</a4j:commandButton>
 						</s:div>
 					</h:panelGroup>
 				</h:panelGrid>
 			</h:form>
 
-			<h:form>
-				<rich:panel>
-					<f:facet name="header">
-						<h:outputText value="Εισαγωγή Νέας Οργανικής Θέσης" />
-					</f:facet>
-
+			<rich:modalPanel id="createModalPanel" autosized="true" width="450">
+				<f:facet name="header">
+					<h:outputText
+						value="Καταχώρηση Νέας Οργανικής Εκπαιδευτικού #{employeeUtil.prettyFormat(employeeHome.instance)}"
+						style="padding-right:15px;" />
+				</f:facet>
+				<f:facet name="controls">
+					<h:panelGroup>
+						<h:graphicImage value="/img/modal/close.png" styleClass="hidelink"
+							width="18" height="18" id="hidelink4" />
+						<rich:componentControl for="createModalPanel" attachTo="hidelink4"
+							operation="hide" event="onclick" />
+					</h:panelGroup>
+				</f:facet>
+				<a4j:region>
 					<h:panelGrid columns="1">
-
-						<h:outputText
-							value="Με την παρακάτω φόρμα μπορείται να εισάγεται καινούργια οργανική θέση στον εκπαιδευτικό." />
-						<h:panelGrid columns="3">
-
-							<s:decorate id="unit" template="/layout/doubleLineEdit.xhtml">
-								<ui:define name="label">
-									<h:outputText value="Σχολική Μονάδα Οργανικής" />
-								</ui:define>
-
-								<h:inputText value="#{newRegularEmployment.school}" tabindex="1"
-									required="true" id="schoolTarget" styleClass="fieldValueText"
-									 converter="unitConverter" size="12" maxlength="22">
-									<a4j:support event="onblur" ajaxSingle="true" reRender="unit"
-										bypassUpdates="true" /> 
-
-									<rich:suggestionbox for="schoolTarget" var="schoolUnit"
-										suggestionAction="#{schoolUnitSuggester.suggest}">
-										<f:facet name="nothingLabel">
-											<h:outputText value="Άγνωστη Σχολική Μονάδα" />
-										</f:facet>
-										<h:column>
-											<h:outputText value="#{schoolUnit.title}" />
-										</h:column>
-									</rich:suggestionbox>
-								</h:inputText>
-							</s:decorate>
-
-							<s:decorate template="/layout/doubleLineEdit.xhtml">
-								<ui:define name="label">
-									<h:outputText value="Ειδικότητα : " />
-								</ui:define>
-								<h:inputText id="specializationFilter"
-									value="#{newRegularEmployment.specialization}" tabindex="2"
-									styleClass="fieldValueText" converter="specializationConverter"
-									size="8" maxlength="8">
-									<rich:suggestionbox height="100" width="250"
-										for="specializationFilter" var="a_spec"
-										suggestionAction="#{specializationSuggester.suggest}">
-										<f:facet name="nothingLabel">
-											<h:outputText value="Άγνωστη Ειδικότητα" />
-										</f:facet>
-										<h:column>
-											<h:outputText value="#{a_spec.id}" />
-										</h:column>
-										<h:column>
-											<h:outputText value="#{a_spec.title}" />
-										</h:column>
-									</rich:suggestionbox>
-								</h:inputText>
-							</s:decorate>
-
-
-							<s:decorate template="/layout/doubleLineEdit.xhtml">
-								<ui:define name="label">
-									<h:outputText value="Ημ/νια Έναρξης : " />
-								</ui:define>
-								<rich:calendar datePattern="dd/MM/yyyy" style="width:50px"  
-									enableManualInput="true" styleClass="fieldValueText"
-									required="true" value="#{newRegularEmployment.established}">
-								</rich:calendar>
-							</s:decorate>
+						<rich:messages style="color:red;"></rich:messages>
+						<h:form>
+							<a4j:outputPanel id="createModalPanelContent" layout="inline">
+								<h:panelGrid columns="1">
 
 
 
+									<h:panelGrid columns="4">
 
-							<s:decorate template="/layout/doubleLineEdit.xhtml">
-								<ui:define name="label">
-									<h:outputText value="Υποχρεωτικό Ωράριο : " />
-								</ui:define>
-								<h:inputText tabindex="4"
-									value="#{newRegularEmployment.mandatoryWorkingHours}" size="3"
-									maxlength="3" required="true" />
-							</s:decorate>
+										<s:decorate id="unit" template="/layout/doubleLineEdit.xhtml">
+											<ui:define name="label">
+												<h:outputText value="Σχολική Μονάδα Οργανικής" />
+											</ui:define>
 
-							<s:decorate template="/layout/doubleLineEdit.xhtml">
-								<ui:define name="label">
-									<h:outputText value="Πραγματικό Ωράριο : " />
-								</ui:define>
-								<h:inputText tabindex="5" value="#{newRegularEmployment.finalWorkingHours}"
-									size="3" maxlength="3" required="true" />
-							</s:decorate>
+											<h:inputText value="#{employment.school}" required="true"
+												readonly="true" id="schoolTarget"
+												styleClass="fieldValueText" tabindex="1"
+												converter="unitConverter" size="12" maxlength="22">
+												<a4j:support event="onblur" ajaxSingle="true"
+													reRender="unit" bypassUpdates="true" />
 
-						</h:panelGrid>
+												<rich:suggestionbox for="schoolTarget" var="schoolUnit"
+													suggestionAction="#{schoolUnitSuggester.suggest}">
+													<f:facet name="nothingLabel">
+														<h:outputText value="Άγνωστη Σχολική Μονάδα" />
+													</f:facet>
+													<h:column>
+														<h:outputText value="#{schoolUnit.title}" />
+													</h:column>
+												</rich:suggestionbox>
+											</h:inputText>
+										</s:decorate>
+
+										<s:decorate template="/layout/doubleLineEdit.xhtml">
+											<ui:define name="label">
+												<h:outputText value="Ειδικότητα : " />
+											</ui:define>
+											<h:inputText id="specializationFilter" readonly="true"
+												value="#{employment.specialization}"
+												styleClass="fieldValueText"
+												converter="specializationConverter" size="8" maxlength="8">
+												<rich:suggestionbox height="100" width="250"
+													for="specializationFilter" var="a_spec"
+													suggestionAction="#{specializationSuggester.suggest}">
+													<f:facet name="nothingLabel">
+														<h:outputText value="Άγνωστη Ειδικότητα" />
+													</f:facet>
+													<h:column>
+														<h:outputText value="#{a_spec.id}" />
+													</h:column>
+													<h:column>
+														<h:outputText value="#{a_spec.title}" />
+													</h:column>
+												</rich:suggestionbox>
+											</h:inputText>
+										</s:decorate>
+
+
+										<s:decorate template="/layout/doubleLineEdit.xhtml">
+											<ui:define name="label">
+												<h:outputText value="Ανάληψη Υπηρεσίας : " />
+											</ui:define>
+											<rich:calendar datePattern="dd/MM/yyyy" style="width:50px"
+												enableManualInput="true" styleClass="fieldValueText"
+												required="true" value="#{employment.established}">
+											</rich:calendar>
+										</s:decorate>
+
+										<s:decorate template="/layout/doubleLineEdit.xhtml">
+											<ui:define name="label">
+												<h:outputText value="Λήξη Υπηρεσίας : " />
+											</ui:define>
+											<rich:calendar datePattern="dd/MM/yyyy" style="width:50px"
+												enableManualInput="true" styleClass="fieldValueText"
+												value="#{employment.terminated}" required="false">
+											</rich:calendar>
+										</s:decorate>
+
+
+										<s:decorate template="/layout/doubleLineEdit.xhtml">
+											<ui:define name="label">
+												<h:outputText value="Υποχρεωτικό Ωράριο : " />
+											</ui:define>
+											<h:inputText value="#{employment.mandatoryWorkingHours}"
+												size="3" maxlength="3" required="true" />
+										</s:decorate>
+
+										<s:decorate template="/layout/doubleLineEdit.xhtml">
+											<ui:define name="label">
+												<h:outputText value="Πραγματικό Ωράριο : " />
+											</ui:define>
+											<h:inputText value="#{employment.finalWorkingHours}" size="3"
+												maxlength="3" required="true" />
+										</s:decorate>
+
+									</h:panelGrid>
+
+
+									<rich:separator lineType="dashed" height="2" />
+
+									<h:panelGroup>
+
+										<s:div styleClass="actionButtons">
+											<s:button id="revertButton" value="Επιστροφή"
+												rendered="#{employmentHome.managed}"
+												action="#{employmentHome.revert}"
+												view="#{empty from ? '/home' : from}.xhtml}" />
+
+											<rich:spacer width="10" />
+											<h:commandButton action="#{employmentHome.update}"
+												value="Ανανέωση" id="updateButton"
+												rendered="#{employmentHome.managed}"
+												disabled="#{!employment.active}" />
+											<rich:spacer width="3" />
+
+
+										</s:div>
+									</h:panelGroup>
+
+
+								</h:panelGrid>
+
+							</a4j:outputPanel>
+
+							<h:panelGrid columns="2">
+
+								<a4j:commandButton value="Καταχώρηση Οργανικής !"
+									action="#{leaveHome.persist()}"
+									data="#{facesContext.maximumSeverity.ordinal ge 2}"
+									oncomplete="if(data == false) Richfaces.hideModalPanel('createModalPanel');"
+									reRender="activeLeave,leavesOutputPanel" />
+								<a4j:commandButton value="Επιστροφή .."
+									action="#{leaveHome.revert()}"
+									onclick="#{rich:component('createModalPanel')}.hide();" />
+							</h:panelGrid>
+						</h:form>
+					</h:panelGrid>
+				</a4j:region>
+			</rich:modalPanel>
+
+			<rich:modalPanel id="updateModalPanel" autosized="true" width="450">
+
+				<f:facet name="header">
+					<h:outputText
+						value="Τροποποίηση Οργανικής Εκπαιδευτικού #{employeeUtil.prettyFormat(employeeHome.instance)}"
+						style="padding-right:15px;" />
+				</f:facet>
+				<f:facet name="controls">
+					<h:panelGroup>
+						<h:graphicImage value="/img/modal/close.png" styleClass="hidelink"
+							width="18" height="18" id="hidelink5" />
+						<rich:componentControl for="updateModalPanel" attachTo="hidelink5"
+							operation="hide" event="onclick" />
+					</h:panelGroup>
+				</f:facet>
+				<a4j:region>
+					<h:panelGrid columns="1">
+						<rich:messages style="color:red;"></rich:messages>
+						<h:form>
+							<a4j:outputPanel id="updateModalPanelContent" layout="inline">
+
+								<h:panelGrid columns="4">
+
+									<s:decorate id="unit" template="/layout/doubleLineEdit.xhtml">
+										<ui:define name="label">
+											<h:outputText value="Σχολική Μονάδα Οργανικής" />
+										</ui:define>
+
+										<h:inputText value="#{employmentHome.instance.school}"
+											required="true" readonly="true" id="schoolTarget"
+											styleClass="fieldValueText" tabindex="1"
+											converter="unitConverter" size="12" maxlength="22">
+											<a4j:support event="onblur" ajaxSingle="true" reRender="unit"
+												bypassUpdates="true" />
+
+											<rich:suggestionbox for="schoolTarget" var="schoolUnit"
+												suggestionAction="#{schoolUnitSuggester.suggest}">
+												<f:facet name="nothingLabel">
+													<h:outputText value="Άγνωστη Σχολική Μονάδα" />
+												</f:facet>
+												<h:column>
+													<h:outputText value="#{schoolUnit.title}" />
+												</h:column>
+											</rich:suggestionbox>
+										</h:inputText>
+									</s:decorate>
+
+									<s:decorate template="/layout/doubleLineEdit.xhtml">
+										<ui:define name="label">
+											<h:outputText value="Ειδικότητα : " />
+										</ui:define>
+										<h:inputText id="specializationFilter" readonly="true"
+											value="#{employmentHome.instance.specialization}"
+											styleClass="fieldValueText"
+											converter="specializationConverter" size="8" maxlength="8">
+											<rich:suggestionbox height="100" width="250"
+												for="specializationFilter" var="a_spec"
+												suggestionAction="#{specializationSuggester.suggest}">
+												<f:facet name="nothingLabel">
+													<h:outputText value="Άγνωστη Ειδικότητα" />
+												</f:facet>
+												<h:column>
+													<h:outputText value="#{a_spec.id}" />
+												</h:column>
+												<h:column>
+													<h:outputText value="#{a_spec.title}" />
+												</h:column>
+											</rich:suggestionbox>
+										</h:inputText>
+									</s:decorate>
+
+
+									<s:decorate template="/layout/doubleLineEdit.xhtml">
+										<ui:define name="label">
+											<h:outputText value="Ανάληψη Υπηρεσίας : " />
+										</ui:define>
+										<rich:calendar datePattern="dd/MM/yyyy" style="width:50px"
+											enableManualInput="true" styleClass="fieldValueText"
+											required="true"
+											value="#{employmentHome.instance.established}">
+										</rich:calendar>
+									</s:decorate>
+
+									<s:decorate template="/layout/doubleLineEdit.xhtml">
+										<ui:define name="label">
+											<h:outputText value="Λήξη Υπηρεσίας : " />
+										</ui:define>
+										<rich:calendar datePattern="dd/MM/yyyy" style="width:50px"
+											enableManualInput="true" styleClass="fieldValueText"
+											value="#{employment.terminated}" required="false">
+										</rich:calendar>
+									</s:decorate>
+
+
+									<s:decorate template="/layout/doubleLineEdit.xhtml">
+										<ui:define name="label">
+											<h:outputText value="Υποχρεωτικό Ωράριο : " />
+										</ui:define>
+										<h:inputText
+											value="#{employmentHome.instance.mandatoryWorkingHours}"
+											size="3" maxlength="3" required="true" />
+									</s:decorate>
+
+									<s:decorate template="/layout/doubleLineEdit.xhtml">
+										<ui:define name="label">
+											<h:outputText value="Πραγματικό Ωράριο : " />
+										</ui:define>
+										<h:inputText
+											value="#{employmentHome.instance.finalWorkingHours}" size="3"
+											maxlength="3" required="true" />
+									</s:decorate>
+
+								</h:panelGrid>
+							</a4j:outputPanel>
+						</h:form>
+						<rich:separator lineType="dashed" height="2" />
 
 						<h:panelGroup>
-
 							<s:div styleClass="actionButtons">
-								<h:commandButton
-									action="#{employeeHome.addNewRegularEmployment(newRegularEmployment)}"
-									value="Εισαγωγή" rendered="#{employeeHome.managed}">
-									<a4j:support event="onclick" reRender="employmentsTable"
-										ajaxSingle="true" />
-								</h:commandButton>
+								<a4j:commandButton value="Ανανέωση Οργανικής !"
+									action="#{employmentHome.update()}"
+									data="#{facesContext.maximumSeverity.ordinal ge 2}"
+									oncomplete="if(data == false) Richfaces.hideModalPanel('updateModalPanel');"
+									reRender="employmentsTable" />
+								<a4j:commandButton value="Επιστροφή .."
+									action="#{leaveHome.revert()}"
+									onclick="#{rich:component('updateModalPanel')}.hide();" />
 							</s:div>
 						</h:panelGroup>
+
 					</h:panelGrid>
-
-				</rich:panel>
-
-			</h:form>
-
-		</rich:panel>
-
-
-
+				</a4j:region>
+			</rich:modalPanel>
 	</ui:define>
 </ui:composition>
 </html>

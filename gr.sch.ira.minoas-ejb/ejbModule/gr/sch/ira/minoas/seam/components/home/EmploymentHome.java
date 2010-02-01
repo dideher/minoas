@@ -5,8 +5,11 @@ import gr.sch.ira.minoas.model.employement.Employment;
 
 import java.util.Date;
 
+import javax.management.RuntimeErrorException;
+
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
+import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
@@ -18,6 +21,9 @@ import org.jboss.seam.annotations.Transactional;
 @Name("employmentHome")
 @Scope(ScopeType.CONVERSATION)
 public class EmploymentHome extends MinoasEntityHome<Employment> {
+
+	@In(create = true)
+	private EmployeeHome employeeHome;
 
 	/**
 	 * 
@@ -37,6 +43,21 @@ public class EmploymentHome extends MinoasEntityHome<Employment> {
 	public String revert() {
 		getEntityManager().refresh(getInstance());
 		return "reverted";
+	}
+
+	/**
+	 * Used to prepare the instance as a new regular employment
+	 * for an existing employee
+	 */
+	@Transactional
+	public void prepareForNewRegularEmploymentOfEmployee() {
+		if (!isManaged()) {
+			if (employeeHome.isManaged()) {
+
+			} else
+				throw new RuntimeException("employee home is not managed");
+		} else
+			throw new RuntimeException("employment home is managed, we need a fresh copy");
 	}
 
 	/**
