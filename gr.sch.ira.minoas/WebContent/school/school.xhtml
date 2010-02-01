@@ -91,7 +91,7 @@
 
 			<rich:tabPanel switchType="ajax">
 				
-				<rich:tab switchType="ajax" ontabenter="#{schoolEmploymentsReport.generateReport()}">
+				<rich:tab  ontabenter="#{schoolEmploymentsReport.generateReport()}">
 					<f:facet name="label">
 						<h:outputText value="Συνγκετρωτική Τρέχουσα Κατάσταση" />
 					</f:facet>
@@ -100,7 +100,7 @@
 						viewId="/school/school-employments-analysis-component.xhtml" />
 
 				</rich:tab>
-				<rich:tab switchType="ajax">
+				<rich:tab  ontabenter="#{schoolReport.generateReport()}">
 					<f:facet name="label">
 						<h:outputText value="Αναλυτική Τρέχουσα Κατάσταση" />
 					</f:facet>
@@ -111,7 +111,7 @@
 				</rich:tab>
 
 				
-				<rich:tab switchType="ajax">
+				<rich:tab ontabenter="#{schoolReport.lookupRegularEmployments()}">
 					<f:facet name="label">
 						<h:outputText value="Οργανικά Ανήκωντες" />
 					</f:facet>
@@ -121,7 +121,7 @@
 
 				</rich:tab>
 
-				<rich:tab switchType="ajax">
+				<rich:tab  ontabenter="#{schoolReport.lookupDeputyEmployments()}">
 					<f:facet name="label">
 						<h:outputText value="Αναπληρωτές" />
 					</f:facet>
@@ -131,7 +131,7 @@
 
 				</rich:tab>
 
-				<rich:tab switchType="ajax">
+				<rich:tab  ontabenter="#{schoolReport.lookupHourlyBasedEmployments()}">
 					<f:facet name="label">
 						<h:outputText value="Ωρομίσθιοι" />
 					</f:facet>

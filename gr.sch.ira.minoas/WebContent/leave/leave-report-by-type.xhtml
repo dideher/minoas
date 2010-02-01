@@ -115,13 +115,23 @@
 						<h:panelGrid columns="3">
 							<s:decorate template="/layout/doubleLineEdit.xhtml">
 								<ui:define name="label">
-									<h:outputText value="Ερμηνεία Ημερομηνίας Εφαρμογής" />
+									<h:outputText value="Ερμηνεία Ημερομηνίας Αναζήτησης" />
 								</ui:define>
 
+								<!-- 
 								<h:selectOneMenu value="#{employeeLeaveCriteria.dateSearchType}">
 									<s:selectItems var="dateSearchType" value="#{dateSearchTypes}"
 										label="#{messages[dateSearchType.key]}">
 									</s:selectItems>
+									<a4j:support event="onchange" ajaxSingle="true"
+										reRender="dateSearchFiltersPanel" />
+								</h:selectOneMenu>
+								 -->
+								<h:selectOneMenu value="#{employeeLeaveCriteria.dateSearchType}">
+									<s:enumItem enumValue="AFTER_DATE" itemLabel="Λήξη ΜΕΤΑ την Ημερομηνία"/>
+									<s:enumItem enumValue="BEFORE_DATE" itemLabel="Λήξη ΠΡΙΝ την Ημερομηνία"/>
+									<s:enumItem enumValue="DURING_DATE" itemLabel="Σε ενεργεία ΚΑΤΑ την Ημερομηνία"/>
+									<s:enumItem enumValue="DURING_DATE_PERIOD" itemLabel="Σε ενέργεια ΚΑΤΑ την Διάρκεια"/>
 									<a4j:support event="onchange" ajaxSingle="true"
 										reRender="dateSearchFiltersPanel" />
 								</h:selectOneMenu>

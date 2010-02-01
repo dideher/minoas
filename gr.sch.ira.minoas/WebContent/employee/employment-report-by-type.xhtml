@@ -121,7 +121,20 @@
 
 								</a4j:outputPanel>
 							</h:panelGroup>
+							
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Περιοχή Σχολικής Μονάδας" />
+								</ui:define>
 
+								<h:selectOneMenu value="#{employmentCriteria.region}">
+									<f:selectItem itemLabel="Όλες οι Περιοχές" itemValue="" />
+									<f:selectItem itemLabel="Α Ηρακλείου" itemValue="Α" />
+									<f:selectItem itemLabel="Β Ηρακλείου" itemValue="Β" />
+								</h:selectOneMenu>
+							</s:decorate>
+
+		
 							<s:decorate template="/layout/doubleLineEdit.xhtml">
 								<ui:define name="label">
 									<h:outputText value="Σχολικό Έτος" />
@@ -251,7 +264,7 @@
 										reRender="employmentsByTypeTable" />
 								</h:commandButton>
 								<s:button action="#{employmentReport.generatePDFReport}"
-									value="Εκτύπωση (PDF)" target="new" disabled="true"
+									value="Εκτύπωση (PDF)" target="new" 
 									type="button" />
 								<s:button id="backButton" action="backButton"
 									value="Τέλος Εργασίας" />
@@ -318,6 +331,14 @@
 						</f:facet>
 						<h:outputText
 							value="#{_employment.school}" />
+					</rich:column>
+					
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Περιοχή" />
+						</f:facet>
+						<h:outputText
+							value="#{_employment.schoolRegion}" />
 					</rich:column>
 					
 					<rich:column>
