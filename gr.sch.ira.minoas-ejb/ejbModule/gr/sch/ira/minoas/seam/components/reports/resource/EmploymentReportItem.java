@@ -11,6 +11,10 @@ public class EmploymentReportItem extends EmployeeReportItem {
 	private String employmentType;
 
 	private String employmentTypeKey;
+	
+	private String employmentSpecialization;
+	
+	private String employmentSpecializationID;
 
 	private String school;
 	
@@ -31,6 +35,8 @@ public class EmploymentReportItem extends EmployeeReportItem {
 			setSchool(employment.getSchool().getTitle());
 			setSchoolRegion(employment.getSchool().getRegionCode());
 		}
+		setEmploymentSpecialization(employment.getSpecialization().getTitle());
+		setEmploymentSpecializationID(employment.getSpecialization().getId());
 		setEmployeeFinalWorkingHours(employment.getFinalWorkingHours());
 		setEmployeeMandatoryHours(employment.getMandatoryWorkingHours());
 		setEmployeeEmploymentEstablishedDate(employment.getEstablished());
@@ -91,6 +97,34 @@ public class EmploymentReportItem extends EmployeeReportItem {
 	 */
 	public void setSchoolRegion(Character schoolRegion) {
 		this.schoolRegion = schoolRegion;
+	}
+
+	/**
+	 * @return the employmentSpecialization
+	 */
+	public String getEmploymentSpecialization() {
+		return employmentSpecialization;
+	}
+
+	/**
+	 * @param employmentSpecialization the employmentSpecialization to set
+	 */
+	public void setEmploymentSpecialization(String employmentSpecialization) {
+		this.employmentSpecialization = employmentSpecialization;
+	}
+
+	/**
+	 * @return the employmentSpecializationID
+	 */
+	public String getEmploymentSpecializationID() {
+		return employmentSpecializationID;
+	}
+
+	/**
+	 * @param employmentSpecializationID the employmentSpecializationID to set
+	 */
+	public void setEmploymentSpecializationID(String employmentSpecializationID) {
+		this.employmentSpecializationID = employmentSpecializationID;
 	}
 
 }

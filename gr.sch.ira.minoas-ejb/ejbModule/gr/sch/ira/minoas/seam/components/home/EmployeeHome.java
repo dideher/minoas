@@ -77,9 +77,9 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 	@Transactional
 	public String addNewEmployeeInLocalPYSDE() {
 
-		if (employmentHome.isManaged() || regularEmployeeInfoHome.isManaged() || deputyEmploymentInfoHome.isManaged()) {
+		if (isManaged() ||  employmentHome.isManaged() || regularEmployeeInfoHome.isManaged() || deputyEmploymentInfoHome.isManaged()) {
 			throw new RuntimeException(
-					"employment home or employeeRegularInfo or  deputyEmploymentInfoHome is managed.");
+					"employee home or employment home or employeeRegularInfo or deputyEmploymentInfoHome is managed.");
 		}
 
 		RegularEmployeeInfo info = null;

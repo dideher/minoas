@@ -79,6 +79,13 @@ public class SchoolReport extends BaseReport {
 	public SchoolReport() {
 	}
 
+	public void fetchSchoolChiefs() {
+		Date today = DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH);
+		schoolChiefs = convertServiceAllocationCollection(getCoreSearching().getSchoolIncomingServiceAllocationsOfType(
+				getEntityManager(), schoolHome.getInstance(), today,
+				Arrays.asList(ServiceAllocationType.SCHOOL_HEADMASTER, ServiceAllocationType.SCHOOL_SUBHEADMASTER)));
+	}
+	
 	public void lookupRegularEmployments() {
 		long started = System.currentTimeMillis(), finished;
 		SchoolYear activeSchoolYear = getCoreSearching().getActiveSchoolYear(getEntityManager());

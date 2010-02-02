@@ -133,7 +133,7 @@ public class EmploymentReport extends BaseReport {
 		}
 
 		if (String.valueOf(getEmploymentCriteria().getSorting()).equals("specialization"))
-			sb.append(" ORDER BY em.type,em.specialization.id, em.employee.lastName, em.employee.firstName");
+			sb.append(" ORDER BY em.specialization.id, em.employee.lastName, em.employee.firstName");
 		else if (String.valueOf(getEmploymentCriteria().getSorting()).equals("surname"))
 			sb.append(" ORDER BY em.employee.lastName, em.employee.firstName");
 		else

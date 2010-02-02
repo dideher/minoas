@@ -9,13 +9,13 @@
 	<parameter name="EMPLOYMENT_SPECIALIZATION_FILTER" class="java.lang.String"/>
 	<parameter name="EMPLOYMENT_SCHOOL_REGION_FILTER" class="java.lang.String"/>
 	<parameter name="EMPLOYMENT_SCHOOL_YEAR_FILTER" class="java.lang.String"/>
-	<field name="employeeSpecialization" class="java.lang.String"/>
+	<field name="employmentSpecialization" class="java.lang.String"/>
 	<field name="employeeFirstName" class="java.lang.String"/>
 	<field name="employeeLastName" class="java.lang.String"/>
 	<field name="employeeFatherName" class="java.lang.String"/>
 	<field name="employeeCode" class="java.lang.String"/>
 	<field name="employeeEmploymentEstablishedDate" class="java.util.Date"/>
-	<field name="employeeSpecializationID" class="java.lang.String"/>
+	<field name="employmentSpecializationID" class="java.lang.String"/>
 	<field name="employeeType" class="java.lang.String"/>
 	<field name="employeeMandatoryHours" class="java.lang.Integer"/>
 	<field name="school" class="java.lang.String"/>
@@ -236,7 +236,7 @@
 				<textElement textAlignment="Center">
 					<font size="9" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{employeeSpecializationID}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{employmentSpecializationID}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
 				<reportElement mode="Opaque" x="302" y="0" width="110" height="15" backcolor="#FFFFFF"/>

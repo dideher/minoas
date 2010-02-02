@@ -51,6 +51,9 @@ public class EmploymentHome extends MinoasEntityHome<Employment> {
 	 */
 	@Transactional
 	public void prepareForNewRegularEmploymentOfEmployee() {
+		if(isManaged()) {
+			this.clearInstance();
+		}
 		if (!isManaged()) {
 			if (employeeHome.isManaged()) {
 

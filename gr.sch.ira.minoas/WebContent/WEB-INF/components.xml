@@ -376,6 +376,11 @@
       <action execute="#{employeeRegularEmploymentsListQuery.refresh}" />
    </event>
    
+   <event type="org.jboss.seam.afterTransactionSuccess.Employment">
+      <action execute="#{employeeRegularEmploymentsListQuery.refresh}" />
+   </event>
+   
+   
    <event type="org.jboss.seam.afterTransactionSuccess.Disposal">
       <action execute="#{employeeDisposalsListQuery.refresh}" />
       <action execute="#{employeeCurrentDisposalsListQuery.refresh}" />

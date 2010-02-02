@@ -7,6 +7,8 @@
   <param name="from" />
   <param name="schoolID" value="#{schoolHome.id}" />
   
+  <action execute="#{schoolReport.fetchSchoolChiefs}"/>
+  
   <!-- navigation rules -->
   <navigation from-action="endButton">
     <end-conversation />
