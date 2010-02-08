@@ -120,10 +120,10 @@
 			</h:form>
 		</rich:panel>
 
-		<rich:modalPanel id="createModalPanel" autosized="true" width="550">
+		<rich:modalPanel id="createModalPanel" autosized="true">
 			<f:facet name="header">
 				<h:outputText
-					value="Καταχώρηση Νέας Οργανικής Εκπαιδευτικού #{employeeUtil.prettyFormat(employeeHome.instance)}"
+					value="Οργανικής Εκπαιδευτικού #{employeeUtil.prettyFormat(employeeHome.instance)}"
 					style="padding-right:15px;" />
 			</f:facet>
 			<f:facet name="controls">
@@ -143,7 +143,7 @@
 
 
 
-								<h:panelGrid columns="4">
+								<h:panelGrid columns="2">
 
 									<s:decorate id="unit" template="/layout/doubleLineEdit.xhtml">
 										<ui:define name="label">
@@ -151,8 +151,8 @@
 										</ui:define>
 
 										<h:inputText value="#{employment.school}" required="true"
-											readonly="true" id="schoolTarget" styleClass="fieldValueText"
-											tabindex="1" converter="unitConverter" size="12"
+											id="schoolTarget" styleClass="fieldValueText"
+											tabindex="1" converter="unitConverter" size="22"
 											maxlength="22">
 											<a4j:support event="onblur" ajaxSingle="true" reRender="unit"
 												bypassUpdates="true" />
@@ -199,7 +199,7 @@
 											<h:outputText value="Ανάληψη Υπηρεσίας : " />
 										</ui:define>
 										<rich:calendar datePattern="dd/MM/yyyy" style="width:50px"
-											enableManualInput="true" styleClass="fieldValueText"
+											enableManualInput="true" inputSize="12" inputClass="fieldValueText"
 											required="true" value="#{employment.established}">
 										</rich:calendar>
 									</s:decorate>
@@ -209,7 +209,7 @@
 											<h:outputText value="Λήξη Υπηρεσίας : " />
 										</ui:define>
 										<rich:calendar datePattern="dd/MM/yyyy" style="width:50px"
-											enableManualInput="true" styleClass="fieldValueText"
+											enableManualInput="true" inputSize="12" inputClass="fieldValueText"
 											value="#{employment.terminated}" required="false">
 										</rich:calendar>
 									</s:decorate>
@@ -233,42 +233,19 @@
 
 								</h:panelGrid>
 
-
 								<rich:separator lineType="dashed" height="2" />
-
-								<h:panelGroup>
-
-									<s:div styleClass="actionButtons">
-										<s:button id="revertButton" value="Επιστροφή"
-											rendered="#{employmentHome.managed}"
-											action="#{employmentHome.revert}"
-											view="#{empty from ? '/home' : from}.xhtml}" />
-
-										<rich:spacer width="10" />
-										<h:commandButton action="#{employmentHome.update}"
-											value="Ανανέωση" id="updateButton"
-											rendered="#{employmentHome.managed}"
-											disabled="#{!employment.active}" />
-										<rich:spacer width="3" />
-
-
-									</s:div>
-								</h:panelGroup>
-
-
 							</h:panelGrid>
-
 						</a4j:outputPanel>
 
 						<h:panelGrid columns="2">
 
 							<a4j:commandButton value="Καταχώρηση Οργανικής !"
-								action="#{leaveHome.persist()}"
+								action="#{employmentHome.insertNewRegularEmploymentOfEmployee}"
 								data="#{facesContext.maximumSeverity.ordinal ge 2}"
 								oncomplete="if(data == false) Richfaces.hideModalPanel('createModalPanel');"
 								reRender="activeLeave,leavesOutputPanel" />
 							<a4j:commandButton value="Επιστροφή .."
-								action="#{leaveHome.revert()}"
+								action="#{employmentHome.revert}"
 								onclick="#{rich:component('createModalPanel')}.hide();" />
 						</h:panelGrid>
 					</h:form>
@@ -354,8 +331,9 @@
 										<h:outputText value="Ανάληψη Υπηρεσίας : " />
 									</ui:define>
 									<rich:calendar datePattern="dd/MM/yyyy" style="width:50px"
-										enableManualInput="true" inputClass="fieldValueText" inputSize="10"
-										required="true" value="#{employmentHome.instance.established}">
+										enableManualInput="true" inputClass="fieldValueText"
+										inputSize="10" required="true"
+										value="#{employmentHome.instance.established}">
 									</rich:calendar>
 								</s:decorate>
 
@@ -364,8 +342,9 @@
 										<h:outputText value="Λήξη Υπηρεσίας : " />
 									</ui:define>
 									<rich:calendar datePattern="dd/MM/yyyy" style="width:50px"
-										enableManualInput="true" inputClass="fieldValueText" inputSize="10"
-										value="#{employmentHome.instance.terminated}" required="false">
+										enableManualInput="true" inputClass="fieldValueText"
+										inputSize="10" value="#{employmentHome.instance.terminated}"
+										required="false">
 									</rich:calendar>
 								</s:decorate>
 
