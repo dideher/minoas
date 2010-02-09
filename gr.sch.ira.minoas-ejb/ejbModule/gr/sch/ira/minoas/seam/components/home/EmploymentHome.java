@@ -18,6 +18,7 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.TransactionPropagationType;
 import org.jboss.seam.annotations.Transactional;
+import org.jboss.seam.international.StatusMessage.Severity;
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
@@ -46,8 +47,11 @@ public class EmploymentHome extends MinoasEntityHome<Employment> {
 
 	@Transactional
 	public String revert() {
-		getEntityManager().refresh(getInstance());
-		return "reverted";
+		if (isManaged()) {
+			getEntityManager().refresh(getInstance());
+			return "reverted";
+		} else
+			return null;
 	}
 
 	/**
@@ -56,23 +60,23 @@ public class EmploymentHome extends MinoasEntityHome<Employment> {
 	 */
 	@Transactional(TransactionPropagationType.REQUIRED)
 	public void prepareForNewRegularEmploymentOfEmployee() {
-		if(isManaged()) {
+		if (isManaged()) {
 			this.clearInstance();
 		}
 		if (!isManaged()) {
 			if (employeeHome.isManaged()) {
 				Employment instance = getInstance();
 				Employee employee = employeeHome.getInstance();
-				
+
 				/* Retrieve current employment */
 				Employment currentEmployment = employee.getCurrentEmployment();
-				instance.setSchoolYear(getCoreSearching().getActiveSchoolYear(getEntityManager())); 
+				instance.setSchoolYear(getCoreSearching().getActiveSchoolYear(getEntityManager()));
 				instance.setEmployee(employee);
 				instance.setType(EmploymentType.REGULAR);
 				instance.setSpecialization(employee.getLastSpecialization());
 				instance.setFinalWorkingHours(currentEmployment.getFinalWorkingHours());
 				instance.setMandatoryWorkingHours(currentEmployment.getMandatoryWorkingHours());
-				
+
 			} else
 				throw new RuntimeException("employee home is not managed");
 		} else
@@ -81,35 +85,51 @@ public class EmploymentHome extends MinoasEntityHome<Employment> {
 
 	@Transactional
 	public String insertNewRegularEmploymentOfEmployee() {
-		if(!isManaged()) {
+		if (!isManaged()) {
+			joinTransaction();
 			Employment instance = getInstance();
-			Employee employee = employeeHome.getInstance();
+			Employee employee = getEntityManager().merge(employeeHome.getInstance());
 			/* Retrieve current employment */
-			Employment currentEmployment = employee.getCurrentEmployment();
-		    
-			/* check if the current employment overlaps with
-		     * the new employment
-		     */
-			Date currentEmploymentDueTo = DateUtils.truncate(currentEmployment.getTerminated(), Calendar.HOUR_OF_DAY); 
-			System.err.println(currentEmploymentDueTo);
-			Date newEmploymentEstablished = DateUtils.truncate(instance.getEstablished(), Calendar.HOUR_OF_DAY);
-			
-			
-			Date newEmploymentDueTo = DateUtils.truncate(instance.getTerminated(), Calendar.HOUR_OF_DAY);
-			/* checks if the new employment really starts after the current employment */
-			if(!newEmploymentEstablished.after(currentEmploymentDueTo)) {
-				System.err.println("EEEEEEEEEEEEeee");
-			}
-			if(true)
-				return "";
-			
-			currentEmployment.setActive(Boolean.FALSE);
-			currentEmployment.setSupersededBy(instance);
+			Employment currentEmployment = getEntityManager().merge(employee.getCurrentEmployment());
 
-			
-			return "lala";
-		} else throw new RuntimeException("employment home is managed, we need a fresh copy");
+			/* check if the current employment overlaps with
+			 * the new employment
+			 */
+			Date currentEmploymentDueTo = DateUtils.truncate(instance.getEstablished(), Calendar.HOUR_OF_DAY);
+			currentEmploymentDueTo = DateUtils.addDays(currentEmploymentDueTo, -1);
+
+			Date currentEmploymentEstablished = DateUtils.truncate(currentEmployment.getEstablished(),
+					Calendar.HOUR_OF_DAY);
+
+			Date newEmploymentEstablished = DateUtils.truncate(instance.getEstablished(), Calendar.HOUR_OF_DAY);
+
+			/* checks if the new employment really starts after the current employment */
+			if (!newEmploymentEstablished.after(currentEmploymentEstablished)) {
+				facesMessages
+						.add(Severity.ERROR,
+								"H ημ/νια ανάληψης υπηρεσίας πρέπει να είναι μεταγενέστερη. Μάλλον πρέπει να κάνεις ενα διάλειμα.");
+				return null;
+			}
+
+			instance.setActive(Boolean.TRUE);
+			instance.setEmployee(employee);
+			instance.setInsertedBy(getPrincipal());
+			String lala = super.persist();
+			if (lala != null) {
+				currentEmployment.setActive(Boolean.FALSE);
+				currentEmployment.setSupersededBy(instance);
+				currentEmployment.setTerminated(currentEmploymentDueTo);
+				employee.setCurrentEmployment(instance);
+
+				getEntityManager().merge(currentEmployment);
+				getEntityManager().merge(employee);
+				getEntityManager().flush();
+			}
+			return lala;
+		} else
+			throw new RuntimeException("employment home is managed, we need a fresh copy");
 	}
+
 	/**
 	 * @see org.jboss.seam.framework.EntityHome#update()
 	 */

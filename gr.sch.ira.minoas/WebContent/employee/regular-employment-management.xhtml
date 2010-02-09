@@ -134,11 +134,12 @@
 						operation="hide" event="onclick" />
 				</h:panelGroup>
 			</f:facet>
-			<a4j:region>
 				<h:panelGrid columns="1">
 					<rich:messages style="color:red;"></rich:messages>
 					<h:form>
 						<a4j:outputPanel id="createModalPanelContent" layout="inline">
+						<a4j:region>
+			
 							<h:panelGrid columns="1">
 
 
@@ -150,13 +151,14 @@
 											<h:outputText value="Σχολική Μονάδα Οργανικής" />
 										</ui:define>
 
-										<h:inputText value="#{employment.school}" required="true"
+										<h:inputText value="#{employmentHome.instance.school}" required="true"
 											id="schoolTarget" styleClass="fieldValueText"
 											tabindex="1" converter="unitConverter" size="22"
 											maxlength="22">
+											
 											<a4j:support event="onblur" ajaxSingle="true" reRender="unit"
 												bypassUpdates="true" />
-
+											
 											<rich:suggestionbox for="schoolTarget" var="schoolUnit"
 												suggestionAction="#{schoolUnitSuggester.suggest}">
 												<f:facet name="nothingLabel">
@@ -174,7 +176,7 @@
 											<h:outputText value="Ειδικότητα : " />
 										</ui:define>
 										<h:inputText id="specializationFilter" readonly="true"
-											value="#{employment.specialization}"
+											value="#{employmentHome.instance.specialization}"
 											styleClass="fieldValueText"
 											converter="specializationConverter" size="8" maxlength="8">
 											<rich:suggestionbox height="100" width="250"
@@ -200,7 +202,7 @@
 										</ui:define>
 										<rich:calendar datePattern="dd/MM/yyyy" style="width:50px"
 											enableManualInput="true" inputSize="12" inputClass="fieldValueText"
-											required="true" value="#{employment.established}">
+											required="true" value="#{employmentHome.instance.established}">
 										</rich:calendar>
 									</s:decorate>
 
@@ -210,7 +212,7 @@
 										</ui:define>
 										<rich:calendar datePattern="dd/MM/yyyy" style="width:50px"
 											enableManualInput="true" inputSize="12" inputClass="fieldValueText"
-											value="#{employment.terminated}" required="false">
+											value="#{employmentHome.instance.terminated}" required="false">
 										</rich:calendar>
 									</s:decorate>
 
@@ -219,7 +221,7 @@
 										<ui:define name="label">
 											<h:outputText value="Υποχρεωτικό Ωράριο : " />
 										</ui:define>
-										<h:inputText value="#{employment.mandatoryWorkingHours}"
+										<h:inputText value="#{employmentHome.instance.mandatoryWorkingHours}"
 											size="3" maxlength="3" required="true" />
 									</s:decorate>
 
@@ -227,7 +229,7 @@
 										<ui:define name="label">
 											<h:outputText value="Πραγματικό Ωράριο : " />
 										</ui:define>
-										<h:inputText value="#{employment.finalWorkingHours}" size="3"
+										<h:inputText value="#{employmentHome.instance.finalWorkingHours}" size="3"
 											maxlength="3" required="true" />
 									</s:decorate>
 
@@ -235,6 +237,7 @@
 
 								<rich:separator lineType="dashed" height="2" />
 							</h:panelGrid>
+							</a4j:region>
 						</a4j:outputPanel>
 
 						<h:panelGrid columns="2">
@@ -243,14 +246,13 @@
 								action="#{employmentHome.insertNewRegularEmploymentOfEmployee}"
 								data="#{facesContext.maximumSeverity.ordinal ge 2}"
 								oncomplete="if(data == false) Richfaces.hideModalPanel('createModalPanel');"
-								reRender="activeLeave,leavesOutputPanel" />
+								reRender="employmentsTable" />
 							<a4j:commandButton value="Επιστροφή .."
-								action="#{employmentHome.revert}"
+								action="#{employmentHome.clearInstance}"
 								onclick="#{rich:component('createModalPanel')}.hide();" />
 						</h:panelGrid>
 					</h:form>
 				</h:panelGrid>
-			</a4j:region>
 		</rich:modalPanel>
 
 		<rich:modalPanel id="updateModalPanel" autosized="true" width="250">
