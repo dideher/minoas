@@ -13,7 +13,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
+import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
+import javax.faces.validator.ValidatorException;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
@@ -23,6 +27,7 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.annotations.datamodel.DataModel;
 import org.jboss.seam.annotations.security.Restrict;
+import org.jboss.seam.international.StatusMessage.Severity;
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
@@ -283,16 +288,22 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 	public String update() {
 		return super.update();
 	}
-
-	public void verifyVATNumberForNewEmployee(ValueChangeEvent e) {
-		String vatNumber = String.valueOf(e.getNewValue());
+	
+	public void passwordMatchValidator(FacesContext context, UIComponent toValidate, Object value) throws ValidatorException {
+		String vatNumber = value.toString();
 		if (vatNumber.trim().length() == 9) {
 			Employee employee = getCoreSearching().getEmployeeByVatNumber(getEntityManager(), vatNumber);
 			if (employee != null) {
-				facesMessages.addToControl(e.getComponent().getId(), "Το ΑΦΜ που δηλώσατε είναι σε χρήση.");
+				FacesMessage message = new FacesMessage();
+	            message.setDetail("Το ΑΦΜ που δηλώσατε είναι σε χρήση.");
+	            message.setSummary("Το ΑΦΜ που δηλώσατε είναι σε χρήση.");
+	            message.setSeverity(FacesMessage.SEVERITY_ERROR);
+	            throw new ValidatorException(message);
 			}
 		}
 	}
+
+	
 
 	@Transactional
 	public boolean wire() {
