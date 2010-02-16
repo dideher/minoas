@@ -96,6 +96,11 @@
 							<h:outputText value="#{_school.title}" />
 						</rich:column>
 						<rich:column>
+							<f:facet name="header">Είδος</f:facet>
+							<h:outputText value="#{messages[_school.type.key]}" />
+						</rich:column>
+						
+						<rich:column>
 							<f:facet name="header">Μόρια</f:facet>
 							<h:outputText value="#{_school.points}" />
 						</rich:column>

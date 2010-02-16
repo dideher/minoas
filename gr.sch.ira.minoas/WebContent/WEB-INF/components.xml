@@ -196,6 +196,14 @@
     </framework:restrictions> 
    </framework:entity-query>
    
+   <framework:entity-query name="employeeRegularEmploymentsIncludingDisabledListQuery" max-results="200" scope="page">
+    <framework:ejbql>SELECT e FROM Employment e WHERE e.type='REGULAR'</framework:ejbql>
+    <framework:order>e.schoolYear desc, e.established desc, e.id desc</framework:order>
+    <framework:restrictions>
+      <value>e.employee = #{employee}</value>
+    </framework:restrictions> 
+   </framework:entity-query>
+   
    <framework:entity-query name="employeeDeputyEmploymentsListQuery" max-results="200" scope="page">
     <framework:ejbql>SELECT e FROM Employment e WHERE e.type='DEPUTY' AND e.active IS TRUE</framework:ejbql>
     <framework:order>e.schoolYear desc, e.established desc, e.id desc</framework:order>
@@ -204,8 +212,24 @@
     </framework:restrictions> 
    </framework:entity-query>
    
+   <framework:entity-query name="employeeDeputyEmploymentsIncludingDisabledListQuery" max-results="200" scope="page">
+    <framework:ejbql>SELECT e FROM Employment e WHERE e.type='DEPUTY'</framework:ejbql>
+    <framework:order>e.schoolYear desc, e.established desc, e.id desc</framework:order>
+    <framework:restrictions>
+      <value>e.employee = #{employee}</value>
+    </framework:restrictions> 
+   </framework:entity-query>
+   
    <framework:entity-query name="employeeHourlyBasedEmploymentsListQuery" max-results="200" scope="page">
     <framework:ejbql>SELECT e FROM Employment e WHERE e.type='HOURLYBASED' AND e.active IS TRUE</framework:ejbql>
+    <framework:order>e.schoolYear desc, e.established desc, e.id desc</framework:order>
+    <framework:restrictions>
+      <value>e.employee = #{employee}</value>
+    </framework:restrictions> 
+   </framework:entity-query>
+   
+   <framework:entity-query name="employeeHourlyBasedEmploymentsIncludingDisabledListQuery" max-results="200" scope="page">
+    <framework:ejbql>SELECT e FROM Employment e WHERE e.type='HOURLYBASED'</framework:ejbql>
     <framework:order>e.schoolYear desc, e.established desc, e.id desc</framework:order>
     <framework:restrictions>
       <value>e.employee = #{employee}</value>
@@ -378,6 +402,7 @@
    
    <event type="org.jboss.seam.afterTransactionSuccess.Employment">
       <action execute="#{employeeRegularEmploymentsListQuery.refresh}" />
+      <action execute="#{employeeRegularEmploymentsIncludingDisabledListQuery.refresh}" />
    </event>
    
    

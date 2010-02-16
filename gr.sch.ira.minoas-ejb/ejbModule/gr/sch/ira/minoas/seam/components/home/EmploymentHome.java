@@ -136,41 +136,6 @@ public class EmploymentHome extends MinoasEntityHome<Employment> {
 	@Override
 	@Transactional
 	public String update() {
-		/* Employment Update is special. We create a new employment and set the
-		 * current employment as parent.
-		 */
-		joinTransaction();
-		Employment current_employment = getInstance();
-		Employee employee = current_employment.getEmployee();
-		Employment new_employment = new Employment();
-
-		/* clone the employment */
-		new_employment.setEmployee(current_employment.getEmployee());
-		new_employment.setActive(Boolean.TRUE);
-		new_employment.setEstablished(current_employment.getEstablished());
-		new_employment.setFinalWorkingHours(current_employment.getFinalWorkingHours());
-		new_employment.setMandatoryWorkingHours(current_employment.getMandatoryWorkingHours());
-		new_employment.setSchool(current_employment.getSchool());
-		new_employment.setSchoolYear(current_employment.getSchoolYear());
-		new_employment.setInsertedOn(new Date(System.currentTimeMillis()));
-		new_employment.setSpecialization(current_employment.getSpecialization());
-		new_employment.setType(current_employment.getType());
-		new_employment.setSecondment(current_employment.getSecondment());
-		getEntityManager().persist(new_employment);
-
-		/* get a fresh copy of the current employment */
-		getEntityManager().refresh(current_employment);
-
-		/* update the current (now old) employment */
-
-		current_employment.setSupersededBy(new_employment);
-		current_employment.setActive(Boolean.FALSE);
-		current_employment.setTerminated(new_employment.getEstablished());
-
-		/* update the employee */
-		employee.setCurrentEmployment(new_employment);
-		employee.setLastSpecialization(new_employment.getSpecialization());
-
 		return super.update();
 	}
 

@@ -41,7 +41,7 @@
 
 					<rich:tabPanel mode="Ajax">
 						<rich:tab
-							rendered="#{employeeRegularEmploymentsListQuery.resultCount gt 0}">
+							rendered="#{employeeRegularEmploymentsIncludingDisabledListQuery.resultCount gt 0}">
 							<f:facet name="label">
 								<h:outputText value="Ιστορικό Οργανικών Θέσεων" />
 							</f:facet>
@@ -115,7 +115,7 @@
 						</rich:tab>
 
 						<rich:tab
-							rendered="#{employeeDeputyEmploymentsListQuery.resultCount gt 0}">
+							rendered="#{employeeDeputyEmploymentsIncludingDisabledListQuery.resultCount gt 0}">
 							<f:facet name="label">
 								<h:outputText value="Ιστορικό Τοποθετήσεων Αναπληρωτή" />
 							</f:facet>
@@ -191,7 +191,7 @@
 						</rich:tab>
 						
 						<rich:tab
-							rendered="#{employeeHourlyBasedEmploymentsListQuery.resultCount gt 0}">
+							rendered="#{employeeHourlyBasedEmploymentsIncludingDisabledListQuery.resultCount gt 0}">
 							<f:facet name="label">
 								<h:outputText value="Ιστορικό Προσλήψεων Ωρομίσθιου" />
 							</f:facet>

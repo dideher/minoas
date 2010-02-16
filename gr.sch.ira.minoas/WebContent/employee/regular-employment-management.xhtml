@@ -20,19 +20,19 @@
 			</f:facet>
 
 			<h:form>
-				<h:panelGrid columns="1">
+				<h:panelGrid columns="1" width="100%">
 
 					<h:outputText
 						value="Στον παρακάτω πίνακα εμφανίζεται το ιστορικό όλων των οργανικών θέσεων του εκπαιδευτικού. Μπορείτε να τροποποιήσεται, αν θέλετε, την ενεργή οργανική θέση." />
 					<a4j:outputPanel id="employmentsTable">
 						<rich:dataTable id="employeeRegularEmploymentList"
-							value="#{employeeRegularEmploymentsListQuery.resultList}"
+							value="#{employeeRegularEmploymentsIncludingDisabledListQuery.resultList}"
 							var="_employment" rows="15" border="0"
 							onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
 							onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
 							width="100%">
 							<f:facet name="header">
-								<h:outputLabel value="Ενεργή Οργανική Θέση Εκπαιδευτικού" />
+								<h:outputLabel value="Λίστω Οργανικών Θέσεων Εκπαιδευτικού" />
 							</f:facet>
 							<rich:column>
 								<f:facet name="header">
@@ -45,6 +45,12 @@
 									<h:outputText value="Σχολική Μονάδα" />
 								</f:facet>
 								<h:outputText value="#{_employment.school.title}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Τύπος Σχολικής Μονάδας" />
+								</f:facet>
+								<h:outputText value="#{messages[_employment.school.type.key]}" />
 							</rich:column>
 							<rich:column>
 								<f:facet name="header">
@@ -88,17 +94,15 @@
 								<f:facet name="header">
 									<h:outputText value="Ενέργεια" />
 								</f:facet>
-								<rich:toolBar itemSeparator="line">
-									<a4j:commandLink id="updateLink"
+									<a4j:commandButton id="updateLink"
 										disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE'))}"
-										reRender="updateModalPanelContent" immediate="true"
+										reRender="updateModalPanelContent" immediate="true" rendered="#{_employment.active}"
 										oncomplete="#{rich:component('updateModalPanel')}.show()"
 										value="Τροποποίηση">
 										<a4j:actionparam name="employmentID" value="#{_employment.id}"
 											assignTo="#{employmentHome.id}"
 											converter="javax.faces.Integer" />
-									</a4j:commandLink>
-								</rich:toolBar>
+									</a4j:commandButton>
 							</rich:column>
 						</rich:dataTable>
 					</a4j:outputPanel>
