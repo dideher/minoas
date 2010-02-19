@@ -59,6 +59,7 @@
     <class>gr.sch.ira.minoas.model.employement.DeputyEmploymentInfo</class>
     <class>gr.sch.ira.minoas.model.employement.Disposal</class>
     <class>gr.sch.ira.minoas.model.employement.DisposalUnit</class>
+    <class>gr.sch.ira.minoas.model.classrooms.SchoolClass</class>
     <properties>
       <!--
         <property name="hibernate.dialect"

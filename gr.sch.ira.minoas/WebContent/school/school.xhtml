@@ -32,7 +32,7 @@
 				<f:facet name="header">
 					<h:outputText value="Διευθυντής και Υποδιευθυντές Μονάδας" />
 				</f:facet>
-				
+
 				<rich:dataTable id="schoolChiefsTable" var="_schoolchief"
 					value="#{schoolChiefs}" sortMode="multi" border="0"
 					onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
@@ -89,52 +89,90 @@
 			<rich:separator lineType="dashed" height="2" />
 			<rich:spacer height="10" />
 
-			<rich:tabPanel switchType="ajax">
-				
-				<rich:tab  ontabenter="#{schoolEmploymentsReport.generateReport()}">
+			<rich:tabPanel switchType="ajax" selectedTab="defaultTab" >
+
+				<rich:tab id="defaultTab">
 					<f:facet name="label">
 						<h:outputText value="Συνγκετρωτική Τρέχουσα Κατάσταση" />
 					</f:facet>
+					<a4j:support event="ontabenter" eventsQueue="lala2"
+						reRender="school-employments-analysis"
+						action="#{schoolReport.generateEmploymentsReport}"
+						ajaxSingle="true">
+					</a4j:support>
 
-					<a4j:include
+					<a4j:include id="school-employments-analysis"
 						viewId="/school/school-employments-analysis-component.xhtml" />
 
 				</rich:tab>
-				<rich:tab  ontabenter="#{schoolReport.generateReport()}">
+				<rich:tab>
 					<f:facet name="label">
 						<h:outputText value="Αναλυτική Τρέχουσα Κατάσταση" />
 					</f:facet>
+					<a4j:support event="ontabenter" ajaxSingle="true"
+						eventsQueue="lala2" reRender="detailed-school-status"
+						action="#{schoolReport.generateReport()}">
+					</a4j:support>
 
-					<a4j:include
+					<a4j:include id="detailed-school-status"
 						viewId="/school/detailed-school-status-component.xhtml" />
 
 				</rich:tab>
 
-				
-				<rich:tab ontabenter="#{schoolReport.lookupRegularEmployments()}">
+				<rich:tab>
 					<f:facet name="label">
 						<h:outputText value="Οργανικά Ανήκωντες" />
 					</f:facet>
-
-					<a4j:include
+					<a4j:support event="ontabenter" ajaxSingle="true"
+						eventsQueue="lala2"
+						reRender="school-regular-employments-component"
+						action="#{schoolReport.lookupRegularEmployments()}">
+					</a4j:support>
+					<a4j:include id="school-regular-employments-component"
 						viewId="/school/school-regular-employments-component.xhtml" />
-
 				</rich:tab>
 
-				<rich:tab  ontabenter="#{schoolReport.lookupDeputyEmployments()}">
+				<rich:tab>
 					<f:facet name="label">
 						<h:outputText value="Αναπληρωτές" />
 					</f:facet>
+					<a4j:support event="ontabenter" eventsQueue="lala2"
+						reRender="school-deputy-employments-component" ajaxSingle="true"
+						action="#{schoolReport.lookupDeputyEmployments()}">
+					</a4j:support>
 
-					<a4j:include
-						viewId="/school/school-deputy-employments-component.xhtml" />
+					<a4j:include id="school-deputy-employments-component"
+						viewId="/school/school-deputy-employments-component.xhtml">
+						<!-- <s:conversationPropagation propagation="join" />  -->
+
+					</a4j:include>
 
 				</rich:tab>
 
-				<rich:tab  ontabenter="#{schoolReport.lookupHourlyBasedEmployments()}">
+				<rich:tab>
 					<f:facet name="label">
 						<h:outputText value="Ωρομίσθιοι" />
 					</f:facet>
+					<a4j:support event="ontabenter" eventsQueue="lala2"
+						reRender="school-hourlybased-employments"
+						action="#{schoolReport.lookupHourlyBasedEmployments()}"
+						ajaxSingle="true">
+
+					</a4j:support>
+
+					<a4j:include id="school-hourlybased-employments"
+						viewId="/school/school-hourlybased-employments-component.xhtml" />
+
+				</rich:tab>
+
+				<rich:tab>
+					<f:facet name="label">
+						<h:outputText value="Τμήματα" />
+					</f:facet>
+
+					<a4j:support event="ontabenter" eventsQueue="lala2"
+						ajaxSingle="true"
+						action="#{schoolReport.lookupHourlyBasedEmployments()}" />
 
 					<a4j:include
 						viewId="/school/school-hourlybased-employments-component.xhtml" />
@@ -159,7 +197,7 @@
 		</rich:panel>
 
 
-
+		<ui:include src="/components/wait-modal-panel.xhtml" />
 
 	</ui:define>
 

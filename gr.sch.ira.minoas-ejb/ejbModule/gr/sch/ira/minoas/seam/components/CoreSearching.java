@@ -1,6 +1,7 @@
 package gr.sch.ira.minoas.seam.components;
 
 import gr.sch.ira.minoas.core.CoreUtils;
+import gr.sch.ira.minoas.model.classrooms.SchoolClass;
 import gr.sch.ira.minoas.model.core.EstablishmentLocation;
 import gr.sch.ira.minoas.model.core.OrganizationalOffice;
 import gr.sch.ira.minoas.model.core.PYSDE;
@@ -75,6 +76,18 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 		}
 	}
 
+	@Factory(value="availableSchoolClasses")
+	@SuppressWarnings("unchecked")
+	public List<SchoolClass> getAvailableSchoolClasses() {
+		return getEntityManager().createQuery("SELECT s FROM SchoolClass ORDER BY (s.schoolType, s.sortOrder)").getResultList();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<SchoolClass> getSchoolClassesForSchoolType(SchoolType schoolType) {
+		return getEntityManager().createQuery("SELECT s FROM SchoolClass WHERE s.schoolType=:schoolType ORDER BY (s.sortOrder)").
+		setParameter("schoolType", schoolType).getResultList();
+	}
+	
 	@Factory(value = "dateSearchTypes")
 	public DateSearchType[] getAvailableDateSearchTypes() {
 		return DateSearchType.values();
@@ -493,7 +506,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 	public List<Employment> getSchoolEmploymentsOfType(EntityManager entityManager, SchoolYear schoolyear, Unit school,
 			EmploymentType type) {
 		long started = System.currentTimeMillis(), finished;
-		info("fetching all employments of type #3 in school unit #0 during school year #1", school, schoolyear, type);
+		info("fetching all employments of type #2 in school unit #0 during school year #1", school, schoolyear, type);
 		List<Employment> return_value = getEntityManager(entityManager)
 				.createQuery(
 						"SELECT e FROM Employment e WHERE e.school=:school AND e.schoolYear=:schoolyear AND e.type=:type AND e.active IS TRUE ORDER BY e.specialization.id, e.employee.lastName")

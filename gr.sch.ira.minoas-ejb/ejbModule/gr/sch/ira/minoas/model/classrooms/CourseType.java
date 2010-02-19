@@ -22,7 +22,7 @@ public class CourseType extends BaseIDModel {
 	private String title;
 	
 	@OneToMany(cascade={CascadeType.ALL})
-	private Collection<ClassType> classTypes;
+	private Collection<SchoolClass> schoolClass;
 	
 	
 }

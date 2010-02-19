@@ -11,11 +11,11 @@
 	<a4j:status onstart="#{rich:component('wait')}.show()"
 			onstop="#{rich:component('wait')}.hide()" />
 		<rich:modalPanel id="wait" autosized="true" width="200" height="120"
-			moveable="false" resizeable="false">
+			moveable="false" resizeable="false" >
 			<f:facet name="header">
-				<h:outputText value="Επεξεργασία" />
+				<h:outputText value="Παρακαλώ Περιμένετε ...." />
 			</f:facet>
-			<h:outputText value="Παρακαλώ Περιμένετε..." />
+			<h:graphicImage value="/img/loading.gif" />
 		</rich:modalPanel>
 	
 	</ui:component>

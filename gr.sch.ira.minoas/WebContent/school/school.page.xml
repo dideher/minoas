@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<page login-required="true" xmlns="http://jboss.com/products/seam/pages"
- xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.1.xsd">
+<page login-required="true" concurrent-request-timeout="3000" 
+  xmlns="http://jboss.com/products/seam/pages"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.1.xsd">
   <begin-conversation join="true" flush-mode="manual"/> 
   <description>Καρτέλα Σχολικής Μονάδας (#{school.title})</description>
   
   <param name="from" />
   <param name="schoolID" value="#{schoolHome.id}" />
   
-  <action execute="#{schoolReport.fetchSchoolChiefs}"/>
+  <action execute="#{schoolReport.fetchSchoolChiefs}" on-postback="false"/>
+  <action execute="#{schoolReport.generateEmploymentsReport}" on-postback="false"/>
   
   <!-- navigation rules -->
   <navigation from-action="endButton">
