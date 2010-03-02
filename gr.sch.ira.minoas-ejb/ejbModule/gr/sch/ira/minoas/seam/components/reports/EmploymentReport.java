@@ -1,5 +1,6 @@
 package gr.sch.ira.minoas.seam.components.reports;
 
+import gr.sch.ira.minoas.model.core.SchoolType;
 import gr.sch.ira.minoas.model.core.SchoolYear;
 import gr.sch.ira.minoas.model.core.Specialization;
 import gr.sch.ira.minoas.model.core.SpecializationGroup;
@@ -70,9 +71,10 @@ public class EmploymentReport extends BaseReport {
 								.getTitle() : "Όλες οι Ομάδες Ειδικοτήτων");
 				break;
 			}
-			if(employmentCriteria.getRegion()!=null)
-				parameters.put("EMPLOYMENT_SCHOOL_REGION_FILTER", employmentCriteria.getRegion()+ " ΗΡΑΚΛΕΙΟΥ");
-			else parameters.put("EMPLOYMENT_SCHOOL_REGION_FILTER", "Όλες οι Περιοχές");
+			if (employmentCriteria.getRegion() != null)
+				parameters.put("EMPLOYMENT_SCHOOL_REGION_FILTER", employmentCriteria.getRegion() + " ΗΡΑΚΛΕΙΟΥ");
+			else
+				parameters.put("EMPLOYMENT_SCHOOL_REGION_FILTER", "Όλες οι Περιοχές");
 			parameters.put("EMPLOYMENT_SCHOOL_YEAR_FILTER", employmentCriteria.getSchoolYear().getDescription());
 
 			/* create the leave type helper */
@@ -110,6 +112,7 @@ public class EmploymentReport extends BaseReport {
 		Specialization specialization = getEmploymentCriteria().getSpecialization();
 		SchoolYear schoolYear = getEmploymentCriteria().getSchoolYear();
 		Character region = getEmploymentCriteria().getRegion();
+		SchoolType schoolType = getEmploymentCriteria().getSchoolType();
 
 		StringBuffer sb = new StringBuffer();
 		sb
@@ -127,9 +130,13 @@ public class EmploymentReport extends BaseReport {
 		if (specializationSearchType == SpecializationSearchType.SPECIALIZATION && specialization != null) {
 			sb.append(" AND em.specialization = :specialization ");
 		}
-		
+
 		if (region != null) {
 			sb.append(" AND em.school.regionCode = :region ");
+		}
+
+		if (schoolType != null) {
+			sb.append(" AND em.school.type = :schoolType ");
 		}
 
 		if (String.valueOf(getEmploymentCriteria().getSorting()).equals("specialization"))
@@ -141,7 +148,6 @@ public class EmploymentReport extends BaseReport {
 		Query q = getEntityManager().createQuery(sb.toString());
 		q.setParameter("schoolYear", schoolYear);
 
-		
 		if (employeeTye != null) {
 			q.setParameter("employmentType", employeeTye);
 		}
@@ -153,9 +159,13 @@ public class EmploymentReport extends BaseReport {
 		if (specializationSearchType == SpecializationSearchType.SPECIALIZATION && specialization != null) {
 			q.setParameter("specialization", specialization);
 		}
-		
+
 		if (region != null) {
 			q.setParameter("region", region);
+		}
+
+		if (schoolType != null) {
+			q.setParameter("schoolType", schoolType);
 		}
 
 		Collection<Employment> employments = q.getResultList();

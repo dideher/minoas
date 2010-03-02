@@ -1,5 +1,6 @@
 package gr.sch.ira.minoas.seam.components.criteria;
 
+import gr.sch.ira.minoas.model.core.SchoolType;
 import gr.sch.ira.minoas.model.core.SchoolYear;
 import gr.sch.ira.minoas.model.core.Specialization;
 import gr.sch.ira.minoas.model.core.SpecializationGroup;
@@ -46,6 +47,8 @@ public class EmploymentCriteria {
 	private String sorting;
 	
 	private Character region;
+	
+	private SchoolType schoolType;
 
 	/**
 	 * 
@@ -250,6 +253,20 @@ public class EmploymentCriteria {
 	 */
 	public void setRegion(Character region) {
 		this.region = region;
+	}
+
+	/**
+	 * @return the schoolType
+	 */
+	public SchoolType getSchoolType() {
+		return schoolType;
+	}
+
+	/**
+	 * @param schoolType the schoolType to set
+	 */
+	public void setSchoolType(SchoolType schoolType) {
+		this.schoolType = schoolType;
 	}
 
 }

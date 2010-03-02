@@ -254,6 +254,7 @@ public class SchoolReport extends BaseReport {
 					today);
 			if (s != null) {
 				/* the employment is overriden by a secondment */
+				System.err.println(employment.getEmployee()+" has a secondment :!");
 				item.setEmployeeFinalWorkingHours(0);
 				item.setEmploymentComment(constructComment(s));
 			}
@@ -268,6 +269,7 @@ public class SchoolReport extends BaseReport {
 					sb.append(constructComment(d));
 					total_hours += d.getHours();
 				}
+				System.err.println(employment.getEmployee()+" : "+ Integer.toString(item.getEmployeeFinalWorkingHours() - total_hours));
 				item.setEmployeeFinalWorkingHours(item.getEmployeeFinalWorkingHours() - total_hours);
 				item.setEmploymentComment(sb.toString());
 			}
