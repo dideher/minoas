@@ -121,7 +121,7 @@
 
 								</a4j:outputPanel>
 							</h:panelGroup>
-							
+
 							<s:decorate template="/layout/doubleLineEdit.xhtml">
 								<ui:define name="label">
 									<h:outputText value="Περιοχή Σχολικής Μονάδας" />
@@ -133,37 +133,46 @@
 									<f:selectItem itemLabel="Β Ηρακλείου" itemValue="Β" />
 								</h:selectOneMenu>
 							</s:decorate>
+							
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Τύπος Σχολικής Μονάδας : " />
+								</ui:define>
+								<h:selectOneMenu value="#{employmentCriteria.schoolType}" required="false">
+									<s:selectItems noSelectionLabel="Επιλέξτε Τύπο Μονάδας"
+										var="_schoolType" value="#{schoolTypes}"
+										label="#{messages[_schoolType.key]}">
+									</s:selectItems>
+								</h:selectOneMenu>
+							</s:decorate>
 
-		
 							<s:decorate template="/layout/doubleLineEdit.xhtml">
 								<ui:define name="label">
 									<h:outputText value="Σχολικό Έτος" />
 								</ui:define>
 
-								<h:selectOneMenu
-									value="#{employmentCriteria.schoolYear}">
-									<s:selectItems hideNoSelectionLabel="true"
-										var="_schoolYear"
+								<h:selectOneMenu value="#{employmentCriteria.schoolYear}">
+									<s:selectItems hideNoSelectionLabel="true" var="_schoolYear"
 										value="#{coreSearching.availableSchoolYears}"
 										label="#{_schoolYear.description}" />
 									<s:convertEntity />
 								</h:selectOneMenu>
 							</s:decorate>
-							
+
 							<s:decorate template="/layout/doubleLineEdit.xhtml">
 								<ui:define name="label">
 									<h:outputText value="Ταξινόμιση Κατά" />
 								</ui:define>
 
-								<h:selectOneMenu
-									value="#{employmentCriteria.sorting}">
-										<f:selectItem itemLabel="Κατά Ειδικότητα" itemValue="specialization"/>
-										<f:selectItem itemLabel="Κατά Επώνυμο" itemValue="surname"/>
+								<h:selectOneMenu value="#{employmentCriteria.sorting}">
+									<f:selectItem itemLabel="Κατά Ειδικότητα"
+										itemValue="specialization" />
+									<f:selectItem itemLabel="Κατά Επώνυμο" itemValue="surname" />
 								</h:selectOneMenu>
 							</s:decorate>
 
 						</h:panelGrid>
-						
+
 						<!-- 
 						<rich:panel>
 							<h:outputText value="Ημερομηνία Ανάληψης Υπηρεσίας" />
@@ -264,8 +273,7 @@
 										reRender="employmentsByTypeTable" />
 								</h:commandButton>
 								<s:button action="#{employmentReport.generatePDFReport}"
-									value="Εκτύπωση (PDF)" target="new" 
-									type="button" />
+									value="Εκτύπωση (PDF)" target="new" type="button" />
 								<s:button id="backButton" action="backButton"
 									value="Τέλος Εργασίας" />
 							</h:panelGrid>
@@ -329,18 +337,16 @@
 						<f:facet name="header">
 							<h:outputText value="Μονάδα" />
 						</f:facet>
-						<h:outputText
-							value="#{_employment.school}" />
+						<h:outputText value="#{_employment.school}" />
 					</rich:column>
-					
+
 					<rich:column>
 						<f:facet name="header">
 							<h:outputText value="Περιοχή" />
 						</f:facet>
-						<h:outputText
-							value="#{_employment.schoolRegion}" />
+						<h:outputText value="#{_employment.schoolRegion}" />
 					</rich:column>
-					
+
 					<rich:column>
 						<f:facet name="header">
 							<h:outputText value="Υποχ. Ωρ" />
@@ -354,7 +360,7 @@
 						</f:facet>
 						<h:outputText value="#{_employment.employeeFinalWorkingHours}" />
 					</rich:column>
-					
+
 					<rich:column>
 						<f:facet name="header">
 							<h:outputText value="Ημ/νια Αν. Υπ/σίας" />
@@ -364,7 +370,7 @@
 							<s:convertDateTime pattern="dd-MM-yyyy" />
 						</h:outputText>
 					</rich:column>
-					
+
 					<f:facet name="footer">
 						<rich:datascroller for="employmentsByTypeTable">
 							<f:facet name="first">
