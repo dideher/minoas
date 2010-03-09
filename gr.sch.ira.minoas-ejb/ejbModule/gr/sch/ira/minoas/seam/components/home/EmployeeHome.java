@@ -159,12 +159,14 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 		getHourlyBasedEmployments().add(e);
 
 	}
+	
+	
 
 	/**
 	 * @see org.jboss.seam.framework.Home#createInstance()
 	 */
 	@Override
-	protected Object createInstance() {
+	protected Employee createInstance() {
 		Employee new_instance = new Employee();
 		new_instance.setType(EmployeeType.REGULAR);
 		return new_instance;
@@ -331,4 +333,6 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 		}
 		return true;
 	}
+
+	
 }

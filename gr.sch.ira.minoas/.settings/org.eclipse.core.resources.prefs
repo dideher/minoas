@@ -1,4 +1,4 @@
-#Fri Nov 06 12:03:36 EET 2009
+#Thu Mar 04 13:06:42 EET 2010
 eclipse.preferences.version=1
 encoding//WebContent/admin/manage-principals.xhtml=UTF-8
 encoding//WebContent/admin/manage-specialization-groups.xhtml=UTF-8
@@ -17,6 +17,7 @@ encoding//WebContent/components/void/voidListComponent.xhtml=UTF-8
 encoding//WebContent/components/wait-modal-panel.xhtml=UTF-8
 encoding//WebContent/disposal/disposal-component.xhtml=UTF-8
 encoding//WebContent/employee/basic-info.xhtml=UTF-8
+encoding//WebContent/employee/components/hourly-based-employment-component.xhtml=UTF-8
 encoding//WebContent/employee/deputy-employment-component.xhtml=UTF-8
 encoding//WebContent/employee/employee-report-by-type.xhtml=UTF-8
 encoding//WebContent/employee/hourly-based-employment-component.xhtml=UTF-8

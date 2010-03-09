@@ -59,7 +59,7 @@ public class SecondmentHome extends MinoasEntityHome<Secondment> {
 	 * @see org.jboss.seam.framework.Home#createInstance()
 	 */
 	@Override
-	protected Object createInstance() {
+	protected Secondment createInstance() {
 		Secondment instance = new Secondment();
 		instance.setSecondmentType(SecondmentType.FULL_TO_SCHOOL);
 		instance.setEmployeeRequested(Boolean.TRUE);

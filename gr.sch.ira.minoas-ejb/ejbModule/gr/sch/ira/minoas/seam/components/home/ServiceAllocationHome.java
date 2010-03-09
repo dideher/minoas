@@ -50,7 +50,7 @@ public class ServiceAllocationHome extends MinoasEntityHome<ServiceAllocation> {
 	 * @see org.jboss.seam.framework.Home#createInstance()
 	 */
 	@Override
-	protected Object createInstance() {
+	protected ServiceAllocation createInstance() {
 		ServiceAllocation instance = new ServiceAllocation();
 		instance.setServiceType(ServiceAllocationType.SCHOOL_HEADMASTER);
 		instance.setEstablished(getCoreSearching().getActiveSchoolYear(getEntityManager()).getSchoolYearStart());

@@ -83,7 +83,15 @@
 						<f:param name="add_new_employee_from" value="/home" />
 					</s:link>
 				</rich:menuItem>
-
+				
+				<rich:menuItem submitMode="none" disabled="#{!(s:hasRole('ADMIN'))}">
+					<s:link value="Διαχείρηση Σχέσεις Εργασίας" propagation="nest"
+						view="/employee/select-employee.xhtml">
+						<f:param name="from" value="/home" />
+						<f:param name="to" value="/employee/manage-employment" />
+					</s:link>
+				</rich:menuItem>
+				
 				<rich:menuItem submitMode="none" disabled="#{!(s:hasRole('ADMIN'))}">
 					<s:link value="Διαχείρηση Οργανικής Θέσης" propagation="nest"
 						view="/employee/select-employee.xhtml">

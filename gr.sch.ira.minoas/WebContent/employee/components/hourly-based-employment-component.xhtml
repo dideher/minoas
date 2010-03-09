@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich">
+
+
+
+<ui:component>
+	<h:panelGrid columns="6">
+		<s:decorate template="/layout/doubleLineEdit.xhtml" id="schoolUnit">
+			<ui:define name="label">
+				<h:outputText value="Σχολική Μονάδα : " />
+			</ui:define>
+			<h:inputText id="schoolUnitTarget" styleClass="fieldValueText"
+				value="#{_hourlybasedEmployment.school.title}" required="true">
+				<rich:suggestionbox for="schoolUnitTarget" var="_school"
+					height="200" width="300"
+					suggestionAction="#{schoolUnitSuggester.suggest}">
+					<f:facet name="nothingLabel">
+						<h:outputText value="Άγνωστη Μονάδα Τοποθέτησης" />
+					</f:facet>
+					<h:column>
+						<h:outputText value="#{_school.title}" />
+					</h:column>
+					<a4j:support ajaxSingle="true" event="onselect"
+						reRender="schoolUnit">
+						<f:setPropertyActionListener value="#{_school}"
+							target="#{_hourlybasedEmployment.school}" />
+					</a4j:support>
+				</rich:suggestionbox>
+			</h:inputText>
+
+		</s:decorate>
+		<s:decorate template="/layout/doubleLineEdit.xhtml" id="workingHours">
+			<ui:define name="label">
+				<h:outputText value="Ώρες Διδασκαλίας : " />
+			</ui:define>
+			<h:inputText value="#{_hourlybasedEmployment.finalWorkingHours}"
+				size="3" styleClass="fieldValueText" maxlength="3" required="true">
+				<a4j:support event="onblur" ajaxSingle="true"
+					reRender="workingHours" />
+			</h:inputText>
+		</s:decorate>
+		<s:decorate template="/layout/doubleLineEdit.xhtml" id="from">
+			<ui:define name="label">
+				<h:outputText value="Από : " />
+			</ui:define>
+			<rich:calendar datePattern="dd-MM-yyyy" style="width:50px"
+				enableManualInput="true" styleClass="fieldValueText" inputSize="10"
+				required="true" value="${_hourlybasedEmployment.established}">
+				<a4j:support event="onchanged" ajaxSingle="true" reRender="from" />
+			</rich:calendar>
+		</s:decorate>
+		<s:decorate template="/layout/doubleLineEdit.xhtml" id="until">
+			<ui:define name="label">
+				<h:outputText value="Εώς : " />
+			</ui:define>
+			<rich:calendar id="untilCalendar" datePattern="dd-MM-yyyy"
+				style="width:50px" enableManualInput="true"
+				styleClass="fieldValueText" inputSize="10" required="true"
+				value="${_hourlybasedEmployment.terminated}">
+				<a4j:support event="onchanged" ajaxSingle="true" reRender="until" />
+			</rich:calendar>
+		</s:decorate>
+		<s:decorate template="/layout/doubleLineEdit.xhtml" id="homebased">
+			<ui:define name="label">
+				<h:outputText value="Κατοίκον ; " />
+			</ui:define>
+			<h:selectBooleanCheckbox value="#{_hourlybasedEmployment.homeBased}" />
+		</s:decorate>
+	</h:panelGrid>
+
+
+</ui:component>
+</html>

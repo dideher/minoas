@@ -47,7 +47,7 @@ public class DisposalHome extends MinoasEntityHome<Disposal> {
 	 * @see org.jboss.seam.framework.Home#createInstance()
 	 */
 	@Override
-	protected Object createInstance() {
+	protected Disposal createInstance() {
 		Disposal new_instance = new Disposal();
 		new_instance.setActive(Boolean.TRUE);
 		new_instance.setDueTo(getCoreSearching().getActiveSchoolYear(getEntityManager()).getTeachingSchoolYearStop());

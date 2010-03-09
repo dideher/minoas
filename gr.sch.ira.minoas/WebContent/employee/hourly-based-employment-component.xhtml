@@ -46,89 +46,22 @@
 			<rich:dataGrid value="#{hourlyBasedEmployments}" width="100%"
 				var="_hourlyBasedEmploymentItem">
 				<f:facet name="header">
-
 					<h:outputText value="Τοποθετήσεις Ωρομίσθιου"></h:outputText>
-
 				</f:facet>
-				<a4j:region>
-					<h:panelGrid columns="6">
-						<s:decorate template="/layout/doubleLineEdit.xhtml"
-							id="schoolUnit">
-							<ui:define name="label">
-								<h:outputText value="Σχολική Μονάδα : " />
-							</ui:define>
-							<h:inputText id="schoolUnitTarget" styleClass="fieldValueText"
-								value="#{_hourlyBasedEmploymentItem.school.title}"
-								required="true">
+				<h:panelGrid columns="2">
+					<ui:include
+						src="/employee/components/hourly-based-employment-component.xhtml">
+						<ui:param value="#{_hourlyBasedEmploymentItem}"
+							name="_hourlybasedEmployment" />
+					</ui:include>
+					<a4j:commandButton id="deleteEmployment" ajaxSingle="true"
+						action="#{employeeHome.removeNewHourlyBasedEmploymentItem(_hourlyBasedEmploymentItem)}"
+						reRender="hourlyBasedEmploymentItemsPanel" value="Διαγραφή">
+						<h:graphicImage value="/img/icons/delete.png" width="12"
+							height="12" style="border:0" />
+					</a4j:commandButton>
+				</h:panelGrid>
 
-								<rich:suggestionbox for="schoolUnitTarget" var="_school"
-									height="200" width="300"
-									suggestionAction="#{schoolUnitSuggester.suggest}">
-									<f:facet name="nothingLabel">
-										<h:outputText value="Άγνωστη Μονάδα Τοποθέτησης" />
-									</f:facet>
-									<h:column>
-										<h:outputText value="#{_school.title}" />
-									</h:column>
-									<a4j:support ajaxSingle="true" event="onselect"
-										reRender="schoolUnit">
-										<f:setPropertyActionListener value="#{_school}"
-											target="#{_hourlyBasedEmploymentItem.school}" />
-									</a4j:support>
-								</rich:suggestionbox>
-							</h:inputText>
-						</s:decorate>
-						<s:decorate template="/layout/doubleLineEdit.xhtml"
-							id="workingHours">
-							<ui:define name="label">
-								<h:outputText value="Ώρες Διδασκαλίας : " />
-							</ui:define>
-							<h:inputText
-								value="#{_hourlyBasedEmploymentItem.finalWorkingHours}" size="3"
-								styleClass="fieldValueText" maxlength="3" required="true">
-								<a4j:support event="onblur" ajaxSingle="true"
-									reRender="workingHours" />
-							</h:inputText>
-						</s:decorate>
-						<s:decorate template="/layout/doubleLineEdit.xhtml" id="from">
-							<ui:define name="label">
-								<h:outputText value="Από : " />
-							</ui:define>
-							<rich:calendar datePattern="dd-MM-yyyy" style="width:50px"
-								enableManualInput="true" styleClass="fieldValueText"
-								inputSize="10" required="true"
-								value="${_hourlyBasedEmploymentItem.established}">
-								<a4j:support event="onchanged" ajaxSingle="true" reRender="from" />
-							</rich:calendar>
-						</s:decorate>
-						<s:decorate template="/layout/doubleLineEdit.xhtml" id="until">
-							<ui:define name="label">
-								<h:outputText value="Εώς : " />
-							</ui:define>
-							<rich:calendar id="untilCalendar" datePattern="dd-MM-yyyy"
-								style="width:50px" enableManualInput="true"
-								styleClass="fieldValueText" inputSize="10" required="true"
-								value="${_hourlyBasedEmploymentItem.terminated}">
-								<a4j:support event="onchanged" ajaxSingle="true"
-									reRender="until" />
-							</rich:calendar>
-						</s:decorate>
-						<s:decorate template="/layout/doubleLineEdit.xhtml" id="homebased">
-							<ui:define name="label">
-								<h:outputText value="Κατοίκον ; " />
-							</ui:define>
-							<h:selectBooleanCheckbox value="#{_hourlyBasedEmploymentItem.homeBased}" />
-						</s:decorate>
-						<a4j:commandButton id="deleteEmployment" ajaxSingle="true"
-							action="#{employeeHome.removeNewHourlyBasedEmploymentItem(_hourlyBasedEmploymentItem)}"
-							reRender="hourlyBasedEmploymentItemsPanel"
-							value="Διαγραφή">
-							<h:graphicImage value="/img/icons/delete.png" width="12"
-								height="12" style="border:0" />
-						</a4j:commandButton>
-
-					</h:panelGrid>
-				</a4j:region>
 			</rich:dataGrid>
 
 

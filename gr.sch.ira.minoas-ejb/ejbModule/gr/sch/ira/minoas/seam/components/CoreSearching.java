@@ -261,6 +261,8 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 				employee, schoolyear);
 		return result;
 	}
+	
+	
 
 	@SuppressWarnings("unchecked")
 	@Transactional(TransactionPropagationType.REQUIRED)
@@ -268,12 +270,25 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 		List<Employment> result;
 		debug("trying to featch all  employments for employee '#0'", employee);
 		result = entityManager.createQuery(
-				"SELECT e from Employment e WHERE e.employee=:employee AND e.type=:type ORDER BY e.schoolYear.title")
+				"SELECT e from Employment e WHERE e.employee=:employee AND e.active IS TRUE  AND e.type=:type ORDER BY e.schoolYear.title")
 				.setParameter("employee", employee).setParameter("type", type).getResultList();
 		info("found totally '#0' employments for regular employee '#1'.", result.size(), employee);
 		return result;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Transactional(TransactionPropagationType.REQUIRED)
+	public Collection<Employment> getEmployeeEmploymentsOfType(Person employee, EmploymentType type, SchoolYear schoolYear) {
+		List<Employment> result;
+		debug("trying to featch all  employments for employee '#0'", employee);
+		result = entityManager.createQuery(
+				"SELECT e from Employment e WHERE e.employee=:employee AND e.active IS TRUE AND e.type=:type AND e.schoolYear=:schoolyear ORDER BY e.id")
+				.setParameter("employee", employee).setParameter("type", type).setParameter("schoolyear", schoolYear).getResultList();
+		info("found totally '#0' employments for regular employee '#1'.", result.size(), employee);
+		return result;
+	}
+
+	
 	@SuppressWarnings("unchecked")
 	@Transactional(TransactionPropagationType.REQUIRED)
 	public Collection<Leave> getEmployeeLeaves(Person employee) {

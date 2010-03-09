@@ -27,7 +27,7 @@ public class AddressHome extends MinoasEntityHome<Address> {
 	 * @see org.jboss.seam.framework.Home#createInstance()
 	 */
 	@Override
-	protected Object createInstance() {
+	protected Address createInstance() {
 		Address instance = new Address();
 		return instance;
 	}

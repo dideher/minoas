@@ -25,7 +25,7 @@ public class DeputyEmploymentInfoHome extends MinoasEntityHome<DeputyEmploymentI
 	 * @see org.jboss.seam.framework.Home#createInstance()
 	 */
 	@Override
-	protected Object createInstance() {
+	protected DeputyEmploymentInfo createInstance() {
 		DeputyEmploymentInfo new_instance = new DeputyEmploymentInfo();
 		return new_instance;
 	}

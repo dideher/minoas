@@ -25,7 +25,7 @@ public class RegularEmployeeInfoHome extends MinoasEntityHome<RegularEmployeeInf
 	 * @see org.jboss.seam.framework.Home#createInstance()
 	 */
 	@Override
-	protected Object createInstance() {
+	protected RegularEmployeeInfo createInstance() {
 		RegularEmployeeInfo new_instance = new RegularEmployeeInfo();
 		return new_instance;
 	}

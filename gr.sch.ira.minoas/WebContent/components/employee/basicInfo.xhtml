@@ -20,6 +20,9 @@
 		<h:outputText styleClass="fieldValueText" value="#{employee.vatNumber}" />
 		<h:outputLabel value="ΑΜ" for="" />
 		<h:outputText styleClass="fieldValueText" value="#{employeeUtil.getRegistryID(employee)}" />
+		<h:outputLabel value="Τύπος" for="" />
+		<h:outputText styleClass="fieldValueText" value="#{messages[employee.type.key]}" />
+		
 		<h:outputLabel value="Ημ/νια Γεννήσεως" for="" />
 		<h:outputText styleClass="fieldValueText" value="#{employee.dateOfBirth}">
 			<s:convertDateTime type="date" pattern="dd-MM-yyyy" />

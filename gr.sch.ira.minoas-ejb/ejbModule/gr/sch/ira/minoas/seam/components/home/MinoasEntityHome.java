@@ -1,5 +1,6 @@
 package gr.sch.ira.minoas.seam.components.home;
 
+import gr.sch.ira.minoas.model.BaseModel;
 import gr.sch.ira.minoas.model.core.Audit;
 import gr.sch.ira.minoas.model.core.AuditType;
 import gr.sch.ira.minoas.model.security.Principal;
@@ -20,7 +21,7 @@ import org.jboss.seam.security.Identity;
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
  * @version $Id$
  */
-public abstract class MinoasEntityHome<E> extends EntityHome {
+public abstract class MinoasEntityHome<E> extends EntityHome<BaseModel> {
 
 	public static final String DUPLICATE_VALUE_OUTCOME = "duplicateValue";
 
@@ -136,6 +137,15 @@ public abstract class MinoasEntityHome<E> extends EntityHome {
 		String result = super.update();
 		getLogger().info("principal '#0' successfully updated '#1'", getPrincipalName(), getInstance());
 		return result;
+	}
+
+	/**
+	 * @see org.jboss.seam.framework.Home#setId(java.lang.Object)
+	 */
+	@Override
+	public void setId(Object id) {
+		super.setId(id);
+		getLogger().info("id \"#0\" has been set.", id);
 	}
 
 }

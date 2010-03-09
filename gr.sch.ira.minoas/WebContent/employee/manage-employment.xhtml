@@ -1,0 +1,313 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<ui:composition template="/layout/simple-beauty-template.xhtml">
+	<ui:define name="body">
+		<rich:panel>
+			<f:facet name="header">
+				<h:outputText value="Διαχείρηση Σχέσεις Εργασίας Εκπαιδευτικού" />
+			</f:facet>
+
+			<ui:include src="/components/messages-component.xhtml" />
+
+			<h:panelGrid columns="1">
+
+
+				<rich:panel>
+					<f:facet name="header">
+						<h:outputText value="Βασικά Στοιχεία" />
+					</f:facet>
+
+					<ui:include src="/components/employee/basicInfo.xhtml" />
+
+
+
+
+				</rich:panel>
+
+				<h:form>
+					<a4j:outputPanel id="employmentPanel">
+
+						<!-- 
+						<a4j:include viewId="/employee/regular-employment-component.xhtml"
+							rendered="#{employee.type == 'REGULAR'}" />
+
+						<a4j:include viewId="/employee/deputy-employment-component.xhtml"
+							rendered="#{employee.type == 'DEPUTY'}" />
+
+						<a4j:include
+							viewId="/employee/hourly-based-employment-component.xhtml"
+							rendered="#{employee.type == 'HOURLYPAID'}" />
+						 -->
+						<s:div rendered="#{employee.type == 'HOURLYPAID'}"
+							id="hourlyEmploymentDiv">
+							<rich:dataTable value="#{schoolYearEmployments}" width="100%"
+								var="_hourlyBasedEmploymentItem">
+								<f:facet name="header">
+									<h:outputText value="Τοποθετήσεις Ωρομίσθιου" />
+
+								</f:facet>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Σχολική Μονάδα" />
+									</f:facet>
+									<h:outputText id="schoolUnitTarget"
+										value="#{_hourlyBasedEmploymentItem.school.title}" />
+
+								</rich:column>
+
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Ώρες Διδασκαλίας" />
+									</f:facet>
+									<h:outputText
+										value="#{_hourlyBasedEmploymentItem.finalWorkingHours}"
+										size="3" styleClass="fieldValueText" maxlength="3" />
+								</rich:column>
+
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Από" />
+
+									</f:facet>
+									<h:outputText value="${_hourlyBasedEmploymentItem.established}">
+										<f:convertDateTime pattern="dd-MM-yyyy" />
+									</h:outputText>
+								</rich:column>
+
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Εώς" />
+									</f:facet>
+									<h:outputText value="${_hourlyBasedEmploymentItem.terminated}">
+										<f:convertDateTime pattern="dd-MM-yyyy" />
+									</h:outputText>
+								</rich:column>
+
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Κατοίκον ;" />
+									</f:facet>
+									<h:outputText value="Ναι"
+										rendered="#{_hourlyBasedEmploymentItem.homeBased}" />
+									<h:outputText value="Οχι"
+										rendered="#{!(_hourlyBasedEmploymentItem.homeBased)}" />
+								</rich:column>
+
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Ενέργεια" />
+									</f:facet>
+
+									<rich:toolBar itemSeparator="line">
+										<a4j:commandLink id="cancellink" ajaxSingle="true"
+											reRender="deleteEmployeeEmploymentContent"
+											oncomplete="#{rich:component('deleteEmploymentModalPanel')}.show();"
+											value="Διαγραφή"
+											onclick="javascript:if(!confirm('Είστε σίγουρος πως θέλετε να διαγράψετε την εγραφή ;')) { return false; }">
+											<h:graphicImage value="/img/icons/delete.png" width="12"
+												height="12" style="border:0" />
+											<f:setPropertyActionListener
+												value="#{_hourlyBasedEmploymentItem.id}"
+												target="#{employmentHome.id}" />
+										</a4j:commandLink>
+
+										<a4j:commandLink id="updatelink"
+											reRender="updateEmployeeEmploymentContent"
+											oncomplete="#{rich:component('updateEmploymentModalPanel')}.show()"
+											value="Τροποποίηση">
+											<h:graphicImage value="/img/icons/edit.png" width="12"
+												height="12" style="border:0" />
+											<f:setPropertyActionListener
+												value="#{_hourlyBasedEmploymentItem.id}"
+												target="#{employmentHome.id}" />
+										</a4j:commandLink>
+									</rich:toolBar>
+								</rich:column>
+
+
+
+
+							</rich:dataTable>
+
+
+						</s:div>
+						<rich:toolBar itemSeparator="line">
+							<s:button action="endButton" value="Τέλος Ενέργειας" />
+							<a4j:commandButton rendered="#{employee.type == 'HOURLYPAID'}"
+								value="Προσθήκη Νέας Σχέσης Ωρομισθίου" reRender="addHourlyEmployeeEmploymentContent"
+								action="#{employeeEmploymentManagement.prepareForNewHourlyBasedEmployment}"
+								oncomplete="#{rich:component('addHourlyEmploymentModalPanel')}.show()">
+							</a4j:commandButton>
+						</rich:toolBar>
+
+					</a4j:outputPanel>
+				</h:form>
+			</h:panelGrid>
+
+		</rich:panel>
+
+		<!-- modal panels -->
+		<rich:modalPanel id="deleteEmploymentModalPanel" autosized="true"
+			width="450">
+			<f:facet name="header">
+				<h:outputText
+					value="Διαγραφή Σχέσεις Εργασίας Εκπαιδευτικού #{employeeUtil.prettyFormat(employeeHome.instance)}"
+					style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<h:graphicImage value="/img/modal/close.png" styleClass="hidelink"
+						width="18" height="18" id="hidelink4" />
+					<rich:componentControl for="deleteEmploymentModalPanel"
+						attachTo="hidelink4" operation="hide" event="onclick" />
+				</h:panelGroup>
+			</f:facet>
+			<a4j:region>
+				<h:panelGrid columns="1">
+					<rich:messages style="color:red;"></rich:messages>
+					<h:form>
+						<a4j:outputPanel layout="inline">
+							<s:div id="deleteEmployeeEmploymentContent">
+								<h:outputText
+									value="Συμπληρώστε την ημερομηνία διαγραφής της σχέσης εργασίας" />
+
+								<s:decorate template="/layout/doubleLineEdit.xhtml" id="until">
+									<ui:define name="label">
+										<h:outputText value="Ημ/νια Διαγραφής Σχέσης Εργασίας : " />
+									</ui:define>
+									<rich:calendar id="untilCalendar" datePattern="dd-MM-yyyy"
+										style="width:50px" enableManualInput="true"
+										styleClass="fieldValueText" inputSize="10" ςrequired="true"
+										value="#{employmentHome.instance.terminated}">
+									</rich:calendar>
+								</s:decorate>
+							</s:div>
+
+						</a4j:outputPanel>
+
+						<h:panelGrid columns="2">
+							<a4j:commandButton value="Διαγραφή Σχέσης !"
+								action="#{employeeEmploymentManagement.deleteEmployment}"
+								data="#{facesContext.maximumSeverity.ordinal ge 2}"
+								reRender="hourlyEmploymentDiv"
+								oncomplete="if(data == false) Richfaces.hideModalPanel('deleteEmploymentModalPanel');" />
+							<a4j:commandButton value="Επιστροφή .."
+								action="#{employmentHome.revert}"
+								onclick="#{rich:component('deleteEmploymentModalPanel')}.hide();" />
+						</h:panelGrid>
+					</h:form>
+				</h:panelGrid>
+			</a4j:region>
+		</rich:modalPanel>
+
+
+		<rich:modalPanel id="updateEmploymentModalPanel" autosized="true">
+			<f:facet name="header">
+				<h:outputText
+					value="Ανανεώση Σχέσης Εργασίας Εκπαιδευτικού #{employeeUtil.prettyFormat(employeeHome.instance)}"
+					style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<h:graphicImage value="/img/modal/close.png" styleClass="hidelink"
+						width="18" height="18" id="hidelink5" />
+					<rich:componentControl for="updateEmploymentModalPanel"
+						attachTo="hidelink5" operation="hide" event="onclick" />
+				</h:panelGroup>
+			</f:facet>
+			<a4j:region>
+				<h:panelGrid columns="1">
+					<rich:messages style="color:red;"></rich:messages>
+					<h:form>
+						<a4j:outputPanel id="updateEmployeeEmploymentContent"
+							layout="inline">
+							<s:div>
+								<s:div rendered="#{employee.type == 'HOURLYPAID'}">
+									<ui:include
+										src="/employee/components/hourly-based-employment-component.xhtml">
+										<ui:param value="#{employmentHome.instance}"
+											name="_hourlybasedEmployment" />
+									</ui:include>
+								</s:div>
+
+							</s:div>
+
+						</a4j:outputPanel>
+
+						<h:panelGrid columns="2">
+							<a4j:commandButton value="Ανανέωση Σχέσης"
+								action="#{employeeEmploymentManagement.updateEmployment}"
+								data="#{facesContext.maximumSeverity.ordinal ge 2}"
+								reRender="hourlyEmploymentDiv"
+								oncomplete="if(data == false) Richfaces.hideModalPanel('updateEmploymentModalPanel');" />
+							<a4j:commandButton value="Επιστροφή .."
+								action="#{employmentHome.revert}" reRender="hourlyEmploymentDiv"
+								onclick="#{rich:component('updateEmploymentModalPanel')}.hide();" />
+						</h:panelGrid>
+					</h:form>
+				</h:panelGrid>
+			</a4j:region>
+		</rich:modalPanel>
+
+		<rich:modalPanel id="addHourlyEmploymentModalPanel" autosized="true">
+			<f:facet name="header">
+				<h:outputText
+					value="Πρόσθεση Σχέσης Εργασίας Ωρομίσθιου #{employeeUtil.prettyFormat(employeeHome.instance)}"
+					style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<h:graphicImage value="/img/modal/close.png" styleClass="hidelink"
+						width="18" height="18" id="hidelink6" />
+					<rich:componentControl for="addHourlyEmploymentModalPanel"
+						attachTo="hidelink6" operation="hide" event="onclick" />
+				</h:panelGroup>
+			</f:facet>
+			<a4j:region>
+				<h:panelGrid columns="1">
+					<rich:messages style="color:red;"></rich:messages>
+					<h:form>
+						<a4j:outputPanel id="addHourlyEmployeeEmploymentContent"
+							layout="inline">
+							<s:div>
+								<s:div rendered="#{employee.type == 'HOURLYPAID'}">
+									<ui:include
+										src="/employee/components/hourly-based-employment-component.xhtml">
+										<ui:param value="#{employmentHome.instance}"
+											name="_hourlybasedEmployment" />
+									</ui:include>
+								</s:div>
+
+							</s:div>
+
+						</a4j:outputPanel>
+
+						<h:panelGrid columns="2">
+							<a4j:commandButton value="Καταχώρηση"
+								action="#{employeeEmploymentManagement.createEmployment}"
+								data="#{facesContext.maximumSeverity.ordinal ge 2}"
+								reRender="hourlyEmploymentDiv"
+								oncomplete="if(data == false) Richfaces.hideModalPanel('addHourlyEmploymentModalPanel');" />
+							<a4j:commandButton value="Επιστροφή .."
+								action="#{employmentHome.revert}" reRender="hourlyEmploymentDiv"
+								onclick="#{rich:component('addHourlyEmploymentModalPanel')}.hide();" />
+						</h:panelGrid>
+					</h:form>
+				</h:panelGrid>
+			</a4j:region>
+		</rich:modalPanel>
+
+	</ui:define>
+</ui:composition>
+</html>

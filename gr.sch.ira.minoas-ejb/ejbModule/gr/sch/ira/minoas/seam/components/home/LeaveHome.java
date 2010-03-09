@@ -56,7 +56,7 @@ public class LeaveHome extends MinoasEntityHome<Leave> {
 	 * @see org.jboss.seam.framework.Home#createInstance()
 	 */
 	@Override
-	protected Object createInstance() {
+	protected Leave createInstance() {
 		Leave instance = new Leave();
 		instance.setActive(Boolean.TRUE);
 		instance.setLeaveType(LeaveType.THREE_MONTHS_LEAVE);
