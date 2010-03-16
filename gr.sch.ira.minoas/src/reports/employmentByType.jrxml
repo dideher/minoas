@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="leaveByType" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Employment By Type" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<style name="Crosstab Data Text" isDefault="false" hAlign="Center"/>
 	<subDataset name="dataset1"/>
 	<parameter name="EMPLOYMENT_TYPE" class="java.lang.String">
@@ -211,63 +214,63 @@
 	<detail>
 		<band height="16" splitType="Stretch">
 			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="31" y="0" width="150" height="15" backcolor="#FFFFFF"/>
+				<reportElement mode="Opaque" x="31" y="0" width="150" height="16" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left">
 					<font size="9" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{employeeLastName} + " " + $F{employeeFirstName} + " ("+  $F{employeeCode} + ")"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="473" y="0" width="24" height="15" backcolor="#FFFFFF"/>
+				<reportElement mode="Opaque" x="473" y="0" width="24" height="16" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Center">
 					<font size="9" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{employeeFinalWorkingHours}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="230" y="0" width="67" height="15" backcolor="#FFFFFF"/>
+				<reportElement mode="Opaque" x="230" y="0" width="67" height="16" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Right">
 					<font size="9" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{REPORT_PARAMETERS_MAP}.get($F{employeeType})]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="186" y="0" width="39" height="15" backcolor="#FFFFFF"/>
+				<reportElement mode="Opaque" x="186" y="0" width="39" height="16" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Center">
 					<font size="9" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{employmentSpecializationID}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="302" y="0" width="110" height="15" backcolor="#FFFFFF"/>
+				<reportElement mode="Opaque" x="302" y="0" width="110" height="16" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Right">
 					<font size="9" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{school}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="417" y="0" width="22" height="15" backcolor="#FFFFFF"/>
+				<reportElement mode="Opaque" x="417" y="0" width="22" height="16" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Center">
 					<font size="9" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{schoolRegion}.toString()]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="444" y="0" width="24" height="15" backcolor="#FFFFFF"/>
+				<reportElement mode="Opaque" x="444" y="0" width="24" height="16" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Center">
 					<font size="9" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{employeeMandatoryHours}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="502" y="0" width="50" height="15" backcolor="#FFFFFF"/>
+				<reportElement mode="Opaque" x="502" y="0" width="50" height="16" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Center">
 					<font size="9" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H"/>
 				</textElement>
 				<textFieldExpression class="java.util.Date"><![CDATA[$F{employeeEmploymentEstablishedDate}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="0" y="0" width="26" height="15" backcolor="#FFFFFF"/>
+				<reportElement mode="Opaque" x="0" y="0" width="26" height="16" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Center">
 					<font size="9" isBold="true" pdfFontName="/fonts/arialb.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>

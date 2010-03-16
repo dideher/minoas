@@ -82,7 +82,8 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 	@Transactional
 	public String addNewEmployeeInLocalPYSDE() {
 
-		if (isManaged() ||  employmentHome.isManaged() || regularEmployeeInfoHome.isManaged() || deputyEmploymentInfoHome.isManaged()) {
+		if (isManaged() || employmentHome.isManaged() || regularEmployeeInfoHome.isManaged()
+				|| deputyEmploymentInfoHome.isManaged()) {
 			throw new RuntimeException(
 					"employee home or employment home or employeeRegularInfo or deputyEmploymentInfoHome is managed.");
 		}
@@ -91,6 +92,18 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 		DeputyEmploymentInfo deputyEmploymentInfo = null;
 		Employee new_employee = getInstance();
 		Employment employment = employmentHome.getInstance();
+
+		Employee test_employee = getCoreSearching().getEmployeeOfTypeByVatNumber(getEntityManager(),
+				new_employee.getType(), new_employee.getVatNumber());
+		if (test_employee != null) {
+			getFacesMessages().add(
+					Severity.ERROR,
+					"Το ΑΦΜ '" + new_employee.getVatNumber()
+							+ "' που εισάγατε είναι ήδει σε χρήση απο τον εκπαιδευτικό '"
+							+ test_employee.toPrettyString()+"').");
+			return null;
+		}
+
 		new_employee.setActive(Boolean.TRUE);
 		new_employee.setCurrentPYSDE(getCoreSearching().getLocalPYSDE(getEntityManager()));
 		switch (new_employee.getType()) {
@@ -104,6 +117,7 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 			employment.setType(EmploymentType.REGULAR);
 			break;
 		}
+
 		getEntityManager().persist(new_employee);
 
 		employment.setEmployee(new_employee);
@@ -159,8 +173,6 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 		getHourlyBasedEmployments().add(e);
 
 	}
-	
-	
 
 	/**
 	 * @see org.jboss.seam.framework.Home#createInstance()
@@ -290,22 +302,6 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 	public String update() {
 		return super.update();
 	}
-	
-	public void passwordMatchValidator(FacesContext context, UIComponent toValidate, Object value) throws ValidatorException {
-		String vatNumber = value.toString();
-		if (vatNumber.trim().length() == 9) {
-			Employee employee = getCoreSearching().getEmployeeByVatNumber(getEntityManager(), vatNumber);
-			if (employee != null) {
-				FacesMessage message = new FacesMessage();
-	            message.setDetail("Το ΑΦΜ που δηλώσατε είναι σε χρήση.");
-	            message.setSummary("Το ΑΦΜ που δηλώσατε είναι σε χρήση.");
-	            message.setSeverity(FacesMessage.SEVERITY_ERROR);
-	            throw new ValidatorException(message);
-			}
-		}
-	}
-
-	
 
 	@Transactional
 	public boolean wire() {
@@ -334,5 +330,4 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 		return true;
 	}
 
-	
 }

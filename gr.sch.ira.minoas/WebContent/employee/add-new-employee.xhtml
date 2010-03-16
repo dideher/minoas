@@ -64,11 +64,10 @@
 										<h:outputText value="Α.Φ.Μ" />
 									</ui:define>
 									<h:inputText id="employeeVatNumber"
-										validator="#{employeeHome.passwordMatchValidator}"
 										value="#{employee.vatNumber}" required="true"
 										styleClass="fieldValueText" size="9" maxlength="9">
 										<f:validateLength minimum="9" maximum="9" />
-										<a4j:support event="onblur" bypassUpdates="true" reRender="employeeVatNumberDecoration" limitToList="true"/>
+										<a4j:support event="onblur" ajaxSingle="true" bypassUpdates="true" reRender="employeeVatNumberDecoration" limitToList="true"/>
 									</h:inputText>
 								</s:decorate>
 
@@ -118,8 +117,8 @@
 											var="_employeeType" value="#{employeeTypes}"
 											label="#{messages[_employeeType.key]}">
 										</s:selectItems>
-										<a4j:support event="onchange" ajaxSingle="true"
-											reRender="employmentPanel" />
+										<a4j:support event="onchange" ajaxSingle="true" 
+											reRender="employmentPanel, employeeVatNumberDecoration" />
 									</h:selectOneMenu>
 								</s:decorate>
 

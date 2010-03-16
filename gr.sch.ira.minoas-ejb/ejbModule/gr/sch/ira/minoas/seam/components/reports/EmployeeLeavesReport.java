@@ -145,8 +145,7 @@ public class EmployeeLeavesReport extends BaseReport {
 					.append(" AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g=:specializationGroup AND l.employee.lastSpecialization MEMBER OF g.specializations) ");
 		}
 
-		sb
-				.append(" ORDER BY l.employee.currentEmployment.school.regionCode, l.employee.lastSpecialization, l.employee.lastName");
+		sb.append(" ORDER BY l.employee.lastSpecialization, l.employee.lastName");
 
 		Query q = getEntityManager().createQuery(sb.toString());
 		if (dateSearchType != DateSearchType.DURING_DATE_PERIOD) {

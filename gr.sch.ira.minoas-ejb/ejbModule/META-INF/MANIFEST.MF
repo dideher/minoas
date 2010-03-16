@@ -7,8 +7,13 @@ Class-Path: richfaces-api.jar
  jboss-seam.jar 
  jboss-el.jar 
  antlr-runtime.jar 
- jasperreports-3.5.3.jar 
- iText-2.1.0.jar 
  commons-lang-2.4.jar 
- richfaces-api-3.3.1.GA.jar
+ richfaces-api-3.3.1.GA.jar 
+ groovy-1.5.7.jar 
+ poi-3.5-FINAL-20090928.jar 
+ iText-2.1.7.jar 
+ jasperreports-3.7.1.jar 
+ jasperreports-fonts-3.7.1.jar 
+ spring-beans-2.5.5.jar 
+ spring-core-2.5.5.jar
 

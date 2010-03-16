@@ -11,29 +11,41 @@ import gr.sch.ira.minoas.seam.components.criteria.EmploymentCriteria;
 import gr.sch.ira.minoas.seam.components.criteria.SpecializationSearchType;
 import gr.sch.ira.minoas.seam.components.reports.resource.EmploymentReportItem;
 
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.faces.context.FacesContext;
 import javax.persistence.Query;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import javax.swing.JApplet;
 
 import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRExporterParameter;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperPrintManager;
 import net.sf.jasperreports.engine.JasperRunManager;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.export.JRXlsExporter;
+import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.datamodel.DataModel;
+import org.jboss.seam.international.StatusMessage.Severity;
 
 /**
- * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
+ * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * @version $Id$
  */
 @Name(value = "employmentReport")
@@ -52,39 +64,48 @@ public class EmploymentReport extends BaseReport {
 	public EmploymentReport() {
 	}
 
+	protected Map<String, Object> constructReportParameters() {
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("EMPLOYMENT_TYPE_FILTER",
+				employmentCriteria.getType() != null ? getLocalizedMessage(employmentCriteria.getType().getKey())
+						: "Όλοι οι Τύποι");
+		switch (getEmploymentCriteria().getSpecializationSearchType()) {
+		case SPECIALIZATION_GROUP:
+			parameters.put("EMPLOYMENT_SPECIALIZATION_FILTER",
+					employmentCriteria.getSpecializationGroup() != null ? employmentCriteria.getSpecializationGroup()
+							.getTitle() : "Όλες οι Ομάδες Ειδικοτήτων");
+			break;
+		case SPECIALIZATION:
+			parameters.put("EMPLOYMENT_SPECIALIZATION_FILTER",
+					employmentCriteria.getSpecialization() != null ? employmentCriteria.getSpecialization().getTitle()
+							: "Όλες οι Ομάδες Ειδικοτήτων");
+			break;
+		}
+		if (employmentCriteria.getRegion() != null)
+			parameters.put("EMPLOYMENT_SCHOOL_REGION_FILTER", employmentCriteria.getRegion() + " ΗΡΑΚΛΕΙΟΥ");
+		else
+			parameters.put("EMPLOYMENT_SCHOOL_REGION_FILTER", "Όλες οι Περιοχές");
+		parameters.put("EMPLOYMENT_SCHOOL_YEAR_FILTER", employmentCriteria.getSchoolYear().getDescription());
+
+		/* create the leave type helper */
+		for (EmployeeType employeeType : getCoreSearching().getEmployeeTypes()) {
+			parameters.put(employeeType.name(), getLocalizedMessage(employeeType.getKey()));
+		}
+		return parameters;
+
+	}
+
 	public void generatePDFReport() throws Exception {
-
 		try {
-			Map<String, Object> parameters = new HashMap<String, Object>();
-			parameters.put("EMPLOYMENT_TYPE_FILTER",
-					employmentCriteria.getType() != null ? getLocalizedMessage(employmentCriteria.getType().getKey())
-							: "Όλοι οι Τύποι");
-			switch (getEmploymentCriteria().getSpecializationSearchType()) {
-			case SPECIALIZATION_GROUP:
-				parameters.put("EMPLOYMENT_SPECIALIZATION_FILTER",
-						employmentCriteria.getSpecializationGroup() != null ? employmentCriteria
-								.getSpecializationGroup().getTitle() : "Όλες οι Ομάδες Ειδικοτήτων");
-				break;
-			case SPECIALIZATION:
-				parameters.put("EMPLOYMENT_SPECIALIZATION_FILTER",
-						employmentCriteria.getSpecialization() != null ? employmentCriteria.getSpecialization()
-								.getTitle() : "Όλες οι Ομάδες Ειδικοτήτων");
-				break;
-			}
-			if (employmentCriteria.getRegion() != null)
-				parameters.put("EMPLOYMENT_SCHOOL_REGION_FILTER", employmentCriteria.getRegion() + " ΗΡΑΚΛΕΙΟΥ");
-			else
-				parameters.put("EMPLOYMENT_SCHOOL_REGION_FILTER", "Όλες οι Περιοχές");
-			parameters.put("EMPLOYMENT_SCHOOL_YEAR_FILTER", employmentCriteria.getSchoolYear().getDescription());
-
-			/* create the leave type helper */
-			for (EmployeeType employeeType : getCoreSearching().getEmployeeTypes()) {
-				parameters.put(employeeType.name(), getLocalizedMessage(employeeType.getKey()));
-			}
-
+			Map<String, Object> parameters = constructReportParameters();
 			JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(reportData);
-			byte[] bytes = JasperRunManager.runReportToPdf(this.getClass().getResourceAsStream(
-					"/reports/employmentByType.jasper"), parameters, (JRDataSource) ds);
+			byte[] bytes = null;
+			try {
+				bytes = JasperRunManager.runReportToPdf(this.getClass().getResourceAsStream(
+						"/reports/employmentByType.jasper"), parameters, (JRDataSource) ds);
+			} catch (Throwable t) {
+				System.err.println(t);
+			}
 			HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext()
 					.getResponse();
 			response.setContentType("application/pdf");
@@ -96,7 +117,60 @@ public class EmploymentReport extends BaseReport {
 			servletOutputStream.close();
 			FacesContext.getCurrentInstance().responseComplete();
 		} catch (Exception ex) {
-			ex.printStackTrace(System.err);
+			error("report generation has failed due to exception #0", ex, ex.getMessage());
+			getFacesMessages().add(Severity.ERROR, "Η παραγωγή του report απέτυχε, λόγω σφάλματος #0", ex.getMessage());
+		}
+	}
+
+	public void generateExcelReport() throws Exception {
+		OutputStream output = null;
+		try {
+			Map<String, Object> parameters = constructReportParameters();
+			JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(reportData);
+
+			JasperPrint jasperPrint = JasperFillManager.fillReport(this.getClass().getResourceAsStream(
+					"/reports/employmentByType.jasper"), parameters, ds);
+			ByteArrayOutputStream bout = new ByteArrayOutputStream();
+			output = new BufferedOutputStream(bout);
+			JRXlsExporter exporter = new JRXlsExporter();
+			exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+			exporter.setParameter(JRXlsExporterParameter.OUTPUT_STREAM, output);
+			exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.FALSE);
+			exporter.setParameter(JRXlsExporterParameter.MAXIMUM_ROWS_PER_SHEET, new Integer(1000));
+			exporter.setParameter(JRXlsExporterParameter.IS_DETECT_CELL_TYPE, Boolean.TRUE);
+			exporter.setParameter(JRXlsExporterParameter.CHARACTER_ENCODING, "UTF-8");
+			exporter.setParameter(JRXlsExporterParameter.IS_WHITE_PAGE_BACKGROUND, Boolean.FALSE);
+			exporter.setParameter(JRXlsExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, Boolean.TRUE);
+			exporter.setParameter(JRXlsExporterParameter.IS_COLLAPSE_ROW_SPAN, Boolean.FALSE);
+			
+
+			try {
+				exporter.exportReport();
+				output.flush();
+			} catch (Throwable t) {
+				System.err.println(t);
+			}
+			byte[] bytes = bout.toByteArray();
+			HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext()
+					.getResponse();
+			//response.setContentType("application/pdf");
+			response.addHeader("Content-Disposition", "attachment;filename=EmployeeReportByType.xls");
+			response.setContentLength(bytes.length);
+			ServletOutputStream servletOutputStream = response.getOutputStream();
+			servletOutputStream.write(bytes, 0, bytes.length);
+			servletOutputStream.flush();
+			servletOutputStream.close();
+			FacesContext.getCurrentInstance().responseComplete();
+		} catch (Exception ex) {
+			error("report generation has failed due to exception #0", ex, ex.getMessage());
+			getFacesMessages().add(Severity.ERROR, "Η παραγωγή του report απέτυχε, λόγω σφάλματος #0", ex.getMessage());
+		} finally {
+			try {
+				if (output != null)
+					output.close();
+			} catch (Exception ex) {
+
+			}
 		}
 
 	}

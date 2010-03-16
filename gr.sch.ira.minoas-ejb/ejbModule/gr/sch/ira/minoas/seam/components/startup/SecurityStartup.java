@@ -75,6 +75,11 @@ public class SecurityStartup {
 		createRole("ADD_EMPLOYEE_REGULAR", "Add New Regular Employee", admin);
 
 		createRole("MANAGE_EMPLOYEE", "Manage Employee", admin);
+		createRole("MANAGE_EMPLOYMENT", "Manage Employment", admin);
+		createRole("MANAGE_EMPLOYMENT_HOURLY_BASED", "Manage Hourly Based Employment", admin);
+		createRole("MANAGE_EMPLOYMENT_DEPUTY", "Manage Deputy Employment", admin);
+		createRole("MANAGE_EMPLOYMENT_REGULAR", "Manage Regular Employment", admin);
+		
 		createRole("VIEW_EMPLOYEE", "View Employee", admin);
 
 		createRole("VIEW_PREPARATORY", "View Preparatory Data", admin);

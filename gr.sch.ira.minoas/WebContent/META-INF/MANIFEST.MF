@@ -7,6 +7,11 @@ Class-Path: gr.sch.ira.minoas-ejb.jar
  jboss-seam.jar 
  jboss-el.jar 
  antlr-runtime.jar 
- jasperreports-3.5.3.jar 
- richfaces-api-3.3.1.GA.jar
+ richfaces-api-3.3.1.GA.jar 
+ jasperreports-3.7.1.jar 
+ jasperreports-fonts-3.7.1.jar 
+ poi-3.5-FINAL-20090928.jar 
+ spring-beans-2.5.5.jar 
+ spring-core-2.5.5.jar 
+ iText-2.1.7.jar
 

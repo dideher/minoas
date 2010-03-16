@@ -128,68 +128,72 @@
 								</h:selectOneMenu>
 								 -->
 								<h:selectOneMenu value="#{employeeLeaveCriteria.dateSearchType}">
-									<s:enumItem enumValue="AFTER_DATE" itemLabel="Λήξη ΜΕΤΑ την Ημερομηνία"/>
-									<s:enumItem enumValue="BEFORE_DATE" itemLabel="Λήξη ΠΡΙΝ την Ημερομηνία"/>
-									<s:enumItem enumValue="DURING_DATE" itemLabel="Σε ενεργεία ΚΑΤΑ την Ημερομηνία"/>
-									<s:enumItem enumValue="DURING_DATE_PERIOD" itemLabel="Σε ενέργεια ΚΑΤΑ την Διάρκεια"/>
+									<s:enumItem enumValue="AFTER_DATE"
+										itemLabel="Λήξη ΜΕΤΑ την Ημερομηνία" />
+									<s:enumItem enumValue="BEFORE_DATE"
+										itemLabel="Λήξη ΠΡΙΝ την Ημερομηνία" />
+									<s:enumItem enumValue="DURING_DATE"
+										itemLabel="Σε ενεργεία ΚΑΤΑ την Ημερομηνία" />
+									<s:enumItem enumValue="DURING_DATE_PERIOD"
+										itemLabel="Σε ενέργεια ΚΑΤΑ την Διάρκεια" />
 									<a4j:support event="onchange" ajaxSingle="true"
 										reRender="dateSearchFiltersPanel" />
 								</h:selectOneMenu>
 							</s:decorate>
-							
+
 							<h:panelGroup>
-							<a4j:outputPanel id="dateSearchFiltersPanel">
-								<h:panelGroup
-									rendered="#{employeeLeaveCriteria.dateSearchType ne 'DURING_DATE_PERIOD'}">
-									<s:decorate id="effectiveDateDecoration"
-										template="/layout/doubleLineEdit.xhtml">
-										<ui:define name="label">
-											<h:outputText value="Ημερομηνία Εφαρμογής" />
-										</ui:define>
-										<rich:calendar enableManualInput="true"
-											value="#{employeeLeaveCriteria.effectiveDate}"
-											required="true" inputSize="10" mode="ajax" locale="el_GR"
-											inputClass="fieldValueText" datePattern="dd-MM-yyyy">
-											<a4j:support event="onblur"
-												reRender="establishedDateDecoration" bypassUpdates="true"
-												ajaxSingle="true" />
-										</rich:calendar>
-									</s:decorate>
+								<a4j:outputPanel id="dateSearchFiltersPanel">
+									<h:panelGroup
+										rendered="#{employeeLeaveCriteria.dateSearchType ne 'DURING_DATE_PERIOD'}">
+										<s:decorate id="effectiveDateDecoration"
+											template="/layout/doubleLineEdit.xhtml">
+											<ui:define name="label">
+												<h:outputText value="Ημερομηνία Εφαρμογής" />
+											</ui:define>
+											<rich:calendar enableManualInput="true"
+												value="#{employeeLeaveCriteria.effectiveDate}"
+												required="true" inputSize="10" mode="ajax" locale="el_GR"
+												inputClass="fieldValueText" datePattern="dd-MM-yyyy">
+												<a4j:support event="onblur"
+													reRender="establishedDateDecoration" bypassUpdates="true"
+													ajaxSingle="true" />
+											</rich:calendar>
+										</s:decorate>
 
-								</h:panelGroup>
+									</h:panelGroup>
 
-								<h:panelGroup
-									rendered="#{employeeLeaveCriteria.dateSearchType eq 'DURING_DATE_PERIOD'}">
-									<s:decorate id="effectiveDateDecorationFrom"
-										template="/layout/doubleLineEdit.xhtml">
-										<ui:define name="label">
-											<h:outputText value="Από" />
-										</ui:define>
-										<rich:calendar id="effectiveDate" enableManualInput="true"
-											value="#{employeeLeaveCriteria.effectiveDateFrom}"
-											required="true" inputSize="10" mode="ajax" locale="el_GR"
-											inputClass="fieldValueText" datePattern="dd-MM-yyyy">
-											<a4j:support event="onblur"
-												reRender="establishedDateDecoration" bypassUpdates="true"
-												ajaxSingle="true" />
-										</rich:calendar>
-									</s:decorate>
-									<s:decorate id="effectiveDateDecorationUntil"
-										template="/layout/doubleLineEdit.xhtml">
-										<ui:define name="label">
-											<h:outputText value="Εώς" />
-										</ui:define>
-										<rich:calendar id="effectiveDate" enableManualInput="true"
-											value="#{employeeLeaveCriteria.effectiveDateUntil}"
-											required="true" inputSize="10" mode="ajax" locale="el_GR"
-											inputClass="fieldValueText" datePattern="dd-MM-yyyy">
-											<a4j:support event="onblur"
-												reRender="establishedDateDecoration" bypassUpdates="true"
-												ajaxSingle="true" />
-										</rich:calendar>
-									</s:decorate>
-								</h:panelGroup>
-							</a4j:outputPanel>
+									<h:panelGroup
+										rendered="#{employeeLeaveCriteria.dateSearchType eq 'DURING_DATE_PERIOD'}">
+										<s:decorate id="effectiveDateDecorationFrom"
+											template="/layout/doubleLineEdit.xhtml">
+											<ui:define name="label">
+												<h:outputText value="Από" />
+											</ui:define>
+											<rich:calendar id="effectiveDate" enableManualInput="true"
+												value="#{employeeLeaveCriteria.effectiveDateFrom}"
+												required="true" inputSize="10" mode="ajax" locale="el_GR"
+												inputClass="fieldValueText" datePattern="dd-MM-yyyy">
+												<a4j:support event="onblur"
+													reRender="establishedDateDecoration" bypassUpdates="true"
+													ajaxSingle="true" />
+											</rich:calendar>
+										</s:decorate>
+										<s:decorate id="effectiveDateDecorationUntil"
+											template="/layout/doubleLineEdit.xhtml">
+											<ui:define name="label">
+												<h:outputText value="Εώς" />
+											</ui:define>
+											<rich:calendar id="effectiveDate" enableManualInput="true"
+												value="#{employeeLeaveCriteria.effectiveDateUntil}"
+												required="true" inputSize="10" mode="ajax" locale="el_GR"
+												inputClass="fieldValueText" datePattern="dd-MM-yyyy">
+												<a4j:support event="onblur"
+													reRender="establishedDateDecoration" bypassUpdates="true"
+													ajaxSingle="true" />
+											</rich:calendar>
+										</s:decorate>
+									</h:panelGroup>
+								</a4j:outputPanel>
 							</h:panelGroup>
 						</h:panelGrid>
 
@@ -220,8 +224,9 @@
 				</h:panelGrid>
 
 				<rich:dataTable id="leavesByTypeTable"
-					value="#{employeeLeavesReport.reportData}" var="_leave" rows="40" rowKeyVar="_row"
-					border="0" onRowMouseOver="this.style.backgfroundColor='#F8F8F8'"
+					value="#{employeeLeavesReport.reportData}" var="_leave" rows="40"
+					rowKeyVar="_row" border="0"
+					onRowMouseOver="this.style.backgfroundColor='#F8F8F8'"
 					onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
 					width="100%">
 					<f:facet name="header">
@@ -236,8 +241,13 @@
 						<f:facet name="header">
 							<h:outputText value="Εκπαιδευτικός" />
 						</f:facet>
-						<h:outputText
-							value="#{_leave.employeeLastName} #{_leave.employeeFirstName} του #{_leave.employeeFatherName}" />
+						<a4j:commandLink action="selectEmployee"
+								value="#{_leave.employeeLastName} #{_leave.employeeFirstName} του #{_leave.employeeFatherName}">
+								<f:setPropertyActionListener
+									value="#{_leave.id}"
+									target="#{employeeHome.id}" />
+								<s:conversationPropagation type="nest" />
+							</a4j:commandLink>
 					</rich:column>
 					<rich:column>
 						<f:facet name="header">
@@ -253,7 +263,12 @@
 						<h:outputText value="#{_leave.employeeSpecialization}" />
 					</rich:column>
 
-
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Τύπος" />
+						</f:facet>
+						<h:outputText value="#{messages[_leave.employeeTypeKey]}" />
+					</rich:column>
 					<rich:column>
 						<f:facet name="header">
 							<h:outputText value="Οργανική Μονάδα" />

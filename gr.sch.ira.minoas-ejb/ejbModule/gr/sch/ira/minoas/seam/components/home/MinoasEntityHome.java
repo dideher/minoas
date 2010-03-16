@@ -7,11 +7,15 @@ import gr.sch.ira.minoas.model.security.Principal;
 import gr.sch.ira.minoas.seam.components.CoreSearching;
 
 import java.lang.reflect.ParameterizedType;
+import java.util.ResourceBundle;
+
+import javax.faces.context.FacesContext;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.TransactionPropagationType;
 import org.jboss.seam.annotations.Transactional;
+import org.jboss.seam.core.SeamResourceBundle;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.framework.EntityHome;
 import org.jboss.seam.log.Log;
@@ -26,6 +30,8 @@ public abstract class MinoasEntityHome<E> extends EntityHome<BaseModel> {
 	public static final String DUPLICATE_VALUE_OUTCOME = "duplicateValue";
 
 	public static final String PERSITESTENCE_CONTEXT_NAME = "entityManager";
+
+	private static final String SEAM_MESSAGES_RESOURCE_BUNDLE_NAME = "messages";
 
 	/**
 	 * Comment for <code>serialVersionUID</code>
@@ -47,7 +53,6 @@ public abstract class MinoasEntityHome<E> extends EntityHome<BaseModel> {
 	private Log logger;
 
 	private Class<E> persistentClass;
-
 	/**
 	 * @see org.jboss.seam.framework.EntityHome#create()
 	 */
@@ -60,7 +65,7 @@ public abstract class MinoasEntityHome<E> extends EntityHome<BaseModel> {
 	public CoreSearching getCoreSearching() {
 		return coreSearching;
 	}
-
+	
 	public E getDefinedInstace() {
 		if (isIdDefined()) {
 			return getEntityManager().find(persistentClass, getId());
@@ -69,10 +74,21 @@ public abstract class MinoasEntityHome<E> extends EntityHome<BaseModel> {
 	}
 
 	/**
+	 * @return the facesMessages
+	 */
+	public FacesMessages getFacesMessages() {
+		return facesMessages;
+	}
+
+	/**
 	 * @return the identity
 	 */
 	protected Identity getIdentity() {
 		return identity;
+	}
+
+	protected String getLocalizedMessage(String message_key) {
+		return getResourceBundle(SEAM_MESSAGES_RESOURCE_BUNDLE_NAME).getString(message_key);
 	}
 
 	/**
@@ -96,6 +112,11 @@ public abstract class MinoasEntityHome<E> extends EntityHome<BaseModel> {
 
 	protected String getPrincipalName() {
 		return getIdentity() != null ? getIdentity().getPrincipal().getName() : "<anonymous>";
+	}
+
+	protected ResourceBundle getResourceBundle(String resource_budle_name) {
+		return SeamResourceBundle.getBundle(SEAM_MESSAGES_RESOURCE_BUNDLE_NAME, FacesContext.getCurrentInstance()
+				.getViewRoot().getLocale());
 	}
 
 	protected void logAudit(AuditType type, String comment) {
@@ -128,15 +149,10 @@ public abstract class MinoasEntityHome<E> extends EntityHome<BaseModel> {
 	}
 
 	/**
-	 * @see org.jboss.seam.framework.EntityHome#update()
+	 * @param facesMessages the facesMessages to set
 	 */
-	@Transactional(TransactionPropagationType.REQUIRED)
-	@Override
-	public String update() {
-		logAudit(AuditType.UPDATE, getInstance().toString());
-		String result = super.update();
-		getLogger().info("principal '#0' successfully updated '#1'", getPrincipalName(), getInstance());
-		return result;
+	public void setFacesMessages(FacesMessages facesMessages) {
+		this.facesMessages = facesMessages;
 	}
 
 	/**
@@ -146,6 +162,18 @@ public abstract class MinoasEntityHome<E> extends EntityHome<BaseModel> {
 	public void setId(Object id) {
 		super.setId(id);
 		getLogger().info("id \"#0\" has been set.", id);
+	}
+
+	/**
+	 * @see org.jboss.seam.framework.EntityHome#update()
+	 */
+	@Transactional(TransactionPropagationType.REQUIRED)
+	@Override
+	public String update() {
+		logAudit(AuditType.UPDATE, getInstance().toString());
+		String result = super.update();
+		getLogger().info("principal '#0' successfully updated '#1'", getPrincipalName(), getInstance());
+		return result;
 	}
 
 }

@@ -279,8 +279,6 @@
   location="/home/fsla/work/java/eclipse-workspace-galileo/gr.sch.ira.minoas-ear/EarContent/jboss-el.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-antlr-runtime.jar"
   location="/home/fsla/work/java/eclipse-workspace-galileo/gr.sch.ira.minoas-ear/EarContent/antlr-runtime.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-jasperreports-3.5.3.jar"
-  location="/home/fsla/work/java/eclipse-workspace-galileo/gr.sch.ira.minoas-ear/EarContent/jasperreports-3.5.3.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-richfaces-api-3.3.1.GA.jar"
   location="/home/fsla/work/java/eclipse-workspace-galileo/gr.sch.ira.minoas-ear/EarContent/richfaces-api-3.3.1.GA.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-commons-beanutils.jar"
@@ -309,6 +307,18 @@
   location="/home/fsla/work/java/eclipse-workspace-galileo/gr.sch.ira.minoas/WebContent/WEB-INF/lib/richfaces-impl-3.3.1.GA.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-richfaces-ui-3.3.1.GA.jar"
   location="/home/fsla/work/java/eclipse-workspace-galileo/gr.sch.ira.minoas/WebContent/WEB-INF/lib/richfaces-ui-3.3.1.GA.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jasperreports-3.7.1.jar"
+  location="/home/fsla/work/java/eclipse-workspace-galileo/gr.sch.ira.minoas-ear/EarContent/jasperreports-3.7.1.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jasperreports-fonts-3.7.1.jar"
+  location="/home/fsla/work/java/eclipse-workspace-galileo/gr.sch.ira.minoas-ear/EarContent/jasperreports-fonts-3.7.1.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-poi-3.5-FINAL-20090928.jar"
+  location="/home/fsla/work/java/eclipse-workspace-galileo/gr.sch.ira.minoas-ear/EarContent/poi-3.5-FINAL-20090928.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-spring-beans-2.5.5.jar"
+  location="/home/fsla/work/java/eclipse-workspace-galileo/gr.sch.ira.minoas-ear/EarContent/spring-beans-2.5.5.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-spring-core-2.5.5.jar"
+  location="/home/fsla/work/java/eclipse-workspace-galileo/gr.sch.ira.minoas-ear/EarContent/spring-core-2.5.5.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-iText-2.1.7.jar"
+  location="/home/fsla/work/java/eclipse-workspace-galileo/gr.sch.ira.minoas-ear/EarContent/iText-2.1.7.jar" model-entity="FileSystemJar"/>
  <web SERVLET_VERSION="2.4" model-entity="JstWeb" model-path="/web.xml">
   <module URI="/WEB-INF/faces-config.xml" model-entity="WebJSFModule"
    model-path="/faces-config.xml" src="src" web-root="WEB-ROOT"/>

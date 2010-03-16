@@ -236,6 +236,19 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 			return null;
 		}
 	}
+	
+	@Transactional(TransactionPropagationType.REQUIRED)
+	public Employee getEmployeeOfTypeByVatNumber(EntityManager entityManager, EmployeeType employeeType, String vatNumber) {
+		EntityManager em = getEntityManager(entityManager);
+		try {
+			return (Employee) em.createQuery("SELECT e from Employee e WHERE e.vatNumber=:vatNumber AND e.type=:employeeType").setParameter(
+					"vatNumber", vatNumber).setParameter("employeeType", employeeType).getSingleResult();
+		} catch (NoResultException nre) {
+			return null;
+		}
+	}
+	
+	
 
 	@Transactional(TransactionPropagationType.REQUIRED)
 	@SuppressWarnings("unchecked")

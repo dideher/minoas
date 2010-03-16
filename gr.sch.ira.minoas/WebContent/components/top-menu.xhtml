@@ -84,8 +84,8 @@
 					</s:link>
 				</rich:menuItem>
 				
-				<rich:menuItem submitMode="none" disabled="#{!(s:hasRole('ADMIN'))}">
-					<s:link value="Διαχείρηση Σχέσεις Εργασίας" propagation="nest"
+				<rich:menuItem submitMode="none" disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYMENT'))}">
+					<s:link value="Διαχείρηση Σχέσης Εργασίας" propagation="nest"
 						view="/employee/select-employee.xhtml">
 						<f:param name="from" value="/home" />
 						<f:param name="to" value="/employee/manage-employment" />
