@@ -26,23 +26,19 @@
   <core:init debug="true" jndi-pattern="@jndiPattern@"
     transaction-management-enabled="true" />
 
-
   <core:manager concurrent-request-timeout="500"
     conversation-timeout="120000" conversation-id-parameter="cid"
     parent-conversation-id-parameter="pid" />
 
+   <persistence:entity-manager-factory
+    name="entityManagerFactory" persistence-unit-name="minoas" />
+
   <persistence:managed-persistence-context
-    name="entityManager" auto-create="true"
-    persistence-unit-jndi-name="java:/EntityManagerFactories/minoasDatabase" />
-
-  
-  <ui:jpa-entity-loader entity-manager="#{entityManager}" />
-
+    name="entityManager" auto-create="true" entity-manager-factory="#{entityManagerFactory}" />
   
   <async:timer-service-dispatcher/>
 
-  <transaction:ejb-transaction />
-
+  
   <web:character-encoding-filter encoding="UTF-8"
     override-client="true" url-pattern="*.seam" />
 

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <faceted-project>
-  <runtime name="JBoss 4.2 Runtime"/>
-  <secondary-runtime name="JBoss 4.2 Runtime (minoas)"/>
+  <runtime name="JBoss 5.1 Runtime - minoas"/>
   <fixed facet="jst.jsf"/>
   <fixed facet="jst.seam"/>
   <fixed facet="jst.web"/>
@@ -9,5 +8,6 @@
   <installed facet="jst.java" version="5.0"/>
   <installed facet="jst.web" version="2.5"/>
   <installed facet="jst.jsf" version="1.2"/>
-  <installed facet="jst.seam" version="2.0"/>
+  <installed facet="jst.seam" version="2.2"/>
+  <installed facet="jpt.jpa" version="1.0"/>
 </faceted-project>

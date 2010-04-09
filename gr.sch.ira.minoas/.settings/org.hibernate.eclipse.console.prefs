@@ -1,4 +1,4 @@
-#Mon Nov 24 23:07:11 EET 2008
-default.configuration=gr.sch.ira.minoas-ejb
+#Thu Apr 08 10:05:52 EEST 2010
+default.configuration=myGTFS
 eclipse.preferences.version=1
 hibernate3.enabled=false

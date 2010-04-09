@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
  <!-- Ajax4jsf -->
  <context-param>
   <param-name>org.richfaces.SKIN</param-name>
@@ -17,13 +16,29 @@
   <param-name>javax.faces.DEFAULT_SUFFIX</param-name>
   <param-value>.xhtml</param-value>
  </context-param>
+ <context-param>
+  <param-name>org.ajax4jsf.SKIN</param-name>
+  <param-value>classic</param-value>
+ </context-param>
  <filter>
   <filter-name>Seam Filter</filter-name>
   <filter-class>org.jboss.seam.servlet.SeamFilter</filter-class>
  </filter>
+ <filter>
+  <display-name>Ajax4jsf Filter</display-name>
+  <filter-name>ajax4jsf</filter-name>
+  <filter-class>org.ajax4jsf.Filter</filter-class>
+ </filter>
  <filter-mapping>
   <filter-name>Seam Filter</filter-name>
   <url-pattern>/*</url-pattern>
+ </filter-mapping>
+ <filter-mapping>
+  <filter-name>ajax4jsf</filter-name>
+  <servlet-name>Faces Servlet</servlet-name>
+  <dispatcher>REQUEST</dispatcher>
+  <dispatcher>FORWARD</dispatcher>
+  <dispatcher>INCLUDE</dispatcher>
  </filter-mapping>
  <!-- Seam -->
  <listener>
@@ -38,13 +53,11 @@
   <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
   <load-on-startup>1</load-on-startup>
  </servlet>
- 
  <servlet>
-    <servlet-name>Document Store Servlet</servlet-name>
-    <servlet-class>org.jboss.seam.document.DocumentStoreServlet</servlet-class>
-    <load-on-startup>1</load-on-startup>
-  </servlet>
- 
+  <servlet-name>Document Store Servlet</servlet-name>
+  <servlet-class>org.jboss.seam.document.DocumentStoreServlet</servlet-class>
+  <load-on-startup>1</load-on-startup>
+ </servlet>
  <servlet-mapping>
   <servlet-name>Seam Resource Servlet</servlet-name>
   <url-pattern>/seam/resource/*</url-pattern>
@@ -54,13 +67,13 @@
   <url-pattern>*.seam</url-pattern>
  </servlet-mapping>
  <servlet-mapping>
-    <servlet-name>Document Store Servlet</servlet-name>
-    <url-pattern>*.pdf</url-pattern>
-</servlet-mapping>
-<servlet-mapping>
-    <servlet-name>Document Store Servlet</servlet-name>
-    <url-pattern>*.rtf</url-pattern>
-</servlet-mapping>
+  <servlet-name>Document Store Servlet</servlet-name>
+  <url-pattern>*.pdf</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>Document Store Servlet</servlet-name>
+  <url-pattern>*.rtf</url-pattern>
+ </servlet-mapping>
  <security-constraint>
   <display-name>Restrict raw XHTML Documents</display-name>
   <web-resource-collection>
@@ -72,6 +85,4 @@
  <login-config>
   <auth-method>BASIC</auth-method>
  </login-config>
- 
-
 </web-app>
