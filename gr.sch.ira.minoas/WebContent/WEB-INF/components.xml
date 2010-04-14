@@ -34,7 +34,8 @@
     name="entityManagerFactory" persistence-unit-name="minoas" />
 
   <persistence:managed-persistence-context
-    name="entityManager" auto-create="true" entity-manager-factory="#{entityManagerFactory}" />
+    name="entityManager" auto-create="true" entity-manager-factory="#{entityManagerFactory}" 
+    persistence-unit-jndi-name="java:/minoasEntityManagerFactory" />
   
   <async:timer-service-dispatcher/>
 

@@ -22,10 +22,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-
 
 /**
  * This class represents an employment. Every employment is binded to a concrete
@@ -36,7 +32,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  */
 @Entity
 @Table(name = "EMPLOYMENT")
-@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public class Employment extends BaseIDModel {
 
 	/**
@@ -60,7 +55,6 @@ public class Employment extends BaseIDModel {
 	private DeputyEmploymentInfo deputyEmploymentInfo;
 
 	@ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
-	@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 	@JoinColumn(name = "EMPLOYEE_ID", nullable = false)
 	private Employee employee;
 

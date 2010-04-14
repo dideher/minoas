@@ -2,6 +2,9 @@
 
 package gr.sch.ira.minoas.model.classrooms;
 
+import gr.sch.ira.minoas.model.BaseIDModel;
+import gr.sch.ira.minoas.model.core.SchoolType;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,15 +12,9 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import gr.sch.ira.minoas.model.BaseIDModel;
-import gr.sch.ira.minoas.model.core.SchoolType;
 
 @Entity
 @Table(name = "SCHOOL_CLASS")
-@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public class SchoolClass extends BaseIDModel {
 
 	

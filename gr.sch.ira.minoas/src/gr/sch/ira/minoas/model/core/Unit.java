@@ -23,8 +23,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
@@ -34,7 +32,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "UNIT_TYPE")
 @Table(name = "UNIT")
-@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public class Unit extends AbstractArchivableEntity implements Comparable<Unit> {
 
 	/**
@@ -44,11 +41,9 @@ public class Unit extends AbstractArchivableEntity implements Comparable<Unit> {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "ADDRESS_ID", nullable = true)
-	@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 	private Address address;
 
 	@ManyToMany(fetch = FetchType.LAZY)
-	@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 	@JoinTable(name = "MINOAS_UNIT_GATEGORIES", joinColumns = @JoinColumn(name = "UNIT_ID", referencedColumnName = "UNIT_ID"), inverseJoinColumns = @JoinColumn(name = "CATEGORY_ID", referencedColumnName = "ID"))
 	private Collection<UnitCategory> categories = new ArrayList<UnitCategory>();
 
@@ -61,7 +56,6 @@ public class Unit extends AbstractArchivableEntity implements Comparable<Unit> {
 	private OrganizationalOffice office;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 	@JoinColumn(name = "PYSDE_ID", nullable = true)
 	private PYSDE pysde;
 

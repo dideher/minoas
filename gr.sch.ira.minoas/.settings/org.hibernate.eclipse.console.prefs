@@ -1,4 +1,4 @@
-#Thu Apr 08 10:05:52 EEST 2010
+#Mon Apr 12 13:04:45 EEST 2010
 default.configuration=myGTFS
 eclipse.preferences.version=1
-hibernate3.enabled=false
+hibernate3.enabled=true

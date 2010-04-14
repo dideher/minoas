@@ -21,15 +21,13 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
  * @version $Id$
  */
 @MappedSuperclass
-@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public abstract class Person extends BaseIDModel {
 
 	/**
@@ -39,7 +37,6 @@ public abstract class Person extends BaseIDModel {
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = true)
 	@JoinColumn(name = "ADDRESS_ID", nullable = true)
-	@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 	private Address address;
 
 	@Basic
@@ -85,7 +82,6 @@ public abstract class Person extends BaseIDModel {
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinTable(name = "MINOAS_EMPLOYEE_TELEPHONES")
-	@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 	private Collection<Telephone> telephones = new ArrayList<Telephone>();
 
 	@Basic

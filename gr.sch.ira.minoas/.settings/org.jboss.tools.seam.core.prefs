@@ -1,8 +1,8 @@
-#Fri Apr 09 11:55:17 EEST 2010
-action.package=gr.sch.ira.minoas.seam
+#Mon Apr 12 13:05:49 EEST 2010
+action.package=gr.sch.ira.minoas.seam.components
 action.sources=/gr.sch.ira.minoas/src
 eclipse.preferences.version=1
-model.package=gr.sch.ira.minoas.model
+model.package=gr.sch.ira.minoas.model.core
 model.sources=/gr.sch.ira.minoas/src
 seam.ear.project=gr.sch.ira.minoas-ear
 seam.ejb.project=gr.sch.ira.minoas-ejb

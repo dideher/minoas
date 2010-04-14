@@ -14,7 +14,6 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.faces.Converter;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
-import org.jboss.seam.framework.EntityController;
 
 /**
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>

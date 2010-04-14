@@ -15,8 +15,6 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * @author slavikos
@@ -24,7 +22,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  */
 @Entity
 @Table(name = "AUDIT")
-@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public class Audit extends BaseIDModel {
 
 	/**

@@ -13,8 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
@@ -22,7 +21,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  */
 @Entity
 @Table(name = "SECONDMENT_UNIT", uniqueConstraints = { @UniqueConstraint(columnNames = { "UNIT_ID", "SECONDMENT_TYPE" }) })
-@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public class SecondmentUnit extends BaseIDModel {
 
 	/**

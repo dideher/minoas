@@ -14,8 +14,6 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * @author slavikos
@@ -23,7 +21,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  */
 @Entity
 @Table(name = "UNIT_CATEGORY")
-@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public class UnitCategory extends BaseIDModel {
 
 	/**

@@ -541,10 +541,6 @@
   location="/home/fsla/work/java/eclipse-workspace-galileo/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jfreechart.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-jxl.jar"
   location="/home/fsla/work/java/eclipse-workspace-galileo/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jxl.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-richfaces-impl.jar"
-  location="/home/fsla/work/java/eclipse-workspace-galileo/gr.sch.ira.minoas/WebContent/WEB-INF/lib/richfaces-impl.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-richfaces-ui.jar"
-  location="/home/fsla/work/java/eclipse-workspace-galileo/gr.sch.ira.minoas/WebContent/WEB-INF/lib/richfaces-ui.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-richfaces-api-3.3.2.SR1.jar" info="hidden=yes"
   location="%workspace.home%/lib/richfaces-api-3.3.2.SR1.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-richfaces-impl-3.3.2.SR1.jar" info="hidden=yes"
@@ -577,6 +573,18 @@
   location="/opt/jboss/jboss-5.1.0.GA/server/minoas/lib/jbosscache-pojo.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-jbosscache-core.jar"
   location="/opt/jboss/jboss-5.1.0.GA/server/minoas/lib/jbosscache-core.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jboss-seam-remoting.jar"
+  location="/home/fsla/work/java/eclipse-workspace-galileo/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jboss-seam-remoting.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jboss-ejb3-proxy-client.jar"
+  location="/opt/jboss/jboss-5.0.1.GA/client/jboss-ejb3-proxy-client.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jboss-xacml.jar"
+  location="/opt/jboss/jboss-5.0.1.GA/common/lib/jboss-xacml.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jboss-ejb3-proxy.jar"
+  location="/opt/jboss/jboss-5.0.1.GA/common/lib/jboss-ejb3-proxy.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jboss-sunxacml.jar"
+  location="/opt/jboss/jboss-5.0.1.GA/common/lib/jboss-sunxacml.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jboss-bindingservice.jar"
+  location="/opt/jboss/jboss-5.0.1.GA/common/lib/jboss-bindingservice.jar" model-entity="FileSystemJar"/>
  <web SERVLET_VERSION="2.4" model-entity="JstWeb" model-path="/web.xml">
   <module URI="/WEB-INF/faces-config.xml" model-entity="WebJSFModule"
    model-path="/faces-config.xml" src="src" web-root="WEB-ROOT"/>

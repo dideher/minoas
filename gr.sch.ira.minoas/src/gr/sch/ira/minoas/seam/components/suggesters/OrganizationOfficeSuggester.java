@@ -5,7 +5,6 @@ package gr.sch.ira.minoas.seam.components.suggesters;
 
 import gr.sch.ira.minoas.core.CoreUtils;
 import gr.sch.ira.minoas.model.core.OrganizationalOffice;
-import gr.sch.ira.minoas.model.core.SchoolGroup;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 
 import java.util.Collection;

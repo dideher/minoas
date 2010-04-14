@@ -12,8 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
@@ -21,7 +20,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  */
 @Entity
 @Table(name = "REGULAR_EMPLOYEE_INFO")
-@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public class RegularEmployeeInfo extends BaseIDModel {
 
 	/**

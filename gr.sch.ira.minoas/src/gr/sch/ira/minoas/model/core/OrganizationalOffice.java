@@ -3,16 +3,14 @@
  */
 package gr.sch.ira.minoas.model.core;
 
+import gr.sch.ira.minoas.model.BaseIDModel;
+
 import java.util.ArrayList;
 import java.util.Collection;
-
-import gr.sch.ira.minoas.model.BaseIDModel;
-import gr.sch.ira.minoas.model.BaseModel;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 

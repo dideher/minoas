@@ -16,9 +16,8 @@
 
     <class>gr.sch.ira.minoas.model.employee.Person</class>
 
-   
-    <class>
-      gr.sch.ira.minoas.model.employee.Employee</class>
+
+    <class>gr.sch.ira.minoas.model.employee.Employee</class>
     <class>gr.sch.ira.minoas.model.AbstractArchivableEntity</class>
     <class>
       gr.sch.ira.minoas.model.security.Role</class>
@@ -83,15 +82,21 @@
       <property name="hibernate.show_sql" value="false" />
       <property name="hibernate.format_sql" value="true" />
 
+      <!-- simple caching settings -->
+      <property name="hibernate.cache.provider_class" value="org.hibernate.cache.HashtableCacheProvider" />
       <!-- caching settings -->
-      <property name="hibernate.cache.use_second_level_cache" value="true" />
-      <property name="hibernate.cache.use_query_cache" value="true" />
-      <property name="hibernate.cache.region.factory_class"
-        value="org.hibernate.cache.jbc2.JndiMultiplexedJBossCacheRegionFactory" />
-      <property name="hibernate.cache.region.jbc2.cachefactory" value="java:CacheManager" />
-      <property name="hibernate.cache.region.jbc2.cfg.entity" value="mvcc-entity" />
-      <property name="hibernate.cache.region.jbc2.cfg.query" value="local-query" />
-      <property name="hibernate.cache.region_prefix" value="minoas" />
+      <!--
+        <property name="hibernate.cache.use_second_level_cache" value="true" />
+        <property name="hibernate.cache.use_query_cache" value="true" />
+        <property name="hibernate.cache.region.factory_class"
+        value="org.hibernate.cache.jbc2.JndiMultiplexedJBossCacheRegionFactory"
+        /> <property name="hibernate.cache.region.jbc2.cachefactory"
+        value="java:CacheManager" /> <property
+        name="hibernate.cache.region.jbc2.cfg.entity" value="mvcc-entity" />
+        <property name="hibernate.cache.region.jbc2.cfg.query"
+        value="local-query" /> <property name="hibernate.cache.region_prefix"
+        value="minoas" />
+      -->
       <!--
         <property name="jboss.entity.manager.factory.jndi.name"
         value="java:/EntityManagerFactories/minoasDatabase" /> <property
@@ -103,7 +108,15 @@
 
       <property name="hibernate.transaction.manager_lookup_class"
         value="org.hibernate.transaction.JBossTransactionManagerLookup" />
+      <!--
+        Binds the EntityManagerFactory to JNDI where Seam can look it up. This
+        is only relevant when the container automatically loads the persistence
+        unit, as is the case in JBoss AS 5.
+      -->
+      <property name="jboss.entity.manager.factory.jndi.name" value="java:/minoasEntityManagerFactory" />
+
     </properties>
+
   </persistence-unit>
 
 </persistence>

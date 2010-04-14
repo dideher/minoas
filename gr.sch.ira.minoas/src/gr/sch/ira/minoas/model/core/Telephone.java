@@ -11,16 +11,12 @@ import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 /**
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  *
  */
 @Entity
 @Table(name = "TELEPHONE")
-@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public class Telephone extends BaseIDModel {
 
 	/**

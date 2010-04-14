@@ -12,12 +12,8 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 @Entity
 @Table(name = "SCHOOL_GROUP")
-@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public class SchoolGroup extends BaseIDModel {
 
 	/**

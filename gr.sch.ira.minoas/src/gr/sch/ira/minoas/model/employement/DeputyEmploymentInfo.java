@@ -9,8 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
@@ -19,7 +18,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
 @Table(name = "DEPUTY_EMPLOYMENT_INFO")
-@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public class DeputyEmploymentInfo extends BaseIDModel {
 
 	/**

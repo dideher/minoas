@@ -3,12 +3,9 @@ package gr.sch.ira.minoas.seam.components.home;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
-import gr.sch.ira.minoas.seam.components.CoreSearching;
 
 import java.util.Calendar;
 import java.util.Date;
-
-import javax.management.RuntimeErrorException;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.jboss.seam.ScopeType;

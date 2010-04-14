@@ -24,12 +24,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
 @Table(name = "EMPLOYEE")
-@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public class Employee extends Person {
 
 	/**

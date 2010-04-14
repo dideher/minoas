@@ -1,16 +1,13 @@
 package gr.sch.ira.minoas.model.classrooms;
 
+import gr.sch.ira.minoas.model.BaseIDModel;
+
 import java.util.Collection;
 
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.OneToMany;
-
-import gr.sch.ira.minoas.model.BaseIDModel;
-import gr.sch.ira.minoas.model.core.SchoolType;
 
 
 public class CourseType extends BaseIDModel {

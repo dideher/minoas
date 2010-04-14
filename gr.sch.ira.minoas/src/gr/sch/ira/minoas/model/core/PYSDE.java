@@ -17,16 +17,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 /**
  * @author slavikos
  *
  */
 @Entity
 @Table(name = "PYSDE")
-@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public class PYSDE extends BaseIDModel {
 
 	/**
@@ -34,7 +30,6 @@ public class PYSDE extends BaseIDModel {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "currentPYSDE")
 	private Collection<Employee> employees;
 
@@ -54,7 +49,6 @@ public class PYSDE extends BaseIDModel {
 	private String title;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "pysde")
-	@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 	private Collection<Unit> units;
 
 	/**

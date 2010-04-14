@@ -21,8 +21,6 @@ import javax.persistence.OrderBy;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.jboss.seam.annotations.Name;
 
 /**
@@ -36,7 +34,6 @@ import org.jboss.seam.annotations.Name;
 @Name("school")
 @DiscriminatorValue("SCHOOL")
 @PrimaryKeyJoinColumn(name = "UNIT_ID")
-@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public class School extends Unit {
 
 	private static final long serialVersionUID = 1L;

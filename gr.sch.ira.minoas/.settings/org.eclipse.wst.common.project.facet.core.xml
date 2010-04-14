@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <faceted-project>
-  <runtime name="JBoss 5.1 Runtime - minoas"/>
+  <runtime name="JBoss 5.0 Runtime"/>
   <fixed facet="jst.jsf"/>
   <fixed facet="jst.seam"/>
   <fixed facet="jst.web"/>
