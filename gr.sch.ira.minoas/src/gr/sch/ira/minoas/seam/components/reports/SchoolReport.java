@@ -166,7 +166,9 @@ public class SchoolReport extends BaseReport {
 		sb.append(" εως και ");
 		sb.append(this.dateFormat.format(serviceAllocation.getDueTo()));
 		sb.append(" απο το/την ");
-		sb.append(serviceAllocation.getSourceUnit().getTitle());
+		if(serviceAllocation.getSourceUnit()!=null && serviceAllocation.getSourceUnit().getTitle()!=null) {
+			sb.append(serviceAllocation.getSourceUnit().getTitle());
+		} else sb.append("**** δεν βρέθηκε ****");
 		sb.append(". ");
 		return sb.toString();
 	}
@@ -449,7 +451,7 @@ public class SchoolReport extends BaseReport {
 			/* check if the incoming service allocation has regular position in the school. 
 			 * If so, then it has been already handled.
 			 */
-			if (serviceAllocation.getServiceUnit().getId().equals(serviceAllocation.getSourceUnit().getId())) {
+			if (serviceAllocation.getServiceUnit() !=null && serviceAllocation.getSourceUnit()!=null && serviceAllocation.getServiceUnit().getId().equals(serviceAllocation.getSourceUnit().getId())) {
 				continue;
 			}
 			SchoolUniversalEmploymentItem item = new SchoolUniversalEmploymentItem(serviceAllocation);

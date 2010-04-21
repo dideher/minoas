@@ -37,8 +37,11 @@
     name="entityManager" auto-create="true" entity-manager-factory="#{entityManagerFactory}" 
     persistence-unit-jndi-name="java:/minoasEntityManagerFactory" />
   
+  <transaction:entity-transaction entity-manager="#{entityManager}" />
+   
+  <!-- 
   <async:timer-service-dispatcher/>
-
+  -->
   
   <web:character-encoding-filter encoding="UTF-8"
     override-client="true" url-pattern="*.seam" />
