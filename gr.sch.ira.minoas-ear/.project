@@ -3,8 +3,6 @@
 	<name>gr.sch.ira.minoas-ear</name>
 	<comment>JavaCC Nature</comment>
 	<projects>
-		<project>gr.sch.ira.minoas-ejb</project>
-		<project>gr.sch.ira.minoas</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

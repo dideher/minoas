@@ -2,11 +2,5 @@
 <project-modules id="moduleCoreId" project-version="1.5.0">
 <wb-module deploy-name="gr.sch.ira.minoas-ear">
 <wb-resource deploy-path="/" source-path="/EarContent"/>
-<dependent-module deploy-path="/" handle="module:/resource/gr.sch.ira.minoas-ejb/gr.sch.ira.minoas-ejb">
-<dependency-type>uses</dependency-type>
-</dependent-module>
-<dependent-module deploy-path="/" handle="module:/resource/gr.sch.ira.minoas/gr.sch.ira.minoas">
-<dependency-type>uses</dependency-type>
-</dependent-module>
 </wb-module>
 </project-modules>
