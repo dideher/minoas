@@ -261,6 +261,21 @@
 					</rich:menuItem>
 				</rich:menuGroup>
 			</rich:dropDownMenu>
+			
+			<rich:dropDownMenu disabled="#{!identity.loggedIn}">
+				<f:facet name="label">
+					<h:panelGroup>
+						<h:outputText value="Βοηθήματα" />
+					</h:panelGroup>
+				</f:facet>
+					<rich:menuItem submitMode="none">
+					<s:link value="Ιστορικό Ενεργείων"
+						view="/admin/audit-report.xhtml">
+						<f:param name="audit_report_from" value="home" />
+					</s:link>
+				</rich:menuItem>
+
+			</rich:dropDownMenu>
 			<rich:dropDownMenu disabled="#{!identity.loggedIn}">
 				<f:facet name="label">
 					<h:panelGroup>
@@ -273,6 +288,13 @@
 						<f:param name="manage_principals_from" value="home" />
 					</s:link>
 				</rich:menuItem>
+					<rich:menuItem submitMode="none" rendered="#{(s:hasRole('ADMIN'))}">
+					<s:link value="Ιστορικό Ενεργείων"
+						view="/admin/audit-report.xhtml">
+						<f:param name="audit_report_from" value="home" />
+					</s:link>
+				</rich:menuItem>
+				
 
 				<rich:menuGroup value="Ειδικότητες">
 					<rich:menuItem submitMode="none"

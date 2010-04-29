@@ -45,6 +45,7 @@ public class DisposalReportByType extends BaseReport {
 		Date effectiveDateFrom = getDisposalCriteria().getEffectiveDateFrom();
 		Date effectiveDateUntil = getDisposalCriteria().getEffectiveDateUntil();
 		DisposalType disposalType = getDisposalCriteria().getDisposalType();
+		
 		Character region = getDisposalCriteria().getRegion();
 		Unit targetUnit = getDisposalCriteria().getTargetUnit();
 		SpecializationGroup specializationGroup = getDisposalCriteria().getSpecializationGroup();
@@ -67,7 +68,7 @@ public class DisposalReportByType extends BaseReport {
 			break;
 		}
 		if (disposalType != null) {
-			sb.append(" AND s.disposalType=:disposalType ");
+			sb.append(" AND s.type=:disposalType ");
 		}
 		if (targetUnit != null) {
 			sb.append(" AND s.disposalUnit=:targetUnit ");

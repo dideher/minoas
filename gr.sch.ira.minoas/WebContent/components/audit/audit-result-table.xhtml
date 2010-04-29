@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich">
+
+<ui:component>
+	<rich:dataTable id="auditResultTable" value="#{audits}" var="_audit" rows="20">
+		<rich:column>
+			<f:facet name="header">
+				<h:outputText value="Ημ/νια Ενέργείας" />
+			</f:facet>
+			<h:outputText value="#{_audit.insertedOn}">
+				<f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
+			</h:outputText>
+		</rich:column>
+		
+		<rich:column>
+			<f:facet name="header">
+				<h:outputText value="Χρήστης" />
+			</f:facet>
+			<h:outputText value="#{_audit.insertedBy.realName}" id="realname">
+				<rich:toolTip for="realname">
+					<h:outputText value="#{_audit.insertedBy.username}" />
+				</rich:toolTip>
+			</h:outputText>
+		</rich:column>
+		<rich:column>
+			<f:facet name="header">
+				<h:outputText value="Είδος Ενέργειας" />
+			</f:facet>
+			<h:outputText value="#{_audit.type}" />
+		</rich:column>
+		<rich:column>
+			<f:facet name="header">
+				<h:outputText value="Σχόλιο Ενέργειας" />
+			</f:facet>
+			<h:outputText value="#{_audit.comment}" />
+		</rich:column>
+
+		<f:facet name="footer">
+			<rich:datascroller for="auditResultTable">
+				<f:facet name="first">
+					<h:outputText value="Πρώτη" />
+				</f:facet>
+				<f:facet name="last">
+					<h:outputText value="Τελευταία" />
+				</f:facet>
+			</rich:datascroller>
+		</f:facet>
+	</rich:dataTable>
+</ui:component>
+
+
+</html>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page login-required="true" view-id="/teachingResources/school-teaching-resources.xhtml"  xmlns="http://jboss.com/products/seam/pages"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.1.xsd">
+  <begin-conversation join="true" flush-mode="manual"/>
+  <description>Προβολή Ιστορικού Ενεργειών </description>
+  
+  <param name="audit_report_from" />
+  
+  <action execute="#{auditReport.generateReport}" on-postback="false"/>
+  
+  <!-- navigation rules -->
+  
+ 	<navigation from-action="#{principalHome.persist()}">
+ 		<rule if-outcome="duplicateValue">
+ 			<redirect view-id="/admin/manage-principals.xhtml">
+ 				<message severity="ERROR">
+ 					Το όνομα χρήστη που εισάγετε είναι ήδει σε χρήση απο άλλον χρήστη.
+ 				</message>
+ 			</redirect>
+ 		</rule>
+ 	</navigation>
+  
+  
+  
+  
+  <navigation from-action="backButton">
+      <redirect view-id="#{manage_principals_from ? '/home' : manage_principals_from}.xhtml}" />
+  </navigation>
+  
+  
+  
+</page>

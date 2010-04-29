@@ -1,9 +1,11 @@
-#Thu Mar 04 13:06:42 EET 2010
+#Tue Apr 27 12:39:22 EEST 2010
 eclipse.preferences.version=1
+encoding//WebContent/admin/audit-report.xhtml=UTF-8
 encoding//WebContent/admin/manage-principals.xhtml=UTF-8
 encoding//WebContent/admin/manage-specialization-groups.xhtml=UTF-8
 encoding//WebContent/admin/principal-component.xhtml=UTF-8
 encoding//WebContent/admin/specialization-group-component.xhtml=UTF-8
+encoding//WebContent/components/audit/audit-result-table.xhtml=UTF-8
 encoding//WebContent/components/employee/basicInfo.xhtml=UTF-8
 encoding//WebContent/components/general/address.xhtml=UTF-8
 encoding//WebContent/components/print/FromHeaders.xhtml=UTF-8
