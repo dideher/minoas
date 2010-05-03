@@ -11,7 +11,17 @@
 
 
 	<ui:define name="body">
+		<h:panelGrid columns="1" width="100%">
 		<ui:include src="/components/messages-component.xhtml" />
+		<rich:panel>
+			<f:facet name="header">
+				<h:outputText value="Γενικά Στατιστικά Μίνωα"/>
+			</f:facet>
+			<h:outputText value="#{auditWinningReport.auditWinnerCountsForGoogleChart}"/>
+			<h:outputText value="#{auditWinningReport.auditWinnerNamesForGoogleChart}"/>
+			<h:graphicImage value="#{auditWinningReport.googleChartURL}"/>
+		</rich:panel>
+		</h:panelGrid>
 		<h1 class="pagetitle">Κεντρική Σελίδα</h1>
 	</ui:define>
 
