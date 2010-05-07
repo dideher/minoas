@@ -1,8 +1,14 @@
 package gr.sch.ira.minoas.seam.components.reports;
 
+import gr.sch.ira.minoas.model.employee.EmployeeType;
+import gr.sch.ira.minoas.model.security.Principal;
+
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 
+import org.hibernate.dialect.IngresDialect;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
@@ -22,9 +28,13 @@ public class BasicUsageReport extends BaseReport {
 	public class AuditWinnersReportData {
 		private Collection<Object[]> rawData;
 
-		private Collection<Integer> auditWinnerCounts;
+		private Collection<Long> auditWinnerCounts;
 
-		private Collection<String> auditWinnerNames;
+		private Collection<Principal> auditWinnerPrincipals;
+
+		private Collection<Long> employeeTypeCounts;
+
+		private Collection<EmployeeType> employeeTypes;
 
 		/**
 		 * @return the rawData
@@ -40,46 +50,122 @@ public class BasicUsageReport extends BaseReport {
 			this.rawData = rawData;
 		}
 
+		public String getAuditWinnerNamesForGoogleChart() {
+			StringBuffer sb = new StringBuffer();
+			for (Iterator<Principal> it = getAuditWinningReport().getAuditWinnerPrincipals().iterator(); it.hasNext();) {
+				Principal p = it.next();
+				sb.append(p.getUsername());
+				if (it.hasNext())
+					sb.append("|");
+			}
+			return sb.toString();
+		}
+
+		public String getAuditWinnerCountsForGoogleChart() {
+			StringBuffer sb = new StringBuffer();
+			for (Iterator<Long> it = getAuditWinningReport().getAuditWinnerCounts().iterator(); it.hasNext();) {
+				Long count = it.next();
+				sb.append(count);
+				if (it.hasNext())
+					sb.append(",");
+			}
+			return sb.toString();
+		}
+
+		public String getAuditWinnersGoogleChartURL() {
+			String baseURL = "http://chart.apis.google.com/chart?cht=p3&chs=420x150&chd=t:{0}&chl={1}";
+			String options[] = { getAuditWinnerCountsForGoogleChart(), getAuditWinnerNamesForGoogleChart() };
+			MessageFormat mf = new MessageFormat(baseURL);
+			String url = mf.format(options);
+			info(url);
+			return url;
+		}
+
+		public String getEmployeeReportGoogleChartURL() {
+			ArrayList<Long> helperCount = new ArrayList<Long>(getEmployeeTypeCounts());
+			StringBuffer emloyeesCount = new StringBuffer();
+			for(Iterator<Long> it = helperCount.iterator() ; it.hasNext() ; ) {
+				emloyeesCount.append(it.next());
+				if (it.hasNext())
+					emloyeesCount.append(",");
+			}
+			
+			StringBuffer emloyeesTypes = new StringBuffer();
+			int count = 0;
+			for(Iterator<EmployeeType> it = getEmployeeTypes().iterator() ; it.hasNext() ; ) {
+				emloyeesTypes.append(it.next());
+				emloyeesTypes.append(" (");
+				emloyeesTypes.append(helperCount.get(count));
+				emloyeesTypes.append(")");
+				if (it.hasNext())
+					emloyeesTypes.append("|");
+				count++;
+			}
+			
+			String baseURL = "http://chart.apis.google.com/chart?cht=p3&chs=420x150&chd=t:{0}&chl={1}&chma=0,0,0,0";
+			String options[] = { emloyeesCount.toString(),  emloyeesTypes.toString()};
+			MessageFormat mf = new MessageFormat(baseURL);
+			String url = mf.format(options);
+			info(url);
+			return url;
+		}
+
+		/**
+		 * @return the auditWinnerPrincipals
+		 */
+		public Collection<Principal> getAuditWinnerPrincipals() {
+			return auditWinnerPrincipals;
+		}
+
+		/**
+		 * @param auditWinnerPrincipals the auditWinnerPrincipals to set
+		 */
+		public void setAuditWinnerPrincipals(Collection<Principal> auditWinnerPrincipals) {
+			this.auditWinnerPrincipals = auditWinnerPrincipals;
+		}
+
 		/**
 		 * @return the auditWinnerCounts
 		 */
-		public Collection<Integer> getAuditWinnerCounts() {
+		public Collection<Long> getAuditWinnerCounts() {
 			return auditWinnerCounts;
 		}
 
 		/**
 		 * @param auditWinnerCounts the auditWinnerCounts to set
 		 */
-		public void setAuditWinnerCounts(Collection<Integer> auditWinnerCounts) {
+		public void setAuditWinnerCounts(Collection<Long> auditWinnerCounts) {
 			this.auditWinnerCounts = auditWinnerCounts;
 		}
 
 		/**
-		 * @return the auditWinnerNames
+		 * @return the employeeTypeCounts
 		 */
-		public Collection<String> getAuditWinnerNames() {
-			return auditWinnerNames;
+		public Collection<Long> getEmployeeTypeCounts() {
+			return employeeTypeCounts;
 		}
 
 		/**
-		 * @param auditWinnerNames the auditWinnerNames to set
+		 * @param employeeTypeCounts the employeeTypeCounts to set
 		 */
-		public void setAuditWinnerNames(Collection<String> auditWinnerNames) {
-			this.auditWinnerNames = auditWinnerNames;
+		public void setEmployeeTypeCounts(Collection<Long> employeeTypeCounts) {
+			this.employeeTypeCounts = employeeTypeCounts;
 		}
 
-		public String getAuditWinnerNamesForGoogleChart() {
-			return "Lala|louou";
+		/**
+		 * @return the employeeTypes
+		 */
+		public Collection<EmployeeType> getEmployeeTypes() {
+			return employeeTypes;
 		}
 
-		public String getAuditWinnerCountsForGoogleChart() {
-			return "1|2";
+		/**
+		 * @param employeeTypes the employeeTypes to set
+		 */
+		public void setEmployeeTypes(Collection<EmployeeType> employeeTypes) {
+			this.employeeTypes = employeeTypes;
 		}
-		
-		public String getGoogleChartURL() {
-			String baseURL = "http://chart.apis.google.com/chart?cht=p3&chs=250x100&chd=t:60,40&chl=Hello|World";
-			return "http://chart.apis.google.com/chart?cht=p3&chs=250x100&chd=t:60,40&chl=Hello|World";
-		}
+
 	}
 
 	@Out(required = false)
@@ -87,24 +173,43 @@ public class BasicUsageReport extends BaseReport {
 
 	@Observer("org.jboss.seam.security.loginSuccessful")
 	@Transactional(TransactionPropagationType.REQUIRED)
-	public void generateWinningReport() {
-		info("generate audit winning report");
+	public void generateReport() {
+		info("generating basic usage report");
 		Collection<Object[]> rawData = getEntityManager()
 				.createQuery(
 						"SELECT (SELECT p FROM Principal p WHERE p.id=a.insertedBy.id), COUNT(a.insertedBy) FROM Audit a GROUP BY (a.insertedBy) ORDER BY COUNT(a.insertedBy) DESC")
 				.getResultList();
 		AuditWinnersReportData reportData = new AuditWinnersReportData();
-		Collection<Integer> counts = new ArrayList<Integer>(rawData.size());
-		Collection<String> names = new ArrayList<String>(rawData.size());
+		Collection<Long> counts = new ArrayList<Long>(rawData.size());
+		Collection<Principal> principals = new ArrayList<Principal>(rawData.size());
+		int max_rows = 3;
+		int count = 1;
 		for (Object[] item : rawData) {
-			names.add(String.valueOf(item[0]));
-			counts.add(Integer.valueOf(String.valueOf(item[1])));
+			principals.add((Principal) item[0]);
+			counts.add((Long) (item[1]));
+			if (count % max_rows == 0)
+				break;
+			count++;
 		}
 		reportData.setRawData(rawData);
-		reportData.setAuditWinnerNames(names);
+		reportData.setAuditWinnerPrincipals(principals);
 		reportData.setAuditWinnerCounts(counts);
+
+		Collection<Object[]> employeeReportData = getEntityManager().createQuery(
+				"SELECT (e.type), COUNT(e.type) FROM Employee e GROUP BY (e.type) ORDER BY COUNT(e.type) DESC WHERE e.active IS TRUE")
+				.getResultList();
+
+		Collection<Long> employeeCounts = new ArrayList<Long>(employeeReportData.size());
+		Collection<EmployeeType> employeeTypes = new ArrayList<EmployeeType>(employeeReportData.size());
+
+		for (Object[] item : employeeReportData) {
+			employeeTypes.add((EmployeeType) item[0]);
+			employeeCounts.add((Long) (item[1]));
+		}
+		reportData.setEmployeeTypeCounts(employeeCounts);
+		reportData.setEmployeeTypes(employeeTypes);
 		setAuditWinningReport(reportData);
-		info("winning audit report has been generated.");
+		info("basic usage report has been generated.");
 	}
 
 	/**

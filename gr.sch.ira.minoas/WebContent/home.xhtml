@@ -5,24 +5,41 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:rich="http://richfaces.org/rich"  template="/layout/simple-beauty-template.xhtml"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/simple-beauty-template.xhtml"
 	xmlns:a4j="http://richfaces.org/a4j">
 
 
 
 	<ui:define name="body">
 		<h:panelGrid columns="1" width="100%">
-		<ui:include src="/components/messages-component.xhtml" />
-		<rich:panel>
-			<f:facet name="header">
-				<h:outputText value="Γενικά Στατιστικά Μίνωα"/>
-			</f:facet>
-			<h:outputText value="#{auditWinningReport.auditWinnerCountsForGoogleChart}"/>
-			<h:outputText value="#{auditWinningReport.auditWinnerNamesForGoogleChart}"/>
-			<h:graphicImage value="#{auditWinningReport.googleChartURL}"/>
-		</rich:panel>
+			<ui:include src="/components/messages-component.xhtml" />
+			<h1 class="pagetitle"></h1>
+			<rich:panel>
+				<f:facet name="header">
+					<h:outputText value="Κεντρική Σελίδα" />
+				</f:facet>
+				<h:outputText value="Γενικά Στατιστικά Μίνωα" />
+				<h:panelGrid columns="2" width="100%">
+					<rich:panel>
+						<f:facet name="header">
+							<h:outputText value="Πλήθος Ενεργειών Χρηστών" />
+						</f:facet>
+						<h:graphicImage
+							value="#{auditWinningReport.auditWinnersGoogleChartURL}" />
+					</rich:panel>
+
+					<rich:panel>
+						<f:facet name="header">
+							<h:outputText value="Κατανομή Ενεργού Προσωπικού" />
+						</f:facet>
+						<h:graphicImage
+							value="#{auditWinningReport.employeeReportGoogleChartURL}" />
+					</rich:panel>
+				</h:panelGrid>
+			</rich:panel>
 		</h:panelGrid>
-		<h1 class="pagetitle">Κεντρική Σελίδα</h1>
+
 	</ui:define>
 
 
