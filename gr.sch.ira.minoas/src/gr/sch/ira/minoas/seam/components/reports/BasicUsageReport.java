@@ -3,11 +3,15 @@ package gr.sch.ira.minoas.seam.components.reports;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
 import gr.sch.ira.minoas.model.security.Principal;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.hibernate.dialect.IngresDialect;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
@@ -16,6 +20,7 @@ import org.jboss.seam.annotations.Out;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.TransactionPropagationType;
 import org.jboss.seam.annotations.Transactional;
+import org.jboss.seam.mail.ui.context.MailFacesContextImpl;
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
@@ -63,9 +68,14 @@ public class BasicUsageReport extends BaseReport {
 
 		public String getAuditWinnerCountsForGoogleChart() {
 			StringBuffer sb = new StringBuffer();
+			// compute the sum 
+			long sum = 0;
+			for(Long v : getAuditWinningReport().getAuditWinnerCounts()) {
+				sum += v.longValue();
+			}
 			for (Iterator<Long> it = getAuditWinningReport().getAuditWinnerCounts().iterator(); it.hasNext();) {
 				Long count = it.next();
-				sb.append(count);
+				sb.append(new Float(((float)count / (float)sum) * 100));
 				if (it.hasNext())
 					sb.append(",");
 			}
@@ -77,15 +87,19 @@ public class BasicUsageReport extends BaseReport {
 			String options[] = { getAuditWinnerCountsForGoogleChart(), getAuditWinnerNamesForGoogleChart() };
 			MessageFormat mf = new MessageFormat(baseURL);
 			String url = mf.format(options);
-			info(url);
 			return url;
 		}
 
-		public String getEmployeeReportGoogleChartURL() {
+		public String getEmployeeReportGoogleChartURL() throws MalformedURLException  {
 			ArrayList<Long> helperCount = new ArrayList<Long>(getEmployeeTypeCounts());
 			StringBuffer emloyeesCount = new StringBuffer();
+			long sum = 0;
+			for(Long v : helperCount) {
+				sum += v.longValue();
+			}
 			for(Iterator<Long> it = helperCount.iterator() ; it.hasNext() ; ) {
-				emloyeesCount.append(it.next());
+				Long count = it.next();
+				emloyeesCount.append(new Float(((float)count / (float)sum) * 100));
 				if (it.hasNext())
 					emloyeesCount.append(",");
 			}
@@ -102,12 +116,11 @@ public class BasicUsageReport extends BaseReport {
 				count++;
 			}
 			
-			String baseURL = "http://chart.apis.google.com/chart?cht=p3&chs=420x150&chd=t:{0}&chl={1}&chma=0,0,0,0";
+			String baseURL = "http://chart.apis.google.com/chart?cht=p3&chs=420x150&chd=t:{0}&chl={1}";
 			String options[] = { emloyeesCount.toString(),  emloyeesTypes.toString()};
 			MessageFormat mf = new MessageFormat(baseURL);
 			String url = mf.format(options);
-			info(url);
-			return url;
+			return new URL(url).toExternalForm();
 		}
 
 		/**
@@ -175,9 +188,10 @@ public class BasicUsageReport extends BaseReport {
 	@Transactional(TransactionPropagationType.REQUIRED)
 	public void generateReport() {
 		info("generating basic usage report");
+		Date fromDate = DateUtils.addDays(new Date(), -30);
 		Collection<Object[]> rawData = getEntityManager()
 				.createQuery(
-						"SELECT (SELECT p FROM Principal p WHERE p.id=a.insertedBy.id), COUNT(a.insertedBy) FROM Audit a GROUP BY (a.insertedBy) ORDER BY COUNT(a.insertedBy) DESC")
+						"SELECT (SELECT p FROM Principal p WHERE p.id=a.insertedBy.id), COUNT(a.insertedBy) FROM Audit a  GROUP BY (a.insertedBy) ORDER BY COUNT(a.insertedBy) DESC")
 				.getResultList();
 		AuditWinnersReportData reportData = new AuditWinnersReportData();
 		Collection<Long> counts = new ArrayList<Long>(rawData.size());

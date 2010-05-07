@@ -24,6 +24,10 @@
 			<h:panelGrid columns="1" width="100%">
 				<h:panelGroup>
 					<h:panelGrid columns="1">
+						<rich:panel>
+						<f:facet name="header">
+							<h:outputText value="Βασικά Στοιχεία"/>
+						</f:facet>
 						<ui:include src="/employee/basic-info.xhtml">
 							<ui:param name="employee" value="#{employee}" />
 						</ui:include>
@@ -32,6 +36,7 @@
 							<ui:param name="address" value="#{employee.address}" />
 						</ui:include>
 						-->
+						</rich:panel>
 					</h:panelGrid>
 				</h:panelGroup>
 
@@ -588,7 +593,7 @@
 							<s:button action="backButton" value="Επιστροφή" />
 							<s:button action="endButton" value="Τέλος Ενέργειας" />
 							<rich:dropDownMenu value="Επιπλέον Ενέργειες">
-								<rich:menuItem submitMode="none" disabled="true">
+								<rich:menuItem submitMode="none" rendered="#{(s:hasRole('ADMIN'))}">
 									<s:link value="Διαχείρηση Οργανικής Θέσης"
 										view="/employee/regular-employment-management">
 										<f:param name="leave_management_from"
@@ -596,7 +601,7 @@
 									</s:link>
 								</rich:menuItem>
 								<rich:menuItem submitMode="none"
-									disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MANAGE_LEAVE'))}">
+									rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_LEAVE'))}">
 									<s:link value="Διαχείρηση Αδειών Εκπαιδευτικού"
 										propagation="join"
 										view="/leave/employee-leave-management.xhtml">
@@ -605,7 +610,7 @@
 									</s:link>
 								</rich:menuItem>
 								<rich:menuItem submitMode="none"
-									disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MANAGE_SERVICE_ALLOCATION'))}">
+									rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_SERVICE_ALLOCATION'))}">
 									<s:link value="Διαχείρηση Θητείας Εκπαιδευτικού"
 										propagation="join"
 										view="/serviceallocation/employee-service-allocation-management.xhtml">
@@ -614,7 +619,7 @@
 									</s:link>
 								</rich:menuItem>
 								<rich:menuItem submitMode="none"
-									disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MANAGE_SECONDMENT'))}">
+									rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_SECONDMENT'))}">
 									<s:link value="Διαχείρηση Απόσπασης Εκπαιδευτικού"
 										propagation="join"
 										view="/secondment/secondment-employment-management.xhtml">
@@ -622,13 +627,20 @@
 											value="/employee/employee" />
 									</s:link>
 								</rich:menuItem>
+								
+								<rich:menuItem submitMode="none"
+									rendered="#{(s:hasRole('ADMIN'))}">
+									<a4j:commandLink value="Αποστολή στην Λίστα Εξαιρέσεων">
+										
+									</a4j:commandLink>
+								</rich:menuItem>
+								
+								<rich:menuSeparator />
 								<rich:menuItem submitMode="none"
 									rendered="#{(s:hasRole('ADMIN'))}">
 									<h:commandLink value="Διαγραφή Εκπαιδευτικού !!!!"
 										onclick="if(!confirm('Να διαγραφή ο εκπαιδευτικός ? Προσοχή!!!! Η Διαδικασία δεν είναι αναστρέψιμη.')) {form.reset(); return false;}"
 										action="#{employeeHome.remove()}" />
-
-
 								</rich:menuItem>
 
 

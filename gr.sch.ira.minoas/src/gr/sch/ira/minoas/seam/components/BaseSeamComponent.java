@@ -16,6 +16,10 @@ import org.jboss.seam.log.Log;
  * 
  */
 public abstract class BaseSeamComponent implements Serializable {
+	
+	public static final String ACTION_OUTCOME_SUCCESS = "success";
+	
+	public static final String ACTION_OUTCOME_FAILURE = "failure";
 
 	public static final Locale greekLocale = new Locale("el", "GR");
 
