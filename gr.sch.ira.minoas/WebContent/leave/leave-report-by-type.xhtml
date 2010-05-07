@@ -153,7 +153,7 @@
 											<rich:calendar enableManualInput="true"
 												value="#{employeeLeaveCriteria.effectiveDate}"
 												required="true" inputSize="10" mode="ajax" locale="el_GR"
-												inputClass="fieldValueText" datePattern="dd-MM-yyyy">
+												inputClass="fieldValueText" datePattern="dd/MM/yyyy">
 												<a4j:support event="onblur"
 													reRender="establishedDateDecoration" bypassUpdates="true"
 													ajaxSingle="true" />
@@ -172,7 +172,7 @@
 											<rich:calendar id="effectiveDate" enableManualInput="true"
 												value="#{employeeLeaveCriteria.effectiveDateFrom}"
 												required="true" inputSize="10" mode="ajax" locale="el_GR"
-												inputClass="fieldValueText" datePattern="dd-MM-yyyy">
+												inputClass="fieldValueText" datePattern="dd/MM/yyyy">
 												<a4j:support event="onblur"
 													reRender="establishedDateDecoration" bypassUpdates="true"
 													ajaxSingle="true" />
@@ -186,7 +186,7 @@
 											<rich:calendar id="effectiveDate" enableManualInput="true"
 												value="#{employeeLeaveCriteria.effectiveDateUntil}"
 												required="true" inputSize="10" mode="ajax" locale="el_GR"
-												inputClass="fieldValueText" datePattern="dd-MM-yyyy">
+												inputClass="fieldValueText" datePattern="dd/MM/yyyy">
 												<a4j:support event="onblur"
 													reRender="establishedDateDecoration" bypassUpdates="true"
 													ajaxSingle="true" />
@@ -301,7 +301,7 @@
 							<h:outputText value="Απο" />
 						</f:facet>
 						<h:outputText value="#{_leave.established}">
-							<s:convertDateTime pattern="dd-MM-yyyy" />
+							<s:convertDateTime pattern="dd/MM/yyyy" />
 						</h:outputText>
 					</rich:column>
 					<rich:column>
@@ -309,7 +309,7 @@
 							<h:outputText value="Εώς" />
 						</f:facet>
 						<h:outputText value="#{_leave.dueTo}">
-							<s:convertDateTime pattern="dd-MM-yyyy" />
+							<s:convertDateTime pattern="dd/MM/yyyy" />
 						</h:outputText>
 					</rich:column>
 

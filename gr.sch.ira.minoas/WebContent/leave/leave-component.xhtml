@@ -33,7 +33,7 @@
 			<rich:calendar id="establishedDate" enableManualInput="true"
 				value="#{leave.established}" required="true" inputSize="10"
 				mode="ajax" locale="el_GR" inputClass="fieldValueText"
-				datePattern="dd-MM-yyyy">
+				datePattern="dd/MM/yyyy">
 				<a4j:support event="onblur" reRender="establishedDateDecoration"
 					bypassUpdates="true" ajaxSingle="true" />
 			</rich:calendar>
@@ -45,7 +45,7 @@
 			</ui:define>
 			<rich:calendar id="dueToDate" value="#{leave.dueTo}" required="true"
 				mode="ajax" locale="el_GR" inputSize="10" enableManualInput="true"
-				inputClass="fieldValueText" datePattern="dd-MM-yyyy">
+				inputClass="fieldValueText" datePattern="dd/MM/yyyy">
 
 				<a4j:support event="onblur" reRender="dueToDateDecoration"
 					bypassUpdates="true" ajaxSingle="true" />
