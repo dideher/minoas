@@ -20,18 +20,36 @@
 			</f:facet>
 
 			<ui:include src="/components/messages-component.xhtml" />
-
+			<h:form>
+				<a4j:region>
+					<a4j:outputPanel id="lala">
+						<s:div rendered="#{employeeHome.isInExclusionList()}" 
+							id="exclusionDiv" styleClass="clean-warning">
+							<h:outputText
+								value="Προσοχή ! Ο εκπαιδευτικός #{employeeUtil.prettyFormat(employee)} βρίσκεται στην λίστα των εξαιρέσεων! " />
+							<a4j:commandLink value="Αφαίρεση απο την Λίστα Εξαιρέσεων" reRender="lala"
+								action="#{employeeManagement.removeEmployeeFromExclusionList()}"
+								onclick="if(!confirm('Να αφαιρεθεί ο εκπαιδευτικός απο λίστα εξαιρέσεων ;')) {form.reset(); return false;}">
+								<f:setPropertyActionListener value="#{employee.exclusion.id}"
+									target="#{employeeExclusionHome.id}" />
+							</a4j:commandLink>
+						</s:div>
+					</a4j:outputPanel>
+				</a4j:region>
+			</h:form>
 			<h:panelGrid columns="1" width="100%">
 				<h:panelGroup>
 					<h:panelGrid columns="1">
 						<rich:panel>
-						<f:facet name="header">
-							<h:outputText value="Βασικά Στοιχεία"/>
-						</f:facet>
-						<ui:include src="/employee/basic-info.xhtml">
-							<ui:param name="employee" value="#{employee}" />
-						</ui:include>
-						<!--  
+							<f:facet name="header">
+								<h:outputText value="Βασικά Στοιχεία" />
+							</f:facet>
+
+
+							<ui:include src="/employee/basic-info.xhtml">
+								<ui:param name="employee" value="#{employee}" />
+							</ui:include>
+							<!--  
 						<ui:include src="/components/general/address.xhtml">
 							<ui:param name="address" value="#{employee.address}" />
 						</ui:include>
@@ -194,7 +212,7 @@
 							</h:panelGrid>
 
 						</rich:tab>
-						
+
 						<rich:tab
 							rendered="#{employeeHourlyBasedEmploymentsIncludingDisabledListQuery.resultCount gt 0}">
 							<f:facet name="label">
@@ -270,7 +288,7 @@
 							</h:panelGrid>
 
 						</rich:tab>
-						
+
 						<rich:tab id="secondmenttab"
 							rendered="#{employeeSecondmentsListQuery.resultCount gt 0}">
 							<f:facet name="label">
@@ -443,13 +461,14 @@
 							</h:panelGrid>
 
 						</rich:tab>
-						
-						
-						<rich:tab rendered="#{employeeServiceAllocationsListQuery.resultCount gt 0}">
-						<f:facet name="label">
+
+
+						<rich:tab
+							rendered="#{employeeServiceAllocationsListQuery.resultCount gt 0}">
+							<f:facet name="label">
 								<h:outputText value="Ιστορικό Θητείων" />
 							</f:facet>
-						<h:panelGrid columns="1" width="100%"> 
+							<h:panelGrid columns="1" width="100%">
 								<h:outputText
 									value="Στον παρακάτω πίνακα εμφανίζεται το ιστορικό όλων των αποσπάσεων του εκπαιδευτικού. Μπορείτε να τροποποιήσεται, αν θέλετε, την ενεργή κατά το τρέχων σχολικό έτος απόσπαση." />
 
@@ -522,8 +541,8 @@
 								</rich:dataTable>
 							</h:panelGrid>
 						</rich:tab>
-						
-						
+
+
 
 						<rich:tab rendered="#{employeeLeavesListQuery.resultCount gt 0}">
 							<f:facet name="label">
@@ -589,11 +608,12 @@
 
 				<h:panelGroup>
 					<h:form>
-						<rich:toolBar>
+						<rich:toolBar id="toolbarMenu">
 							<s:button action="backButton" value="Επιστροφή" />
 							<s:button action="endButton" value="Τέλος Ενέργειας" />
 							<rich:dropDownMenu value="Επιπλέον Ενέργειες">
-								<rich:menuItem submitMode="none" rendered="#{(s:hasRole('ADMIN'))}">
+								<rich:menuItem submitMode="none"
+									rendered="#{(s:hasRole('ADMIN'))}">
 									<s:link value="Διαχείρηση Οργανικής Θέσης"
 										view="/employee/regular-employment-management">
 										<f:param name="leave_management_from"
@@ -627,14 +647,17 @@
 											value="/employee/employee" />
 									</s:link>
 								</rich:menuItem>
-								
-								<rich:menuItem submitMode="none"
-									rendered="#{(s:hasRole('ADMIN'))}">
-									<a4j:commandLink value="Αποστολή στην Λίστα Εξαιρέσεων">
-										
+
+								<rich:menuItem submitMode="ajax"
+									rendered="#{(s:hasRole('ADMIN')) and (!employeeHome.isInExclusionList())}">
+									<a4j:commandLink value="Αποστολή στην Λίστα Εξαιρέσεων"
+										ajaxSingle="true"
+										action="#{employeeManagement.addEmployeeToExclusionList}"
+										reRender="lala"
+										onclick="if(!confirm('Να προστεθεί ο εκπαιδευτικός στην λίστα εξαιρέσεων ;')) {form.reset(); return false;}">
 									</a4j:commandLink>
 								</rich:menuItem>
-								
+
 								<rich:menuSeparator />
 								<rich:menuItem submitMode="none"
 									rendered="#{(s:hasRole('ADMIN'))}">

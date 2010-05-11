@@ -97,6 +97,9 @@ public class Employee extends Person {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "EMPLOYEE_TYPE", nullable = false, updatable = false)
 	private EmployeeType type;
+	
+	@OneToOne(fetch=FetchType.LAZY, cascade={CascadeType.ALL}, mappedBy="employee")
+	private EmployeeExclusion exclusion;
 
 	/**
 	 * 
@@ -367,5 +370,21 @@ public class Employee extends Person {
 		sb.append(" ]");
 		return sb.toString();
 	}
+
+	/**
+	 * @return the exclusion
+	 */
+	public EmployeeExclusion getExclusion() {
+		return exclusion;
+	}
+
+	/**
+	 * @param exclusion the exclusion to set
+	 */
+	public void setExclusion(EmployeeExclusion exclusion) {
+		this.exclusion = exclusion;
+	}
+	
+	
 
 }

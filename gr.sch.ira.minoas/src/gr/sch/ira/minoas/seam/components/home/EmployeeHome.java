@@ -323,5 +323,9 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 		}
 		return true;
 	}
+	
+	public Boolean isInExclusionList() {
+		return getInstance().getExclusion()!=null;
+	}
 
 }
