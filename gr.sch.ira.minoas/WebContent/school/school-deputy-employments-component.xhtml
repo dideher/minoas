@@ -83,6 +83,11 @@
 						<h:outputText
 							value="#{_schoolDeputyEmployment.employeeSpecialization}" />
 					</rich:column>
+					<rich:column>
+							<f:facet name="header">Σχόλιο</f:facet>
+							<h:outputText styleClass="fieldValueText"
+								value="#{_schoolDeputyEmployment.employmentComment}" />
+						</rich:column>
 				</rich:dataTable>
 			</h:panelGrid>
 		</rich:panel>

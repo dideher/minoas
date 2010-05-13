@@ -18,181 +18,183 @@
 			<f:facet name="header">
 				<h:outputText value="Καρτέλα Σχολικής Μονάδας #{school.title}" />
 			</f:facet>
-
-			<rich:panel>
-				<f:facet name="header">
-					<h:outputText value="Βασικά Στοιχεία" />
-				</f:facet>
-
-				<ui:include src="/school/basicInfo.xhtml">
-					<ui:param name="activeSchool" value="#{school}" />
-				</ui:include>
-			</rich:panel>
-			<rich:panel>
-				<f:facet name="header">
-					<h:outputText value="Διευθυντής και Υποδιευθυντές Μονάδας" />
-				</f:facet>
-
-				<rich:dataTable id="schoolChiefsTable" var="_schoolchief"
-					value="#{schoolChiefs}" sortMode="multi" border="0"
-					onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
-					onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
-					width="100%">
-					<rich:column>
-						<f:facet name="header">AM</f:facet>
-						<h:outputText value="#{_schoolchief.employeeCode}" />
-					</rich:column>
-					<rich:column>
-						<f:facet name="header">Θητεία</f:facet>
-						<h:outputText
-							value="#{messages[_schoolchief.serviceAllocationTypeKey]}" />
-					</rich:column>
-					<rich:column>
-						<f:facet name="header">Επώνυμο</f:facet>
-						<a4j:commandLink action="selectEmployee"
-							value="#{_schoolchief.employeeLastName}">
-							<f:setPropertyActionListener value="#{_schoolchief.id}"
-								target="#{employeeHome.id}" />
-							<s:conversationPropagation type="nest" />
-						</a4j:commandLink>
-					</rich:column>
-					<rich:column>
-						<f:facet name="header">Όνομα</f:facet>
-						<a4j:commandLink action="selectEmployee"
-							value="#{_schoolchief.employeeFirstName}">
-							<f:setPropertyActionListener value="#{_schoolchief.id}"
-								target="#{employeeHome.id}" />
-							<s:conversationPropagation type="nest" />
-						</a4j:commandLink>
-					</rich:column>
-					<rich:column>
-						<f:facet name="header">Όνομα Πατρός</f:facet>
-						<h:outputText value="#{_schoolchief.employeeFatherName}" />
-					</rich:column>
-					<rich:column>
-						<f:facet name="header">Ώρες</f:facet>
-						<h:outputText
-							value="#{_schoolchief.workingHoursOnServicingPosition}" />
-					</rich:column>
-					<rich:column>
-						<f:facet name="header">Ειδ.</f:facet>
-						<h:outputText value="#{_schoolchief.employeeSpecializationID}" />
-					</rich:column>
-					<rich:column>
-						<f:facet name="header">Λεκτικό Ειδ.</f:facet>
-						<h:outputText value="#{_schoolchief.employeeSpecialization}" />
-					</rich:column>
-				</rich:dataTable>
-			</rich:panel>
-
-			<rich:spacer height="10" />
-			<rich:separator lineType="dashed" height="2" />
-			<rich:spacer height="10" />
-
-			<rich:tabPanel switchType="ajax" selectedTab="defaultTab" >
-
-				<rich:tab id="defaultTab">
-					<f:facet name="label">
-						<h:outputText value="Συνγκετρωτική Τρέχουσα Κατάσταση" />
-					</f:facet>
-					<a4j:support event="ontabenter" eventsQueue="lala2"
-						reRender="school-employments-analysis"
-						action="#{schoolReport.generateEmploymentsReport}"
-						ajaxSingle="true">
-					</a4j:support>
-
-					<a4j:include id="school-employments-analysis"
-						viewId="/school/school-employments-analysis-component.xhtml" />
-
-				</rich:tab>
-				<rich:tab>
-					<f:facet name="label">
-						<h:outputText value="Αναλυτική Τρέχουσα Κατάσταση" />
-					</f:facet>
-					<a4j:support event="ontabenter" ajaxSingle="true"
-						eventsQueue="lala2" reRender="detailed-school-status"
-						action="#{schoolReport.generateReport()}">
-					</a4j:support>
-
-					<a4j:include id="detailed-school-status"
-						viewId="/school/detailed-school-status-component.xhtml" />
-
-				</rich:tab>
-
-				<rich:tab>
-					<f:facet name="label">
-						<h:outputText value="Οργανικά Ανήκωντες" />
-					</f:facet>
-					<a4j:support event="ontabenter" ajaxSingle="true"
-						eventsQueue="lala2"
-						reRender="school-regular-employments-component"
-						action="#{schoolReport.lookupRegularEmployments()}">
-					</a4j:support>
-					<a4j:include id="school-regular-employments-component"
-						viewId="/school/school-regular-employments-component.xhtml" />
-				</rich:tab>
-
-				<rich:tab>
-					<f:facet name="label">
-						<h:outputText value="Αναπληρωτές" />
-					</f:facet>
-					<a4j:support event="ontabenter" eventsQueue="lala2"
-						reRender="school-deputy-employments-component" ajaxSingle="true"
-						action="#{schoolReport.lookupDeputyEmployments()}">
-					</a4j:support>
-
-					<a4j:include id="school-deputy-employments-component"
-						viewId="/school/school-deputy-employments-component.xhtml">
-						<!-- <s:conversationPropagation propagation="join" />  -->
-
-					</a4j:include>
-
-				</rich:tab>
-
-				<rich:tab>
-					<f:facet name="label">
-						<h:outputText value="Ωρομίσθιοι" />
-					</f:facet>
-					<a4j:support event="ontabenter" eventsQueue="lala2"
-						reRender="school-hourlybased-employments"
-						action="#{schoolReport.lookupHourlyBasedEmployments()}"
-						ajaxSingle="true">
-
-					</a4j:support>
-
-					<a4j:include id="school-hourlybased-employments"
-						viewId="/school/school-hourlybased-employments-component.xhtml" />
-
-				</rich:tab>
-
-				<rich:tab>
-					<f:facet name="label">
-						<h:outputText value="Τμήματα" />
+			<h:panelGrid columns="1" width="100%">
+				<rich:panel>
+					<f:facet name="header">
+						<h:outputText value="Βασικά Στοιχεία" />
 					</f:facet>
 
-					<a4j:support event="ontabenter" eventsQueue="lala2"
-						ajaxSingle="true"
-						action="#{schoolReport.lookupHourlyBasedEmployments()}" />
+					<ui:include src="/school/basicInfo.xhtml">
+						<ui:param name="activeSchool" value="#{school}" />
+					</ui:include>
+				</rich:panel>
 
-					<a4j:include
-						viewId="/school/school-hourlybased-employments-component.xhtml" />
-
-				</rich:tab>
-
-
-
-			</rich:tabPanel>
+				<rich:panel>
+					<f:facet name="header">
+						<h:outputText value="Διευθυντής και Υποδιευθυντές Μονάδας" />
+					</f:facet>
 
 
-			<h:panelGroup>
-				<s:div styleClass="actionButtons">
-					<s:button disabled="#{empty from}" action="backButton"
-						value="Επιστροφή" />
-					<rich:spacer width="20" />
-					<s:button action="endButton" value="Τέλος Ενέργειας" />
-				</s:div>
-			</h:panelGroup>
+					<rich:dataTable id="schoolChiefsTable" var="_schoolchief"
+						value="#{schoolChiefs}" sortMode="multi" border="0"
+						onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+						onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+						width="100%">
+						<rich:column>
+							<f:facet name="header">AM</f:facet>
+							<h:outputText value="#{_schoolchief.employeeCode}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Θητεία</f:facet>
+							<h:outputText
+								value="#{messages[_schoolchief.serviceAllocationTypeKey]}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Επώνυμο</f:facet>
+							<a4j:commandLink action="selectEmployee"
+								value="#{_schoolchief.employeeLastName}">
+								<f:setPropertyActionListener value="#{_schoolchief.id}"
+									target="#{employeeHome.id}" />
+								<s:conversationPropagation type="nest" />
+							</a4j:commandLink>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Όνομα</f:facet>
+							<a4j:commandLink action="selectEmployee"
+								value="#{_schoolchief.employeeFirstName}">
+								<f:setPropertyActionListener value="#{_schoolchief.id}"
+									target="#{employeeHome.id}" />
+								<s:conversationPropagation type="nest" />
+							</a4j:commandLink>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Όνομα Πατρός</f:facet>
+							<h:outputText value="#{_schoolchief.employeeFatherName}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Ώρες</f:facet>
+							<h:outputText
+								value="#{_schoolchief.workingHoursOnServicingPosition}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Ειδ.</f:facet>
+							<h:outputText value="#{_schoolchief.employeeSpecializationID}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Λεκτικό Ειδ.</f:facet>
+							<h:outputText value="#{_schoolchief.employeeSpecialization}" />
+						</rich:column>
+					</rich:dataTable>
 
+				</rich:panel>
+
+
+				<rich:tabPanel switchType="ajax" selectedTab="defaultTab">
+
+					<rich:tab id="defaultTab">
+						<f:facet name="label">
+							<h:outputText value="Συνγκετρωτική Τρέχουσα Κατάσταση" />
+						</f:facet>
+						<a4j:support event="ontabenter" eventsQueue="lala2"
+							reRender="school-employments-analysis"
+							action="#{schoolReport.generateEmploymentsReport}"
+							ajaxSingle="true">
+						</a4j:support>
+
+						<a4j:include id="school-employments-analysis"
+							viewId="/school/school-employments-analysis-component.xhtml" />
+
+					</rich:tab>
+					<rich:tab>
+						<f:facet name="label">
+							<h:outputText value="Αναλυτική Τρέχουσα Κατάσταση" />
+						</f:facet>
+						<a4j:support event="ontabenter" ajaxSingle="true"
+							eventsQueue="lala2" reRender="detailed-school-status"
+							action="#{schoolReport.generateReport()}">
+						</a4j:support>
+
+						<a4j:include id="detailed-school-status"
+							viewId="/school/detailed-school-status-component.xhtml" />
+
+					</rich:tab>
+
+					<rich:tab>
+						<f:facet name="label">
+							<h:outputText value="Οργανικά Ανήκωντες" />
+						</f:facet>
+						<a4j:support event="ontabenter" ajaxSingle="true"
+							eventsQueue="lala2"
+							reRender="school-regular-employments-component"
+							action="#{schoolReport.lookupRegularEmployments()}">
+						</a4j:support>
+						<a4j:include id="school-regular-employments-component"
+							viewId="/school/school-regular-employments-component.xhtml" />
+					</rich:tab>
+
+					<rich:tab>
+						<f:facet name="label">
+							<h:outputText value="Αναπληρωτές" />
+						</f:facet>
+						<a4j:support event="ontabenter" eventsQueue="lala2"
+							reRender="school-deputy-employments-component" ajaxSingle="true"
+							action="#{schoolReport.lookupDeputyEmployments()}">
+						</a4j:support>
+
+						<a4j:include id="school-deputy-employments-component"
+							viewId="/school/school-deputy-employments-component.xhtml">
+							<!-- <s:conversationPropagation propagation="join" />  -->
+
+						</a4j:include>
+
+					</rich:tab>
+
+					<rich:tab>
+						<f:facet name="label">
+							<h:outputText value="Ωρομίσθιοι" />
+						</f:facet>
+						<a4j:support event="ontabenter" eventsQueue="lala2"
+							reRender="school-hourlybased-employments"
+							action="#{schoolReport.lookupHourlyBasedEmployments()}"
+							ajaxSingle="true">
+
+						</a4j:support>
+
+						<a4j:include id="school-hourlybased-employments"
+							viewId="/school/school-hourlybased-employments-component.xhtml" />
+
+					</rich:tab>
+
+					<rich:tab>
+						<f:facet name="label">
+							<h:outputText value="Τμήματα" />
+						</f:facet>
+
+						<a4j:support event="ontabenter" eventsQueue="lala2"
+							ajaxSingle="true"
+							action="#{schoolReport.lookupHourlyBasedEmployments()}" />
+
+						<a4j:include
+							viewId="/school/school-hourlybased-employments-component.xhtml" />
+
+					</rich:tab>
+
+
+
+				</rich:tabPanel>
+
+
+
+				<h:panelGroup>
+					<s:div styleClass="actionButtons">
+						<s:button disabled="#{empty from}" action="backButton"
+							value="Επιστροφή" />
+						<rich:spacer width="20" />
+						<s:button action="endButton" value="Τέλος Ενέργειας" />
+					</s:div>
+				</h:panelGroup>
+
+			</h:panelGrid>
 
 		</rich:panel>
 

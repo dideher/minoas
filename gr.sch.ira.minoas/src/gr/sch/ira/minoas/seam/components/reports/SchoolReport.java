@@ -20,6 +20,7 @@ import gr.sch.ira.minoas.seam.components.reports.resource.ServiceAllocationItem;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
@@ -196,7 +197,96 @@ public class SchoolReport extends BaseReport {
 				getEntityManager(), schoolHome.getInstance(), today,
 				Arrays.asList(ServiceAllocationType.SCHOOL_HEADMASTER, ServiceAllocationType.SCHOOL_SUBHEADMASTER)));
 	}
+	
+	public SchoolUniversalEmploymentItem constructDeputyEmploymentInfoItem(Employment employment) {
+		Date today = DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH);
+		SchoolUniversalEmploymentItem item = new SchoolUniversalEmploymentItem(employment);
 
+		/* check if the employment is associated with a disposal */
+		Collection<Disposal> disposals = getCoreSearching().getEmployeeActiveDisposals(getEntityManager(),
+				employment.getEmployee(), today);
+		if (disposals != null && disposals.size() > 0) {
+			StringBuffer sb = new StringBuffer();
+			int total_hours = 0;
+			for (Disposal d : disposals) {
+				sb.append(constructComment(d));
+				total_hours += d.getHours();
+			}
+			item.setEmployeeFinalWorkingHours(item.getEmployeeFinalWorkingHours() - total_hours);
+			item.setEmploymentComment(sb.toString());
+		}
+
+		/* check if the employment is associated with a service allocation */
+		ServiceAllocation serviceAllocation = getCoreSearching().getEmployeeActiveServiceAllocation(
+				getEntityManager(), employment.getEmployee(), today);
+		if (serviceAllocation != null) {
+			/* the employment is overriden by a service allocation */
+			item.setEmployeeFinalWorkingHours(serviceAllocation.getWorkingHoursOnRegularPosition());
+			item.setEmploymentComment(constructComment(serviceAllocation));
+		}
+
+		/* check if the employment is associated with a leave */
+		Leave leave = getCoreSearching()
+				.getEmployeeActiveLeave(getEntityManager(), employment.getEmployee(), today);
+		if (leave != null) {
+			/* the employment is overriden by a service allocation */
+			item.setEmployeeFinalWorkingHours(0);
+			item.setEmploymentComment(constructComment(leave));
+		}
+
+		return item;
+	}
+
+	public SchoolUniversalEmploymentItem constructRegularEmploymentInfoItem(Employment regularEmployment) {
+		Date today = DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH);
+		SchoolUniversalEmploymentItem item = new SchoolUniversalEmploymentItem(regularEmployment);
+
+		/* check if the employment is associated with an secondment */
+		Secondment s = getCoreSearching().getEmployeeActiveSecondment(getEntityManager(), regularEmployment.getEmployee(),
+				today);
+		if (s != null) {
+			/* the employment is overriden by a secondment */
+			item.setEmployeeFinalWorkingHours(0);
+			item.setEmploymentComment(constructComment(s));
+		}
+
+		/* check if the employment is associated with a disposal */
+		Collection<Disposal> disposals = getCoreSearching().getEmployeeActiveDisposals(getEntityManager(),
+				regularEmployment.getEmployee(), today);
+		if (disposals != null && disposals.size() > 0) {
+			StringBuffer sb = new StringBuffer();
+			int total_hours = 0;
+			for (Disposal d : disposals) {
+				sb.append(constructComment(d));
+				total_hours += d.getHours();
+			}
+			item.setEmployeeFinalWorkingHours(item.getEmployeeFinalWorkingHours() - total_hours);
+			item.setEmploymentComment(sb.toString());
+		}
+
+		/* check if the employment is associated with a service allocation */
+		ServiceAllocation serviceAllocation = getCoreSearching().getEmployeeActiveServiceAllocation(
+				getEntityManager(), regularEmployment.getEmployee(), today);
+		if (serviceAllocation != null) {
+			/* the employment is overriden by a service allocation */
+			item.setEmployeeFinalWorkingHours(serviceAllocation.getWorkingHoursOnRegularPosition());
+			item.setEmploymentComment(constructComment(serviceAllocation));
+		}
+
+		/* check if the employment is associated with a leave */
+		Leave leave = getCoreSearching()
+				.getEmployeeActiveLeave(getEntityManager(), regularEmployment.getEmployee(), today);
+		if (leave != null) {
+			/* the employment is overriden by a service allocation */
+			item.setEmployeeFinalWorkingHours(0);
+			item.setEmploymentComment(constructComment(leave));
+		}
+
+		return item;
+	
+	}
+	
+	
 	public void generateEmploymentsReport() {
 
 		/*
@@ -249,52 +339,7 @@ public class SchoolReport extends BaseReport {
 				getEntityManager(), activeSchoolYear, schoolHome.getInstance(), EmploymentType.REGULAR);
 
 		for (Employment employment : schoolRegularEmployments) {
-			SchoolUniversalEmploymentItem item = new SchoolUniversalEmploymentItem(employment);
-
-			/* check if the employment is associated with an secondment */
-			Secondment s = getCoreSearching().getEmployeeActiveSecondment(getEntityManager(), employment.getEmployee(),
-					today);
-			if (s != null) {
-				/* the employment is overriden by a secondment */
-				System.err.println(employment.getEmployee()+" has a secondment :!");
-				item.setEmployeeFinalWorkingHours(0);
-				item.setEmploymentComment(constructComment(s));
-			}
-
-			/* check if the employment is associated with a disposal */
-			Collection<Disposal> disposals = getCoreSearching().getEmployeeActiveDisposals(getEntityManager(),
-					employment.getEmployee(), today);
-			if (disposals != null && disposals.size() > 0) {
-				StringBuffer sb = new StringBuffer();
-				int total_hours = 0;
-				for (Disposal d : disposals) {
-					sb.append(constructComment(d));
-					total_hours += d.getHours();
-				}
-				System.err.println(employment.getEmployee()+" : "+ Integer.toString(item.getEmployeeFinalWorkingHours() - total_hours));
-				item.setEmployeeFinalWorkingHours(item.getEmployeeFinalWorkingHours() - total_hours);
-				item.setEmploymentComment(sb.toString());
-			}
-
-			/* check if the employment is associated with a service allocation */
-			ServiceAllocation serviceAllocation = getCoreSearching().getEmployeeActiveServiceAllocation(
-					getEntityManager(), employment.getEmployee(), today);
-			if (serviceAllocation != null) {
-				/* the employment is overriden by a service allocation */
-				item.setEmployeeFinalWorkingHours(serviceAllocation.getWorkingHoursOnRegularPosition());
-				item.setEmploymentComment(constructComment(serviceAllocation));
-			}
-
-			/* check if the employment is associated with a leave */
-			Leave leave = getCoreSearching()
-					.getEmployeeActiveLeave(getEntityManager(), employment.getEmployee(), today);
-			if (leave != null) {
-				/* the employment is overriden by a service allocation */
-				item.setEmployeeFinalWorkingHours(0);
-				item.setEmploymentComment(constructComment(leave));
-			}
-
-			reportData.add(item);
+			reportData.add(constructRegularEmploymentInfoItem(employment));
 		}
 
 		/* ************************************************************************************ */
@@ -304,41 +349,7 @@ public class SchoolReport extends BaseReport {
 				getEntityManager(), activeSchoolYear, schoolHome.getInstance(), EmploymentType.DEPUTY);
 
 		for (Employment employment : schoolDeputyEmployments) {
-			SchoolUniversalEmploymentItem item = new SchoolUniversalEmploymentItem(employment);
-
-			/* check if the employment is associated with a disposal */
-			Collection<Disposal> disposals = getCoreSearching().getEmployeeActiveDisposals(getEntityManager(),
-					employment.getEmployee(), today);
-			if (disposals != null && disposals.size() > 0) {
-				StringBuffer sb = new StringBuffer();
-				int total_hours = 0;
-				for (Disposal d : disposals) {
-					sb.append(constructComment(d));
-					total_hours += d.getHours();
-				}
-				item.setEmployeeFinalWorkingHours(item.getEmployeeFinalWorkingHours() - total_hours);
-				item.setEmploymentComment(sb.toString());
-			}
-
-			/* check if the employment is associated with a service allocation */
-			ServiceAllocation serviceAllocation = getCoreSearching().getEmployeeActiveServiceAllocation(
-					getEntityManager(), employment.getEmployee(), today);
-			if (serviceAllocation != null) {
-				/* the employment is overriden by a service allocation */
-				item.setEmployeeFinalWorkingHours(serviceAllocation.getWorkingHoursOnRegularPosition());
-				item.setEmploymentComment(constructComment(serviceAllocation));
-			}
-
-			/* check if the employment is associated with a leave */
-			Leave leave = getCoreSearching()
-					.getEmployeeActiveLeave(getEntityManager(), employment.getEmployee(), today);
-			if (leave != null) {
-				/* the employment is overriden by a service allocation */
-				item.setEmployeeFinalWorkingHours(0);
-				item.setEmploymentComment(constructComment(leave));
-			}
-
-			reportData.add(item);
+			reportData.add(constructDeputyEmploymentInfoItem(employment));
 		}
 
 		/* ************************************************************************************ */
@@ -624,8 +635,12 @@ public class SchoolReport extends BaseReport {
 		SchoolYear activeSchoolYear = getCoreSearching().getActiveSchoolYear(getEntityManager());
 		info("deputy employee lookup in school unit #0 during school year #1", schoolHome.getInstance(),
 				activeSchoolYear);
-		schoolDeputyEmployments = convertEmploymentCollection(getCoreSearching().getSchoolEmploymentsOfType(
-				getEntityManager(), activeSchoolYear, schoolHome.getInstance(), EmploymentType.DEPUTY));
+		Collection<Employment> deputyEmployments = getCoreSearching().getSchoolEmploymentsOfType(
+				getEntityManager(), activeSchoolYear, schoolHome.getInstance(), EmploymentType.DEPUTY);
+		schoolDeputyEmployments = new ArrayList<EmploymentReportItem>(deputyEmployments.size());
+		for(Employment employment : deputyEmployments) {
+			schoolDeputyEmployments.add(constructRegularEmploymentInfoItem(employment));
+		}
 		finished = System.currentTimeMillis();
 		info("lookup found #0 deputy employment(s) totally in #1 [ms]", schoolDeputyEmployments.size(),
 				(finished - started));
@@ -648,8 +663,13 @@ public class SchoolReport extends BaseReport {
 		SchoolYear activeSchoolYear = getCoreSearching().getActiveSchoolYear(getEntityManager());
 		info("regular employee lookup in school unit #0 during school year #1", schoolHome.getInstance(),
 				activeSchoolYear);
-		schoolRegularEmployments = convertEmploymentCollection(getCoreSearching().getSchoolEmploymentsOfType(
-				getEntityManager(), activeSchoolYear, schoolHome.getInstance(), EmploymentType.REGULAR));
+		Collection<Employment> regularEmployments = getCoreSearching().getSchoolEmploymentsOfType(
+				getEntityManager(), activeSchoolYear, schoolHome.getInstance(), EmploymentType.REGULAR);
+		schoolRegularEmployments = new ArrayList<EmploymentReportItem>(regularEmployments.size());
+		for(Employment employment : regularEmployments) {
+			schoolRegularEmployments.add(constructRegularEmploymentInfoItem(employment));
+		}
+		
 		finished = System.currentTimeMillis();
 		info("lookup found #0 regular employment(s) totally in #1 [ms]", schoolRegularEmployments.size(),
 				(finished - started));
