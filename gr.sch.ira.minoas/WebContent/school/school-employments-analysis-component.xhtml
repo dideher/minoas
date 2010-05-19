@@ -128,9 +128,11 @@
 									</s:div>
 								</f:facet>
 							</rich:column>
-							<rich:column style="text-align:right">
-								<h:outputText styleClass="fieldValueText"
-									value="#{_schoolRegularEmployment.employmentComment}" />
+							<rich:column style="text-align:left">
+									<rich:dataGrid onRowMouseOver="this.style.backgroundColor='#A5F3CB'" width="100%"
+											onRowMouseOut="this.style.backgroundColor='#{a4jSkin.rowBackgroundColor}'" value="#{_schoolRegularEmployment.employmentComments}" var="_employmentComment">
+										<h:outputText value="#{_employmentComment}" styleClass="fieldValueText"/>
+									</rich:dataGrid>
 								<f:facet name="footer">	
 								<s:div style="text-align:center">
 									<h:outputText value="Απαιτούμενες ώρες : " />

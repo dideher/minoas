@@ -61,7 +61,7 @@
 
 
 				<h:panelGroup>
-
+					<h:form>
 					<rich:tabPanel mode="Ajax">
 						<rich:tab
 							rendered="#{employeeRegularEmploymentsIncludingDisabledListQuery.resultCount gt 0}">
@@ -402,10 +402,10 @@
 											</h:outputText>
 										</f:facet>
 										<h:outputText
-											value="#{_disposal.affectedSecondment.sourceUnit.title} (Απόσπαση)"
+											value="#{_disposal.affectedSecondment.targetUnit.title} (Μονάδα Απόσπασης)"
 											rendered="#{_disposal.affectedSecondment ne null}" />
 										<h:outputText
-											value="#{_disposal.affectedEmployment.school.title} (Οργανική))"
+											value="#{_disposal.affectedEmployment.school.title})"
 											rendered="#{_disposal.affectedEmployment ne null}" />
 									</rich:column>
 									<rich:column>
@@ -601,6 +601,8 @@
 							</h:panelGrid>
 						</rich:tab>
 					</rich:tabPanel>
+					
+					</h:form>
 
 				</h:panelGroup>
 
