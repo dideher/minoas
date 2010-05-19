@@ -1,5 +1,8 @@
 package gr.sch.ira.minoas.seam.components.reports.resource;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employement.Disposal;
 import gr.sch.ira.minoas.model.employement.Employment;
@@ -12,7 +15,7 @@ import gr.sch.ira.minoas.model.employement.ServiceAllocation;
  */
 public class SchoolUniversalEmploymentItem extends EmploymentReportItem {
 
-	private String employmentComment;
+	private List<String> employmentComments = new ArrayList<String>();
 
 	/**
 	 * 
@@ -70,18 +73,23 @@ public class SchoolUniversalEmploymentItem extends EmploymentReportItem {
 		super(serviceAllocation.getAffectedEmployment());
 	}
 
+	
 	/**
-	 * @return the employmentComment
+	 * @return the employmentComments
 	 */
-	public String getEmploymentComment() {
-		return employmentComment;
+	public List<String> getEmploymentComments() {
+		return employmentComments;
 	}
 
 	/**
-	 * @param employmentComment the employmentComment to set
+	 * @param employmentComments the employmentComments to set
 	 */
-	public void setEmploymentComment(String employmentComment) {
-		this.employmentComment = employmentComment;
+	public void setEmploymentComments(List<String> employmentComments) {
+		this.employmentComments = employmentComments;
+	}
+	
+	public void addEmploymentComment(String employmentComment) {
+		getEmploymentComments().add(employmentComment);
 	}
 
 }
