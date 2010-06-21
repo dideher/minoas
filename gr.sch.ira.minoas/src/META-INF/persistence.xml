@@ -65,6 +65,10 @@
     <class>gr.sch.ira.minoas.model.employement.DisposalUnit</class>
     <class>gr.sch.ira.minoas.model.classrooms.SchoolClass</class>
     <class>gr.sch.ira.minoas.model.employee.EmployeeExclusion</class>
+    <class>gr.sch.ira.minoas.model.classrooms.CourseType</class>
+    <class>gr.sch.ira.minoas.model.classrooms.SchoolDepartment</class>
+    <class>gr.sch.ira.minoas.model.transfers.BaseOutstandingTransfer</class>
+    <class>gr.sch.ira.minoas.model.transfers.OutstandingImprovement</class>
     <properties>
       <!--
         <property name="hibernate.dialect"

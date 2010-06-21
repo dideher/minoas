@@ -36,6 +36,17 @@
 						<f:param name="to" value="/school/school-unit-management" />
 					</s:link>
 				</rich:menuItem>
+
+				<rich:menuSeparator />
+
+				<rich:menuItem submitMode="none">
+					<s:link value="Τύποι Μαθημάτων"
+						view="/courseType/courseTypes.xhtml" propagation="nest">
+						<f:param name="from" value="/home" />
+					</s:link>
+				</rich:menuItem>
+
+
 				<rich:menuItem submitMode="none">
 					<s:link value="Ώρες Διδασκαλίας Σχολικής Μονάδας"
 						view="/school/select-school.xhtml" propagation="nest">
@@ -169,7 +180,7 @@
 								value="/serviceallocation/employee-service-allocation-management" />
 						</s:link>
 					</rich:menuItem>
-					<rich:menuSeparator />
+
 					<rich:menuGroup value="Εκτύπωσεις και Σταστικά"
 						rendered="#{(s:hasRole('ADMIN') or s:hasRole('VIEW_SERVICE_ALLOCATION'))}">
 						<rich:menuItem submitMode="none">
@@ -215,7 +226,15 @@
 
 					</rich:menuGroup>
 				</rich:menuGroup>
+				<rich:menuSeparator />
+				<rich:menuGroup value="Μεταθέσεις - Βελτιώσεις"
+					rendered="#{(s:hasRole('ADMIN'))}">
+					<rich:menuItem submitMode="none">
 
+						<s:link value="Βελτιώσεις" view="/transfers/improvements.xhtml">
+						</s:link>
+					</rich:menuItem>
+				</rich:menuGroup>
 				<rich:menuSeparator />
 				<rich:menuGroup value="Εκτύπωσεις και Στατιστικά"
 					rendered="#{(s:hasRole('ADMIN') or s:hasRole('VIEW_EMPLOYEE'))}">

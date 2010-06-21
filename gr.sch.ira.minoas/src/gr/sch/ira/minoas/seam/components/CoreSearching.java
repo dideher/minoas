@@ -76,18 +76,19 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 		}
 	}
 
-	@Factory(value="availableSchoolClasses")
+	@Factory(value = "availableSchoolClasses")
 	@SuppressWarnings("unchecked")
 	public List<SchoolClass> getAvailableSchoolClasses() {
-		return getEntityManager().createQuery("SELECT s FROM SchoolClass ORDER BY (s.schoolType, s.sortOrder)").getResultList();
+		return getEntityManager().createQuery("SELECT s FROM SchoolClass s ORDER BY (s.schoolType)").getResultList();
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public List<SchoolClass> getSchoolClassesForSchoolType(SchoolType schoolType) {
-		return getEntityManager().createQuery("SELECT s FROM SchoolClass WHERE s.schoolType=:schoolType ORDER BY (s.sortOrder)").
-		setParameter("schoolType", schoolType).getResultList();
+		return getEntityManager().createQuery(
+				"SELECT s FROM SchoolClass s WHERE s.schoolType=:schoolType ORDER BY (s.sortOrder)").setParameter(
+				"schoolType", schoolType).getResultList();
 	}
-	
+
 	@Factory(value = "dateSearchTypes")
 	public DateSearchType[] getAvailableDateSearchTypes() {
 		return DateSearchType.values();
@@ -118,7 +119,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 	public LeaveType[] getAvailableLeaveTypes() {
 		return LeaveType.values();
 	}
-	
+
 	@Factory(value = "schoolTypes")
 	public SchoolType[] getAvailableSchoolTypes() {
 		return SchoolType.values();
@@ -236,19 +237,19 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 			return null;
 		}
 	}
-	
+
 	@Transactional(TransactionPropagationType.REQUIRED)
-	public Employee getEmployeeOfTypeByVatNumber(EntityManager entityManager, EmployeeType employeeType, String vatNumber) {
+	public Employee getEmployeeOfTypeByVatNumber(EntityManager entityManager, EmployeeType employeeType,
+			String vatNumber) {
 		EntityManager em = getEntityManager(entityManager);
 		try {
-			return (Employee) em.createQuery("SELECT e from Employee e WHERE e.vatNumber=:vatNumber AND e.type=:employeeType").setParameter(
+			return (Employee) em.createQuery(
+					"SELECT e from Employee e WHERE e.vatNumber=:vatNumber AND e.type=:employeeType").setParameter(
 					"vatNumber", vatNumber).setParameter("employeeType", employeeType).getSingleResult();
 		} catch (NoResultException nre) {
 			return null;
 		}
 	}
-	
-	
 
 	@Transactional(TransactionPropagationType.REQUIRED)
 	@SuppressWarnings("unchecked")
@@ -274,16 +275,15 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 				employee, schoolyear);
 		return result;
 	}
-	
-	
 
 	@SuppressWarnings("unchecked")
 	@Transactional(TransactionPropagationType.REQUIRED)
 	public Collection<Employment> getEmployeeEmploymentsOfType(Person employee, EmploymentType type) {
 		List<Employment> result;
 		debug("trying to featch all  employments for employee '#0'", employee);
-		result = entityManager.createQuery(
-				"SELECT e from Employment e WHERE e.employee=:employee AND e.active IS TRUE  AND e.type=:type ORDER BY e.schoolYear.title")
+		result = entityManager
+				.createQuery(
+						"SELECT e from Employment e WHERE e.employee=:employee AND e.active IS TRUE  AND e.type=:type ORDER BY e.schoolYear.title")
 				.setParameter("employee", employee).setParameter("type", type).getResultList();
 		info("found totally '#0' employments for regular employee '#1'.", result.size(), employee);
 		return result;
@@ -291,17 +291,19 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 
 	@SuppressWarnings("unchecked")
 	@Transactional(TransactionPropagationType.REQUIRED)
-	public Collection<Employment> getEmployeeEmploymentsOfType(Person employee, EmploymentType type, SchoolYear schoolYear) {
+	public Collection<Employment> getEmployeeEmploymentsOfType(Person employee, EmploymentType type,
+			SchoolYear schoolYear) {
 		List<Employment> result;
 		debug("trying to featch all  employments for employee '#0'", employee);
-		result = entityManager.createQuery(
-				"SELECT e from Employment e WHERE e.employee=:employee AND e.active IS TRUE AND e.type=:type AND e.schoolYear=:schoolyear ORDER BY e.id")
-				.setParameter("employee", employee).setParameter("type", type).setParameter("schoolyear", schoolYear).getResultList();
+		result = entityManager
+				.createQuery(
+						"SELECT e from Employment e WHERE e.employee=:employee AND e.active IS TRUE AND e.type=:type AND e.schoolYear=:schoolyear ORDER BY e.id")
+				.setParameter("employee", employee).setParameter("type", type).setParameter("schoolyear", schoolYear)
+				.getResultList();
 		info("found totally '#0' employments for regular employee '#1'.", result.size(), employee);
 		return result;
 	}
 
-	
 	@SuppressWarnings("unchecked")
 	@Transactional(TransactionPropagationType.REQUIRED)
 	public Collection<Leave> getEmployeeLeaves(Person employee) {
@@ -809,6 +811,12 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 
 	public Specialization getSpecialization(String id) {
 		return getEntityManager().find(Specialization.class, id);
+	}
+
+	@SuppressWarnings("unchecked")
+	public Collection<Specialization> getSpecializations(EntityManager em) {
+		return (Collection<Specialization>) em.createQuery("SELECT s FROM Specialization s WHERE ORDER BY s.title ASC")
+				.getResultList();
 	}
 
 	@SuppressWarnings("unchecked")

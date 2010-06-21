@@ -1,4 +1,4 @@
-#Tue Apr 27 12:39:22 EEST 2010
+#Wed Jun 09 13:07:14 EEST 2010
 eclipse.preferences.version=1
 encoding//WebContent/admin/audit-report.xhtml=UTF-8
 encoding//WebContent/admin/manage-principals.xhtml=UTF-8
@@ -17,6 +17,7 @@ encoding//WebContent/components/top-menu.xhtml=UTF-8
 encoding//WebContent/components/void/teachingVoidComponent.xhtml=UTF-8
 encoding//WebContent/components/void/voidListComponent.xhtml=UTF-8
 encoding//WebContent/components/wait-modal-panel.xhtml=UTF-8
+encoding//WebContent/courseType/courseType-component.xhtml=UTF-8
 encoding//WebContent/disposal/disposal-component.xhtml=UTF-8
 encoding//WebContent/employee/basic-info.xhtml=UTF-8
 encoding//WebContent/employee/components/hourly-based-employment-component.xhtml=UTF-8

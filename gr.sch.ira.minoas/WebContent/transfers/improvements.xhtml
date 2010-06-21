@@ -1,0 +1,262 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:c="http://java.sun.com/jstl/core">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<ui:composition template="/layout/simple-beauty-template.xhtml">
+	<ui:define name="body">
+
+		<rich:panel>
+			<f:facet name="header">
+				<h:outputText value="Μελλοντικές Βελτιώσεις" />
+			</f:facet>
+			<h:form>
+				<a4j:region>
+
+					<h:panelGrid columns="1" width="100%">
+						<h:panelGrid columns="4">
+
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Ομάδα Ειδικοτήτων : " />
+								</ui:define>
+								<h:inputText id="specializationGroupFilter"
+									styleClass="fieldValueText" size="30">
+
+									<rich:suggestionbox height="200" width="350"
+										for="specializationGroupFilter" var="a_spec"
+										suggestionAction="#{specializationGroupSuggester.suggest}">
+										<f:facet name="nothingLabel">
+											<h:outputText value="Άγνωστη Ομάδα Ειδικοτήτων" />
+										</f:facet>
+										<h:column>
+											<h:outputText value="#{a_spec.title}" />
+										</h:column>
+										<a4j:support ajaxSingle="true" event="onselect">
+											<f:setPropertyActionListener value="#{a_spec}"
+												target="#{outstandingImprovementCriteria.specializationGroup}" />
+										</a4j:support>
+									</rich:suggestionbox>
+								</h:inputText>
+							</s:decorate>
+
+
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Βελτίωση Απο" />
+								</ui:define>
+
+								<h:selectOneMenu
+									value="#{outstandingImprovementCriteria.sourceRegion}">
+									<f:selectItem itemLabel="Όλες τις Περιοχές" itemValue="" />
+									<f:selectItem itemLabel="Α Ηρακλείου" itemValue="Α" />
+									<f:selectItem itemLabel="Β Ηρακλείου" itemValue="Β" />
+								</h:selectOneMenu>
+							</s:decorate>
+
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Βελτίωση Στην" />
+								</ui:define>
+
+								<h:selectOneMenu
+									value="#{outstandingImprovementCriteria.targetRegion}">
+									<f:selectItem itemLabel="Όλες τις Περιοχές" itemValue="" />
+									<f:selectItem itemLabel="Α Ηρακλείου" itemValue="Α" />
+									<f:selectItem itemLabel="Β Ηρακλείου" itemValue="Β" />
+								</h:selectOneMenu>
+							</s:decorate>
+
+
+						</h:panelGrid>
+
+						<rich:toolBar itemSeparator="line">
+
+							<h:commandButton id="searchButton" value="Αναζήτηση"
+								action="#{outstandingImprovementsReport.generateReport}">
+								<s:defaultAction />
+								<a4j:support ajaxSingle="true" event="onclick"
+									reRender="employmentsByTypeTable" />
+							</h:commandButton>
+							
+							<a4j:commandButton
+								disabled="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_LEAVE'))}"
+								action="action" reRender="createModalPanelContent"
+								immediate="true"
+								oncomplete="#{rich:component('createModalPanel')}.show()"
+								value="Καταχώρηση Νέας Βελτίωσεις" />
+							<s:button id="backButton" action="backButton"
+								value="Τέλος Εργασίας" />
+						</rich:toolBar>
+
+						<rich:panel>
+							<f:facet name="header">
+								<h:outputText value="Μελλοντικές Βελτιώσεις Μόνιμων Εκπαιδευτικών" />
+							</f:facet>
+						</rich:panel>
+
+					</h:panelGrid>
+				</a4j:region>
+			</h:form>
+		</rich:panel>
+
+
+		<rich:modalPanel id="createModalPanel" autosized="true" width="450">
+			<f:facet name="header">
+				<h:outputText
+					value="Καταχώρηση Άδειας Εκπαιδευτικού #{employeeUtil.prettyFormat(employeeHome.instance)}"
+					style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<h:graphicImage value="/img/modal/close.png" styleClass="hidelink"
+						width="18" height="18" id="hidelink4" />
+					<rich:componentControl for="createModalPanel" attachTo="hidelink4"
+						operation="hide" event="onclick" />
+				</h:panelGroup>
+			</f:facet>
+			<a4j:region>
+				<h:panelGrid columns="4">
+					<rich:messages style="color:red;"></rich:messages>
+					<h:form>
+						<a4j:outputPanel id="createModalPanelContent" layout="inline">
+							<a4j:region>
+								<h:outputText
+									value="Συμπληρώστε τα στοιχεία της παρακάτω φόρμας για να εισάγεται την μελλοντική βελτίωση του εκπαιδευτικό." />
+
+								<h:panelGrid columns="2">
+									<s:decorate template="/layout/doubleLineEdit.xhtml"
+										id="employeeSectionID">
+										<ui:define name="label">
+											<h:outputText value="Μόνιμος Εκπαιδευτικός : " />
+										</ui:define>
+										<h:inputText id="regularEmployeeID"
+											value="#{outstandingImprovementHome.instance.employeeRegistryID}"
+											styleClass="fieldValueText" size="6" maxlength="6">
+
+											<rich:suggestionbox height="300" width="650"
+												for="regularEmployeeID" var="a_employee"
+												fetchValue="#{a_employee.regularDetail.registryID}"
+												suggestionAction="#{regularEmployeeSuggester.suggest}">
+												<f:facet name="nothingLabel">
+													<h:outputText value="Άγνωστος Εκπαιδευτικός" />
+												</f:facet>
+												<rich:column>
+													<h:outputText
+														value="#{a_employee.regularDetail.registryID}" />
+												</rich:column>
+												<rich:column>
+													<h:outputText value="#{a_employee.lastName}" />
+												</rich:column>
+												<rich:column>
+													<h:outputText value="#{a_employee.firstName}" />
+												</rich:column>
+												<rich:column>
+													<h:outputText value="#{a_employee.fatherName}" />
+												</rich:column>
+												<rich:column>
+													<h:outputText
+														value="#{a_employee.lastSpecialization.title}" />
+												</rich:column>
+												<rich:column>
+													<h:outputText
+														value="#{a_employee.currentEmployment.school.title}" />
+												</rich:column>
+												<a4j:support ajaxSingle="true" event="onselect"
+													reRender="improvementFrom, employeeSectionID, employeeSection"
+													action="#{outstandingImprovementHome.updateValueDueToEmployee()}">
+													<f:setPropertyActionListener value="#{a_employee}"
+														target="#{outstandingImprovementHome.instance.employee}" />
+
+												</a4j:support>
+											</rich:suggestionbox>
+										</h:inputText>
+									</s:decorate>
+
+									<s:decorate template="/layout/doubleLineEdit.xhtml"
+										id="employeeSection">
+										<ui:define name="label">
+											<h:outputText value="Εκπαιδευτικός : " />
+										</ui:define>
+										<h:inputText styleClass="fieldValueText" readonly="true"
+											size="40"
+											value="#{employeeUtil.prettyFormat(outstandingImprovementHome.instance.employee)}">
+										</h:inputText>
+									</s:decorate>
+
+									<s:decorate template="/layout/doubleLineEdit.xhtml"
+										id="improvementFrom">
+										<ui:define name="label">
+											<h:outputText value="Βελτίωση Απο : " />
+										</ui:define>
+										<h:inputText styleClass="fieldValueText" readonly="true"
+											size="20"
+											value="#{outstandingImprovementHome.instance.sourceSchool.title} (#{outstandingImprovementHome.instance.sourceSchool.regionCode})">
+										</h:inputText>
+									</s:decorate>
+
+									<s:decorate id="improvementTo"
+										template="/layout/doubleLineEdit.xhtml">
+										<ui:define name="label">
+											<h:outputText value="Βελτίωση Σε" />
+										</ui:define>
+
+										<h:inputText id="schoolTarget" styleClass="fieldValueText"
+											required="true" size="20">
+
+											<rich:suggestionbox for="schoolTarget" var="leaveSourceUnit"
+												height="200" width="300"
+												suggestionAction="#{schoolUnitSuggester.suggest}">
+												<f:facet name="nothingLabel">
+													<h:outputText value="Άγνωστη Σχολική Μονάδα" />
+												</f:facet>
+												<h:column>
+													<h:outputText value="#{leaveSourceUnit.title}" />
+												</h:column>
+												<a4j:support ajaxSingle="true" event="onselect">
+													<f:setPropertyActionListener value="#{leaveSourceUnit}"
+														target="#{outstandingImprovementHome.instance.targetSchool}" />
+												</a4j:support>
+											</rich:suggestionbox>
+										</h:inputText>
+									</s:decorate>
+								</h:panelGrid>
+
+
+							</a4j:region>
+						</a4j:outputPanel>
+
+
+
+						<h:panelGrid columns="2">
+
+
+
+							<a4j:commandButton value="Καταχώρηση Βελτίωσης !"
+								action="#{outstandingImprovementManagement.createNewImprovement}"
+								data="#{facesContext.maximumSeverity.ordinal ge 2}"
+								oncomplete="if(data == false) Richfaces.hideModalPanel('createModalPanel');" />
+							<a4j:commandButton value="Επιστροφή .."
+								action="{leaveHome.revert()}"
+								onclick="#{rich:component('createModalPanel')}.hide();" />
+						</h:panelGrid>
+					</h:form>
+				</h:panelGrid>
+			</a4j:region>
+		</rich:modalPanel>
+
+		<ui:include src="/components/wait-modal-panel.xhtml" />
+
+	</ui:define>
+</ui:composition>
+</html>
+

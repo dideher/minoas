@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:c="http://java.sun.com/jstl/core">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<ui:composition template="/layout/simple-beauty-template.xhtml">
+	<ui:define name="body">
+
+		<rich:panel>
+			<f:facet name="header">
+				<h:outputText value="Διαθέσιμοι Τύποι Μαθημάτων" />
+			</f:facet>
+			<h:panelGrid columns="1" width="100%">
+				<rich:panel>
+					<f:facet name="header">
+						<h:outputText value="Βασικά Στοιχεία" />
+					</f:facet>
+				</rich:panel>
+				<h:panelGroup>
+					<h:form>
+						<rich:tabPanel switchType="ajax" id="schoolClassesTabs">
+							<c:forEach var="_schoolClass" items="#{availableSchoolClasses}">
+								<rich:tab>
+									<f:facet name="label">
+										<h:outputText value="#{_schoolClass.title}" />
+									</f:facet>
+
+									<a4j:commandLink value="Προσθήκη" action="acc"/>
+									<a4j:commandButton disabled="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_LEAVE'))}"
+									action="action"
+									reRender="createModalPanelContent" immediate="true"
+									oncomplete="#{rich:component('createModalPanel')}.show()"
+									value="Καταχώρηση Νέας Άδειας" />
+								
+
+								</rich:tab>
+							</c:forEach>
+						</rich:tabPanel>
+
+					</h:form>
+				</h:panelGroup>
+			</h:panelGrid>
+		</rich:panel>
+		
+		
+		<rich:modalPanel id="createModalPanel" autosized="true" width="450">
+			<f:facet name="header">
+				<h:outputText
+					value="Καταχώρηση Άδειας Εκπαιδευτικού #{employeeUtil.prettyFormat(employeeHome.instance)}"
+					style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<h:graphicImage value="/img/modal/close.png" styleClass="hidelink"
+						width="18" height="18" id="hidelink4" />
+					<rich:componentControl for="createModalPanel" attachTo="hidelink4"
+						operation="hide" event="onclick" />
+				</h:panelGroup>
+			</f:facet>
+			<a4j:region>
+				<h:panelGrid columns="1">
+					<rich:messages style="color:red;"></rich:messages>
+					<h:form>
+						<a4j:outputPanel id="createModalPanelContent" layout="inline">
+							<h:outputText
+								value="Συμπληρώστε τα στοιχεία της παρακάτω φόρμας για να εισάγεται νέα άδεια για τον εκπαιδευτικό." />
+							<ui:include src="/courseType/courseType-component.xhtml">
+								
+							</ui:include>
+						</a4j:outputPanel>
+						
+						<h:panelGrid columns="2">
+						
+						
+
+							<a4j:commandButton value="Καταχώρηση Άδειας !"
+								action="#{leaveHome.persist()}"
+								data="#{facesContext.maximumSeverity.ordinal ge 2}"
+								oncomplete="if(data == false) Richfaces.hideModalPanel('createModalPanel');"
+								reRender="activeLeave,leavesOutputPanel" />
+							<a4j:commandButton value="Επιστροφή .."
+								action="#{leaveHome.revert()}"
+								onclick="#{rich:component('createModalPanel')}.hide();" />
+						</h:panelGrid>
+					</h:form>
+				</h:panelGrid>
+			</a4j:region>
+		</rich:modalPanel>
+
+		<ui:include src="/components/wait-modal-panel.xhtml" />
+		
+	</ui:define>
+</ui:composition>
+</html>
+

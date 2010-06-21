@@ -1,6 +1,7 @@
 package gr.sch.ira.minoas.seam.components.management;
 
 import gr.sch.ira.minoas.model.employee.EmployeeExclusion;
+import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.home.EmployeeExclusionHome;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
@@ -67,6 +68,12 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
 			return ACTION_OUTCOME_FAILURE;
 		}
 
+	}
+	
+	@Transactional
+	public String transferEmployee() {
+		Employment newEmployment = new Employment();
+		return null;
 	}
 
 	/**
