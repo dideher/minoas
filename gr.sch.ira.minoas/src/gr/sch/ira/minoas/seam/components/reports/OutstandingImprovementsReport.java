@@ -44,9 +44,6 @@ public class OutstandingImprovementsReport extends BaseReport {
 	private Collection<OutstandingImprovementItem> reportData = null;
 
 	@In(required = true)
-	private SecondmentCriteria secondmentCriteria;
-	
-	@In(required = true)
 	private OutstandingImprovementCriteria outstandingImprovementCriteria;
 
 	/**
@@ -55,122 +52,35 @@ public class OutstandingImprovementsReport extends BaseReport {
 	public OutstandingImprovementsReport() {
 	}
 
-	public void generatePDFReport() throws Exception {
-		try {
-			Map<String, String> parameters = new HashMap<String, String>();
-			parameters.put("SECONDMENT_TYPE_FILTER",
-					secondmentCriteria.getSecondmentType() != null ? getLocalizedMessage(secondmentCriteria
-							.getSecondmentType().getKey()) : "Όλοι οι Τύποι");
-			/* create the secondment type helper */
-			for (SecondmentType secondmentType : getCoreSearching().getAvailableSecondmentTypes()) {
-				parameters.put(secondmentType.name(), getLocalizedMessage(secondmentType.getKey()));
-			}
-			JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(reportData);
-			byte[] bytes = JasperRunManager.runReportToPdf(this.getClass().getResourceAsStream(
-					"/reports/secondmentByType.jasper"), parameters, (JRDataSource) ds);
-			HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext()
-					.getResponse();
-			response.setContentType("application/pdf");
-			response.addHeader("Content-Disposition", "attachment;filename=SecondmentReportByType.pdf");
-			response.setContentLength(bytes.length);
-			ServletOutputStream servletOutputStream = response.getOutputStream();
-			servletOutputStream.write(bytes, 0, bytes.length);
-			servletOutputStream.flush();
-			servletOutputStream.close();
-			FacesContext.getCurrentInstance().responseComplete();
-		} catch (Exception ex) {
-			ex.printStackTrace(System.err);
-		}
-	}
-
 	public void generateReport() throws Exception {
-		Date effectiveDate = getSecondmentCriteria().getEffectiveDate();
-		Date effectiveDateFrom = getSecondmentCriteria().getEffectiveDateFrom();
-		Date effectiveDateUntil = getSecondmentCriteria().getEffectiveDateUntil();
-		SecondmentType secondmentType = getSecondmentCriteria().getSecondmentType();
-		Character region = getSecondmentCriteria().getRegion();
-		Unit targetUnit = getSecondmentCriteria().getTargetUnit();
-		SpecializationGroup specializationGroup = getSecondmentCriteria().getSpecializationGroup();
-		Boolean employeeRequested = getSecondmentCriteria().getEmployeeRequested();
-		DateSearchType dateSearchType = getSecondmentCriteria().getDateSearchType();
+
+		Character improvementRegion = getOutstandingImprovementCriteria().getImprovementRegion();
+		SpecializationGroup specializationGroup = getOutstandingImprovementCriteria().getSpecializationGroup();
 
 		StringBuffer sb = new StringBuffer();
-		sb.append("SELECT i FROM OutstandingImprovement i WHERE i.active IS TRUE ");
-		if (employeeRequested != null) {
-			sb.append("AND s.employeeRequested = :employeeRequested");
-		}
-		switch (dateSearchType) {
-		case AFTER_DATE:
-			sb.append("AND s.established >= :effectiveDate ");
-			break;
-		case BEFORE_DATE:
-			sb.append("AND s.dueTo <= :effectiveDate ");
-			break;
-		case DURING_DATE:
-			sb.append(" AND (:effectiveDate BETWEEN s.established AND s.dueTo) ");
-			break;
-		case DURING_DATE_PERIOD:
-			sb.append(" AND (:effectiveDateFrom <= s.established AND  :effectiveDateUntil >= s.dueTo) ");
-			break;
-		}
-		if (secondmentType != null) {
-			sb.append(" AND s.secondmentType=:secondmentType ");
-		}
-		if (targetUnit != null) {
-			sb.append(" AND s.targetUnit=:targetUnit ");
-		}
-		if (region != null) {
-			sb.append(" AND s.employee.currentEmployment.school.regionCode=:region ");
+		sb.append("SELECT i FROM OutstandingImprovement i WHERE i.isProcessed IS FALSE ");
+		if (improvementRegion != null) {
+			sb.append(" AND i.improvementRegionCode=:improvementRegion ");
 		}
 		if (specializationGroup != null) {
 			sb
-					.append(" AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g=:specializationGroup AND s.employee.lastSpecialization MEMBER OF g.specializations) ");
+					.append(" AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g=:specializationGroup AND i.employee.lastSpecialization MEMBER OF g.specializations) ");
 		}
-		sb.append(" ORDER BY s.employee.lastName");
+		sb.append(" ORDER BY i.employee.lastName");
 
 		Query q = getEntityManager().createQuery(sb.toString());
-		if (dateSearchType != DateSearchType.DURING_DATE_PERIOD) {
-			q.setParameter("effectiveDate", effectiveDate);
-
-		} else {
-			q.setParameter("effectiveDateFrom", effectiveDateFrom);
-			q.setParameter("effectiveDateUntil", effectiveDateUntil);
-		}
-		if (secondmentType != null) {
-			q.setParameter("secondmentType", secondmentType);
-		}
-		if (targetUnit != null) {
-			q.setParameter("targetUnit", targetUnit);
-		}
-		if (region != null) {
-			q.setParameter("region", region);
+		if (improvementRegion != null) {
+			q.setParameter("improvementRegion", improvementRegion);
 		}
 		if (specializationGroup != null) {
 			q.setParameter("specializationGroup", specializationGroup);
 		}
-		if (employeeRequested != null) {
-			q.setParameter("employeeRequested", employeeRequested);
-		}
 		Collection<OutstandingImprovement> improvements = q.getResultList();
-		info("found totally #0 secondments matching criteria", improvements.size());
+		info("found totally #0 outstanding improvement(s) matching criteria", improvements.size());
 		reportData = new ArrayList<OutstandingImprovementItem>(improvements.size());
 		for (OutstandingImprovement improvement : improvements) {
 			reportData.add(new OutstandingImprovementItem(improvement));
 		}
-	}
-
-	/**
-	 * @return the secondmentCriteria
-	 */
-	public SecondmentCriteria getSecondmentCriteria() {
-		return secondmentCriteria;
-	}
-
-	/**
-	 * @param secondmentCriteria the secondmentCriteria to set
-	 */
-	public void setSecondmentCriteria(SecondmentCriteria secondmentCriteria) {
-		this.secondmentCriteria = secondmentCriteria;
 	}
 
 	/**

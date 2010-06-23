@@ -22,6 +22,11 @@ import org.jboss.seam.international.StatusMessage.Severity;
 @Scope(ScopeType.CONVERSATION)
 public class OutstandingImprovementManagement extends BaseDatabaseAwareSeamComponent {
 
+	
+	@In(required = true, create = true)
+	private CoreSearching coreSearching;
+	
+	
 	@In(required = true, create = true)
 	private EmployeeHome employeeHome;
 
@@ -62,8 +67,11 @@ public class OutstandingImprovementManagement extends BaseDatabaseAwareSeamCompo
 		info("new improvment");
 		if(!outstandingImprovementHome.isManaged()) {
 			OutstandingImprovement instance = getOutstandingImprovementHome().getInstance();
+			instance.setEmployeeRegistryID(instance.getEmployee().getRegularDetail().getRegistryID());
 			instance.setSchoolYear(instance.getEmployee().getCurrentEmployment().getSchoolYear());
+			instance.setImprovementRegionCode(instance.getTargetSchool().getRegionCode());
 			instance.setTargetPYSDE(instance.getTargetSchool().getPysde());
+			instance.setEffectiveDate(coreSearching.getActiveSchoolYear(getEntityManager()).getSchoolYearStop());
 			getOutstandingImprovementHome().persist();
 			return ACTION_OUTCOME_SUCCESS;
 		} else {

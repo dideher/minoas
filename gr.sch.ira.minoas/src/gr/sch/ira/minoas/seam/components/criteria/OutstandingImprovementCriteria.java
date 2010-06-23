@@ -1,12 +1,6 @@
 package gr.sch.ira.minoas.seam.components.criteria;
 
-import gr.sch.ira.minoas.model.core.SchoolType;
-import gr.sch.ira.minoas.model.core.SchoolYear;
-import gr.sch.ira.minoas.model.core.Specialization;
 import gr.sch.ira.minoas.model.core.SpecializationGroup;
-import gr.sch.ira.minoas.model.employement.EmploymentType;
-
-import java.util.Date;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
@@ -22,9 +16,9 @@ public class OutstandingImprovementCriteria {
 
 	private SpecializationGroup specializationGroup;
 
-	private Character sourceRegion;
+	private Character improvementRegion;
 
-	private Character targetRegion;
+
 
 	/**
 	 * 
@@ -34,34 +28,7 @@ public class OutstandingImprovementCriteria {
 
 	}
 
-	/**
-	 * @return the sourceRegion
-	 */
-	public Character getSourceRegion() {
-		return sourceRegion;
-	}
-
-	/**
-	 * @param sourceRegion the sourceRegion to set
-	 */
-	public void setSourceRegion(Character sourceRegion) {
-		this.sourceRegion = sourceRegion;
-	}
-
-	/**
-	 * @return the targetRegion
-	 */
-	public Character getTargetRegion() {
-		return targetRegion;
-	}
-
-	/**
-	 * @param targetRegion the targetRegion to set
-	 */
-	public void setTargetRegion(Character targetRegion) {
-		this.targetRegion = targetRegion;
-	}
-
+	
 	/**
 	 * @return the specializationGroup
 	 */
@@ -74,6 +41,20 @@ public class OutstandingImprovementCriteria {
 	 */
 	public void setSpecializationGroup(SpecializationGroup specializationGroup) {
 		this.specializationGroup = specializationGroup;
+	}
+
+	/**
+	 * @return the improvementRegion
+	 */
+	public Character getImprovementRegion() {
+		return improvementRegion;
+	}
+
+	/**
+	 * @param improvementRegion the improvementRegion to set
+	 */
+	public void setImprovementRegion(Character improvementRegion) {
+		this.improvementRegion = improvementRegion;
 	}
 
 }

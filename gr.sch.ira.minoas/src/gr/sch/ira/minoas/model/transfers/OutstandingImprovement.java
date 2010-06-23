@@ -1,5 +1,7 @@
 package gr.sch.ira.minoas.model.transfers;
 
+import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -21,9 +23,11 @@ public class OutstandingImprovement extends BaseOutstandingTransfer {
 	@ManyToOne
 	@JoinColumn(name="TARGET_SCHOOL_ID", nullable=false)
 	private School targetSchool;
+	
+	@Basic
+	@Column(name = "IMPROVEMENT_REGION")
+	private Character improvementRegionCode;
 
-	@Transient
-	private String employeeRegistryID;
 	/**
 	 * @return the targetSchool
 	 */
@@ -52,29 +56,27 @@ public class OutstandingImprovement extends BaseOutstandingTransfer {
 		this.sourceSchool = sourceSchool;
 	}
 
-	/**
-	 * @return the employeeRegistryID
-	 */
-	public String getEmployeeRegistryID() {
-		return employeeRegistryID;
-	}
-
-	/**
-	 * @param employeeRegistryID the employeeRegistryID to set
-	 */
-	public void setEmployeeRegistryID(String employeeRegistryID) {
-		this.employeeRegistryID = employeeRegistryID;
-	}
-
+	
 	/**
 	 * @see gr.sch.ira.minoas.model.transfers.BaseOutstandingTransfer#setEmployee(gr.sch.ira.minoas.model.employee.Employee)
 	 */
 	@Override
 	public void setEmployee(Employee employee) {
 		super.setEmployee(employee);
-		if(employee!=null && employee.getRegularDetail()!=null) {
-			this.employeeRegistryID = employee.getRegularDetail().getRegistryID();
-		}
+	}
+
+	/**
+	 * @return the improvementRegionCode
+	 */
+	public Character getImprovementRegionCode() {
+		return improvementRegionCode;
+	}
+
+	/**
+	 * @param improvementRegionCode the improvementRegionCode to set
+	 */
+	public void setImprovementRegionCode(Character improvementRegionCode) {
+		this.improvementRegionCode = improvementRegionCode;
 	}
 	
 }
