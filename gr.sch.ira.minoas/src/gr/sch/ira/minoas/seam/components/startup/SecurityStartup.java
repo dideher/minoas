@@ -118,6 +118,10 @@ public class SecurityStartup extends BaseDatabaseAwareSeamComponent {
 
 		/* School Unit */
 		createRole("MANAGE_SCHOOL_BASIC", "Basic School Unit Management", admin);
+		
+		/* Improvements */
+		createRole("MANAGE_IMPROVEMENTS", "Manage Improvements", admin);
+		createRole("VIEW_IMPROVEMENTS", "View Improvements", admin);
 
 	}
 }

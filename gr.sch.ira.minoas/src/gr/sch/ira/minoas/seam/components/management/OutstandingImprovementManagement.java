@@ -22,11 +22,9 @@ import org.jboss.seam.international.StatusMessage.Severity;
 @Scope(ScopeType.CONVERSATION)
 public class OutstandingImprovementManagement extends BaseDatabaseAwareSeamComponent {
 
-	
 	@In(required = true, create = true)
 	private CoreSearching coreSearching;
-	
-	
+
 	@In(required = true, create = true)
 	private EmployeeHome employeeHome;
 
@@ -60,29 +58,54 @@ public class OutstandingImprovementManagement extends BaseDatabaseAwareSeamCompo
 	public void setOutstandingImprovementHome(OutstandingImprovementHome outstandingImprovementHome) {
 		this.outstandingImprovementHome = outstandingImprovementHome;
 	}
-	
-	
+
+	protected boolean isOutstandingImprovementValid(OutstandingImprovement improvement) {
+		boolean result = true;
+		if (!(improvement.getSourceSchool().getRegionCode().equals(improvement.getTargetSchool().getRegionCode()))) {
+			result = false;
+			facesMessages.add(Severity.ERROR,
+					"Η σχολική μονάδα βελτίωσεις πρέπει να είναι στην ίδια περιοχή με την οργανική.");
+		}
+		return result;
+	}
+
+	@Transactional(TransactionPropagationType.REQUIRED)
+	public String updateImprovement() {
+		if (outstandingImprovementHome.isManaged()) {
+			OutstandingImprovement instance = getOutstandingImprovementHome().getInstance();
+			if (isOutstandingImprovementValid(instance)) {
+				getOutstandingImprovementHome().update();
+				return ACTION_OUTCOME_SUCCESS;
+			} else
+				return ACTION_OUTCOME_FAILURE;
+
+		} else {
+			facesMessages.add(Severity.ERROR, "Outstanding Improvement #0 is *NOT* managed.",
+					outstandingImprovementHome);
+			return ACTION_OUTCOME_FAILURE;
+		}
+	}
+
 	@Transactional(TransactionPropagationType.REQUIRED)
 	public String createNewImprovement() {
 		info("new improvment");
-		if(!outstandingImprovementHome.isManaged()) {
+		if (!outstandingImprovementHome.isManaged()) {
 			OutstandingImprovement instance = getOutstandingImprovementHome().getInstance();
 			instance.setEmployeeRegistryID(instance.getEmployee().getRegularDetail().getRegistryID());
 			instance.setSchoolYear(instance.getEmployee().getCurrentEmployment().getSchoolYear());
 			instance.setImprovementRegionCode(instance.getTargetSchool().getRegionCode());
 			instance.setTargetPYSDE(instance.getTargetSchool().getPysde());
 			instance.setEffectiveDate(coreSearching.getActiveSchoolYear(getEntityManager()).getSchoolYearStop());
-			getOutstandingImprovementHome().persist();
-			return ACTION_OUTCOME_SUCCESS;
+			if (isOutstandingImprovementValid(instance)) {
+				getOutstandingImprovementHome().persist();
+				return ACTION_OUTCOME_SUCCESS;
+			} else
+				return ACTION_OUTCOME_FAILURE;
 		} else {
 			facesMessages.add(Severity.ERROR, "Outstanding Improvement #0 is managed.", outstandingImprovementHome);
 			return ACTION_OUTCOME_FAILURE;
 		}
-		
+
 	}
-	
-	
-	
-	
 
 }

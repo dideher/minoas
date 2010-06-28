@@ -79,7 +79,7 @@
 								<s:defaultAction />
 							</a4j:commandButton>
 
-							<a4j:commandButton
+							<a4j:commandButton rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_IMPROVEMENTS'))}"
 								disabled="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_LEAVE'))}"
 								action="#{outstandingImprovementHome.clearInstance}"
 								reRender="createModalPanelContent" immediate="true"
@@ -145,7 +145,7 @@
 								<rich:column style="text-align:center">
 									<f:facet name="header">Ενέργεια.</f:facet>
 									<rich:toolBar itemSeparator="line">
-										<a4j:commandLink id="cancellink" ajaxSingle="true"
+										<a4j:commandLink id="cancellink" ajaxSingle="true" rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_IMPROVEMENTS'))}"
 											reRender="outstandingImprovementsTable"
 											oncomplete="#{outstandingImprovementsReport.generateReport()}"
 											action="#{outstandingImprovementHome.remove}"
@@ -158,7 +158,7 @@
 												target="#{outstandingImprovementHome.id}" />
 										</a4j:commandLink>
 
-										<a4j:commandLink id="updatelink"
+										<a4j:commandLink id="updatelink" rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_IMPROVEMENTS'))}"
 											reRender="updateModalPanelContent"
 											oncomplete="#{rich:component('updateModalPanel')}.show()"
 											value="Τροποποίηση">
@@ -305,20 +305,16 @@
 							</a4j:region>
 						</a4j:outputPanel>
 
-
-
 						<h:panelGrid columns="2">
-
-
 
 							<a4j:commandButton value="Καταχώρηση Βελτίωσης !"
 								action="#{outstandingImprovementManagement.createNewImprovement}"
 								data="#{facesContext.maximumSeverity.ordinal ge 2}" reRender="outstandingImprovementsTable"
 								oncomplete="if(data == false) Richfaces.hideModalPanel('createModalPanel');">
-								<a4j:support action="#{outstandingImprovementsReport.generateReport()}" event="onclick"/>
 							</a4j:commandButton>
+
 							<a4j:commandButton value="Επιστροφή .."
-								action="{leaveHome.revert()}"
+								action="#{outstandingImprovementHome.clearInstance()}"
 								onclick="#{rich:component('createModalPanel')}.hide();" />
 						</h:panelGrid>
 					</h:form>
@@ -394,7 +390,7 @@
 										</ui:define>
 
 										<h:inputText id="schoolTarget" styleClass="fieldValueText"
-											required="true" size="20">
+											required="true" size="20" value="#{outstandingImprovementHome.instance.targetSchool.title}">
 
 											<rich:suggestionbox for="schoolTarget" var="leaveSourceUnit"
 												height="200" width="300"
@@ -424,12 +420,12 @@
 
 
 
-							<a4j:commandButton value="Καταχώρηση Βελτίωσης !"
-								action="#{outstandingImprovementManagement.updateNewImprovement}"
+							<a4j:commandButton value="Ανανέωση Βελτίωσης !"
+								action="#{outstandingImprovementManagement.updateImprovement}"
 								data="#{facesContext.maximumSeverity.ordinal ge 2}"
 								oncomplete="if(data == false) Richfaces.hideModalPanel('updateModalPanel');" />
 							<a4j:commandButton value="Επιστροφή .."
-								action="{leaveHome.revert()}"
+								action="#{outstandingImprovementHome.revert()}"
 								onclick="#{rich:component('updateModalPanel')}.hide();" />
 						</h:panelGrid>
 					</h:form>

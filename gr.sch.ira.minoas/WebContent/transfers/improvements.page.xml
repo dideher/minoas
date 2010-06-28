@@ -5,7 +5,7 @@
   xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.1.xsd">
   <begin-conversation join="true" flush-mode="manual"/> 
   <description>Βελτιώσεις</description>
-  
+  <action execute="#{outstandingImprovementsReport.generateReport()}" on-postback="false"/>
   <param name="from" />
   
   <!--  
@@ -17,6 +17,13 @@
   <navigation from-action="endButton">
     <end-conversation />
     <redirect view-id="/home.xhtml" />
+  </navigation>
+  
+  <navigation from-action="#{outstandingImprovementManagement.createNewImprovement}">
+  <rule if-outcome="success">
+    <redirect view-id="/transfers/improvements.xhtml">
+     </redirect>
+  </rule>
   </navigation>
   
   

@@ -228,10 +228,10 @@
 				</rich:menuGroup>
 				<rich:menuSeparator />
 				<rich:menuGroup value="Μεταθέσεις - Βελτιώσεις"
-					rendered="#{(s:hasRole('ADMIN'))}">
+					rendered="#{(s:hasRole('ADMIN') or s:hasRole('VIEW_IMPROVEMENTS'))}">
 					<rich:menuItem submitMode="none">
 
-						<s:link value="Βελτιώσεις" view="/transfers/improvements.xhtml">
+						<s:link value="Μελλοντικές Βελτιώσεις" view="/transfers/improvements.xhtml">
 						</s:link>
 					</rich:menuItem>
 				</rich:menuGroup>

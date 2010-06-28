@@ -43,7 +43,7 @@ public class OutstandingImprovementsReport extends BaseReport {
 	@DataModel(value = "reportData")
 	private Collection<OutstandingImprovementItem> reportData = null;
 
-	@In(required = true)
+	@In(required = true, create=true)
 	private OutstandingImprovementCriteria outstandingImprovementCriteria;
 
 	/**
