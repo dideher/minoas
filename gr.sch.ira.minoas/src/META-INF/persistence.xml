@@ -69,6 +69,7 @@
     <class>gr.sch.ira.minoas.model.classrooms.SchoolDepartment</class>
     <class>gr.sch.ira.minoas.model.transfers.BaseOutstandingTransfer</class>
     <class>gr.sch.ira.minoas.model.transfers.OutstandingImprovement</class>
+    <class>gr.sch.ira.minoas.model.transfers.PermanentTransfer</class>
     <properties>
       <!--
         <property name="hibernate.dialect"

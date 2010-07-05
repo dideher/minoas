@@ -17,7 +17,7 @@
 
 		<rich:panel>
 			<f:facet name="header">
-				<h:outputText value="Διαχείρηση Μελλοντικών Βελτιώσεων" />
+				<h:outputText value="Διαχείρηση Μελλοντικών Μεταθέσεων" />
 			</f:facet>
 			<h:form>
 				<a4j:region>
@@ -25,7 +25,7 @@
 					<h:panelGrid columns="1" width="100%">
 						<rich:panel>
 							<f:facet name="header">
-								<h:outputText value="Στοιχεία-Φιλτρά Μελλοντικών Βελτιώσεων" />
+								<h:outputText value="Στοιχεία-Φιλτρά Μελλοντικών Μεταθέσεων" />
 							</f:facet>
 							<h:panelGrid columns="4">
 
@@ -74,16 +74,17 @@
 
 						<rich:toolBar itemSeparator="line">
 							<a4j:commandButton id="searchButton" value="Αναζήτηση"
-								reRender="outstandingImprovementsTable"
-								action="#{outstandingImprovementsReport.generateReport}">
+								reRender="outstandingPermanentTransfersTable"
+								action="#{outstandingPermanentTransfersReport.generateReport}">
 								<s:defaultAction />
 							</a4j:commandButton>
 
-							<a4j:commandButton rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_IMPROVEMENTS'))}"
-								action="#{outstandingImprovementHome.clearInstance}"
+							<a4j:commandButton
+								rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_PERMANENT_TRANSFERS'))}"
+								action="#{permanentTransferHome.clearInstance}"
 								reRender="createModalPanelContent" immediate="true"
 								oncomplete="#{rich:component('createModalPanel')}.show()"
-								value="Καταχώρηση Νέας Βελτίωσεις" />
+								value="Καταχώρηση Νέας Μετάθεσεις" />
 							<s:button id="backButton" action="backButton"
 								value="Τέλος Εργασίας" />
 						</rich:toolBar>
@@ -91,12 +92,12 @@
 						<rich:panel>
 							<f:facet name="header">
 								<h:outputText
-									value="Μελλοντικές Βελτιώσεις Μόνιμων Εκπαιδευτικών" />
+									value="Μελλοντικές Μεταθέσεις Μόνιμων Εκπαιδευτικών" />
 							</f:facet>
 
-							<rich:dataTable id="outstandingImprovementsTable"
-								value="#{outstandingImprovementsReport.reportData}"
-								var="_outstandingImprovement" rows="40" rowKeyVar="_row"
+							<rich:dataTable id="outstandingPermanentTransfersTable"
+								value="#{outstandingPermanentTransfersReport.reportData}"
+								var="_outstandingPermanentTransfer" rows="40" rowKeyVar="_row"
 								border="0"
 								onRowMouseOver="this.style.backgfroundColor='#F8F8F8'"
 								onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
@@ -111,61 +112,63 @@
 								<rich:column style="text-align:center">
 									<f:facet name="header">ΑΜ</f:facet>
 									<h:outputText styleClass="fieldValueText"
-										value="#{_outstandingImprovement.employeeCode}" />
+										value="#{_outstandingPermanentTransfer.employeeCode}" />
 								</rich:column>
 								<rich:column style="text-align:center">
 									<f:facet name="header">Εκπαιδευτικός</f:facet>
 									<h:outputText
-										value="#{_outstandingImprovement.employeeLastName} #{_outstandingImprovement.employeeFirstName} του #{_outstandingImprovement.employeeFatherName}" />
+										value="#{_outstandingPermanentTransfer.employeeLastName} #{_outstandingPermanentTransfer.employeeFirstName} του #{_outstandingPermanentTransfer.employeeFatherName}" />
 								</rich:column>
 								<rich:column style="text-align:center">
 									<f:facet name="header">Ειδ.</f:facet>
 									<h:outputText styleClass="fieldValueText"
-										value="#{_outstandingImprovement.employeeSpecializationID}" />
+										value="#{_outstandingPermanentTransfer.employeeSpecializationID}" />
 								</rich:column>
 								<rich:column style="text-align:center">
 									<f:facet name="header">Λεκτικό Ειδ.</f:facet>
 									<h:outputText
-										value="#{_outstandingImprovement.employeeSpecialization}" />
+										value="#{_outstandingPermanentTransfer.employeeSpecialization}" />
 								</rich:column>
 								<rich:column style="text-align:center">
-									<f:facet name="header">Περ. Βελτίωσης</f:facet>
+									<f:facet name="header">Τύπος Μετάθεσεις</f:facet>
+									<h:outputText
+										value="#{messages[_outstandingPermanentTransfer.transferTypeKey]}" />
+								</rich:column>
+								<rich:column style="text-align:center">
+									<f:facet name="header">Απο</f:facet>
 									<h:outputText styleClass="fieldValueText"
-										value="#{_outstandingImprovement.improvementRegion}" />
+										value="#{_outstandingPermanentTransfer.sourceUnit}" />
 								</rich:column>
 								<rich:column style="text-align:center">
-									<f:facet name="header">Απο Σχ.</f:facet>
-									<h:outputText value="#{_outstandingImprovement.sourceSchool}" />
-								</rich:column>
-								<rich:column style="text-align:center">
-									<f:facet name="header">Προς Σχ.</f:facet>
-									<h:outputText value="#{_outstandingImprovement.targetSchool}" />
+									<f:facet name="header">Σε</f:facet>
+									<h:outputText styleClass="fieldValueText" value="#{_outstandingPermanentTransfer.targetUnit}" />
 								</rich:column>
 								<rich:column style="text-align:center">
 									<f:facet name="header">Ενέργεια.</f:facet>
 									<rich:toolBar itemSeparator="line">
-										<a4j:commandLink id="cancellink" ajaxSingle="true" rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_IMPROVEMENTS'))}"
-											reRender="outstandingImprovementsTable"
-											oncomplete="#{outstandingImprovementsReport.generateReport()}"
-											action="#{outstandingImprovementHome.remove}"
-											onclick="if(!confirm('Να διαγραφεί η μελλοντική βελτίωση του εκπαιδευτικού ?')) {form.reset(); return false;}"
+										<a4j:commandLink id="cancellink" ajaxSingle="true"
+											rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_IMPROVEMENTS'))}"
+											reRender="outstandingPermanentTransfersTable"
+											action="#{permanentTransferHome.remove}"
+											onclick="if(!confirm('Να διαγραφεί η μελλοντική μετάθεσει του εκπαιδευτικού ?')) {form.reset(); return false;}"
 											value="Ακύρωση">
 											<h:graphicImage value="/img/icons/delete.png" width="12"
 												height="12" style="border:0" />
 											<f:setPropertyActionListener
-												value="#{_outstandingImprovement.id}"
-												target="#{outstandingImprovementHome.id}" />
+												value="#{_outstandingPermanentTransfer.id}"
+												target="#{permanentTransferHome.id}" />
 										</a4j:commandLink>
 
-										<a4j:commandLink id="updatelink" rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_IMPROVEMENTS'))}"
+										<a4j:commandLink id="updatelink"
+											rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_IMPROVEMENTS'))}"
 											reRender="updateModalPanelContent"
 											oncomplete="#{rich:component('updateModalPanel')}.show()"
 											value="Τροποποίηση">
 											<h:graphicImage value="/img/icons/edit.png" width="12"
 												height="12" style="border:0" />
 											<f:setPropertyActionListener
-												value="#{_outstandingImprovement.id}"
-												target="#{outstandingImprovementHome.id}" />
+												value="#{_outstandingPermanentTransfer.id}"
+												target="#{permanentTransferHome.id}" />
 										</a4j:commandLink>
 									</rich:toolBar>
 								</rich:column>
@@ -182,7 +185,7 @@
 		<rich:modalPanel id="createModalPanel" autosized="true" width="450">
 			<f:facet name="header">
 				<h:outputText
-					value="Καταχώρηση Nεας Βελτίωσεις Εκπαιδευτικού "
+					value="Καταχώρηση Nεας Μελλοντικής Μετάθεσεις Εκπαιδευτικού "
 					style="padding-right:15px;" />
 			</f:facet>
 			<f:facet name="controls">
@@ -194,121 +197,154 @@
 				</h:panelGroup>
 			</f:facet>
 			<a4j:region>
-				<h:panelGrid columns="4">
+				<h:panelGrid columns="1">
 					<rich:messages style="color:red;"></rich:messages>
 					<h:form>
-						<a4j:outputPanel id="createModalPanelContent" layout="inline">
-							<a4j:region>
+						<a4j:region>
+							<a4j:outputPanel id="createModalPanelContent" layout="inline">
+
 								<h:outputText
-									value="Συμπληρώστε τα στοιχεία της παρακάτω φόρμας για να εισάγεται την μελλοντική βελτίωση του εκπαιδευτικό." />
+									value="Συμπληρώστε τα στοιχεία της παρακάτω φόρμας για να εισάγεται την μελλοντική μετάθεση του εκπαιδευτικό." />
 
-								<h:panelGrid columns="2">
-									<s:decorate template="/layout/doubleLineEdit.xhtml"
-										id="employeeSectionID">
+								<h:panelGrid columns="1">
+
+									<s:decorate template="/layout/doubleLineEdit.xhtml">
 										<ui:define name="label">
-											<h:outputText value="Μόνιμος Εκπαιδευτικός : " />
+											<h:outputText value="Τύπος Μετάθεσεις : " />
 										</ui:define>
-										<h:inputText id="regularEmployeeID"
-											value="#{outstandingImprovementHome.instance.employeeRegistryID}"
-											styleClass="fieldValueText" size="6" maxlength="6">
+										<h:selectOneMenu
+											value="#{permanentTransferHome.instance.type}">
+											<s:selectItems noSelectionLabel="Επιλέξτε Τύπο Μετάθεσεις"
+												var="_permanentTransferType"
+												value="#{permanentTransferTypes}"
+												label="#{messages[_permanentTransferType.key]}">
+											</s:selectItems>
+											<a4j:support event="onchange" ajaxSingle="true"
+												reRender="existingEmployeeSection" />
+										</h:selectOneMenu>
 
-											<rich:suggestionbox height="300" width="650"
-												for="regularEmployeeID" var="a_employee"
-												fetchValue="#{a_employee.regularDetail.registryID}"
-												suggestionAction="#{regularEmployeeSuggester.suggest}">
-												<f:facet name="nothingLabel">
-													<h:outputText value="Άγνωστος Εκπαιδευτικός" />
-												</f:facet>
-												<rich:column>
-													<h:outputText
-														value="#{a_employee.regularDetail.registryID}" />
-												</rich:column>
-												<rich:column>
-													<h:outputText value="#{a_employee.lastName}" />
-												</rich:column>
-												<rich:column>
-													<h:outputText value="#{a_employee.firstName}" />
-												</rich:column>
-												<rich:column>
-													<h:outputText value="#{a_employee.fatherName}" />
-												</rich:column>
-												<rich:column>
-													<h:outputText
-														value="#{a_employee.lastSpecialization.title}" />
-												</rich:column>
-												<rich:column>
-													<h:outputText
-														value="#{a_employee.currentEmployment.school.title}" />
-												</rich:column>
-												<a4j:support ajaxSingle="true" event="onselect" bypassUpdates="true"
-													reRender="improvementFrom,employeeSectionID,employeeSection"
-													action="#{outstandingImprovementHome.updateValueDueToEmployee()}">
-													<f:setPropertyActionListener value="#{a_employee}"
-														target="#{outstandingImprovementHome.instance.employee}" />
-
-												</a4j:support>
-											</rich:suggestionbox>
-										</h:inputText>
 									</s:decorate>
 
-									<s:decorate template="/layout/doubleLineEdit.xhtml"
-										id="employeeSection">
-										<ui:define name="label">
-											<h:outputText value="Εκπαιδευτικός : " />
-										</ui:define>
-										<h:inputText styleClass="fieldValueText" readonly="true"
-											size="40"
-											value="#{employeeUtil.prettyFormat(outstandingImprovementHome.instance.employee)}">
-										</h:inputText>
-									</s:decorate>
-
-									<s:decorate template="/layout/doubleLineEdit.xhtml"
-										id="improvementFrom">
-										<ui:define name="label">
-											<h:outputText value="Βελτίωση Απο : " />
-										</ui:define>
-										<h:inputText styleClass="fieldValueText" readonly="true"
-											size="20"
-											value="#{outstandingImprovementHome.instance.sourceSchool.title} (#{outstandingImprovementHome.instance.sourceSchool.regionCode})">
-										</h:inputText>
-									</s:decorate>
-
-									<s:decorate id="improvementTo"
-										template="/layout/doubleLineEdit.xhtml">
-										<ui:define name="label">
-											<h:outputText value="Βελτίωση Σε" />
-										</ui:define>
-
-										<h:inputText id="schoolTarget" styleClass="fieldValueText"
-											required="true" size="20">
-
-											<rich:suggestionbox for="schoolTarget" var="leaveSourceUnit"
-												height="200" width="300"
-												suggestionAction="#{schoolUnitSuggester.suggest}">
-												<f:facet name="nothingLabel">
-													<h:outputText value="Άγνωστη Σχολική Μονάδα" />
-												</f:facet>
-												<h:column>
-													<h:outputText value="#{leaveSourceUnit.title}" />
-												</h:column>
-												<a4j:support ajaxSingle="true" event="onselect">
-													<f:setPropertyActionListener value="#{leaveSourceUnit}"
-														target="#{outstandingImprovementHome.instance.targetSchool}" />
-												</a4j:support>
-											</rich:suggestionbox>
-										</h:inputText>
-									</s:decorate>
 								</h:panelGrid>
 
 
-							</a4j:region>
-						</a4j:outputPanel>
 
+								<a4j:outputPanel id="existingEmployeeSection">
+									<s:div
+										rendered="#{permanentTransferHome.instance.type == 'FROM_OTHER_PYSDE'}">
+										<h:panelGrid columns="1">
+											<h:outputText styleClass="fieldValueText"
+												value="Οι μεταθέσεις σε απο άλλο ΠΥΣΔΕ δεν υποστηρίζονται ακόμα." />
+										</h:panelGrid>
+
+									</s:div>
+									<s:div
+										rendered="#{permanentTransferHome.instance.type == 'WITHIN_PYSDE' or permanentTransferHome.instance.type == 'TO_OTHER_PYSDE'}">
+										<h:panelGrid columns="2">
+											<s:decorate template="/layout/doubleLineEdit.xhtml"
+												id="employeeSectionID">
+												<ui:define name="label">
+													<h:outputText value="Μόνιμος Εκπαιδευτικός : " />
+												</ui:define>
+												<h:inputText id="regularEmployeeID"
+													value="#{permanentTransferHome.instance.employeeRegistryID}"
+													styleClass="fieldValueText" size="6" maxlength="6">
+
+													<rich:suggestionbox height="300" width="650"
+														for="regularEmployeeID" var="a_employee"
+														fetchValue="#{a_employee.regularDetail.registryID}"
+														suggestionAction="#{regularEmployeeSuggester.suggest}">
+														<f:facet name="nothingLabel">
+															<h:outputText value="Άγνωστος Εκπαιδευτικός" />
+														</f:facet>
+														<rich:column>
+															<h:outputText
+																value="#{a_employee.regularDetail.registryID}" />
+														</rich:column>
+														<rich:column>
+															<h:outputText value="#{a_employee.lastName}" />
+														</rich:column>
+														<rich:column>
+															<h:outputText value="#{a_employee.firstName}" />
+														</rich:column>
+														<rich:column>
+															<h:outputText value="#{a_employee.fatherName}" />
+														</rich:column>
+														<rich:column>
+															<h:outputText
+																value="#{a_employee.lastSpecialization.title}" />
+														</rich:column>
+														<rich:column>
+															<h:outputText
+																value="#{a_employee.currentEmployment.school.title}" />
+														</rich:column>
+														<a4j:support ajaxSingle="true" event="onselect"
+															bypassUpdates="true"
+															reRender="improvementFrom,employeeSectionID,employeeSection"
+															action="#{permanentTransferHome.updateValueDueToEmployee()}">
+															<f:setPropertyActionListener value="#{a_employee}"
+																target="#{permanentTransferHome.instance.employee}" />
+
+														</a4j:support>
+													</rich:suggestionbox>
+												</h:inputText>
+											</s:decorate>
+
+											<s:decorate template="/layout/doubleLineEdit.xhtml"
+												id="employeeSection">
+												<ui:define name="label">
+													<h:outputText value="Εκπαιδευτικός : " />
+												</ui:define>
+												<h:inputText styleClass="fieldValueText" readonly="true"
+													size="40"
+													value="#{employeeUtil.prettyFormat(permanentTransferHome.instance.employee)}">
+												</h:inputText>
+											</s:decorate>
+
+											<s:decorate id="improvementTo"
+												template="/layout/doubleLineEdit.xhtml">
+												<ui:define name="label">
+													<h:outputText value="Μετάθεση Σε" />
+												</ui:define>
+
+												<h:inputText id="schoolTarget" styleClass="fieldValueText"
+													required="true" size="20">
+
+													<rich:suggestionbox for="schoolTarget"
+														var="leaveSourceUnit" height="200" width="300"
+														suggestionAction="#{permanentTransferAwareUnitSuggester.suggest}">
+														<f:facet name="nothingLabel">
+															<h:outputText value="Άγνωστη Σχολική Μονάδα" />
+														</f:facet>
+														<h:column>
+															<h:outputText value="#{leaveSourceUnit.title}" />
+														</h:column>
+														<a4j:support ajaxSingle="true" event="onselect">
+															<f:setPropertyActionListener value="#{leaveSourceUnit}"
+																target="#{permanentTransferHome.instance.targetUnit}" />
+														</a4j:support>
+													</rich:suggestionbox>
+												</h:inputText>
+											</s:decorate>
+
+										</h:panelGrid>
+									</s:div>
+
+
+
+								</a4j:outputPanel>
+
+							</a4j:outputPanel>
+
+
+
+						</a4j:region>
 						<h:panelGrid columns="2">
 
-							<a4j:commandButton value="Καταχώρηση Βελτίωσης !"
-								action="#{outstandingImprovementManagement.createNewImprovement}"
-								data="#{facesContext.maximumSeverity.ordinal ge 2}" reRender="outstandingImprovementsTable"
+							<a4j:commandButton value="Καταχώρηση Μετάθεσεις !"
+								action="#{permanentTransferManagement.createNewPermanentTransfer()}"
+								data="#{facesContext.maximumSeverity.ordinal ge 2}"
+								reRender="outstandingPermanentTransfersTable"
 								oncomplete="if(data == false) Richfaces.hideModalPanel('createModalPanel');">
 							</a4j:commandButton>
 
@@ -389,7 +425,8 @@
 										</ui:define>
 
 										<h:inputText id="schoolTarget" styleClass="fieldValueText"
-											required="true" size="20" value="#{outstandingImprovementHome.instance.targetSchool.title}">
+											required="true" size="20"
+											value="#{outstandingImprovementHome.instance.targetSchool.title}">
 
 											<rich:suggestionbox for="schoolTarget" var="leaveSourceUnit"
 												height="200" width="300"

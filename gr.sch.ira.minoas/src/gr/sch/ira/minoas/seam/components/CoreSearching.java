@@ -31,6 +31,7 @@ import gr.sch.ira.minoas.model.preparatory.PreparatoryUnitNatureType;
 import gr.sch.ira.minoas.model.preparatory.TeachingLanguage;
 import gr.sch.ira.minoas.model.security.Principal;
 import gr.sch.ira.minoas.model.security.Role;
+import gr.sch.ira.minoas.model.transfers.PermanentTransferType;
 import gr.sch.ira.minoas.seam.components.criteria.DateSearchType;
 import gr.sch.ira.minoas.seam.components.criteria.SpecializationGroupSearchType;
 import gr.sch.ira.minoas.seam.components.criteria.SpecializationSearchType;
@@ -102,6 +103,11 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 	@Factory(value = "disposalTypes")
 	public DisposalType[] getAvailableDisposalTypes() {
 		return DisposalType.values();
+	}
+	
+	@Factory(value = "permanentTransferTypes")
+	public PermanentTransferType[] getAvailablePermanentTransferTypes() {
+		return PermanentTransferType.values();
 	}
 
 	@Factory(value = "establishmentLicenseStatusTypes")

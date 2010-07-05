@@ -227,13 +227,16 @@
 					</rich:menuGroup>
 				</rich:menuGroup>
 				<rich:menuSeparator />
-				<rich:menuGroup value="Μεταθέσεις - Βελτιώσεις"
-					rendered="#{(s:hasRole('ADMIN') or s:hasRole('VIEW_IMPROVEMENTS'))}">
+				<rich:menuGroup value="Μεταθέσεις - Βελτιώσεις">
 					<rich:menuItem submitMode="none">
-
-						<s:link value="Μελλοντικές Βελτιώσεις" view="/transfers/improvements.xhtml">
-						</s:link>
+						<s:link value="Μελλοντικές Βελτιώσεις" rendered="#{(s:hasRole('ADMIN') or s:hasRole('VIEW_IMPROVEMENTS'))}"
+							view="/transfers/improvements.xhtml" />
 					</rich:menuItem>
+					<rich:menuItem submitMode="none">
+						<s:link value="Μελλοντικές Μεταθέσεις" rendered="#{(s:hasRole('ADMIN') or s:hasRole('VIEW_PERMANENT_TRANSFERS'))}"
+							view="/transfers/permanentTransfers.xhtml" />
+					</rich:menuItem>
+
 				</rich:menuGroup>
 				<rich:menuSeparator />
 				<rich:menuGroup value="Εκτύπωσεις και Στατιστικά"

@@ -4,8 +4,8 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
   xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.1.xsd">
   <begin-conversation join="true" flush-mode="manual"/> 
-  <description>Μελλοντικές Βελτιώσεις</description>
-  <action execute="#{outstandingImprovementsReport.generateReport()}" on-postback="false"/>
+  <description>Μελλοντικές Μεταθέσεις</description>
+  <action execute="#{outstandingPermanentTransfersReport.generateReport()}" on-postback="false"/>
   <param name="from" />
   
   <!--  
@@ -19,9 +19,18 @@
     <redirect view-id="/home.xhtml" />
   </navigation>
   
-  <navigation from-action="#{outstandingImprovementManagement.createNewImprovement}">
+  
+  
+  <navigation from-action="#{permanentTransferManagement.createNewPermanentTransfer()}">
   <rule if-outcome="success">
-    <redirect view-id="/transfers/improvements.xhtml">
+    <redirect view-id="/transfers/permanentTransfers.xhtml">
+     </redirect>
+  </rule>
+  </navigation>
+  
+  <navigation from-action="#{permanentTransferHome.remove}">
+  <rule if-outcome="removed">
+    <redirect view-id="/transfers/permanentTransfers.xhtml">
      </redirect>
   </rule>
   </navigation>
