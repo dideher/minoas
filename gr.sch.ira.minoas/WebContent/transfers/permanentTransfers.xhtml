@@ -47,7 +47,7 @@
 											</h:column>
 											<a4j:support ajaxSingle="true" event="onselect">
 												<f:setPropertyActionListener value="#{a_spec}"
-													target="#{outstandingImprovementCriteria.specializationGroup}" />
+													target="#{outstandingPermanentTransferCriteria.specializationGroup}" />
 											</a4j:support>
 										</rich:suggestionbox>
 									</h:inputText>
@@ -56,16 +56,72 @@
 
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
 									<ui:define name="label">
-										<h:outputText value="Περιοχή Βελτίωσης" />
+										<h:outputText value="Τύπος Μετάθεσεις" />
 									</ui:define>
 
 									<h:selectOneMenu
-										value="#{outstandingImprovementCriteria.improvementRegion}">
-										<f:selectItem itemLabel="Όλες τις Περιοχές" itemValue="" />
-										<f:selectItem itemLabel="Α Ηρακλείου" itemValue="Α" />
-										<f:selectItem itemLabel="Β Ηρακλείου" itemValue="Β" />
+										value="#{outstandingPermanentTransferCriteria.transferType}">
+										<s:selectItems noSelectionLabel="Επιλέξτε Τύπο Μετάθεσεις"
+												var="_permanentTransferType"
+												value="#{permanentTransferTypes}"
+												label="#{messages[_permanentTransferType.key]}">
+											</s:selectItems>
 									</h:selectOneMenu>
 								</s:decorate>
+								
+								<s:decorate id="transferFrom"
+										template="/layout/doubleLineEdit.xhtml">
+										<ui:define name="label">
+											<h:outputText value="Μετάθεση Απο" />
+										</ui:define>
+
+										<h:inputText id="schoolSource" styleClass="fieldValueText"
+										 size="20"
+										>
+
+											<rich:suggestionbox for="schoolSource" var="leaveSourceUnit"
+												height="200" width="300"
+												suggestionAction="#{unitSuggester.suggest}">
+												<f:facet name="nothingLabel">
+													<h:outputText value="Άγνωστη Σχολική Μονάδα" />
+												</f:facet>
+												<h:column>
+													<h:outputText value="#{leaveSourceUnit.title}" />
+												</h:column>
+												<a4j:support ajaxSingle="true" event="onselect">
+													<f:setPropertyActionListener value="#{leaveSourceUnit}"
+														target="#{outstandingPermanentTransferCriteria.sourceUnit}" />
+												</a4j:support>
+											</rich:suggestionbox>
+										</h:inputText>
+									</s:decorate>
+									
+									<s:decorate id="transferTo"
+										template="/layout/doubleLineEdit.xhtml">
+										<ui:define name="label">
+											<h:outputText value="Μετάθεση Σε" />
+										</ui:define>
+
+										<h:inputText id="schoolTarget" styleClass="fieldValueText"
+											size="20"
+											>
+
+											<rich:suggestionbox for="schoolTarget" var="leaveSourceUnit"
+												height="200" width="300"
+												suggestionAction="#{unitSuggester.suggest}">
+												<f:facet name="nothingLabel">
+													<h:outputText value="Άγνωστη Σχολική Μονάδα" />
+												</f:facet>
+												<h:column>
+													<h:outputText value="#{leaveSourceUnit.title}" />
+												</h:column>
+												<a4j:support ajaxSingle="true" event="onselect">
+													<f:setPropertyActionListener value="#{leaveSourceUnit}"
+														target="#{outstandingPermanentTransferCriteria.targetUnit}" />
+												</a4j:support>
+											</rich:suggestionbox>
+										</h:inputText>
+									</s:decorate>
 
 
 							</h:panelGrid>
@@ -141,13 +197,14 @@
 								</rich:column>
 								<rich:column style="text-align:center">
 									<f:facet name="header">Σε</f:facet>
-									<h:outputText styleClass="fieldValueText" value="#{_outstandingPermanentTransfer.targetUnit}" />
+									<h:outputText styleClass="fieldValueText"
+										value="#{_outstandingPermanentTransfer.targetUnit}" />
 								</rich:column>
 								<rich:column style="text-align:center">
 									<f:facet name="header">Ενέργεια.</f:facet>
 									<rich:toolBar itemSeparator="line">
 										<a4j:commandLink id="cancellink" ajaxSingle="true"
-											rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_IMPROVEMENTS'))}"
+											rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_PERMANENT_TRANSFERS'))}"
 											reRender="outstandingPermanentTransfersTable"
 											action="#{permanentTransferHome.remove}"
 											onclick="if(!confirm('Να διαγραφεί η μελλοντική μετάθεσει του εκπαιδευτικού ?')) {form.reset(); return false;}"
@@ -158,9 +215,9 @@
 												value="#{_outstandingPermanentTransfer.id}"
 												target="#{permanentTransferHome.id}" />
 										</a4j:commandLink>
-
-										<a4j:commandLink id="updatelink"
-											rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_IMPROVEMENTS'))}"
+										<!-- 
+										<a4j:commandLink id="updatelink" 
+											rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_PERMANENT_TRANSFERS'))}"
 											reRender="updateModalPanelContent"
 											oncomplete="#{rich:component('updateModalPanel')}.show()"
 											value="Τροποποίηση">
@@ -170,6 +227,7 @@
 												value="#{_outstandingPermanentTransfer.id}"
 												target="#{permanentTransferHome.id}" />
 										</a4j:commandLink>
+										 -->
 									</rich:toolBar>
 								</rich:column>
 

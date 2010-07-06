@@ -1,6 +1,8 @@
 package gr.sch.ira.minoas.seam.components.criteria;
 
 import gr.sch.ira.minoas.model.core.SpecializationGroup;
+import gr.sch.ira.minoas.model.core.Unit;
+import gr.sch.ira.minoas.model.transfers.PermanentTransferType;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
@@ -16,7 +18,11 @@ public class OutstandingPermanentTransferCriteria {
 
 	private SpecializationGroup specializationGroup;
 
-	private Character improvementRegion;
+	private PermanentTransferType transferType;
+	
+	private Unit sourceUnit;
+	
+	private Unit targetUnit;
 
 
 
@@ -43,18 +49,53 @@ public class OutstandingPermanentTransferCriteria {
 		this.specializationGroup = specializationGroup;
 	}
 
-	/**
-	 * @return the improvementRegion
-	 */
-	public Character getImprovementRegion() {
-		return improvementRegion;
-	}
+	
 
 	/**
-	 * @param improvementRegion the improvementRegion to set
+	 * @return the transferType
 	 */
-	public void setImprovementRegion(Character improvementRegion) {
-		this.improvementRegion = improvementRegion;
+	public PermanentTransferType getTransferType() {
+		return transferType;
+	}
+
+
+	/**
+	 * @param transferType the transferType to set
+	 */
+	public void setTransferType(PermanentTransferType transferType) {
+		this.transferType = transferType;
+	}
+
+
+	/**
+	 * @return the sourceUnit
+	 */
+	public Unit getSourceUnit() {
+		return sourceUnit;
+	}
+
+
+	/**
+	 * @param sourceUnit the sourceUnit to set
+	 */
+	public void setSourceUnit(Unit sourceUnit) {
+		this.sourceUnit = sourceUnit;
+	}
+
+
+	/**
+	 * @return the targetUnit
+	 */
+	public Unit getTargetUnit() {
+		return targetUnit;
+	}
+
+
+	/**
+	 * @param targetUnit the targetUnit to set
+	 */
+	public void setTargetUnit(Unit targetUnit) {
+		this.targetUnit = targetUnit;
 	}
 
 }

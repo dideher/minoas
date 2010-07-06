@@ -54,7 +54,6 @@ public class PermanentTransfer extends BaseOutstandingTransfer {
 	public void setSourceUnit(Unit sourceUnit) {
 		this.sourceUnit = sourceUnit;
 	}
-
 	
 
 	/**

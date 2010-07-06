@@ -63,13 +63,15 @@ public class PermanentTransferAwareUnitSuggester extends BaseDatabaseAwareSeamCo
 		*/
 		switch (type) {
 		case WITHIN_PYSDE:
-			returnCollection = getEntityManager().createQuery(
-					"SELECT s FROM Unit s WHERE LOWER(s.title) LIKE LOWER(:search_pattern)").setParameter(
-					"search_pattern", CoreUtils.getSearchPattern(String.valueOf(search_pattern))).getResultList();
+			returnCollection = getEntityManager()
+					.createQuery(
+							"SELECT s FROM Unit s WHERE LOWER(s.title) LIKE LOWER(:search_pattern) AND s.pysde.localPYSDE IS TRUE")
+					.setParameter("search_pattern", CoreUtils.getSearchPattern(String.valueOf(search_pattern)))
+					.getResultList();
 			break;
 		case TO_OTHER_PYSDE:
 			returnCollection = getEntityManager().createQuery(
-					"SELECT s FROM Unit s WHERE LOWER(s.title) LIKE LOWER(:search_pattern)").setParameter(
+					"SELECT s FROM Unit s WHERE LOWER(s.title) LIKE LOWER(:search_pattern)  AND s.pysde.localPYSDE IS FALSE").setParameter(
 					"search_pattern", CoreUtils.getSearchPattern(String.valueOf(search_pattern))).getResultList();
 			break;
 		default:

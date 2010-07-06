@@ -122,6 +122,11 @@ public class SecurityStartup extends BaseDatabaseAwareSeamComponent {
 		/* Improvements */
 		createRole("MANAGE_IMPROVEMENTS", "Manage Improvements", admin);
 		createRole("VIEW_IMPROVEMENTS", "View Improvements", admin);
+		
+		/* Permanent Transfers */
+		createRole("VIEW_PERMANENT_TRANSFERS", "View Permanent Transfers", admin);
+		createRole("MANAGE_PERMANENT_TRANSFERS", "Manage Permanent Transfers", admin);
+		
 
 	}
 }

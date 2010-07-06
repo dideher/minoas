@@ -26,6 +26,13 @@
   </rule>
   </navigation>
   
+  <navigation from-action="#{outstandingImprovementHome.remove}">
+  <rule if-outcome="removed">
+    <redirect view-id="/transfers/improvements.xhtml">
+     </redirect>
+  </rule>
+  </navigation>
+  
   
   
 </page>

@@ -146,7 +146,6 @@
 									<rich:toolBar itemSeparator="line">
 										<a4j:commandLink id="cancellink" ajaxSingle="true" rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_IMPROVEMENTS'))}"
 											reRender="outstandingImprovementsTable"
-											oncomplete="#{outstandingImprovementsReport.generateReport()}"
 											action="#{outstandingImprovementHome.remove}"
 											onclick="if(!confirm('Να διαγραφεί η μελλοντική βελτίωση του εκπαιδευτικού ?')) {form.reset(); return false;}"
 											value="Ακύρωση">
