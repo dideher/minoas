@@ -159,7 +159,7 @@
 								onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
 								width="100%">
 								<f:facet name="header">
-									<h:outputLabel value="Λίστα Μελλοντικών Βελτιώσεων" />
+									<h:outputLabel value="Λίστα Μελλοντικών Μεταθέσεων" />
 								</f:facet>
 								<rich:column style="text-align:center">
 									<f:facet name="header">A/A</f:facet>
@@ -230,7 +230,9 @@
 										 -->
 									</rich:toolBar>
 								</rich:column>
-
+								<f:facet name="footer">
+									<rich:datascroller for="outstandingPermanentTransfersTable" maxPages="40"/>
+								</f:facet>
 							</rich:dataTable>
 						</rich:panel>
 
