@@ -2,6 +2,7 @@ package gr.sch.ira.minoas.seam.components.management;
 
 import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.transfers.PermanentTransfer;
+import gr.sch.ira.minoas.model.transfers.PermanentTransferType;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.CoreSearching;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
@@ -42,8 +43,6 @@ public class PermanentTransferManagement extends BaseDatabaseAwareSeamComponent 
 		this.employeeHome = employeeHome;
 	}
 
-	
-
 	protected boolean isPermanentTransferValid(PermanentTransfer improvement) {
 		boolean result = true;
 		/*
@@ -67,8 +66,7 @@ public class PermanentTransferManagement extends BaseDatabaseAwareSeamComponent 
 				return ACTION_OUTCOME_FAILURE;
 
 		} else {
-			facesMessages.add(Severity.ERROR, "Permanent Transfer #0 is *NOT* managed.",
-					permanentTransferHome);
+			facesMessages.add(Severity.ERROR, "Permanent Transfer #0 is *NOT* managed.", permanentTransferHome);
 			return ACTION_OUTCOME_FAILURE;
 		}
 	}
@@ -78,12 +76,22 @@ public class PermanentTransferManagement extends BaseDatabaseAwareSeamComponent 
 		info("new permanent transfer");
 		if (!permanentTransferHome.isManaged()) {
 			PermanentTransfer instance = getPermanentTransferHome().getInstance();
-			instance.setEmployeeRegistryID(instance.getEmployee().getRegularDetail().getRegistryID());
-			instance.setSchoolYear(instance.getEmployee().getCurrentEmployment().getSchoolYear());
-			//instance.setImprovementRegionCode(instance.getTargetSchool().getRegionCode());
-			instance.setTargetPYSDE(instance.getTargetUnit().getPysde());
-			if(instance.getTargetUnit() instanceof School) {
-				instance.setTargetRegionCode(((School)instance.getTargetUnit()).getRegionCode());
+			if (instance.getType() != PermanentTransferType.FROM_OTHER_PYSDE) {
+				instance.setEmployeeRegistryID(instance.getEmployee().getRegularDetail().getRegistryID());
+				instance.setSchoolYear(instance.getEmployee().getCurrentEmployment().getSchoolYear());
+				instance.setTargetPYSDE(instance.getTargetUnit().getPysde());
+				instance.setNewEmployee(Boolean.FALSE);
+			} else {
+				/* this is a permanent trasfer from other pysde */
+				instance.setSchoolYear(coreSearching.getActiveSchoolYear(getEntityManager()));
+				instance.setTargetUnit(coreSearching.getLocalPYSDE(getEntityManager()).getRepresentedByUnit());
+				instance.setTargetPYSDE(coreSearching.getLocalPYSDE(getEntityManager()));
+				instance.setSourcePYSDE(instance.getSourceUnit().getPysde());
+				instance.setNewEmployee(Boolean.TRUE);
+			}
+			
+			if (instance.getTargetUnit() instanceof School) {
+				instance.setTargetRegionCode(((School) instance.getTargetUnit()).getRegionCode());
 			}
 			instance.setEffectiveDate(coreSearching.getActiveSchoolYear(getEntityManager()).getSchoolYearStop());
 			if (isPermanentTransferValid(instance)) {

@@ -52,28 +52,30 @@ public class EmployeeReportItem extends BaseIDReportItem {
 
 	public EmployeeReportItem(Employee employee) {
 		super(employee);
-		this.employeeLastName = employee.getLastName();
-		this.employeeFirstName = employee.getFirstName();
-		this.employeeFatherName = employee.getFatherName();
-		this.employeeMotherName = employee.getMotherName();
-		this.employeeType = employee.getType().name();
-		this.employeeTypeKey = employee.getType().getKey();
-		this.employeeBirthday = employee.getDateOfBirth();
-		this.employeeHasBigFamily = employee.getBigFamily();
-		this.employeeIsSpecialCategory = employee.getSpecialCategory();
-		if (employee.getLastSpecialization() != null) {
-			this.employeeSpecialization = employee.getLastSpecialization().getTitle();
-			this.employeeSpecializationID = employee.getLastSpecialization().getId();
-		}
-		if (employee.getRegularDetail() != null)
-			this.employeeCode = employee.getRegularDetail().getRegistryID();
+		if (employee != null) {
+			this.employeeLastName = employee.getLastName();
+			this.employeeFirstName = employee.getFirstName();
+			this.employeeFatherName = employee.getFatherName();
+			this.employeeMotherName = employee.getMotherName();
+			this.employeeType = employee.getType().name();
+			this.employeeTypeKey = employee.getType().getKey();
+			this.employeeBirthday = employee.getDateOfBirth();
+			this.employeeHasBigFamily = employee.getBigFamily();
+			this.employeeIsSpecialCategory = employee.getSpecialCategory();
+			if (employee.getLastSpecialization() != null) {
+				this.employeeSpecialization = employee.getLastSpecialization().getTitle();
+				this.employeeSpecializationID = employee.getLastSpecialization().getId();
+			}
+			if (employee.getRegularDetail() != null)
+				this.employeeCode = employee.getRegularDetail().getRegistryID();
 
-		if (employee.getCurrentEmployment() != null) {
-			Employment employment = employee.getCurrentEmployment();
-			this.employeeFinalWorkingHours = employment.getFinalWorkingHours();
-			this.employeeMandatoryHours = employment.getMandatoryWorkingHours();
-			this.employeeEmploymentEstablishedDate = employment.getEstablished();
-			this.employeeEmploymentTerminatedDate = employment.getTerminated();
+			if (employee.getCurrentEmployment() != null) {
+				Employment employment = employee.getCurrentEmployment();
+				this.employeeFinalWorkingHours = employment.getFinalWorkingHours();
+				this.employeeMandatoryHours = employment.getMandatoryWorkingHours();
+				this.employeeEmploymentEstablishedDate = employment.getEstablished();
+				this.employeeEmploymentTerminatedDate = employment.getTerminated();
+			}
 		}
 	}
 

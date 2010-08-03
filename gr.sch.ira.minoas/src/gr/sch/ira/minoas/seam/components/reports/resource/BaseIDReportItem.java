@@ -11,7 +11,9 @@ public abstract class BaseIDReportItem {
 
 	public BaseIDReportItem(BaseIDModel entity) {
 		this();
-		setId(entity.getId());
+		if (entity != null) {
+			setId(entity.getId());
+		}
 	}
 
 	/**

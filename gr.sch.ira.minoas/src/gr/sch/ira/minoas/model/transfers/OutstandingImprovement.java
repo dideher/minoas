@@ -16,6 +16,14 @@ import gr.sch.ira.minoas.model.employee.Employee;
 @Table(name = "OutstandingImprovement", uniqueConstraints=@UniqueConstraint(columnNames={"EMPLOYEE_ID", "SCHOOLYEAR_ID"}))
 public class OutstandingImprovement extends BaseOutstandingTransfer {
 
+	@Basic
+	@Column(name="EMPLOYEE_REGISTRY_ID", nullable=false)
+	private String employeeRegistryID;
+	
+	@ManyToOne
+	@JoinColumn(name="EMPLOYEE_ID", nullable=false)
+	private Employee employee;
+	
 	@ManyToOne
 	@JoinColumn(name="SOURCE_SCHOOL_ID", nullable=false)
 	private School sourceSchool;
@@ -57,13 +65,6 @@ public class OutstandingImprovement extends BaseOutstandingTransfer {
 	}
 
 	
-	/**
-	 * @see gr.sch.ira.minoas.model.transfers.BaseOutstandingTransfer#setEmployee(gr.sch.ira.minoas.model.employee.Employee)
-	 */
-	@Override
-	public void setEmployee(Employee employee) {
-		super.setEmployee(employee);
-	}
 
 	/**
 	 * @return the improvementRegionCode
@@ -77,6 +78,34 @@ public class OutstandingImprovement extends BaseOutstandingTransfer {
 	 */
 	public void setImprovementRegionCode(Character improvementRegionCode) {
 		this.improvementRegionCode = improvementRegionCode;
+	}
+
+	/**
+	 * @return the employeeRegistryID
+	 */
+	public String getEmployeeRegistryID() {
+		return employeeRegistryID;
+	}
+
+	/**
+	 * @param employeeRegistryID the employeeRegistryID to set
+	 */
+	public void setEmployeeRegistryID(String employeeRegistryID) {
+		this.employeeRegistryID = employeeRegistryID;
+	}
+
+	/**
+	 * @return the employee
+	 */
+	public Employee getEmployee() {
+		return employee;
+	}
+
+	/**
+	 * @param employee the employee to set
+	 */
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
 	}
 	
 }

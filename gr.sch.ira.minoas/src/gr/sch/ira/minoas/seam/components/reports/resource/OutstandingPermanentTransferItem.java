@@ -5,6 +5,7 @@ import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.transfers.OutstandingImprovement;
 import gr.sch.ira.minoas.model.transfers.PermanentTransfer;
+import gr.sch.ira.minoas.model.transfers.PermanentTransferType;
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
@@ -13,20 +14,21 @@ import gr.sch.ira.minoas.model.transfers.PermanentTransfer;
 public class OutstandingPermanentTransferItem extends EmployeeReportItem {
 
 	private String sourceUnit;
-	
+
 	private String targetUnit;
-	
+
 	private Character sourceRegionCode;
-	
+
 	private Character targetRegionCode;
-	
+
 	private String transferType;
-	
+
 	private String transferTypeKey;
-	
+
 	private String sourcePysde;
-	
+
 	private String targetPysde;
+
 	/**
 	 * 
 	 */
@@ -39,28 +41,39 @@ public class OutstandingPermanentTransferItem extends EmployeeReportItem {
 	 */
 	public OutstandingPermanentTransferItem(PermanentTransfer permanentTransfer) {
 		super(permanentTransfer.getEmployee());
+		if (permanentTransfer.getType() == PermanentTransferType.FROM_OTHER_PYSDE) {
+			/* no employee info, failback */
+			setEmployeeLastName(permanentTransfer.getEmployeeSurname());
+			setEmployeeFirstName(permanentTransfer.getEmployeeName());
+			setEmployeeCode(permanentTransfer.getEmployeeRegistryID());
+			setEmployeeFatherName(permanentTransfer.getEmployeeFatherName());
+			if (permanentTransfer.getEmployeeSpecialization() != null) {
+				setEmployeeSpecialization(permanentTransfer.getEmployeeSpecialization().getTitle());
+				setEmployeeSpecializationID(permanentTransfer.getEmployeeSpecialization().getId());
+			}
+		}
 		setId(permanentTransfer.getId());
 		Unit sourceUnit = permanentTransfer.getSourceUnit();
-		if(sourceUnit!=null) {
+		if (sourceUnit != null) {
 			setSourceUnit(sourceUnit.getTitle());
-			if(sourceUnit.getPysde()!=null)
+			if (sourceUnit.getPysde() != null)
 				setSourcePysde(sourceUnit.getPysde().getTitle());
-			if(sourceUnit instanceof School) {
-				setSourceRegionCode(((School)sourceUnit).getRegionCode());
+			if (sourceUnit instanceof School) {
+				setSourceRegionCode(((School) sourceUnit).getRegionCode());
 			}
 		}
 		Unit targetUnit = permanentTransfer.getTargetUnit();
-		if(targetUnit!=null) {
+		if (targetUnit != null) {
 			setTargetUnit(targetUnit.getTitle());
-			if(targetUnit.getPysde()!=null)
+			if (targetUnit.getPysde() != null)
 				setTargetPysde(targetUnit.getPysde().getTitle());
-			if(targetUnit instanceof School) {
-				setTargetRegionCode(((School)targetUnit).getRegionCode());
+			if (targetUnit instanceof School) {
+				setTargetRegionCode(((School) targetUnit).getRegionCode());
 			}
 		}
 		setTransferType(permanentTransfer.getType().name());
 		setTransferTypeKey(permanentTransfer.getType().getKey());
-		
+
 	}
 
 	/**
@@ -91,7 +104,6 @@ public class OutstandingPermanentTransferItem extends EmployeeReportItem {
 		this.targetUnit = targetUnit;
 	}
 
-	
 	/**
 	 * @return the transferType
 	 */
@@ -175,8 +187,5 @@ public class OutstandingPermanentTransferItem extends EmployeeReportItem {
 	public void setTargetRegionCode(Character targetRegionCode) {
 		this.targetRegionCode = targetRegionCode;
 	}
-
-	
-	
 
 }

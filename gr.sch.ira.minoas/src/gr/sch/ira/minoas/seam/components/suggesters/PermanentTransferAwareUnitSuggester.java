@@ -44,23 +44,6 @@ public class PermanentTransferAwareUnitSuggester extends BaseDatabaseAwareSeamCo
 		PermanentTransferType type = permanentTransferHome != null ? type = permanentTransferHome.getInstance()
 				.getType() : null;
 
-		/*
-		if (type != null) {
-			return getEntityManager()
-					.createQuery(
-							"SELECT u.unit FROM DisposalUnit u WHERE (u.unit.title) LIKE LOWER(:search_pattern) AND u.type=:type ORDER BY u.unit.title")
-					.setParameter("search_pattern",
-							CoreUtils.getSearchPattern(String.valueOf(secondmemt_search_pattern))).setParameter("type",
-							type).getResultList();
-
-		} else {
-			return getEntityManager()
-					.createQuery(
-							"SELECT u.unit FROM DisposalUnit u WHERE (u.unit.title) LIKE LOWER(:search_pattern) ORDER BY u.unit.title")
-					.setParameter("search_pattern",
-							CoreUtils.getSearchPattern(String.valueOf(secondmemt_search_pattern))).getResultList();
-		}
-		*/
 		switch (type) {
 		case WITHIN_PYSDE:
 			returnCollection = getEntityManager()
@@ -70,6 +53,7 @@ public class PermanentTransferAwareUnitSuggester extends BaseDatabaseAwareSeamCo
 					.getResultList();
 			break;
 		case TO_OTHER_PYSDE:
+		case FROM_OTHER_PYSDE:
 			returnCollection = getEntityManager().createQuery(
 					"SELECT s FROM Unit s WHERE LOWER(s.title) LIKE LOWER(:search_pattern)  AND s.pysde.localPYSDE IS FALSE").setParameter(
 					"search_pattern", CoreUtils.getSearchPattern(String.valueOf(search_pattern))).getResultList();

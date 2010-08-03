@@ -27,13 +27,7 @@ public class BaseOutstandingTransfer extends BaseIDModel {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@Basic
-	@Column(name="EMPLOYEE_REGISTRY_ID", nullable=false)
-	private String employeeRegistryID;
 	
-	@ManyToOne
-	@JoinColumn(name="EMPLOYEE_ID", nullable=false)
-	private Employee employee;
 	
 	@ManyToOne
 	@JoinColumn(name="SCHOOLYEAR_ID", nullable=false)
@@ -56,19 +50,7 @@ public class BaseOutstandingTransfer extends BaseIDModel {
 	private Boolean isProcessed;
 	
 
-	/**
-	 * @return the employee
-	 */
-	public Employee getEmployee() {
-		return employee;
-	}
-
-	/**
-	 * @param employee the employee to set
-	 */
-	public void setEmployee(Employee employee) {
-		this.employee = employee;
-	}
+	
 
 	/**
 	 * @return the schoolYear
@@ -140,19 +122,6 @@ public class BaseOutstandingTransfer extends BaseIDModel {
 		this.isProcessed = isProcessed;
 	}
 
-	/**
-	 * @return the employeeRegistryID
-	 */
-	public String getEmployeeRegistryID() {
-		return employeeRegistryID;
-	}
-
-	/**
-	 * @param employeeRegistryID the employeeRegistryID to set
-	 */
-	public void setEmployeeRegistryID(String employeeRegistryID) {
-		this.employeeRegistryID = employeeRegistryID;
-	}
 	
 	
 }
