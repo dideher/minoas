@@ -364,6 +364,32 @@
 													</rich:suggestionbox>
 												</h:inputText>
 											</s:decorate>
+											
+											<s:decorate
+												template="/layout/doubleLineEdit.xhtml">
+												<ui:define name="label">
+													<h:outputText value="Μετάθεση Σε" />
+												</ui:define>
+
+												<h:inputText id="schoolTarget" styleClass="fieldValueText"
+													required="false" size="20">
+
+													<rich:suggestionbox for="schoolTarget"
+														var="leaveSourceUnit" height="200" width="300"
+														suggestionAction="#{schoolUnitSuggester.suggest}">
+														<f:facet name="nothingLabel">
+															<h:outputText value="Άγνωστη Σχολική Μονάδα" />
+														</f:facet>
+														<h:column>
+															<h:outputText value="#{leaveSourceUnit.title}" />
+														</h:column>
+														<a4j:support ajaxSingle="true" event="onselect">
+															<f:setPropertyActionListener value="#{leaveSourceUnit}"
+																target="#{permanentTransferHome.instance.targetUnit}" />
+														</a4j:support>
+													</rich:suggestionbox>
+												</h:inputText>
+											</s:decorate>
 
 											<s:decorate template="/layout/doubleLineEdit.xhtml">
 												<ui:define name="label">

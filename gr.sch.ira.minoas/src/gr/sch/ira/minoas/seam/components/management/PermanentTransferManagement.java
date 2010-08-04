@@ -84,7 +84,10 @@ public class PermanentTransferManagement extends BaseDatabaseAwareSeamComponent 
 			} else {
 				/* this is a permanent trasfer from other pysde */
 				instance.setSchoolYear(coreSearching.getActiveSchoolYear(getEntityManager()));
-				instance.setTargetUnit(coreSearching.getLocalPYSDE(getEntityManager()).getRepresentedByUnit());
+				if(instance.getTargetUnit()==null) {
+					/* if user did not specify a target unit, use the pysde's unit */
+					instance.setTargetUnit(coreSearching.getLocalPYSDE(getEntityManager()).getRepresentedByUnit());
+				}
 				instance.setTargetPYSDE(coreSearching.getLocalPYSDE(getEntityManager()));
 				instance.setSourcePYSDE(instance.getSourceUnit().getPysde());
 				instance.setNewEmployee(Boolean.TRUE);
