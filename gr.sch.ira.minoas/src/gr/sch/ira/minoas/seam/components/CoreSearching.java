@@ -31,6 +31,8 @@ import gr.sch.ira.minoas.model.preparatory.PreparatoryUnitNatureType;
 import gr.sch.ira.minoas.model.preparatory.TeachingLanguage;
 import gr.sch.ira.minoas.model.security.Principal;
 import gr.sch.ira.minoas.model.security.Role;
+import gr.sch.ira.minoas.model.transfers.OutstandingImprovement;
+import gr.sch.ira.minoas.model.transfers.PermanentTransfer;
 import gr.sch.ira.minoas.model.transfers.PermanentTransferType;
 import gr.sch.ira.minoas.seam.components.criteria.DateSearchType;
 import gr.sch.ira.minoas.seam.components.criteria.SpecializationGroupSearchType;
@@ -65,6 +67,17 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 		return getEntityManager().find(Role.class, roleID);
 	}
 
+	
+	public Collection<SchoolYear> getSchoolYears(EntityManager entityManager) {
+		try {
+			EntityManager em = getEntityManager(entityManager);
+			return em.createQuery("SELECT s from SchoolYear s ORDER BY (s.year)")
+					.getResultList();
+		} catch (NoResultException nre) {
+			warn("no active school year found");
+			return null;
+		}
+	}
 	public SchoolYear getActiveSchoolYear(EntityManager entityManager) {
 		try {
 			debug("trying to find active school year");
@@ -104,7 +117,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 	public DisposalType[] getAvailableDisposalTypes() {
 		return DisposalType.values();
 	}
-	
+
 	@Factory(value = "permanentTransferTypes")
 	public PermanentTransferType[] getAvailablePermanentTransferTypes() {
 		return PermanentTransferType.values();
@@ -232,7 +245,23 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 			return null;
 		}
 	}
+	
+	@Transactional(TransactionPropagationType.REQUIRED)
+	@SuppressWarnings("unchecked")
+	public Collection<ServiceAllocation> getActiveServiceAllocations(EntityManager em) {
+		return getEntityManager(em)
+		.createQuery(
+				"SELECT s FROM ServiceAllocation s WHERE s.active IS TRUE").getResultList();
+	}
 
+	@SuppressWarnings("unchecked")
+	@Transactional(TransactionPropagationType.REQUIRED)
+	public Collection<Secondment> getActiveSecondments(EntityManager em) {
+		return em
+		.createQuery(
+				"SELECT s from Secondment s WHERE s.active IS TRUE").getResultList();
+	}
+	
 	@Transactional(TransactionPropagationType.REQUIRED)
 	public Employee getEmployeeByVatNumber(EntityManager entityManager, String vatNumber) {
 		EntityManager em = getEntityManager(entityManager);
@@ -312,6 +341,19 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 
 	@SuppressWarnings("unchecked")
 	@Transactional(TransactionPropagationType.REQUIRED)
+	public Collection<Employment> getEmploymentsOfType(EmploymentType type, SchoolYear schoolYear) {
+		List<Employment> result;
+		debug("trying to featch all active employments of type '#0'", type);
+		result = entityManager
+				.createQuery(
+						"SELECT e from Employment e WHERE e.active IS TRUE AND e.type=:type AND e.schoolYear=:schoolyear ORDER BY e.id")
+				.setParameter("type", type).setParameter("schoolyear", schoolYear).getResultList();
+		info("found totally '#0' active employments of type '#1'.", result.size(), type);
+		return result;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Transactional(TransactionPropagationType.REQUIRED)
 	public Collection<Leave> getEmployeeLeaves(Person employee) {
 		Collection<Leave> result = null;
 		info("searching employee's '#0' leaves.", employee);
@@ -366,6 +408,55 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	@Transactional(TransactionPropagationType.REQUIRED)
+	public Collection<OutstandingImprovement> getUnProcessedOutstandingImprovements(EntityManager em, SchoolYear schoolYear) {
+		return getEntityManager(em)
+		.createQuery(
+				"SELECT i FROM OutstandingImprovement i WHERE i.isProcessed IS FALSE AND i.schoolYear=:schoolYear").setParameter("schoolYear", schoolYear).getResultList();
+		
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional(TransactionPropagationType.REQUIRED)
+	public Collection<PermanentTransfer> getgetUnProcessedPermanentTransfers(EntityManager em, SchoolYear schoolYear) {
+		return getEntityManager(em)
+		.createQuery(
+				"SELECT i FROM PermanentTransfer i WHERE i.isProcessed IS FALSE AND i.schoolYear=:schoolYear").setParameter("schoolYear", schoolYear).getResultList();
+		
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional(TransactionPropagationType.REQUIRED)
+	public Collection<Employee> getEmployeesWithUnProcessedOutstandingImprovements(EntityManager em, SchoolYear schoolYear) {
+		return getEntityManager(em)
+		.createQuery(
+				"SELECT i.employee FROM OutstandingImprovement i WHERE i.isProcessed IS FALSE AND i.schoolYear=:schoolYear").setParameter("schoolYear", schoolYear).getResultList();
+		
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional(TransactionPropagationType.REQUIRED)
+	public Collection<Employee> getEmployeesWithUnProcessedPermanentTransfers(EntityManager em, SchoolYear schoolYear) {
+		return getEntityManager(em)
+		.createQuery(
+				"SELECT i.employee FROM PermanentTransfer i WHERE i.isProcessed IS FALSE AND i.schoolYear=:schoolYear").setParameter("schoolYear", schoolYear).getResultList();
+		
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional(TransactionPropagationType.REQUIRED)
+	public Collection<Employment> getEmploymentsOfType(EmploymentType type, SchoolYear schoolYear, Collection<Employee> excludedEmployees) {
+		List<Employment> result;
+		debug("trying to featch all active employments of type '#0'", type);
+		result = entityManager
+				.createQuery(
+						"SELECT e from Employment e WHERE e.active IS TRUE AND e.type=:type AND e.schoolYear=:schoolyear AND e.employee NOT IN (:excludedEmployees) ORDER BY e.id")
+				.setParameter("type", type).setParameter("schoolyear", schoolYear).setParameter("excludedEmployees", excludedEmployees).getResultList();
+		info("found totally '#0' active employments of type '#1'.", result.size(), type);
+		return result;
+	}
+	
 	public Collection<Employee> getSchoolActiveEmployees(EntityManager em, School school, SchoolYear schoolYear,
 			Date dayOfPrecense) {
 		return getSchoolActiveEmployees(em, school, schoolYear, dayOfPrecense, (SpecializationGroup) null);
@@ -489,6 +580,14 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 					.setParameter("employmentType", employmentType).setParameter("schoolYear", schoolYear)
 					.setParameter("dayOfInterest", dayOfPrecense).getResultList();
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public Collection<TeachingRequirement> getTeachingRequirement(EntityManager em, SchoolYear schoolYear) {
+		return getEntityManager().createQuery(
+				"SELECT DISTINCT r FROM TeachingRequirement r WHERE r.schoolYear=:schoolYear").setParameter(
+				"schoolYear", schoolYear).getResultList();
 	}
 
 	@SuppressWarnings("unchecked")

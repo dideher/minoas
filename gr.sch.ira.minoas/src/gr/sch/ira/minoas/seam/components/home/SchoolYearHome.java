@@ -25,8 +25,8 @@ public class SchoolYearHome extends MinoasEntityHome<SchoolYear> {
 	 */
 	@Override
 	@Factory(value = "schoolYear", scope = ScopeType.PAGE)
-	public School getInstance() {
-		return (School) super.getInstance();
+	public SchoolYear getInstance() {
+		return (SchoolYear) super.getInstance();
 	}
 
 	@Transactional
