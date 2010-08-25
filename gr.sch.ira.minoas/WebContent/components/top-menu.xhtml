@@ -338,6 +338,12 @@
 						</s:link>
 					</rich:menuItem>
 				</rich:menuGroup>
+				<rich:menuSeparator /> 
+				<rich:menuItem submitMode="none" rendered="#{(s:hasRole('ADMIN'))}">
+					<s:link value="Διαχείρηση Σχολικών Ετών" view="/admin/manage-schoolyears.xhtml">
+						<f:param name="manage_schoolyears_from" value="home" />
+					</s:link>
+				</rich:menuItem>
 				<!--  
 				<rich:menuItem submitMode="ajax">
 					<s:link value="Σχολικά Έτη" action="#{schoolYearAdmin.search()}"

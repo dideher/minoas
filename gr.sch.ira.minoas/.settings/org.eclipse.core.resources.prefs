@@ -1,7 +1,8 @@
-#Wed Jun 09 13:07:14 EEST 2010
+#Mon Aug 16 11:50:05 EEST 2010
 eclipse.preferences.version=1
 encoding//WebContent/admin/audit-report.xhtml=UTF-8
 encoding//WebContent/admin/manage-principals.xhtml=UTF-8
+encoding//WebContent/admin/manage-schoolyears.xhtml=UTF-8
 encoding//WebContent/admin/manage-specialization-groups.xhtml=UTF-8
 encoding//WebContent/admin/principal-component.xhtml=UTF-8
 encoding//WebContent/admin/specialization-group-component.xhtml=UTF-8

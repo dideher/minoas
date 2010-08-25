@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+
+<ui:composition template="/layout/simple-beauty-template.xhtml">
+	<ui:define name="body">
+
+		<h:form id="form1">
+			<rich:panel>
+				<f:facet name="header">
+					<h:outputText value="Διαχείρηση Σχολικών Ετών" />
+				</f:facet>
+				<a4j:outputPanel>
+					<h:panelGrid columns="1">
+						<h:outputText
+							value="Στον παρακάτω πίνακα μπορείτε να διαχειριστήτε τα σχολικά έτη του Μίνωα." />
+
+						<rich:dataTable id="schoolYearsResultTable" value="#{schoolYears}"
+							var="_schoolYear" rows="20">
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Περιγραφή" />
+								</f:facet>
+								<h:outputText value="#{_schoolYear.description}">
+								</h:outputText>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Έναρξη Διδακτικού Έτους" />
+								</f:facet>
+								<h:outputText value="#{_schoolYear.teachingSchoolYearStart}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Λήξη Διδακτικού Έτους" />
+								</f:facet>
+								<h:outputText value="#{_schoolYear.teachingSchoolYearStop}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Έναρξη Σχολικού Έτους" />
+								</f:facet>
+								<h:outputText value="#{_schoolYear.schoolYearStart}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Λήξη Σχολικού Έτους" />
+								</f:facet>
+								<h:outputText value="#{_schoolYear.schoolYearStop}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Ενέργειες" />
+								</f:facet>
+								<rich:toolBar itemSeparator="line">
+									<a4j:commandLink id="updatelink"
+										reRender="schoolYearsResultTable"
+										rendered="#{!_schoolYear.currentSchoolYear}"
+										action="#{schoolYearManagement.doUpgrade()}"
+										value="Ορισμός ως Τρέχων">
+										<h:graphicImage value="/img/icons/edit.png" width="12"
+											height="12" style="border:0" />
+										<f:setPropertyActionListener value="#{_schoolYear.id}"
+											target="#{schoolYearHome.id}" />
+									</a4j:commandLink>
+								</rich:toolBar>
+							</rich:column>
+
+						</rich:dataTable>
+
+						<rich:toolBar itemSeparator="line">
+							<s:button action="backButton" value="Επιστροφή" />
+							<s:button action="endButton" value="Τέλος Ενέργειας" />
+							<a4j:commandButton id="createButton"
+								disabled="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_SCHOOLYEAR'))}"
+								action="#{schoolYearHome.clearInstance()}"
+								reRender="createModalPanelContent" immediate="true"
+								oncomplete="#{rich:component('createModalPanel')}.show()"
+								value="Καταχώρηση Σχολικού Έτους">
+							</a4j:commandButton>
+						</rich:toolBar>
+
+
+
+					</h:panelGrid>
+				</a4j:outputPanel>
+			</rich:panel>
+		</h:form>
+
+		<rich:modalPanel id="createModalPanel" autosized="true" width="450">
+			<f:facet name="header">
+				<h:outputText value="Δημιουργία Νέου Σχολικού Έτους"
+					style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<h:graphicImage value="/img/modal/close.png" styleClass="hidelink"
+						width="18" height="18" id="hidelink4" />
+					<rich:componentControl for="createModalPanel" attachTo="hidelink4"
+						operation="hide" event="onclick" />
+				</h:panelGroup>
+			</f:facet>
+			<a4j:region>
+				<h:panelGrid columns="1">
+					<rich:messages style="color:red;"></rich:messages>
+					<h:form>
+						<a4j:outputPanel id="createModalPanelContent" layout="inline">
+							<h:outputText value="Ορίστε το έτος του νέου σχολικού έτους" />
+
+							<h:panelGrid>
+
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Σχολικό Έτος  : " />
+									</ui:define>
+									<h:inputText value="#{schoolYearManagement.newSchoolYearYear}"
+										size="4" maxlength="4" />
+								</s:decorate>
+
+							</h:panelGrid>
+						</a4j:outputPanel>
+
+						<h:panelGrid columns="2">
+
+							<a4j:commandButton value="Καταχώρηση Νέου Σχολικού Έτους !"
+								action="#{schoolYearManagement.createNewSchoolYear()}"
+								data="#{facesContext.maximumSeverity.ordinal ge 2}"
+								oncomplete="if(data == false) Richfaces.hideModalPanel('createModalPanel');"
+								reRender="schoolYearsResultTable" />
+							<a4j:commandButton value="Επιστροφή .." action="d"
+								onclick="#{rich:component('createModalPanel')}.hide();" />
+						</h:panelGrid>
+					</h:form>
+				</h:panelGrid>
+			</a4j:region>
+		</rich:modalPanel>
+
+		<ui:include src="/components/wait-modal-panel.xhtml" />
+	</ui:define>
+</ui:composition>
+</html>
