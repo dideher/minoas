@@ -23,6 +23,8 @@ import gr.sch.ira.minoas.model.core.SchoolYear;
 import gr.sch.ira.minoas.model.core.SpecializationGroup;
 import gr.sch.ira.minoas.model.core.TeachingRequirement;
 import gr.sch.ira.minoas.model.employee.Employee;
+import gr.sch.ira.minoas.model.employee.EmployeeType;
+import gr.sch.ira.minoas.model.employee.RegularEmployeeInfo;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
 import gr.sch.ira.minoas.model.employement.Secondment;
@@ -73,15 +75,22 @@ public class SchoolYearManagement extends BaseDatabaseAwareSeamComponent {
 	@Transactional
 	public void doUpgrade() {
 		if (getSchoolYearHome().isManaged()) {
+			
+			
+			
+			
+			
 			EntityManager em = getEntityManager();
 			SchoolYear sourceSchoolYear = coreSearching.getActiveSchoolYear(em);
 			SchoolYear targetSchoolYear = getSchoolYearHome().getInstance();
 			info("upgrading school year #0 to #1", sourceSchoolYear, targetSchoolYear);
 			
 			
-			//if (true)
-			//	return;
-			info("upgrading/handling teaching requirment.");
+			
+			
+			
+			
+			info("upgrading/handling teaching requirement.");
 			Collection<TeachingRequirement> teachingRequirements = coreSearching.getTeachingRequirement(em,
 					sourceSchoolYear);
 			info("found #0 teaching requirment(s) for upgrading/handling.", teachingRequirements.size());
@@ -250,9 +259,52 @@ public class SchoolYearManagement extends BaseDatabaseAwareSeamComponent {
 					
 					transfer.setIsProcessed(Boolean.TRUE);
 					em.persist(newEmployment);
+				} else if(transfer.getType()==PermanentTransferType.FROM_OTHER_PYSDE) {
+					Employee newEmployee = new Employee();
+					newEmployee.setComment("ΑΥΤΟΜΑΤΗ ΕΙΣΑΓΩΓΗ ΑΠΟ ΤΟΝ ΜΙΝΩΑ ΛΟΓΟ ΜΕΤΑΘΕΣΗΣ ΑΠΟ ΑΛΛΟ ΠΥΣΔΕ ΤΟ ΣΧ. ΕΤΟΣ '"+targetSchoolYear.getYear()+"'");
+					newEmployee.setActive(Boolean.TRUE);
+					newEmployee.setCurrentPYSDE(coreSearching.getLocalPYSDE(em));
+					newEmployee.setFatherName(transfer.getEmployeeFatherName());
+					newEmployee.setFirstName(transfer.getEmployeeName());
+					newEmployee.setLastName(transfer.getEmployeeSurname());
+					newEmployee.setMotherName(transfer.getEmployeeMotherName());
+					newEmployee.setLastSpecialization(transfer.getEmployeeSpecialization());
+					newEmployee.setVatNumber(transfer.getEmployeeAFM());
+					newEmployee.setType(EmployeeType.REGULAR);
+					em.persist(newEmployee);
+					em.flush();
+					
+					
+					RegularEmployeeInfo regular_info = new RegularEmployeeInfo();
+					regular_info.setEmployee(newEmployee);
+					regular_info.setRegistryID(transfer.getEmployeeRegistryID());
+					newEmployee.setRegularDetail(regular_info);
+					em.persist(regular_info);
+					em.flush();
+					
+					Employment newEmployment = new Employment();
+					newEmployment.setActive(Boolean.TRUE);
+					newEmployment.setEstablished(targetSchoolYear.getSchoolYearStart());
+					newEmployment.setFinalWorkingHours(21);
+					newEmployment.setMandatoryWorkingHours(21);
+					newEmployment.setType(EmploymentType.REGULAR);
+					
+					newEmployment.setSchool(em.find(School.class, transfer.getTargetUnit().getId()));
+					newEmployment.setSchoolYear(targetSchoolYear);
+					newEmployment.setSpecialization(transfer.getEmployeeSpecialization());
+					newEmployment.setEmployee(newEmployee);
+					em.persist(newEmployment);
+					em.flush();
+					newEmployee.setCurrentEmployment(newEmployment);
+					transfer.setIsProcessed(Boolean.TRUE);
+					em.flush();
+					
 				}
 				
 			}
+			
+			/* end hanling of transfers */
+			
 			em.flush();
 			fetchSchoolYears();
 		} else {

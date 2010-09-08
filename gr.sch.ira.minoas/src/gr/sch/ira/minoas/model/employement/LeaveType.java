@@ -49,7 +49,9 @@ public enum LeaveType {
 	/**
 	 * Άνευ Αποδοχών
 	 */
-	UNPAID_LEAVE("UNPAID_LEAVE_TYPE", (30 * 12));
+	UNPAID_LEAVE("UNPAID_LEAVE_TYPE", 30 * 12), 
+	
+	RETIREMENT_LEAVE("RETIREMENT_LEAVE_TYPE", 30*2);
 
 	private Integer durationInDays;
 

@@ -76,6 +76,16 @@
 										<f:setPropertyActionListener value="#{_schoolYear.id}"
 											target="#{schoolYearHome.id}" />
 									</a4j:commandLink>
+									
+									<a4j:commandLink id="fdjfslkjdflkjds"
+										reRender="schoolYearsResultTable"
+										action="#{schoolYearManagement.doUpgrade()}"
+										value="Re do upgrade !">
+										<h:graphicImage value="/img/icons/edit.png" width="12"
+											height="12" style="border:0" />
+										<f:setPropertyActionListener value="#{_schoolYear.id}"
+											target="#{schoolYearHome.id}" />
+									</a4j:commandLink>
 								</rich:toolBar>
 							</rich:column>
 
