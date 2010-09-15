@@ -22,9 +22,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.EntityManager;
+
 import org.apache.commons.lang.time.DateUtils;
 import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Out;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.datamodel.DataModel;
 
@@ -55,8 +59,18 @@ public class TeachingHourAnalysisReport extends BaseReport {
 	private SpecializationGroup specializationGroup;
 
 	private List<SpecializationGroup> specializationGroups = new ArrayList<SpecializationGroup>();
+	
+	@Out(required=false, scope=ScopeType.CONVERSATION)
+	private List<SpecializationGroup> availableSpecializationGroups;
 
 	private SpecializationGroupSearchType specializationGroupSearchType = SpecializationGroupSearchType.SINGLE_SPECIALIZATION_GROUP;
+
+	@Factory("availableSpecializationGroups")
+	public void constructAvailableSpecializationGroupList() {
+		EntityManager em = getEntityManager();
+		this.availableSpecializationGroups = new ArrayList(getCoreSearching().getSpecializationGroups(
+				getCoreSearching().getActiveSchoolYear(em), em));
+	}
 
 	public void generateReport() {
 
@@ -289,7 +303,7 @@ public class TeachingHourAnalysisReport extends BaseReport {
 						reportItem.addSchoolAvailableHours(schoolItem, hours);
 
 					} else {
-						
+
 						reportItem.addSchoolAvailableHours(schoolItem, hours);
 					}
 				}
@@ -435,6 +449,20 @@ public class TeachingHourAnalysisReport extends BaseReport {
 	 */
 	public void setRegularEmploymentsOnly(Boolean regularEmploymentsOnly) {
 		this.regularEmploymentsOnly = regularEmploymentsOnly;
+	}
+
+	/**
+	 * @return the availableSpecializationGroups
+	 */
+	public List<SpecializationGroup> getAvailableSpecializationGroups() {
+		return availableSpecializationGroups;
+	}
+
+	/**
+	 * @param availableSpecializationGroups the availableSpecializationGroups to set
+	 */
+	public void setAvailableSpecializationGroups(List<SpecializationGroup> availableSpecializationGroups) {
+		this.availableSpecializationGroups = availableSpecializationGroups;
 	}
 
 }

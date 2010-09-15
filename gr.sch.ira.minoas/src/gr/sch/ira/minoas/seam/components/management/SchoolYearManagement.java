@@ -6,6 +6,8 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 
@@ -20,6 +22,7 @@ import org.jboss.seam.international.StatusMessage.Severity;
 
 import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.core.SchoolYear;
+import gr.sch.ira.minoas.model.core.Specialization;
 import gr.sch.ira.minoas.model.core.SpecializationGroup;
 import gr.sch.ira.minoas.model.core.TeachingRequirement;
 import gr.sch.ira.minoas.model.employee.Employee;
@@ -87,8 +90,24 @@ public class SchoolYearManagement extends BaseDatabaseAwareSeamComponent {
 			
 			
 			
+			Collection<SpecializationGroup> groups = coreSearching.getSpecializationGroups(sourceSchoolYear, em);
+			/* key oldGroup -> value is new Group */
+			Map<SpecializationGroup, SpecializationGroup> oldSpecializationMap = new HashMap<SpecializationGroup, SpecializationGroup>(groups.size());
+			info("upgrading/handling specialization groups.");
+			for (SpecializationGroup group : groups) {
+				SpecializationGroup newGroup = new SpecializationGroup();
+				newGroup.setInsertedBy(group.getInsertedBy());
+				newGroup.setSchoolYear(targetSchoolYear);
+				for(Specialization specialization : group.getSpecializations()) {
+					newGroup.getSpecializations().add(specialization);
+					
+				}
+				newGroup.setTitle(group.getTitle());
+				em.persist(newGroup);
+				oldSpecializationMap.put(group, newGroup);
+			}
 			
-			
+			em.flush();
 			
 			info("upgrading/handling teaching requirement.");
 			Collection<TeachingRequirement> teachingRequirements = coreSearching.getTeachingRequirement(em,
@@ -100,21 +119,14 @@ public class SchoolYearManagement extends BaseDatabaseAwareSeamComponent {
 				newRequirement.setComment(requirement.getComment());
 				newRequirement.setHours(requirement.getHours());
 				newRequirement.setSchoolYear(targetSchoolYear);
-				newRequirement.setSpecialization(requirement.getSpecialization());
+				newRequirement.setSpecialization(oldSpecializationMap.get(requirement.getSpecialization()));
 				newRequirement.setSchool(requirement.getSchool());
 				em.persist(newRequirement);
 			}
 			
-			Collection<SpecializationGroup> groups = coreSearching.getSpecializationGroups(sourceSchoolYear, em);
-			info("upgrading/handling specialization groups.");
-			for (SpecializationGroup group : groups) {
-				SpecializationGroup newGroup = new SpecializationGroup();
-				newGroup.setInsertedBy(group.getInsertedBy());
-				newGroup.setSchoolYear(targetSchoolYear);
-				newGroup.getSpecializations().addAll(group.getSpecializations());
-				newGroup.setTitle(group.getTitle());
-				em.persist(newGroup);
-			}
+			
+			
+			
 
 			info("upgrading/handling hourly employment(s).");
 			/* handle hourly based employments -> not upgraded */

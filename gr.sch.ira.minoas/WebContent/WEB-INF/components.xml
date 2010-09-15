@@ -334,11 +334,13 @@
    
    
    <framework:entity-query name="specializationGroupsListQuery" max-results="200" scope="page">
-    <framework:ejbql>SELECT s FROM SpecializationGroup s</framework:ejbql>
+    <framework:ejbql>SELECT s FROM SpecializationGroup s  WHERE s.schoolYear.id = 9</framework:ejbql>
     <framework:order>s.title asc</framework:order>
+      <!-- 
       <framework:restrictions>
-        <value>s.schoolYear.id = #{activeShoolYear.id}</value>
-      </framework:restrictions>
+        <value>s.schoolYear = #{activeShoolYear}</value> 
+   
+      </framework:restrictions>    -->  
    </framework:entity-query>
    
    

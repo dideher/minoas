@@ -1,8 +1,11 @@
-package gr.sch.ira.minoas.seam.components;
+package gr.sch.ira.minoas.seam.components.management;
 
 import gr.sch.ira.minoas.model.employee.Employee;
+import gr.sch.ira.minoas.model.employee.EmployeeType;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
+import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
+import gr.sch.ira.minoas.seam.components.CoreSearching;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
 import gr.sch.ira.minoas.seam.components.home.EmploymentHome;
 
@@ -48,6 +51,9 @@ public class EmployeeEmploymentManagement extends BaseDatabaseAwareSeamComponent
 
 	@In(required = true, create = true)
 	private CoreSearching coreSearching;
+
+	@DataModel(value = "oldEmployments")
+	private Collection<Employment> oldEmployments;
 
 	/**
 	 * @return the employeeHome
@@ -101,8 +107,40 @@ public class EmployeeEmploymentManagement extends BaseDatabaseAwareSeamComponent
 	@Factory(value = "schoolYearEmployments")
 	public void initializeSchoolYearEmployeeEmployments() {
 		if (employeeHome != null & employeeHome.isManaged()) {
+			EmploymentType employmentType = null;
+			switch (employeeHome.getInstance().getType()) {
+			case DEPUTY:
+				employmentType = EmploymentType.DEPUTY;
+				break;
+			case HOURLYPAID:
+				employmentType = EmploymentType.HOURLYBASED;
+				break;
+			case REGULAR:
+				employmentType = EmploymentType.REGULAR;
+				break;
+			}
 			this.schoolYearEmployments = getCoreSearching().getEmployeeEmploymentsOfType(employeeHome.getInstance(),
-					EmploymentType.HOURLYBASED, getCoreSearching().getActiveSchoolYear(getEntityManager()));
+					employmentType, getCoreSearching().getActiveSchoolYear(getEntityManager()));
+		}
+	}
+
+	@Factory(value = "oldEmployments")
+	public void initializeOldEmployments() {
+		if (employeeHome != null & employeeHome.isManaged()) {
+			EmploymentType employmentType = null;
+			switch (employeeHome.getInstance().getType()) {
+			case DEPUTY:
+				employmentType = EmploymentType.DEPUTY;
+				break;
+			case HOURLYPAID:
+				employmentType = EmploymentType.HOURLYBASED;
+				break;
+			case REGULAR:
+				employmentType = EmploymentType.REGULAR;
+				break;
+			}
+			this.oldEmployments = getCoreSearching().getEmployeeEmploymentsOfType(employeeHome.getInstance(),
+					employmentType);
 		}
 	}
 
@@ -127,8 +165,10 @@ public class EmployeeEmploymentManagement extends BaseDatabaseAwareSeamComponent
 		if (employmentHome != null && employmentHome.isManaged()) {
 			employment.setActive(Boolean.FALSE);
 			String result = employmentHome.update();
-			initializeEmployeeEmployments();
-			initializeSchoolYearEmployeeEmployments();
+			if (employeeHome.getInstance().getType() == EmployeeType.HOURLYPAID) {
+				initializeEmployeeEmployments();
+				initializeSchoolYearEmployeeEmployments();
+			}
 			info("canceled employment #0 for employee #1", employment, employee);
 			return result;
 		} else {
@@ -155,8 +195,10 @@ public class EmployeeEmploymentManagement extends BaseDatabaseAwareSeamComponent
 		if (getEmployeeHome().isManaged()) {
 			if (!getEmploymentHome().isManaged()) {
 				String result = employmentHome.persist();
-				initializeEmployeeEmployments();
-				initializeSchoolYearEmployeeEmployments();
+				if (employeeHome.getInstance().getType() == EmployeeType.HOURLYPAID) {
+					initializeEmployeeEmployments();
+					initializeSchoolYearEmployeeEmployments();
+				}
 				return result;
 			} else {
 				getFacesMessages().add(Severity.ERROR, "employment home is managed", (Object[]) null);
@@ -189,6 +231,30 @@ public class EmployeeEmploymentManagement extends BaseDatabaseAwareSeamComponent
 		}
 	}
 
+	@Transactional(TransactionPropagationType.REQUIRED)
+	public String prepareForNewDeputyEmployment() {
+		if (getEmployeeHome().isManaged()) {
+			EmploymentHome employmentHome = getEmploymentHome();
+			employmentHome.clearInstance();
+			Employment e = employmentHome.getInstance();
+			e.setEmployee(getEmployeeHome().getInstance());
+			e.setActive(Boolean.TRUE);
+			e.setSchoolYear(getCoreSearching().getActiveSchoolYear(getEntityManager()));
+			e.setType(EmploymentType.DEPUTY);
+			e.setEstablished(new Date());
+			e.setFinalWorkingHours(21);
+			e.setMandatoryWorkingHours(21);
+
+			/* be helpfull and calculate the end date */
+			e.setTerminated(e.getSchoolYear().getTeachingSchoolYearStop());
+			e.setSpecialization(getEmployeeHome().getInstance().getLastSpecialization());
+			return "prepared";
+		} else {
+			getFacesMessages().add(Severity.ERROR, "employee home or is not managed", (Object[]) null);
+			return null;
+		}
+	}
+
 	/**
 	 * @return the coreSearching
 	 */
@@ -201,5 +267,19 @@ public class EmployeeEmploymentManagement extends BaseDatabaseAwareSeamComponent
 	 */
 	public void setCoreSearching(CoreSearching coreSearching) {
 		this.coreSearching = coreSearching;
+	}
+
+	/**
+	 * @return the oldEmployments
+	 */
+	public Collection<Employment> getOldEmployments() {
+		return oldEmployments;
+	}
+
+	/**
+	 * @param oldEmployments the oldEmployments to set
+	 */
+	public void setOldEmployments(Collection<Employment> oldEmployments) {
+		this.oldEmployments = oldEmployments;
 	}
 }
