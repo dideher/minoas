@@ -294,13 +294,23 @@
 									size="15" maxlength="30">
 								</h:inputText>
 							</s:decorate>
+							
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Όνομα Πατρός" />
+								</ui:define>
+								<h:inputText value="#{employeeHome.instance.fatherName}"
+									required="true" styleClass="fieldValueText" 
+									size="15" maxlength="30">
+								</h:inputText>
+							</s:decorate>
 
 							<s:decorate template="/layout/doubleLineEdit.xhtml">
 								<ui:define name="label">
-									<h:outputText value="Έπωνυμο Πατρός" />
+									<h:outputText value="Επώνυμο Πατρός" />
 								</ui:define>
 								<h:inputText value="#{employeeHome.instance.fatherSurname}"
-									required="true" styleClass="fieldValueText" 
+									required="false" styleClass="fieldValueText" 
 									size="15" maxlength="30">
 								</h:inputText>
 							</s:decorate>
@@ -362,16 +372,6 @@
 												target="#{employeeHome.instance.lastSpecialization}" />
 										</a4j:support>
 									</rich:suggestionbox>
-								</h:inputText>
-							</s:decorate>
-
-							<s:decorate template="/layout/doubleLineEdit.xhtml">
-								<ui:define name="label">
-									<h:outputText value="Όνομα Πατρός" />
-								</ui:define>
-								<h:inputText value="#{employeeHome.instance.fatherName}"
-									required="false" styleClass="fieldValueText" 
-									size="15" maxlength="30">
 								</h:inputText>
 							</s:decorate>
 

@@ -3,6 +3,7 @@ package gr.sch.ira.minoas.seam.components.management;
 import gr.sch.ira.minoas.model.employee.EmployeeExclusion;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
+import gr.sch.ira.minoas.seam.components.EmployeeMergeRequest;
 import gr.sch.ira.minoas.seam.components.home.EmployeeExclusionHome;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
 
@@ -24,7 +25,11 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
 
 	@In(required = true, create = true)
 	private EmployeeExclusionHome employeeExclusionHome;
-
+	
+	@In(required = true, create = true)
+	private EmployeeMergeRequest employeeMergeRequest;
+	
+	
 	/**
 	 * @return the employeeHome
 	 */
@@ -51,6 +56,28 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
 			return ACTION_OUTCOME_FAILURE;
 		}
 
+	}
+	
+	@Transactional(TransactionPropagationType.REQUIRED)
+	public String mergeEmployees() {
+		EmployeeHome sourceEmployeeHome = new EmployeeHome();
+		sourceEmployeeHome.setId(getEmployeeMergeRequest().getSourceEmployee().getId());
+		
+		EmployeeHome targetEmployeeHome = new EmployeeHome();
+		targetEmployeeHome.setId(getEmployeeMergeRequest().getTargetEmployee().getId());
+		if(sourceEmployeeHome.isManaged() && targetEmployeeHome.isManaged()) {
+			info("trying to merge employee #0 to #1", sourceEmployeeHome.getInstance(), targetEmployeeHome.getInstance());
+			
+			/* employees must not be same */
+			if(sourceEmployeeHome.getId().equals(targetEmployeeHome.getId())) {
+				facesMessages.add(Severity.ERROR, "Δεν μπορείτε να συνχωνεύσεται τον εκπαιδευτικό στον εαυτό του. Kάντε ενα διάλλειμα για καφε και τσιγάρο.");
+				return ACTION_OUTCOME_FAILURE;
+			}
+			return ACTION_OUTCOME_SUCCESS;
+		} else {
+			facesMessages.add(Severity.ERROR, "Employee #0 is not managed.");
+			return ACTION_OUTCOME_FAILURE;
+		}
 	}
 
 	@Transactional(TransactionPropagationType.REQUIRED)
@@ -88,6 +115,20 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
 	 */
 	public void setEmployeeExclusionHome(EmployeeExclusionHome employeeExclusionHome) {
 		this.employeeExclusionHome = employeeExclusionHome;
+	}
+
+	/**
+	 * @return the employeeMergeRequest
+	 */
+	public EmployeeMergeRequest getEmployeeMergeRequest() {
+		return employeeMergeRequest;
+	}
+
+	/**
+	 * @param employeeMergeRequest the employeeMergeRequest to set
+	 */
+	public void setEmployeeMergeRequest(EmployeeMergeRequest employeeMergeRequest) {
+		this.employeeMergeRequest = employeeMergeRequest;
 	}
 
 }

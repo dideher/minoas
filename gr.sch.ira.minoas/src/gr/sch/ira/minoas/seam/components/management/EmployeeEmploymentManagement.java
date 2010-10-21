@@ -1,5 +1,6 @@
 package gr.sch.ira.minoas.seam.components.management;
 
+import gr.sch.ira.minoas.model.core.AuditType;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
 import gr.sch.ira.minoas.model.employement.Employment;
@@ -139,7 +140,7 @@ public class EmployeeEmploymentManagement extends BaseDatabaseAwareSeamComponent
 				employmentType = EmploymentType.REGULAR;
 				break;
 			}
-			this.oldEmployments = getCoreSearching().getEmployeeEmploymentsOfType(employeeHome.getInstance(),
+			this.oldEmployments = getCoreSearching().getAllEmployeeEmploymentsOfType(employeeHome.getInstance(),
 					employmentType);
 		}
 	}
@@ -164,12 +165,49 @@ public class EmployeeEmploymentManagement extends BaseDatabaseAwareSeamComponent
 		Employee employee = employeeHome != null ? employeeHome.getInstance() : null;
 		if (employmentHome != null && employmentHome.isManaged()) {
 			employment.setActive(Boolean.FALSE);
+			employment.setDeleted(Boolean.TRUE);
+			employment.setDeletedBy(getPrincipal());
+			employment.setDeletedOn(new Date());
+			Employment currentEmployeeEmployment = employee.getCurrentEmployment();
+			if(currentEmployeeEmployment!=null && currentEmployeeEmployment.getId().equals(employment.getId())) {
+				employee.setCurrentEmployment(null);
+			}
 			String result = employmentHome.update();
-			if (employeeHome.getInstance().getType() == EmployeeType.HOURLYPAID) {
+			
 				initializeEmployeeEmployments();
 				initializeSchoolYearEmployeeEmployments();
-			}
+				initializeOldEmployments();
+				logAudit(AuditType.UPDATE, "Ακύρωση της σχέσης "+employment+" του εκπαιδευτικού "+employee+".");	
 			info("canceled employment #0 for employee #1", employment, employee);
+			employmentHome.clearInstance();
+			return result;
+		} else {
+			error("trying to delete a NULL or transient employment #0 for employee #1", employment, employee);
+			return null;
+		}
+
+	}
+	
+	@Transactional(TransactionPropagationType.REQUIRED)
+	@RaiseEvent("employeeEmploymentDisabled")
+	public String terminatelEmployment() {
+		Employment employment = employmentHome != null ? employmentHome.getInstance() : null;
+		Employee employee = employeeHome != null ? employeeHome.getInstance() : null;
+		if (employmentHome != null && employmentHome.isManaged()) {
+			employment.setActive(Boolean.FALSE);
+			Employment currentEmployeeEmployment = employee.getCurrentEmployment();
+			if(currentEmployeeEmployment!=null && currentEmployeeEmployment.getId().equals(employment.getId())) {
+				employee.setCurrentEmployment(null);
+			}
+			String result = employmentHome.update();
+			
+				initializeEmployeeEmployments();
+				initializeSchoolYearEmployeeEmployments();
+				initializeOldEmployments();
+			
+			info("canceled employment #0 for employee #1", employment, employee);
+			logAudit(AuditType.UPDATE, "Τερματισμός της σχέσης "+employment+" του εκπαιδευτικού "+employee+".");
+			employmentHome.clearInstance();
 			return result;
 		} else {
 			error("trying to delete a NULL or transient employment #0 for employee #1", employment, employee);
@@ -195,10 +233,11 @@ public class EmployeeEmploymentManagement extends BaseDatabaseAwareSeamComponent
 		if (getEmployeeHome().isManaged()) {
 			if (!getEmploymentHome().isManaged()) {
 				String result = employmentHome.persist();
-				if (employeeHome.getInstance().getType() == EmployeeType.HOURLYPAID) {
-					initializeEmployeeEmployments();
-					initializeSchoolYearEmployeeEmployments();
-				}
+				employeeHome.getInstance().setCurrentEmployment(employmentHome.getInstance());
+				employeeHome.update();
+				initializeEmployeeEmployments();
+				initializeSchoolYearEmployeeEmployments();
+				initializeOldEmployments();
 				return result;
 			} else {
 				getFacesMessages().add(Severity.ERROR, "employment home is managed", (Object[]) null);
@@ -244,11 +283,39 @@ public class EmployeeEmploymentManagement extends BaseDatabaseAwareSeamComponent
 			e.setEstablished(new Date());
 			e.setFinalWorkingHours(21);
 			e.setMandatoryWorkingHours(21);
-
+			
 			/* be helpfull and calculate the end date */
 			e.setTerminated(e.getSchoolYear().getTeachingSchoolYearStop());
 			e.setSpecialization(getEmployeeHome().getInstance().getLastSpecialization());
 			return "prepared";
+		} else {
+			getFacesMessages().add(Severity.ERROR, "employee home or is not managed", (Object[]) null);
+			return null;
+		}
+	}
+	
+	@Transactional(TransactionPropagationType.REQUIRED)
+	public String prepareForNewRegularEmployment() {
+		if (getEmployeeHome().isManaged()) {
+			if(getEmployeeHome().getInstance().getCurrentEmployment()==null) {
+				EmploymentHome employmentHome = getEmploymentHome();
+				employmentHome.clearInstance();
+				Employment e = employmentHome.getInstance();
+				e.setEmployee(getEmployeeHome().getInstance());
+				e.setActive(Boolean.TRUE);
+				e.setSchoolYear(getCoreSearching().getActiveSchoolYear(getEntityManager()));
+				e.setType(EmploymentType.REGULAR);
+				e.setEstablished(new Date());
+				e.setMandatoryWorkingHours(21);
+				/* be helpfull and calculate the end date */
+				e.setTerminated(e.getSchoolYear().getTeachingSchoolYearStop());
+				e.setSpecialization(getEmployeeHome().getInstance().getLastSpecialization());
+				return "prepared";
+			} else {
+				getFacesMessages().add(Severity.ERROR, "Ο Εκπαιδευτικός έχει ενεργή σχέση εργασίας", (Object[]) null);
+				return null;
+			}
+			
 		} else {
 			getFacesMessages().add(Severity.ERROR, "employee home or is not managed", (Object[]) null);
 			return null;

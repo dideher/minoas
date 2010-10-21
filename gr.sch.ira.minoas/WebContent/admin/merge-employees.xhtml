@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+
+<ui:composition template="/layout/simple-beauty-template.xhtml">
+	<ui:define name="body">
+
+		<h:form id="form1">
+			<rich:panel>
+				<f:facet name="header">
+					<h:outputText value="Συνχώνευση Εκπαιδευτικών " />
+				</f:facet>
+				<a4j:outputPanel>
+					
+						<h:panelGrid columns="1">
+							<h:outputText
+								value="Με αυτή την διαδικασία μπορείτε να συνχωνεύσετε εκπαιδευτικούς. Επιλέξτε το αρχικό εκπαιδευτικό και τον τελικό εκπαιδευτικό. Όλες οι άδειες, αποσπάσεις, διαθέσεις, σχέσεις εργασίας, κλπ, κλπ του αρχικού εκπαιδευτικού θα μεταφερθούν στον τελικό εκπαιδευτικό. Ο αρχικός εκπαιδευτικός θα διαγραφεί απο το σύστημα." />
+
+							<h:panelGrid columns="2">
+
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Αρχικός Εκπαιδευτικός : " />
+									</ui:define>
+									<h:inputText id="sourceEmployee" size="30" required="true" value="#{employeeMergeRequest.sourceEmployeeStr}"
+										styleClass="fieldValueText">
+										<rich:suggestionbox height="100" width="450" fetchValue="#{employeeUtil.prettyFormatForRegularEmployee(a_employee)}"
+											for="sourceEmployee" var="a_employee"
+											suggestionAction="#{regularEmployeeSuggester.suggest}">
+											<f:facet name="nothingLabel">
+												<h:outputText value="Άγνωστος Εκπαιδευτικός" />
+											</f:facet>
+											<h:column>
+												<h:outputText
+													value="#{employeeUtil.prettyFormatForRegularEmployee(a_employee)}" />
+											</h:column>
+
+											<a4j:support ajaxSingle="true" event="onselect">
+												<f:setPropertyActionListener value="#{a_employee}"
+													target="#{employeeMergeRequest.sourceEmployee}" />
+											</a4j:support>
+										
+
+										</rich:suggestionbox>
+									</h:inputText>
+								</s:decorate>
+								
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Τελικός Εκπαιδευτικός : " />
+									</ui:define>
+									<h:inputText id="targetEmployee" size="30" required="true"  value="#{employeeMergeRequest.targetEmployeeStr}"
+									
+										styleClass="fieldValueText">
+										<rich:suggestionbox height="100" width="450"
+											for="targetEmployee" var="a_employee"
+											suggestionAction="#{regularEmployeeSuggester.suggest}">
+											<f:facet name="nothingLabel">
+												<h:outputText value="Άγνωστος Εκπαιδευτικός" />
+											</f:facet>
+											<h:column>
+												<h:outputText
+													value="#{employeeUtil.prettyFormatForRegularEmployee(a_employee)}" />
+											</h:column>
+
+											<a4j:support ajaxSingle="true" event="onselect">
+												<f:setPropertyActionListener value="#{a_employee}"
+													target="#{employeeMergeRequest.targetEmployee}" />
+											</a4j:support>
+
+										</rich:suggestionbox>
+									</h:inputText>
+								</s:decorate>
+							</h:panelGrid>
+
+							<rich:toolBar itemSeparator="line">
+								<s:button action="backButton" value="Επιστροφή" />
+								<s:button action="endButton" value="Τέλος Ενέργειας" />
+								<a4j:commandButton
+									disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MERGE_EMPLOYEE'))}"
+									action="#{employeeMergeManagement.mergeEmployees()}" 
+									onclick="javascript:if(!confirm('Είστε σίγουρος πως θέλετε προχωρήσετε στην συνχώνευση ;')) { return false; }"
+									value="Συνχώνευση Εκπαιδευτικών">
+								</a4j:commandButton>
+							</rich:toolBar>
+
+
+
+						</h:panelGrid>
+				</a4j:outputPanel>
+			</rich:panel>
+		</h:form>
+
+		
+
+		
+	</ui:define>
+</ui:composition>
+</html>

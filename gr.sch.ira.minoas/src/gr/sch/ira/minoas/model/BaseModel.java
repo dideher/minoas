@@ -43,6 +43,8 @@ public abstract class BaseModel implements Serializable {
 	@Column(name = "VERSION")
 	@Version
 	private Long version;
+	
+	
 
 	/**
 	 * 

@@ -11,13 +11,13 @@
 
 <ui:component>
 	<h:panelGrid columns="6">
-		<s:decorate template="/layout/doubleLineEdit.xhtml" id="regularSchoolUnit">
+		<s:decorate template="/layout/doubleLineEdit.xhtml" id="deputySchoolUnit">
 			<ui:define name="label">
 				<h:outputText value="Σχολική Μονάδα : " />
 			</ui:define>
-			<h:inputText id="regularSchoolUnitTarget" styleClass="fieldValueText"
-				value="#{_regularEmployment.school.title}" required="true">
-				<rich:suggestionbox for="regularSchoolUnitTarget" var="_school"
+			<h:inputText id="deputySchoolUnitTarget" styleClass="fieldValueText"
+				value="#{_regularEmployment.school.title}" required="true" readonly="#{!enableSchoolUnitField}">
+				<rich:suggestionbox for="deputySchoolUnitTarget" var="_school"
 					height="200" width="300"
 					suggestionAction="#{schoolUnitSuggester.suggest}">
 					<f:facet name="nothingLabel">
@@ -27,7 +27,7 @@
 						<h:outputText value="#{_school.title}" />
 					</h:column>
 					<a4j:support ajaxSingle="true" event="onselect"
-						reRender="regularSchoolUnit">
+						reRender="deputySchoolUnit">
 						<f:setPropertyActionListener value="#{_school}"
 							target="#{_regularEmployment.school}" />
 					</a4j:support>
@@ -35,27 +35,33 @@
 			</h:inputText>
 
 		</s:decorate>
-		<s:decorate template="/layout/doubleLineEdit.xhtml" id="regularWorkingHours">
+		<s:decorate template="/layout/doubleLineEdit.xhtml" id="deputyWorkingHours">
 			<ui:define name="label">
 				<h:outputText value="Ώρες Διδασκαλίας : " />
 			</ui:define>
 			<h:inputText value="#{_regularEmployment.finalWorkingHours}"
 				size="3" styleClass="fieldValueText" maxlength="3" required="true">
 				<a4j:support event="onblur" ajaxSingle="true"
-					reRender="regularWorkingHours" />
+					reRender="deputyWorkingHours" />
 			</h:inputText>
 		</s:decorate>
-		<s:decorate template="/layout/doubleLineEdit.xhtml" id="regularFrom">
+		<s:decorate template="/layout/doubleLineEdit.xhtml" id="deputyFrom">
 			<ui:define name="label">
 				<h:outputText value="Από : " />
 			</ui:define>
 			<rich:calendar datePattern="dd-MM-yyyy" style="width:50px"
 				enableManualInput="true" styleClass="fieldValueText" inputSize="10"
 				required="true" value="${_regularEmployment.established}">
-				<a4j:support event="onchanged" ajaxSingle="true" reRender="regularFrom" />
+				<a4j:support event="onchanged" ajaxSingle="true" reRender="deputyFrom" />
 			</rich:calendar>
 		</s:decorate>
 		
+		<s:decorate template="/layout/doubleLineEdit.xhtml">
+				<ui:define name="label">
+					<h:outputText value="Προσωρινή Οργανική ;" />
+				</ui:define>
+				<h:selectBooleanCheckbox value="#{_regularEmployment.temporar}" />
+			</s:decorate>
 	</h:panelGrid>
 
 

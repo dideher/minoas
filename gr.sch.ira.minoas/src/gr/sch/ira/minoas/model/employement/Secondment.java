@@ -380,29 +380,29 @@ public class Secondment extends BaseIDModel implements Cloneable {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("Secondment [");
+		builder.append("Απόσπαση [");
 		if (sourceUnit != null) {
-			builder.append("sourceUnit=");
+			builder.append("Απο Σχ. Μονάδα=");
 			builder.append(sourceUnit);
 			builder.append(", ");
 		}
 		if (targetUnit != null) {
-			builder.append("targetUnit=");
+			builder.append("Σε Σχ. Μονάδα=");
 			builder.append(targetUnit);
 			builder.append(", ");
 		}
 		if (employee != null) {
-			builder.append("employee=");
+			builder.append("Εκπαιδευτικός=");
 			builder.append(employee);
 			builder.append(", ");
 		}
 		if (finalWorkingHours != null) {
-			builder.append("finalWorkingHours=");
+			builder.append("Ωρ.=");
 			builder.append(finalWorkingHours);
 			builder.append(", ");
 		}
 		if (schoolYear != null) {
-			builder.append("schoolYear=");
+			builder.append("Σχ.Ετος=");
 			builder.append(schoolYear);
 			builder.append(", ");
 		}

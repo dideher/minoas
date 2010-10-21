@@ -26,6 +26,8 @@ import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.SecondmentType;
 import gr.sch.ira.minoas.model.employement.ServiceAllocation;
 import gr.sch.ira.minoas.model.employement.ServiceAllocationType;
+import gr.sch.ira.minoas.model.employement.WorkExperience;
+import gr.sch.ira.minoas.model.employement.WorkExperienceType;
 import gr.sch.ira.minoas.model.preparatory.EstablishmentLicenseStatusType;
 import gr.sch.ira.minoas.model.preparatory.PreparatoryUnitNatureType;
 import gr.sch.ira.minoas.model.preparatory.TeachingLanguage;
@@ -246,6 +248,15 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 		}
 	}
 	
+	public Collection<WorkExperience> getEmployeeWorkExperience(EntityManager em, Person employee) {
+		return null;
+	}
+	
+	public Collection<WorkExperience> getEmployeeWorkExperience(EntityManager em, Person employee, Collection<WorkExperienceType> ofType) {
+		return null;
+	}
+	
+	
 	@Transactional(TransactionPropagationType.REQUIRED)
 	@SuppressWarnings("unchecked")
 	public Collection<ServiceAllocation> getActiveServiceAllocations(EntityManager em) {
@@ -319,6 +330,24 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 		result = entityManager
 				.createQuery(
 						"SELECT e from Employment e WHERE e.employee=:employee AND e.active IS TRUE  AND e.type=:type ORDER BY e.schoolYear.title")
+				.setParameter("employee", employee).setParameter("type", type).getResultList();
+		info("found totally '#0' employments for regular employee '#1'.", result.size(), employee);
+		return result;
+	}
+	
+	/**
+	 * @param employee
+	 * @param type
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	@Transactional(TransactionPropagationType.REQUIRED)
+	public Collection<Employment> getAllEmployeeEmploymentsOfType(Person employee, EmploymentType type) {
+		List<Employment> result;
+		debug("trying to featch all  employments for employee '#0'", employee);
+		result = entityManager
+				.createQuery(
+						"SELECT e from Employment e WHERE e.employee=:employee AND e.type=:type AND e.deleted IS FALSE ORDER BY e.schoolYear.title ")
 				.setParameter("employee", employee).setParameter("type", type).getResultList();
 		info("found totally '#0' employments for regular employee '#1'.", result.size(), employee);
 		return result;

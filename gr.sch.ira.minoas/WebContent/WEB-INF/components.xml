@@ -189,7 +189,7 @@
    </framework:entity-query>
    
    <framework:entity-query name="employeeRegularEmploymentsListQuery" max-results="200" scope="page">
-    <framework:ejbql>SELECT e FROM Employment e WHERE e.type='REGULAR' AND e.active IS TRUE</framework:ejbql>
+    <framework:ejbql>SELECT e FROM Employment e WHERE e.type='REGULAR' AND e.deleted IS FALSE</framework:ejbql>
     <framework:order>e.schoolYear desc, e.established desc, e.id desc</framework:order>
     <framework:restrictions>
       <value>e.employee = #{employee}</value>
@@ -205,7 +205,7 @@
    </framework:entity-query>
    
    <framework:entity-query name="employeeDeputyEmploymentsListQuery" max-results="200" scope="page">
-    <framework:ejbql>SELECT e FROM Employment e WHERE e.type='DEPUTY' AND e.active IS TRUE</framework:ejbql>
+    <framework:ejbql>SELECT e FROM Employment e WHERE e.type='DEPUTY' AND e.deleted IS FALSE</framework:ejbql>
     <framework:order>e.schoolYear desc, e.established desc, e.id desc</framework:order>
     <framework:restrictions>
       <value>e.employee = #{employee}</value>
@@ -221,7 +221,7 @@
    </framework:entity-query>
    
    <framework:entity-query name="employeeHourlyBasedEmploymentsListQuery" max-results="200" scope="page">
-    <framework:ejbql>SELECT e FROM Employment e WHERE e.type='HOURLYBASED' AND e.active IS TRUE</framework:ejbql>
+    <framework:ejbql>SELECT e FROM Employment e WHERE e.type='HOURLYBASED' AND e.deleted IS FALSE</framework:ejbql>
     <framework:order>e.schoolYear desc, e.established desc, e.id desc</framework:order>
     <framework:restrictions>
       <value>e.employee = #{employee}</value>
@@ -251,7 +251,7 @@
    
    <!--  All employee's secondments -->
    <framework:entity-query name="employeeServiceAllocationsListQuery" max-results="200" scope="page">
-    <framework:ejbql>SELECT s FROM ServiceAllocation s WHERE s.active IS TRUE</framework:ejbql>
+    <framework:ejbql>SELECT s FROM ServiceAllocation s</framework:ejbql>
     <framework:order>s.established desc</framework:order>
     <framework:restrictions>
       <value>s.employee = #{employeeHome.instance}</value>
@@ -296,7 +296,7 @@
    
    <!--  All employee's secondments -->
    <framework:entity-query name="employeeSecondmentsListQuery" max-results="200" scope="page">
-    <framework:ejbql>SELECT s FROM Secondment s WHERE s.active IS TRUE</framework:ejbql>
+    <framework:ejbql>SELECT s FROM Secondment s</framework:ejbql>
     <framework:order>s.schoolYear desc, s.established desc</framework:order>
     <framework:restrictions>
       <value>s.employee = #{employee}</value>
@@ -378,7 +378,7 @@
    </framework:entity-query>
    
    <framework:entity-query name="employeeDisposalsListQuery" max-results="200" scope="page">
-    <framework:ejbql>SELECT d FROM Disposal d WHERE d.active IS TRUE</framework:ejbql>
+    <framework:ejbql>SELECT d FROM Disposal d</framework:ejbql>
     <framework:order>d.schoolYear, d.established desc</framework:order>
     <framework:restrictions>
       <value>d.employee = #{employeeHome.instance}</value>

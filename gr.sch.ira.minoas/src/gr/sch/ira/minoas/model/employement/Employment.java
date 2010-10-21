@@ -1,5 +1,6 @@
 package gr.sch.ira.minoas.model.employement;
 
+import gr.sch.ira.minoas.model.BaseIDDeleteAwareModel;
 import gr.sch.ira.minoas.model.BaseIDModel;
 import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.core.SchoolYear;
@@ -32,7 +33,7 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "EMPLOYMENT")
-public class Employment extends BaseIDModel {
+public class Employment extends BaseIDDeleteAwareModel {
 
 	/**
 	 * 

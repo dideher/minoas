@@ -313,5 +313,20 @@ public class Disposal extends BaseIDModel {
 	public void setType(DisposalType type) {
 		this.type = type;
 	}
+	
+	/**
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("[ Διάθεση : ");
+		sb.append(getEmployee());
+		sb.append(" εκπαιδευτικόυ ");
+		sb.append(" στην μονάδα  ");
+		sb.append(getDisposalUnit());
+		sb.append(" ]");
+		return sb.toString();
+	}
 
 }

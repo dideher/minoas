@@ -90,6 +90,7 @@ public class SecurityStartup extends BaseDatabaseAwareSeamComponent {
 		createRole("MANAGE_EMPLOYMENT_HOURLY_BASED", "Manage Hourly Based Employment", admin);
 		createRole("MANAGE_EMPLOYMENT_DEPUTY", "Manage Deputy Employment", admin);
 		createRole("MANAGE_EMPLOYMENT_REGULAR", "Manage Regular Employment", admin);
+		createRole("DELETE_EMPLOYMENT_REGULAR", "Delete Regular Employment", admin);
 
 		createRole("VIEW_EMPLOYEE", "View Employee", admin);
 
