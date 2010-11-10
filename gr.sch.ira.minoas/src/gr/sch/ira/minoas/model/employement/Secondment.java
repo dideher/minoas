@@ -3,6 +3,7 @@
  */
 package gr.sch.ira.minoas.model.employement;
 
+import gr.sch.ira.minoas.model.BaseIDDeleteAwareModel;
 import gr.sch.ira.minoas.model.BaseIDModel;
 import gr.sch.ira.minoas.model.core.PYSDE;
 import gr.sch.ira.minoas.model.core.SchoolYear;
@@ -31,7 +32,7 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "SECONDMENT")
-public class Secondment extends BaseIDModel implements Cloneable {
+public class Secondment extends BaseIDDeleteAwareModel implements Cloneable {
 
 	/**
 	 * 

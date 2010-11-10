@@ -273,17 +273,22 @@
 											</f:facet>
 
 											<rich:toolBar itemSeparator="line">
-												<a4j:commandLink id="cancellink" ajaxSingle="true"
-													reRender="deleteEmployeeEmploymentContent"
-													oncomplete="#{rich:component('deleteEmploymentModalPanel')}.show();"
-													value="Διαγραφή"
-													onclick="javascript:if(!confirm('Είστε σίγουρος πως θέλετε να διαγράψετε την εγραφή ;')) { return false; }">
-													<h:graphicImage value="/img/icons/delete.png" width="12"
+											
+											<a4j:commandLink id="terminatellink" ajaxSingle="true"
+													reRender="terminateEmployeeEmploymentContent"
+													oncomplete="#{rich:component('terminateEmploymentModalPanel')}.show();"
+													value="Τερματισμός"
+													onclick="javascript:if(!confirm('Είστε σίγουρος πως θέλετε να τερματίσετε την εγγραφή ;')) { return false; }">
+													<h:graphicImage value="/img/icons/euro.png" width="12"
 														height="12" style="border:0" />
 													<f:setPropertyActionListener
 														value="#{_deputyEmploymentItem.id}"
 														target="#{employmentHome.id}" />
 												</a4j:commandLink>
+												
+												
+												
+												
 
 												<a4j:commandLink id="updatelink"
 													reRender="updateEmployeeEmploymentContent"
@@ -295,6 +300,20 @@
 														value="#{_deputyEmploymentItem.id}"
 														target="#{employmentHome.id}" />
 												</a4j:commandLink>
+												
+												<a4j:commandLink id="deletelink"
+														rendered="#{(s:hasRole('ADMIN') or s:hasRole('DELETE_EMPLOYMENT_DEPUTY'))}"
+														ajaxSingle="true"
+														reRender="deleteEmployeeEmploymentContent"
+														oncomplete="#{rich:component('deleteEmploymentModalPanel')}.show();"
+														value="Διαγραφή"
+														onclick="javascript:if(!confirm('Είστε σίγουρος πως θέλετε να διαγράψετε την εγγραφή ;')) { return false; }">
+														<h:graphicImage value="/img/icons/delete.png" width="12"
+															height="12" style="border:0" />
+														<f:setPropertyActionListener
+															value="#{_deputyEmploymentItem.id}"
+															target="#{employmentHome.id}" />
+													</a4j:commandLink>
 											</rich:toolBar>
 										</rich:column>
 									</rich:dataTable>

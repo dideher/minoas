@@ -16,7 +16,7 @@
 				<h:outputText value="Σχολική Μονάδα : " />
 			</ui:define>
 			<h:inputText id="regularSchoolUnitTarget" styleClass="fieldValueText"
-				value="#{_regularEmployment.school.title}" required="true">
+				value="#{_deputyEmployment.school.title}" required="true">
 				<rich:suggestionbox for="regularSchoolUnitTarget" var="_school"
 					height="200" width="300"
 					suggestionAction="#{schoolUnitSuggester.suggest}">
@@ -29,7 +29,7 @@
 					<a4j:support ajaxSingle="true" event="onselect"
 						reRender="regularSchoolUnit">
 						<f:setPropertyActionListener value="#{_school}"
-							target="#{_regularEmployment.school}" />
+							target="#{_deputyEmployment.school}" />
 					</a4j:support>
 				</rich:suggestionbox>
 			</h:inputText>
@@ -39,7 +39,7 @@
 			<ui:define name="label">
 				<h:outputText value="Ώρες Διδασκαλίας : " />
 			</ui:define>
-			<h:inputText value="#{_regularEmployment.finalWorkingHours}"
+			<h:inputText value="#{_deputyEmployment.finalWorkingHours}"
 				size="3" styleClass="fieldValueText" maxlength="3" required="true">
 				<a4j:support event="onblur" ajaxSingle="true"
 					reRender="regularWorkingHours" />
@@ -51,7 +51,7 @@
 			</ui:define>
 			<rich:calendar datePattern="dd-MM-yyyy" style="width:50px"
 				enableManualInput="true" styleClass="fieldValueText" inputSize="10"
-				required="true" value="${_regularEmployment.established}">
+				required="true" value="${_deputyEmployment.established}">
 				<a4j:support event="onchanged" ajaxSingle="true" reRender="regularFrom" />
 			</rich:calendar>
 		</s:decorate>
