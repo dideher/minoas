@@ -44,7 +44,7 @@ public class SpecializationGroupConverter extends DatabaseAwareBaseConverter {
 	public Object getAsObject(FacesContext context, UIComponent component, String value) {
 		if (value != null) {
 			try {
-				return getMinoasDatabase().createQuery("FROM SpecializationGroup s WHERE s.title=:value").setParameter(
+				return getMinoasDatabase().createQuery("FROM SpecializationGroup s WHERE s.title=:value AND s.schoolYear.currentSchoolYear IS TRUE").setParameter(
 						"value", value).getSingleResult();
 			} catch (NoResultException nre) {
 				return null;
