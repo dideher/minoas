@@ -2,6 +2,7 @@ package gr.sch.ira.minoas.model.employee;
 
 import gr.sch.ira.minoas.model.core.PYSDE;
 import gr.sch.ira.minoas.model.core.Specialization;
+import gr.sch.ira.minoas.model.employement.Disposal;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.Leave;
 import gr.sch.ira.minoas.model.employement.Secondment;
@@ -89,6 +90,9 @@ public class Employee extends Person {
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", cascade = { CascadeType.ALL })
 	private Collection<ServiceAllocation> serviceAllocations = new ArrayList<ServiceAllocation>();
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", cascade = { CascadeType.ALL })
+	private Collection<Disposal> disposals = new ArrayList<Disposal>();
 
 	@Basic
 	@Column(name = "SPECIAL_CATEGORY", nullable = true)
@@ -383,6 +387,20 @@ public class Employee extends Person {
 	 */
 	public void setExclusion(EmployeeExclusion exclusion) {
 		this.exclusion = exclusion;
+	}
+
+	/**
+	 * @return the disposals
+	 */
+	protected Collection<Disposal> getDisposals() {
+		return disposals;
+	}
+
+	/**
+	 * @param disposals the disposals to set
+	 */
+	protected void setDisposals(Collection<Disposal> disposals) {
+		this.disposals = disposals;
 	}
 	
 	

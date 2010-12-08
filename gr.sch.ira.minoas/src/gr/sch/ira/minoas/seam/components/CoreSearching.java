@@ -403,6 +403,17 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 		info("found totally '#0' secondments for employee '#1'.", result.size(), employee);
 		return result;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public Collection<Secondment> getAllEmployeeSecondments(Person employee) {
+		Collection<Secondment> result = null;
+		info("searching employee's '#0' secondments.", employee);
+		result = entityManager.createQuery(
+				"SELECT s from Secondment s WHERE s.employee=:employee ORDER BY s.insertedOn")
+				.setParameter("employee", employee).getResultList();
+		info("found totally '#0' secondments for employee '#1'.", result.size(), employee);
+		return result;
+	}
 
 	@Factory(value = "employeeTypes")
 	public EmployeeType[] getEmployeeTypes() {
