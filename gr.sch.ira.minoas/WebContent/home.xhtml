@@ -1,13 +1,17 @@
-<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:s="http://jboss.com/products/seam/taglib"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:f="http://java.sun.com/jsf/core"
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:s="http://jboss.com/products/seam/taglib"
 	xmlns:rich="http://richfaces.org/rich"
-	template="/layout/simple-beauty-template.xhtml"
 	xmlns:a4j="http://richfaces.org/a4j">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<ui:composition template="/layout/simple-beauty-template.xhtml">
 
 
 
@@ -25,9 +29,9 @@
 						<f:facet name="header">
 							<h:outputText value="Πλήθος Ενεργειών Χρηστών" />
 						</f:facet>
-						<h:graphicImage 
-							url="#{auditWinningReport.auditWinnersGoogleChartURL}" />
-						
+						<h:graphicImage
+							url="{auditWinningReport.auditWinnersGoogleChartURL}" />
+
 					</rich:panel>
 
 					<rich:panel>
@@ -35,7 +39,7 @@
 							<h:outputText value="Κατανομή Ενεργού Προσωπικού" />
 						</f:facet>
 						<h:graphicImage
-							value="#{auditWinningReport.employeeReportGoogleChartURL}" />
+							value="{auditWinningReport.employeeReportGoogleChartURL}" />
 					</rich:panel>
 				</h:panelGrid>
 			</rich:panel>
@@ -46,4 +50,4 @@
 
 </ui:composition>
 
-
+</html>
