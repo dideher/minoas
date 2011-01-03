@@ -12,7 +12,6 @@ import java.util.Date;
 import java.util.Iterator;
 
 import org.apache.commons.lang.time.DateUtils;
-import org.hibernate.dialect.IngresDialect;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
@@ -20,7 +19,6 @@ import org.jboss.seam.annotations.Out;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.TransactionPropagationType;
 import org.jboss.seam.annotations.Transactional;
-import org.jboss.seam.mail.ui.context.MailFacesContextImpl;
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
