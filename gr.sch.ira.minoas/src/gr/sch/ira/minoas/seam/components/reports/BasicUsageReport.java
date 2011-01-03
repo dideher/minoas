@@ -13,6 +13,9 @@ import java.util.Iterator;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.AutoCreate;
+import org.jboss.seam.annotations.Factory;
+import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Out;
@@ -21,11 +24,11 @@ import org.jboss.seam.annotations.TransactionPropagationType;
 import org.jboss.seam.annotations.Transactional;
 
 /**
- * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
+ * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * @version $Id$
  */
 @Name("basicUsageReport")
-@Scope(ScopeType.SESSION)
+@Scope(ScopeType.CONVERSATION)
 public class BasicUsageReport extends BaseReport {
 
 	public class AuditWinnersReportData {
@@ -179,14 +182,14 @@ public class BasicUsageReport extends BaseReport {
 
 	}
 
-	@Out(required = false)
+	@In(create=true) @Out
 	private AuditWinnersReportData auditWinningReport;
 
-	@Observer("org.jboss.seam.security.loginSuccessful")
+	@Factory(value="auditWinningReport")
 	@Transactional(TransactionPropagationType.REQUIRED)
 	public void generateReport() {
 		info("generating basic usage report");
-		Date fromDate = DateUtils.addDays(new Date(), -30);
+		
 		Collection<Object[]> rawData = getEntityManager()
 				.createQuery(
 						"SELECT (SELECT p FROM Principal p WHERE p.id=a.insertedBy.id), COUNT(a.insertedBy) FROM Audit a  GROUP BY (a.insertedBy) ORDER BY COUNT(a.insertedBy) DESC")

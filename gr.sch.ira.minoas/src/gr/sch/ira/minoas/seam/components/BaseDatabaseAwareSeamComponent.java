@@ -24,11 +24,11 @@ public abstract class BaseDatabaseAwareSeamComponent extends BaseSeamComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@In
+	@In(required = true, create = true)
 	protected EntityManager entityManager;
 	
-	@In()
-	private CoreSearching coreSearching;
+	@In(required = true, create = true)
+    private CoreSearching coreSearching;
 
 	@In(required = false)
 	private Identity identity;

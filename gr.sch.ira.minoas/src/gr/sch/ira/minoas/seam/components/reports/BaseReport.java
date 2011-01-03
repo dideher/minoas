@@ -28,9 +28,6 @@ public abstract class BaseReport extends BaseDatabaseAwareSeamComponent {
 
 	private static final String SEAM_MESSAGES_RESOURCE_BUNDLE_NAME = "messages";
 
-	@In(required = true, create = true)
-	private CoreSearching coreSearching;
-
 	protected Collection<DisposalReportItem> convertDisposalCollection(Collection<Disposal> disposals) {
 		Collection<DisposalReportItem> returnValue = new ArrayList<DisposalReportItem>(disposals.size());
 		for (Disposal disposal : disposals) {
@@ -80,12 +77,7 @@ public abstract class BaseReport extends BaseDatabaseAwareSeamComponent {
 		return returnValue;
 	}
 
-	/**
-	 * @return the coreSearching
-	 */
-	public CoreSearching getCoreSearching() {
-		return coreSearching;
-	}
+	
 
 	protected String getLocalizedMessage(String message_key) {
 		return getResourceBundle(SEAM_MESSAGES_RESOURCE_BUNDLE_NAME).getString(message_key);
@@ -96,11 +88,6 @@ public abstract class BaseReport extends BaseDatabaseAwareSeamComponent {
 				.getViewRoot().getLocale());
 	}
 
-	/**
-	 * @param coreSearching the coreSearching to set
-	 */
-	public void setCoreSearching(CoreSearching coreSearching) {
-		this.coreSearching = coreSearching;
-	}
+	
 
 }

@@ -31,7 +31,7 @@
 				<rich:menuItem submitMode="none"
 					rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_SCHOOL_BASIC'))}">
 					<s:link value="Επεξεργασία Σχολικής Μονάδας "
-						view="/school/select-school.xhtml" propagation="nest">
+						view="/school/select-school.xhtml">
 						<f:param name="from" value="/home" />
 						<f:param name="to" value="/school/school-unit-management" />
 					</s:link>
@@ -41,7 +41,7 @@
 
 				<rich:menuItem submitMode="none">
 					<s:link value="Τύποι Μαθημάτων"
-						view="/courseType/courseTypes.xhtml" propagation="nest">
+						view="/courseType/courseTypes.xhtml" >
 						<f:param name="from" value="/home" />
 					</s:link>
 				</rich:menuItem>
@@ -49,7 +49,7 @@
 
 				<rich:menuItem submitMode="none">
 					<s:link value="Ώρες Διδασκαλίας Σχολικής Μονάδας"
-						view="/school/select-school.xhtml" propagation="nest">
+						view="/school/select-school.xhtml">
 						<f:param name="from" value="/home" />
 						<f:param name="to"
 							value="/teachingResources/school-teaching-resources" />
@@ -77,7 +77,7 @@
 				</f:facet>
 				<rich:menuItem submitMode="none"
 					rendered="#{(s:hasRole('ADMIN') or s:hasRole('VIEW_EMPLOYEE'))}">
-					<s:link value="Προβολή Καρτέλας" propagation="nest"
+					<s:link value="Προβολή Καρτέλας"
 						view="/employee/select-employee.xhtml">
 						<f:param name="from" value="/home" />
 						<f:param name="to" value="/employee/employee" />
@@ -87,7 +87,7 @@
 				<rich:menuSeparator />
 				<rich:menuItem submitMode="none"
 					rendered="#{(s:hasRole('ADMIN') or s:hasRole('ADD_EMPLOYEE'))}">
-					<s:link value="Εισαγωγή Εκπαιδευτικού" propagation="nest"
+					<s:link value="Εισαγωγή Εκπαιδευτικού"
 						action="#{employeeHome.prepareForNewEmployee}"
 						view="/employee/add-new-employee.xhtml">
 						<f:param name="add_new_employee_from" value="/home" />
@@ -96,7 +96,7 @@
 
 				<rich:menuItem submitMode="none"
 					rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYMENT'))}">
-					<s:link value="Διαχείριση Σχέσης Εργασίας" propagation="nest"
+					<s:link value="Διαχείριση Σχέσης Εργασίας" 
 						view="/employee/select-employee.xhtml">
 						<f:param name="from" value="/home" />
 						<f:param name="to" value="/employee/manage-employment" />
@@ -106,7 +106,7 @@
 				<rich:menuGroup value="Διαχείριση Αδειών">
 					<rich:menuItem submitMode="none"
 						rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_LEAVE'))}">
-						<s:link value="Διαχείριση Αδειών Εκπαιδευτικού" propagation="nest"
+						<s:link value="Διαχείριση Αδειών Εκπαιδευτικού" 
 							view="/employee/select-employee.xhtml">
 							<f:param name="from" value="/home" />
 							<f:param name="to" value="/leave/employee-leave-management" />
@@ -116,7 +116,7 @@
 					<rich:menuGroup value="Εκτύπωσεις και Σταστικά">
 						<rich:menuItem submitMode="none"
 							rendered="#{(s:hasRole('ADMIN') or s:hasRole('VIEW_LEAVE'))}">
-							<s:link value="Άδειες Ανα Τύπο" propagation="nest"
+							<s:link value="Άδειες Ανα Τύπο" 
 								view="/leave/leave-report-by-type.xhtml">
 								<f:param name="leaves_report_by_type_from" value="/home" />
 							</s:link>
@@ -146,7 +146,7 @@
 					<rich:menuGroup value="Εκτύπωσεις και Σταστικά"
 						rendered="#{(s:hasRole('ADMIN') or s:hasRole('VIEW_DISPOSAL'))}">
 						<rich:menuItem submitMode="none">
-							<s:link value="Διαθέσεις Ανα Τύπο" propagation="nest"
+							<s:link value="Διαθέσεις Ανα Τύπο"
 								view="/disposal/report-by-type.xhtml">
 								<f:param name="from" value="/home" />
 							</s:link>
@@ -194,7 +194,7 @@
 					<rich:menuItem submitMode="none"
 						rendered="#{(s:hasRole('ADMIN') or s:hasRole('ADD_SECONDMENT'))}">
 
-						<s:link value="Εισαγωγή Νέας Απόσπασης" propagation="nest"
+						<s:link value="Εισαγωγή Νέας Απόσπασης" 
 							action="#{secondmentHome.prepareForNewSecondment}"
 							view="/secondment/add-new-secondment.xhtml">
 							<f:param name="add_new_secondment_from" value="/home" />
@@ -203,7 +203,7 @@
 					<rich:menuItem submitMode="none"
 						rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_SECONDMENT'))}">
 						<s:link value="Διαχείριση Απόσπασης Εκπαιδευτικού"
-							propagation="nest" view="/employee/select-employee.xhtml">
+							 view="/employee/select-employee.xhtml">
 							<f:param name="from" value="/home" />
 							<f:param name="to"
 								value="/secondment/secondment-employment-management" />
@@ -213,13 +213,13 @@
 					<rich:menuGroup value="Εκτύπωσεις και Σταστικά"
 						rendered="#{(s:hasRole('ADMIN') or s:hasRole('VIEW_SECONDMENT'))}">
 						<rich:menuItem submitMode="none">
-							<s:link value="Αποσπάσεις Ανα Τύπο" propagation="nest"
+							<s:link value="Αποσπάσεις Ανα Τύπο"
 								view="/secondment/report-by-type.xhtml">
 								<f:param name="from" value="/home" />
 							</s:link>
 						</rich:menuItem>
 						<rich:menuItem submitMode="none">
-							<s:link value="Αποσπάσεις Απο Άλλο ΠΥΣΔΕ" propagation="nest"
+							<s:link value="Αποσπάσεις Απο Άλλο ΠΥΣΔΕ" 
 								view="/secondment/FromOtherPysdeReport.xhtml">
 								<f:param name="from" value="/home" />
 							</s:link>
