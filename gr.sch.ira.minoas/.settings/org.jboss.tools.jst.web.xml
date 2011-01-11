@@ -524,16 +524,12 @@
   location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/commons-digester.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-commons-lang-2.4.jar"
   location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/commons-lang-2.4.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-darkX-3.3.1.GA.jar"
-  location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/darkX-3.3.1.GA.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-drools-api.jar"
   location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/drools-api.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-drools-compiler.jar"
   location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/drools-compiler.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-drools-core.jar"
   location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/drools-core.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-glassX-3.3.1.GA.jar"
-  location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/glassX-3.3.1.GA.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-groovy-1.5.7.jar"
   location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/groovy-1.5.7.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-iText-2.1.7.jar"
@@ -574,12 +570,6 @@
   location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/mvel2.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-poi-3.5-FINAL-20090928.jar"
   location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/poi-3.5-FINAL-20090928.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-richfaces-api-3.3.2.SR1.jar"
-  location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/richfaces-api-3.3.2.SR1.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-richfaces-impl-3.3.2.SR1.jar"
-  location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/richfaces-impl-3.3.2.SR1.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-richfaces-ui-3.3.2.SR1.jar"
-  location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/richfaces-ui-3.3.2.SR1.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-spring-beans-2.5.5.jar"
   location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/spring-beans-2.5.5.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-spring-context-2.5.5.jar"
@@ -589,6 +579,16 @@
  <file-system NAME="lib-spring-web-2.5.5.jar"
   location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/spring-web-2.5.5.jar" model-entity="FileSystemJar"/>
  <file-system NAME="src" location="%workspace.home%/../../src" model-entity="FileSystemFolder"/>
+ <file-system NAME="lib-darkX-3.3.3.Final.jar"
+  location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/darkX-3.3.3.Final.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-glassX-3.3.3.Final.jar"
+  location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/glassX-3.3.3.Final.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-richfaces-api.jar"
+  location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/richfaces-api.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-richfaces-impl.jar"
+  location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/richfaces-impl.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-richfaces-ui.jar"
+  location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/richfaces-ui.jar" model-entity="FileSystemJar"/>
  <web SERVLET_VERSION="2.4" model-entity="JstWeb" model-path="/web.xml">
   <module URI="/WEB-INF/faces-config.xml" model-entity="WebJSFModule"
    model-path="/faces-config.xml" src="src" web-root="WEB-ROOT"/>
