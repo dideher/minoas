@@ -16,7 +16,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.faces.context.FacesContext;
 import javax.persistence.Query;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -31,6 +30,7 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.datamodel.DataModel;
+import org.jboss.seam.faces.FacesContext;
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
@@ -87,7 +87,7 @@ public class EmployeeLeavesReport extends BaseReport {
 			JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(reportData);
 			byte[] bytes = JasperRunManager.runReportToPdf(this.getClass().getResourceAsStream(
 					"/reports/leaveByType.jasper"), parameters, (JRDataSource) ds);
-			HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext()
+			HttpServletResponse response = (HttpServletResponse) facesContext.getContext().getExternalContext()
 					.getResponse();
 			response.setContentType("application/pdf");
 			response.addHeader("Content-Disposition", "attachment;filename=LeaveReportByType.pdf");
@@ -96,7 +96,7 @@ public class EmployeeLeavesReport extends BaseReport {
 			servletOutputStream.write(bytes, 0, bytes.length);
 			servletOutputStream.flush();
 			servletOutputStream.close();
-			FacesContext.getCurrentInstance().responseComplete();
+			facesContext.getContext().responseComplete();
 		} catch (Exception ex) {
 			ex.printStackTrace(System.err);
 		}

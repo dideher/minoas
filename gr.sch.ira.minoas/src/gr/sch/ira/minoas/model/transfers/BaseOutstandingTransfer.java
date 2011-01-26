@@ -1,5 +1,9 @@
 package gr.sch.ira.minoas.model.transfers;
 
+import gr.sch.ira.minoas.model.BaseIDModel;
+import gr.sch.ira.minoas.model.core.PYSDE;
+import gr.sch.ira.minoas.model.core.SchoolYear;
+
 import java.util.Date;
 
 import javax.persistence.Basic;
@@ -7,13 +11,6 @@ import javax.persistence.Column;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
-
-import org.jboss.aspects.security.Unchecked;
-
-import gr.sch.ira.minoas.model.BaseIDModel;
-import gr.sch.ira.minoas.model.core.PYSDE;
-import gr.sch.ira.minoas.model.core.SchoolYear;
-import gr.sch.ira.minoas.model.employee.Employee;
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>

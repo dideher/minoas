@@ -10,7 +10,6 @@ import gr.sch.ira.minoas.model.security.Principal;
 import javax.persistence.EntityManager;
 
 import org.jboss.seam.annotations.In;
-import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.security.Identity;
 
 /**

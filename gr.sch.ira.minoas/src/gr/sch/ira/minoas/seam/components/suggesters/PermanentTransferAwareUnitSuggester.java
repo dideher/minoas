@@ -4,13 +4,9 @@
 package gr.sch.ira.minoas.seam.components.suggesters;
 
 import gr.sch.ira.minoas.core.CoreUtils;
-import gr.sch.ira.minoas.model.core.PYSDE;
 import gr.sch.ira.minoas.model.core.Unit;
-import gr.sch.ira.minoas.model.employement.Disposal;
-import gr.sch.ira.minoas.model.employement.DisposalTargetType;
 import gr.sch.ira.minoas.model.transfers.PermanentTransferType;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
-import gr.sch.ira.minoas.seam.components.CoreSearching;
 import gr.sch.ira.minoas.seam.components.home.PermanentTransferHome;
 
 import java.util.Collection;

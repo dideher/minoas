@@ -7,7 +7,6 @@ import gr.sch.ira.minoas.model.employement.Leave;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.ServiceAllocation;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
-import gr.sch.ira.minoas.seam.components.CoreSearching;
 import gr.sch.ira.minoas.seam.components.reports.resource.DisposalReportItem;
 import gr.sch.ira.minoas.seam.components.reports.resource.EmployeeReportItem;
 import gr.sch.ira.minoas.seam.components.reports.resource.EmploymentReportItem;
@@ -19,12 +18,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.ResourceBundle;
 
-import javax.faces.context.FacesContext;
-
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.core.SeamResourceBundle;
+import org.jboss.seam.faces.FacesContext;
 
 public abstract class BaseReport extends BaseDatabaseAwareSeamComponent {
+    
+    @In
+    protected FacesContext facesContext;
+
 
 	private static final String SEAM_MESSAGES_RESOURCE_BUNDLE_NAME = "messages";
 
@@ -84,7 +86,7 @@ public abstract class BaseReport extends BaseDatabaseAwareSeamComponent {
 	}
 
 	protected ResourceBundle getResourceBundle(String resource_budle_name) {
-		return SeamResourceBundle.getBundle(SEAM_MESSAGES_RESOURCE_BUNDLE_NAME, FacesContext.getCurrentInstance()
+		return SeamResourceBundle.getBundle(SEAM_MESSAGES_RESOURCE_BUNDLE_NAME, facesContext.getContext()
 				.getViewRoot().getLocale());
 	}
 

@@ -1,25 +1,5 @@
 package gr.sch.ira.minoas.seam.components.management;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.persistence.EntityManager;
-
-import org.jboss.seam.ScopeType;
-import org.jboss.seam.annotations.Factory;
-import org.jboss.seam.annotations.In;
-import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Scope;
-import org.jboss.seam.annotations.Transactional;
-import org.jboss.seam.annotations.datamodel.DataModel;
-import org.jboss.seam.international.StatusMessage.Severity;
-
 import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.core.SchoolYear;
 import gr.sch.ira.minoas.model.core.Specialization;
@@ -37,9 +17,23 @@ import gr.sch.ira.minoas.model.transfers.PermanentTransfer;
 import gr.sch.ira.minoas.model.transfers.PermanentTransferType;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.CoreSearching;
-import gr.sch.ira.minoas.seam.components.home.SchoolHome;
 import gr.sch.ira.minoas.seam.components.home.SchoolYearHome;
-import gr.sch.ira.minoas.seam.components.reports.resource.TeachingResource;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.persistence.EntityManager;
+
+import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.In;
+import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.annotations.Transactional;
+import org.jboss.seam.annotations.datamodel.DataModel;
+import org.jboss.seam.international.StatusMessage.Severity;
 
 @Name(value = "schoolYearManagement")
 @Scope(ScopeType.CONVERSATION)

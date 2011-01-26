@@ -16,7 +16,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.faces.context.FacesContext;
 import javax.persistence.Query;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -85,7 +84,7 @@ public class EmployeeReport extends BaseReport {
 			JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(reportData);
 			byte[] bytes = JasperRunManager.runReportToPdf(this.getClass().getResourceAsStream(
 					"/reports/employeeByType.jasper"), parameters, (JRDataSource) ds);
-			HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext()
+			HttpServletResponse response = (HttpServletResponse) facesContext.getContext().getExternalContext()
 					.getResponse();
 			response.setContentType("application/pdf");
 			response.addHeader("Content-Disposition", "attachment;filename=EmployeeReportByType.pdf");
@@ -94,7 +93,7 @@ public class EmployeeReport extends BaseReport {
 			servletOutputStream.write(bytes, 0, bytes.length);
 			servletOutputStream.flush();
 			servletOutputStream.close();
-			FacesContext.getCurrentInstance().responseComplete();
+			facesContext.getContext().responseComplete();
 		} catch (Exception ex) {
 			ex.printStackTrace(System.err);
 		}

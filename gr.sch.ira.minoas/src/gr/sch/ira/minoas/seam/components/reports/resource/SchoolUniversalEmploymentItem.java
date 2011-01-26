@@ -1,13 +1,13 @@
 package gr.sch.ira.minoas.seam.components.reports.resource;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employement.Disposal;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.ServiceAllocation;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>

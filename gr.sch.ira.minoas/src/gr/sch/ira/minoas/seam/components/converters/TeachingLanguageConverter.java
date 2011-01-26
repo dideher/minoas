@@ -1,11 +1,11 @@
 package gr.sch.ira.minoas.seam.components.converters;
 
 import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.faces.Converter;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
+import javax.faces.context.FacesContext;
 
 @Name("teachingLanguageConverter")
 @Converter

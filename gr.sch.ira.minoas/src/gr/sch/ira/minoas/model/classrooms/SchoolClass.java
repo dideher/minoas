@@ -2,11 +2,11 @@
 
 package gr.sch.ira.minoas.model.classrooms;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import gr.sch.ira.minoas.model.BaseIDModel;
 import gr.sch.ira.minoas.model.core.SchoolType;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;

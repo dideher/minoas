@@ -491,14 +491,6 @@
   location="/opt/jboss/jboss-5.1.0.GA/server/standard/deployers/ejb3.deployer/jboss-ejb3-deployer.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-jsr299-api.jar"
   location="/opt/jboss/jboss-5.1.0.GA/server/standard/deployers/webbeans.deployer/jsr299-api.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-localedata.jar"
-  location="/opt/sun-jdk-1.5.0.20/jre/lib/ext/localedata.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-sunjce_provider.jar"
-  location="/opt/sun-jdk-1.5.0.20/jre/lib/ext/sunjce_provider.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-dnsns.jar"
-  location="/opt/sun-jdk-1.5.0.20/jre/lib/ext/dnsns.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-sunpkcs11.jar"
-  location="/opt/sun-jdk-1.5.0.20/jre/lib/ext/sunpkcs11.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-hibernate-jbosscache2.jar"
   location="/opt/jboss/jboss-5.1.0.GA/server/minoas/lib/hibernate-jbosscache2.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-jbosscache-pojo.jar"

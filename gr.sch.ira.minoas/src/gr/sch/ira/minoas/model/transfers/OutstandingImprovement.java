@@ -1,16 +1,15 @@
 package gr.sch.ira.minoas.model.transfers;
 
+import gr.sch.ira.minoas.model.core.School;
+import gr.sch.ira.minoas.model.employee.Employee;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
-
-import gr.sch.ira.minoas.model.core.School;
-import gr.sch.ira.minoas.model.employee.Employee;
 
 @Entity
 @Table(name = "OutstandingImprovement", uniqueConstraints=@UniqueConstraint(columnNames={"EMPLOYEE_ID", "SCHOOLYEAR_ID"}))

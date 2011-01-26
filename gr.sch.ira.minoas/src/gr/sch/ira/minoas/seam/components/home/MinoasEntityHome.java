@@ -9,13 +9,12 @@ import gr.sch.ira.minoas.seam.components.CoreSearching;
 import java.lang.reflect.ParameterizedType;
 import java.util.ResourceBundle;
 
-import javax.faces.context.FacesContext;
-
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.TransactionPropagationType;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.core.SeamResourceBundle;
+import org.jboss.seam.faces.FacesContext;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.framework.EntityHome;
 import org.jboss.seam.log.Log;
@@ -48,6 +47,9 @@ public abstract class MinoasEntityHome<E> extends EntityHome<BaseModel> {
 
 	@In(required = false)
 	private Identity identity;
+	
+	@In
+	private FacesContext facesContext;
 
 	@Logger
 	private Log logger;
@@ -115,7 +117,7 @@ public abstract class MinoasEntityHome<E> extends EntityHome<BaseModel> {
 	}
 
 	protected ResourceBundle getResourceBundle(String resource_budle_name) {
-		return SeamResourceBundle.getBundle(SEAM_MESSAGES_RESOURCE_BUNDLE_NAME, FacesContext.getCurrentInstance()
+		return SeamResourceBundle.getBundle(SEAM_MESSAGES_RESOURCE_BUNDLE_NAME, facesContext.getContext()
 				.getViewRoot().getLocale());
 	}
 

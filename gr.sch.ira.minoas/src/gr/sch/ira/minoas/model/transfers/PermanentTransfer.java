@@ -1,6 +1,5 @@
 package gr.sch.ira.minoas.model.transfers;
 
-import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.core.Specialization;
 import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employee.Employee;

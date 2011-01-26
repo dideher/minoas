@@ -5,9 +5,8 @@ import gr.sch.ira.minoas.model.core.AuditType;
 import gr.sch.ira.minoas.model.security.Principal;
 import gr.sch.ira.minoas.seam.components.criteria.AuditCriteria;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.Collection;
+import java.util.Date;
 
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
@@ -16,11 +15,9 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
-import org.jboss.seam.annotations.Out;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.TransactionPropagationType;
 import org.jboss.seam.annotations.Transactional;
-import org.jboss.seam.annotations.Unwrap;
 import org.jboss.seam.annotations.datamodel.DataModel;
 import org.jboss.seam.security.Identity;
 

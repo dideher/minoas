@@ -8,16 +8,12 @@ import java.net.URL;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Iterator;
 
-import org.apache.commons.lang.time.DateUtils;
 import org.jboss.seam.ScopeType;
-import org.jboss.seam.annotations.AutoCreate;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Out;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.TransactionPropagationType;
@@ -28,7 +24,7 @@ import org.jboss.seam.annotations.Transactional;
  * @version $Id$
  */
 @Name("basicUsageReport")
-@Scope(ScopeType.CONVERSATION)
+@Scope(ScopeType.SESSION)
 public class BasicUsageReport extends BaseReport {
 
 	public class AuditWinnersReportData {

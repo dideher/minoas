@@ -4,7 +4,6 @@
 package gr.sch.ira.minoas.model.employement;
 
 import gr.sch.ira.minoas.model.BaseIDDeleteAwareModel;
-import gr.sch.ira.minoas.model.BaseIDModel;
 import gr.sch.ira.minoas.model.core.PYSDE;
 import gr.sch.ira.minoas.model.core.SchoolYear;
 import gr.sch.ira.minoas.model.core.Unit;

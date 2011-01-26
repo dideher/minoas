@@ -1,8 +1,12 @@
 
 package gr.sch.ira.minoas.seam.components.management;
 
+import gr.sch.ira.minoas.model.core.Specialization;
+import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
+import gr.sch.ira.minoas.seam.components.CoreSearching;
+import gr.sch.ira.minoas.seam.components.home.CourseTypeHome;
+
 import java.util.Collection;
-import java.util.List;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
@@ -10,13 +14,6 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Out;
 import org.jboss.seam.annotations.Scope;
-
-import gr.sch.ira.minoas.model.classrooms.CourseType;
-import gr.sch.ira.minoas.model.classrooms.SchoolClass;
-import gr.sch.ira.minoas.model.core.Specialization;
-import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
-import gr.sch.ira.minoas.seam.components.CoreSearching;
-import gr.sch.ira.minoas.seam.components.home.CourseTypeHome;
 
 /**
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>

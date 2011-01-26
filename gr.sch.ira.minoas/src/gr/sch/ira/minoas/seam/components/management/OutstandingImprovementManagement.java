@@ -1,18 +1,14 @@
 package gr.sch.ira.minoas.seam.components.management;
 
-import gr.sch.ira.minoas.model.employee.EmployeeExclusion;
-import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.transfers.OutstandingImprovement;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.CoreSearching;
-import gr.sch.ira.minoas.seam.components.home.EmployeeExclusionHome;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
 import gr.sch.ira.minoas.seam.components.home.OutstandingImprovementHome;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Out;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.TransactionPropagationType;
 import org.jboss.seam.annotations.Transactional;

@@ -1,6 +1,5 @@
 package gr.sch.ira.minoas.seam.components.home;
 
-import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.core.SchoolYear;
 
 import org.jboss.seam.ScopeType;

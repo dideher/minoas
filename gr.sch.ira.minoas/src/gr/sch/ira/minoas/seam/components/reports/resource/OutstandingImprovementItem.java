@@ -1,6 +1,5 @@
 package gr.sch.ira.minoas.seam.components.reports.resource;
 
-import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.transfers.OutstandingImprovement;
 
 /**

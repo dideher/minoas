@@ -4,7 +4,6 @@
 package gr.sch.ira.minoas.seam.components.suggesters;
 
 import gr.sch.ira.minoas.core.CoreUtils;
-import gr.sch.ira.minoas.model.core.Specialization;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
 

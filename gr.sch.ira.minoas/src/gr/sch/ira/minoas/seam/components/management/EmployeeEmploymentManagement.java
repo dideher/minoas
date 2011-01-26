@@ -2,7 +2,6 @@ package gr.sch.ira.minoas.seam.components.management;
 
 import gr.sch.ira.minoas.model.core.AuditType;
 import gr.sch.ira.minoas.model.employee.Employee;
-import gr.sch.ira.minoas.model.employee.EmployeeType;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;

@@ -5,7 +5,6 @@ package gr.sch.ira.minoas.seam.components.home;
 
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employement.Employment;
-import gr.sch.ira.minoas.model.transfers.OutstandingImprovement;
 import gr.sch.ira.minoas.model.transfers.PermanentTransfer;
 
 import org.jboss.seam.ScopeType;
