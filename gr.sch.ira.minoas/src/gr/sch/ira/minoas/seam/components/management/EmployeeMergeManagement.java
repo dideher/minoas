@@ -16,6 +16,11 @@ import org.jboss.seam.international.StatusMessage.Severity;
 @Scope(ScopeType.CONVERSATION)
 public class EmployeeMergeManagement extends BaseDatabaseAwareSeamComponent {
 
+    /**
+     * Comment for <code>serialVersionUID</code>
+     */
+    private static final long serialVersionUID = 1L;
+    
 	@In(required = true, create = true)
 	private EmployeeMergeRequest employeeMergeRequest;
 	

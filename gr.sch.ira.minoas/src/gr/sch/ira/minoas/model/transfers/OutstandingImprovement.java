@@ -15,6 +15,13 @@ import javax.persistence.UniqueConstraint;
 @Table(name = "OutstandingImprovement", uniqueConstraints=@UniqueConstraint(columnNames={"EMPLOYEE_ID", "SCHOOLYEAR_ID"}))
 public class OutstandingImprovement extends BaseOutstandingTransfer {
 
+    
+    /**
+     * Comment for <code>serialVersionUID</code>
+     */
+    private static final long serialVersionUID = 1L;
+    
+    
 	@Basic
 	@Column(name="EMPLOYEE_REGISTRY_ID", nullable=false)
 	private String employeeRegistryID;

@@ -12,6 +12,12 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "EMPLOYEE_EXCLUSION")
 public class EmployeeExclusion extends BaseIDModel {
+    
+    /**
+     * Comment for <code>serialVersionUID</code>
+     */
+    private static final long serialVersionUID = 1L;
+    
 	
 	@OneToOne
 	@JoinColumn(name="EMPLOYEE_ID", unique=true)

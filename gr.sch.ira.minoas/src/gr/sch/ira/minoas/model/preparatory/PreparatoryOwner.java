@@ -16,6 +16,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "PREP_OWNER")
 public class PreparatoryOwner extends PreparatoryOwnerOrDirector {
+    
+    
 
 	/**
 	 * Comment for <code>serialVersionUID</code>
@@ -24,5 +26,19 @@ public class PreparatoryOwner extends PreparatoryOwnerOrDirector {
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "owner", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	private Set<PreparatoryUnit> owningUnits = new HashSet<PreparatoryUnit>();
+
+    /**
+     * @return the owningUnits
+     */
+    public Set<PreparatoryUnit> getOwningUnits() {
+        return owningUnits;
+    }
+
+    /**
+     * @param owningUnits the owningUnits to set
+     */
+    public void setOwningUnits(Set<PreparatoryUnit> owningUnits) {
+        this.owningUnits = owningUnits;
+    }
 
 }

@@ -102,7 +102,7 @@ public class EmploymentReport extends BaseReport {
 			} catch (Throwable t) {
 				System.err.println(t);
 			}
-			HttpServletResponse response = (HttpServletResponse) facesContext.getContext().getExternalContext()
+			HttpServletResponse response = (HttpServletResponse) getFacesContext().getExternalContext()
 					.getResponse();
 			response.setContentType("application/pdf");
 			response.addHeader("Content-Disposition", "attachment;filename=EmployeeReportByType.pdf");
@@ -111,7 +111,7 @@ public class EmploymentReport extends BaseReport {
 			servletOutputStream.write(bytes, 0, bytes.length);
 			servletOutputStream.flush();
 			servletOutputStream.close();
-			facesContext.getContext().responseComplete();
+			getFacesContext().responseComplete();
 		} catch (Exception ex) {
 			error("report generation has failed due to exception #0", ex, ex.getMessage());
 			getFacesMessages().add(Severity.ERROR, "Η παραγωγή του report απέτυχε, λόγω σφάλματος #0", ex.getMessage());
@@ -147,7 +147,7 @@ public class EmploymentReport extends BaseReport {
 				System.err.println(t);
 			}
 			byte[] bytes = bout.toByteArray();
-			HttpServletResponse response = (HttpServletResponse)facesContext.getContext().getExternalContext()
+			HttpServletResponse response = (HttpServletResponse)getFacesContext().getExternalContext()
 					.getResponse();
 			//response.setContentType("application/pdf");
 			response.addHeader("Content-Disposition", "attachment;filename=EmployeeReportByType.xls");
@@ -156,7 +156,7 @@ public class EmploymentReport extends BaseReport {
 			servletOutputStream.write(bytes, 0, bytes.length);
 			servletOutputStream.flush();
 			servletOutputStream.close();
-			facesContext.getContext().responseComplete();
+			getFacesContext().responseComplete();
 		} catch (Exception ex) {
 			error("report generation has failed due to exception #0", ex, ex.getMessage());
 			getFacesMessages().add(Severity.ERROR, "Η παραγωγή του report απέτυχε, λόγω σφάλματος #0", ex.getMessage());

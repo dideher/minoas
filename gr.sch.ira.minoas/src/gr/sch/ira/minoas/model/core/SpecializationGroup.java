@@ -24,6 +24,11 @@ import javax.persistence.UniqueConstraint;
 @Entity
 @Table(name = "SPECIALIZATION_GROUP", uniqueConstraints = { @UniqueConstraint(columnNames = { "TITLE", "SCHOOL_YEAR_ID" }) })
 public class SpecializationGroup extends BaseIDModel implements Comparable<SpecializationGroup> {
+    
+    /**
+     * Comment for <code>serialVersionUID</code>
+     */
+    private static final long serialVersionUID = 1L;
 
 	@ManyToOne
 	@JoinColumn(name = "SCHOOL_YEAR_ID", nullable = false)

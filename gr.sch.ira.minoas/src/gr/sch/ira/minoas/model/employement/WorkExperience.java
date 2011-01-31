@@ -19,6 +19,11 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "WORK_EXPERIENCE")
 public class WorkExperience extends BaseIDModel {
+    
+    /**
+     * Comment for <code>serialVersionUID</code>
+     */
+    private static final long serialVersionUID = 1L;
 
 	@Basic
 	@Column(name = "IS_ACTIVE", nullable = true)

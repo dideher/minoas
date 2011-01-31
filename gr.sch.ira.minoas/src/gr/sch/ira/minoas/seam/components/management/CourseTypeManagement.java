@@ -22,6 +22,11 @@ import org.jboss.seam.annotations.Scope;
 @Name(value = "courseTypeManagement")
 @Scope(ScopeType.CONVERSATION)
 public class CourseTypeManagement extends BaseDatabaseAwareSeamComponent {
+    
+    /**
+     * Comment for <code>serialVersionUID</code>
+     */
+    private static final long serialVersionUID = 1L;
 	
 	@In(required=false, create=false)
 	private CourseTypeHome courseTypeHome;

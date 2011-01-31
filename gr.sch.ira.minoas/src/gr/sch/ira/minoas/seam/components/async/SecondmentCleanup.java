@@ -18,6 +18,11 @@ import org.jboss.seam.annotations.async.IntervalDuration;
 @Name("secondmentCleanupHandler")
 public class SecondmentCleanup extends BaseSeamComponent {
 
+    /**
+     * Comment for <code>serialVersionUID</code>
+     */
+    private static final long serialVersionUID = 1L;
+    
 	/**
 	 * 
 	 */

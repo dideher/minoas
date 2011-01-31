@@ -20,7 +20,13 @@ import org.jboss.seam.international.StatusMessage.Severity;
 @Scope(ScopeType.CONVERSATION)
 public class PermanentTransferManagement extends BaseDatabaseAwareSeamComponent {
 
-	@In(required = true, create = true)
+	
+    /**
+     * Comment for <code>serialVersionUID</code>
+     */
+    private static final long serialVersionUID = 1L;
+    
+    @In(required = true, create = true)
 	private CoreSearching coreSearching;
 
 	@In(required = true, create = true)

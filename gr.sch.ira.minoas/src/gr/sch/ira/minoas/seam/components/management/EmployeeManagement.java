@@ -18,6 +18,12 @@ import org.jboss.seam.international.StatusMessage.Severity;
 @Name(value = "employeeManagement")
 @Scope(ScopeType.CONVERSATION)
 public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
+    
+    /**
+     * Comment for <code>serialVersionUID</code>
+     */
+    private static final long serialVersionUID = 1L;
+    
 
 	@In(required = true, create = true)
 	private EmployeeHome employeeHome;

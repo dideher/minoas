@@ -581,6 +581,16 @@
   location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/richfaces-impl.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-richfaces-ui.jar"
   location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/richfaces-ui.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-resources.jar"
+  location="/usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/resources.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-localedata.jar"
+  location="/usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/ext/localedata.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-sunjce_provider.jar"
+  location="/usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/ext/sunjce_provider.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-dnsns.jar"
+  location="/usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/ext/dnsns.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-sunpkcs11.jar"
+  location="/usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/ext/sunpkcs11.jar" model-entity="FileSystemJar"/>
  <web SERVLET_VERSION="2.4" model-entity="JstWeb" model-path="/web.xml">
   <module URI="/WEB-INF/faces-config.xml" model-entity="WebJSFModule"
    model-path="/faces-config.xml" src="src" web-root="WEB-ROOT"/>

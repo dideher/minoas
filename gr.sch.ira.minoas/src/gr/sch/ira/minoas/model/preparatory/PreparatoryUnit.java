@@ -37,4 +37,32 @@ public class PreparatoryUnit extends Unit {
 		super();
 	}
 
+    /**
+     * @return the address
+     */
+    public Address getAddress() {
+        return address;
+    }
+
+    /**
+     * @param address the address to set
+     */
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    /**
+     * @return the owner
+     */
+    public PreparatoryOwner getOwner() {
+        return owner;
+    }
+
+    /**
+     * @param owner the owner to set
+     */
+    public void setOwner(PreparatoryOwner owner) {
+        this.owner = owner;
+    }
+
 }

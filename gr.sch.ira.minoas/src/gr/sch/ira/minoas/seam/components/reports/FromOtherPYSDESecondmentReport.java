@@ -61,7 +61,7 @@ public class FromOtherPYSDESecondmentReport extends BaseReport {
 			JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(reportData);
 			byte[] bytes = JasperRunManager.runReportToPdf(this.getClass().getResourceAsStream(
 					"/reports/secondmentByType.jasper"), parameters, (JRDataSource) ds);
-			HttpServletResponse response = (HttpServletResponse) facesContext.getContext().getExternalContext()
+			HttpServletResponse response = (HttpServletResponse) getFacesContext().getExternalContext()
 					.getResponse();
 			response.setContentType("application/pdf");
 			response.addHeader("Content-Disposition", "attachment;filename=SecondmentReportByType.pdf");
@@ -70,7 +70,7 @@ public class FromOtherPYSDESecondmentReport extends BaseReport {
 			servletOutputStream.write(bytes, 0, bytes.length);
 			servletOutputStream.flush();
 			servletOutputStream.close();
-			facesContext.getContext().responseComplete();
+			getFacesContext().responseComplete();
 		} catch (Exception ex) {
 			ex.printStackTrace(System.err);
 		}

@@ -39,6 +39,11 @@ import org.jboss.seam.international.StatusMessage.Severity;
 @Scope(ScopeType.CONVERSATION)
 public class SchoolYearManagement extends BaseDatabaseAwareSeamComponent {
 
+    /**
+     * Comment for <code>serialVersionUID</code>
+     */
+    private static final long serialVersionUID = 1L;
+    
 	@DataModel
 	private Collection<SchoolYear> schoolYears;
 
