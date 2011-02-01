@@ -37,6 +37,7 @@
     name="entityManager" auto-create="true" entity-manager-factory="#{entityManagerFactory}" 
     persistence-unit-jndi-name="java:/minoasEntityManagerFactory" />
   
+  
   <transaction:entity-transaction entity-manager="#{entityManager}" />
    
   <!-- 
