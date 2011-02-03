@@ -48,7 +48,13 @@ public class DisposalReportItem extends EmployeeReportItem {
 			this.sourceUnit = disposal.getAffectedEmployment().getSchool().getTitle();
 		}
 		if (disposal.getAffectedSecondment() != null) {
-			this.sourceUnit = disposal.getAffectedSecondment().getSourceUnit().getTitle();
+		    /* if the disposal is associated with a secondment, then source unit
+		     * is actually the secondment's target unit.
+		     * 
+		     * This is typical for employees from other PYSDE that came to our PYSDE with 
+		     * a secodment and then assigned to school with disposal for few hours.
+		     */
+		    this.sourceUnit = disposal.getAffectedSecondment().getTargetUnit().getTitle();
 		}
 		this.disposalType = disposal.getType().name();
 		this.disposalTypeKey = disposal.getType().getKey();
@@ -251,5 +257,15 @@ public class DisposalReportItem extends EmployeeReportItem {
 	public void setTargetUnitRegion(Character targetUnitRegion) {
 		this.targetUnitRegion = targetUnitRegion;
 	}
+
+    /**
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return "DisposalReportItem [employee=" + super.toString() +", disposalTypeKey=" + disposalTypeKey + ", disposalUnit=" + disposalUnit +
+                ", dueTo=" + dueTo + ", establishedIn=" + establishedIn + ", hours=" + hours + ", sourceUnit=" +
+                sourceUnit + "]";
+    }
 
 }

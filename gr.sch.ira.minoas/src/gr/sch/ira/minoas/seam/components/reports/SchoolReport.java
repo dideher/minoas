@@ -189,7 +189,21 @@ public class SchoolReport extends BaseReport {
 		sb.append(" εως και ");
 		sb.append(this.dateFormat.format(disposal.getDueTo()));
 		sb.append(" απο την μονάδα ");
-		sb.append(disposal.getAffectedEmployment().getSchool().getTitle());
+		if(disposal.getAffectedEmployment()!=null) {
+		    /* disposal is associated with an employment, proceed normaly */
+		    sb.append(disposal.getAffectedEmployment().getSchool().getTitle());
+		}
+		else {
+		    /* disposal is associated with a secondment. This means that the
+		     * employee has no regular employment and the disposal affects
+		     * the employee's secondment target.
+		     * 
+		     * A typical example is an employee from other PYSDE occupied on a target
+		     * school unit due to an secodment having a disposal to other unit for
+		     * few hours.
+		     */
+		    sb.append(disposal.getAffectedSecondment().getTargetUnit().getTitle());
+		}
 		sb.append(" για ");
 		sb.append(disposal.getHours());
 		sb.append(" ώρες και ");
@@ -468,6 +482,8 @@ public class SchoolReport extends BaseReport {
 
 				reportData.add(item);
 			} catch (Exception ex) {
+			    System.err.println(ex);
+			    ex.printStackTrace(System.err);
 				continue;
 			}
 		}

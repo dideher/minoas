@@ -303,4 +303,14 @@ public class EmployeeReportItem extends BaseIDReportItem {
 		this.employeeTypeKey = employeeTypeKey;
 	}
 
+    /**
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return "EmployeeReportItem [employeeCode=" + employeeCode + ", employeeFatherName=" + employeeFatherName +
+                ", employeeFirstName=" + employeeFirstName + ", employeeLastName=" + employeeLastName +
+                ", employeeSpecializationID=" + employeeSpecializationID + ", employeeTypeKey=" + employeeTypeKey + "]";
+    }
+
 }

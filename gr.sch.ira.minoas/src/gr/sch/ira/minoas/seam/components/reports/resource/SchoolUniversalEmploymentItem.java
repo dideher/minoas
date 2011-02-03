@@ -25,8 +25,10 @@ public class SchoolUniversalEmploymentItem extends EmploymentReportItem {
 	}
 
 	public SchoolUniversalEmploymentItem(Disposal disposal) {
-		super(disposal.getAffectedEmployment());
+	    super(disposal);
 	}
+	
+	
 
 	public SchoolUniversalEmploymentItem(Employee employee) {
 		this();
