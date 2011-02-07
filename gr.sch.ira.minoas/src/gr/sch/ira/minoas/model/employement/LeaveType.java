@@ -51,7 +51,11 @@ public enum LeaveType {
 	 */
 	UNPAID_LEAVE("UNPAID_LEAVE_TYPE", 30 * 12), 
 	
-	RETIREMENT_LEAVE("RETIREMENT_LEAVE_TYPE", 30*2);
+	RETIREMENT_LEAVE("RETIREMENT_LEAVE_TYPE", 30*2),
+	
+	/* Διαθεσιμότητα λόγω Ασθενείας */
+	MEDICAL_SUSPENSION("MEDICAL_SUSPENSION_TYPE", 30*1)
+	;
 
 	private Integer durationInDays;
 
