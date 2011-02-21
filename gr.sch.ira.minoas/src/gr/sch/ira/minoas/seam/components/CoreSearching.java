@@ -651,6 +651,44 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 							dayOfPrecense).getResultList();
 		}
 	}
+	
+	@SuppressWarnings("unchecked")
+	public Collection<Disposal> getDisposalAssociatedWithSecondment(EntityManager em, Secondment secondment) {
+	    return getEntityManager().createQuery("SELECT DISTINCT d FROM Disposal d WHERE d.affectedSecondment = :secondment").setParameter("secondment", secondment).getResultList();
+	}
+	/**
+	 * Get the schools disposals that are not affected by a active leave.
+	 * 
+	 * @param em
+	 * @param school
+	 * @param schoolYear
+	 * @param dayOfPrecense
+	 * @param specializationGroups
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+    public Collection<Disposal> getSchoolDisposalsNotAffectedByActiveLeave(EntityManager em, School school, SchoolYear schoolYear,
+            Date dayOfPrecense, Collection<SpecializationGroup> specializationGroups) {
+
+        if (specializationGroups != null && specializationGroups.size() > 0) {
+            return getEntityManager(em)
+                    .createQuery(
+                            "SELECT DISTINCT s FROM Disposal s JOIN FETCH s.employee WHERE (s.active IS TRUE AND s.disposalUnit=:school AND s.schoolYear=:schoolYear AND (:dayOfInterest BETWEEN s.established AND s.dueTo)) "
+                                    + " AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g IN (:specializations) AND s.employee.lastSpecialization MEMBER OF g.specializations)"
+                                    + " AND NOT EXISTS(SELECT l FROM Leave l WHERE l.employee=s.employee AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
+                                    + " ORDER BY s.employee.lastSpecialization.id, s.employee.lastName ").setParameter(
+                            "specializations", specializationGroups).setParameter("school", school).setParameter(
+                            "schoolYear", schoolYear).setParameter("dayOfInterest", dayOfPrecense).getResultList();
+        } else {
+            return getEntityManager(em)
+                    .createQuery(
+                            "SELECT DISTINCT s FROM Disposal s JOIN FETCH s.employee WHERE (s.active IS TRUE AND s.disposalUnit=:school AND s.schoolYear=:schoolYear AND (:dayOfInterest BETWEEN s.established AND s.dueTo)) "
+                            + " AND NOT EXISTS(SELECT l FROM Leave l WHERE l.employee=s.employee AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
+                            + " ORDER BY s.employee.lastSpecialization.id, s.employee.lastName ").setParameter(
+                            "school", school).setParameter("schoolYear", schoolYear).setParameter("dayOfInterest",
+                            dayOfPrecense).getResultList();
+        }
+    }
 
 	@SuppressWarnings("unchecked")
 	public Collection<Employee> getSchoolEmployeeWithPresence(EntityManager entityManager, Date dayOfPrecense,
@@ -922,6 +960,36 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 							"dayOfInterest", dayOfPrecense).getResultList();
 		}
 	}
+	
+	/**
+	 * Returns a list of secondments targeted to the given school unit that are not associated with a leave
+	 * @param em
+	 * @param school
+	 * @param schoolYear
+	 * @param dayOfPrecense
+	 * @param specializationGroups
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public Collection<Secondment> getSchoolSecondmentsNotAffectedByActiveLeave(EntityManager em, School school, SchoolYear schoolYear,
+            Date dayOfPrecense, Collection<SpecializationGroup> specializationGroups) {
+	    if (specializationGroups != null && specializationGroups.size() > 0) {
+            return getEntityManager(em)
+                    .createQuery(
+                            "SELECT DISTINCT s FROM Secondment s JOIN FETCH s.employee WHERE (s.active IS TRUE AND s.targetUnit=:school AND s.schoolYear=:schoolYear AND (:dayOfInterest BETWEEN s.established AND s.dueTo))"
+                                    + " AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g IN (:specializations) AND s.employee.lastSpecialization MEMBER OF g.specializations)"
+                                    + " AND NOT EXISTS(SELECT l FROM Leave l WHERE l.employee=s.employee AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))")
+                    .setParameter("specializations", specializationGroups).setParameter("school", school).setParameter(
+                            "schoolYear", schoolYear).setParameter("dayOfInterest", dayOfPrecense).getResultList();
+        } else {
+            return getEntityManager(em)
+                    .createQuery(
+                            "SELECT DISTINCT s FROM Secondment s JOIN FETCH s.employee WHERE (s.active IS TRUE AND s.targetUnit=:school AND s.schoolYear=:schoolYear AND (:dayOfInterest BETWEEN s.established AND s.dueTo))"
+                            + " AND NOT EXISTS(SELECT l FROM Leave l WHERE l.employee=s.employee AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))")
+                    .setParameter("school", school).setParameter("schoolYear", schoolYear).setParameter(
+                            "dayOfInterest", dayOfPrecense).getResultList();
+        }
+    }
 
 	@SuppressWarnings("unchecked")
 	public Collection<Secondment> getSchoolSecondments(EntityManager em, School school, SchoolYear schoolYear,
