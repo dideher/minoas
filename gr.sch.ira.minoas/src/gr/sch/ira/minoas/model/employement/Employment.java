@@ -118,6 +118,10 @@ public class Employment extends BaseIDDeleteAwareModel {
 	@Basic
 	@Column(name = "WORK_HRS_DECR_REASON", nullable = true)
 	private String workingHoursDecrementReason;
+	
+	@OneToOne(cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
+	@JoinColumn(name="CDR_ID", nullable=true)
+	private TeachingHourCDR employmentCDR;
 
 	/**
 	 * 

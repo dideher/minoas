@@ -12,6 +12,7 @@ import gr.sch.ira.minoas.model.employee.Employee;
 import java.util.Date;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -133,6 +134,10 @@ public class Secondment extends BaseIDDeleteAwareModel implements Cloneable {
 	@Basic
 	@Column(name = "WORK_HRS_DECR_REASON", nullable = true)
 	private String workingHoursDecrementReason;
+	
+	@OneToOne(cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
+    @JoinColumn(name="CDR_ID", nullable=true)
+    private TeachingHourCDR secondmentCDR;
 
 	/**
 	 * @see java.lang.Object#clone()
