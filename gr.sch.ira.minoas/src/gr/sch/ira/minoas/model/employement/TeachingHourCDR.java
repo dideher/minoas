@@ -21,6 +21,11 @@ import gr.sch.ira.minoas.model.employee.Employee;
 @Table(name = "TEACHING_HOUR_CDR")
 public class TeachingHourCDR extends BaseIDModel {
 
+    /**
+     * Comment for <code>serialVersionUID</code>
+     */
+    private static final long serialVersionUID = 1L;
+
     @ManyToOne
     @JoinColumn(name = "SCHOOL_YEAR_ID", nullable = false)
     private SchoolYear schoolYear;

@@ -200,4 +200,18 @@ public class Leave extends BaseIDModel {
 		return builder.toString();
 	}
 
+    /**
+     * @return the leaveCDR
+     */
+    public TeachingHourCDR getLeaveCDR() {
+        return leaveCDR;
+    }
+
+    /**
+     * @param leaveCDR the leaveCDR to set
+     */
+    public void setLeaveCDR(TeachingHourCDR leaveCDR) {
+        this.leaveCDR = leaveCDR;
+    }
+
 }

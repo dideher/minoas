@@ -290,4 +290,18 @@ public class ServiceAllocation extends BaseIDModel {
 		builder.append("]");
 		return builder.toString();
 	}
+
+    /**
+     * @return the serviceAllocationCDR
+     */
+    public TeachingHourCDR getServiceAllocationCDR() {
+        return serviceAllocationCDR;
+    }
+
+    /**
+     * @param serviceAllocationCDR the serviceAllocationCDR to set
+     */
+    public void setServiceAllocationCDR(TeachingHourCDR serviceAllocationCDR) {
+        this.serviceAllocationCDR = serviceAllocationCDR;
+    }
 }

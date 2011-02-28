@@ -415,4 +415,18 @@ public class Secondment extends BaseIDDeleteAwareModel implements Cloneable {
 		return builder.toString();
 	}
 
+    /**
+     * @return the secondmentCDR
+     */
+    public TeachingHourCDR getSecondmentCDR() {
+        return secondmentCDR;
+    }
+
+    /**
+     * @param secondmentCDR the secondmentCDR to set
+     */
+    public void setSecondmentCDR(TeachingHourCDR secondmentCDR) {
+        this.secondmentCDR = secondmentCDR;
+    }
+
 }

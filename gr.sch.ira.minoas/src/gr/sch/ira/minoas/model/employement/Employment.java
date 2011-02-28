@@ -392,4 +392,18 @@ public class Employment extends BaseIDDeleteAwareModel {
 		this.homeBased = homeBased;
 	}
 
+    /**
+     * @return the employmentCDR
+     */
+    public TeachingHourCDR getEmploymentCDR() {
+        return employmentCDR;
+    }
+
+    /**
+     * @param employmentCDR the employmentCDR to set
+     */
+    public void setEmploymentCDR(TeachingHourCDR employmentCDR) {
+        this.employmentCDR = employmentCDR;
+    }
+
 }
