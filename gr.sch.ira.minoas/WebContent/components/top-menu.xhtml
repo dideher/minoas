@@ -8,6 +8,7 @@
 	xmlns:f="http://java.sun.com/jsf/core">
 
 <ui:component>
+	
 	<a4j:form id="menuform">
 		<rich:toolBar>
 
@@ -320,6 +321,13 @@
 						<f:param name="manage_schoolyears_from" value="home" />
 					</s:link>
 				</rich:menuItem>
+				
+				<rich:menuItem rendered="#{(s:hasRole('ADMIN'))}"  submitMode="none">
+					<a4j:htmlCommandLink action="#{teachingHoursCDRManagement.doCalculateCurrentCDRs()}" value="Ανανέωση CDRs">
+					</a4j:htmlCommandLink>
+				</rich:menuItem>
+				
+				
 				<!--  
 				<rich:menuItem submitMode="ajax">
 					<s:link value="Σχολικά Έτη" action="#{schoolYearAdmin.search()}"
@@ -346,7 +354,9 @@
 					action="#{identity.logout}" view="/home.xhtml" />
 			</rich:toolBarGroup>
 		</rich:toolBar>
+		
 	</a4j:form>
+	
 </ui:component>
 
 </html>

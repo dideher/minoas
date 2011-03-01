@@ -15,6 +15,7 @@ import javax.persistence.Table;
 import gr.sch.ira.minoas.model.BaseIDModel;
 import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.core.SchoolYear;
+import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employee.Employee;
 
 @Entity
@@ -31,8 +32,8 @@ public class TeachingHourCDR extends BaseIDModel {
     private SchoolYear schoolYear;
     
     @ManyToOne
-    @JoinColumn(name = "SCHOOL_ID", nullable = false)
-    private School school;
+    @JoinColumn(name = "UNIT_ID", nullable = false)
+    private Unit unit;
     
     @Basic
     @Column(name="HOURS", nullable=false)
@@ -43,7 +44,7 @@ public class TeachingHourCDR extends BaseIDModel {
     private Employee employee;
     
     @Enumerated(EnumType.STRING)
-    @JoinColumn(name="CDR_TYPE", nullable=false)
+    @Column(name="CDR_TYPE", nullable=false)
     private TeachingHourCDRType cdrType;
     
     @Basic
@@ -77,20 +78,6 @@ public class TeachingHourCDR extends BaseIDModel {
      */
     public void setSchoolYear(SchoolYear schoolYear) {
         this.schoolYear = schoolYear;
-    }
-
-    /**
-     * @return the school
-     */
-    public School getSchool() {
-        return school;
-    }
-
-    /**
-     * @param school the school to set
-     */
-    public void setSchool(School school) {
-        this.school = school;
     }
 
     /**
@@ -217,5 +204,19 @@ public class TeachingHourCDR extends BaseIDModel {
      */
     public void setDisposal(Disposal disposal) {
         this.disposal = disposal;
+    }
+
+    /**
+     * @return the unit
+     */
+    public Unit getUnit() {
+        return unit;
+    }
+
+    /**
+     * @param unit the unit to set
+     */
+    public void setUnit(Unit unit) {
+        this.unit = unit;
     }
 }
