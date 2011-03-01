@@ -1083,7 +1083,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     }
 
     @SuppressWarnings("unchecked")
-    public Collection<TeachingHourCDR> getTeachingHoursCDRs(EntityManager entityManager, SchoolYear schoolYear,
+    public Collection<TeachingHourCDR> getEmployeeTeachingHoursCDRs(EntityManager entityManager, SchoolYear schoolYear,
             Employee employee) {
         info("searching for teaching hour CDRs of employee #0 during school year #1", employee, schoolYear);
         List return_value = getEntityManager(entityManager).createQuery(
@@ -1094,7 +1094,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     }
 
     @SuppressWarnings("unchecked")
-    public Collection<TeachingHourCDR> getTeachingHoursCDRs(EntityManager entityManager, SchoolYear schoolYear,
+    public Collection<TeachingHourCDR> getSchoolTeachingHoursCDRs(EntityManager entityManager, SchoolYear schoolYear,
             Unit unit) {
         info("searching for teaching hour CDRs in unit #0 during school year #1", unit, schoolYear);
         List return_value = getEntityManager(entityManager).createQuery(
