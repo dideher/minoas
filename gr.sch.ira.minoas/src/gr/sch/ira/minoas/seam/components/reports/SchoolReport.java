@@ -41,6 +41,12 @@ import org.jboss.seam.annotations.datamodel.DataModel;
 @Name(value = "schoolReport")
 @Scope(ScopeType.CONVERSATION)
 public class SchoolReport extends BaseReport {
+    
+    /**
+     * Comment for <code>serialVersionUID</code>
+     */
+    private static final long serialVersionUID = 1L;
+    
 
 	private DateFormat dateFormat;
 

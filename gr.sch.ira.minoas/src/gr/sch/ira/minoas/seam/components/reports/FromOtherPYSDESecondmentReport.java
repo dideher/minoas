@@ -35,6 +35,12 @@ import org.jboss.seam.annotations.datamodel.DataModel;
 @Name("fromOtherPYSDESecondmentReport")
 @Scope(ScopeType.CONVERSATION)
 public class FromOtherPYSDESecondmentReport extends BaseReport {
+    
+    /**
+     * Comment for <code>serialVersionUID</code>
+     */
+    private static final long serialVersionUID = 1L;
+    
 
 	@DataModel(value = "reportData")
 	private Collection<SecondmentItem> reportData = null;

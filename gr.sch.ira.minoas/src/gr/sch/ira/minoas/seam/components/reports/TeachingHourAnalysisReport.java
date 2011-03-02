@@ -39,6 +39,12 @@ import org.jboss.seam.annotations.datamodel.DataModel;
 @Name(value = "teachingVoidBySpecializationReport")
 @Scope(ScopeType.CONVERSATION)
 public class TeachingHourAnalysisReport extends BaseReport {
+    
+    /**
+     * Comment for <code>serialVersionUID</code>
+     */
+    private static final long serialVersionUID = 1L;
+    
 
     public static final int HOURS_FOR_REGULAR_POSITION = 18;
 

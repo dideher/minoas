@@ -40,8 +40,15 @@ import org.jboss.seam.faces.FacesContext;
 @Name(value = "employeeLeavesReport")
 @Scope(ScopeType.CONVERSATION)
 public class EmployeeLeavesReport extends BaseReport {
+    
+    
 
-	@In(create = true, required = true)
+	/**
+     * Comment for <code>serialVersionUID</code>
+     */
+    private static final long serialVersionUID = 1L;
+
+    @In(create = true, required = true)
 	private EmployeeLeaveCriteria employeeLeaveCriteria;
 
 	@DataModel(value = "reportData")

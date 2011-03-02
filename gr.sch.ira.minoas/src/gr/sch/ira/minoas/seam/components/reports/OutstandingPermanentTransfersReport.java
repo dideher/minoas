@@ -25,6 +25,12 @@ import org.jboss.seam.annotations.datamodel.DataModel;
 @Name("outstandingPermanentTransfersReport")
 @Scope(ScopeType.CONVERSATION)
 public class OutstandingPermanentTransfersReport extends BaseReport {
+    
+    /**
+     * Comment for <code>serialVersionUID</code>
+     */
+    private static final long serialVersionUID = 1L;
+    
 
 	@DataModel(value = "reportData")
 	private Collection<OutstandingPermanentTransferItem> reportData = null;

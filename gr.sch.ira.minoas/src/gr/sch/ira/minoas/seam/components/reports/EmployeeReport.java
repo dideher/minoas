@@ -37,6 +37,12 @@ import org.jboss.seam.annotations.datamodel.DataModel;
 @Name(value = "employeeReport")
 @Scope(ScopeType.CONVERSATION)
 public class EmployeeReport extends BaseReport {
+    
+    /**
+     * Comment for <code>serialVersionUID</code>
+     */
+    private static final long serialVersionUID = 1L;
+    
 
 	@In(create = true, required = true)
 	private EmployeeCriteria employeeCriteria;

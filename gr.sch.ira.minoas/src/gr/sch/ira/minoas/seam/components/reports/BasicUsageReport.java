@@ -26,6 +26,11 @@ import org.jboss.seam.annotations.Transactional;
 @Name("basicUsageReport")
 @Scope(ScopeType.SESSION)
 public class BasicUsageReport extends BaseReport {
+    
+    /**
+     * Comment for <code>serialVersionUID</code>
+     */
+    private static final long serialVersionUID = 1L;
 
 	public class AuditWinnersReportData {
 		private Collection<Object[]> rawData;

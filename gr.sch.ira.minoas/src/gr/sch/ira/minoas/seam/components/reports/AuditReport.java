@@ -25,8 +25,7 @@ import org.jboss.seam.security.Identity;
 @Scope(ScopeType.CONVERSATION)
 public class AuditReport extends BaseReport {
 
-    
-	@In
+    @In
 	protected Identity identity;
 
 	/**

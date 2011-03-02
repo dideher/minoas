@@ -27,6 +27,11 @@ import org.jboss.seam.annotations.datamodel.DataModel;
 @Name("disposalReportByType")
 @Scope(ScopeType.CONVERSATION)
 public class DisposalReportByType extends BaseReport {
+    
+    /**
+     * Comment for <code>serialVersionUID</code>
+     */
+    private static final long serialVersionUID = 1L;
 
 	@In(required = true)
 	private DisposalCriteria disposalCriteria;

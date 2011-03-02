@@ -23,6 +23,12 @@ import org.jboss.seam.annotations.datamodel.DataModel;
 @Name("outstandingImprovementsReport")
 @Scope(ScopeType.CONVERSATION)
 public class OutstandingImprovementsReport extends BaseReport {
+    
+    /**
+     * Comment for <code>serialVersionUID</code>
+     */
+    private static final long serialVersionUID = 1L;
+    
 
 	@DataModel(value = "reportData")
 	private Collection<OutstandingImprovementItem> reportData = null;
