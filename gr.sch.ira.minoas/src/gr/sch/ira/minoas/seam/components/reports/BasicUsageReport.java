@@ -24,7 +24,7 @@ import org.jboss.seam.annotations.Transactional;
  * @version $Id$
  */
 @Name("basicUsageReport")
-@Scope(ScopeType.SESSION)
+@Scope(ScopeType.CONVERSATION)
 public class BasicUsageReport extends BaseReport {
     
     /**
@@ -183,49 +183,55 @@ public class BasicUsageReport extends BaseReport {
 
 	}
 
-	@In(create=true) @Out
+	@In @Out
 	private AuditWinnersReportData auditWinningReport;
 
-	@Factory(value="auditWinningReport")
+	@Factory(value="auditWinningReport", autoCreate=true)
 	@Transactional(TransactionPropagationType.REQUIRED)
 	public void generateReport() {
-		info("generating basic usage report");
-		
-		Collection<Object[]> rawData = getEntityManager()
-				.createQuery(
-						"SELECT (SELECT p FROM Principal p WHERE p.id=a.insertedBy.id), COUNT(a.insertedBy) FROM Audit a  GROUP BY (a.insertedBy) ORDER BY COUNT(a.insertedBy) DESC")
-				.getResultList();
-		AuditWinnersReportData reportData = new AuditWinnersReportData();
-		Collection<Long> counts = new ArrayList<Long>(rawData.size());
-		Collection<Principal> principals = new ArrayList<Principal>(rawData.size());
-		int max_rows = 3;
-		int count = 1;
-		for (Object[] item : rawData) {
-			principals.add((Principal) item[0]);
-			counts.add((Long) (item[1]));
-			if (count % max_rows == 0)
-				break;
-			count++;
+		if(getEntityManager()!=null) {
+		    info("generating basic usage report");
+	        
+	        Collection<Object[]> rawData = getEntityManager()
+	                .createQuery(
+	                        "SELECT (SELECT p FROM Principal p WHERE p.id=a.insertedBy.id), COUNT(a.insertedBy) FROM Audit a  GROUP BY (a.insertedBy) ORDER BY COUNT(a.insertedBy) DESC")
+	                .getResultList();
+	        AuditWinnersReportData reportData = new AuditWinnersReportData();
+	        Collection<Long> counts = new ArrayList<Long>(rawData.size());
+	        Collection<Principal> principals = new ArrayList<Principal>(rawData.size());
+	        int max_rows = 3;
+	        int count = 1;
+	        for (Object[] item : rawData) {
+	            principals.add((Principal) item[0]);
+	            counts.add((Long) (item[1]));
+	            if (count % max_rows == 0)
+	                break;
+	            count++;
+	        }
+	        reportData.setRawData(rawData);
+	        reportData.setAuditWinnerPrincipals(principals);
+	        reportData.setAuditWinnerCounts(counts);
+
+	        Collection<Object[]> employeeReportData = getEntityManager().createQuery(
+	                "SELECT (e.type), COUNT(e.type) FROM Employee e GROUP BY (e.type) ORDER BY COUNT(e.type) DESC WHERE e.active IS TRUE")
+	                .getResultList();
+
+	        Collection<Long> employeeCounts = new ArrayList<Long>(employeeReportData.size());
+	        Collection<EmployeeType> employeeTypes = new ArrayList<EmployeeType>(employeeReportData.size());
+
+	        for (Object[] item : employeeReportData) {
+	            employeeTypes.add((EmployeeType) item[0]);
+	            employeeCounts.add((Long) (item[1]));
+	        }
+	        reportData.setEmployeeTypeCounts(employeeCounts);
+	        reportData.setEmployeeTypes(employeeTypes);
+	        setAuditWinningReport(reportData);
+	        info("basic usage report has been generated.");
+		} else {
+		    setAuditWinningReport(new AuditWinnersReportData());
+		    warn("entity manager is null, not generating basic usage report");
 		}
-		reportData.setRawData(rawData);
-		reportData.setAuditWinnerPrincipals(principals);
-		reportData.setAuditWinnerCounts(counts);
-
-		Collection<Object[]> employeeReportData = getEntityManager().createQuery(
-				"SELECT (e.type), COUNT(e.type) FROM Employee e GROUP BY (e.type) ORDER BY COUNT(e.type) DESC WHERE e.active IS TRUE")
-				.getResultList();
-
-		Collection<Long> employeeCounts = new ArrayList<Long>(employeeReportData.size());
-		Collection<EmployeeType> employeeTypes = new ArrayList<EmployeeType>(employeeReportData.size());
-
-		for (Object[] item : employeeReportData) {
-			employeeTypes.add((EmployeeType) item[0]);
-			employeeCounts.add((Long) (item[1]));
-		}
-		reportData.setEmployeeTypeCounts(employeeCounts);
-		reportData.setEmployeeTypes(employeeTypes);
-		setAuditWinningReport(reportData);
-		info("basic usage report has been generated.");
+	    
 	}
 
 	/**

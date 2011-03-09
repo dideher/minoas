@@ -31,21 +31,8 @@
 
 						<h:panelGrid columns="4">
 
-
-							<s:decorate template="/layout/doubleLineEdit.xhtml">
-								<ui:define name="label">
-									<h:outputText value="Τύπος Σχέσεις Εργασίας" />
-								</ui:define>
-
-								<h:selectOneMenu value="#{employeeTeachingHoursReportCriteria.type}">
-									<s:selectItems hideNoSelectionLabel="false"
-										noSelectionLabel="Όλοι οι Τύποι" var="_employmentType"
-										value="#{employmentTypes}"
-										label="#{messages[_employmentType.key]}" />
-									<s:convertEnum />
-								</h:selectOneMenu>
-							</s:decorate>
-
+							
+							
 							<s:decorate template="/layout/doubleLineEdit.xhtml">
 								<ui:define name="label">
 									<h:outputText value="Τύπος Ειδικότητας" />
@@ -64,7 +51,7 @@
 								</h:selectOneMenu>
 							</s:decorate>
 
-							<h:panelGroup>
+ 							<h:panelGroup>
 								<a4j:outputPanel id="specializationTypesOutputPanel">
 									<s:decorate template="/layout/doubleLineEdit.xhtml"
 										rendered="#{employeeTeachingHoursReportCriteria.specializationSearchType eq 'SPECIALIZATION_GROUP'}">
@@ -121,37 +108,15 @@
 
 								</a4j:outputPanel>
 							</h:panelGroup>
-
-							<s:decorate template="/layout/doubleLineEdit.xhtml">
-								<ui:define name="label">
-									<h:outputText value="Περιοχή Σχολικής Μονάδας" />
-								</ui:define>
-
-								<h:selectOneMenu value="#{employeeTeachingHoursReportCriteria.region}">
-									<f:selectItem itemLabel="Όλες οι Περιοχές" itemValue="" />
-									<f:selectItem itemLabel="Α Ηρακλείου" itemValue="Α" />
-									<f:selectItem itemLabel="Β Ηρακλείου" itemValue="Β" />
-								</h:selectOneMenu>
-							</s:decorate>
 							
-							<s:decorate template="/layout/doubleLineEdit.xhtml">
-								<ui:define name="label">
-									<h:outputText value="Τύπος Σχολικής Μονάδας : " />
-								</ui:define>
-								<h:selectOneMenu value="#{employeeTeachingHoursReportCriteria.schoolType}" required="false">
-									<s:selectItems noSelectionLabel="Επιλέξτε Τύπο Μονάδας"
-										var="_schoolType" value="#{schoolTypes}"
-										label="#{messages[_schoolType.key]}">
-									</s:selectItems>
-								</h:selectOneMenu>
-							</s:decorate>
 
 							<s:decorate template="/layout/doubleLineEdit.xhtml">
 								<ui:define name="label">
 									<h:outputText value="Σχολικό Έτος" />
 								</ui:define>
 
-								<h:selectOneMenu value="#{employeeTeachingHoursReportCriteria.schoolYear}">
+								<h:selectOneMenu
+									value="#{employeeTeachingHoursReportCriteria.schoolYear}">
 									<s:selectItems hideNoSelectionLabel="true" var="_schoolYear"
 										value="#{coreSearching.availableSchoolYears}"
 										label="#{_schoolYear.description}" />
@@ -164,7 +129,8 @@
 									<h:outputText value="Ταξινόμιση Κατά" />
 								</ui:define>
 
-								<h:selectOneMenu value="#{employeeTeachingHoursReportCriteria.sorting}">
+								<h:selectOneMenu
+									value="#{employeeTeachingHoursReportCriteria.sorting}">
 									<f:selectItem itemLabel="Κατά Ειδικότητα"
 										itemValue="specialization" />
 									<f:selectItem itemLabel="Κατά Επώνυμο" itemValue="surname" />
@@ -173,134 +139,78 @@
 
 						</h:panelGrid>
 
-						<!-- 
-						<rich:panel>
-							<h:outputText value="Ημερομηνία Ανάληψης Υπηρεσίας" />
-							<h:panelGrid columns="3">
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
-									<ui:define name="label">
-										<h:outputText value="Ερμηνεία Ημερομηνίας Εφαρμογής" />
-									</ui:define>
 
-									<h:selectOneMenu value="#{employeeTeachingHoursReportCriteria.dateSearchType}">
-										<s:selectItems var="dateSearchType" value="#{dateSearchTypes}"
-											label="#{messages[dateSearchType.key]}">
-										</s:selectItems>
-										<a4j:support event="onchange" ajaxSingle="true"
-											reRender="dateSearchFiltersPanel" />
-									</h:selectOneMenu>
-								</s:decorate>
-
-								<h:panelGroup>
-									<a4j:outputPanel id="dateSearchFiltersPanel">
-										<h:panelGrid columns="2">
-											<s:div
-												rendered="#{employeeTeachingHoursReportCriteria.dateSearchType ne 'DURING_DATE_PERIOD'}">
-												<s:decorate id="effectiveDateDecoration"
-													template="/layout/doubleLineEdit.xhtml">
-													<ui:define name="label">
-														<h:outputText value="Ημερομηνία Εφαρμογής" />
-													</ui:define>
-													<rich:calendar enableManualInput="true"
-														value="#{employeeTeachingHoursReportCriteria.effectiveDate}"
-														required="true" inputSize="10" mode="ajax" locale="el_GR"
-														inputClass="fieldValueText" datePattern="dd-MM-yyyy">
-														<a4j:support event="onblur"
-															reRender="establishedDateDecoration" bypassUpdates="true"
-															ajaxSingle="true" />
-													</rich:calendar>
-												</s:decorate>
-											</s:div>
-											<s:div
-												rendered="#{employeeTeachingHoursReportCriteria.dateSearchType eq 'DURING_DATE_PERIOD'}">
-
-												<h:panelGrid columns="2">
-													<s:decorate id="effectiveDateDecorationFrom"
-														template="/layout/doubleLineEdit.xhtml">
-														<ui:define name="label">
-															<h:outputText value="Από" />
-														</ui:define>
-														<rich:calendar id="effectiveDate" enableManualInput="true"
-															value="#{employeeTeachingHoursReportCriteria.effectiveDateFrom}"
-															required="true" inputSize="10" mode="ajax" locale="el_GR"
-															inputClass="fieldValueText" datePattern="dd-MM-yyyy">
-															<a4j:support event="onblur"
-																reRender="establishedDateDecoration"
-																bypassUpdates="true" ajaxSingle="true" />
-														</rich:calendar>
-													</s:decorate>
-													<s:decorate id="effectiveDateDecorationUntil"
-														template="/layout/doubleLineEdit.xhtml">
-														<ui:define name="label">
-															<h:outputText value="Εώς" />
-														</ui:define>
-														<rich:calendar id="effectiveDate" enableManualInput="true"
-															value="#{employeeTeachingHoursReportCriteria.effectiveDateUntil}"
-															required="true" inputSize="10" mode="ajax" locale="el_GR"
-															inputClass="fieldValueText" datePattern="dd-MM-yyyy">
-															<a4j:support event="onblur"
-																reRender="establishedDateDecoration"
-																bypassUpdates="true" ajaxSingle="true" />
-														</rich:calendar>
-													</s:decorate>
-												</h:panelGrid>
-
-											</s:div>
-
-
-										</h:panelGrid>
-
-									</a4j:outputPanel>
-								</h:panelGroup>
-							</h:panelGrid>
-						</rich:panel>
-						 -->
 
 					</rich:panel>
 					<rich:spacer height="5" />
 					<rich:separator lineType="dashed" height="2" />
 					<rich:spacer height="5" />
 
-						<rich:toolBar itemSeparator="line">
-						
-								<h:commandButton id="searchButton" value="Αναζήτηση"
-									action="#{employeeTeachingHoursReport.generateReport}">
-									<s:defaultAction />
-									<a4j:support ajaxSingle="true" event="onclick"
-										reRender="employmentsByTypeTable" />
-								</h:commandButton>
-								<s:button action="#{employeeTeachingHoursReport.generatePDFReport}"
-									value="Εκτύπωση (PDF)" target="new" type="button" />
-									<s:button action="#{employeeTeachingHoursReport.generateExcelReport}"
-									value="Εκτύπωση (Excel)" target="new" type="button" />
-								<s:button id="backButton" action="backButton"
-									value="Τέλος Εργασίας" />
-							</rich:toolBar>
+					<rich:toolBar itemSeparator="line">
+
+						<h:commandButton id="searchButton" value="Αναζήτηση"
+							action="#{employeeTeachingHoursReport.generateReport}">
+							<s:defaultAction />
+							<a4j:support ajaxSingle="true" event="onclick"
+								reRender="employmentsByTypeTable" />
+						</h:commandButton>
+						<s:button
+							action="#{employeeTeachingHoursReport.generatePDFReport}"
+							value="Εκτύπωση (PDF)" target="new" type="button" />
+						<s:button
+							action="#{employeeTeachingHoursReport.generateExcelReport}"
+							value="Εκτύπωση (Excel)" target="new" type="button" />
+						<s:button id="backButton" action="backButton"
+							value="Τέλος Εργασίας" />
+					</rich:toolBar>
 				</h:panelGrid>
 
 				<rich:dataTable id="employmentsByTypeTable"
-					value="#{employeeTeachingHoursReport.reportData}" var="_employment" rows="40"
-					rowKeyVar="_row" border="0"
+					value="#{employeeTeachingHoursReport.reportData}" var="_employment"
+					rows="40" rowKeyVar="_row" border="0"
 					onRowMouseOver="this.style.backgfroundColor='#F8F8F8'"
 					onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
 					width="100%">
 					<f:facet name="header">
-						<h:outputLabel value="Λίστα Εκπαιδευτικών" />
+						<rich:columnGroup>
+							<rich:column colspan="8">
+								<h:outputLabel value="Λίστα Εκπαιδευτικών" />
+							</rich:column>
+							<rich:column style="text-align:center" breakBefore="true">
+								<h:outputText styleClass="fieldValueText" value="A/A" />
+
+							</rich:column>
+							<rich:column>
+								<h:outputText value="ΑΜ" />
+
+							</rich:column>
+							<rich:column>
+								<h:outputText value="Εκπαιδευτικός" />
+
+							</rich:column>
+							<rich:column>
+								<h:outputText value="Λεκτικό Ειδ." />
+
+							</rich:column>
+							<rich:column>
+								<h:outputText value="Tύπος Σχέσεις" />
+
+							</rich:column>
+							<rich:column>
+								<h:outputText value="Ανάλυση Ωρών Εκπαιδευτικού" />
+							</rich:column>
+						</rich:columnGroup>
+
 					</f:facet>
+
+
 					<rich:column style="text-align:center">
-						<f:facet name="header">A/A</f:facet>
 						<h:outputText styleClass="fieldValueText" value="#{_row+1}" />
 					</rich:column>
 					<rich:column>
-						<f:facet name="header">
-							<h:outputText value="ΑΜ" />
-						</f:facet>
 						<h:outputText value="#{_employment.employeeCode}" />
 					</rich:column>
 					<rich:column>
-						<f:facet name="header">
-							<h:outputText value="Εκπαιδευτικός" />
-						</f:facet>
 						<a4j:commandLink action="selectEmployee"
 							value="#{_employment.employeeLastName} #{_employment.employeeFirstName} του #{_employment.employeeFatherName}">
 							<f:setPropertyActionListener value="#{_employment.id}"
@@ -308,67 +218,80 @@
 							<s:conversationPropagation type="nest" />
 						</a4j:commandLink>
 					</rich:column>
-					<rich:column>
-						<f:facet name="header">
-							<h:outputText value="Ειδ." />
-						</f:facet>
-						<h:outputText value="#{_employment.employmentSpecialization}" />
-					</rich:column>
 
 					<rich:column>
-						<f:facet name="header">
-							<h:outputText value="Λεκτικό Ειδ." />
-						</f:facet>
-						<h:outputText value="#{_employment.employmentSpecializationID}" />
+						<h:outputText value="#{_employment.employeeSpecializationID}" />
 					</rich:column>
 
 
 					<rich:column>
-						<f:facet name="header">
-							<h:outputText value="Tύπος Σχέσεις" />
-						</f:facet>
-						<h:outputText value="#{messages[_employment.employmentTypeKey]}" />
+						<h:outputText value="#{messages[_employment.employeeTypeKey]}" />
 					</rich:column>
 
 					<rich:column>
-						<f:facet name="header">
-							<h:outputText value="Μονάδα" />
-						</f:facet>
-						<h:outputText value="#{_employment.school}" />
-					</rich:column>
 
-					<rich:column>
-						<f:facet name="header">
-							<h:outputText value="Περιοχή" />
-						</f:facet>
-						<h:outputText value="#{_employment.schoolRegion}" />
-					</rich:column>
+						<rich:dataGrid var="cdrGroupUnitName" columns="1" width="100%"
+							value="#{_employment.getCDRUnitGroups()}">
 
-					<rich:column>
-						<f:facet name="header">
-							<h:outputText value="Υποχ. Ωρ" />
-						</f:facet>
-						<h:outputText value="#{_employment.employeeMandatoryHours}" />
-					</rich:column>
 
-					<rich:column>
-						<f:facet name="header">
-							<h:outputText value="Πραγ. Ωρ" />
-						</f:facet>
-						<h:outputText value="#{_employment.employeeFinalWorkingHours}" />
-					</rich:column>
+							<rich:panel>
 
-					<rich:column>
-						<f:facet name="header">
-							<h:outputText value="Ημ/νια Αν. Υπ/σίας" />
-						</f:facet>
-						<h:outputText
-							value="#{_employment.employeeEmploymentEstablishedDate}">
-							<s:convertDateTime pattern="dd-MM-yyyy" />
-						</h:outputText>
+								<f:facet name="header">
+
+									<h:outputText styleClass="fieldValueText"
+										value="#{cdrGroupUnitName.title} - Ώρες Διδασκαλίας στην Μονάδα : #{_employment.getCDRGroup(cdrGroupUnitName).getSum()}" />
+
+								</f:facet>
+
+								<rich:dataOrderedList var="cdr" type="1"
+									value="#{_employment.getCDRGroup(cdrGroupUnitName).getCDRs()}">
+									<h:outputText value="#{cdr.comment}" />
+								</rich:dataOrderedList>
+
+							</rich:panel>
+							<f:facet name="footer">
+								<h:outputText styleClass="fieldValueText"
+									value="Σύνολο Ορών : #{_employment.getTotalSum()}" />
+							</f:facet>
+						</rich:dataGrid>
+
+						<!-- 
+
+						<rich:dataOrderedList var="cdrGroupUnitName"
+							value="#{_employment.getCDRUnitGroups()}" type="1">
+							<h:outputText styleClass="fieldValueText"
+								value="#{cdrGroupUnitName.title}" />
+							<h:outputText
+								value="#{_employment.getCDRGroup(cdrGroupUnitName).getSum()}" />
+						</rich:dataOrderedList>
+						
+						 -->
+
+
 					</rich:column>
 
 					<f:facet name="footer">
+
+						<!--  
+						<rich:columnGroup>
+							<rich:column style="text-align:center">
+								<h:outputText styleClass="fieldValueText" value="A/A" />
+							</rich:column>
+							<rich:column>
+								<h:outputText value="ΑΜ" />
+							</rich:column>
+							<rich:column>
+								<h:outputText value="Εκπαιδευτικός" />
+							</rich:column>
+							<rich:column>
+								<h:outputText value="Λεκτικό Ειδ." />
+							</rich:column>
+							<rich:column>
+								<h:outputText value="Tύπος Σχέσεις" />
+							</rich:column>
+						</rich:columnGroup>
+						-->
+
 						<rich:datascroller for="employmentsByTypeTable">
 							<f:facet name="first">
 								<h:outputText value="Πρώτη" />
@@ -377,7 +300,9 @@
 								<h:outputText value="Τελευταία" />
 							</f:facet>
 						</rich:datascroller>
+
 					</f:facet>
+
 				</rich:dataTable>
 			</h:form>
 		</rich:panel>

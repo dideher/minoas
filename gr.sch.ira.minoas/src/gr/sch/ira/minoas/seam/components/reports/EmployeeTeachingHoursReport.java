@@ -6,13 +6,16 @@ import gr.sch.ira.minoas.model.core.Specialization;
 import gr.sch.ira.minoas.model.core.SpecializationGroup;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
+import gr.sch.ira.minoas.model.employement.TeachingHourCDR;
 import gr.sch.ira.minoas.seam.components.criteria.EmployeeTeachingHoursReportCriteria;
 import gr.sch.ira.minoas.seam.components.criteria.SpecializationSearchType;
 import gr.sch.ira.minoas.seam.components.reports.resource.EmployeeTeachingHoursReportItem;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.Query;
 
@@ -39,7 +42,7 @@ public class EmployeeTeachingHoursReport extends BaseReport {
 	private EmployeeTeachingHoursReportCriteria employeeTeachingHoursReportCriteria;
 
 	@DataModel(value = "reportData")
-	private List<EmployeeTeachingHoursReportItem> reportData;
+	private List<EmployeeTeachingHoursReportItem> reportData = new ArrayList<EmployeeTeachingHoursReportItem>();
 
 	/**
 	 * 
@@ -174,41 +177,41 @@ public class EmployeeTeachingHoursReport extends BaseReport {
 
 		StringBuffer sb = new StringBuffer();
 		sb
-				.append("SELECT em FROM Employment em JOIN FETCH em.employee WHERE em.active IS TRUE AND em.employee.active IS TRUE AND em.schoolYear=:schoolYear ");
+				.append("SELECT cdr FROM TeachingHourCDR cdr JOIN FETCH cdr.employee WHERE cdr.employee.active IS TRUE AND cdr.schoolYear=:schoolYear ");
 
-		if (employeeTye != null) {
-			sb.append(" AND em.type=:employmentType ");
-		}
+//		if (employeeTye != null) {
+//			sb.append(" AND em.type=:employmentType ");
+//		}
 
 		if (specializationSearchType == SpecializationSearchType.SPECIALIZATION_GROUP && specializationGroup != null) {
 			sb
-					.append(" AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g=:specializationGroup AND em.specialization MEMBER OF g.specializations) ");
+					.append(" AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g=:specializationGroup AND cdr.employee.lastSpecialization MEMBER OF g.specializations) ");
 		}
 
 		if (specializationSearchType == SpecializationSearchType.SPECIALIZATION && specialization != null) {
-			sb.append(" AND em.specialization = :specialization ");
+			sb.append(" AND cdr.employee.lastSpecialization = :specialization ");
 		}
 
-		if (region != null) {
-			sb.append(" AND em.school.regionCode = :region ");
-		}
-
-		if (schoolType != null) {
-			sb.append(" AND em.school.type = :schoolType ");
-		}
+//		if (region != null) {
+//			sb.append(" AND em.school.regionCode = :region ");
+//		}
+//
+//		if (schoolType != null) {
+//			sb.append(" AND em.school.type = :schoolType ");
+//		}
 
 		if (String.valueOf(getEmployeeTeachingHoursReportCriteria().getSorting()).equals("specialization"))
-			sb.append(" ORDER BY em.specialization.id, em.employee.lastName, em.employee.firstName");
+			sb.append(" ORDER BY cdr.employee.lastSpecialization.id, cdr.employee.lastName, cdr.employee.firstName, cdr.id");
 		else if (String.valueOf(getEmployeeTeachingHoursReportCriteria().getSorting()).equals("surname"))
-			sb.append(" ORDER BY em.employee.lastName, em.employee.firstName");
+			sb.append(" ORDER BY cdr.employee.lastName, cdr.employee.firstName, cdr.id");
 		else
-			sb.append(" ORDER BY em.type,em.specialization.id, em.employee.lastName, em.employee.firstName");
+			sb.append(" ORDER BY cdr.employee.lastName, cdr.employee.firstName, cdr.id");
 		Query q = getEntityManager().createQuery(sb.toString());
 		q.setParameter("schoolYear", schoolYear);
 
-		if (employeeTye != null) {
-			q.setParameter("employmentType", employeeTye);
-		}
+//		if (employeeTye != null) {
+//			q.setParameter("employmentType", employeeTye);
+//		}
 
 		if (specializationSearchType == SpecializationSearchType.SPECIALIZATION_GROUP && specializationGroup != null) {
 			q.setParameter("specializationGroup", specializationGroup);
@@ -218,23 +221,32 @@ public class EmployeeTeachingHoursReport extends BaseReport {
 			q.setParameter("specialization", specialization);
 		}
 
-		if (region != null) {
-			q.setParameter("region", region);
-		}
+//		if (region != null) {
+//			q.setParameter("region", region);
+//		}
+//
+//		if (schoolType != null) {
+//			q.setParameter("schoolType", schoolType);
+//		}
 
-		if (schoolType != null) {
-			q.setParameter("schoolType", schoolType);
+		Collection<TeachingHourCDR> cdrs = q.getResultList();
+		//info("found totally #0 cdr(s) matching criteria", cdrs.size());
+		Map<Integer, EmployeeTeachingHoursReportItem> employee = new LinkedHashMap<Integer, EmployeeTeachingHoursReportItem>(cdrs.size()/2);
+		reportData = new ArrayList<EmployeeTeachingHoursReportItem>(cdrs.size());
+		for (TeachingHourCDR cdr : cdrs) {
+			//reportData.add(new EmployeeTeachingHoursReportItem(employment.getEmployee()));
+		    EmployeeTeachingHoursReportItem item = employee.get(cdr.getEmployee().getId());
+		    if(item==null) {
+		        item = new EmployeeTeachingHoursReportItem(cdr.getEmployee());
+		        employee.put(cdr.getEmployee().getId(), item);
+		    }
+		    item.updateWith(cdr);
+		    //info("employee #0 -> type #1 for hours #2 on unit #3 due to #4", cdr.getEmployee(), cdr.getCdrType(), cdr.getHours(), cdr.getUnit(), cdr.getComment());
 		}
-
-		Collection<Employment> employments = q.getResultList();
-		info("found totally #0 employments matching criteria", employments.size());
-		reportData = new ArrayList<EmployeeTeachingHoursReportItem>(employments.size());
-		for (Employment employment : employments) {
-			reportData.add(new EmployeeTeachingHoursReportItem(employment.getEmployee()));
-		}
+		reportData.addAll(employee.values());
 		long finished = System.currentTimeMillis();
         
-        info("generated employee teaching hours report [ms]", (finished-started));
+        info("generated employee teaching hours report #0 [ms]", (finished-started));
 	}
 
 
@@ -254,6 +266,22 @@ public class EmployeeTeachingHoursReport extends BaseReport {
     public void setEmployeeTeachingHoursReportCriteria(
             EmployeeTeachingHoursReportCriteria employeeTeachingHoursReportCriteria) {
         this.employeeTeachingHoursReportCriteria = employeeTeachingHoursReportCriteria;
+    }
+
+
+    /**
+     * @return the reportData
+     */
+    public List<EmployeeTeachingHoursReportItem> getReportData() {
+        return reportData;
+    }
+
+
+    /**
+     * @param reportData the reportData to set
+     */
+    public void setReportData(List<EmployeeTeachingHoursReportItem> reportData) {
+        this.reportData = reportData;
     }
 
 }
