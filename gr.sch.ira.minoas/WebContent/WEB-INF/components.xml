@@ -42,7 +42,9 @@
    
   <!-- 
   <async:timer-service-dispatcher/>
-  -->
+   -->
+   
+   <async:quartz-dispatcher />
   
   <web:character-encoding-filter encoding="UTF-8"
     override-client="true" url-pattern="*.seam" />
@@ -60,6 +62,9 @@
 
   <security:identity authenticate-method="#{authenticator.authenticate}" />
 
+  <event type="org.jboss.seam.postInitialization"> 
+    <action execute="#{schedulerController.scheduleJobs}"/> 
+  </event>
 
   <event type="org.jboss.seam.security.notLoggedIn">
     <action execute="#{redirect.captureCurrentView}" />

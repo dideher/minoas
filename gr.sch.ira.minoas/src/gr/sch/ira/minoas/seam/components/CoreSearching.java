@@ -87,6 +87,8 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     public Collection<Secondment> getActiveSecondments(EntityManager em) {
         return em.createQuery("SELECT s from Secondment s WHERE s.active IS TRUE").getResultList();
     }
+    
+    
 
     @SuppressWarnings("unchecked")
     @Transactional(TransactionPropagationType.REQUIRED)

@@ -39,7 +39,7 @@ public class TeachingHourCDR extends BaseIDModel {
     @Column(name="HOURS", nullable=false)
     private Integer hours;
     
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "EMPLOYEE_ID", nullable = false)
     private Employee employee;
     

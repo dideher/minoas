@@ -45,6 +45,11 @@ public class Secondment extends BaseIDDeleteAwareModel implements Cloneable {
 	@Basic
 	@Column(name = "IS_ACTIVE", nullable = true)
 	private boolean active;
+	
+	
+	@Basic
+    @Column(name = "IS_AUTOCANCELED", nullable = true)
+    private Boolean autoCanceled;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = true)
 	@JoinColumn(name = "PARENT_EMPLOYMENT_ID", nullable = true)
@@ -427,6 +432,20 @@ public class Secondment extends BaseIDDeleteAwareModel implements Cloneable {
      */
     public void setSecondmentCDR(TeachingHourCDR secondmentCDR) {
         this.secondmentCDR = secondmentCDR;
+    }
+
+    /**
+     * @return the autoCanceled
+     */
+    public Boolean isAutoCanceled() {
+        return autoCanceled;
+    }
+
+    /**
+     * @param autoCanceled the autoCanceled to set
+     */
+    public void setAutoCanceled(Boolean autoCanceled) {
+        this.autoCanceled = autoCanceled;
     }
 
 }

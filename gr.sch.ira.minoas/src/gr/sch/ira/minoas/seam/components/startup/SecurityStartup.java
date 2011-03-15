@@ -23,7 +23,12 @@ import org.jboss.seam.annotations.Transactional;
 @Name("SecurityStartup")
 public class SecurityStartup extends BaseDatabaseAwareSeamComponent {
 
-	protected Principal getPrincipal(String principalName) {
+	/**
+     * Comment for <code>serialVersionUID</code>
+     */
+    private static final long serialVersionUID = 1L;
+
+    protected Principal getPrincipal(String principalName) {
 		try {
 			return (Principal) getEntityManager().createQuery("SELECT p FROM Principal p WHERE p.username = :username")
 					.setParameter("username", principalName).getSingleResult();
