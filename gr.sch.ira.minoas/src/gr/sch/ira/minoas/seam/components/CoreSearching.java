@@ -29,9 +29,6 @@ import gr.sch.ira.minoas.model.employement.ServiceAllocationType;
 import gr.sch.ira.minoas.model.employement.TeachingHourCDR;
 import gr.sch.ira.minoas.model.employement.WorkExperience;
 import gr.sch.ira.minoas.model.employement.WorkExperienceType;
-import gr.sch.ira.minoas.model.preparatory.EstablishmentLicenseStatusType;
-import gr.sch.ira.minoas.model.preparatory.PreparatoryUnitNatureType;
-import gr.sch.ira.minoas.model.preparatory.TeachingLanguage;
 import gr.sch.ira.minoas.model.security.Principal;
 import gr.sch.ira.minoas.model.security.Role;
 import gr.sch.ira.minoas.model.transfers.OutstandingImprovement;
@@ -170,11 +167,6 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         return DisposalType.values();
     }
 
-    @Factory(value = "establishmentLicenseStatusTypes")
-    public EstablishmentLicenseStatusType[] getAvailableEstablishmentLicenseStatusTypes() {
-        return EstablishmentLicenseStatusType.values();
-    }
-
     @SuppressWarnings("unchecked")
     @Factory(value = "establishmentLocations")
     public Collection<EstablishmentLocation> getAvailableEstablishments() {
@@ -197,11 +189,6 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     @Factory(value = "permanentTransferTypes")
     public PermanentTransferType[] getAvailablePermanentTransferTypes() {
         return PermanentTransferType.values();
-    }
-
-    @Factory(value = "preparatoryUnitNatureTypes")
-    public PreparatoryUnitNatureType[] getAvailablePreparatoryNatures() {
-        return PreparatoryUnitNatureType.values();
     }
 
     @SuppressWarnings("unchecked")
@@ -245,12 +232,6 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     @Factory(value = "serviceAllocationTypes")
     public ServiceAllocationType[] getAvailableServiceAllocationTypes() {
         return ServiceAllocationType.values();
-    }
-
-    @SuppressWarnings("unchecked")
-    @Factory(value = "teachingLanguages")
-    public Collection<TeachingLanguage> getAvailableTeachingLanguages() {
-        return getEntityManager().createQuery("FROM TeachingLanguage e ORDER BY (e.language)").getResultList();
     }
 
     @SuppressWarnings("unchecked")

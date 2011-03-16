@@ -13,12 +13,6 @@
     <class>gr.sch.ira.minoas.model.transfers.BaseOutstandingTransfer</class>
     <class>gr.sch.ira.minoas.model.security.Role</class>
     <class>gr.sch.ira.minoas.model.security.Principal</class>
-    <class>gr.sch.ira.minoas.model.preparatory.TeachingLanguage</class>
-    <class>gr.sch.ira.minoas.model.preparatory.PreparatoryUnit</class>
-    <class>gr.sch.ira.minoas.model.preparatory.PreparatoryOwnerOrDirector</class>
-    <class>gr.sch.ira.minoas.model.preparatory.PreparatoryOwner</class>
-    <class>gr.sch.ira.minoas.model.preparatory.EstablishmentLicenseRenewal</class>
-    <class>gr.sch.ira.minoas.model.preparatory.EstablishmentLicense</class>
     <class>gr.sch.ira.minoas.model.employement.WorkExperience</class>
     <class>gr.sch.ira.minoas.model.employement.ServiceAllocation</class>
     <class>gr.sch.ira.minoas.model.employement.SecondmentUnit</class>
