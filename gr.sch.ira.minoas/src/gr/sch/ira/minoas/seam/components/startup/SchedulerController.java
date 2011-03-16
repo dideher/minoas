@@ -1,18 +1,16 @@
 package gr.sch.ira.minoas.seam.components.startup;
 
+import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
+import gr.sch.ira.minoas.seam.components.async.DisposalCleanupProcessor;
+import gr.sch.ira.minoas.seam.components.async.LeaveCleanupProcessor;
+import gr.sch.ira.minoas.seam.components.async.SecondmentCleanupProcessor;
+import gr.sch.ira.minoas.seam.components.async.ServiceAllocationCleanupProcessor;
+
 import java.util.Date;
 
-import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
-import gr.sch.ira.minoas.seam.components.async.SecondmentCleanup;
-
-import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.AutoCreate;
-import org.jboss.seam.annotations.Create;
-import org.jboss.seam.annotations.Destroy;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Scope;
-import org.jboss.seam.annotations.Startup;
 import org.jboss.seam.async.QuartzTriggerHandle;
 
 /**
@@ -22,11 +20,31 @@ import org.jboss.seam.async.QuartzTriggerHandle;
 @Name("schedulerController")
 @AutoCreate
 public class SchedulerController extends BaseDatabaseAwareSeamComponent {
-
-    @In(create=true, value="secondmentCleanupProcessor")
-    private SecondmentCleanup secondmentCleanupProcessor;
     
-    private QuartzTriggerHandle secondmentCleanerProcessor;
+    private static final long SECONDMENT_CLEANUP_INTERVAL = 1200000;
+    
+    private static final long LEAVE_CLEANUP_INTERVAL = 1200000;
+    
+    private static final long SERVICE_ALLOCATION_CLEANUP_INTERVAL = 1200000;
+    
+    private static final long DISPOSAL_CLEANUP_INTERVAL = 1200000;
+    
+    @In(create=true, value="secondmentCleanupProcessor")
+    private SecondmentCleanupProcessor secondmentCleanupProcessor;
+    
+    @In(create=true, value="leaveCleanupProcessor")
+    private LeaveCleanupProcessor leaveCleanupProcessor;
+    
+    @In(create=true, value="disposalCleanupProcessor")
+    private DisposalCleanupProcessor disposalCleanupProcessor;
+    
+    @In(create=true, value="serviceAllocationCleanupProcessor")
+    private ServiceAllocationCleanupProcessor serviceAllocationCleanupProcessor;
+    
+    private QuartzTriggerHandle secondmentCleanupProcessorHandler;
+    private QuartzTriggerHandle leaveCleanupProcessorHandler;
+    private QuartzTriggerHandle disposalCleanupProcessorHandler;
+    private QuartzTriggerHandle serviceAllocationCleanupProcessorHandler;
 	/**
      * Comment for <code>serialVersionUID</code>
      */
@@ -34,10 +52,29 @@ public class SchedulerController extends BaseDatabaseAwareSeamComponent {
 
    
     public void scheduleJobs() {
+        try {
         info("creating schedule object");
-        if(secondmentCleanupProcessor!=null)
-            secondmentCleanerProcessor = secondmentCleanupProcessor.scheduleSecondmentCleanup(new Date(), "* */2 * * * ?");
-        info("scheduled #0", secondmentCleanerProcessor);
+        if(secondmentCleanupProcessor!=null) {
+            secondmentCleanupProcessorHandler = secondmentCleanupProcessor.scheduleSecondmentCleanup(new Date(), SECONDMENT_CLEANUP_INTERVAL, null);
+            info("scheduled #0", secondmentCleanupProcessorHandler.getTrigger().getFullName());
+        }
+        if(leaveCleanupProcessor!=null) {
+            leaveCleanupProcessorHandler = leaveCleanupProcessor.scheduleSecondmentCleanup(new Date(), LEAVE_CLEANUP_INTERVAL, null);
+            info("scheduled #0", leaveCleanupProcessorHandler.getTrigger().getFullName());
+        }
+        
+        if(disposalCleanupProcessor!=null) {
+            disposalCleanupProcessorHandler = disposalCleanupProcessor.scheduleSecondmentCleanup(new Date(), DISPOSAL_CLEANUP_INTERVAL, null);
+            info("scheduled #0", disposalCleanupProcessorHandler.getTrigger().getFullName());
+        }
+        if(serviceAllocationCleanupProcessor!=null) {
+            serviceAllocationCleanupProcessorHandler = serviceAllocationCleanupProcessor.scheduleSecondmentCleanup(new Date(), SERVICE_ALLOCATION_CLEANUP_INTERVAL, null);
+            info("scheduled #0", serviceAllocationCleanupProcessorHandler.getTrigger().getFullName());
+        }
+        
+        } catch(Exception ex) {
+            error("failed to schedule jobs due to an exception #0", ex, ex.getMessage());
+        }
     }
     
 //    @Destroy

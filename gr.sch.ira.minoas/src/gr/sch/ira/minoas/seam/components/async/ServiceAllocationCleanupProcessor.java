@@ -1,6 +1,7 @@
 package gr.sch.ira.minoas.seam.components.async;
 
 import gr.sch.ira.minoas.model.employement.Secondment;
+import gr.sch.ira.minoas.model.employement.ServiceAllocation;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.BaseSeamComponent;
 import gr.sch.ira.minoas.seam.components.CoreSearching;
@@ -20,6 +21,7 @@ import org.jboss.seam.annotations.TransactionPropagationType;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.annotations.async.Asynchronous;
 import org.jboss.seam.annotations.async.Expiration;
+import org.jboss.seam.annotations.async.FinalExpiration;
 import org.jboss.seam.annotations.async.IntervalCron;
 import org.jboss.seam.annotations.async.IntervalDuration;
 import org.jboss.seam.async.QuartzTriggerHandle;
@@ -28,10 +30,10 @@ import org.jboss.seam.async.QuartzTriggerHandle;
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
  * @version $Id$
  */
-@Name("secondmentCleanupProcessor")
+@Name("serviceAllocationCleanupProcessor")
 @Scope(ScopeType.APPLICATION)
 @AutoCreate
-public class SecondmentCleanup extends BaseDatabaseAwareSeamComponent {
+public class ServiceAllocationCleanupProcessor extends BaseDatabaseAwareSeamComponent {
 
     
     @In
@@ -45,31 +47,33 @@ public class SecondmentCleanup extends BaseDatabaseAwareSeamComponent {
 	/**
 	 * 
 	 */
-	public SecondmentCleanup() {
+	public ServiceAllocationCleanupProcessor() {
 	}
 
 	
 	
 	@SuppressWarnings("unchecked")
     @Transactional(TransactionPropagationType.REQUIRED)
-    public Collection<Secondment> getActiveSecondmentsThatSouldBeAutoCanceled(EntityManager em, Date today) {
-        return em.createQuery("SELECT s from Secondment s WHERE s.active IS TRUE AND :onDate NOT BETWEEN s.established AND s.dueTo").setParameter("onDate", today).getResultList();
+    public Collection<ServiceAllocation> getActiveServiceAllocationThatSouldBeAutoCanceled(EntityManager em, Date today) {
+        return em.createQuery("SELECT s from ServiceAllocation s WHERE s.active IS TRUE AND :onDate NOT BETWEEN s.established AND s.dueTo").setParameter("onDate", today).getResultList();
     }
 	
 	@Asynchronous
 	@Transactional(TransactionPropagationType.REQUIRED)
-	public QuartzTriggerHandle scheduleSecondmentCleanup(@Expiration Date when, @IntervalCron String cron ) {
+	public QuartzTriggerHandle scheduleSecondmentCleanup(@Expiration Date when, 
+            @IntervalDuration Long interval,
+            @FinalExpiration Date endDate) {
 	    Date today = new Date();
-	    info("will check for secondments that should be canceled on #0", today);
-	    Collection<Secondment> activeSecondments = getActiveSecondmentsThatSouldBeAutoCanceled(getEntityManager(), today);
-	    info("found totally #0 secondments that should be auto-canceled", activeSecondments.size());
-	    for(Secondment invalidSecondment : activeSecondments) {
-	        info("auto canceling secondment #0", invalidSecondment);
-	        invalidSecondment.setActive(false);
-	        invalidSecondment.setAutoCanceled(Boolean.TRUE);
-	        if(invalidSecondment.getSecondmentCDR()!=null) {
-	            getEntityManager().remove(invalidSecondment.getSecondmentCDR());
-	            invalidSecondment.setSecondmentCDR(null);
+	    info("will check for service allocation that should be canceled on #0", today);
+	    Collection<ServiceAllocation> activeServiceAllocations = getActiveServiceAllocationThatSouldBeAutoCanceled(getEntityManager(), today);
+	    info("found totally #0 service allocations that should be auto-canceled", activeServiceAllocations.size());
+	    for(ServiceAllocation invalidServiceAllocation : activeServiceAllocations) {
+	        info("auto canceling service allocation #0", invalidServiceAllocation);
+	        invalidServiceAllocation.setActive(false);
+	        invalidServiceAllocation.setAutoCanceled(Boolean.TRUE);
+	        if(invalidServiceAllocation.getServiceAllocationCDR()!=null) {
+	            getEntityManager().remove(invalidServiceAllocation.getServiceAllocationCDR());
+	            invalidServiceAllocation.setServiceAllocationCDR(null);
 	        }
 	    }
 	    getEntityManager().flush();
