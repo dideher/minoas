@@ -20,6 +20,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.apache.commons.lang.time.DateUtils;
+
 
 
 @Entity
@@ -33,6 +35,10 @@ public class ServiceAllocation extends BaseIDModel {
 	@Basic
 	@Column(name = "IS_ACTIVE", nullable = true)
 	private Boolean active;
+	
+	@Basic
+    @Column(name = "IS_AUTOCANCELED", nullable = true)
+    private Boolean autoCanceled;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = true)
 	@JoinColumn(name = "PARENT_EMPLOYMENT_ID", nullable = true)
@@ -287,6 +293,16 @@ public class ServiceAllocation extends BaseIDModel {
 			builder.append("workingHoursOnServicingPosition=");
 			builder.append(workingHoursOnServicingPosition);
 		}
+		if (established != null) {
+            builder.append("established=");
+            builder.append(established);
+            builder.append(", ");
+        }
+        if (dueTo != null) {
+            builder.append("dueTo=");
+            builder.append(dueTo);
+            builder.append(", ");
+        }
 		builder.append("]");
 		return builder.toString();
 	}
@@ -303,5 +319,19 @@ public class ServiceAllocation extends BaseIDModel {
      */
     public void setServiceAllocationCDR(TeachingHourCDR serviceAllocationCDR) {
         this.serviceAllocationCDR = serviceAllocationCDR;
+    }
+
+    /**
+     * @return the autoCanceled
+     */
+    public Boolean getAutoCanceled() {
+        return autoCanceled;
+    }
+
+    /**
+     * @param autoCanceled the autoCanceled to set
+     */
+    public void setAutoCanceled(Boolean autoCanceled) {
+        this.autoCanceled = autoCanceled;
     }
 }

@@ -36,6 +36,10 @@ public class Leave extends BaseIDModel {
 	@Basic
 	@Column(name = "IS_ACTIVE", nullable = false)
 	private Boolean active;
+	
+	@Basic
+    @Column(name = "IS_AUTOCANCELED", nullable = true)
+    private Boolean autoCanceled;
 
 	@Basic
 	@Column(name = "COMMENT", nullable = true, length = 255)
@@ -195,6 +199,7 @@ public class Leave extends BaseIDModel {
 		if (dueTo != null) {
 			builder.append("dueTo=");
 			builder.append(dueTo);
+			builder.append(", ");
 		}
 		builder.append("]");
 		return builder.toString();
@@ -212,6 +217,20 @@ public class Leave extends BaseIDModel {
      */
     public void setLeaveCDR(TeachingHourCDR leaveCDR) {
         this.leaveCDR = leaveCDR;
+    }
+
+    /**
+     * @return the autoCanceled
+     */
+    public Boolean getAutoCanceled() {
+        return autoCanceled;
+    }
+
+    /**
+     * @param autoCanceled the autoCanceled to set
+     */
+    public void setAutoCanceled(Boolean autoCanceled) {
+        this.autoCanceled = autoCanceled;
     }
 
 }

@@ -40,6 +40,10 @@ public class Disposal extends BaseIDModel {
 	@Basic
 	@Column(name = "IS_ACTIVE", nullable = false)
 	private boolean active;
+	
+	@Basic
+    @Column(name = "IS_AUTOCANCELED", nullable = true)
+    private Boolean autoCanceled;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = true)
 	@JoinColumn(name = "PARENT_EMPLOYMENT_ID", nullable = true)
@@ -331,8 +335,45 @@ public class Disposal extends BaseIDModel {
 		sb.append(" εκπαιδευτικόυ ");
 		sb.append(" στην μονάδα  ");
 		sb.append(getDisposalUnit());
-		sb.append(" ]");
+		
+		if(established != null) {
+            sb.append(" ,established=");
+            sb.append(established);
+        }
+        if(dueTo != null) {
+            sb.append(" ,dueTo=");
+            sb.append(dueTo);
+        }
+        sb.append(" ]");
 		return sb.toString();
 	}
+
+    /**
+     * @return the disposalCDR
+     */
+    public TeachingHourCDR getDisposalCDR() {
+        return disposalCDR;
+    }
+
+    /**
+     * @param disposalCDR the disposalCDR to set
+     */
+    public void setDisposalCDR(TeachingHourCDR disposalCDR) {
+        this.disposalCDR = disposalCDR;
+    }
+
+    /**
+     * @return the autoCanceled
+     */
+    public Boolean getAutoCanceled() {
+        return autoCanceled;
+    }
+
+    /**
+     * @param autoCanceled the autoCanceled to set
+     */
+    public void setAutoCanceled(Boolean autoCanceled) {
+        this.autoCanceled = autoCanceled;
+    }
 
 }
