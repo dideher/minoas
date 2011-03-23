@@ -1,6 +1,7 @@
 package gr.sch.ira.minoas.seam.components.async;
 
 import gr.sch.ira.minoas.model.employement.Secondment;
+import gr.sch.ira.minoas.model.employement.TeachingHourCDR;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.BaseSeamComponent;
 import gr.sch.ira.minoas.seam.components.CoreSearching;
@@ -70,10 +71,13 @@ public class SecondmentCleanupProcessor extends BaseDatabaseAwareSeamComponent {
 	        info("auto canceling secondment #0", invalidSecondment);
 	        invalidSecondment.setActive(false);
 	        invalidSecondment.setAutoCanceled(Boolean.TRUE);
-	        if(invalidSecondment.getSecondmentCDR()!=null) {
-	            getEntityManager().remove(invalidSecondment.getSecondmentCDR());
-	            invalidSecondment.setSecondmentCDR(null);
-	        }
+	        if(invalidSecondment.getSecondmentCDRs()!=null) {
+                for(TeachingHourCDR cdr : invalidSecondment.getSecondmentCDRs()) {
+                    cdr.setSecondment(null);
+                    getEntityManager().remove(cdr);
+                }
+                invalidSecondment.getSecondmentCDRs().clear();
+            }
 	    }
 	    getEntityManager().flush();
 	    return null;

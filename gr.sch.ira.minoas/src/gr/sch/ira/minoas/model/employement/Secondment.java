@@ -9,6 +9,8 @@ import gr.sch.ira.minoas.model.core.SchoolYear;
 import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employee.Employee;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.Basic;
@@ -20,6 +22,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -140,9 +143,8 @@ public class Secondment extends BaseIDDeleteAwareModel implements Cloneable {
 	@Column(name = "WORK_HRS_DECR_REASON", nullable = true)
 	private String workingHoursDecrementReason;
 	
-	@OneToOne(cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
-    @JoinColumn(name="CDR_ID", nullable=true)
-    private TeachingHourCDR secondmentCDR;
+	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.LAZY, mappedBy="secondment")
+    private Collection<TeachingHourCDR> secondmentCDRs = new ArrayList<TeachingHourCDR>();
 
 	/**
 	 * @see java.lang.Object#clone()
@@ -420,19 +422,7 @@ public class Secondment extends BaseIDDeleteAwareModel implements Cloneable {
 		return builder.toString();
 	}
 
-    /**
-     * @return the secondmentCDR
-     */
-    public TeachingHourCDR getSecondmentCDR() {
-        return secondmentCDR;
-    }
-
-    /**
-     * @param secondmentCDR the secondmentCDR to set
-     */
-    public void setSecondmentCDR(TeachingHourCDR secondmentCDR) {
-        this.secondmentCDR = secondmentCDR;
-    }
+    
 
     /**
      * @return the autoCanceled
@@ -446,6 +436,20 @@ public class Secondment extends BaseIDDeleteAwareModel implements Cloneable {
      */
     public void setAutoCanceled(Boolean autoCanceled) {
         this.autoCanceled = autoCanceled;
+    }
+
+    /**
+     * @return the secondmentCDRs
+     */
+    public Collection<TeachingHourCDR> getSecondmentCDRs() {
+        return secondmentCDRs;
+    }
+
+    /**
+     * @param secondmentCDRs the secondmentCDRs to set
+     */
+    public void setSecondmentCDRs(Collection<TeachingHourCDR> secondmentCDRs) {
+        this.secondmentCDRs = secondmentCDRs;
     }
 
 }
