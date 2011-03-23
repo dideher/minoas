@@ -25,6 +25,8 @@ import javax.persistence.TemporalType;
 
 import org.apache.commons.lang.time.DateUtils;
 
+import org.apache.commons.lang.time.DateUtils;
+
 
 
 @Entity
@@ -310,6 +312,20 @@ public class ServiceAllocation extends BaseIDModel {
 	}
 
     
+     /**
+     * @return the serviceAllocationCDRs
+     */
+    public Collection<TeachingHourCDR> getServiceAllocationCDRs() {
+        return serviceAllocationCDRs;
+    }
+
+    /**
+     * @param serviceAllocationCDRs the serviceAllocationCDRs to set
+     */
+    public void setServiceAllocationCDRs(Collection<TeachingHourCDR> serviceAllocationCDRs) {
+        this.serviceAllocationCDRs = serviceAllocationCDRs;
+    }
+
     /**
      * @return the autoCanceled
      */
@@ -322,19 +338,5 @@ public class ServiceAllocation extends BaseIDModel {
      */
     public void setAutoCanceled(Boolean autoCanceled) {
         this.autoCanceled = autoCanceled;
-    }
-
-    /**
-     * @return the serviceAllocationCDRs
-     */
-    public Collection<TeachingHourCDR> getServiceAllocationCDRs() {
-        return serviceAllocationCDRs;
-    }
-
-    /**
-     * @param serviceAllocationCDRs the serviceAllocationCDRs to set
-     */
-    public void setServiceAllocationCDRs(Collection<TeachingHourCDR> serviceAllocationCDRs) {
-        this.serviceAllocationCDRs = serviceAllocationCDRs;
     }
 }

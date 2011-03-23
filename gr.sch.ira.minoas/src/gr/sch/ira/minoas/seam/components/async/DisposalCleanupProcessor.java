@@ -36,51 +36,50 @@ import org.jboss.seam.async.QuartzTriggerHandle;
 @AutoCreate
 public class DisposalCleanupProcessor extends BaseDatabaseAwareSeamComponent {
 
-    
     @In
     private CoreSearching coreSearching;
-    
+
     /**
      * Comment for <code>serialVersionUID</code>
      */
     private static final long serialVersionUID = 1L;
-    
-	/**
-	 * 
-	 */
-	public DisposalCleanupProcessor() {
-	}
 
-	
-	
-	@SuppressWarnings("unchecked")
+    /**
+     * 
+     */
+    public DisposalCleanupProcessor() {
+    }
+
+    @SuppressWarnings("unchecked")
     @Transactional(TransactionPropagationType.REQUIRED)
     public Collection<Disposal> getActiveDisposalThatSouldBeAutoCanceled(EntityManager em, Date today) {
-        return em.createQuery("SELECT s from Disposal s WHERE s.active IS TRUE AND :onDate NOT BETWEEN s.established AND s.dueTo").setParameter("onDate", today).getResultList();
+        return em
+                .createQuery(
+                        "SELECT s from Disposal s WHERE s.active IS TRUE AND :onDate NOT BETWEEN s.established AND s.dueTo")
+                .setParameter("onDate", today).getResultList();
     }
-	
-	@Asynchronous
-	@Transactional(TransactionPropagationType.REQUIRED)
-	public QuartzTriggerHandle scheduleSecondmentCleanup(@Expiration Date when, 
-            @IntervalDuration Long interval,
+
+    @Asynchronous
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public QuartzTriggerHandle scheduleSecondmentCleanup(@Expiration Date when, @IntervalDuration Long interval,
             @FinalExpiration Date endDate) {
-	    Date today = new Date();
-	    info("will check for disposals that should be canceled on #0", today);
-	    Collection<Disposal> activeDisposals = getActiveDisposalThatSouldBeAutoCanceled(getEntityManager(), today);
-	    info("found totally #0 disposals that should be auto-canceled", activeDisposals.size());
-	    for(Disposal invalidDisposal : activeDisposals) {
-	        info("auto canceling disposal #0", invalidDisposal);
-	        invalidDisposal.setActive(false);
-	        invalidDisposal.setAutoCanceled(Boolean.TRUE);
-	        if(invalidDisposal.getDisposalCDRs()!=null) {
-	            for(TeachingHourCDR cdr : invalidDisposal.getDisposalCDRs()) {
-	                cdr.setDisposal(null);
-	                getEntityManager().remove(cdr);
-	            }
-	            invalidDisposal.getDisposalCDRs().clear();
-	        }
-	    }
-	    getEntityManager().flush();
-	    return null;
-	}
+        Date today = new Date();
+        info("will check for disposals that should be canceled on #0", today);
+        Collection<Disposal> activeDisposals = getActiveDisposalThatSouldBeAutoCanceled(getEntityManager(), today);
+        info("found totally #0 disposals that should be auto-canceled", activeDisposals.size());
+        for (Disposal invalidDisposal : activeDisposals) {
+            info("auto canceling disposal #0", invalidDisposal);
+            invalidDisposal.setActive(false);
+            invalidDisposal.setAutoCanceled(Boolean.TRUE);
+            if (invalidDisposal.getDisposalCDRs() != null) {
+                for (TeachingHourCDR cdr : invalidDisposal.getDisposalCDRs()) {
+                    cdr.setDisposal(null);
+                    getEntityManager().remove(cdr);
+                }
+                invalidDisposal.getDisposalCDRs().clear();
+            }
+        }
+        getEntityManager().flush();
+        return null;
+    }
 }
