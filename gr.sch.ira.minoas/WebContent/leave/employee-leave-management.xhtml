@@ -31,14 +31,14 @@
 							</f:facet>
 							<h:outputText
 								value="Δεν βρέθηκε ενεργή άδεια για τον εκπαιδευτικό."
-								rendered="#{(empty employeeHome.instance.leave)}" />
+								rendered="#{(empty employeeActiveLeave)}" />
 
 							<a4j:outputPanel id="activeLeave"
-								rendered="#{!(empty employeeHome.instance.leave)}">
+								rendered="#{!(empty employeeActiveLeave)}">
 								<h:panelGrid columns="1">
 									<h:outputText
 										value="Στον παραπάνω πίνακα εμφανίζετε η τρέχουσα ενεργή Άδεια του Εκπαιδευτικού." />
-									<rich:dataTable value="#{employeeHome.instance.leave}" var="_leave"
+									<rich:dataTable value="#{employeeActiveLeave}" var="_leave"
 										rows="15" border="0"
 										onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
 										onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
@@ -113,6 +113,7 @@
 							</a4j:outputPanel>
 						</rich:panel>
 
+
 						<rich:panel>
 							<f:facet name="header">
 								<h:outputText value="Ιστορικό Αδειών Εκπαιδευτικού" />
@@ -121,17 +122,17 @@
 							<a4j:outputPanel id="leavesOutputPanel">
 
 								<h:panelGroup
-									rendered="#{employeeLeavesListQuery.resultCount==0}">
+									rendered="#{employeeLeaveHistory.rowCount==0}">
 									<h:outputText
 										value="Δεν βρέθηκε ιστορικό αποσπάσων για τον εκπαιδευτικό." />
 								</h:panelGroup>
-								<h:panelGrid columns="1"
-									rendered="#{employeeLeavesListQuery.resultCount gt 0}">
+								<h:panelGrid columns="1" width="100%"
+									rendered="#{employeeLeaveHistory.rowCount gt 0}">
 									<h:outputText
 										value="Στον παρακάτω πίνακα εμφανίζεται το ιστορικό όλων των αδειών του εκπαιδευτικού." />
 
 									<rich:dataTable id="employeeLeavesList"
-										value="#{employeeLeavesListQuery.resultList}" var="_leave"
+										value="#{employeeLeaveHistory}" var="_leave"
 										rows="15" border="0"
 										onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
 										onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
@@ -175,32 +176,7 @@
 											</f:facet>
 											<h:outputText value="#{_leave.comment}" />
 										</rich:column>
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Ενέργεια" />
-											</f:facet>
-											<rich:toolBar itemSeparator="line">
-												<a4j:commandLink 
-													reRender="cancelModalPanelContent"
-													oncomplete="#{rich:component('cancelModalPanel')}.show()"
-													value="Ακύρωση">
-													<h:graphicImage value="/img/icons/delete.png" width="12"
-														height="12" style="border:0" />
-													<f:setPropertyActionListener value="#{_leave.id}"
-														target="#{leaveHome.id}" />
-												</a4j:commandLink>
-
-												<a4j:commandLink 
-													reRender="updateModalPanelContent"
-													oncomplete="#{rich:component('updateModalPanel')}.show()"
-													value="Τροποποίηση">
-													<h:graphicImage value="/img/icons/edit.png" width="12"
-														height="12" style="border:0" />
-													<f:setPropertyActionListener value="#{_leave.id}"
-														target="#{leaveHome.id}" />
-												</a4j:commandLink>
-											</rich:toolBar>
-										</rich:column>
+										
 
 									</rich:dataTable>
 								</h:panelGrid>
