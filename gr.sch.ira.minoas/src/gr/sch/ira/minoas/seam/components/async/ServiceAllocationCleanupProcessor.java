@@ -2,6 +2,7 @@ package gr.sch.ira.minoas.seam.components.async;
 
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.ServiceAllocation;
+import gr.sch.ira.minoas.model.employement.TeachingHourCDR;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.BaseSeamComponent;
 import gr.sch.ira.minoas.seam.components.CoreSearching;
@@ -71,10 +72,13 @@ public class ServiceAllocationCleanupProcessor extends BaseDatabaseAwareSeamComp
 	        info("auto canceling service allocation #0", invalidServiceAllocation);
 	        invalidServiceAllocation.setActive(false);
 	        invalidServiceAllocation.setAutoCanceled(Boolean.TRUE);
-	        if(invalidServiceAllocation.getServiceAllocationCDR()!=null) {
-	            getEntityManager().remove(invalidServiceAllocation.getServiceAllocationCDR());
-	            invalidServiceAllocation.setServiceAllocationCDR(null);
-	        }
+	        if(invalidServiceAllocation.getServiceAllocationCDRs()!=null) {
+                for(TeachingHourCDR cdr : invalidServiceAllocation.getServiceAllocationCDRs()) {
+                    cdr.setServiceAllocation(null);
+                    getEntityManager().remove(cdr);
+                }
+                invalidServiceAllocation.getServiceAllocationCDRs().clear();
+            }
 	    }
 	    getEntityManager().flush();
 	    return null;

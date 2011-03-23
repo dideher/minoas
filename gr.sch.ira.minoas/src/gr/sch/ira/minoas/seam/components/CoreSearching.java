@@ -103,14 +103,6 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     
     @Transactional(TransactionPropagationType.REQUIRED)
     @SuppressWarnings("unchecked")
-    public Collection<ServiceAllocation> getActiveServiceAllocations(EntityManager em, SchoolYear schoolYear) {
-        return getEntityManager(em).createQuery("SELECT s FROM ServiceAllocation s WHERE s.active IS TRUE AND s.schoolYear=:schoolYear")
-                .setParameter("schoolYear", schoolYear).getResultList();
-                
-    }
-    
-    @Transactional(TransactionPropagationType.REQUIRED)
-    @SuppressWarnings("unchecked")
     public Collection<Disposal> getActiveDisposal(EntityManager em, SchoolYear schoolYear) {
         return getEntityManager(em).createQuery("SELECT d FROM Disposal d WHERE d.active IS TRUE AND d.schoolYear=:schoolYear")
                 .setParameter("schoolYear", schoolYear).getResultList();

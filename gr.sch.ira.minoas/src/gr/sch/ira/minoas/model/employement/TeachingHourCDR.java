@@ -51,19 +51,23 @@ public class TeachingHourCDR extends BaseIDModel {
     @Column(name="COMMENT", length=1024)
     private String comment;
     
-    @OneToOne(fetch=FetchType.LAZY, mappedBy="employmentCDR")
+    @ManyToOne(fetch=FetchType.LAZY)
     private Employment employment;
     
-    @OneToOne(fetch=FetchType.LAZY, mappedBy="secondmentCDR")
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="SECONDMENT_ID", nullable=true)
     private Secondment secondment;
     
-    @OneToOne(fetch=FetchType.LAZY, mappedBy="serviceAllocationCDR")
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="SERVICE_ALLOCATION_ID", nullable=true)
     private ServiceAllocation serviceAllocation;
     
-    @OneToOne(fetch=FetchType.LAZY, mappedBy="leaveCDR")
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="LEAVE_ID", nullable=true)
     private Leave leave;
     
-    @OneToOne(fetch=FetchType.LAZY, mappedBy="disposalCDR")
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="DISPOSAL_ID", nullable=true)
     private Disposal disposal;
 
     /**

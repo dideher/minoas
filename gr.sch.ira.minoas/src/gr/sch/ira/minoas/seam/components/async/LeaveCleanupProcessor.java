@@ -2,6 +2,7 @@ package gr.sch.ira.minoas.seam.components.async;
 
 import gr.sch.ira.minoas.model.employement.Leave;
 import gr.sch.ira.minoas.model.employement.Secondment;
+import gr.sch.ira.minoas.model.employement.TeachingHourCDR;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.BaseSeamComponent;
 import gr.sch.ira.minoas.seam.components.CoreSearching;
@@ -71,10 +72,13 @@ public class LeaveCleanupProcessor extends BaseDatabaseAwareSeamComponent {
 	        info("auto canceling leave #0", invalidLeave);
 	        invalidLeave.setActive(false);
 	        invalidLeave.setAutoCanceled(Boolean.TRUE);
-	        if(invalidLeave.getLeaveCDR()!=null) {
-	            getEntityManager().remove(invalidLeave.getLeaveCDR());
-	            invalidLeave.setLeaveCDR(null);
-	        }
+	        if(invalidLeave.getLeaveCDRs()!=null) {
+                for(TeachingHourCDR cdr : invalidLeave.getLeaveCDRs()) {
+                    cdr.setLeave(null);
+                    getEntityManager().remove(cdr);
+                }
+                invalidLeave.getLeaveCDRs().clear();
+            }
 	    }
 	    getEntityManager().flush();
 	    return null;

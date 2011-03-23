@@ -4,6 +4,8 @@ import gr.sch.ira.minoas.model.BaseIDModel;
 import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employee.Employee;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.Basic;
@@ -15,6 +17,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -86,9 +89,8 @@ public class ServiceAllocation extends BaseIDModel {
 	@Column(name = "WORKING_HOURS_ON_SERVICE", nullable = true)
 	private Integer workingHoursOnServicingPosition;
 	
-	@OneToOne(cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
-    @JoinColumn(name="CDR_ID", nullable=true)
-    private TeachingHourCDR serviceAllocationCDR;
+	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.LAZY, mappedBy="serviceAllocation")
+    private Collection<TeachingHourCDR> serviceAllocationCDRs = new ArrayList<TeachingHourCDR>();
 
 	public ServiceAllocation() {
 		super();
@@ -307,20 +309,7 @@ public class ServiceAllocation extends BaseIDModel {
 		return builder.toString();
 	}
 
-    /**
-     * @return the serviceAllocationCDR
-     */
-    public TeachingHourCDR getServiceAllocationCDR() {
-        return serviceAllocationCDR;
-    }
-
-    /**
-     * @param serviceAllocationCDR the serviceAllocationCDR to set
-     */
-    public void setServiceAllocationCDR(TeachingHourCDR serviceAllocationCDR) {
-        this.serviceAllocationCDR = serviceAllocationCDR;
-    }
-
+    
     /**
      * @return the autoCanceled
      */
@@ -333,5 +322,19 @@ public class ServiceAllocation extends BaseIDModel {
      */
     public void setAutoCanceled(Boolean autoCanceled) {
         this.autoCanceled = autoCanceled;
+    }
+
+    /**
+     * @return the serviceAllocationCDRs
+     */
+    public Collection<TeachingHourCDR> getServiceAllocationCDRs() {
+        return serviceAllocationCDRs;
+    }
+
+    /**
+     * @param serviceAllocationCDRs the serviceAllocationCDRs to set
+     */
+    public void setServiceAllocationCDRs(Collection<TeachingHourCDR> serviceAllocationCDRs) {
+        this.serviceAllocationCDRs = serviceAllocationCDRs;
     }
 }

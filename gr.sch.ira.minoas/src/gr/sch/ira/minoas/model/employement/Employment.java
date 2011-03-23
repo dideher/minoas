@@ -6,6 +6,8 @@ import gr.sch.ira.minoas.model.core.SchoolYear;
 import gr.sch.ira.minoas.model.core.Specialization;
 import gr.sch.ira.minoas.model.employee.Employee;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.Basic;
@@ -17,6 +19,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -119,9 +122,8 @@ public class Employment extends BaseIDDeleteAwareModel {
 	@Column(name = "WORK_HRS_DECR_REASON", nullable = true)
 	private String workingHoursDecrementReason;
 	
-	@OneToOne(cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
-	@JoinColumn(name="CDR_ID", nullable=true)
-	private TeachingHourCDR employmentCDR;
+	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.LAZY, mappedBy="employment")
+    private Collection<TeachingHourCDR>employmentCDRs = new ArrayList<TeachingHourCDR>();
 
 	/**
 	 * 
@@ -392,18 +394,19 @@ public class Employment extends BaseIDDeleteAwareModel {
 		this.homeBased = homeBased;
 	}
 
+   
     /**
-     * @return the employmentCDR
+     * @return the employmentCDRs
      */
-    public TeachingHourCDR getEmploymentCDR() {
-        return employmentCDR;
+    public Collection<TeachingHourCDR> getEmploymentCDRs() {
+        return employmentCDRs;
     }
 
     /**
-     * @param employmentCDR the employmentCDR to set
+     * @param employmentCDRs the employmentCDRs to set
      */
-    public void setEmploymentCDR(TeachingHourCDR employmentCDR) {
-        this.employmentCDR = employmentCDR;
+    public void setEmploymentCDRs(Collection<TeachingHourCDR> employmentCDRs) {
+        this.employmentCDRs = employmentCDRs;
     }
 
 }
