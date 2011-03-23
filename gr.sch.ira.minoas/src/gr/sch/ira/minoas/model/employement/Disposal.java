@@ -8,6 +8,8 @@ import gr.sch.ira.minoas.model.core.SchoolYear;
 import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employee.Employee;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.Basic;
@@ -19,6 +21,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -103,9 +106,8 @@ public class Disposal extends BaseIDModel {
 	@Column(name = "DISPOSAL_TYPE", nullable = false)
 	private DisposalType type;
 	
-	@OneToOne(cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
-    @JoinColumn(name="CDR_ID", nullable=true)
-    private TeachingHourCDR disposalCDR;
+	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
+    private Collection<TeachingHourCDR> disposalCDRs = new ArrayList<TeachingHourCDR>();
 
 	/**
 	 * 
@@ -349,20 +351,6 @@ public class Disposal extends BaseIDModel {
 	}
 
     /**
-     * @return the disposalCDR
-     */
-    public TeachingHourCDR getDisposalCDR() {
-        return disposalCDR;
-    }
-
-    /**
-     * @param disposalCDR the disposalCDR to set
-     */
-    public void setDisposalCDR(TeachingHourCDR disposalCDR) {
-        this.disposalCDR = disposalCDR;
-    }
-
-    /**
      * @return the autoCanceled
      */
     public Boolean getAutoCanceled() {
@@ -374,6 +362,20 @@ public class Disposal extends BaseIDModel {
      */
     public void setAutoCanceled(Boolean autoCanceled) {
         this.autoCanceled = autoCanceled;
+    }
+
+    /**
+     * @return the disposalCDRs
+     */
+    public Collection<TeachingHourCDR> getDisposalCDRs() {
+        return disposalCDRs;
+    }
+
+    /**
+     * @param disposalCDRs the disposalCDRs to set
+     */
+    public void setDisposalCDRs(Collection<TeachingHourCDR> disposalCDRs) {
+        this.disposalCDRs = disposalCDRs;
     }
 
 }

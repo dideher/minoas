@@ -4,6 +4,8 @@ import gr.sch.ira.minoas.model.BaseIDModel;
 import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.employee.Employee;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.Basic;
@@ -15,6 +17,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -67,9 +70,8 @@ public class Leave extends BaseIDModel {
 	@JoinColumn(name = "REGULAR_SCHOOL_ID", nullable = true)
 	private School regularSchool;
 	
-	@OneToOne(cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
-    @JoinColumn(name="CDR_ID", nullable=true)
-    private TeachingHourCDR leaveCDR;
+	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.LAZY, mappedBy="leave")
+    private Collection<TeachingHourCDR> leaveCDRs = new ArrayList<TeachingHourCDR>();
 
 	public Leave() {
 		super();
@@ -205,20 +207,7 @@ public class Leave extends BaseIDModel {
 		return builder.toString();
 	}
 
-    /**
-     * @return the leaveCDR
-     */
-    public TeachingHourCDR getLeaveCDR() {
-        return leaveCDR;
-    }
-
-    /**
-     * @param leaveCDR the leaveCDR to set
-     */
-    public void setLeaveCDR(TeachingHourCDR leaveCDR) {
-        this.leaveCDR = leaveCDR;
-    }
-
+   
     /**
      * @return the autoCanceled
      */
@@ -231,6 +220,20 @@ public class Leave extends BaseIDModel {
      */
     public void setAutoCanceled(Boolean autoCanceled) {
         this.autoCanceled = autoCanceled;
+    }
+
+    /**
+     * @return the leaveCDRs
+     */
+    public Collection<TeachingHourCDR> getLeaveCDRs() {
+        return leaveCDRs;
+    }
+
+    /**
+     * @param leaveCDRs the leaveCDRs to set
+     */
+    public void setLeaveCDRs(Collection<TeachingHourCDR> leaveCDRs) {
+        this.leaveCDRs = leaveCDRs;
     }
 
 }

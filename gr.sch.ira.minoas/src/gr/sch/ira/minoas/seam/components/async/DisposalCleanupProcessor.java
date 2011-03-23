@@ -2,6 +2,7 @@ package gr.sch.ira.minoas.seam.components.async;
 
 import gr.sch.ira.minoas.model.employement.Disposal;
 import gr.sch.ira.minoas.model.employement.Secondment;
+import gr.sch.ira.minoas.model.employement.TeachingHourCDR;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.BaseSeamComponent;
 import gr.sch.ira.minoas.seam.components.CoreSearching;
@@ -71,9 +72,12 @@ public class DisposalCleanupProcessor extends BaseDatabaseAwareSeamComponent {
 	        info("auto canceling disposal #0", invalidDisposal);
 	        invalidDisposal.setActive(false);
 	        invalidDisposal.setAutoCanceled(Boolean.TRUE);
-	        if(invalidDisposal.getDisposalCDR()!=null) {
-	            getEntityManager().remove(invalidDisposal.getDisposalCDR());
-	            invalidDisposal.setDisposalCDR(null);
+	        if(invalidDisposal.getDisposalCDRs()!=null) {
+	            for(TeachingHourCDR cdr : invalidDisposal.getDisposalCDRs()) {
+	                cdr.setDisposal(null);
+	                getEntityManager().remove(cdr);
+	            }
+	            invalidDisposal.getDisposalCDRs().clear();
 	        }
 	    }
 	    getEntityManager().flush();
