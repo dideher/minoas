@@ -208,6 +208,20 @@ public class Leave extends BaseIDModel {
 	}
 
    
+     /**
+     * @return the leaveCDRs
+     */
+    public Collection<TeachingHourCDR> getLeaveCDRs() {
+        return leaveCDRs;
+    }
+
+    /**
+     * @param leaveCDRs the leaveCDRs to set
+     */
+    public void setLeaveCDRs(Collection<TeachingHourCDR> leaveCDRs) {
+        this.leaveCDRs = leaveCDRs;
+    }
+
     /**
      * @return the autoCanceled
      */
@@ -220,20 +234,6 @@ public class Leave extends BaseIDModel {
      */
     public void setAutoCanceled(Boolean autoCanceled) {
         this.autoCanceled = autoCanceled;
-    }
-
-    /**
-     * @return the leaveCDRs
-     */
-    public Collection<TeachingHourCDR> getLeaveCDRs() {
-        return leaveCDRs;
-    }
-
-    /**
-     * @param leaveCDRs the leaveCDRs to set
-     */
-    public void setLeaveCDRs(Collection<TeachingHourCDR> leaveCDRs) {
-        this.leaveCDRs = leaveCDRs;
     }
 
 }
