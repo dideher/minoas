@@ -18,7 +18,7 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.datamodel.DataModel;
 
 @Name(value = "employeeLeavesManagement")
-@Scope(ScopeType.CONVERSATION)
+@Scope(ScopeType.PAGE)
 public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
     
     /**
@@ -32,13 +32,13 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
 	@In(required = true, create = true)
 	private EmployeeHome employeeHome;
 	
-	@Out(required=false, scope=ScopeType.CONVERSATION)
+	@Out(required=false, scope=ScopeType.PAGE)
 	private Leave employeeActiveLeave;
 	
 	/**
 	 * Employees current leave history
 	 */
-	@DataModel(value="employeeLeaveHistory")
+	@DataModel(scope=ScopeType.PAGE, value="employeeLeaveHistory")
 	private Collection<Leave> employeeLeaveHistory = null;
 	
 	@Factory(value="employeeActiveLeave")
