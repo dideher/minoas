@@ -244,6 +244,11 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
         Collection<ServiceAllocation> serviceAllocations = coreSearching.getActiveServiceAllocations(em);
         info("found #0 totally active service allocations.", serviceAllocations.size());
         for(ServiceAllocation serviceAllocation : serviceAllocations) {
+            if(serviceAllocation.getSourceUnit()==null) {
+                /* this should never happen */
+                warn("service allocation #0 has no source unit !!!!!!", serviceAllocation);
+                break;
+            }
             TeachingHourCDR cdr = new TeachingHourCDR();
             cdr.setCdrType(TeachingHourCDRType.SERVICE_ALLOCATION);
             StringBuffer sb = new StringBuffer();
