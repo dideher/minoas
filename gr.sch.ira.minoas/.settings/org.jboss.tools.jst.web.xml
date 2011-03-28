@@ -21699,8 +21699,55 @@ processed
   </FOLDER>
  </file-system>
  <file-system NAME="lib" location="%workspace.home%/lib" model-entity="FileSystemFolder"/>
+ <file-system NAME="src" location="%workspace.home%/../../src" model-entity="FileSystemFolder"/>
+ <file-system NAME="lib-localedata.jar"
+  location="/usr/lib/jvm/java-1.5.0-sun-1.5.0.19/jre/lib/ext/localedata.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+  <FOLDER NAME="sun" model-entity="JarFolder">
+   <FOLDER NAME="text" model-entity="JarFolder">
+    <FOLDER NAME="resources" model-entity="JarFolder"/>
+   </FOLDER>
+  </FOLDER>
+ </file-system>
+ <file-system NAME="lib-sunjce_provider.jar"
+  location="/usr/lib/jvm/java-1.5.0-sun-1.5.0.19/jre/lib/ext/sunjce_provider.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+  <FOLDER NAME="com" model-entity="JarFolder">
+   <FOLDER NAME="sun" model-entity="JarFolder">
+    <FOLDER NAME="crypto" model-entity="JarFolder">
+     <FOLDER NAME="provider" model-entity="JarFolder"/>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+ </file-system>
+ <file-system NAME="lib-dnsns.jar"
+  location="/usr/lib/jvm/java-1.5.0-sun-1.5.0.19/jre/lib/ext/dnsns.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="META-INF" model-entity="JarFolder">
+   <FOLDER NAME="services" model-entity="JarFolder"/>
+  </FOLDER>
+  <FOLDER NAME="sun" model-entity="JarFolder">
+   <FOLDER NAME="net" model-entity="JarFolder">
+    <FOLDER NAME="spi" model-entity="JarFolder">
+     <FOLDER NAME="nameservice" model-entity="JarFolder">
+      <FOLDER NAME="dns" model-entity="JarFolder"/>
+     </FOLDER>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+ </file-system>
+ <file-system NAME="lib-sunpkcs11.jar"
+  location="/usr/lib/jvm/java-1.5.0-sun-1.5.0.19/jre/lib/ext/sunpkcs11.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+  <FOLDER NAME="sun" model-entity="JarFolder">
+   <FOLDER NAME="security" model-entity="JarFolder">
+    <FOLDER NAME="pkcs11" model-entity="JarFolder">
+     <FOLDER NAME="wrapper" model-entity="JarFolder"/>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+ </file-system>
  <file-system NAME="lib-antlr-runtime.jar"
-  location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/antlr-runtime.jar" model-entity="FileSystemJar">
+  location="/home/fsla/work/java/eclipse-workspace-helios/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/antlr-runtime.jar" model-entity="FileSystemJar">
   <FOLDER NAME="META-INF" model-entity="JarFolder"/>
   <FOLDER NAME="org" model-entity="JarFolder">
    <FOLDER NAME="antlr" model-entity="JarFolder">
@@ -21713,7 +21760,7 @@ processed
   </FOLDER>
  </file-system>
  <file-system NAME="lib-commons-beanutils.jar"
-  location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/commons-beanutils.jar" model-entity="FileSystemJar">
+  location="/home/fsla/work/java/eclipse-workspace-helios/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/commons-beanutils.jar" model-entity="FileSystemJar">
   <FOLDER NAME="META-INF" model-entity="JarFolder"/>
   <FOLDER NAME="org" model-entity="JarFolder">
    <FOLDER NAME="apache" model-entity="JarFolder">
@@ -21730,7 +21777,7 @@ processed
   </FOLDER>
  </file-system>
  <file-system NAME="lib-commons-digester.jar"
-  location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/commons-digester.jar" model-entity="FileSystemJar">
+  location="/home/fsla/work/java/eclipse-workspace-helios/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/commons-digester.jar" model-entity="FileSystemJar">
   <FOLDER NAME="META-INF" model-entity="JarFolder">
    <FOLDER NAME="maven" model-entity="JarFolder">
     <FOLDER NAME="commons-digester" model-entity="JarFolder">
@@ -21754,7 +21801,7 @@ processed
   </FOLDER>
  </file-system>
  <file-system NAME="lib-commons-lang-2.4.jar"
-  location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/commons-lang-2.4.jar" model-entity="FileSystemJar">
+  location="/home/fsla/work/java/eclipse-workspace-helios/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/commons-lang-2.4.jar" model-entity="FileSystemJar">
   <FOLDER NAME="META-INF" model-entity="JarFolder">
    <FOLDER NAME="maven" model-entity="JarFolder">
     <FOLDER NAME="commons-lang" model-entity="JarFolder">
@@ -21779,8 +21826,36 @@ processed
    </FOLDER>
   </FOLDER>
  </file-system>
+ <file-system NAME="lib-darkX-3.3.3.Final.jar"
+  location="/home/fsla/work/java/eclipse-workspace-helios/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/darkX-3.3.3.Final.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="META-INF" model-entity="JarFolder">
+   <FOLDER NAME="maven" model-entity="JarFolder">
+    <FOLDER NAME="org.richfaces.samples" model-entity="JarFolder">
+     <FOLDER NAME="darkX" model-entity="JarFolder"/>
+    </FOLDER>
+   </FOLDER>
+   <FOLDER NAME="skins" model-entity="JarFolder"/>
+   <faces-config model-entity="FacesConfig12">
+    <application model-entity="JSFApplication12">
+     <locale-config model-entity="JSFLocaleConfig"/>
+    </application>
+    <factory model-entity="JSFFactory"/>
+    <lifecycle model-entity="JSFLifecycle"/>
+   </faces-config>
+  </FOLDER>
+  <FOLDER NAME="org" model-entity="JarFolder">
+   <FOLDER NAME="richfaces" model-entity="JarFolder">
+    <FOLDER NAME="skins" model-entity="JarFolder">
+     <FOLDER NAME="darkx" model-entity="JarFolder">
+      <FOLDER NAME="css" model-entity="JarFolder"/>
+      <FOLDER NAME="images" model-entity="JarFolder"/>
+     </FOLDER>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+ </file-system>
  <file-system NAME="lib-drools-api.jar"
-  location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/drools-api.jar" model-entity="FileSystemJar">
+  location="/home/fsla/work/java/eclipse-workspace-helios/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/drools-api.jar" model-entity="FileSystemJar">
   <FOLDER NAME="META-INF" model-entity="JarFolder">
    <FOLDER NAME="maven" model-entity="JarFolder">
     <FOLDER NAME="org.drools" model-entity="JarFolder">
@@ -21827,7 +21902,7 @@ processed
   </FOLDER>
  </file-system>
  <file-system NAME="lib-drools-compiler.jar"
-  location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/drools-compiler.jar" model-entity="FileSystemJar">
+  location="/home/fsla/work/java/eclipse-workspace-helios/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/drools-compiler.jar" model-entity="FileSystemJar">
   <FOLDER NAME="META-INF" model-entity="JarFolder">
    <FOLDER NAME="maven" model-entity="JarFolder">
     <FOLDER NAME="org.drools" model-entity="JarFolder">
@@ -21894,7 +21969,7 @@ processed
   </FOLDER>
  </file-system>
  <file-system NAME="lib-drools-core.jar"
-  location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/drools-core.jar" model-entity="FileSystemJar">
+  location="/home/fsla/work/java/eclipse-workspace-helios/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/drools-core.jar" model-entity="FileSystemJar">
   <FOLDER NAME="META-INF" model-entity="JarFolder">
    <FOLDER NAME="maven" model-entity="JarFolder">
     <FOLDER NAME="org.drools" model-entity="JarFolder">
@@ -22041,8 +22116,36 @@ processed
    </FOLDER>
   </FOLDER>
  </file-system>
+ <file-system NAME="lib-glassX-3.3.3.Final.jar"
+  location="/home/fsla/work/java/eclipse-workspace-helios/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/glassX-3.3.3.Final.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="META-INF" model-entity="JarFolder">
+   <FOLDER NAME="maven" model-entity="JarFolder">
+    <FOLDER NAME="org.richfaces.samples" model-entity="JarFolder">
+     <FOLDER NAME="glassX" model-entity="JarFolder"/>
+    </FOLDER>
+   </FOLDER>
+   <FOLDER NAME="skins" model-entity="JarFolder"/>
+   <faces-config model-entity="FacesConfig12">
+    <application model-entity="JSFApplication12">
+     <locale-config model-entity="JSFLocaleConfig"/>
+    </application>
+    <factory model-entity="JSFFactory"/>
+    <lifecycle model-entity="JSFLifecycle"/>
+   </faces-config>
+  </FOLDER>
+  <FOLDER NAME="org" model-entity="JarFolder">
+   <FOLDER NAME="richfaces" model-entity="JarFolder">
+    <FOLDER NAME="skins" model-entity="JarFolder">
+     <FOLDER NAME="glassx" model-entity="JarFolder">
+      <FOLDER NAME="css" model-entity="JarFolder"/>
+      <FOLDER NAME="images" model-entity="JarFolder"/>
+     </FOLDER>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+ </file-system>
  <file-system NAME="lib-groovy-1.5.7.jar"
-  location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/groovy-1.5.7.jar" model-entity="FileSystemJar">
+  location="/home/fsla/work/java/eclipse-workspace-helios/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/groovy-1.5.7.jar" model-entity="FileSystemJar">
   <FOLDER NAME="META-INF" model-entity="JarFolder"/>
   <FOLDER NAME="groovy" model-entity="JarFolder">
    <FOLDER NAME="inspect" model-entity="JarFolder">
@@ -22131,7 +22234,7 @@ processed
   </FOLDER>
  </file-system>
  <file-system NAME="lib-iText-2.1.7.jar"
-  location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/iText-2.1.7.jar" model-entity="FileSystemJar">
+  location="/home/fsla/work/java/eclipse-workspace-helios/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/iText-2.1.7.jar" model-entity="FileSystemJar">
   <FOLDER NAME="META-INF" model-entity="JarFolder"/>
   <FOLDER NAME="com" model-entity="JarFolder">
    <FOLDER NAME="lowagie" model-entity="JarFolder">
@@ -22167,7 +22270,7 @@ processed
   </FOLDER>
  </file-system>
  <file-system NAME="lib-jasperreports-3.7.1.jar"
-  location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jasperreports-3.7.1.jar" model-entity="FileSystemJar">
+  location="/home/fsla/work/java/eclipse-workspace-helios/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jasperreports-3.7.1.jar" model-entity="FileSystemJar">
   <FOLDER NAME="META-INF" model-entity="JarFolder"/>
   <FOLDER NAME="net" model-entity="JarFolder">
    <FOLDER NAME="sf" model-entity="JarFolder">
@@ -22252,7 +22355,7 @@ processed
   </FOLDER>
  </file-system>
  <file-system NAME="lib-jasperreports-fonts-3.7.1.jar"
-  location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jasperreports-fonts-3.7.1.jar" model-entity="FileSystemJar">
+  location="/home/fsla/work/java/eclipse-workspace-helios/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jasperreports-fonts-3.7.1.jar" model-entity="FileSystemJar">
   <FOLDER NAME="META-INF" model-entity="JarFolder"/>
   <FOLDER NAME="net" model-entity="JarFolder">
    <FOLDER NAME="sf" model-entity="JarFolder">
@@ -22265,7 +22368,7 @@ processed
   </FOLDER>
  </file-system>
  <file-system NAME="lib-jboss-el.jar"
-  location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jboss-el.jar" model-entity="FileSystemJar">
+  location="/home/fsla/work/java/eclipse-workspace-helios/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jboss-el.jar" model-entity="FileSystemJar">
   <FOLDER NAME="META-INF" model-entity="JarFolder"/>
   <FOLDER NAME="org" model-entity="JarFolder">
    <FOLDER NAME="jboss" model-entity="JarFolder">
@@ -22278,7 +22381,7 @@ processed
   </FOLDER>
  </file-system>
  <file-system NAME="lib-jboss-seam-debug.jar"
-  location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jboss-seam-debug.jar" model-entity="FileSystemJar">
+  location="/home/fsla/work/java/eclipse-workspace-helios/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jboss-seam-debug.jar" model-entity="FileSystemJar">
   <FOLDER NAME="META-INF" model-entity="JarFolder">
    <faces-config model-entity="FacesConfig12">
     <application model-entity="JSFApplication12">
@@ -22306,7 +22409,7 @@ processed
   </FOLDER>
  </file-system>
  <file-system NAME="lib-jboss-seam-excel.jar"
-  location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jboss-seam-excel.jar" model-entity="FileSystemJar">
+  location="/home/fsla/work/java/eclipse-workspace-helios/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jboss-seam-excel.jar" model-entity="FileSystemJar">
   <FOLDER NAME="META-INF" model-entity="JarFolder">
    <faces-config model-entity="FacesConfig12">
     <application model-entity="JSFApplication12">
@@ -22463,7 +22566,7 @@ processed
   </FOLDER>
  </file-system>
  <file-system NAME="lib-jboss-seam-ioc.jar"
-  location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jboss-seam-ioc.jar" model-entity="FileSystemJar">
+  location="/home/fsla/work/java/eclipse-workspace-helios/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jboss-seam-ioc.jar" model-entity="FileSystemJar">
   <FOLDER NAME="META-INF" model-entity="JarFolder"/>
   <FOLDER NAME="org" model-entity="JarFolder">
    <FOLDER NAME="jboss" model-entity="JarFolder">
@@ -22478,7 +22581,7 @@ processed
   <FOLDER NAME="schema" model-entity="JarFolder"/>
  </file-system>
  <file-system NAME="lib-jboss-seam-mail.jar"
-  location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jboss-seam-mail.jar" model-entity="FileSystemJar">
+  location="/home/fsla/work/java/eclipse-workspace-helios/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jboss-seam-mail.jar" model-entity="FileSystemJar">
   <FOLDER NAME="META-INF" model-entity="JarFolder">
    <faces-config model-entity="FacesConfig12">
     <application model-entity="JSFApplication12">
@@ -22564,7 +22667,7 @@ processed
   </FOLDER>
  </file-system>
  <file-system NAME="lib-jboss-seam-pdf.jar"
-  location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jboss-seam-pdf.jar" model-entity="FileSystemJar">
+  location="/home/fsla/work/java/eclipse-workspace-helios/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jboss-seam-pdf.jar" model-entity="FileSystemJar">
   <FOLDER NAME="META-INF" model-entity="JarFolder">
    <faces-config model-entity="FacesConfig12">
     <application model-entity="JSFApplication12">
@@ -22807,7 +22910,7 @@ processed
   </FOLDER>
  </file-system>
  <file-system NAME="lib-jboss-seam-remoting.jar"
-  location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jboss-seam-remoting.jar" model-entity="FileSystemJar">
+  location="/home/fsla/work/java/eclipse-workspace-helios/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jboss-seam-remoting.jar" model-entity="FileSystemJar">
   <FOLDER NAME="META-INF" model-entity="JarFolder"/>
   <FOLDER NAME="org" model-entity="JarFolder">
    <FOLDER NAME="jboss" model-entity="JarFolder">
@@ -22826,7 +22929,7 @@ processed
   </FOLDER>
  </file-system>
  <file-system NAME="lib-jboss-seam-ui.jar"
-  location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jboss-seam-ui.jar" model-entity="FileSystemJar">
+  location="/home/fsla/work/java/eclipse-workspace-helios/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jboss-seam-ui.jar" model-entity="FileSystemJar">
   <FOLDER NAME="META-INF" model-entity="JarFolder">
    <FOLDER NAME="maven" model-entity="JarFolder">
     <FOLDER NAME="org.jboss.seam" model-entity="JarFolder">
@@ -25910,7 +26013,7 @@ a backing bean</description>
   </FOLDER>
  </file-system>
  <file-system NAME="lib-jboss-seam.jar"
-  location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jboss-seam.jar" model-entity="FileSystemJar">
+  location="/home/fsla/work/java/eclipse-workspace-helios/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jboss-seam.jar" model-entity="FileSystemJar">
   <FOLDER NAME="META-INF" model-entity="JarFolder">
    <components NAME="components" model-entity="FileSeamComponents22">
     <import model-entity="SeamImport">org.jboss.seam.core</import>
@@ -26022,7 +26125,7 @@ a backing bean</description>
   </FOLDER>
  </file-system>
  <file-system NAME="lib-jbpm-jpdl.jar"
-  location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jbpm-jpdl.jar" model-entity="FileSystemJar">
+  location="/home/fsla/work/java/eclipse-workspace-helios/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jbpm-jpdl.jar" model-entity="FileSystemJar">
   <FOLDER NAME="META-INF" model-entity="JarFolder"/>
   <FOLDER NAME="org" model-entity="JarFolder">
    <FOLDER NAME="jbpm" model-entity="JarFolder">
@@ -26307,7 +26410,7 @@ a backing bean</description>
   </FOLDER>
  </file-system>
  <file-system NAME="lib-jcommon.jar"
-  location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jcommon.jar" model-entity="FileSystemJar">
+  location="/home/fsla/work/java/eclipse-workspace-helios/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jcommon.jar" model-entity="FileSystemJar">
   <FOLDER NAME="META-INF" model-entity="JarFolder">
    <FOLDER NAME="maven" model-entity="JarFolder">
     <FOLDER NAME="jfree" model-entity="JarFolder">
@@ -26343,7 +26446,7 @@ a backing bean</description>
   </FOLDER>
  </file-system>
  <file-system NAME="lib-jfreechart.jar"
-  location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jfreechart.jar" model-entity="FileSystemJar">
+  location="/home/fsla/work/java/eclipse-workspace-helios/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jfreechart.jar" model-entity="FileSystemJar">
   <FOLDER NAME="META-INF" model-entity="JarFolder"/>
   <FOLDER NAME="org" model-entity="JarFolder">
    <FOLDER NAME="jfree" model-entity="JarFolder">
@@ -26392,7 +26495,7 @@ a backing bean</description>
   </FOLDER>
  </file-system>
  <file-system NAME="lib-jsf-facelets.jar"
-  location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jsf-facelets.jar" model-entity="FileSystemJar">
+  location="/home/fsla/work/java/eclipse-workspace-helios/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jsf-facelets.jar" model-entity="FileSystemJar">
   <FOLDER NAME="META-INF" model-entity="JarFolder">
    <FOLDER NAME="rsc" model-entity="JarFolder"/>
    <faces-config model-entity="FacesConfig11">
@@ -26522,7 +26625,7 @@ a backing bean</description>
   </FOLDER>
  </file-system>
  <file-system NAME="lib-jxl.jar"
-  location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jxl.jar" model-entity="FileSystemJar">
+  location="/home/fsla/work/java/eclipse-workspace-helios/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/jxl.jar" model-entity="FileSystemJar">
   <FOLDER NAME="META-INF" model-entity="JarFolder"/>
   <FOLDER NAME="common" model-entity="JarFolder"/>
   <FOLDER NAME="jxl" model-entity="JarFolder">
@@ -26541,7 +26644,7 @@ a backing bean</description>
   </FOLDER>
  </file-system>
  <file-system NAME="lib-mvel2.jar"
-  location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/mvel2.jar" model-entity="FileSystemJar">
+  location="/home/fsla/work/java/eclipse-workspace-helios/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/mvel2.jar" model-entity="FileSystemJar">
   <FOLDER NAME="META-INF" model-entity="JarFolder">
    <FOLDER NAME="maven" model-entity="JarFolder">
     <FOLDER NAME="org.mvel" model-entity="JarFolder">
@@ -26591,7 +26694,7 @@ a backing bean</description>
   </FOLDER>
  </file-system>
  <file-system NAME="lib-poi-3.5-FINAL-20090928.jar"
-  location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/poi-3.5-FINAL-20090928.jar" model-entity="FileSystemJar">
+  location="/home/fsla/work/java/eclipse-workspace-helios/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/poi-3.5-FINAL-20090928.jar" model-entity="FileSystemJar">
   <FOLDER NAME="META-INF" model-entity="JarFolder"/>
   <FOLDER NAME="org" model-entity="JarFolder">
    <FOLDER NAME="apache" model-entity="JarFolder">
@@ -26655,267 +26758,8 @@ a backing bean</description>
    </FOLDER>
   </FOLDER>
  </file-system>
- <file-system NAME="lib-spring-beans-2.5.5.jar"
-  location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/spring-beans-2.5.5.jar" model-entity="FileSystemJar">
-  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
-  <FOLDER NAME="org" model-entity="JarFolder">
-   <FOLDER NAME="springframework" model-entity="JarFolder">
-    <FOLDER NAME="beans" model-entity="JarFolder">
-     <FOLDER NAME="annotation" model-entity="JarFolder"/>
-     <FOLDER NAME="factory" model-entity="JarFolder">
-      <FOLDER NAME="access" model-entity="JarFolder">
-       <FOLDER NAME="el" model-entity="JarFolder"/>
-      </FOLDER>
-      <FOLDER NAME="annotation" model-entity="JarFolder"/>
-      <FOLDER NAME="config" model-entity="JarFolder"/>
-      <FOLDER NAME="generic" model-entity="JarFolder"/>
-      <FOLDER NAME="parsing" model-entity="JarFolder"/>
-      <FOLDER NAME="serviceloader" model-entity="JarFolder"/>
-      <FOLDER NAME="support" model-entity="JarFolder"/>
-      <FOLDER NAME="wiring" model-entity="JarFolder"/>
-      <FOLDER NAME="xml" model-entity="JarFolder"/>
-     </FOLDER>
-     <FOLDER NAME="propertyeditors" model-entity="JarFolder"/>
-     <FOLDER NAME="support" model-entity="JarFolder"/>
-    </FOLDER>
-   </FOLDER>
-  </FOLDER>
- </file-system>
- <file-system NAME="lib-spring-context-2.5.5.jar"
-  location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/spring-context-2.5.5.jar" model-entity="FileSystemJar">
-  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
-  <FOLDER NAME="org" model-entity="JarFolder">
-   <FOLDER NAME="springframework" model-entity="JarFolder">
-    <FOLDER NAME="context" model-entity="JarFolder">
-     <FOLDER NAME="access" model-entity="JarFolder"/>
-     <FOLDER NAME="annotation" model-entity="JarFolder"/>
-     <FOLDER NAME="config" model-entity="JarFolder"/>
-     <FOLDER NAME="event" model-entity="JarFolder"/>
-     <FOLDER NAME="i18n" model-entity="JarFolder"/>
-     <FOLDER NAME="support" model-entity="JarFolder"/>
-     <FOLDER NAME="weaving" model-entity="JarFolder"/>
-    </FOLDER>
-    <FOLDER NAME="ejb" model-entity="JarFolder">
-     <FOLDER NAME="access" model-entity="JarFolder"/>
-     <FOLDER NAME="config" model-entity="JarFolder"/>
-     <FOLDER NAME="interceptor" model-entity="JarFolder"/>
-     <FOLDER NAME="support" model-entity="JarFolder"/>
-    </FOLDER>
-    <FOLDER NAME="instrument" model-entity="JarFolder">
-     <FOLDER NAME="classloading" model-entity="JarFolder">
-      <FOLDER NAME="glassfish" model-entity="JarFolder"/>
-      <FOLDER NAME="oc4j" model-entity="JarFolder"/>
-      <FOLDER NAME="weblogic" model-entity="JarFolder"/>
-     </FOLDER>
-    </FOLDER>
-    <FOLDER NAME="jmx" model-entity="JarFolder">
-     <FOLDER NAME="access" model-entity="JarFolder"/>
-     <FOLDER NAME="export" model-entity="JarFolder">
-      <FOLDER NAME="annotation" model-entity="JarFolder"/>
-      <FOLDER NAME="assembler" model-entity="JarFolder"/>
-      <FOLDER NAME="metadata" model-entity="JarFolder"/>
-      <FOLDER NAME="naming" model-entity="JarFolder"/>
-      <FOLDER NAME="notification" model-entity="JarFolder"/>
-     </FOLDER>
-     <FOLDER NAME="support" model-entity="JarFolder"/>
-    </FOLDER>
-    <FOLDER NAME="jndi" model-entity="JarFolder">
-     <FOLDER NAME="support" model-entity="JarFolder"/>
-    </FOLDER>
-    <FOLDER NAME="remoting" model-entity="JarFolder">
-     <FOLDER NAME="rmi" model-entity="JarFolder"/>
-     <FOLDER NAME="soap" model-entity="JarFolder"/>
-     <FOLDER NAME="support" model-entity="JarFolder"/>
-    </FOLDER>
-    <FOLDER NAME="scheduling" model-entity="JarFolder">
-     <FOLDER NAME="backportconcurrent" model-entity="JarFolder"/>
-     <FOLDER NAME="concurrent" model-entity="JarFolder"/>
-     <FOLDER NAME="support" model-entity="JarFolder"/>
-     <FOLDER NAME="timer" model-entity="JarFolder"/>
-    </FOLDER>
-    <FOLDER NAME="scripting" model-entity="JarFolder">
-     <FOLDER NAME="bsh" model-entity="JarFolder"/>
-     <FOLDER NAME="config" model-entity="JarFolder"/>
-     <FOLDER NAME="groovy" model-entity="JarFolder"/>
-     <FOLDER NAME="jruby" model-entity="JarFolder"/>
-     <FOLDER NAME="support" model-entity="JarFolder"/>
-    </FOLDER>
-    <FOLDER NAME="stereotype" model-entity="JarFolder"/>
-    <FOLDER NAME="ui" model-entity="JarFolder">
-     <FOLDER NAME="context" model-entity="JarFolder">
-      <FOLDER NAME="support" model-entity="JarFolder"/>
-     </FOLDER>
-    </FOLDER>
-    <FOLDER NAME="validation" model-entity="JarFolder"/>
-   </FOLDER>
-  </FOLDER>
- </file-system>
- <file-system NAME="lib-spring-core-2.5.5.jar"
-  location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/spring-core-2.5.5.jar" model-entity="FileSystemJar">
-  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
-  <FOLDER NAME="org" model-entity="JarFolder">
-   <FOLDER NAME="springframework" model-entity="JarFolder">
-    <FOLDER NAME="asm" model-entity="JarFolder">
-     <FOLDER NAME="commons" model-entity="JarFolder"/>
-     <FOLDER NAME="signature" model-entity="JarFolder"/>
-    </FOLDER>
-    <FOLDER NAME="core" model-entity="JarFolder">
-     <FOLDER NAME="annotation" model-entity="JarFolder"/>
-     <FOLDER NAME="enums" model-entity="JarFolder"/>
-     <FOLDER NAME="io" model-entity="JarFolder">
-      <FOLDER NAME="support" model-entity="JarFolder"/>
-     </FOLDER>
-     <FOLDER NAME="style" model-entity="JarFolder"/>
-     <FOLDER NAME="task" model-entity="JarFolder">
-      <FOLDER NAME="support" model-entity="JarFolder"/>
-     </FOLDER>
-     <FOLDER NAME="type" model-entity="JarFolder">
-      <FOLDER NAME="classreading" model-entity="JarFolder"/>
-      <FOLDER NAME="filter" model-entity="JarFolder"/>
-     </FOLDER>
-    </FOLDER>
-    <FOLDER NAME="metadata" model-entity="JarFolder">
-     <FOLDER NAME="commons" model-entity="JarFolder"/>
-    </FOLDER>
-    <FOLDER NAME="util" model-entity="JarFolder">
-     <FOLDER NAME="comparator" model-entity="JarFolder"/>
-     <FOLDER NAME="xml" model-entity="JarFolder"/>
-    </FOLDER>
-   </FOLDER>
-  </FOLDER>
- </file-system>
- <file-system NAME="lib-spring-web-2.5.5.jar"
-  location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/spring-web-2.5.5.jar" model-entity="FileSystemJar">
-  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
-  <FOLDER NAME="org" model-entity="JarFolder">
-   <FOLDER NAME="springframework" model-entity="JarFolder">
-    <FOLDER NAME="remoting" model-entity="JarFolder">
-     <FOLDER NAME="caucho" model-entity="JarFolder"/>
-     <FOLDER NAME="httpinvoker" model-entity="JarFolder"/>
-     <FOLDER NAME="jaxrpc" model-entity="JarFolder">
-      <FOLDER NAME="support" model-entity="JarFolder"/>
-     </FOLDER>
-     <FOLDER NAME="jaxws" model-entity="JarFolder"/>
-    </FOLDER>
-    <FOLDER NAME="web" model-entity="JarFolder">
-     <FOLDER NAME="context" model-entity="JarFolder">
-      <FOLDER NAME="request" model-entity="JarFolder"/>
-      <FOLDER NAME="support" model-entity="JarFolder"/>
-     </FOLDER>
-     <FOLDER NAME="filter" model-entity="JarFolder"/>
-     <FOLDER NAME="jsf" model-entity="JarFolder">
-      <FOLDER NAME="el" model-entity="JarFolder"/>
-     </FOLDER>
-     <FOLDER NAME="util" model-entity="JarFolder"/>
-    </FOLDER>
-   </FOLDER>
-  </FOLDER>
- </file-system>
- <file-system NAME="src" location="%workspace.home%/../../src" model-entity="FileSystemFolder"/>
- <file-system NAME="lib-localedata.jar"
-  location="/usr/lib/jvm/java-1.5.0-sun-1.5.0.19/jre/lib/ext/localedata.jar" model-entity="FileSystemJar">
-  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
-  <FOLDER NAME="sun" model-entity="JarFolder">
-   <FOLDER NAME="text" model-entity="JarFolder">
-    <FOLDER NAME="resources" model-entity="JarFolder"/>
-   </FOLDER>
-  </FOLDER>
- </file-system>
- <file-system NAME="lib-sunjce_provider.jar"
-  location="/usr/lib/jvm/java-1.5.0-sun-1.5.0.19/jre/lib/ext/sunjce_provider.jar" model-entity="FileSystemJar">
-  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
-  <FOLDER NAME="com" model-entity="JarFolder">
-   <FOLDER NAME="sun" model-entity="JarFolder">
-    <FOLDER NAME="crypto" model-entity="JarFolder">
-     <FOLDER NAME="provider" model-entity="JarFolder"/>
-    </FOLDER>
-   </FOLDER>
-  </FOLDER>
- </file-system>
- <file-system NAME="lib-dnsns.jar"
-  location="/usr/lib/jvm/java-1.5.0-sun-1.5.0.19/jre/lib/ext/dnsns.jar" model-entity="FileSystemJar">
-  <FOLDER NAME="META-INF" model-entity="JarFolder">
-   <FOLDER NAME="services" model-entity="JarFolder"/>
-  </FOLDER>
-  <FOLDER NAME="sun" model-entity="JarFolder">
-   <FOLDER NAME="net" model-entity="JarFolder">
-    <FOLDER NAME="spi" model-entity="JarFolder">
-     <FOLDER NAME="nameservice" model-entity="JarFolder">
-      <FOLDER NAME="dns" model-entity="JarFolder"/>
-     </FOLDER>
-    </FOLDER>
-   </FOLDER>
-  </FOLDER>
- </file-system>
- <file-system NAME="lib-sunpkcs11.jar"
-  location="/usr/lib/jvm/java-1.5.0-sun-1.5.0.19/jre/lib/ext/sunpkcs11.jar" model-entity="FileSystemJar">
-  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
-  <FOLDER NAME="sun" model-entity="JarFolder">
-   <FOLDER NAME="security" model-entity="JarFolder">
-    <FOLDER NAME="pkcs11" model-entity="JarFolder">
-     <FOLDER NAME="wrapper" model-entity="JarFolder"/>
-    </FOLDER>
-   </FOLDER>
-  </FOLDER>
- </file-system>
- <file-system NAME="lib-darkX-3.3.3.Final.jar"
-  location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/darkX-3.3.3.Final.jar" model-entity="FileSystemJar">
-  <FOLDER NAME="META-INF" model-entity="JarFolder">
-   <FOLDER NAME="maven" model-entity="JarFolder">
-    <FOLDER NAME="org.richfaces.samples" model-entity="JarFolder">
-     <FOLDER NAME="darkX" model-entity="JarFolder"/>
-    </FOLDER>
-   </FOLDER>
-   <FOLDER NAME="skins" model-entity="JarFolder"/>
-   <faces-config model-entity="FacesConfig12">
-    <application model-entity="JSFApplication12">
-     <locale-config model-entity="JSFLocaleConfig"/>
-    </application>
-    <factory model-entity="JSFFactory"/>
-    <lifecycle model-entity="JSFLifecycle"/>
-   </faces-config>
-  </FOLDER>
-  <FOLDER NAME="org" model-entity="JarFolder">
-   <FOLDER NAME="richfaces" model-entity="JarFolder">
-    <FOLDER NAME="skins" model-entity="JarFolder">
-     <FOLDER NAME="darkx" model-entity="JarFolder">
-      <FOLDER NAME="css" model-entity="JarFolder"/>
-      <FOLDER NAME="images" model-entity="JarFolder"/>
-     </FOLDER>
-    </FOLDER>
-   </FOLDER>
-  </FOLDER>
- </file-system>
- <file-system NAME="lib-glassX-3.3.3.Final.jar"
-  location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/glassX-3.3.3.Final.jar" model-entity="FileSystemJar">
-  <FOLDER NAME="META-INF" model-entity="JarFolder">
-   <FOLDER NAME="maven" model-entity="JarFolder">
-    <FOLDER NAME="org.richfaces.samples" model-entity="JarFolder">
-     <FOLDER NAME="glassX" model-entity="JarFolder"/>
-    </FOLDER>
-   </FOLDER>
-   <FOLDER NAME="skins" model-entity="JarFolder"/>
-   <faces-config model-entity="FacesConfig12">
-    <application model-entity="JSFApplication12">
-     <locale-config model-entity="JSFLocaleConfig"/>
-    </application>
-    <factory model-entity="JSFFactory"/>
-    <lifecycle model-entity="JSFLifecycle"/>
-   </faces-config>
-  </FOLDER>
-  <FOLDER NAME="org" model-entity="JarFolder">
-   <FOLDER NAME="richfaces" model-entity="JarFolder">
-    <FOLDER NAME="skins" model-entity="JarFolder">
-     <FOLDER NAME="glassx" model-entity="JarFolder">
-      <FOLDER NAME="css" model-entity="JarFolder"/>
-      <FOLDER NAME="images" model-entity="JarFolder"/>
-     </FOLDER>
-    </FOLDER>
-   </FOLDER>
-  </FOLDER>
- </file-system>
  <file-system NAME="lib-richfaces-api.jar"
-  location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/richfaces-api.jar" model-entity="FileSystemJar">
+  location="/home/fsla/work/java/eclipse-workspace-helios/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/richfaces-api.jar" model-entity="FileSystemJar">
   <FOLDER NAME="META-INF" model-entity="JarFolder">
    <FOLDER NAME="maven" model-entity="JarFolder">
     <FOLDER NAME="org.richfaces.framework" model-entity="JarFolder">
@@ -26956,7 +26800,7 @@ a backing bean</description>
   </FOLDER>
  </file-system>
  <file-system NAME="lib-richfaces-impl.jar"
-  location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/richfaces-impl.jar" model-entity="FileSystemJar">
+  location="/home/fsla/work/java/eclipse-workspace-helios/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/richfaces-impl.jar" model-entity="FileSystemJar">
   <FOLDER NAME="META-INF" model-entity="JarFolder">
    <FOLDER NAME="maven" model-entity="JarFolder">
     <FOLDER NAME="org.richfaces.framework" model-entity="JarFolder">
@@ -27068,7 +26912,7 @@ a backing bean</description>
   </FOLDER>
  </file-system>
  <file-system NAME="lib-richfaces-ui.jar"
-  location="/home/fsla/work/java/eclipse-workspace-galileo/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/richfaces-ui.jar" model-entity="FileSystemJar">
+  location="/home/fsla/work/java/eclipse-workspace-helios/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/richfaces-ui.jar" model-entity="FileSystemJar">
   <FOLDER NAME="META-INF" model-entity="JarFolder">
    <FOLDER NAME="maven" model-entity="JarFolder">
     <FOLDER NAME="org.richfaces.ui" model-entity="JarFolder">
@@ -74603,6 +74447,162 @@ a backing bean</description>
     </FOLDER>
     <FOLDER NAME="utils" model-entity="JarFolder"/>
     <FOLDER NAME="validator" model-entity="JarFolder"/>
+   </FOLDER>
+  </FOLDER>
+ </file-system>
+ <file-system NAME="lib-spring-beans-2.5.5.jar"
+  location="/home/fsla/work/java/eclipse-workspace-helios/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/spring-beans-2.5.5.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+  <FOLDER NAME="org" model-entity="JarFolder">
+   <FOLDER NAME="springframework" model-entity="JarFolder">
+    <FOLDER NAME="beans" model-entity="JarFolder">
+     <FOLDER NAME="annotation" model-entity="JarFolder"/>
+     <FOLDER NAME="factory" model-entity="JarFolder">
+      <FOLDER NAME="access" model-entity="JarFolder">
+       <FOLDER NAME="el" model-entity="JarFolder"/>
+      </FOLDER>
+      <FOLDER NAME="annotation" model-entity="JarFolder"/>
+      <FOLDER NAME="config" model-entity="JarFolder"/>
+      <FOLDER NAME="generic" model-entity="JarFolder"/>
+      <FOLDER NAME="parsing" model-entity="JarFolder"/>
+      <FOLDER NAME="serviceloader" model-entity="JarFolder"/>
+      <FOLDER NAME="support" model-entity="JarFolder"/>
+      <FOLDER NAME="wiring" model-entity="JarFolder"/>
+      <FOLDER NAME="xml" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="propertyeditors" model-entity="JarFolder"/>
+     <FOLDER NAME="support" model-entity="JarFolder"/>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+ </file-system>
+ <file-system NAME="lib-spring-context-2.5.5.jar"
+  location="/home/fsla/work/java/eclipse-workspace-helios/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/spring-context-2.5.5.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+  <FOLDER NAME="org" model-entity="JarFolder">
+   <FOLDER NAME="springframework" model-entity="JarFolder">
+    <FOLDER NAME="context" model-entity="JarFolder">
+     <FOLDER NAME="access" model-entity="JarFolder"/>
+     <FOLDER NAME="annotation" model-entity="JarFolder"/>
+     <FOLDER NAME="config" model-entity="JarFolder"/>
+     <FOLDER NAME="event" model-entity="JarFolder"/>
+     <FOLDER NAME="i18n" model-entity="JarFolder"/>
+     <FOLDER NAME="support" model-entity="JarFolder"/>
+     <FOLDER NAME="weaving" model-entity="JarFolder"/>
+    </FOLDER>
+    <FOLDER NAME="ejb" model-entity="JarFolder">
+     <FOLDER NAME="access" model-entity="JarFolder"/>
+     <FOLDER NAME="config" model-entity="JarFolder"/>
+     <FOLDER NAME="interceptor" model-entity="JarFolder"/>
+     <FOLDER NAME="support" model-entity="JarFolder"/>
+    </FOLDER>
+    <FOLDER NAME="instrument" model-entity="JarFolder">
+     <FOLDER NAME="classloading" model-entity="JarFolder">
+      <FOLDER NAME="glassfish" model-entity="JarFolder"/>
+      <FOLDER NAME="oc4j" model-entity="JarFolder"/>
+      <FOLDER NAME="weblogic" model-entity="JarFolder"/>
+     </FOLDER>
+    </FOLDER>
+    <FOLDER NAME="jmx" model-entity="JarFolder">
+     <FOLDER NAME="access" model-entity="JarFolder"/>
+     <FOLDER NAME="export" model-entity="JarFolder">
+      <FOLDER NAME="annotation" model-entity="JarFolder"/>
+      <FOLDER NAME="assembler" model-entity="JarFolder"/>
+      <FOLDER NAME="metadata" model-entity="JarFolder"/>
+      <FOLDER NAME="naming" model-entity="JarFolder"/>
+      <FOLDER NAME="notification" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="support" model-entity="JarFolder"/>
+    </FOLDER>
+    <FOLDER NAME="jndi" model-entity="JarFolder">
+     <FOLDER NAME="support" model-entity="JarFolder"/>
+    </FOLDER>
+    <FOLDER NAME="remoting" model-entity="JarFolder">
+     <FOLDER NAME="rmi" model-entity="JarFolder"/>
+     <FOLDER NAME="soap" model-entity="JarFolder"/>
+     <FOLDER NAME="support" model-entity="JarFolder"/>
+    </FOLDER>
+    <FOLDER NAME="scheduling" model-entity="JarFolder">
+     <FOLDER NAME="backportconcurrent" model-entity="JarFolder"/>
+     <FOLDER NAME="concurrent" model-entity="JarFolder"/>
+     <FOLDER NAME="support" model-entity="JarFolder"/>
+     <FOLDER NAME="timer" model-entity="JarFolder"/>
+    </FOLDER>
+    <FOLDER NAME="scripting" model-entity="JarFolder">
+     <FOLDER NAME="bsh" model-entity="JarFolder"/>
+     <FOLDER NAME="config" model-entity="JarFolder"/>
+     <FOLDER NAME="groovy" model-entity="JarFolder"/>
+     <FOLDER NAME="jruby" model-entity="JarFolder"/>
+     <FOLDER NAME="support" model-entity="JarFolder"/>
+    </FOLDER>
+    <FOLDER NAME="stereotype" model-entity="JarFolder"/>
+    <FOLDER NAME="ui" model-entity="JarFolder">
+     <FOLDER NAME="context" model-entity="JarFolder">
+      <FOLDER NAME="support" model-entity="JarFolder"/>
+     </FOLDER>
+    </FOLDER>
+    <FOLDER NAME="validation" model-entity="JarFolder"/>
+   </FOLDER>
+  </FOLDER>
+ </file-system>
+ <file-system NAME="lib-spring-core-2.5.5.jar"
+  location="/home/fsla/work/java/eclipse-workspace-helios/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/spring-core-2.5.5.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+  <FOLDER NAME="org" model-entity="JarFolder">
+   <FOLDER NAME="springframework" model-entity="JarFolder">
+    <FOLDER NAME="asm" model-entity="JarFolder">
+     <FOLDER NAME="commons" model-entity="JarFolder"/>
+     <FOLDER NAME="signature" model-entity="JarFolder"/>
+    </FOLDER>
+    <FOLDER NAME="core" model-entity="JarFolder">
+     <FOLDER NAME="annotation" model-entity="JarFolder"/>
+     <FOLDER NAME="enums" model-entity="JarFolder"/>
+     <FOLDER NAME="io" model-entity="JarFolder">
+      <FOLDER NAME="support" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="style" model-entity="JarFolder"/>
+     <FOLDER NAME="task" model-entity="JarFolder">
+      <FOLDER NAME="support" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="type" model-entity="JarFolder">
+      <FOLDER NAME="classreading" model-entity="JarFolder"/>
+      <FOLDER NAME="filter" model-entity="JarFolder"/>
+     </FOLDER>
+    </FOLDER>
+    <FOLDER NAME="metadata" model-entity="JarFolder">
+     <FOLDER NAME="commons" model-entity="JarFolder"/>
+    </FOLDER>
+    <FOLDER NAME="util" model-entity="JarFolder">
+     <FOLDER NAME="comparator" model-entity="JarFolder"/>
+     <FOLDER NAME="xml" model-entity="JarFolder"/>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+ </file-system>
+ <file-system NAME="lib-spring-web-2.5.5.jar"
+  location="/home/fsla/work/java/eclipse-workspace-helios/minoas/gr.sch.ira.minoas/WebContent/WEB-INF/lib/spring-web-2.5.5.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+  <FOLDER NAME="org" model-entity="JarFolder">
+   <FOLDER NAME="springframework" model-entity="JarFolder">
+    <FOLDER NAME="remoting" model-entity="JarFolder">
+     <FOLDER NAME="caucho" model-entity="JarFolder"/>
+     <FOLDER NAME="httpinvoker" model-entity="JarFolder"/>
+     <FOLDER NAME="jaxrpc" model-entity="JarFolder">
+      <FOLDER NAME="support" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="jaxws" model-entity="JarFolder"/>
+    </FOLDER>
+    <FOLDER NAME="web" model-entity="JarFolder">
+     <FOLDER NAME="context" model-entity="JarFolder">
+      <FOLDER NAME="request" model-entity="JarFolder"/>
+      <FOLDER NAME="support" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="filter" model-entity="JarFolder"/>
+     <FOLDER NAME="jsf" model-entity="JarFolder">
+      <FOLDER NAME="el" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="util" model-entity="JarFolder"/>
+    </FOLDER>
    </FOLDER>
   </FOLDER>
  </file-system>
