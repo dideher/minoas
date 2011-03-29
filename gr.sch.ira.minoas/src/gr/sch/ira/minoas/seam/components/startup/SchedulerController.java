@@ -2,6 +2,7 @@ package gr.sch.ira.minoas.seam.components.startup;
 
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.async.DisposalCleanupProcessor;
+import gr.sch.ira.minoas.seam.components.async.LeaveActivactionProcessor;
 import gr.sch.ira.minoas.seam.components.async.LeaveCleanupProcessor;
 import gr.sch.ira.minoas.seam.components.async.SecondmentCleanupProcessor;
 import gr.sch.ira.minoas.seam.components.async.ServiceAllocationCleanupProcessor;
@@ -29,6 +30,8 @@ public class SchedulerController extends BaseDatabaseAwareSeamComponent {
     
     private static final long DISPOSAL_CLEANUP_INTERVAL = 1200000;
     
+    private static final long LEAVE_ACTIVATION_INTERVAL = 1200000;
+    
     @In(create=true, value="secondmentCleanupProcessor")
     private SecondmentCleanupProcessor secondmentCleanupProcessor;
     
@@ -38,6 +41,10 @@ public class SchedulerController extends BaseDatabaseAwareSeamComponent {
     @In(create=true, value="disposalCleanupProcessor")
     private DisposalCleanupProcessor disposalCleanupProcessor;
     
+    
+    @In(create=true, value="leaveActivationProcessor")
+    private LeaveActivactionProcessor leaveActivationProcessor;
+    
     @In(create=true, value="serviceAllocationCleanupProcessor")
     private ServiceAllocationCleanupProcessor serviceAllocationCleanupProcessor;
     
@@ -45,6 +52,7 @@ public class SchedulerController extends BaseDatabaseAwareSeamComponent {
     private QuartzTriggerHandle leaveCleanupProcessorHandler;
     private QuartzTriggerHandle disposalCleanupProcessorHandler;
     private QuartzTriggerHandle serviceAllocationCleanupProcessorHandler;
+    private QuartzTriggerHandle leaveActivationProcessorHandler;
 	/**
      * Comment for <code>serialVersionUID</code>
      */
@@ -72,10 +80,18 @@ public class SchedulerController extends BaseDatabaseAwareSeamComponent {
             info("scheduled #0", serviceAllocationCleanupProcessorHandler.getTrigger().getFullName());
         }
         
+        if(leaveActivationProcessor!=null) {
+            leaveActivationProcessorHandler = leaveActivationProcessor.scheduleSecondmentCleanup(new Date(), LEAVE_ACTIVATION_INTERVAL, null);
+            info("scheduled #0", leaveActivationProcessorHandler.getTrigger().getFullName());
+        }
+        
         } catch(Exception ex) {
             error("failed to schedule jobs due to an exception #0", ex, ex.getMessage());
         }
     }
+
+
+  
     
 //    @Destroy
 //    public void destroy() {
