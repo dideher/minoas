@@ -2,9 +2,11 @@ package gr.sch.ira.minoas.seam.components.management;
 
 import gr.sch.ira.minoas.model.core.SchoolYear;
 import gr.sch.ira.minoas.model.core.Unit;
+import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employement.Disposal;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
+import gr.sch.ira.minoas.model.employement.Leave;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.ServiceAllocation;
 import gr.sch.ira.minoas.model.employement.TeachingHourCDR;
@@ -293,6 +295,32 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
         }
 
         /* WE NEED TO ADD LEAVES */
+        
+        Collection<Leave> activeLeaves = coreSearching.getActiveLeaves(em);
+        info("found #0 totally active leaves.", activeLeaves.size());
+        for(Leave activeLeave : activeLeaves) {
+            Employee employeeWithLeave = activeLeave.getEmployee();
+            /* fix the common leave message */
+            StringBuffer sb = new StringBuffer();
+            sb.append("Άδεια τύπου  ");
+            sb.append(activeLeave.getLeaveType());
+            sb.append(" απο τις ");
+            sb.append(df.format(activeLeave.getEstablished()));
+            sb.append(" μέχρι και  ");
+            sb.append(df.format(activeLeave.getDueTo()));
+            
+            Collection<TeachingHourCDR> employeeCDRs = coreSearching.getEmployeeTeachingHoursCDRs(em, currentSchoolYear, employeeWithLeave);
+            for(TeachingHourCDR employeeCDR : employeeCDRs) {
+                TeachingHourCDR cdr = new TeachingHourCDR();
+                cdr.setCdrType(TeachingHourCDRType.LEAVE);
+                cdr.setComment(sb.toString());
+                cdr.setEmployee(employeeWithLeave);
+                cdr.setHours(0);
+                cdr.setSchoolYear(currentSchoolYear);
+                cdr.setUnit(employeeCDR.getUnit());
+                cdr.setLeave(activeLeave);
+            }
+         }
 
         em.flush();
         long finished = System.currentTimeMillis();
