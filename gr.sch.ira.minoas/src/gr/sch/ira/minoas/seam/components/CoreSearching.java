@@ -110,9 +110,8 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     
     @Transactional(TransactionPropagationType.REQUIRED)
     @SuppressWarnings("unchecked")
-    public Collection<Leave> getActiveLeaves(EntityManager em, SchoolYear schoolYear) {
-        return getEntityManager(em).createQuery("SELECT l FROM Leave l WHERE l.active IS TRUE AND l.schoolYear=:schoolYear")
-                .setParameter("schoolYear", schoolYear).getResultList();
+    public Collection<Leave> getActiveLeaves(EntityManager em) {
+        return getEntityManager(em).createQuery("SELECT l FROM Leave l WHERE l.active IS TRUE").getResultList();
     }
 
     /**
@@ -1062,8 +1061,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 
     @SuppressWarnings("unchecked")
     public Collection<TeachingHourCDR> getTeachingHoursCDRs(EntityManager entityManager, SchoolYear schoolYear) {
-        info("searching for teaching hour CDRs during school year #0", schoolYear);
-        List return_value = getEntityManager(entityManager).createQuery(
+        List<TeachingHourCDR> return_value = getEntityManager(entityManager).createQuery(
                 "SELECT t FROM TeachingHourCDR t WHERE t.schoolYear=:schoolYear")
                 .setParameter("schoolYear", schoolYear).getResultList();
         info("found totally #0 CDRs", return_value.size());
@@ -1073,8 +1071,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     @SuppressWarnings("unchecked")
     public Collection<TeachingHourCDR> getEmployeeTeachingHoursCDRs(EntityManager entityManager, SchoolYear schoolYear,
             Employee employee) {
-        info("searching for teaching hour CDRs of employee #0 during school year #1", employee, schoolYear);
-        List return_value = getEntityManager(entityManager).createQuery(
+        List<TeachingHourCDR> return_value = getEntityManager(entityManager).createQuery(
                 "SELECT t FROM TeachingHourCDR t WHERE t.schoolYear=:schoolYear " + "AND t.employee=:employee")
                 .setParameter("schoolYear", schoolYear).setParameter("employee", employee).getResultList();
         info("found totally #0 CDRs", return_value.size());
@@ -1084,8 +1081,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     @SuppressWarnings("unchecked")
     public Collection<TeachingHourCDR> getSchoolTeachingHoursCDRs(EntityManager entityManager, SchoolYear schoolYear,
             Unit unit) {
-        info("searching for teaching hour CDRs in unit #0 during school year #1", unit, schoolYear);
-        List return_value = getEntityManager(entityManager).createQuery(
+        List<TeachingHourCDR> return_value = getEntityManager(entityManager).createQuery(
                 "SELECT t FROM TeachingHourCDR t WHERE t.schoolYear=:schoolYear " + "AND t.unit=:unit")
                 .setParameter("schoolYear", schoolYear).setParameter("unit", unit).getResultList();
         info("found totally #0 CDRs", return_value.size());
