@@ -105,6 +105,21 @@
 							viewId="/school/school-employments-analysis-component.xhtml" />
 
 					</rich:tab>
+					
+					<rich:tab>
+						<f:facet name="label">
+							<h:outputText value="**** Νεα Τρέχουσα Κατάσταση *****" />
+						</f:facet>
+						<a4j:support event="ontabenter" eventsQueue="lala2"
+							reRender="school-employments-analysis2"
+							action="#{schoolReport.generateEmploymentsCDRReport}"
+							ajaxSingle="true">
+						</a4j:support>
+
+						<a4j:include id="school-employments-analysis2"
+							viewId="/school/school-employments-cdr-analysis-component.xhtml" />
+
+					</rich:tab>
 					<rich:tab>
 						<f:facet name="label">
 							<h:outputText value="Αναλυτική Τρέχουσα Κατάσταση" />

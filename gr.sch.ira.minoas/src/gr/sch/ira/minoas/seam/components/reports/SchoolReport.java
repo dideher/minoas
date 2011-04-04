@@ -9,6 +9,7 @@ import gr.sch.ira.minoas.model.employement.Leave;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.ServiceAllocation;
 import gr.sch.ira.minoas.model.employement.ServiceAllocationType;
+import gr.sch.ira.minoas.model.employement.TeachingHourCDR;g
 import gr.sch.ira.minoas.seam.components.home.SchoolHome;
 import gr.sch.ira.minoas.seam.components.reports.resource.DisposalReportItem;
 import gr.sch.ira.minoas.seam.components.reports.resource.EmployeeReportItem;
@@ -41,6 +42,128 @@ import org.jboss.seam.annotations.datamodel.DataModel;
 @Name(value = "schoolReport")
 @Scope(ScopeType.CONVERSATION)
 public class SchoolReport extends BaseReport {
+    
+    public final class TeachingHourCRDReportItem {
+        
+        private String comment;
+        
+        private Integer hours;
+        
+        
+        
+        public TeachingHourCRDReportItem(TeachingHourCDR cdr) {
+            super();
+            setHours(cdr.getHours());
+            setComment(comment);
+        }
+
+
+
+        /**
+         * @return the comment
+         */
+        public String getComment() {
+            return comment;
+        }
+
+
+
+        /**
+         * @param comment the comment to set
+         */
+        public void setComment(String comment) {
+            this.comment = comment;
+        }
+
+
+
+        /**
+         * @return the hours
+         */
+        public Integer getHours() {
+            return hours;
+        }
+
+
+
+        /**
+         * @param hours the hours to set
+         */
+        public void setHours(Integer hours) {
+            this.hours = hours;
+        }
+    }
+    
+    public final class EmployeeSchoolCDRReportItem {
+        /**
+         * @param employee
+         */
+        public EmployeeSchoolCDRReportItem(EmployeeReportItem employee) {
+            super();
+            this.employee = employee;
+        }
+
+
+        private EmployeeReportItem employee;
+        
+        private Collection<TeachingHourCRDReportItem> employeeCRS = new ArrayList<SchoolReport.TeachingHourCRDReportItem>();
+        
+        private Integer totalHours;
+        
+        
+        public TeachingHourCDR addCDR(TeachingHourCDR employeeCDR) {
+            getEmployeeCRS().add(new TeachingHourCRDReportItem(employeeCDR));
+            return employeeCDR;
+        }
+
+
+        /**
+         * @return the employee
+         */
+        public EmployeeReportItem getEmployee() {
+            return employee;
+        }
+
+
+        /**
+         * @param employee the employee to set
+         */
+        public void setEmployee(EmployeeReportItem employee) {
+            this.employee = employee;
+        }
+
+
+        /**
+         * @return the employeeCRS
+         */
+        public Collection<TeachingHourCRDReportItem> getEmployeeCRS() {
+            return employeeCRS;
+        }
+
+
+        /**
+         * @param employeeCRS the employeeCRS to set
+         */
+        public void setEmployeeCRS(Collection<TeachingHourCRDReportItem> employeeCRS) {
+            this.employeeCRS = employeeCRS;
+        }
+
+
+        /**
+         * @return the totalHours
+         */
+        public Integer getTotalHours() {
+            return totalHours;
+        }
+
+
+        /**
+         * @param totalHours the totalHours to set
+         */
+        public void setTotalHours(Integer totalHours) {
+            this.totalHours = totalHours;
+        }
+    }
     
     /**
      * Comment for <code>serialVersionUID</code>
@@ -528,6 +651,21 @@ public class SchoolReport extends BaseReport {
 
 	}
 
+	public void generateEmploymentsCDRReport() {
+	    long started = System.currentTimeMillis(), finished;
+        info("generating employments cdr report ");
+        Date today = DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH);
+        SchoolYear activeSchoolYear = getCoreSearching().getActiveSchoolYear(getEntityManager());
+        Collection<TeachingHourCDR> schoolsCDRS = getCoreSearching().getSchoolTeachingHoursCDRs(getEntityManager(), activeSchoolYear, schoolHome.getInstance());
+        
+        for(TeachingHourCDR cdr : schoolsCDRS) {
+            
+        }
+        
+        finished = System.currentTimeMillis();
+        info("report has been generated in #0 [ms]", (finished - started));
+	}
+	
 	public void generateReport() {
 
 		long started = System.currentTimeMillis(), finished;
