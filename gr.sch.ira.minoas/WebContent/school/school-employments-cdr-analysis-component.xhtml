@@ -22,18 +22,20 @@
 				<h:outputText
 					value="Παρακάτω εμφανίζεται όλο το διδακτικό προσωπικού που προσφέρει ή δεν προσφέρει διδακτικό έργο στην μονάδα. To προσωπικό που εμφανίζεται στην κατάσταση ανήκει οργανικά στην μονάδα ή έχει τοποθετηθεί στην μονάδα με οποιαδήποτε ιδιότητα." />
 				<rich:spacer height="5" />
-
-				<a4j:repeat var="_group" value="#{schoolEmployments}">
-					<rich:panel rendered="#{_group.size() gt 0}">
+				
+				<a4j:repeat var="_group" value="#{schoolGroupedEmployeeCDRs}">
+					<rich:panel>
 						<f:facet name="header">
-							<h:outputText value="#{_group.specializationGroup.title}" />
+							<h:outputText value="#{_group.groupTitle}" />
 						</f:facet>
-
-						<rich:dataTable var="_schoolRegularEmployment" value="#{_group.items}"
+						
+						
+						<rich:dataTable var="employeeCDRs" value="#{_group.groupEmployees}"
 							sortMode="multi" border="0" rowKeyVar="_row"
 							onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
 							onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
 							width="100%">
+							
 							<f:facet name="header">
 								<rich:columnGroup>
 									<rich:column style="text-align:center">
@@ -73,11 +75,11 @@
 								<h:outputText styleClass="fieldValueText" value="#{_row+1}" />
 							</rich:column>
 							<rich:column style="text-align:center">
-								<h:outputText value="#{_schoolRegularEmployment.employeeCode}" />
+								<h:outputText value="#{employeeCDRs.employee.employeeCode}" />
 							</rich:column>
 							<rich:column>
 								<a4j:commandLink action="selectEmployee"
-									value="#{_schoolRegularEmployment.employeeLastName}">
+									value="#{employeeCDRs.employee.employeeLastName}">
 									<f:setPropertyActionListener
 										value="#{_schoolRegularEmployment.id}"
 										target="#{employeeHome.id}" />
@@ -86,7 +88,7 @@
 							</rich:column>
 							<rich:column>
 								<a4j:commandLink action="selectEmployee"
-									value="#{_schoolRegularEmployment.employeeFirstName}">
+									value="#{employeeCDRs.employee.employeeFirstName}">
 									<f:setPropertyActionListener
 										value="#{_schoolRegularEmployment.id}"
 										target="#{employeeHome.id}" />
@@ -95,17 +97,17 @@
 							</rich:column>
 							<rich:column>
 								<h:outputText
-									value="#{_schoolRegularEmployment.employeeFatherName}" />
+									value="#{employeeCDRs.employee.employeeFatherName}" />
 							</rich:column>
 
 							<rich:column>
 								<h:outputText
-									value="#{_schoolRegularEmployment.employeeSpecializationID}" />
+									value="#{employeeCDRs.employee.employeeSpecializationID}" />
 							</rich:column>
 
 							<rich:column>
 								<h:outputText
-									value="#{messages[_schoolRegularEmployment.employeeTypeKey]}" />
+									value="#{messages[employeeCDRs.employee.employeeTypeKey]}" />
 								<f:facet name="footer">
 								<s:div style="text-align:right">
 									<h:outputText value="Σύνολα : " style="font-weight:bold;" />
@@ -115,47 +117,54 @@
 
 							<rich:column style="text-align:right">
 								<h:outputText
-									value="#{_schoolRegularEmployment.employeeMandatoryHours}" />
+									value="#{employeeCDRs.employee.employeeMandatoryHours}" />
 								<f:facet name="footer">
 								<s:div style="text-align:right">
-									<h:outputText value="#{_group.mandatoryHours}" style="color:green;font-weight:bold;" />
+									<h:outputText value="#{_group.groupRequiredTeachingHours}" style="color:green;font-weight:bold;" />
 								</s:div>
 								</f:facet>
 							</rich:column>
 							<rich:column style="text-align:right">
 								<h:outputText styleClass="fieldValueText"
-									value="#{_schoolRegularEmployment.employeeFinalWorkingHours}" />
+									value="#{employeeCDRs.employee.employeeFinalWorkingHours}" />
 								<f:facet name="footer">
 									<s:div style="text-align:right">
-									<h:outputText value="#{_group.availableHours}" style="color:green;font-weight:bold; text-align:right" />
+									<h:outputText value="#{_group.groupAvailableTeachingHours}" style="color:green;font-weight:bold; text-align:right" />
 									</s:div>
 								</f:facet>
 							</rich:column>
 							<rich:column style="text-align:left">
+							 
 									<rich:dataGrid onRowMouseOver="this.style.backgroundColor='#A5F3CB'" width="100%"
-											onRowMouseOut="this.style.backgroundColor='#{a4jSkin.rowBackgroundColor}'" value="#{_schoolRegularEmployment.employmentComments}" var="_employmentComment">
-										<h:outputText value="#{_employmentComment}" styleClass="fieldValueText"/>
+											onRowMouseOut="this.style.backgroundColor='#{a4jSkin.rowBackgroundColor}'" value="#{employeeCDRs.employeeCDRS}" var="cdr">
+										<h:outputText value="#{cdr.comment}" styleClass="fieldValueText"  rendered="#{!(cdr.type eq 'EMPLOYMENT')}" />
 									</rich:dataGrid>
+									<!--
 								<f:facet name="footer">	
 								<s:div style="text-align:center">
 									<h:outputText value="Απαιτούμενες ώρες : " />
-										<h:outputText value="#{_group.requiredHours}" style="color:blue;font-weight:bold; text-align:right" />
+										<h:outputText value="_group.requiredHours" style="color:blue;font-weight:bold; text-align:right" />
 									<h:outputText value=", Πλ/Κν (+/-) : " />
-									<h:outputText rendered="#{!_group.hasMissingHours()}"
-										value="#{_group.missingHours}"
+									<h:outputText rendered="!_group.hasMissingHours()"
+										value="_group.missingHours"
 										style="color: blue;font-weight:bold;" />
-									<h:outputText rendered="#{_group.hasMissingHours()}"
-										value="#{_group.missingHours}"
+									<h:outputText rendered="_group.hasMissingHours()"
+										value="_group.missingHours"
 										style="color: red;font-weight:bold;" />
 								</s:div>
 								</f:facet>
+								-->
 							</rich:column>
-
-
-						</rich:dataTable>
-					</rich:panel>
-
+							
+				</rich:dataTable>
+						
+				</rich:panel>
 				</a4j:repeat>
+				
+				
+				
+				
+				
 			</h:panelGrid>
 		</rich:panel>
 	</h:form>
