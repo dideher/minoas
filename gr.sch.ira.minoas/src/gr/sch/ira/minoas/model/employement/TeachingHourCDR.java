@@ -223,4 +223,26 @@ public class TeachingHourCDR extends BaseIDModel {
     public void setUnit(Unit unit) {
         this.unit = unit;
     }
+
+    /**
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("TeachingHourCDR [schoolYear=");
+        builder.append(schoolYear);
+        builder.append(", unit=");
+        builder.append(unit);
+        builder.append(", hours=");
+        builder.append(hours);
+        builder.append(", employee=");
+        builder.append(employee);
+        builder.append(", cdrType=");
+        builder.append(cdrType);
+        builder.append(", comment=");
+        builder.append(comment);
+        builder.append("]");
+        return builder.toString();
+    }
 }
