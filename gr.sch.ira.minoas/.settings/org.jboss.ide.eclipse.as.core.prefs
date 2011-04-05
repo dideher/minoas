@@ -1,3 +1,3 @@
-#Thu Mar 31 14:51:03 EEST 2011
+#Tue Apr 05 21:04:44 EEST 2011
 eclipse.preferences.version=1
-org.jboss.ide.eclipse.as.core.singledeployable.deployableList=resources/gr.sch.ira.minoas-gand-ds.xml\nresources/gr.sch.ira.minoas-ds.xml\n
+org.jboss.ide.eclipse.as.core.singledeployable.deployableList=resources/gr.sch.ira.minoas-gand-ds.xml\nresources/gr.sch.ira.minoas-localhost-ds.xml\nresources/gr.sch.ira.minoas-ds.xml\n

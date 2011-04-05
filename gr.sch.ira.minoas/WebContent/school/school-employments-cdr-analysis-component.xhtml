@@ -9,7 +9,7 @@
 
 <ui:component>
 
-	<h:outputText value="Αυτή είναι η δοκιμαστική έκδοση ....." />
+	<h:outputText value="Τα δεδομένα της ανάλυσης είναι ακόμα υπο εξέταση. Δώστε τόπο στην οργή." />
 
 	<h:form>
 		<rich:panel>
@@ -120,13 +120,13 @@
 									value="#{employeeCDRs.employee.employeeMandatoryHours}" />
 								<f:facet name="footer">
 								<s:div style="text-align:right">
-									<h:outputText value="#{_group.groupRequiredTeachingHours}" style="color:green;font-weight:bold;" />
+									<h:outputText value="#{_group.groupMandatoryTeachingHours}" style="color:green;font-weight:bold;" />
 								</s:div>
 								</f:facet>
 							</rich:column>
 							<rich:column style="text-align:right">
 								<h:outputText styleClass="fieldValueText"
-									value="#{employeeCDRs.employee.employeeFinalWorkingHours}" />
+									value="#{employeeCDRs.totalHours}" />
 								<f:facet name="footer">
 									<s:div style="text-align:right">
 									<h:outputText value="#{_group.groupAvailableTeachingHours}" style="color:green;font-weight:bold; text-align:right" />
@@ -134,26 +134,26 @@
 								</f:facet>
 							</rich:column>
 							<rich:column style="text-align:left">
-							 
-									<rich:dataGrid onRowMouseOver="this.style.backgroundColor='#A5F3CB'" width="100%"
+							 		
+									<rich:dataGrid onRowMouseOver="this.style.backgroundColor='#A5F3CB'" width="100%" rendered="#{employeeCDRs.hasCDRsOtherThanEmployment()}"
 											onRowMouseOut="this.style.backgroundColor='#{a4jSkin.rowBackgroundColor}'" value="#{employeeCDRs.employeeCDRS}" var="cdr">
-										<h:outputText value="#{cdr.comment}" styleClass="fieldValueText"  rendered="#{!(cdr.type eq 'EMPLOYMENT')}" />
+										<h:outputText value="#{cdr.comment}" styleClass="fieldValueText"  />
 									</rich:dataGrid>
-									<!--
+									
 								<f:facet name="footer">	
 								<s:div style="text-align:center">
 									<h:outputText value="Απαιτούμενες ώρες : " />
-										<h:outputText value="_group.requiredHours" style="color:blue;font-weight:bold; text-align:right" />
+										<h:outputText value="#{_group.groupRequiredTeachingHours}" style="color:blue;font-weight:bold; text-align:right" />
 									<h:outputText value=", Πλ/Κν (+/-) : " />
-									<h:outputText rendered="!_group.hasMissingHours()"
-										value="_group.missingHours"
+									<h:outputText rendered="#{!_group.hasMissingHours()}"
+										value="#{_group.missingHours}"
 										style="color: blue;font-weight:bold;" />
-									<h:outputText rendered="_group.hasMissingHours()"
-										value="_group.missingHours"
+									<h:outputText rendered="#{_group.hasMissingHours()}"
+										value="#{_group.missingHours}"
 										style="color: red;font-weight:bold;" />
 								</s:div>
 								</f:facet>
-								-->
+								
 							</rich:column>
 							
 				</rich:dataTable>
