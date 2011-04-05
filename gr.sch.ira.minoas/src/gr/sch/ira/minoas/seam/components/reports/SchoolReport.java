@@ -31,9 +31,11 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.time.DateUtils;
@@ -50,15 +52,22 @@ import org.jboss.seam.annotations.datamodel.DataModel;
 @Name(value = "schoolReport")
 @Scope(ScopeType.CONVERSATION)
 public class SchoolReport extends BaseReport {
-    
+
     public final class EmployeeSchoolCDRReportItem {
         private EmployeeReportItem employee;
 
-
         private Collection<TeachingHourCRDReportItem> employeeCDRS = new ArrayList<SchoolReport.TeachingHourCRDReportItem>();
-        
+
         private Integer totalHours = 0;
         
+        public boolean hasCDRsOtherThanEmployment() {
+            if(employeeCDRS.size()==1 && ((TeachingHourCRDReportItem)employeeCDRS.toArray()[0]).getType().equals("EMPLOYMENT")) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+
         /**
          * @param employee
          */
@@ -67,14 +76,12 @@ public class SchoolReport extends BaseReport {
             this.employee = employee;
             this.totalHours = 0;
         }
-        
-        
+
         public TeachingHourCDR addCDR(TeachingHourCDR employeeCDR) {
             getEmployeeCDRS().add(new TeachingHourCRDReportItem(employeeCDR));
             totalHours += employeeCDR.getHours();
             return employeeCDR;
         }
-
 
         /**
          * @return the employee
@@ -83,14 +90,12 @@ public class SchoolReport extends BaseReport {
             return employee;
         }
 
-
         /**
          * @return the employeeCRS
          */
         public Collection<TeachingHourCRDReportItem> getEmployeeCDRS() {
             return employeeCDRS;
         }
-
 
         /**
          * @return the totalHours
@@ -99,14 +104,12 @@ public class SchoolReport extends BaseReport {
             return totalHours;
         }
 
-
         /**
          * @param employee the employee to set
          */
         public void setEmployee(EmployeeReportItem employee) {
             this.employee = employee;
         }
-
 
         /**
          * @param employeeCRS the employeeCRS to set
@@ -115,7 +118,6 @@ public class SchoolReport extends BaseReport {
             this.employeeCDRS = employeeCRS;
         }
 
-
         /**
          * @param totalHours the totalHours to set
          */
@@ -123,16 +125,16 @@ public class SchoolReport extends BaseReport {
             this.totalHours = totalHours;
         }
     }
-    
+
     public final class GroupedEmployeesCDRItem {
-        
-        private Integer groupAvailableTeachingHours = 0;
-        
+
         private HashMap<Integer, EmployeeSchoolCDRReportItem> groupEmployeesCache = new LinkedHashMap<Integer, SchoolReport.EmployeeSchoolCDRReportItem>();
-        
+
         private Integer groupRequiredTeachingHours = 0;
         
-       private String groupTitle;
+        private Integer groupMandatoryTeachingHours = 0;
+
+        private String groupTitle;
 
         /**
          * @param groupTitle
@@ -146,32 +148,49 @@ public class SchoolReport extends BaseReport {
 
         public void addEmployeeCDRs(EmployeeSchoolCDRReportItem item) {
             this.groupEmployeesCache.put(item.getEmployee().getEmployeeID(), item);
-            this.groupAvailableTeachingHours += item.getTotalHours();
+            groupMandatoryTeachingHours += item.getEmployee().getEmployeeMandatoryHours();
         }
 
         public EmployeeSchoolCDRReportItem getEmployeeCDRReportItem(Integer employeeID) {
             return groupEmployeesCache.get(employeeID);
         }
 
-        /**
-         * @return the groupAvailableTeachingHours
-         */
-        public Integer getGroupAvailableTeachingHours() {
-            return groupAvailableTeachingHours;
+       public Integer getGroupAvailableTeachingHours() {
+            int returnValue = 0;
+            for(EmployeeSchoolCDRReportItem item : groupEmployeesCache.values()) {
+                returnValue += item.getTotalHours();
+            }
+            return Integer.valueOf(returnValue);
         }
+       
+       
 
         /**
          * @return the groupEmployees
          */
         public Collection<EmployeeSchoolCDRReportItem> getGroupEmployees() {
-            return new ArrayList<SchoolReport.EmployeeSchoolCDRReportItem>(groupEmployeesCache.values());
-        }
+            List<SchoolReport.EmployeeSchoolCDRReportItem> returnValue = new ArrayList<SchoolReport.EmployeeSchoolCDRReportItem>(groupEmployeesCache.values());
+            Collections.sort(returnValue, new Comparator<SchoolReport.EmployeeSchoolCDRReportItem>() {
+                public int compare(EmployeeSchoolCDRReportItem o1, EmployeeSchoolCDRReportItem o2) {
+                    return o1.getEmployee().getEmployeeLastName().compareTo(o2.getEmployee().getEmployeeLastName());
+                }
+            });
+            return returnValue;
+         }
 
         /**
          * @return the groupRequiredTeachingHours
          */
         public Integer getGroupRequiredTeachingHours() {
             return groupRequiredTeachingHours;
+        }
+        
+        public Integer getMissingHours() {
+            return getGroupAvailableTeachingHours()-groupRequiredTeachingHours;
+        }
+        
+        public boolean hasMissingHours() {
+            return getMissingHours() > 0;
         }
 
         /**
@@ -181,14 +200,7 @@ public class SchoolReport extends BaseReport {
             return groupTitle;
         }
 
-        /**
-         * @param groupAvailableTeachingHours the groupAvailableTeachingHours to set
-         */
-        private void setGroupAvailableTeachingHours(Integer groupAvailableTeachingHours) {
-            this.groupAvailableTeachingHours = groupAvailableTeachingHours;
-        }
-        
-        /**
+       /**
          * @param groupRequiredTeachingHours the groupRequiredTeachingHours to set
          */
         private void setGroupRequiredTeachingHours(Integer groupRequiredTeachingHours) {
@@ -201,26 +213,31 @@ public class SchoolReport extends BaseReport {
         private void setGroupTitle(String groupTitle) {
             this.groupTitle = groupTitle;
         }
-    }
-    
-    public final class TeachingHourCRDReportItem {
-        
-        private String comment;
-        
-        private Integer hours;
-        
-        private String type;
+
+        /**
+         * @return the groupMandatoryTeachingHours
+         */
+        public Integer getGroupMandatoryTeachingHours() {
+            return groupMandatoryTeachingHours;
+        }
 
         
-        
+    }
+
+    public final class TeachingHourCRDReportItem {
+
+        private String comment;
+
+        private Integer hours;
+
+        private String type;
+
         public TeachingHourCRDReportItem(TeachingHourCDR cdr) {
             super();
             setHours(cdr.getHours());
             setComment(cdr.getComment());
             setType(cdr.getCdrType().toString());
         }
-
-
 
         /**
          * @return the comment
@@ -229,16 +246,12 @@ public class SchoolReport extends BaseReport {
             return comment;
         }
 
-
-
         /**
          * @return the hours
          */
         public Integer getHours() {
             return hours;
         }
-
-
 
         /**
          * @param comment the comment to set
@@ -247,16 +260,12 @@ public class SchoolReport extends BaseReport {
             this.comment = comment;
         }
 
-
-
         /**
          * @param hours the hours to set
          */
         public void setHours(Integer hours) {
             this.hours = hours;
         }
-
-
 
         /**
          * @return the type
@@ -265,8 +274,6 @@ public class SchoolReport extends BaseReport {
             return type;
         }
 
-
-
         /**
          * @param type the type to set
          */
@@ -274,902 +281,911 @@ public class SchoolReport extends BaseReport {
             this.type = type;
         }
     }
-    
+
     /**
      * Comment for <code>serialVersionUID</code>
      */
     private static final long serialVersionUID = 1L;
-    
 
-	private DateFormat dateFormat;
+    private DateFormat dateFormat;
 
-	@DataModel(value = "incomingDisposals")
-	private Collection<DisposalReportItem> incomingDisposals;
+    @DataModel(value = "incomingDisposals")
+    private Collection<DisposalReportItem> incomingDisposals;
 
-	@DataModel(value = "incomingSecondments")
-	private Collection<SecondmentItem> incomingSecondments;
+    @DataModel(value = "incomingSecondments")
+    private Collection<SecondmentItem> incomingSecondments;
 
-	@DataModel(value = "incomingServiceAllocations")
-	private Collection<ServiceAllocationItem> incomingServiceAllocations;
+    @DataModel(value = "incomingServiceAllocations")
+    private Collection<ServiceAllocationItem> incomingServiceAllocations;
 
-	@DataModel(value = "schoolOutgoingDisposals")
-	private Collection<DisposalReportItem> outcomingDisposals;
+    @DataModel(value = "schoolOutgoingDisposals")
+    private Collection<DisposalReportItem> outcomingDisposals;
 
-	@DataModel(value = "schoolOutgoingSecondments")
-	private Collection<SecondmentItem> outcomingSecondments;
+    @DataModel(value = "schoolOutgoingSecondments")
+    private Collection<SecondmentItem> outcomingSecondments;
 
-	@DataModel(value = "schoolOutgoingServiceAllocations")
-	private Collection<ServiceAllocationItem> outcomingServiceAllocations;
+    @DataModel(value = "schoolOutgoingServiceAllocations")
+    private Collection<ServiceAllocationItem> outcomingServiceAllocations;
 
-	@DataModel(value = "schoolGroupedEmployeeCDRs")
-	private Collection<GroupedEmployeesCDRItem> schoolGroupedEmployeeCDRs;
+    @DataModel(value = "schoolGroupedEmployeeCDRs")
+    private Collection<GroupedEmployeesCDRItem> schoolGroupedEmployeeCDRs;
 
-	@DataModel(value = "schoolChiefs")
-	private Collection<ServiceAllocationItem> schoolChiefs;
+    @DataModel(value = "schoolChiefs")
+    private Collection<ServiceAllocationItem> schoolChiefs;
 
-	@DataModel(value = "schoolDeputyEmployees")
-	private Collection<EmployeeReportItem> schoolDeputyEmployees;
+    @DataModel(value = "schoolDeputyEmployees")
+    private Collection<EmployeeReportItem> schoolDeputyEmployees;
 
-	@DataModel(value = "schoolDeputyEmployments")
-	private Collection<EmploymentReportItem> schoolDeputyEmployments;
-	
-	@DataModel(value = "schoolEmployments")
-	private SchoolUniversalEmployments schoolEmployments;
+    @DataModel(value = "schoolDeputyEmployments")
+    private Collection<EmploymentReportItem> schoolDeputyEmployments;
 
-	@In
-	private SchoolHome schoolHome;
+    @DataModel(value = "schoolEmployments")
+    private SchoolUniversalEmployments schoolEmployments;
 
-	@DataModel(value = "schoolHourlyBasedEmployments")
-	private Collection<EmploymentReportItem> schoolHourlyBasedEmployments;
+    @In
+    private SchoolHome schoolHome;
 
-	@DataModel(value = "schoolLeaves")
-	private Collection<LeaveReportItem> schoolLeaves;
-	
-	@DataModel(value = "schoolRegularBasedEmployments")
-	private Collection<EmploymentReportItem> schoolRegularBasedEmployments;
+    @DataModel(value = "schoolHourlyBasedEmployments")
+    private Collection<EmploymentReportItem> schoolHourlyBasedEmployments;
 
+    @DataModel(value = "schoolLeaves")
+    private Collection<LeaveReportItem> schoolLeaves;
 
-	@DataModel(value = "schoolRegularEmployments")
-	private SchoolUniversalEmployments schoolRegularEmployments;
+    @DataModel(value = "schoolRegularBasedEmployments")
+    private Collection<EmploymentReportItem> schoolRegularBasedEmployments;
 
-	
-	@DataModel(value = "schoolRegularsEmployees")
-	private Collection<EmployeeReportItem> schoolRegularsEmployees;
+    @DataModel(value = "schoolRegularEmployments")
+    private SchoolUniversalEmployments schoolRegularEmployments;
 
-	/**
-	 * 
-	 */
-	public SchoolReport() {
-		dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-	}
+    @DataModel(value = "schoolRegularsEmployees")
+    private Collection<EmployeeReportItem> schoolRegularsEmployees;
 
-	private String constructComment(Disposal disposal) {
-		StringBuffer sb = new StringBuffer();
-		sb.append("Διάθεση απο τις ");
-		sb.append(this.dateFormat.format(disposal.getEstablished()));
-		sb.append(" εως και ");
-		sb.append(this.dateFormat.format(disposal.getDueTo()));
-		sb.append(" στο/σε ");
-		sb.append(disposal.getDisposalUnit().getTitle());
-		sb.append(" για ");
-		sb.append(disposal.getHours());
-		sb.append(" ωρες και ");
-		sb.append(disposal.getDays());
-		sb.append(" ημέρες. ");
-		return sb.toString();
+    /**
+     * 
+     */
+    public SchoolReport() {
+        dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    }
 
-	}
+    private String constructComment(Disposal disposal) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("Διάθεση απο τις ");
+        sb.append(this.dateFormat.format(disposal.getEstablished()));
+        sb.append(" εως και ");
+        sb.append(this.dateFormat.format(disposal.getDueTo()));
+        sb.append(" στο/σε ");
+        sb.append(disposal.getDisposalUnit().getTitle());
+        sb.append(" για ");
+        sb.append(disposal.getHours());
+        sb.append(" ωρες και ");
+        sb.append(disposal.getDays());
+        sb.append(" ημέρες. ");
+        return sb.toString();
 
-	private String constructComment(Leave leave) {
-		StringBuffer sb = new StringBuffer();
-		sb.append("Άδεια τύπου ");
-		sb.append(getLocalizedMessage(leave.getLeaveType().getKey()));
-		sb.append(" απο τις ");
-		sb.append(this.dateFormat.format(leave.getEstablished()));
-		sb.append(" εως και ");
-		sb.append(this.dateFormat.format(leave.getDueTo()));
-		sb.append(". ");
-		return sb.toString();
-	}
+    }
 
-	private String constructComment(Secondment secondment) {
-		StringBuffer sb = new StringBuffer();
-		sb.append("Αποσπάση απο τις ");
-		sb.append(this.dateFormat.format(secondment.getEstablished()));
-		sb.append(" στο/σε ");
-		sb.append(secondment.getTargetUnit().getTitle());
-		sb.append(". ");
-		return sb.toString();
-	}
+    private String constructComment(Leave leave) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("Άδεια τύπου ");
+        sb.append(getLocalizedMessage(leave.getLeaveType().getKey()));
+        sb.append(" απο τις ");
+        sb.append(this.dateFormat.format(leave.getEstablished()));
+        sb.append(" εως και ");
+        sb.append(this.dateFormat.format(leave.getDueTo()));
+        sb.append(". ");
+        return sb.toString();
+    }
 
-	private String constructComment(ServiceAllocation serviceAllocation) {
-		StringBuffer sb = new StringBuffer();
-		sb.append("Θητεία τύπου ");
-		sb.append(getLocalizedMessage(serviceAllocation.getServiceType().getKey()));
-		sb.append(" απο τις ");
-		sb.append(this.dateFormat.format(serviceAllocation.getEstablished()));
-		sb.append(" εως και ");
-		sb.append(this.dateFormat.format(serviceAllocation.getDueTo()));
-		sb.append(" στο/σε ");
-		sb.append(serviceAllocation.getServiceUnit().getTitle());
-		sb.append(". ");
-		return sb.toString();
-	}
+    private String constructComment(Secondment secondment) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("Αποσπάση απο τις ");
+        sb.append(this.dateFormat.format(secondment.getEstablished()));
+        sb.append(" στο/σε ");
+        sb.append(secondment.getTargetUnit().getTitle());
+        sb.append(". ");
+        return sb.toString();
+    }
 
-	public SchoolUniversalEmploymentItem constructDeputyEmploymentInfoItem(Employment employment) {
-		Date today = DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH);
-		SchoolUniversalEmploymentItem item = new SchoolUniversalEmploymentItem(employment);
+    private String constructComment(ServiceAllocation serviceAllocation) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("Θητεία τύπου ");
+        sb.append(getLocalizedMessage(serviceAllocation.getServiceType().getKey()));
+        sb.append(" απο τις ");
+        sb.append(this.dateFormat.format(serviceAllocation.getEstablished()));
+        sb.append(" εως και ");
+        sb.append(this.dateFormat.format(serviceAllocation.getDueTo()));
+        sb.append(" στο/σε ");
+        sb.append(serviceAllocation.getServiceUnit().getTitle());
+        sb.append(". ");
+        return sb.toString();
+    }
 
-		/* check if the employment is associated with a disposal */
-		Collection<Disposal> disposals = getCoreSearching().getEmployeeActiveDisposals(getEntityManager(),
-				employment.getEmployee(), today);
-		if (disposals != null && disposals.size() > 0) {
-			StringBuffer sb = new StringBuffer();
-			int total_hours = 0;
-			for (Disposal d : disposals) {
-				sb.append(constructComment(d));
-				total_hours += d.getHours();
-			}
-			item.setEmployeeFinalWorkingHours(item.getEmployeeFinalWorkingHours() - total_hours);
-			item.addEmploymentComment(sb.toString());
-		}
+    public SchoolUniversalEmploymentItem constructDeputyEmploymentInfoItem(Employment employment) {
+        Date today = DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH);
+        SchoolUniversalEmploymentItem item = new SchoolUniversalEmploymentItem(employment);
 
-		/* check if the employment is associated with a service allocation */
-		ServiceAllocation serviceAllocation = getCoreSearching().getEmployeeActiveServiceAllocation(getEntityManager(),
-				employment.getEmployee(), today);
-		if (serviceAllocation != null) {
-			/* the employment is overriden by a service allocation */
-			item.setEmployeeFinalWorkingHours(serviceAllocation.getWorkingHoursOnRegularPosition());
-			item.addEmploymentComment(constructComment(serviceAllocation));
-		}
+        /* check if the employment is associated with a disposal */
+        Collection<Disposal> disposals = getCoreSearching().getEmployeeActiveDisposals(getEntityManager(),
+                employment.getEmployee(), today);
+        if (disposals != null && disposals.size() > 0) {
+            StringBuffer sb = new StringBuffer();
+            int total_hours = 0;
+            for (Disposal d : disposals) {
+                sb.append(constructComment(d));
+                total_hours += d.getHours();
+            }
+            item.setEmployeeFinalWorkingHours(item.getEmployeeFinalWorkingHours() - total_hours);
+            item.addEmploymentComment(sb.toString());
+        }
 
-		/* check if the employment is associated with a leave */
-		Leave leave = getCoreSearching().getEmployeeActiveLeave(getEntityManager(), employment.getEmployee(), today);
-		if (leave != null) {
-			/* the employment is overriden by a service allocation */
-			item.setEmployeeFinalWorkingHours(0);
-			item.addEmploymentComment(constructComment(leave));
-		}
+        /* check if the employment is associated with a service allocation */
+        ServiceAllocation serviceAllocation = getCoreSearching().getEmployeeActiveServiceAllocation(getEntityManager(),
+                employment.getEmployee(), today);
+        if (serviceAllocation != null) {
+            /* the employment is overriden by a service allocation */
+            item.setEmployeeFinalWorkingHours(serviceAllocation.getWorkingHoursOnRegularPosition());
+            item.addEmploymentComment(constructComment(serviceAllocation));
+        }
 
-		return item;
-	}
+        /* check if the employment is associated with a leave */
+        Leave leave = getCoreSearching().getEmployeeActiveLeave(getEntityManager(), employment.getEmployee(), today);
+        if (leave != null) {
+            /* the employment is overriden by a service allocation */
+            item.setEmployeeFinalWorkingHours(0);
+            item.addEmploymentComment(constructComment(leave));
+        }
 
-	private String constructIncomingComment(Secondment secondment) {
-		StringBuffer sb = new StringBuffer();
-		sb.append("Αποσπασμένος/νη στην μονάδα απο τις ");
-		sb.append(this.dateFormat.format(secondment.getEstablished()));
-		sb.append(" απο το/την ");
-		sb.append(secondment.getSourceUnit().getTitle());
-		sb.append(". ");
-		return sb.toString();
-	}
+        return item;
+    }
 
-	private String constructIncomingComment(ServiceAllocation serviceAllocation) {
-		StringBuffer sb = new StringBuffer();
-		sb.append("Υπηρετή στην μονάδα με θητεία τύπου ");
-		sb.append(getLocalizedMessage(serviceAllocation.getServiceType().getKey()));
-		sb.append(" απο τις ");
-		sb.append(this.dateFormat.format(serviceAllocation.getEstablished()));
-		sb.append(" εως και ");
-		sb.append(this.dateFormat.format(serviceAllocation.getDueTo()));
-		sb.append(" απο το/την ");
-		if (serviceAllocation.getSourceUnit() != null && serviceAllocation.getSourceUnit().getTitle() != null) {
-			sb.append(serviceAllocation.getSourceUnit().getTitle());
-		} else
-			sb.append("**** δεν βρέθηκε ****");
-		sb.append(". ");
-		return sb.toString();
-	}
+    private String constructIncomingComment(Secondment secondment) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("Αποσπασμένος/νη στην μονάδα απο τις ");
+        sb.append(this.dateFormat.format(secondment.getEstablished()));
+        sb.append(" απο το/την ");
+        sb.append(secondment.getSourceUnit().getTitle());
+        sb.append(". ");
+        return sb.toString();
+    }
 
-	private String constructIncommingComment(Disposal disposal) {
-		StringBuffer sb = new StringBuffer();
-		sb.append("Υπηρετή στην μονάδα λόγω διάθεσης απο τις ");
-		sb.append(this.dateFormat.format(disposal.getEstablished()));
-		sb.append(" εως και ");
-		sb.append(this.dateFormat.format(disposal.getDueTo()));
-		sb.append(" απο την μονάδα ");
-		if(disposal.getAffectedEmployment()!=null) {
-		    /* disposal is associated with an employment, proceed normaly */
-		    sb.append(disposal.getAffectedEmployment().getSchool().getTitle());
-		}
-		else {
-		    /* disposal is associated with a secondment. This means that the
-		     * employee has no regular employment and the disposal affects
-		     * the employee's secondment target.
-		     * 
-		     * A typical example is an employee from other PYSDE occupied on a target
-		     * school unit due to an secodment having a disposal to other unit for
-		     * few hours.
-		     */
-		    sb.append(disposal.getAffectedSecondment().getTargetUnit().getTitle());
-		}
-		sb.append(" για ");
-		sb.append(disposal.getHours());
-		sb.append(" ώρες και ");
-		sb.append(disposal.getDays());
-		sb.append(" ημέρες. ");
-		return sb.toString();
+    private String constructIncomingComment(ServiceAllocation serviceAllocation) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("Υπηρετή στην μονάδα με θητεία τύπου ");
+        sb.append(getLocalizedMessage(serviceAllocation.getServiceType().getKey()));
+        sb.append(" απο τις ");
+        sb.append(this.dateFormat.format(serviceAllocation.getEstablished()));
+        sb.append(" εως και ");
+        sb.append(this.dateFormat.format(serviceAllocation.getDueTo()));
+        sb.append(" απο το/την ");
+        if (serviceAllocation.getSourceUnit() != null && serviceAllocation.getSourceUnit().getTitle() != null) {
+            sb.append(serviceAllocation.getSourceUnit().getTitle());
+        } else
+            sb.append("**** δεν βρέθηκε ****");
+        sb.append(". ");
+        return sb.toString();
+    }
 
-	}
+    private String constructIncommingComment(Disposal disposal) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("Υπηρετή στην μονάδα λόγω διάθεσης απο τις ");
+        sb.append(this.dateFormat.format(disposal.getEstablished()));
+        sb.append(" εως και ");
+        sb.append(this.dateFormat.format(disposal.getDueTo()));
+        sb.append(" απο την μονάδα ");
+        if (disposal.getAffectedEmployment() != null) {
+            /* disposal is associated with an employment, proceed normaly */
+            sb.append(disposal.getAffectedEmployment().getSchool().getTitle());
+        } else {
+            /* disposal is associated with a secondment. This means that the
+             * employee has no regular employment and the disposal affects
+             * the employee's secondment target.
+             * 
+             * A typical example is an employee from other PYSDE occupied on a target
+             * school unit due to an secodment having a disposal to other unit for
+             * few hours.
+             */
+            sb.append(disposal.getAffectedSecondment().getTargetUnit().getTitle());
+        }
+        sb.append(" για ");
+        sb.append(disposal.getHours());
+        sb.append(" ώρες και ");
+        sb.append(disposal.getDays());
+        sb.append(" ημέρες. ");
+        return sb.toString();
 
-	public SchoolUniversalEmploymentItem constructRegularEmploymentInfoItem(Employment regularEmployment) {
-		Date today = DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH);
-		School referenceSchool = schoolHome.getInstance();
-		SchoolUniversalEmploymentItem item = new SchoolUniversalEmploymentItem(regularEmployment);
+    }
 
-		/* check if the employment is associated with an secondment */
-		Secondment s = getCoreSearching().getEmployeeActiveSecondment(getEntityManager(),
-				regularEmployment.getEmployee(), today);
-		if (s != null) {
-			/* the employment is overriden by a secondment */
-			item.setEmployeeFinalWorkingHours(0);
-			item.addEmploymentComment(constructComment(s));
-		}
+    public SchoolUniversalEmploymentItem constructRegularEmploymentInfoItem(Employment regularEmployment) {
+        Date today = DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH);
+        School referenceSchool = schoolHome.getInstance();
+        SchoolUniversalEmploymentItem item = new SchoolUniversalEmploymentItem(regularEmployment);
 
-		/* check if the employment is associated with a disposal */
-		Collection<Disposal> disposals = getCoreSearching().getEmployeeActiveDisposals(getEntityManager(),
-				regularEmployment.getEmployee(), today);
-		if (disposals != null && disposals.size() > 0) {
-			int total_hours = 0;
-			for (Disposal d : disposals) {
-				item.addEmploymentComment(constructComment(d));
-				/* substract hours if the displosal is outgoing from this very school unit */
-				if ((d.getAffectedSecondment() != null && d.getAffectedSecondment().getTargetUnit().getId().equals(
-						referenceSchool.getId()))
-						|| (d.getAffectedEmployment() != null && d.getAffectedEmployment().getSchool().getId().equals(
-								referenceSchool.getId())))
-					total_hours += d.getHours();
-			}
-			item.setEmployeeFinalWorkingHours(item.getEmployeeFinalWorkingHours() - total_hours);
-		}
+        /* check if the employment is associated with an secondment */
+        Secondment s = getCoreSearching().getEmployeeActiveSecondment(getEntityManager(),
+                regularEmployment.getEmployee(), today);
+        if (s != null) {
+            /* the employment is overriden by a secondment */
+            item.setEmployeeFinalWorkingHours(0);
+            item.addEmploymentComment(constructComment(s));
+        }
 
-		/* check if the employment is associated with a service allocation */
-		ServiceAllocation serviceAllocation = getCoreSearching().getEmployeeActiveServiceAllocation(getEntityManager(),
-				regularEmployment.getEmployee(), today);
-		if (serviceAllocation != null) {
-			/* the employment is overriden by a service allocation */
-			if (serviceAllocation.getServiceUnit().getId().equals(referenceSchool.getId())) {
-				/* since the reference school is currently the service allocation target unit 
-				 * use the appropriate working hours element.
-				 */
-				item.setEmployeeFinalWorkingHours(serviceAllocation.getWorkingHoursOnServicingPosition());
-			} else {
-				item.setEmployeeFinalWorkingHours(serviceAllocation.getWorkingHoursOnRegularPosition());
-			}
-			item.addEmploymentComment(constructComment(serviceAllocation));
-		}
+        /* check if the employment is associated with a disposal */
+        Collection<Disposal> disposals = getCoreSearching().getEmployeeActiveDisposals(getEntityManager(),
+                regularEmployment.getEmployee(), today);
+        if (disposals != null && disposals.size() > 0) {
+            int total_hours = 0;
+            for (Disposal d : disposals) {
+                item.addEmploymentComment(constructComment(d));
+                /* substract hours if the displosal is outgoing from this very school unit */
+                if ((d.getAffectedSecondment() != null && d.getAffectedSecondment().getTargetUnit().getId()
+                        .equals(referenceSchool.getId())) ||
+                        (d.getAffectedEmployment() != null && d.getAffectedEmployment().getSchool().getId()
+                                .equals(referenceSchool.getId())))
+                    total_hours += d.getHours();
+            }
+            item.setEmployeeFinalWorkingHours(item.getEmployeeFinalWorkingHours() - total_hours);
+        }
 
-		/* check if the employment is associated with a leave */
-		Leave leave = getCoreSearching().getEmployeeActiveLeave(getEntityManager(), regularEmployment.getEmployee(),
-				today);
-		if (leave != null) {
-			/* the employment is overriden by a service allocation */
-			item.setEmployeeFinalWorkingHours(0);
-			item.addEmploymentComment(constructComment(leave));
-		}
+        /* check if the employment is associated with a service allocation */
+        ServiceAllocation serviceAllocation = getCoreSearching().getEmployeeActiveServiceAllocation(getEntityManager(),
+                regularEmployment.getEmployee(), today);
+        if (serviceAllocation != null) {
+            /* the employment is overriden by a service allocation */
+            if (serviceAllocation.getServiceUnit().getId().equals(referenceSchool.getId())) {
+                /* since the reference school is currently the service allocation target unit 
+                 * use the appropriate working hours element.
+                 */
+                item.setEmployeeFinalWorkingHours(serviceAllocation.getWorkingHoursOnServicingPosition());
+            } else {
+                item.setEmployeeFinalWorkingHours(serviceAllocation.getWorkingHoursOnRegularPosition());
+            }
+            item.addEmploymentComment(constructComment(serviceAllocation));
+        }
 
-		return item;
+        /* check if the employment is associated with a leave */
+        Leave leave = getCoreSearching().getEmployeeActiveLeave(getEntityManager(), regularEmployment.getEmployee(),
+                today);
+        if (leave != null) {
+            /* the employment is overriden by a service allocation */
+            item.setEmployeeFinalWorkingHours(0);
+            item.addEmploymentComment(constructComment(leave));
+        }
 
-	}
+        return item;
 
-	public void fetchSchoolChiefs() {
-		Date today = DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH);
-		schoolChiefs = convertServiceAllocationCollection(getCoreSearching().getSchoolIncomingServiceAllocationsOfType(
-				getEntityManager(), schoolHome.getInstance(), today,
-				Arrays.asList(ServiceAllocationType.SCHOOL_HEADMASTER, ServiceAllocationType.SCHOOL_SUBHEADMASTER)));
-	}
+    }
 
-	public void generateEmploymentsCDRReport() {
-	    long started = System.currentTimeMillis(), finished;
+    public void fetchSchoolChiefs() {
+        Date today = DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH);
+        schoolChiefs = convertServiceAllocationCollection(getCoreSearching().getSchoolIncomingServiceAllocationsOfType(
+                getEntityManager(), schoolHome.getInstance(), today,
+                Arrays.asList(ServiceAllocationType.SCHOOL_HEADMASTER, ServiceAllocationType.SCHOOL_SUBHEADMASTER)));
+    }
+
+    public void generateEmploymentsCDRReport() {
+        long started = System.currentTimeMillis(), finished;
         info("generating employments cdr report ");
         Date today = DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH);
-        
-         
+
         SchoolYear activeSchoolYear = getCoreSearching().getActiveSchoolYear(getEntityManager());
         // fetch all cdrs that are associated with our unit
-        Collection<TeachingHourCDR> schoolsCDRS = getCoreSearching().getSchoolTeachingHoursCDRs(getEntityManager(), activeSchoolYear, schoolHome.getInstance());
+        Collection<TeachingHourCDR> schoolsCDRS = getCoreSearching().getSchoolTeachingHoursCDRs(getEntityManager(),
+                activeSchoolYear, schoolHome.getInstance());
         // fetch school teaching req
-        Collection<TeachingRequirement> teachingReqs = getCoreSearching().getSchoolTeachingRequirement(getEntityManager(), schoolHome.getInstance(), activeSchoolYear);
+        Collection<TeachingRequirement> teachingReqs = getCoreSearching().getSchoolTeachingRequirement(
+                getEntityManager(), schoolHome.getInstance(), activeSchoolYear);
+        Map<SpecializationGroup, Integer> teachingReqsCache = new HashMap<SpecializationGroup, Integer>();
+        for(TeachingRequirement r : teachingReqs) {
+            teachingReqsCache.put(r.getSpecialization(), r.getHours());
+        }
         // fetch all specialization groups
-        Collection<SpecializationGroup> specializationGruops = getCoreSearching().getSpecializationGroups(activeSchoolYear, getEntityManager());
+        Collection<SpecializationGroup> specializationGruops = getCoreSearching().getSpecializationGroups(
+                activeSchoolYear, getEntityManager());
         Map<Specialization, SpecializationGroup> specializationGroupCache = new HashMap<Specialization, SpecializationGroup>();
-        for(SpecializationGroup group : specializationGruops) {
-            for(Specialization sp : group.getSpecializations()) {
+        for (SpecializationGroup group : specializationGruops) {
+            for (Specialization sp : group.getSpecializations()) {
                 specializationGroupCache.put(sp, group);
             }
         }
-        
+
         Map<String, GroupedEmployeesCDRItem> groupCache = new LinkedHashMap<String, SchoolReport.GroupedEmployeesCDRItem>();
-        
+
         Map<Employee, EmployeeSchoolCDRReportItem> cache = new HashMap<Employee, SchoolReport.EmployeeSchoolCDRReportItem>();
-        for(TeachingHourCDR cdr : schoolsCDRS) {
+        for (TeachingHourCDR cdr : schoolsCDRS) {
             info("handling #0 cdr", cdr);
             Employee employee = cdr.getEmployee();
             SpecializationGroup sgroup = specializationGroupCache.get(employee.getLastSpecialization());
             /* if the employee's specialization does not map to a concrete specialization group, then
              * just use the specialization title as group title.
              */
-            String groupTitle = (sgroup != null) ? sgroup.getTitle() : employee.getLastSpecialization().getTitle(); 
+            String groupTitle = (sgroup != null) ? sgroup.getTitle() : employee.getLastSpecialization().getTitle();
             GroupedEmployeesCDRItem group = groupCache.get(groupTitle);
-            if(group==null) {
+            if (group == null) {
                 /* no such group so far */
-                group = new GroupedEmployeesCDRItem(groupTitle, 0); /* we need to add the required hours here */
+                Integer reqHours = 0;
+                if(sgroup!=null) {
+                    reqHours = teachingReqsCache.get(sgroup);
+                    
+                }
+                group = new GroupedEmployeesCDRItem(groupTitle, reqHours !=null ? reqHours : 0); /* we need to add the required hours here */
                 groupCache.put(groupTitle, group);
             }
             EmployeeSchoolCDRReportItem item = group.getEmployeeCDRReportItem(employee.getId());
-            if(item==null) {
+            if (item == null) {
                 item = new EmployeeSchoolCDRReportItem(new EmployeeReportItem(cdr.getEmployee()));
                 group.addEmployeeCDRs(item);
             }
             item.addCDR(cdr);
         }
-        
-        
-        setSchoolGroupedEmployeeCDRs(new ArrayList<SchoolReport.GroupedEmployeesCDRItem>(groupCache.values()));
+
+        List<SchoolReport.GroupedEmployeesCDRItem> result = new ArrayList<SchoolReport.GroupedEmployeesCDRItem>(
+                groupCache.values());
+        Collections.sort(result, new Comparator<SchoolReport.GroupedEmployeesCDRItem>() {
+
+            public int compare(GroupedEmployeesCDRItem o1, GroupedEmployeesCDRItem o2) {
+                return o1.getGroupTitle().compareTo(o2.getGroupTitle());
+            }
+
+        });
+        setSchoolGroupedEmployeeCDRs(result);
         finished = System.currentTimeMillis();
         info("report has been generated in #0 [ms]", (finished - started));
-	}
-
-	public void generateEmploymentsReport() {
-
-		/*
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * CURRENT PROBLEM THERE ARE SECONDMENT WITHOUT EMPLOYMENT (FROM OTHER PYSDE) AND DISPOSALS (NO AFFECTED EMPLOYMENT CAUSE THE 
-		 * DISPOSAL OVERRIDES A SECONDMENT).
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 */
-
-		long started = System.currentTimeMillis(), finished;
-		info("generating report school employment analysis");
-		Date today = DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH);
-
-		SchoolYear activeSchoolYear = getCoreSearching().getActiveSchoolYear(getEntityManager());
-
-		SchoolUniversalEmployments reportData = new SchoolUniversalEmployments(getCoreSearching()
-				.getSchoolTeachingRequirement(getEntityManager(), schoolHome.getInstance(), activeSchoolYear),
-				getCoreSearching().getSpecializationGroups(activeSchoolYear, getEntityManager()));
-
-		/* ************************************************************************************ */
-		/* REGULAR EMPLOYMENTS 																	*/
-		/* ************************************************************************************ */
-
-		Collection<Employment> schoolRegularEmployments = getCoreSearching().getSchoolEmploymentsOfType(
-				getEntityManager(), activeSchoolYear, schoolHome.getInstance(), EmploymentType.REGULAR);
-
-		for (Employment employment : schoolRegularEmployments) {
-			reportData.add(constructRegularEmploymentInfoItem(employment));
-		}
-
-		/* ************************************************************************************ */
-		/* DEPUTY EMPLOYMENTS 																	*/
-		/* ************************************************************************************ */
-		Collection<Employment> schoolDeputyEmployments = getCoreSearching().getSchoolEmploymentsOfType(
-				getEntityManager(), activeSchoolYear, schoolHome.getInstance(), EmploymentType.DEPUTY);
-
-		for (Employment employment : schoolDeputyEmployments) {
-			reportData.add(constructDeputyEmploymentInfoItem(employment));
-		}
-
-		/* ************************************************************************************ */
-		/* HOURLY BASED EMPLOYMENTS 																	*/
-		/* ************************************************************************************ */
-		Collection<Employment> schoolHourlyBasedEmployments = getCoreSearching().getSchoolEmploymentsOfType(
-				getEntityManager(), activeSchoolYear, schoolHome.getInstance(), EmploymentType.HOURLYBASED);
-
-		for (Employment employment : schoolHourlyBasedEmployments) {
-			SchoolUniversalEmploymentItem item = new SchoolUniversalEmploymentItem(employment);
-			item.setEmployeeMandatoryHours(11);
-			/* check if the employment is associated with a leave */
-			Leave leave = getCoreSearching()
-					.getEmployeeActiveLeave(getEntityManager(), employment.getEmployee(), today);
-			if (leave != null) {
-				/* the employment is overriden by a service allocation */
-				item.setEmployeeFinalWorkingHours(0);
-				item.addEmploymentComment(constructComment(leave));
-			}
-
-			reportData.add(item);
-		}
-
-		/* now handle incomming employees */
-
-		/* secondments */
-		Collection<Secondment> incomingSecondents = getCoreSearching().getSchoolSecondments(getEntityManager(),
-				schoolHome.getInstance(), activeSchoolYear, today);
-		for (Secondment secondment : incomingSecondents) {
-			try {
-				SchoolUniversalEmploymentItem item = secondment.getAffectedEmployment() != null ? new SchoolUniversalEmploymentItem(
-						secondment)
-						: new SchoolUniversalEmploymentItem(secondment.getEmployee());
-				item.addEmploymentComment(constructIncomingComment(secondment));
-
-				if (secondment.getAffectedEmployment() == null) {
-					/* this is a special case of secondement when it is not
-					 * associated with an employment
-					 * 
-					 * This shit happens with secondments from other PYSDE
-					 */
-
-					if (secondment.getFinalWorkingHours() != null)
-						item.setEmployeeFinalWorkingHours(secondment.getFinalWorkingHours());
-					if (secondment.getMandatoryWorkingHours() != null)
-						item.setEmployeeMandatoryHours(secondment.getMandatoryWorkingHours());
-					//item.setEmployeeEmploymentEstablishedDate(employment.getEstablished());
-					//item.setEmployeeEmploymentTerminatedDate(employment.getTerminated());
-
-				}
-
-				/* check if the employment is associated with a disposal */
-				Collection<Disposal> disposals = getCoreSearching().getEmployeeActiveDisposals(getEntityManager(),
-						secondment.getEmployee(), today);
-				if (disposals != null && disposals.size() > 0) {
-					StringBuffer sb = new StringBuffer();
-					int total_hours = 0;
-					for (Disposal d : disposals) {
-						sb.append(constructComment(d));
-						total_hours += d.getHours();
-					}
-					item.setEmployeeFinalWorkingHours(item.getEmployeeFinalWorkingHours() - total_hours);
-					item.addEmploymentComment(sb.toString());
-				}
-
-				/* check if the employment is associated with a leave */
-				Leave leave = getCoreSearching().getEmployeeActiveLeave(getEntityManager(), secondment.getEmployee(),
-						today);
-				if (leave != null) {
-					/* the employment is overriden by a service allocation */
-					item.setEmployeeFinalWorkingHours(0);
-					item.addEmploymentComment(constructComment(leave));
-				}
-
-				reportData.add(item);
-			} catch (Exception ex) {
-				System.err.println(ex);
-				error("error with secondment #1", incomingSecondents);
-				continue;
-			}
-		}
-
-		Collection<Disposal> incomingDisposal = getCoreSearching().getSchoolDisposals(getEntityManager(),
-				schoolHome.getInstance(), activeSchoolYear, today, null);
-		for (Disposal disposal : incomingDisposal) {
-			try {
-				SchoolUniversalEmploymentItem item = new SchoolUniversalEmploymentItem(disposal);
-				item.addEmploymentComment(constructIncommingComment(disposal));
-				item.setEmployeeFinalWorkingHours(disposal.getHours());
-
-				/* check if the employment is associated with a leave */
-				Leave leave = getCoreSearching().getEmployeeActiveLeave(getEntityManager(), disposal.getEmployee(),
-						today);
-				if (leave != null) {
-					/* the employment is overriden by a service allocation */
-					item.setEmployeeFinalWorkingHours(0);
-					item.addEmploymentComment(constructComment(leave));
-				}
-
-				reportData.add(item);
-			} catch (Exception ex) {
-			    System.err.println(ex);
-			    ex.printStackTrace(System.err);
-				continue;
-			}
-		}
-
-		Collection<ServiceAllocation> incomingServiceAllocation = getCoreSearching()
-				.getSchoolIncomingServiceAllocations(getEntityManager(), schoolHome.getInstance(), today);
-		for (ServiceAllocation serviceAllocation : incomingServiceAllocation) {
-
-			/* check if the incoming service allocation has regular position in the school. 
-			 * If so, then it has been already handled.
-			 */
-			if (serviceAllocation.getServiceUnit() != null && serviceAllocation.getSourceUnit() != null
-					&& serviceAllocation.getServiceUnit().getId().equals(serviceAllocation.getSourceUnit().getId())) {
-				continue;
-			}
-			SchoolUniversalEmploymentItem item = new SchoolUniversalEmploymentItem(serviceAllocation);
-			item.addEmploymentComment(constructIncomingComment(serviceAllocation));
-			item.setEmployeeFinalWorkingHours(serviceAllocation.getWorkingHoursOnServicingPosition());
-
-			/* check if the employment is associated with a leave */
-			Leave leave = getCoreSearching().getEmployeeActiveLeave(getEntityManager(),
-					serviceAllocation.getEmployee(), today);
-			if (leave != null) {
-				/* the employment is overriden by a service allocation */
-				item.setEmployeeFinalWorkingHours(0);
-				item.addEmploymentComment(constructComment(leave));
-			}
-
-			reportData.add(item);
-
-		}
-
-		setSchoolEmployments(reportData);
-		finished = System.currentTimeMillis();
-		info("report has been generated in #0 [ms]", (finished - started));
-
-	}
-	
-	public void generateReport() {
-
-		long started = System.currentTimeMillis(), finished;
-		info("generating report ");
-		Date today = DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH);
-
-		SchoolYear activeSchoolYear = getCoreSearching().getActiveSchoolYear(getEntityManager());
-		schoolChiefs = convertServiceAllocationCollection(getCoreSearching().getSchoolIncomingServiceAllocationsOfType(
-				getEntityManager(), schoolHome.getInstance(), today,
-				Arrays.asList(ServiceAllocationType.SCHOOL_HEADMASTER, ServiceAllocationType.SCHOOL_SUBHEADMASTER)));
-
-		schoolRegularsEmployees = convertEmployeeCollection(getCoreSearching()
-				.getSchoolActiveEmployeesOfEmploymentType(getEntityManager(), schoolHome.getInstance(),
-						getCoreSearching().getActiveSchoolYear(getEntityManager()), today, EmploymentType.REGULAR));
-
-		schoolDeputyEmployees = convertEmployeeCollection(getCoreSearching().getSchoolActiveEmployeesOfEmploymentType(
-				getEntityManager(), schoolHome.getInstance(),
-				getCoreSearching().getActiveSchoolYear(getEntityManager()), today, EmploymentType.DEPUTY));
-
-		incomingSecondments = convertSecondmentCollection(getCoreSearching().getSchoolSecondments(getEntityManager(),
-				schoolHome.getInstance(), activeSchoolYear, today));
-
-		incomingServiceAllocations = convertServiceAllocationCollection(getCoreSearching()
-				.getSchoolIncomingServiceAllocations(getEntityManager(), schoolHome.getInstance(), today));
-
-		incomingDisposals = convertDisposalCollection(getCoreSearching().getSchoolDisposals(getEntityManager(),
-				schoolHome.getInstance(), activeSchoolYear, today, null));
-
-		outcomingSecondments = convertSecondmentCollection(getCoreSearching().getSchoolOutgoingSecondments(
-				getEntityManager(), schoolHome.getInstance(), activeSchoolYear, today));
-
-		schoolLeaves = convertLeaveCollection(getCoreSearching().getSchoolLeaves(getEntityManager(),
-				schoolHome.getInstance(), activeSchoolYear, today, null));
-
-		schoolRegularBasedEmployments = convertEmploymentCollection(getCoreSearching().getSchoolEmploymentsOfType(
-				getEntityManager(), activeSchoolYear, schoolHome.getInstance(), EmploymentType.REGULAR));
-
-		schoolDeputyEmployments = convertEmploymentCollection(getCoreSearching().getSchoolEmploymentsOfType(
-				getEntityManager(), activeSchoolYear, schoolHome.getInstance(), EmploymentType.DEPUTY));
-
-		schoolHourlyBasedEmployments = convertEmploymentCollection(getCoreSearching().getSchoolEmploymentsOfType(
-				getEntityManager(), activeSchoolYear, schoolHome.getInstance(), EmploymentType.HOURLYBASED));
-
-		outcomingServiceAllocations = convertServiceAllocationCollection(getCoreSearching()
-				.getSchoolReallyOutgoingServiceAllocations(getEntityManager(), schoolHome.getInstance(), today, null));
-
-		finished = System.currentTimeMillis();
-		info("report has been generated in #0 [ms]", (finished - started));
-
-	}
-
-	/**
-	 * @return the incomingDisposals
-	 */
-	public Collection<DisposalReportItem> getIncomingDisposals() {
-		return incomingDisposals;
-	}
-
-	/**
-	 * @return the incomingSecondments
-	 */
-	public Collection<SecondmentItem> getIncomingSecondments() {
-		return incomingSecondments;
-	}
-
-	/**
-	 * @return the incomingServiceAllocations
-	 */
-	public Collection<ServiceAllocationItem> getIncomingServiceAllocations() {
-		return incomingServiceAllocations;
-	}
-
-	/**
-	 * @return the outcomingDisposals
-	 */
-	public Collection<DisposalReportItem> getOutcomingDisposals() {
-		return outcomingDisposals;
-	}
-
-	/**
-	 * @return the outcomingSecondments
-	 */
-	public Collection<SecondmentItem> getOutcomingSecondments() {
-		return outcomingSecondments;
-	}
-
-	/**
-	 * @return the outcomingServiceAllocations
-	 */
-	public Collection<ServiceAllocationItem> getOutcomingServiceAllocations() {
-		return outcomingServiceAllocations;
-	}
-
-	/**
-	 * @return the schoolChiefs
-	 */
-	public Collection<ServiceAllocationItem> getSchoolChiefs() {
-		return schoolChiefs;
-	}
-
-	/**
-	 * @return the schoolDeputysEmployees
-	 */
-	public Collection<EmployeeReportItem> getSchoolDeputyEmployees() {
-		return schoolDeputyEmployees;
-	}
-
-	/**
-	 * @return the schoolDeputyEmployments
-	 */
-	public Collection<EmploymentReportItem> getSchoolDeputyEmployments() {
-		return schoolDeputyEmployments;
-	}
-
-	/**
-	 * @return the schoolEmployments
-	 */
-	public SchoolUniversalEmployments getSchoolEmployments() {
-		return schoolEmployments;
-	}
-
-	
-
-	/**
-	 * @return the schoolHourlyBasedEmployments
-	 */
-	public Collection<EmploymentReportItem> getSchoolHourlyBasedEmployments() {
-		return schoolHourlyBasedEmployments;
-	}
-
-	/**
-	 * @return the schoolLeaves
-	 */
-	public Collection<LeaveReportItem> getSchoolLeaves() {
-		return schoolLeaves;
-	}
-
-	/**
-	 * @return the schoolRegularBasedEmployments
-	 */
-	public Collection<EmploymentReportItem> getSchoolRegularBasedEmployments() {
-		return schoolRegularBasedEmployments;
-	}
-
-	/**
-	 * @return the schoolRegularEmployments
-	 */
-	public SchoolUniversalEmployments getSchoolRegularEmployments() {
-		return schoolRegularEmployments;
-	}
-
-	/**
-	 * @return the schoolRegularsEmployees
-	 */
-	public Collection<EmployeeReportItem> getSchoolRegularsEmployees() {
-		return schoolRegularsEmployees;
-	}
-
-	public void lookupDeputyEmployments() {
-		long started = System.currentTimeMillis(), finished;
-		SchoolYear activeSchoolYear = getCoreSearching().getActiveSchoolYear(getEntityManager());
-		info("deputy employee lookup in school unit #0 during school year #1", schoolHome.getInstance(),
-				activeSchoolYear);
-		Collection<Employment> deputyEmployments = getCoreSearching().getSchoolEmploymentsOfType(getEntityManager(),
-				activeSchoolYear, schoolHome.getInstance(), EmploymentType.DEPUTY);
-		schoolDeputyEmployments = new ArrayList<EmploymentReportItem>(deputyEmployments.size());
-		for (Employment employment : deputyEmployments) {
-			schoolDeputyEmployments.add(constructRegularEmploymentInfoItem(employment));
-		}
-		finished = System.currentTimeMillis();
-		info("lookup found #0 deputy employment(s) totally in #1 [ms]", schoolDeputyEmployments.size(),
-				(finished - started));
-	}
-
-	public void lookupHourlyBasedEmployments() {
-		long started = System.currentTimeMillis(), finished;
-		SchoolYear activeSchoolYear = getCoreSearching().getActiveSchoolYear(getEntityManager());
-		info("hourly based employee lookup in school unit #0 during school year #1", schoolHome.getInstance(),
-				activeSchoolYear);
-		schoolHourlyBasedEmployments = convertEmploymentCollection(getCoreSearching().getSchoolEmploymentsOfType(
-				getEntityManager(), activeSchoolYear, schoolHome.getInstance(), EmploymentType.HOURLYBASED));
-		finished = System.currentTimeMillis();
-		info("lookup found #0 hourly based employment(s) totally in #1 [ms]", schoolHourlyBasedEmployments.size(),
-				(finished - started));
-	}
-
-	public void lookupRegularEmployments() {
-
-
-		/*
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * CURRENT PROBLEM THERE ARE SECONDMENT WITHOUT EMPLOYMENT (FROM OTHER PYSDE) AND DISPOSALS (NO AFFECTED EMPLOYMENT CAUSE THE 
-		 * DISPOSAL OVERRIDES A SECONDMENT).
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 */
-
-		long started = System.currentTimeMillis(), finished;
-		info("generating report school employment analysis");
-		Date today = DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH);
-
-		SchoolYear activeSchoolYear = getCoreSearching().getActiveSchoolYear(getEntityManager());
-
-		SchoolUniversalEmployments reportData = new SchoolUniversalEmployments(getCoreSearching()
-				.getSchoolTeachingRequirement(getEntityManager(), schoolHome.getInstance(), activeSchoolYear),
-				getCoreSearching().getSpecializationGroups(activeSchoolYear, getEntityManager()));
-
-		/* ************************************************************************************ */
-		/* REGULAR EMPLOYMENTS 																	*/
-		/* ************************************************************************************ */
-
-		Collection<Employment> schoolRegularEmployments = getCoreSearching().getSchoolEmploymentsOfType(
-				getEntityManager(), activeSchoolYear, schoolHome.getInstance(), EmploymentType.REGULAR);
-
-		for (Employment employment : schoolRegularEmployments) {
-			reportData.add(constructRegularEmploymentInfoItem(employment));
-		}
-
-
-		setSchoolRegularEmployments(reportData);
-		finished = System.currentTimeMillis();
-		info("report has been generated in #0 [ms]", (finished - started));
-
-	
-		
-	}
-
-	/**
-	 * @param incomingDisposals the incomingDisposals to set
-	 */
-	public void setIncomingDisposals(Collection<DisposalReportItem> incomingDisposals) {
-		this.incomingDisposals = incomingDisposals;
-	}
-
-	/**
-	 * @param incomingSecondments the incomingSecondments to set
-	 */
-	public void setIncomingSecondments(Collection<SecondmentItem> incomingSecondments) {
-		this.incomingSecondments = incomingSecondments;
-	}
-
-	/**
-	 * @param incomingServiceAllocations the incomingServiceAllocations to set
-	 */
-	public void setIncomingServiceAllocations(Collection<ServiceAllocationItem> incomingServiceAllocations) {
-		this.incomingServiceAllocations = incomingServiceAllocations;
-	}
-
-	/**
-	 * @param outcomingDisposals the outcomingDisposals to set
-	 */
-	public void setOutcomingDisposals(Collection<DisposalReportItem> outcomingDisposals) {
-		this.outcomingDisposals = outcomingDisposals;
-	}
-
-	/**
-	 * @param outcomingSecondments the outcomingSecondments to set
-	 */
-	public void setOutcomingSecondments(Collection<SecondmentItem> outcomingSecondments) {
-		this.outcomingSecondments = outcomingSecondments;
-	}
-
-	/**
-	 * @param outcomingServiceAllocations the outcomingServiceAllocations to set
-	 */
-	public void setOutcomingServiceAllocations(Collection<ServiceAllocationItem> outcomingServiceAllocations) {
-		this.outcomingServiceAllocations = outcomingServiceAllocations;
-	}
-
-
-	/**
-	 * @param schoolChiefs the schoolChiefs to set
-	 */
-	public void setSchoolChiefs(Collection<ServiceAllocationItem> schoolChiefs) {
-		this.schoolChiefs = schoolChiefs;
-	}
-
-	/**
-	 * @param schoolDeputysEmployees the schoolDeputysEmployees to set
-	 */
-	public void setSchoolDeputyEmployees(Collection<EmployeeReportItem> schoolDeputysEmployees) {
-		this.schoolDeputyEmployees = schoolDeputysEmployees;
-	}
-
-	/**
-	 * @param schoolDeputyEmployments the schoolDeputyEmployments to set
-	 */
-	public void setSchoolDeputyEmployments(Collection<EmploymentReportItem> schoolDeputyEmployments) {
-		this.schoolDeputyEmployments = schoolDeputyEmployments;
-	}
-
-	/**
-	 * @param schoolEmployments the schoolEmployments to set
-	 */
-	public void setSchoolEmployments(SchoolUniversalEmployments schoolEmployments) {
-		this.schoolEmployments = schoolEmployments;
-	}
-
-	/**
-	 * @param schoolHourlyBasedEmployments the schoolHourlyBasedEmployments to set
-	 */
-	public void setSchoolHourlyBasedEmployments(Collection<EmploymentReportItem> schoolHourlyBasedEmployments) {
-		this.schoolHourlyBasedEmployments = schoolHourlyBasedEmployments;
-	}
-
-	/**
-	 * @param schoolLeaves the schoolLeaves to set
-	 */
-	public void setSchoolLeaves(Collection<LeaveReportItem> schoolLeaves) {
-		this.schoolLeaves = schoolLeaves;
-	}
-
-	/**
-	 * @param schoolRegularBasedEmployments the schoolRegularBasedEmployments to set
-	 */
-	public void setSchoolRegularBasedEmployments(Collection<EmploymentReportItem> schoolRegularBasedEmployments) {
-		this.schoolRegularBasedEmployments = schoolRegularBasedEmployments;
-	}
+        
+
+    }
+
+    public void generateEmploymentsReport() {
+
+        /*
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * CURRENT PROBLEM THERE ARE SECONDMENT WITHOUT EMPLOYMENT (FROM OTHER PYSDE) AND DISPOSALS (NO AFFECTED EMPLOYMENT CAUSE THE 
+         * DISPOSAL OVERRIDES A SECONDMENT).
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         */
+
+        long started = System.currentTimeMillis(), finished;
+        info("generating report school employment analysis");
+        Date today = DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH);
+
+        SchoolYear activeSchoolYear = getCoreSearching().getActiveSchoolYear(getEntityManager());
+
+        SchoolUniversalEmployments reportData = new SchoolUniversalEmployments(getCoreSearching()
+                .getSchoolTeachingRequirement(getEntityManager(), schoolHome.getInstance(), activeSchoolYear),
+                getCoreSearching().getSpecializationGroups(activeSchoolYear, getEntityManager()));
+
+        /* ************************************************************************************ */
+        /* REGULAR EMPLOYMENTS 																	*/
+        /* ************************************************************************************ */
+
+        Collection<Employment> schoolRegularEmployments = getCoreSearching().getSchoolEmploymentsOfType(
+                getEntityManager(), activeSchoolYear, schoolHome.getInstance(), EmploymentType.REGULAR);
+
+        for (Employment employment : schoolRegularEmployments) {
+            reportData.add(constructRegularEmploymentInfoItem(employment));
+        }
+
+        /* ************************************************************************************ */
+        /* DEPUTY EMPLOYMENTS 																	*/
+        /* ************************************************************************************ */
+        Collection<Employment> schoolDeputyEmployments = getCoreSearching().getSchoolEmploymentsOfType(
+                getEntityManager(), activeSchoolYear, schoolHome.getInstance(), EmploymentType.DEPUTY);
+
+        for (Employment employment : schoolDeputyEmployments) {
+            reportData.add(constructDeputyEmploymentInfoItem(employment));
+        }
+
+        /* ************************************************************************************ */
+        /* HOURLY BASED EMPLOYMENTS 																	*/
+        /* ************************************************************************************ */
+        Collection<Employment> schoolHourlyBasedEmployments = getCoreSearching().getSchoolEmploymentsOfType(
+                getEntityManager(), activeSchoolYear, schoolHome.getInstance(), EmploymentType.HOURLYBASED);
+
+        for (Employment employment : schoolHourlyBasedEmployments) {
+            SchoolUniversalEmploymentItem item = new SchoolUniversalEmploymentItem(employment);
+            item.setEmployeeMandatoryHours(11);
+            /* check if the employment is associated with a leave */
+            Leave leave = getCoreSearching()
+                    .getEmployeeActiveLeave(getEntityManager(), employment.getEmployee(), today);
+            if (leave != null) {
+                /* the employment is overriden by a service allocation */
+                item.setEmployeeFinalWorkingHours(0);
+                item.addEmploymentComment(constructComment(leave));
+            }
+
+            reportData.add(item);
+        }
+
+        /* now handle incomming employees */
+
+        /* secondments */
+        Collection<Secondment> incomingSecondents = getCoreSearching().getSchoolSecondments(getEntityManager(),
+                schoolHome.getInstance(), activeSchoolYear, today);
+        for (Secondment secondment : incomingSecondents) {
+            try {
+                SchoolUniversalEmploymentItem item = secondment.getAffectedEmployment() != null ? new SchoolUniversalEmploymentItem(
+                        secondment) : new SchoolUniversalEmploymentItem(secondment.getEmployee());
+                item.addEmploymentComment(constructIncomingComment(secondment));
+
+                if (secondment.getAffectedEmployment() == null) {
+                    /* this is a special case of secondement when it is not
+                     * associated with an employment
+                     * 
+                     * This shit happens with secondments from other PYSDE
+                     */
+
+                    if (secondment.getFinalWorkingHours() != null)
+                        item.setEmployeeFinalWorkingHours(secondment.getFinalWorkingHours());
+                    if (secondment.getMandatoryWorkingHours() != null)
+                        item.setEmployeeMandatoryHours(secondment.getMandatoryWorkingHours());
+                    //item.setEmployeeEmploymentEstablishedDate(employment.getEstablished());
+                    //item.setEmployeeEmploymentTerminatedDate(employment.getTerminated());
+
+                }
+
+                /* check if the employment is associated with a disposal */
+                Collection<Disposal> disposals = getCoreSearching().getEmployeeActiveDisposals(getEntityManager(),
+                        secondment.getEmployee(), today);
+                if (disposals != null && disposals.size() > 0) {
+                    StringBuffer sb = new StringBuffer();
+                    int total_hours = 0;
+                    for (Disposal d : disposals) {
+                        sb.append(constructComment(d));
+                        total_hours += d.getHours();
+                    }
+                    item.setEmployeeFinalWorkingHours(item.getEmployeeFinalWorkingHours() - total_hours);
+                    item.addEmploymentComment(sb.toString());
+                }
+
+                /* check if the employment is associated with a leave */
+                Leave leave = getCoreSearching().getEmployeeActiveLeave(getEntityManager(), secondment.getEmployee(),
+                        today);
+                if (leave != null) {
+                    /* the employment is overriden by a service allocation */
+                    item.setEmployeeFinalWorkingHours(0);
+                    item.addEmploymentComment(constructComment(leave));
+                }
+
+                reportData.add(item);
+            } catch (Exception ex) {
+                System.err.println(ex);
+                error("error with secondment #1", incomingSecondents);
+                continue;
+            }
+        }
+
+        Collection<Disposal> incomingDisposal = getCoreSearching().getSchoolDisposals(getEntityManager(),
+                schoolHome.getInstance(), activeSchoolYear, today, null);
+        for (Disposal disposal : incomingDisposal) {
+            try {
+                SchoolUniversalEmploymentItem item = new SchoolUniversalEmploymentItem(disposal);
+                item.addEmploymentComment(constructIncommingComment(disposal));
+                item.setEmployeeFinalWorkingHours(disposal.getHours());
+
+                /* check if the employment is associated with a leave */
+                Leave leave = getCoreSearching().getEmployeeActiveLeave(getEntityManager(), disposal.getEmployee(),
+                        today);
+                if (leave != null) {
+                    /* the employment is overriden by a service allocation */
+                    item.setEmployeeFinalWorkingHours(0);
+                    item.addEmploymentComment(constructComment(leave));
+                }
+
+                reportData.add(item);
+            } catch (Exception ex) {
+                System.err.println(ex);
+                ex.printStackTrace(System.err);
+                continue;
+            }
+        }
+
+        Collection<ServiceAllocation> incomingServiceAllocation = getCoreSearching()
+                .getSchoolIncomingServiceAllocations(getEntityManager(), schoolHome.getInstance(), today);
+        for (ServiceAllocation serviceAllocation : incomingServiceAllocation) {
+
+            /* check if the incoming service allocation has regular position in the school. 
+             * If so, then it has been already handled.
+             */
+            if (serviceAllocation.getServiceUnit() != null && serviceAllocation.getSourceUnit() != null &&
+                    serviceAllocation.getServiceUnit().getId().equals(serviceAllocation.getSourceUnit().getId())) {
+                continue;
+            }
+            SchoolUniversalEmploymentItem item = new SchoolUniversalEmploymentItem(serviceAllocation);
+            item.addEmploymentComment(constructIncomingComment(serviceAllocation));
+            item.setEmployeeFinalWorkingHours(serviceAllocation.getWorkingHoursOnServicingPosition());
+
+            /* check if the employment is associated with a leave */
+            Leave leave = getCoreSearching().getEmployeeActiveLeave(getEntityManager(),
+                    serviceAllocation.getEmployee(), today);
+            if (leave != null) {
+                /* the employment is overriden by a service allocation */
+                item.setEmployeeFinalWorkingHours(0);
+                item.addEmploymentComment(constructComment(leave));
+            }
+
+            reportData.add(item);
+
+        }
+
+        setSchoolEmployments(reportData);
+        finished = System.currentTimeMillis();
+        info("report has been generated in #0 [ms]", (finished - started));
+
+    }
+
+    public void generateReport() {
+
+        long started = System.currentTimeMillis(), finished;
+        info("generating report ");
+        Date today = DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH);
+
+        SchoolYear activeSchoolYear = getCoreSearching().getActiveSchoolYear(getEntityManager());
+        schoolChiefs = convertServiceAllocationCollection(getCoreSearching().getSchoolIncomingServiceAllocationsOfType(
+                getEntityManager(), schoolHome.getInstance(), today,
+                Arrays.asList(ServiceAllocationType.SCHOOL_HEADMASTER, ServiceAllocationType.SCHOOL_SUBHEADMASTER)));
+
+        schoolRegularsEmployees = convertEmployeeCollection(getCoreSearching()
+                .getSchoolActiveEmployeesOfEmploymentType(getEntityManager(), schoolHome.getInstance(),
+                        getCoreSearching().getActiveSchoolYear(getEntityManager()), today, EmploymentType.REGULAR));
+
+        schoolDeputyEmployees = convertEmployeeCollection(getCoreSearching().getSchoolActiveEmployeesOfEmploymentType(
+                getEntityManager(), schoolHome.getInstance(),
+                getCoreSearching().getActiveSchoolYear(getEntityManager()), today, EmploymentType.DEPUTY));
+
+        incomingSecondments = convertSecondmentCollection(getCoreSearching().getSchoolSecondments(getEntityManager(),
+                schoolHome.getInstance(), activeSchoolYear, today));
+
+        incomingServiceAllocations = convertServiceAllocationCollection(getCoreSearching()
+                .getSchoolIncomingServiceAllocations(getEntityManager(), schoolHome.getInstance(), today));
+
+        incomingDisposals = convertDisposalCollection(getCoreSearching().getSchoolDisposals(getEntityManager(),
+                schoolHome.getInstance(), activeSchoolYear, today, null));
+
+        outcomingSecondments = convertSecondmentCollection(getCoreSearching().getSchoolOutgoingSecondments(
+                getEntityManager(), schoolHome.getInstance(), activeSchoolYear, today));
+
+        schoolLeaves = convertLeaveCollection(getCoreSearching().getSchoolLeaves(getEntityManager(),
+                schoolHome.getInstance(), activeSchoolYear, today, null));
+
+        schoolRegularBasedEmployments = convertEmploymentCollection(getCoreSearching().getSchoolEmploymentsOfType(
+                getEntityManager(), activeSchoolYear, schoolHome.getInstance(), EmploymentType.REGULAR));
+
+        schoolDeputyEmployments = convertEmploymentCollection(getCoreSearching().getSchoolEmploymentsOfType(
+                getEntityManager(), activeSchoolYear, schoolHome.getInstance(), EmploymentType.DEPUTY));
+
+        schoolHourlyBasedEmployments = convertEmploymentCollection(getCoreSearching().getSchoolEmploymentsOfType(
+                getEntityManager(), activeSchoolYear, schoolHome.getInstance(), EmploymentType.HOURLYBASED));
+
+        outcomingServiceAllocations = convertServiceAllocationCollection(getCoreSearching()
+                .getSchoolReallyOutgoingServiceAllocations(getEntityManager(), schoolHome.getInstance(), today, null));
+
+        finished = System.currentTimeMillis();
+        info("report has been generated in #0 [ms]", (finished - started));
+
+    }
 
     /**
-	 * @param schoolRegularEmployments the schoolRegularEmployments to set
-	 */
-	public void setSchoolRegularEmployments(SchoolUniversalEmployments schoolRegularEmployments) {
-		this.schoolRegularEmployments = schoolRegularEmployments;
-	}
+     * @return the incomingDisposals
+     */
+    public Collection<DisposalReportItem> getIncomingDisposals() {
+        return incomingDisposals;
+    }
 
     /**
-	 * @param schoolRegularsEmployees the schoolRegularsEmployees to set
-	 */
-	public void setSchoolRegularsEmployees(Collection<EmployeeReportItem> schoolRegularsEmployees) {
-		this.schoolRegularsEmployees = schoolRegularsEmployees;
-	}
+     * @return the incomingSecondments
+     */
+    public Collection<SecondmentItem> getIncomingSecondments() {
+        return incomingSecondments;
+    }
+
+    /**
+     * @return the incomingServiceAllocations
+     */
+    public Collection<ServiceAllocationItem> getIncomingServiceAllocations() {
+        return incomingServiceAllocations;
+    }
+
+    /**
+     * @return the outcomingDisposals
+     */
+    public Collection<DisposalReportItem> getOutcomingDisposals() {
+        return outcomingDisposals;
+    }
+
+    /**
+     * @return the outcomingSecondments
+     */
+    public Collection<SecondmentItem> getOutcomingSecondments() {
+        return outcomingSecondments;
+    }
+
+    /**
+     * @return the outcomingServiceAllocations
+     */
+    public Collection<ServiceAllocationItem> getOutcomingServiceAllocations() {
+        return outcomingServiceAllocations;
+    }
+
+    /**
+     * @return the schoolChiefs
+     */
+    public Collection<ServiceAllocationItem> getSchoolChiefs() {
+        return schoolChiefs;
+    }
+
+    /**
+     * @return the schoolDeputysEmployees
+     */
+    public Collection<EmployeeReportItem> getSchoolDeputyEmployees() {
+        return schoolDeputyEmployees;
+    }
+
+    /**
+     * @return the schoolDeputyEmployments
+     */
+    public Collection<EmploymentReportItem> getSchoolDeputyEmployments() {
+        return schoolDeputyEmployments;
+    }
+
+    /**
+     * @return the schoolEmployments
+     */
+    public SchoolUniversalEmployments getSchoolEmployments() {
+        return schoolEmployments;
+    }
+
+    /**
+     * @return the schoolHourlyBasedEmployments
+     */
+    public Collection<EmploymentReportItem> getSchoolHourlyBasedEmployments() {
+        return schoolHourlyBasedEmployments;
+    }
+
+    /**
+     * @return the schoolLeaves
+     */
+    public Collection<LeaveReportItem> getSchoolLeaves() {
+        return schoolLeaves;
+    }
+
+    /**
+     * @return the schoolRegularBasedEmployments
+     */
+    public Collection<EmploymentReportItem> getSchoolRegularBasedEmployments() {
+        return schoolRegularBasedEmployments;
+    }
+
+    /**
+     * @return the schoolRegularEmployments
+     */
+    public SchoolUniversalEmployments getSchoolRegularEmployments() {
+        return schoolRegularEmployments;
+    }
+
+    /**
+     * @return the schoolRegularsEmployees
+     */
+    public Collection<EmployeeReportItem> getSchoolRegularsEmployees() {
+        return schoolRegularsEmployees;
+    }
+
+    public void lookupDeputyEmployments() {
+        long started = System.currentTimeMillis(), finished;
+        SchoolYear activeSchoolYear = getCoreSearching().getActiveSchoolYear(getEntityManager());
+        info("deputy employee lookup in school unit #0 during school year #1", schoolHome.getInstance(),
+                activeSchoolYear);
+        Collection<Employment> deputyEmployments = getCoreSearching().getSchoolEmploymentsOfType(getEntityManager(),
+                activeSchoolYear, schoolHome.getInstance(), EmploymentType.DEPUTY);
+        schoolDeputyEmployments = new ArrayList<EmploymentReportItem>(deputyEmployments.size());
+        for (Employment employment : deputyEmployments) {
+            schoolDeputyEmployments.add(constructRegularEmploymentInfoItem(employment));
+        }
+        finished = System.currentTimeMillis();
+        info("lookup found #0 deputy employment(s) totally in #1 [ms]", schoolDeputyEmployments.size(),
+                (finished - started));
+    }
+
+    public void lookupHourlyBasedEmployments() {
+        long started = System.currentTimeMillis(), finished;
+        SchoolYear activeSchoolYear = getCoreSearching().getActiveSchoolYear(getEntityManager());
+        info("hourly based employee lookup in school unit #0 during school year #1", schoolHome.getInstance(),
+                activeSchoolYear);
+        schoolHourlyBasedEmployments = convertEmploymentCollection(getCoreSearching().getSchoolEmploymentsOfType(
+                getEntityManager(), activeSchoolYear, schoolHome.getInstance(), EmploymentType.HOURLYBASED));
+        finished = System.currentTimeMillis();
+        info("lookup found #0 hourly based employment(s) totally in #1 [ms]", schoolHourlyBasedEmployments.size(),
+                (finished - started));
+    }
+
+    public void lookupRegularEmployments() {
+
+        /*
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * CURRENT PROBLEM THERE ARE SECONDMENT WITHOUT EMPLOYMENT (FROM OTHER PYSDE) AND DISPOSALS (NO AFFECTED EMPLOYMENT CAUSE THE 
+         * DISPOSAL OVERRIDES A SECONDMENT).
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         */
+
+        long started = System.currentTimeMillis(), finished;
+        info("generating report school employment analysis");
+        Date today = DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH);
+
+        SchoolYear activeSchoolYear = getCoreSearching().getActiveSchoolYear(getEntityManager());
+
+        SchoolUniversalEmployments reportData = new SchoolUniversalEmployments(getCoreSearching()
+                .getSchoolTeachingRequirement(getEntityManager(), schoolHome.getInstance(), activeSchoolYear),
+                getCoreSearching().getSpecializationGroups(activeSchoolYear, getEntityManager()));
+
+        /* ************************************************************************************ */
+        /* REGULAR EMPLOYMENTS 																	*/
+        /* ************************************************************************************ */
+
+        Collection<Employment> schoolRegularEmployments = getCoreSearching().getSchoolEmploymentsOfType(
+                getEntityManager(), activeSchoolYear, schoolHome.getInstance(), EmploymentType.REGULAR);
+
+        for (Employment employment : schoolRegularEmployments) {
+            reportData.add(constructRegularEmploymentInfoItem(employment));
+        }
+
+        setSchoolRegularEmployments(reportData);
+        finished = System.currentTimeMillis();
+        info("report has been generated in #0 [ms]", (finished - started));
+
+    }
+
+    /**
+     * @param incomingDisposals the incomingDisposals to set
+     */
+    public void setIncomingDisposals(Collection<DisposalReportItem> incomingDisposals) {
+        this.incomingDisposals = incomingDisposals;
+    }
+
+    /**
+     * @param incomingSecondments the incomingSecondments to set
+     */
+    public void setIncomingSecondments(Collection<SecondmentItem> incomingSecondments) {
+        this.incomingSecondments = incomingSecondments;
+    }
+
+    /**
+     * @param incomingServiceAllocations the incomingServiceAllocations to set
+     */
+    public void setIncomingServiceAllocations(Collection<ServiceAllocationItem> incomingServiceAllocations) {
+        this.incomingServiceAllocations = incomingServiceAllocations;
+    }
+
+    /**
+     * @param outcomingDisposals the outcomingDisposals to set
+     */
+    public void setOutcomingDisposals(Collection<DisposalReportItem> outcomingDisposals) {
+        this.outcomingDisposals = outcomingDisposals;
+    }
+
+    /**
+     * @param outcomingSecondments the outcomingSecondments to set
+     */
+    public void setOutcomingSecondments(Collection<SecondmentItem> outcomingSecondments) {
+        this.outcomingSecondments = outcomingSecondments;
+    }
+
+    /**
+     * @param outcomingServiceAllocations the outcomingServiceAllocations to set
+     */
+    public void setOutcomingServiceAllocations(Collection<ServiceAllocationItem> outcomingServiceAllocations) {
+        this.outcomingServiceAllocations = outcomingServiceAllocations;
+    }
+
+    /**
+     * @param schoolChiefs the schoolChiefs to set
+     */
+    public void setSchoolChiefs(Collection<ServiceAllocationItem> schoolChiefs) {
+        this.schoolChiefs = schoolChiefs;
+    }
+
+    /**
+     * @param schoolDeputysEmployees the schoolDeputysEmployees to set
+     */
+    public void setSchoolDeputyEmployees(Collection<EmployeeReportItem> schoolDeputysEmployees) {
+        this.schoolDeputyEmployees = schoolDeputysEmployees;
+    }
+
+    /**
+     * @param schoolDeputyEmployments the schoolDeputyEmployments to set
+     */
+    public void setSchoolDeputyEmployments(Collection<EmploymentReportItem> schoolDeputyEmployments) {
+        this.schoolDeputyEmployments = schoolDeputyEmployments;
+    }
+
+    /**
+     * @param schoolEmployments the schoolEmployments to set
+     */
+    public void setSchoolEmployments(SchoolUniversalEmployments schoolEmployments) {
+        this.schoolEmployments = schoolEmployments;
+    }
+
+    /**
+     * @param schoolHourlyBasedEmployments the schoolHourlyBasedEmployments to set
+     */
+    public void setSchoolHourlyBasedEmployments(Collection<EmploymentReportItem> schoolHourlyBasedEmployments) {
+        this.schoolHourlyBasedEmployments = schoolHourlyBasedEmployments;
+    }
+
+    /**
+     * @param schoolLeaves the schoolLeaves to set
+     */
+    public void setSchoolLeaves(Collection<LeaveReportItem> schoolLeaves) {
+        this.schoolLeaves = schoolLeaves;
+    }
+
+    /**
+     * @param schoolRegularBasedEmployments the schoolRegularBasedEmployments to set
+     */
+    public void setSchoolRegularBasedEmployments(Collection<EmploymentReportItem> schoolRegularBasedEmployments) {
+        this.schoolRegularBasedEmployments = schoolRegularBasedEmployments;
+    }
+
+    /**
+     * @param schoolRegularEmployments the schoolRegularEmployments to set
+     */
+    public void setSchoolRegularEmployments(SchoolUniversalEmployments schoolRegularEmployments) {
+        this.schoolRegularEmployments = schoolRegularEmployments;
+    }
+
+    /**
+     * @param schoolRegularsEmployees the schoolRegularsEmployees to set
+     */
+    public void setSchoolRegularsEmployees(Collection<EmployeeReportItem> schoolRegularsEmployees) {
+        this.schoolRegularsEmployees = schoolRegularsEmployees;
+    }
 
     /**
      * @return the schoolGroupedEmployeeCDRs
