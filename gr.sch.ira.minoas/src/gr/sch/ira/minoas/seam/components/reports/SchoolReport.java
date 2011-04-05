@@ -2,6 +2,10 @@ package gr.sch.ira.minoas.seam.components.reports;
 
 import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.core.SchoolYear;
+import gr.sch.ira.minoas.model.core.Specialization;
+import gr.sch.ira.minoas.model.core.SpecializationGroup;
+import gr.sch.ira.minoas.model.core.TeachingRequirement;
+import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employement.Disposal;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
@@ -9,7 +13,7 @@ import gr.sch.ira.minoas.model.employement.Leave;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.ServiceAllocation;
 import gr.sch.ira.minoas.model.employement.ServiceAllocationType;
-import gr.sch.ira.minoas.model.employement.TeachingHourCDR;g
+import gr.sch.ira.minoas.model.employement.TeachingHourCDR;
 import gr.sch.ira.minoas.seam.components.home.SchoolHome;
 import gr.sch.ira.minoas.seam.components.reports.resource.DisposalReportItem;
 import gr.sch.ira.minoas.seam.components.reports.resource.EmployeeReportItem;
@@ -26,7 +30,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.jboss.seam.ScopeType;
@@ -43,18 +51,173 @@ import org.jboss.seam.annotations.datamodel.DataModel;
 @Scope(ScopeType.CONVERSATION)
 public class SchoolReport extends BaseReport {
     
+    public final class EmployeeSchoolCDRReportItem {
+        private EmployeeReportItem employee;
+
+
+        private Collection<TeachingHourCRDReportItem> employeeCDRS = new ArrayList<SchoolReport.TeachingHourCRDReportItem>();
+        
+        private Integer totalHours = 0;
+        
+        /**
+         * @param employee
+         */
+        public EmployeeSchoolCDRReportItem(EmployeeReportItem employee) {
+            super();
+            this.employee = employee;
+            this.totalHours = 0;
+        }
+        
+        
+        public TeachingHourCDR addCDR(TeachingHourCDR employeeCDR) {
+            getEmployeeCDRS().add(new TeachingHourCRDReportItem(employeeCDR));
+            totalHours += employeeCDR.getHours();
+            return employeeCDR;
+        }
+
+
+        /**
+         * @return the employee
+         */
+        public EmployeeReportItem getEmployee() {
+            return employee;
+        }
+
+
+        /**
+         * @return the employeeCRS
+         */
+        public Collection<TeachingHourCRDReportItem> getEmployeeCDRS() {
+            return employeeCDRS;
+        }
+
+
+        /**
+         * @return the totalHours
+         */
+        public Integer getTotalHours() {
+            return totalHours;
+        }
+
+
+        /**
+         * @param employee the employee to set
+         */
+        public void setEmployee(EmployeeReportItem employee) {
+            this.employee = employee;
+        }
+
+
+        /**
+         * @param employeeCRS the employeeCRS to set
+         */
+        public void setEmployeeCDRS(Collection<TeachingHourCRDReportItem> employeeCRS) {
+            this.employeeCDRS = employeeCRS;
+        }
+
+
+        /**
+         * @param totalHours the totalHours to set
+         */
+        public void setTotalHours(Integer totalHours) {
+            this.totalHours = totalHours;
+        }
+    }
+    
+    public final class GroupedEmployeesCDRItem {
+        
+        private Integer groupAvailableTeachingHours = 0;
+        
+        private HashMap<Integer, EmployeeSchoolCDRReportItem> groupEmployeesCache = new LinkedHashMap<Integer, SchoolReport.EmployeeSchoolCDRReportItem>();
+        
+        private Integer groupRequiredTeachingHours = 0;
+        
+       private String groupTitle;
+
+        /**
+         * @param groupTitle
+         * @param groupRequiredTeachingHours
+         */
+        public GroupedEmployeesCDRItem(String groupTitle, Integer groupRequiredTeachingHours) {
+            super();
+            this.groupTitle = groupTitle;
+            this.groupRequiredTeachingHours = groupRequiredTeachingHours;
+        }
+
+        public void addEmployeeCDRs(EmployeeSchoolCDRReportItem item) {
+            this.groupEmployeesCache.put(item.getEmployee().getEmployeeID(), item);
+            this.groupAvailableTeachingHours += item.getTotalHours();
+        }
+
+        public EmployeeSchoolCDRReportItem getEmployeeCDRReportItem(Integer employeeID) {
+            return groupEmployeesCache.get(employeeID);
+        }
+
+        /**
+         * @return the groupAvailableTeachingHours
+         */
+        public Integer getGroupAvailableTeachingHours() {
+            return groupAvailableTeachingHours;
+        }
+
+        /**
+         * @return the groupEmployees
+         */
+        public Collection<EmployeeSchoolCDRReportItem> getGroupEmployees() {
+            return new ArrayList<SchoolReport.EmployeeSchoolCDRReportItem>(groupEmployeesCache.values());
+        }
+
+        /**
+         * @return the groupRequiredTeachingHours
+         */
+        public Integer getGroupRequiredTeachingHours() {
+            return groupRequiredTeachingHours;
+        }
+
+        /**
+         * @return the groupTitle
+         */
+        public String getGroupTitle() {
+            return groupTitle;
+        }
+
+        /**
+         * @param groupAvailableTeachingHours the groupAvailableTeachingHours to set
+         */
+        private void setGroupAvailableTeachingHours(Integer groupAvailableTeachingHours) {
+            this.groupAvailableTeachingHours = groupAvailableTeachingHours;
+        }
+        
+        /**
+         * @param groupRequiredTeachingHours the groupRequiredTeachingHours to set
+         */
+        private void setGroupRequiredTeachingHours(Integer groupRequiredTeachingHours) {
+            this.groupRequiredTeachingHours = groupRequiredTeachingHours;
+        }
+
+        /**
+         * @param groupTitle the groupTitle to set
+         */
+        private void setGroupTitle(String groupTitle) {
+            this.groupTitle = groupTitle;
+        }
+    }
+    
     public final class TeachingHourCRDReportItem {
         
         private String comment;
         
         private Integer hours;
         
+        private String type;
+
         
         
         public TeachingHourCRDReportItem(TeachingHourCDR cdr) {
             super();
             setHours(cdr.getHours());
-            setComment(comment);
+            setComment(cdr.getComment());
+            setType(cdr.getCdrType().toString());
         }
 
 
@@ -69,19 +232,19 @@ public class SchoolReport extends BaseReport {
 
 
         /**
-         * @param comment the comment to set
+         * @return the hours
          */
-        public void setComment(String comment) {
-            this.comment = comment;
+        public Integer getHours() {
+            return hours;
         }
 
 
 
         /**
-         * @return the hours
+         * @param comment the comment to set
          */
-        public Integer getHours() {
-            return hours;
+        public void setComment(String comment) {
+            this.comment = comment;
         }
 
 
@@ -92,76 +255,23 @@ public class SchoolReport extends BaseReport {
         public void setHours(Integer hours) {
             this.hours = hours;
         }
-    }
-    
-    public final class EmployeeSchoolCDRReportItem {
-        /**
-         * @param employee
-         */
-        public EmployeeSchoolCDRReportItem(EmployeeReportItem employee) {
-            super();
-            this.employee = employee;
-        }
 
-
-        private EmployeeReportItem employee;
-        
-        private Collection<TeachingHourCRDReportItem> employeeCRS = new ArrayList<SchoolReport.TeachingHourCRDReportItem>();
-        
-        private Integer totalHours;
-        
-        
-        public TeachingHourCDR addCDR(TeachingHourCDR employeeCDR) {
-            getEmployeeCRS().add(new TeachingHourCRDReportItem(employeeCDR));
-            return employeeCDR;
-        }
 
 
         /**
-         * @return the employee
+         * @return the type
          */
-        public EmployeeReportItem getEmployee() {
-            return employee;
+        public String getType() {
+            return type;
         }
 
 
-        /**
-         * @param employee the employee to set
-         */
-        public void setEmployee(EmployeeReportItem employee) {
-            this.employee = employee;
-        }
-
 
         /**
-         * @return the employeeCRS
+         * @param type the type to set
          */
-        public Collection<TeachingHourCRDReportItem> getEmployeeCRS() {
-            return employeeCRS;
-        }
-
-
-        /**
-         * @param employeeCRS the employeeCRS to set
-         */
-        public void setEmployeeCRS(Collection<TeachingHourCRDReportItem> employeeCRS) {
-            this.employeeCRS = employeeCRS;
-        }
-
-
-        /**
-         * @return the totalHours
-         */
-        public Integer getTotalHours() {
-            return totalHours;
-        }
-
-
-        /**
-         * @param totalHours the totalHours to set
-         */
-        public void setTotalHours(Integer totalHours) {
-            this.totalHours = totalHours;
+        public void setType(String type) {
+            this.type = type;
         }
     }
     
@@ -191,6 +301,9 @@ public class SchoolReport extends BaseReport {
 	@DataModel(value = "schoolOutgoingServiceAllocations")
 	private Collection<ServiceAllocationItem> outcomingServiceAllocations;
 
+	@DataModel(value = "schoolGroupedEmployeeCDRs")
+	private Collection<GroupedEmployeesCDRItem> schoolGroupedEmployeeCDRs;
+
 	@DataModel(value = "schoolChiefs")
 	private Collection<ServiceAllocationItem> schoolChiefs;
 
@@ -199,26 +312,25 @@ public class SchoolReport extends BaseReport {
 
 	@DataModel(value = "schoolDeputyEmployments")
 	private Collection<EmploymentReportItem> schoolDeputyEmployments;
-
+	
 	@DataModel(value = "schoolEmployments")
 	private SchoolUniversalEmployments schoolEmployments;
-	
-	@DataModel(value = "schoolRegularEmployments")
-	private SchoolUniversalEmployments schoolRegularEmployments;
-
 
 	@In
 	private SchoolHome schoolHome;
 
 	@DataModel(value = "schoolHourlyBasedEmployments")
 	private Collection<EmploymentReportItem> schoolHourlyBasedEmployments;
+
+	@DataModel(value = "schoolLeaves")
+	private Collection<LeaveReportItem> schoolLeaves;
 	
 	@DataModel(value = "schoolRegularBasedEmployments")
 	private Collection<EmploymentReportItem> schoolRegularBasedEmployments;
 
 
-	@DataModel(value = "schoolLeaves")
-	private Collection<LeaveReportItem> schoolLeaves;
+	@DataModel(value = "schoolRegularEmployments")
+	private SchoolUniversalEmployments schoolRegularEmployments;
 
 	
 	@DataModel(value = "schoolRegularsEmployees")
@@ -284,6 +396,44 @@ public class SchoolReport extends BaseReport {
 		return sb.toString();
 	}
 
+	public SchoolUniversalEmploymentItem constructDeputyEmploymentInfoItem(Employment employment) {
+		Date today = DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH);
+		SchoolUniversalEmploymentItem item = new SchoolUniversalEmploymentItem(employment);
+
+		/* check if the employment is associated with a disposal */
+		Collection<Disposal> disposals = getCoreSearching().getEmployeeActiveDisposals(getEntityManager(),
+				employment.getEmployee(), today);
+		if (disposals != null && disposals.size() > 0) {
+			StringBuffer sb = new StringBuffer();
+			int total_hours = 0;
+			for (Disposal d : disposals) {
+				sb.append(constructComment(d));
+				total_hours += d.getHours();
+			}
+			item.setEmployeeFinalWorkingHours(item.getEmployeeFinalWorkingHours() - total_hours);
+			item.addEmploymentComment(sb.toString());
+		}
+
+		/* check if the employment is associated with a service allocation */
+		ServiceAllocation serviceAllocation = getCoreSearching().getEmployeeActiveServiceAllocation(getEntityManager(),
+				employment.getEmployee(), today);
+		if (serviceAllocation != null) {
+			/* the employment is overriden by a service allocation */
+			item.setEmployeeFinalWorkingHours(serviceAllocation.getWorkingHoursOnRegularPosition());
+			item.addEmploymentComment(constructComment(serviceAllocation));
+		}
+
+		/* check if the employment is associated with a leave */
+		Leave leave = getCoreSearching().getEmployeeActiveLeave(getEntityManager(), employment.getEmployee(), today);
+		if (leave != null) {
+			/* the employment is overriden by a service allocation */
+			item.setEmployeeFinalWorkingHours(0);
+			item.addEmploymentComment(constructComment(leave));
+		}
+
+		return item;
+	}
+
 	private String constructIncomingComment(Secondment secondment) {
 		StringBuffer sb = new StringBuffer();
 		sb.append("Αποσπασμένος/νη στην μονάδα απο τις ");
@@ -340,51 +490,6 @@ public class SchoolReport extends BaseReport {
 		sb.append(" ημέρες. ");
 		return sb.toString();
 
-	}
-
-	public void fetchSchoolChiefs() {
-		Date today = DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH);
-		schoolChiefs = convertServiceAllocationCollection(getCoreSearching().getSchoolIncomingServiceAllocationsOfType(
-				getEntityManager(), schoolHome.getInstance(), today,
-				Arrays.asList(ServiceAllocationType.SCHOOL_HEADMASTER, ServiceAllocationType.SCHOOL_SUBHEADMASTER)));
-	}
-
-	public SchoolUniversalEmploymentItem constructDeputyEmploymentInfoItem(Employment employment) {
-		Date today = DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH);
-		SchoolUniversalEmploymentItem item = new SchoolUniversalEmploymentItem(employment);
-
-		/* check if the employment is associated with a disposal */
-		Collection<Disposal> disposals = getCoreSearching().getEmployeeActiveDisposals(getEntityManager(),
-				employment.getEmployee(), today);
-		if (disposals != null && disposals.size() > 0) {
-			StringBuffer sb = new StringBuffer();
-			int total_hours = 0;
-			for (Disposal d : disposals) {
-				sb.append(constructComment(d));
-				total_hours += d.getHours();
-			}
-			item.setEmployeeFinalWorkingHours(item.getEmployeeFinalWorkingHours() - total_hours);
-			item.addEmploymentComment(sb.toString());
-		}
-
-		/* check if the employment is associated with a service allocation */
-		ServiceAllocation serviceAllocation = getCoreSearching().getEmployeeActiveServiceAllocation(getEntityManager(),
-				employment.getEmployee(), today);
-		if (serviceAllocation != null) {
-			/* the employment is overriden by a service allocation */
-			item.setEmployeeFinalWorkingHours(serviceAllocation.getWorkingHoursOnRegularPosition());
-			item.addEmploymentComment(constructComment(serviceAllocation));
-		}
-
-		/* check if the employment is associated with a leave */
-		Leave leave = getCoreSearching().getEmployeeActiveLeave(getEntityManager(), employment.getEmployee(), today);
-		if (leave != null) {
-			/* the employment is overriden by a service allocation */
-			item.setEmployeeFinalWorkingHours(0);
-			item.addEmploymentComment(constructComment(leave));
-		}
-
-		return item;
 	}
 
 	public SchoolUniversalEmploymentItem constructRegularEmploymentInfoItem(Employment regularEmployment) {
@@ -445,6 +550,64 @@ public class SchoolReport extends BaseReport {
 
 		return item;
 
+	}
+
+	public void fetchSchoolChiefs() {
+		Date today = DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH);
+		schoolChiefs = convertServiceAllocationCollection(getCoreSearching().getSchoolIncomingServiceAllocationsOfType(
+				getEntityManager(), schoolHome.getInstance(), today,
+				Arrays.asList(ServiceAllocationType.SCHOOL_HEADMASTER, ServiceAllocationType.SCHOOL_SUBHEADMASTER)));
+	}
+
+	public void generateEmploymentsCDRReport() {
+	    long started = System.currentTimeMillis(), finished;
+        info("generating employments cdr report ");
+        Date today = DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH);
+        
+         
+        SchoolYear activeSchoolYear = getCoreSearching().getActiveSchoolYear(getEntityManager());
+        // fetch all cdrs that are associated with our unit
+        Collection<TeachingHourCDR> schoolsCDRS = getCoreSearching().getSchoolTeachingHoursCDRs(getEntityManager(), activeSchoolYear, schoolHome.getInstance());
+        // fetch school teaching req
+        Collection<TeachingRequirement> teachingReqs = getCoreSearching().getSchoolTeachingRequirement(getEntityManager(), schoolHome.getInstance(), activeSchoolYear);
+        // fetch all specialization groups
+        Collection<SpecializationGroup> specializationGruops = getCoreSearching().getSpecializationGroups(activeSchoolYear, getEntityManager());
+        Map<Specialization, SpecializationGroup> specializationGroupCache = new HashMap<Specialization, SpecializationGroup>();
+        for(SpecializationGroup group : specializationGruops) {
+            for(Specialization sp : group.getSpecializations()) {
+                specializationGroupCache.put(sp, group);
+            }
+        }
+        
+        Map<String, GroupedEmployeesCDRItem> groupCache = new LinkedHashMap<String, SchoolReport.GroupedEmployeesCDRItem>();
+        
+        Map<Employee, EmployeeSchoolCDRReportItem> cache = new HashMap<Employee, SchoolReport.EmployeeSchoolCDRReportItem>();
+        for(TeachingHourCDR cdr : schoolsCDRS) {
+            info("handling #0 cdr", cdr);
+            Employee employee = cdr.getEmployee();
+            SpecializationGroup sgroup = specializationGroupCache.get(employee.getLastSpecialization());
+            /* if the employee's specialization does not map to a concrete specialization group, then
+             * just use the specialization title as group title.
+             */
+            String groupTitle = (sgroup != null) ? sgroup.getTitle() : employee.getLastSpecialization().getTitle(); 
+            GroupedEmployeesCDRItem group = groupCache.get(groupTitle);
+            if(group==null) {
+                /* no such group so far */
+                group = new GroupedEmployeesCDRItem(groupTitle, 0); /* we need to add the required hours here */
+                groupCache.put(groupTitle, group);
+            }
+            EmployeeSchoolCDRReportItem item = group.getEmployeeCDRReportItem(employee.getId());
+            if(item==null) {
+                item = new EmployeeSchoolCDRReportItem(new EmployeeReportItem(cdr.getEmployee()));
+                group.addEmployeeCDRs(item);
+            }
+            item.addCDR(cdr);
+        }
+        
+        
+        setSchoolGroupedEmployeeCDRs(new ArrayList<SchoolReport.GroupedEmployeesCDRItem>(groupCache.values()));
+        finished = System.currentTimeMillis();
+        info("report has been generated in #0 [ms]", (finished - started));
 	}
 
 	public void generateEmploymentsReport() {
@@ -650,21 +813,6 @@ public class SchoolReport extends BaseReport {
 		info("report has been generated in #0 [ms]", (finished - started));
 
 	}
-
-	public void generateEmploymentsCDRReport() {
-	    long started = System.currentTimeMillis(), finished;
-        info("generating employments cdr report ");
-        Date today = DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH);
-        SchoolYear activeSchoolYear = getCoreSearching().getActiveSchoolYear(getEntityManager());
-        Collection<TeachingHourCDR> schoolsCDRS = getCoreSearching().getSchoolTeachingHoursCDRs(getEntityManager(), activeSchoolYear, schoolHome.getInstance());
-        
-        for(TeachingHourCDR cdr : schoolsCDRS) {
-            
-        }
-        
-        finished = System.currentTimeMillis();
-        info("report has been generated in #0 [ms]", (finished - started));
-	}
 	
 	public void generateReport() {
 
@@ -781,6 +929,15 @@ public class SchoolReport extends BaseReport {
 	}
 
 	/**
+	 * @return the schoolEmployments
+	 */
+	public SchoolUniversalEmployments getSchoolEmployments() {
+		return schoolEmployments;
+	}
+
+	
+
+	/**
 	 * @return the schoolHourlyBasedEmployments
 	 */
 	public Collection<EmploymentReportItem> getSchoolHourlyBasedEmployments() {
@@ -794,7 +951,19 @@ public class SchoolReport extends BaseReport {
 		return schoolLeaves;
 	}
 
-	
+	/**
+	 * @return the schoolRegularBasedEmployments
+	 */
+	public Collection<EmploymentReportItem> getSchoolRegularBasedEmployments() {
+		return schoolRegularBasedEmployments;
+	}
+
+	/**
+	 * @return the schoolRegularEmployments
+	 */
+	public SchoolUniversalEmployments getSchoolRegularEmployments() {
+		return schoolRegularEmployments;
+	}
 
 	/**
 	 * @return the schoolRegularsEmployees
@@ -938,6 +1107,7 @@ public class SchoolReport extends BaseReport {
 		this.outcomingServiceAllocations = outcomingServiceAllocations;
 	}
 
+
 	/**
 	 * @param schoolChiefs the schoolChiefs to set
 	 */
@@ -960,6 +1130,13 @@ public class SchoolReport extends BaseReport {
 	}
 
 	/**
+	 * @param schoolEmployments the schoolEmployments to set
+	 */
+	public void setSchoolEmployments(SchoolUniversalEmployments schoolEmployments) {
+		this.schoolEmployments = schoolEmployments;
+	}
+
+	/**
 	 * @param schoolHourlyBasedEmployments the schoolHourlyBasedEmployments to set
 	 */
 	public void setSchoolHourlyBasedEmployments(Collection<EmploymentReportItem> schoolHourlyBasedEmployments) {
@@ -973,55 +1150,39 @@ public class SchoolReport extends BaseReport {
 		this.schoolLeaves = schoolLeaves;
 	}
 
-	
-
-	/**
-	 * @param schoolRegularsEmployees the schoolRegularsEmployees to set
-	 */
-	public void setSchoolRegularsEmployees(Collection<EmployeeReportItem> schoolRegularsEmployees) {
-		this.schoolRegularsEmployees = schoolRegularsEmployees;
-	}
-
-	/**
-	 * @return the schoolEmployments
-	 */
-	public SchoolUniversalEmployments getSchoolEmployments() {
-		return schoolEmployments;
-	}
-
-	/**
-	 * @param schoolEmployments the schoolEmployments to set
-	 */
-	public void setSchoolEmployments(SchoolUniversalEmployments schoolEmployments) {
-		this.schoolEmployments = schoolEmployments;
-	}
-
-	/**
-	 * @return the schoolRegularEmployments
-	 */
-	public SchoolUniversalEmployments getSchoolRegularEmployments() {
-		return schoolRegularEmployments;
-	}
-
-	/**
-	 * @param schoolRegularEmployments the schoolRegularEmployments to set
-	 */
-	public void setSchoolRegularEmployments(SchoolUniversalEmployments schoolRegularEmployments) {
-		this.schoolRegularEmployments = schoolRegularEmployments;
-	}
-
-	/**
-	 * @return the schoolRegularBasedEmployments
-	 */
-	public Collection<EmploymentReportItem> getSchoolRegularBasedEmployments() {
-		return schoolRegularBasedEmployments;
-	}
-
 	/**
 	 * @param schoolRegularBasedEmployments the schoolRegularBasedEmployments to set
 	 */
 	public void setSchoolRegularBasedEmployments(Collection<EmploymentReportItem> schoolRegularBasedEmployments) {
 		this.schoolRegularBasedEmployments = schoolRegularBasedEmployments;
 	}
+
+    /**
+	 * @param schoolRegularEmployments the schoolRegularEmployments to set
+	 */
+	public void setSchoolRegularEmployments(SchoolUniversalEmployments schoolRegularEmployments) {
+		this.schoolRegularEmployments = schoolRegularEmployments;
+	}
+
+    /**
+	 * @param schoolRegularsEmployees the schoolRegularsEmployees to set
+	 */
+	public void setSchoolRegularsEmployees(Collection<EmployeeReportItem> schoolRegularsEmployees) {
+		this.schoolRegularsEmployees = schoolRegularsEmployees;
+	}
+
+    /**
+     * @return the schoolGroupedEmployeeCDRs
+     */
+    public Collection<GroupedEmployeesCDRItem> getSchoolGroupedEmployeeCDRs() {
+        return schoolGroupedEmployeeCDRs;
+    }
+
+    /**
+     * @param schoolGroupedEmployeeCDRs the schoolGroupedEmployeeCDRs to set
+     */
+    public void setSchoolGroupedEmployeeCDRs(Collection<GroupedEmployeesCDRItem> schoolGroupedEmployeeCDRs) {
+        this.schoolGroupedEmployeeCDRs = schoolGroupedEmployeeCDRs;
+    }
 
 }
