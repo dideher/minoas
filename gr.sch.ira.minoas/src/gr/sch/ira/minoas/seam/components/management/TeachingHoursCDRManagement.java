@@ -319,6 +319,8 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
                 cdr.setSchoolYear(currentSchoolYear);
                 cdr.setUnit(employeeCDR.getUnit());
                 cdr.setLeave(activeLeave);
+                entityManager.persist(cdr);
+                totalCDRsCreated++;
             }
          }
 
