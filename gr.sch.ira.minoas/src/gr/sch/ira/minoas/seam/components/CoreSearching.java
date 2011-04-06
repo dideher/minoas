@@ -1074,7 +1074,6 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         List<TeachingHourCDR> return_value = getEntityManager(entityManager).createQuery(
                 "SELECT t FROM TeachingHourCDR t WHERE t.schoolYear=:schoolYear " + "AND t.employee=:employee")
                 .setParameter("schoolYear", schoolYear).setParameter("employee", employee).getResultList();
-        info("found totally #0 CDRs", return_value.size());
         return return_value;
     }
 

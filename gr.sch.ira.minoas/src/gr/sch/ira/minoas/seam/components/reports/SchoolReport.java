@@ -14,6 +14,7 @@ import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.ServiceAllocation;
 import gr.sch.ira.minoas.model.employement.ServiceAllocationType;
 import gr.sch.ira.minoas.model.employement.TeachingHourCDR;
+import gr.sch.ira.minoas.model.employement.TeachingHourCDRType;
 import gr.sch.ira.minoas.seam.components.home.SchoolHome;
 import gr.sch.ira.minoas.seam.components.reports.resource.DisposalReportItem;
 import gr.sch.ira.minoas.seam.components.reports.resource.EmployeeReportItem;
@@ -54,6 +55,9 @@ import org.jboss.seam.annotations.datamodel.DataModel;
 public class SchoolReport extends BaseReport {
 
     public final class EmployeeSchoolCDRReportItem {
+        
+        private boolean containsLeaveCDR = false;
+        
         private EmployeeReportItem employee;
 
         private Collection<TeachingHourCRDReportItem> employeeCDRS = new ArrayList<SchoolReport.TeachingHourCRDReportItem>();
@@ -80,6 +84,10 @@ public class SchoolReport extends BaseReport {
         public TeachingHourCDR addCDR(TeachingHourCDR employeeCDR) {
             getEmployeeCDRS().add(new TeachingHourCRDReportItem(employeeCDR));
             totalHours += employeeCDR.getHours();
+            if(!containsLeaveCDR) {
+                /* check if the new employee CDR to be added is a leave CDR */
+                containsLeaveCDR = (employeeCDR.getCdrType() == TeachingHourCDRType.LEAVE);
+            }
             return employeeCDR;
         }
 
@@ -98,10 +106,12 @@ public class SchoolReport extends BaseReport {
         }
 
         /**
+         * Return the total hours of teaching. Returns 0 if the employee
+         * is associated with leave.
          * @return the totalHours
          */
         public Integer getTotalHours() {
-            return totalHours;
+            return containsLeaveCDR ? 0 : totalHours;
         }
 
         /**
@@ -592,7 +602,6 @@ public class SchoolReport extends BaseReport {
 
         Map<Employee, EmployeeSchoolCDRReportItem> cache = new HashMap<Employee, SchoolReport.EmployeeSchoolCDRReportItem>();
         for (TeachingHourCDR cdr : schoolsCDRS) {
-            info("handling #0 cdr", cdr);
             Employee employee = cdr.getEmployee();
             SpecializationGroup sgroup = specializationGroupCache.get(employee.getLastSpecialization());
             /* if the employee's specialization does not map to a concrete specialization group, then

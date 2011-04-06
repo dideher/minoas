@@ -16,7 +16,10 @@ import gr.sch.ira.minoas.seam.components.CoreSearching;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 
@@ -55,6 +58,7 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
             cdrsDeleted++;
         }
         info("successfully deleted totally #0 old CRD(s).", cdrsDeleted);
+        em.flush(); /* flush */
 
         /* fetch all regular employments */
         Collection<Employment> regularEmployments = coreSearching.getEmploymentsOfType(em, EmploymentType.REGULAR,
@@ -78,6 +82,7 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
             entityManager.persist(cdr);
             totalCDRsCreated++;
         }
+        em.flush(); /* flush */
 
         /* fetch all deputy employments */
         Collection<Employment> deputyEmployments = coreSearching.getEmploymentsOfType(em, EmploymentType.DEPUTY,
@@ -100,6 +105,7 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
             entityManager.persist(cdr);
             totalCDRsCreated++;
         }
+        em.flush(); /* flush */
 
         /* fetch all hourly employments */
         Collection<Employment> hourlyEmployments = coreSearching.getEmploymentsOfType(em, EmploymentType.HOURLYBASED,
@@ -122,7 +128,7 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
             entityManager.persist(cdr);
             totalCDRsCreated++;
         }
-
+        em.flush(); /* flush */
         /* handle secodnments */
 
         Collection<Secondment> secondments = coreSearching.getActiveSecondments(em, currentSchoolYear);
@@ -184,7 +190,9 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
             entityManager.persist(cdr);
             totalCDRsCreated++;
         }
-
+        
+        em.flush(); /* flush */
+        
         /* handle disposal */
 
         Collection<Disposal> disposals = coreSearching.getActiveDisposal(em, currentSchoolYear);
@@ -240,7 +248,9 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
             totalCDRsCreated++;
 
         }
-
+        
+        em.flush(); /* flush */
+        
         /* handle service allocation */
 
         Collection<ServiceAllocation> serviceAllocations = coreSearching.getActiveServiceAllocations(em);
@@ -293,7 +303,9 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
           
                 
         }
-
+        
+        em.flush(); /* flush */
+        
         /* WE NEED TO ADD LEAVES */
         
         Collection<Leave> activeLeaves = coreSearching.getActiveLeaves(em);
@@ -310,17 +322,27 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
             sb.append(df.format(activeLeave.getDueTo()));
             
             Collection<TeachingHourCDR> employeeCDRs = coreSearching.getEmployeeTeachingHoursCDRs(em, currentSchoolYear, employeeWithLeave);
+            info("when handling leave #0 we found #1 releated CDRs", activeLeave, employeeCDRs.size());
+            List<String> unitCache = new ArrayList<String>(employeeCDRs.size()); // use to store units for which we have inserted a leave cdr 
+            
             for(TeachingHourCDR employeeCDR : employeeCDRs) {
-                TeachingHourCDR cdr = new TeachingHourCDR();
-                cdr.setCdrType(TeachingHourCDRType.LEAVE);
-                cdr.setComment(sb.toString());
-                cdr.setEmployee(employeeWithLeave);
-                cdr.setHours(0);
-                cdr.setSchoolYear(currentSchoolYear);
-                cdr.setUnit(employeeCDR.getUnit());
-                cdr.setLeave(activeLeave);
-                entityManager.persist(cdr);
-                totalCDRsCreated++;
+                if(!unitCache.contains(employeeCDR.getUnit().getId())) {
+                    info("related CDR #0", employeeCDR);
+                    TeachingHourCDR cdr = new TeachingHourCDR();
+                    cdr.setCdrType(TeachingHourCDRType.LEAVE);
+                    cdr.setComment(sb.toString());
+                    cdr.setEmployee(employeeWithLeave);
+                    cdr.setHours(0);
+                    cdr.setSchoolYear(currentSchoolYear);
+                    cdr.setUnit(employeeCDR.getUnit());
+                    cdr.setLeave(activeLeave);
+                    entityManager.persist(cdr);
+                    totalCDRsCreated++;
+                    unitCache.add(employeeCDR.getUnit().getId());
+                } else {
+                    info("ignoring related CDR #0 since a counterpart has been already registered.", employeeCDR);
+                }
+                
             }
          }
 
