@@ -17,12 +17,16 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 /**
  * @author slavikos
  *
  */
 @Entity
 @Table(name = "PYSDE")
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class PYSDE extends BaseIDModel {
 
 	/**
