@@ -16,8 +16,12 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 @Entity
 @Table(name = "WORK_EXPERIENCE")
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class WorkExperience extends BaseIDModel {
     
     /**

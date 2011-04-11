@@ -23,12 +23,16 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 /**
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * 
  */
 @Entity
 @Table(name = "EMPLOYEE_LEAVE")
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class Leave extends BaseIDModel {
 
 	/**
