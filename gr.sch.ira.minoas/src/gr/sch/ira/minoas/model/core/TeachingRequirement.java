@@ -13,6 +13,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 
 /**
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
@@ -21,6 +24,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "TEACHING_REQUIREMENT")
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class TeachingRequirement extends BaseIDModel implements Cloneable {
 
 	/**
