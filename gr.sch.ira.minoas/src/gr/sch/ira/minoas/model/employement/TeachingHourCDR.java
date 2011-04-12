@@ -12,6 +12,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import gr.sch.ira.minoas.model.BaseIDModel;
 import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.core.SchoolYear;
@@ -20,6 +23,7 @@ import gr.sch.ira.minoas.model.employee.Employee;
 
 @Entity
 @Table(name = "TEACHING_HOUR_CDR")
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class TeachingHourCDR extends BaseIDModel {
 
     /**
