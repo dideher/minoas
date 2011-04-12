@@ -25,6 +25,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 
 /**
  * This class represents an employment. Every employment is binded to a concrete
@@ -35,6 +38,7 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "EMPLOYMENT")
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class Employment extends BaseIDDeleteAwareModel {
 
 	/**
