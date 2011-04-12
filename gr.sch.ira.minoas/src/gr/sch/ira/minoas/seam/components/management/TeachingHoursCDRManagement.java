@@ -291,12 +291,13 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
 
             specialEmploymentCDR.setEmployee(relatedEmployment.getEmployee());
             specialEmploymentCDR.setEmployment(relatedEmployment);
-            specialEmploymentCDR.setHours(relatedEmployment.getFinalWorkingHours());
+            specialEmploymentCDR.setHours((-1) * relatedEmployment.getFinalWorkingHours());
             specialEmploymentCDR.setUnit(relatedEmployment.getSchool());
             specialEmploymentCDR.setSchoolYear(currentSchoolYear);
             relatedEmployment.getEmploymentCDRs().add(specialEmploymentCDR);
             entityManager.persist(specialEmploymentCDR);
             totalCDRsCreated++;
+            
             
             /* apply on target unit */
             TeachingHourCDR cdr = new TeachingHourCDR();
