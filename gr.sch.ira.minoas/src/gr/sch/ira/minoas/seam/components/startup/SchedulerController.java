@@ -6,6 +6,7 @@ import gr.sch.ira.minoas.seam.components.async.LeaveActivactionProcessor;
 import gr.sch.ira.minoas.seam.components.async.LeaveCleanupProcessor;
 import gr.sch.ira.minoas.seam.components.async.SecondmentCleanupProcessor;
 import gr.sch.ira.minoas.seam.components.async.ServiceAllocationCleanupProcessor;
+import gr.sch.ira.minoas.seam.components.reports.BasicUsageReport;
 
 import java.util.Date;
 
@@ -32,6 +33,8 @@ public class SchedulerController extends BaseDatabaseAwareSeamComponent {
     
     private static final long LEAVE_ACTIVATION_INTERVAL = 1200000;
     
+    private static final long BASIC_USAGE_REPORT_INTERVAL = 2400000;
+    
     @In(create=true, value="secondmentCleanupProcessor")
     private SecondmentCleanupProcessor secondmentCleanupProcessor;
     
@@ -48,11 +51,16 @@ public class SchedulerController extends BaseDatabaseAwareSeamComponent {
     @In(create=true, value="serviceAllocationCleanupProcessor")
     private ServiceAllocationCleanupProcessor serviceAllocationCleanupProcessor;
     
+    
+    @In(create=true, value="basicUsageReport")
+    private BasicUsageReport basicUsageReportProcessor;
+    
     private QuartzTriggerHandle secondmentCleanupProcessorHandler;
     private QuartzTriggerHandle leaveCleanupProcessorHandler;
     private QuartzTriggerHandle disposalCleanupProcessorHandler;
     private QuartzTriggerHandle serviceAllocationCleanupProcessorHandler;
     private QuartzTriggerHandle leaveActivationProcessorHandler;
+    private QuartzTriggerHandle basicUsageReportProcessorHandler;
 	/**
      * Comment for <code>serialVersionUID</code>
      */
@@ -83,6 +91,11 @@ public class SchedulerController extends BaseDatabaseAwareSeamComponent {
         if(leaveActivationProcessor!=null) {
             leaveActivationProcessorHandler = leaveActivationProcessor.scheduleSecondmentCleanup(new Date(), LEAVE_ACTIVATION_INTERVAL, null);
             info("scheduled #0", leaveActivationProcessorHandler.getTrigger().getFullName());
+        }
+        
+        if(basicUsageReportProcessor!=null) {
+            basicUsageReportProcessorHandler = basicUsageReportProcessor.scheduleReportGeneration(new Date(), BASIC_USAGE_REPORT_INTERVAL, null);
+            info("scheduled #0", basicUsageReportProcessorHandler.getTrigger().getFullName());
         }
         
         } catch(Exception ex) {
