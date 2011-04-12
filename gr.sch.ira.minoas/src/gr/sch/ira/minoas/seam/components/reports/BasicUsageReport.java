@@ -1,6 +1,9 @@
 package gr.sch.ira.minoas.seam.components.reports;
 
+import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
+import gr.sch.ira.minoas.model.employement.Leave;
+import gr.sch.ira.minoas.model.employement.TeachingHourCDR;
 import gr.sch.ira.minoas.model.security.Principal;
 
 import java.net.MalformedURLException;
@@ -8,23 +11,32 @@ import java.net.URL;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 
 import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.Create;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Out;
 import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.annotations.Startup;
 import org.jboss.seam.annotations.TransactionPropagationType;
 import org.jboss.seam.annotations.Transactional;
+import org.jboss.seam.annotations.async.Asynchronous;
+import org.jboss.seam.annotations.async.Expiration;
+import org.jboss.seam.annotations.async.FinalExpiration;
+import org.jboss.seam.annotations.async.IntervalDuration;
+import org.jboss.seam.async.QuartzTriggerHandle;
 
 /**
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * @version $Id$
  */
 @Name("basicUsageReport")
-@Scope(ScopeType.CONVERSATION)
+@Scope(ScopeType.APPLICATION)
+@Startup
 public class BasicUsageReport extends BaseReport {
     
     /**
@@ -183,11 +195,24 @@ public class BasicUsageReport extends BaseReport {
 
 	}
 
-	@In @Out
+	@Out
 	private AuditWinnersReportData auditWinningReport;
 
-	@Factory(value="auditWinningReport", autoCreate=true)
+	
+	
+	@Asynchronous
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public QuartzTriggerHandle scheduleReportGeneration(@Expiration Date when, 
+            @IntervalDuration Long interval,
+            @FinalExpiration Date endDate) {
+        info("we will generate our basic report");
+        generateReport();
+        return null;
+    }
+	
+	
 	@Transactional(TransactionPropagationType.REQUIRED)
+	@Create
 	public void generateReport() {
 		if(getEntityManager()!=null) {
 		    info("generating basic usage report");
