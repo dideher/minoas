@@ -3,6 +3,9 @@
  */
 package gr.sch.ira.minoas.model.core;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import gr.sch.ira.minoas.model.BaseModel;
 
 /**
@@ -11,6 +14,7 @@ import gr.sch.ira.minoas.model.BaseModel;
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * 
  */
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class Region extends BaseModel {
 
 	/**
