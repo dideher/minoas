@@ -298,7 +298,11 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
             entityManager.persist(specialEmploymentCDR);
             totalCDRsCreated++;
             
-            
+            if(serviceAllocation.getSourceUnit().equals(serviceAllocation.getServiceUnit())) {
+                /* source unit is the same as the servicing unit. This is the case when a regular
+                 * employee having a regular employment at a given unit, serves there as the headmaster.
+                 */
+            }
             /* apply on target unit */
             TeachingHourCDR cdr = new TeachingHourCDR();
             cdr.setCdrType(TeachingHourCDRType.SERVICE_ALLOCATION);
