@@ -1,5 +1,6 @@
 package gr.sch.ira.minoas.seam.components.management;
 
+import gr.sch.ira.minoas.core.CoreUtils;
 import gr.sch.ira.minoas.model.core.SchoolYear;
 import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employee.Employee;
@@ -27,6 +28,8 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
+
+import sun.security.action.GetLongAction;
 
 @Name(value = "teachingHoursCDRManagement")
 @Scope(ScopeType.CONVERSATION)
@@ -158,6 +161,8 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
             StringBuffer sb = new StringBuffer();
             sb.append("Αποσπασμένος απο την μονάδα ");
             sb.append(secondment.getSourceUnit().getTitle());
+            sb.append(" με απόσπαση τυπου ");
+            sb.append(CoreUtils.getLocalizedMessage(secondment.getSecondmentType().getKey()));
             sb.append(" απο τις ");
             sb.append(df.format(secondment.getEstablished()));
             sb.append(" για ");
@@ -179,6 +184,8 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
             sb = new StringBuffer();
             sb.append("Αποσπασμένος στην μονάδα ");
             sb.append(secondment.getTargetUnit().getTitle());
+            sb.append(" με απόσπαση τυπου ");
+            sb.append(CoreUtils.getLocalizedMessage(secondment.getSecondmentType().getKey()));
             sb.append(" απο τις ");
             sb.append(df.format(secondment.getEstablished()));
             sb.append(" για ");
@@ -215,6 +222,8 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
             StringBuffer sb = new StringBuffer();
             sb.append("Διάθεση απο την μονάδα ");
             sb.append(sourceUnit.getTitle());
+            sb.append(" με διάθεση τυπου ");
+            sb.append(CoreUtils.getLocalizedMessage(disposal.getType().getKey()));
             sb.append(" απο τις ");
             sb.append(df.format(disposal.getEstablished()));
             sb.append(" για ");
@@ -236,6 +245,8 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
             sb = new StringBuffer();
             sb.append("Διάθεση στην μονάδα ");
             sb.append(disposal.getDisposalUnit().getTitle());
+            sb.append(" με διάθεση τυπου ");
+            sb.append(CoreUtils.getLocalizedMessage(disposal.getType().getKey()));
             sb.append(" απο τις ");
             sb.append(df.format(disposal.getEstablished()));
             sb.append(" για ");
@@ -275,7 +286,6 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
                 break;
             }
             TeachingHourCDR employmentCDR = employmentsCDRs.size() > 0 ? employmentsCDRs.iterator().next() : null;
-            Integer hoursOnEmploymentCDR = employmentCDR != null ? employmentCDR.getHours() : 0;
             
             /* construct a special CDR to deduct the employment CDR hours */
             TeachingHourCDR specialEmploymentCDR = new TeachingHourCDR();
@@ -285,7 +295,8 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
             sb.append(df.format(relatedEmployment.getEstablished()));
             sb.append(" με υποχρεωτικό ωράριο ");
             sb.append(relatedEmployment.getFinalWorkingHours());
-            sb.append(" ώρες λόγω θητείας.");
+            sb.append(" ώρες λόγω θητείας τύπου ");
+            sb.append(CoreUtils.getLocalizedMessage(serviceAllocation.getServiceType().getKey()));
             specialEmploymentCDR.setComment(sb.toString());
 
             specialEmploymentCDR.setEmployee(relatedEmployment.getEmployee());
@@ -301,47 +312,73 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
                 /* source unit is the same as the servicing unit. This is the case when a regular
                  * employee having a regular employment at a given unit, serves there as the headmaster.
                  */
+                TeachingHourCDR cdr = new TeachingHourCDR();
+                cdr.setCdrType(TeachingHourCDRType.SERVICE_ALLOCATION);
+                sb = new StringBuffer();
+                sb.append("Θητεία στην μονάδα ");
+                sb.append(serviceAllocation.getSourceUnit().getTitle());
+                sb.append(" τυπου ");
+                sb.append(CoreUtils.getLocalizedMessage(serviceAllocation.getServiceType().getKey()));
+                sb.append(" απο τις ");
+                sb.append(df.format(serviceAllocation.getEstablished()));
+                sb.append(" για ");
+                sb.append(serviceAllocation.getWorkingHoursOnServicingPosition());
+                sb.append(" ώρες.");
+                cdr.setComment(sb.toString());
+                cdr.setEmployee(serviceAllocation.getEmployee());
+                cdr.setServiceAllocation(serviceAllocation);
+                cdr.setHours(serviceAllocation.getWorkingHoursOnServicingPosition());
+                cdr.setUnit(serviceAllocation.getServiceUnit());
+                cdr.setSchoolYear(currentSchoolYear);
+                entityManager.persist(cdr);
+                totalCDRsCreated++;
+                
+            } else {
+                /* apply on target unit */
+                TeachingHourCDR cdr = new TeachingHourCDR();
+                cdr.setCdrType(TeachingHourCDRType.SERVICE_ALLOCATION);
+                sb = new StringBuffer();
+                sb.append("Θητεία απο την μονάδα ");
+                sb.append(serviceAllocation.getSourceUnit().getTitle());
+                sb.append(" τυπου ");
+                sb.append(CoreUtils.getLocalizedMessage(serviceAllocation.getServiceType().getKey()));
+                sb.append(" απο τις ");
+                sb.append(df.format(serviceAllocation.getEstablished()));
+                sb.append(" για ");
+                sb.append(serviceAllocation.getWorkingHoursOnServicingPosition());
+                sb.append(" ώρες.");
+                cdr.setComment(sb.toString());
+                cdr.setEmployee(serviceAllocation.getEmployee());
+                cdr.setServiceAllocation(serviceAllocation);
+                cdr.setHours(serviceAllocation.getWorkingHoursOnServicingPosition());
+                cdr.setUnit(serviceAllocation.getServiceUnit());
+                cdr.setSchoolYear(currentSchoolYear);
+                entityManager.persist(cdr);
+                totalCDRsCreated++;
+                
+                /* apply on source unit */
+    
+                cdr = new TeachingHourCDR();
+                cdr.setCdrType(TeachingHourCDRType.SERVICE_ALLOCATION);
+                sb = new StringBuffer();
+                sb.append("Θητεία στην μονάδα ");
+                sb.append(serviceAllocation.getServiceUnit().getTitle());
+                sb.append(" τυπου ");
+                sb.append(CoreUtils.getLocalizedMessage(serviceAllocation.getServiceType().getKey()));
+                sb.append(" απο τις ");
+                sb.append(df.format(serviceAllocation.getEstablished()));
+                sb.append(" για ");
+                sb.append(serviceAllocation.getWorkingHoursOnServicingPosition());
+                sb.append(" ώρες.");
+                cdr.setComment(sb.toString());
+                cdr.setEmployee(serviceAllocation.getEmployee());
+                cdr.setServiceAllocation(serviceAllocation);
+                cdr.setHours(serviceAllocation.getWorkingHoursOnRegularPosition());
+                cdr.setUnit(serviceAllocation.getSourceUnit());
+                cdr.setSchoolYear(currentSchoolYear);
+                entityManager.persist(cdr);
+                totalCDRsCreated++;
             }
-            /* apply on target unit */
-            TeachingHourCDR cdr = new TeachingHourCDR();
-            cdr.setCdrType(TeachingHourCDRType.SERVICE_ALLOCATION);
-            sb = new StringBuffer();
-            sb.append("Θητεία απο την μονάδα ");
-            sb.append(serviceAllocation.getSourceUnit().getTitle());
-            sb.append(" απο τις ");
-            sb.append(df.format(serviceAllocation.getEstablished()));
-            sb.append(" για ");
-            sb.append(serviceAllocation.getWorkingHoursOnServicingPosition());
-            sb.append(" ώρες.");
-            cdr.setComment(sb.toString());
-            cdr.setEmployee(serviceAllocation.getEmployee());
-            cdr.setServiceAllocation(serviceAllocation);
-            cdr.setHours(serviceAllocation.getWorkingHoursOnServicingPosition());
-            cdr.setUnit(serviceAllocation.getServiceUnit());
-            cdr.setSchoolYear(currentSchoolYear);
-            entityManager.persist(cdr);
-            totalCDRsCreated++;
-            
-            /* apply on source unit */
-
-            cdr = new TeachingHourCDR();
-            cdr.setCdrType(TeachingHourCDRType.SERVICE_ALLOCATION);
-            sb = new StringBuffer();
-            sb.append("Θητεία στην μονάδα ");
-            sb.append(serviceAllocation.getServiceUnit().getTitle());
-            sb.append(" απο τις ");
-            sb.append(df.format(serviceAllocation.getEstablished()));
-            sb.append(" για ");
-            sb.append(serviceAllocation.getWorkingHoursOnServicingPosition());
-            sb.append(" ώρες.");
-            cdr.setComment(sb.toString());
-            cdr.setEmployee(serviceAllocation.getEmployee());
-            cdr.setServiceAllocation(serviceAllocation);
-            cdr.setHours(serviceAllocation.getWorkingHoursOnRegularPosition());
-            cdr.setUnit(serviceAllocation.getSourceUnit());
-            cdr.setSchoolYear(currentSchoolYear);
-            entityManager.persist(cdr);
-            totalCDRsCreated++;
           }
         
         em.flush(); /* flush */
@@ -355,7 +392,7 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
             /* fix the common leave message */
             StringBuffer sb = new StringBuffer();
             sb.append("Άδεια τύπου  ");
-            sb.append(activeLeave.getLeaveType());
+            sb.append(CoreUtils.getLocalizedMessage(activeLeave.getLeaveType().getKey()));
             sb.append(" απο τις ");
             sb.append(df.format(activeLeave.getEstablished()));
             sb.append(" μέχρι και  ");
