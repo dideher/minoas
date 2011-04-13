@@ -1,9 +1,6 @@
 package gr.sch.ira.minoas.seam.components.reports;
 
-import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
-import gr.sch.ira.minoas.model.employement.Leave;
-import gr.sch.ira.minoas.model.employement.TeachingHourCDR;
 import gr.sch.ira.minoas.model.security.Principal;
 
 import java.net.MalformedURLException;
@@ -16,8 +13,6 @@ import java.util.Iterator;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Create;
-import org.jboss.seam.annotations.Factory;
-import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Out;
 import org.jboss.seam.annotations.Scope;
@@ -217,7 +212,8 @@ public class BasicUsageReport extends BaseReport {
 		if(getEntityManager()!=null) {
 		    info("generating basic usage report");
 	        
-	        Collection<Object[]> rawData = getEntityManager()
+	        @SuppressWarnings("unchecked")
+            Collection<Object[]> rawData = getEntityManager()
 	                .createQuery(
 	                        "SELECT (SELECT p FROM Principal p WHERE p.id=a.insertedBy.id), COUNT(a.insertedBy) FROM Audit a  GROUP BY (a.insertedBy) ORDER BY COUNT(a.insertedBy) DESC")
 	                .getResultList();
@@ -236,7 +232,8 @@ public class BasicUsageReport extends BaseReport {
 	        reportData.setRawData(rawData);
 	        reportData.setAuditWinnerPrincipals(principals);
 	        reportData.setAuditWinnerCounts(counts);
-
+	        
+	        @SuppressWarnings("unchecked")
 	        Collection<Object[]> employeeReportData = getEntityManager().createQuery(
 	                "SELECT (e.type), COUNT(e.type) FROM Employee e GROUP BY (e.type) ORDER BY COUNT(e.type) DESC WHERE e.active IS TRUE")
 	                .getResultList();

@@ -108,6 +108,7 @@ public class DisposalReportByType extends BaseReport {
 			q.setParameter("specializationGroup", specializationGroup);
 		}
 
+		@SuppressWarnings("unchecked")
 		Collection<Disposal> disposals = q.getResultList();
 		info("found totally #0 disposals matching criteria", disposals.size());
 		reportData = new ArrayList<DisposalReportItem>(disposals.size());

@@ -1155,7 +1155,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     public List<Role> searchRoles(String role_search_pattern) {
         String pattern = CoreUtils.getSearchPattern(role_search_pattern);
         info("searching for roles with #0 search pattern", pattern);
-        List return_value = getEntityManager().createQuery(
+        List<Role> return_value = getEntityManager().createQuery(
                 "SELECT r from Role r WHERE lower(r.id) LIKE :search_pattern").setParameter("search_pattern", pattern)
                 .getResultList();
         info("found totally #0 role(s).", return_value.size());
@@ -1166,7 +1166,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     public List<School> searchShools(String school_search_pattern) {
         String pattern = CoreUtils.getSearchPattern(school_search_pattern);
         info("searching for schools with #0 search pattern.", pattern);
-        List return_value = getEntityManager().createQuery(
+        List<School> return_value = getEntityManager().createQuery(
                 "SELECT s from School s WHERE lower(s.title) LIKE :search_pattern AND s.ministryCode != '0000000'")
                 .setParameter("search_pattern", pattern).getResultList();
         info("found totally #0 school(s).", return_value.size());
