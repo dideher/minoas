@@ -22,6 +22,11 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class WorkExperienceType extends BaseIDModel {
     
+    /**
+     * Comment for <code>serialVersionUID</code>
+     */
+    private static final long serialVersionUID = 1L;
+
     @Basic
     @Column(name = "IS_ACTIVE", nullable = true)
     private Boolean active;

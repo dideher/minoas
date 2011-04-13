@@ -109,6 +109,7 @@ public class EmployeeReport extends BaseReport {
 	/**
 	 * 
 	 */
+	@SuppressWarnings("unchecked")
 	public void generateReport() {
 
 		Date effectiveDate = getEmployeeCriteria().getEffectiveDate();
@@ -118,8 +119,7 @@ public class EmployeeReport extends BaseReport {
 		SpecializationSearchType specializationSearchType = getEmployeeCriteria().getSpecializationSearchType();
 		SpecializationGroup specializationGroup = getEmployeeCriteria().getSpecializationGroup();
 		Specialization specialization = getEmployeeCriteria().getSpecialization();
-		Boolean specialCategory = getEmployeeCriteria().getSpecialCategory();
-		Boolean bigFamily = getEmployeeCriteria().getBigFamily();
+		
 
 		DateSearchType dateSearchType = getEmployeeCriteria().getDateSearchType();
 		//

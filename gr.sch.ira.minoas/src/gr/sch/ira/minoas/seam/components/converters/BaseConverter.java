@@ -3,9 +3,9 @@
  */
 package gr.sch.ira.minoas.seam.components.converters;
 
-import javax.faces.convert.Converter;
-
 import gr.sch.ira.minoas.seam.components.BaseSeamComponent;
+
+import javax.faces.convert.Converter;
 
 import org.jboss.seam.Component;
 
