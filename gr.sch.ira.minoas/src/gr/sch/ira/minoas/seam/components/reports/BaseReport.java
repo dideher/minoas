@@ -1,5 +1,6 @@
 package gr.sch.ira.minoas.seam.components.reports;
 
+import gr.sch.ira.minoas.core.CoreUtils;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employement.Disposal;
 import gr.sch.ira.minoas.model.employement.Employment;
@@ -31,7 +32,7 @@ public abstract class BaseReport extends BaseDatabaseAwareSeamComponent {
     private static final long serialVersionUID = 1L;
 
 
-	private static final String SEAM_MESSAGES_RESOURCE_BUNDLE_NAME = "messages";
+	
 
 	protected Collection<DisposalReportItem> convertDisposalCollection(Collection<Disposal> disposals) {
 		Collection<DisposalReportItem> returnValue = new ArrayList<DisposalReportItem>(disposals.size());
@@ -83,16 +84,15 @@ public abstract class BaseReport extends BaseDatabaseAwareSeamComponent {
 	}
 
 	protected FacesContext getFacesContext() {
-	    return FacesContext.getCurrentInstance();
+	    return CoreUtils.getFacesContext();
 	}
 
 	protected String getLocalizedMessage(String message_key) {
-		return getResourceBundle(SEAM_MESSAGES_RESOURCE_BUNDLE_NAME).getString(message_key);
+		return CoreUtils.getLocalizedMessage(message_key);
 	}
 
 	protected ResourceBundle getResourceBundle(String resource_budle_name) {
-	    return SeamResourceBundle.getBundle(SEAM_MESSAGES_RESOURCE_BUNDLE_NAME, getFacesContext()
-				.getViewRoot().getLocale());
+	    return CoreUtils.getResourceBundle(resource_budle_name);
 	}
 
 	
