@@ -110,6 +110,12 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     
     @Transactional(TransactionPropagationType.REQUIRED)
     @SuppressWarnings("unchecked")
+    public Collection<Disposal> getActiveDisposal(EntityManager em) {
+        return getEntityManager(em).createQuery("SELECT d FROM Disposal d WHERE d.active IS TRUE").getResultList();
+    }
+    
+    @Transactional(TransactionPropagationType.REQUIRED)
+    @SuppressWarnings("unchecked")
     public Collection<Leave> getActiveLeaves(EntityManager em) {
         return getEntityManager(em).createQuery("SELECT l FROM Leave l WHERE l.active IS TRUE").getResultList();
     }

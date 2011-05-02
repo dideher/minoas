@@ -137,7 +137,7 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
         em.flush(); /* flush */
         /* handle secodnments */
 
-        Collection<Secondment> secondments = coreSearching.getActiveSecondments(em, currentSchoolYear);
+        Collection<Secondment> secondments = coreSearching.getActiveSecondments(em);
         for (Secondment secondment : secondments) {
 
             /* hack for secondments */
@@ -205,7 +205,7 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
         
         /* handle disposal */
 
-        Collection<Disposal> disposals = coreSearching.getActiveDisposal(em, currentSchoolYear);
+        Collection<Disposal> disposals = coreSearching.getActiveDisposal(em);
         for (Disposal disposal : disposals) {
 
             Unit sourceUnit = null;
