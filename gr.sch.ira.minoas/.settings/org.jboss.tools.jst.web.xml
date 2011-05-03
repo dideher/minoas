@@ -52939,17 +52939,6 @@ a backing bean</description>
    </FOLDER>
   </FOLDER>
  </file-system>
- <file-system NAME="lib-sunpkcs11.jar"
-  location="/usr/lib/jvm/java-1.5.0-sun-1.5.0.19/jre/lib/ext/sunpkcs11.jar" model-entity="FileSystemJar">
-  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
-  <FOLDER NAME="sun" model-entity="JarFolder">
-   <FOLDER NAME="security" model-entity="JarFolder">
-    <FOLDER NAME="pkcs11" model-entity="JarFolder">
-     <FOLDER NAME="wrapper" model-entity="JarFolder"/>
-    </FOLDER>
-   </FOLDER>
-  </FOLDER>
- </file-system>
  <file-system NAME="lib-jboss-j2ee.jar"
   location="/opt/jboss/jboss-4.2.2.GA/server/minoas/lib/jboss-j2ee.jar" model-entity="FileSystemJar">
   <FOLDER NAME="META-INF" model-entity="JarFolder"/>
@@ -53021,6 +53010,9 @@ a backing bean</description>
      <FOLDER NAME="jdbc" model-entity="JarFolder"/>
     </FOLDER>
    </FOLDER>
+  </FOLDER>
+  <FOLDER NAME="microsoft" model-entity="JarFolder">
+   <FOLDER NAME="sql" model-entity="JarFolder"/>
   </FOLDER>
  </file-system>
  <file-system NAME="lib-jbossha-client.jar"
