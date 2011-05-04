@@ -120,14 +120,19 @@ public class Employment extends BaseIDDeleteAwareModel {
 
 	@Basic
 	@Column(name = "WORK_HRS_DECR", nullable = true)
+	@Deprecated
 	private Integer workingHoursDecrement;
 
 	@Basic
 	@Column(name = "WORK_HRS_DECR_REASON", nullable = true)
+	@Deprecated
 	private String workingHoursDecrementReason;
 	
 	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.LAZY, mappedBy="employment")
     private Collection<TeachingHourCDR>employmentCDRs = new ArrayList<TeachingHourCDR>();
+	
+	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.LAZY, mappedBy="employment")
+	private Collection<WorkReduction> reductions = new ArrayList<WorkReduction>();
 
 	/**
 	 * 
@@ -411,6 +416,20 @@ public class Employment extends BaseIDDeleteAwareModel {
      */
     public void setEmploymentCDRs(Collection<TeachingHourCDR> employmentCDRs) {
         this.employmentCDRs = employmentCDRs;
+    }
+
+    /**
+     * @return the reductions
+     */
+    public Collection<WorkReduction> getReductions() {
+        return reductions;
+    }
+
+    /**
+     * @param reductions the reductions to set
+     */
+    public void setReductions(Collection<WorkReduction> reductions) {
+        this.reductions = reductions;
     }
 
 }

@@ -111,6 +111,9 @@ public class Disposal extends BaseIDModel {
 	
 	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
     private Collection<TeachingHourCDR> disposalCDRs = new ArrayList<TeachingHourCDR>();
+	
+	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.LAZY, mappedBy="disposal")
+	private Collection<WorkReduction> reductions = new ArrayList<WorkReduction>();
 
 	/**
 	 * 

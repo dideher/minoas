@@ -141,6 +141,7 @@ public class Secondment extends BaseIDDeleteAwareModel implements Cloneable {
 
 	@Basic
 	@Column(name = "WORK_HRS_DECR", nullable = true)
+	@Deprecated
 	private Integer workingHoursDecrement;
 
 	@Basic
@@ -150,6 +151,9 @@ public class Secondment extends BaseIDDeleteAwareModel implements Cloneable {
 	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.LAZY, mappedBy="secondment")
     private Collection<TeachingHourCDR> secondmentCDRs = new ArrayList<TeachingHourCDR>();
 
+	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.LAZY, mappedBy="secondment")
+	private Collection<WorkReduction> reductions = new ArrayList<WorkReduction>();
+	
 	/**
 	 * @see java.lang.Object#clone()
 	 */
@@ -253,10 +257,12 @@ public class Secondment extends BaseIDDeleteAwareModel implements Cloneable {
 		return targetUnit;
 	}
 
+	@Deprecated
 	public Integer getWorkingHoursDecrement() {
 		return workingHoursDecrement;
 	}
 
+	@Deprecated
 	public String getWorkingHoursDecrementReason() {
 		return workingHoursDecrementReason;
 	}
@@ -454,6 +460,20 @@ public class Secondment extends BaseIDDeleteAwareModel implements Cloneable {
      */
     public void setSecondmentCDRs(Collection<TeachingHourCDR> secondmentCDRs) {
         this.secondmentCDRs = secondmentCDRs;
+    }
+
+    /**
+     * @return the reductions
+     */
+    public Collection<WorkReduction> getReductions() {
+        return reductions;
+    }
+
+    /**
+     * @param reductions the reductions to set
+     */
+    public void setReductions(Collection<WorkReduction> reductions) {
+        this.reductions = reductions;
     }
 
 }

@@ -92,6 +92,9 @@ public class ServiceAllocation extends BaseIDModel {
 	
 	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.LAZY, mappedBy="serviceAllocation")
     private Collection<TeachingHourCDR> serviceAllocationCDRs = new ArrayList<TeachingHourCDR>();
+	
+	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.LAZY, mappedBy="serviceAllocation")
+    private Collection<WorkReduction> reductions = new ArrayList<WorkReduction>();
 
 	public ServiceAllocation() {
 		super();
@@ -337,5 +340,19 @@ public class ServiceAllocation extends BaseIDModel {
      */
     public void setAutoCanceled(Boolean autoCanceled) {
         this.autoCanceled = autoCanceled;
+    }
+
+    /**
+     * @return the reductions
+     */
+    public Collection<WorkReduction> getReductions() {
+        return reductions;
+    }
+
+    /**
+     * @param reductions the reductions to set
+     */
+    public void setReductions(Collection<WorkReduction> reductions) {
+        this.reductions = reductions;
     }
 }
