@@ -1,23 +1,175 @@
 package gr.sch.ira.minoas.seam.components.management;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+
+import gr.sch.ira.minoas.model.core.SchoolYear;
+import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeExclusion;
 import gr.sch.ira.minoas.model.employement.Employment;
+import gr.sch.ira.minoas.model.employement.TeachingHourCDR;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.EmployeeMergeRequest;
 import gr.sch.ira.minoas.seam.components.home.EmployeeExclusionHome;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
 
 import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.TransactionPropagationType;
 import org.jboss.seam.annotations.Transactional;
+import org.jboss.seam.annotations.datamodel.DataModel;
 import org.jboss.seam.international.StatusMessage.Severity;
 
 @Name(value = "employeeManagement")
-@Scope(ScopeType.CONVERSATION)
+@Scope(ScopeType.PAGE)
 public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
+    
+    public class EmployeeCDRReportItem {
+        
+        private String comment;
+        
+        private Date established;
+        
+        private Date dueTo;
+        
+        private String schoolUnit;
+        
+        private String schoolID;
+        
+        private Integer hours;
+        
+        private String cdrType;
+        
+        private String cdrTypeKey;
+        
+        private TeachingHourCDR cdr;
+        /**
+         * 
+         */
+        public EmployeeCDRReportItem(TeachingHourCDR cdr) {
+            super();
+            this.cdr = cdr;
+            this.comment = cdr.getComment();
+            this.schoolID = cdr.getUnit().getId();
+            this.schoolUnit = cdr.getUnit().getTitle();
+            this.hours = cdr.getHours();
+            this.cdrType = cdr.getCdrType().toString();
+            this.cdrTypeKey = cdr.getCdrType().getKey();
+        }
+        /**
+         * @return the comment
+         */
+        public String getComment() {
+            return comment;
+        }
+        /**
+         * @param comment the comment to set
+         */
+        public void setComment(String comment) {
+            this.comment = comment;
+        }
+        /**
+         * @return the established
+         */
+        public Date getEstablished() {
+            return established;
+        }
+        /**
+         * @param established the established to set
+         */
+        public void setEstablished(Date established) {
+            this.established = established;
+        }
+        /**
+         * @return the dueTo
+         */
+        public Date getDueTo() {
+            return dueTo;
+        }
+        /**
+         * @param dueTo the dueTo to set
+         */
+        public void setDueTo(Date dueTo) {
+            this.dueTo = dueTo;
+        }
+        /**
+         * @return the schoolUnit
+         */
+        public String getSchoolUnit() {
+            return schoolUnit;
+        }
+        /**
+         * @param schoolUnit the schoolUnit to set
+         */
+        public void setSchoolUnit(String schoolUnit) {
+            this.schoolUnit = schoolUnit;
+        }
+        /**
+         * @return the schoolID
+         */
+        public String getSchoolID() {
+            return schoolID;
+        }
+        /**
+         * @param schoolID the schoolID to set
+         */
+        public void setSchoolID(String schoolID) {
+            this.schoolID = schoolID;
+        }
+        /**
+         * @return the hours
+         */
+        public Integer getHours() {
+            return hours;
+        }
+        /**
+         * @param hours the hours to set
+         */
+        public void setHours(Integer hours) {
+            this.hours = hours;
+        }
+        /**
+         * @return the cdrType
+         */
+        public String getCdrType() {
+            return cdrType;
+        }
+        /**
+         * @param cdrType the cdrType to set
+         */
+        public void setCdrType(String cdrType) {
+            this.cdrType = cdrType;
+        }
+        /**
+         * @return the cdr
+         */
+        public TeachingHourCDR getCdr() {
+            return cdr;
+        }
+        /**
+         * @param cdr the cdr to set
+         */
+        public void setCdr(TeachingHourCDR cdr) {
+            this.cdr = cdr;
+        }
+        /**
+         * @return the cdrTypeKey
+         */
+        public String getCdrTypeKey() {
+            return cdrTypeKey;
+        }
+        /**
+         * @param cdrTypeKey the cdrTypeKey to set
+         */
+        public void setCdrTypeKey(String cdrTypeKey) {
+            this.cdrTypeKey = cdrTypeKey;
+        }
+        
+    }
     
     /**
      * Comment for <code>serialVersionUID</code>
@@ -33,6 +185,9 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
 	
 	@In(required = true, create = true)
 	private EmployeeMergeRequest employeeMergeRequest;
+	
+	@DataModel(value="employeeCurrentStatusItems")
+	private Collection<EmployeeCDRReportItem> employeeCurrentStatusItems;
 	
 	
 	/**
@@ -61,6 +216,18 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
 			return ACTION_OUTCOME_FAILURE;
 		}
 
+	}
+	
+	@Factory(value="employeeCurrentStatusItems")
+	public void constructEmployeeCurrentStatusReport() {
+	    SchoolYear currentSchoolYear =  getCoreSearching().getActiveSchoolYear(getEntityManager());
+	    Employee employee = getEmployeeHome().getInstance();
+	    Collection<TeachingHourCDR> employeeCDRs = getCoreSearching().getEmployeeTeachingHoursCDRsWithPositiveHours(getEntityManager(), currentSchoolYear, employee);
+	    employeeCurrentStatusItems = new ArrayList<EmployeeManagement.EmployeeCDRReportItem>(employeeCDRs.size());
+	    for(TeachingHourCDR cdr : employeeCDRs) {
+	        employeeCurrentStatusItems.add(new EmployeeManagement.EmployeeCDRReportItem(cdr));
+	    }
+	    setEmployeeCurrentStatusItems(employeeCurrentStatusItems);
 	}
 	
 	@Transactional(TransactionPropagationType.REQUIRED)
@@ -135,5 +302,19 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
 	public void setEmployeeMergeRequest(EmployeeMergeRequest employeeMergeRequest) {
 		this.employeeMergeRequest = employeeMergeRequest;
 	}
+
+    /**
+     * @return the employeeCurrentStatusItems
+     */
+    public Collection<EmployeeCDRReportItem> getEmployeeCurrentStatusItems() {
+        return employeeCurrentStatusItems;
+    }
+
+    /**
+     * @param employeeCurrentStatusItems the employeeCurrentStatusItems to set
+     */
+    public void setEmployeeCurrentStatusItems(Collection<EmployeeCDRReportItem> employeeCurrentStatusItems) {
+        this.employeeCurrentStatusItems = employeeCurrentStatusItems;
+    }
 
 }
