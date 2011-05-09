@@ -57,7 +57,7 @@
         value="org.hibernate.dialect.MySQL5InnoDBDialect" />
       -->
       <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect" />
-
+      <property name="hibernate.default_schema" value="slavikos"/>
       <!--
         <property name="hibernate.dialect"
         value="org.hibernate.dialect.HSQLDialect"/> property
