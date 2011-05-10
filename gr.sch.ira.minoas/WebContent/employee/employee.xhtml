@@ -694,6 +694,20 @@
 										onclick="if(!confirm('Να προστεθεί ο εκπαιδευτικός στην λίστα εξαιρέσεων ;')) {form.reset(); return false;}">
 									</a4j:commandLink>
 								</rich:menuItem>
+								
+								
+								<rich:menuItem submitMode="ajax"
+									rendered="#{(s:hasRole('ADMIN'))}">
+									<s:link value="Διαχείρηση Μειώσεων Εκπαιδευτικού"
+										propagation="join"
+										view="/employee/manage-employee-workreductions.xhtml">
+										<!--  
+										<f:param name="secondment_management_from"
+											value="/employee/employee" />
+										-->
+									</s:link>
+								</rich:menuItem>
+								
 
 								<rich:menuSeparator />
 								<rich:menuItem submitMode="none"
