@@ -1,4 +1,3 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
@@ -22,9 +21,43 @@
 
 			<h:outputText value="Καλημερα Ζωή" />
 
+			<h:outputText value="fdfkgjdfghjk #{employeesWorkReductions}" />
+
+
+
+
+
+
+			<rich:dataTable id="dflfldskf"
+				value="#{employeesWorkReductions}"
+				var="_workReduction" rows="15" border="0"
+				onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+				onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+				width="100%">
+				<f:facet name="header">
+					<h:outputLabel value="Ιστορικό Οργανικών Θέσεων Εκπαιδευτικού" />
+				</f:facet>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="Σχολική Χρονία" />
+					</f:facet>
+					<h:outputText value="#{_workReduction.comment}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="Σχολική Μονάδα" />
+					</f:facet>
+					<h:outputText value="#{_workReduction.hours}" />
+				</rich:column>
+				
+
+			</rich:dataTable>
+
+
+
 		</rich:panel>
 
-	
+
 
 	</ui:define>
 </ui:composition>
