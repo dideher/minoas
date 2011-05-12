@@ -29,6 +29,7 @@ import gr.sch.ira.minoas.model.employement.ServiceAllocationType;
 import gr.sch.ira.minoas.model.employement.TeachingHourCDR;
 import gr.sch.ira.minoas.model.employement.WorkExperience;
 import gr.sch.ira.minoas.model.employement.WorkExperienceType;
+import gr.sch.ira.minoas.model.employement.WorkReduction;
 import gr.sch.ira.minoas.model.security.Principal;
 import gr.sch.ira.minoas.model.security.Role;
 import gr.sch.ira.minoas.model.transfers.OutstandingImprovement;
@@ -86,6 +87,11 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     }
     
     
+    @SuppressWarnings("unchecked")
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public Collection<WorkReduction> getEmployeeWorkReductions(EntityManager em, Person employee) {
+        return em.createQuery("SELECT w from WorkReduction w WHERE w.active IS TRUE AND w.employee=:employee").setParameter("employee", employee).getResultList();
+    }
 
     @SuppressWarnings("unchecked")
     @Transactional(TransactionPropagationType.REQUIRED)
