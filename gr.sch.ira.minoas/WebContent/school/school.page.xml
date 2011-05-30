@@ -25,7 +25,9 @@
   </navigation>
   
   <navigation from-action="selectEmployee">
-      <redirect view-id="/employee/employee.xhtml" />
+      <redirect view-id="/employee/employee.xhtml">
+        <param name="from" value="/school/school" />
+      </redirect>
   </navigation>
   
 </page>
