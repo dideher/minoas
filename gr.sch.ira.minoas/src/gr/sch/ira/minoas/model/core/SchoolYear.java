@@ -13,6 +13,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 /**
  * Represent a school year.
  * 
@@ -20,6 +23,7 @@ import javax.persistence.Table;
  * */
 @Entity
 @Table(name = "SCHOOL_YEAR")
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class SchoolYear extends BaseIDModel {
 
 	private static final long serialVersionUID = 1L;

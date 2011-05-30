@@ -10,6 +10,9 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 /**
  * 
  * @author slavikos
@@ -17,6 +20,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "SPECIALIZATION")
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class Specialization extends BaseModel {
 
 	private static final long serialVersionUID = 1L;

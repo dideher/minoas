@@ -49,7 +49,8 @@ public class AuditReport extends BaseReport {
 		}
 	}
 
-	@Observer("org.jboss.seam.security.loginSuccessful")
+	@SuppressWarnings("unchecked")
+    @Observer("org.jboss.seam.security.loginSuccessful")
 	@Transactional(TransactionPropagationType.REQUIRED)
 	public void generateReport() {
 		Principal principal = getAuditCriteria().getPrincipal();

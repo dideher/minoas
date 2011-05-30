@@ -18,10 +18,12 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
@@ -29,6 +31,7 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "EMPLOYEE_LEAVE")
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class Leave extends BaseIDModel {
 
 	/**

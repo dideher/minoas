@@ -1,11 +1,8 @@
 package gr.sch.ira.minoas.seam.components.reports;
 
-import gr.sch.ira.minoas.model.core.SchoolType;
 import gr.sch.ira.minoas.model.core.SchoolYear;
 import gr.sch.ira.minoas.model.core.Specialization;
 import gr.sch.ira.minoas.model.core.SpecializationGroup;
-import gr.sch.ira.minoas.model.employement.Employment;
-import gr.sch.ira.minoas.model.employement.EmploymentType;
 import gr.sch.ira.minoas.model.employement.TeachingHourCDR;
 import gr.sch.ira.minoas.seam.components.criteria.EmployeeTeachingHoursReportCriteria;
 import gr.sch.ira.minoas.seam.components.criteria.SpecializationSearchType;
@@ -164,16 +161,15 @@ public class EmployeeTeachingHoursReport extends BaseReport {
 	/**
 	 * 
 	 */
+	@SuppressWarnings("unchecked")
 	public void generateReport() {
 	    long started = System.currentTimeMillis();
         info("generating employee teaching hours report");
-		EmploymentType employeeTye = getEmployeeTeachingHoursReportCriteria().getType();
 		SpecializationSearchType specializationSearchType = getEmployeeTeachingHoursReportCriteria().getSpecializationSearchType();
 		SpecializationGroup specializationGroup = getEmployeeTeachingHoursReportCriteria().getSpecializationGroup();
 		Specialization specialization = getEmployeeTeachingHoursReportCriteria().getSpecialization();
 		SchoolYear schoolYear = getEmployeeTeachingHoursReportCriteria().getSchoolYear();
-		Character region = getEmployeeTeachingHoursReportCriteria().getRegion();
-		SchoolType schoolType = getEmployeeTeachingHoursReportCriteria().getSchoolType();
+		
 
 		StringBuffer sb = new StringBuffer();
 		sb

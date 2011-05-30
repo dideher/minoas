@@ -1,6 +1,11 @@
 
 package gr.sch.ira.minoas.model.employement;
 
+import gr.sch.ira.minoas.model.BaseIDModel;
+import gr.sch.ira.minoas.model.core.SchoolYear;
+import gr.sch.ira.minoas.model.core.Unit;
+import gr.sch.ira.minoas.model.employee.Employee;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,17 +14,14 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import gr.sch.ira.minoas.model.BaseIDModel;
-import gr.sch.ira.minoas.model.core.School;
-import gr.sch.ira.minoas.model.core.SchoolYear;
-import gr.sch.ira.minoas.model.core.Unit;
-import gr.sch.ira.minoas.model.employee.Employee;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
 @Table(name = "TEACHING_HOUR_CDR")
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class TeachingHourCDR extends BaseIDModel {
 
     /**
@@ -222,5 +224,27 @@ public class TeachingHourCDR extends BaseIDModel {
      */
     public void setUnit(Unit unit) {
         this.unit = unit;
+    }
+
+    /**
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("TeachingHourCDR [schoolYear=");
+        builder.append(schoolYear);
+        builder.append(", unit=");
+        builder.append(unit);
+        builder.append(", hours=");
+        builder.append(hours);
+        builder.append(", employee=");
+        builder.append(employee);
+        builder.append(", cdrType=");
+        builder.append(cdrType);
+        builder.append(", comment=");
+        builder.append(comment);
+        builder.append("]");
+        return builder.toString();
     }
 }

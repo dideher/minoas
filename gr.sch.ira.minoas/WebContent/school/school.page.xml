@@ -11,7 +11,7 @@
   
   <action execute="#{schoolReport.fetchSchoolChiefs}" on-postback="false"/>
   <action execute="#{schoolReport.generateEmploymentsReport}" on-postback="false"/>
-  
+   
   <!-- navigation rules -->
   <navigation from-action="endButton">
     <end-conversation />

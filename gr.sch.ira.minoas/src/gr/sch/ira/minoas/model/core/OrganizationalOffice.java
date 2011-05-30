@@ -14,6 +14,9 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 /**
  * 
  * @author
@@ -21,6 +24,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "ORGANIZATIONAL_OFFICE")
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class OrganizationalOffice extends BaseIDModel  {
 
 	private static final long serialVersionUID = 1L;

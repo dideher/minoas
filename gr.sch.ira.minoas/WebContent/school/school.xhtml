@@ -1,4 +1,3 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
@@ -91,6 +90,8 @@
 
 				<rich:tabPanel switchType="ajax" selectedTab="defaultTab">
 
+
+
 					<rich:tab id="defaultTab">
 						<f:facet name="label">
 							<h:outputText value="Συνγκετρωτική Τρέχουσα Κατάσταση" />
@@ -105,6 +106,23 @@
 							viewId="/school/school-employments-analysis-component.xhtml" />
 
 					</rich:tab>
+
+					<rich:tab>
+						<f:facet name="label">
+							<h:outputText value="**** Νεα Τρέχουσα Κατάσταση *****" />
+						</f:facet>
+						<a4j:support event="ontabenter" eventsQueue="lala2"
+							reRender="school-employments-analysis2"
+							action="#{schoolReport.generateEmploymentsCDRReport}"
+							ajaxSingle="true">
+						</a4j:support>
+						
+						<a4j:include id="school-employments-analysis2"
+							viewId="/school/school-employments-cdr-analysis-component.xhtml" />
+
+					</rich:tab>
+
+
 					<rich:tab>
 						<f:facet name="label">
 							<h:outputText value="Αναλυτική Τρέχουσα Κατάσταση" />

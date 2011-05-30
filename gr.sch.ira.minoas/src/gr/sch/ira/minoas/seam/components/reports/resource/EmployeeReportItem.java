@@ -12,6 +12,8 @@ import java.util.Date;
 public class EmployeeReportItem extends BaseIDReportItem {
 
 	private Date employeeBirthday;
+	
+	private Integer employeeID;
 
 	private String employeeCode;
 
@@ -53,6 +55,7 @@ public class EmployeeReportItem extends BaseIDReportItem {
 	public EmployeeReportItem(Employee employee) {
 		super(employee);
 		if (employee != null) {
+		    this.employeeID = employee.getId();
 			this.employeeLastName = employee.getLastName();
 			this.employeeFirstName = employee.getFirstName();
 			this.employeeFatherName = employee.getFatherName();
@@ -311,6 +314,20 @@ public class EmployeeReportItem extends BaseIDReportItem {
         return "EmployeeReportItem [employeeCode=" + employeeCode + ", employeeFatherName=" + employeeFatherName +
                 ", employeeFirstName=" + employeeFirstName + ", employeeLastName=" + employeeLastName +
                 ", employeeSpecializationID=" + employeeSpecializationID + ", employeeTypeKey=" + employeeTypeKey + "]";
+    }
+
+    /**
+     * @return the employeeID
+     */
+    public Integer getEmployeeID() {
+        return employeeID;
+    }
+
+    /**
+     * @param employeeID the employeeID to set
+     */
+    public void setEmployeeID(Integer employeeID) {
+        this.employeeID = employeeID;
     }
 
 }

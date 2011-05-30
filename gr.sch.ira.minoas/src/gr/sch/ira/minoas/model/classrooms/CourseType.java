@@ -26,7 +26,12 @@ import javax.persistence.Table;
 public class CourseType extends BaseIDModel {
 	
 	
-	@Basic
+	/**
+     * Comment for <code>serialVersionUID</code>
+     */
+    private static final long serialVersionUID = 1L;
+
+    @Basic
 	@Column(name="TITLE", length=128, unique=true, nullable=false)
 	private String title;
 	

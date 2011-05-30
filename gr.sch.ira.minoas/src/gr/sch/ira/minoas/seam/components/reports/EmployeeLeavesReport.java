@@ -30,7 +30,6 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.datamodel.DataModel;
-import org.jboss.seam.faces.FacesContext;
 
 /**
  * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
@@ -110,6 +109,7 @@ public class EmployeeLeavesReport extends BaseReport {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public void generateReport() {
 
 		Date effectiveDate = getEmployeeLeaveCriteria().getEffectiveDate();

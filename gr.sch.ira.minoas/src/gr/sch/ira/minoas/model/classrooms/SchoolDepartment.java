@@ -22,7 +22,12 @@ import javax.persistence.Table;
 @Table(name = "SCHOOL_DEPARTMENT")
 public class SchoolDepartment extends BaseIDModel {
 
-	@ManyToOne
+	/**
+     * Comment for <code>serialVersionUID</code>
+     */
+    private static final long serialVersionUID = 1L;
+
+    @ManyToOne
 	@JoinColumn(name="SCHOOL_ID", nullable=false)
 	private School school;
 	
