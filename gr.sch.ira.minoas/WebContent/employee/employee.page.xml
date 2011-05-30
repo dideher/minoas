@@ -13,6 +13,7 @@
   </navigation>
   
   <navigation from-action="backButton">
+    <end-conversation />
     <redirect view-id="#{empty from ? '/home' : from}.xhtml}">
       <param name="to" value="/employee/employee" />
     </redirect>
