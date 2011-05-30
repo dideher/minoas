@@ -1,0 +1,34 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich">
+
+<ui:component>
+	<h:panelGrid columns="1">
+		<s:decorate template="/layout/doubleLineEdit.xhtml">
+			<ui:define name="label">
+				<h:outputText value="Κωδικός Ειδικότητας : " />
+			</ui:define>
+			<h:inputText id="specializationId" value="${specialization.id}"
+				required="true" size="8" maxlength="16" styleClass="fieldValueText" />
+		</s:decorate>
+
+		<s:decorate template="/layout/doubleLineEdit.xhtml">
+			<ui:define name="label">
+				<h:outputText value="Περιγραφή Ειδικότητας : " />
+			</ui:define>
+			<h:inputText value="${specialization.title}" required="true"
+				size="25" maxlength="90" styleClass="fieldValueText" />
+		</s:decorate>
+
+
+
+
+	</h:panelGrid>
+
+
+
+</ui:component>
+</html>

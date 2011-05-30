@@ -54,7 +54,7 @@ public class AddressHome extends MinoasEntityHome<Address> {
 
 	@Transactional
 	public String revert() {
-		info("principal #0 is reverting updates to adress #1", getPrincipalName(), getInstance());
+		info("principal #0 is reverting updates to address #1", getPrincipalName(), getInstance());
 		getEntityManager().refresh(getInstance());
 		return "reverted";
 	}

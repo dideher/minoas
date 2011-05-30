@@ -113,7 +113,7 @@
 						</s:link>
 					</rich:menuItem>
 					<rich:menuSeparator />
-					<rich:menuGroup value="Εκτύπωσεις και Σταστικά">
+					<rich:menuGroup value="Εκτύπωσεις και Στατιστικά">
 						<rich:menuItem submitMode="none"
 							rendered="#{(s:hasRole('ADMIN') or s:hasRole('VIEW_LEAVE'))}">
 							<s:link value="Άδειες Ανα Τύπο" 
@@ -179,7 +179,7 @@
 					<rich:menuGroup value="Εκτύπωσεις και Σταστικά"
 						rendered="#{(s:hasRole('ADMIN') or s:hasRole('VIEW_SERVICE_ALLOCATION'))}">
 						<rich:menuItem submitMode="none">
-							<s:link value="Θητείες Ανα Τύπο"
+							<s:link value="Θητείες ανά Τύπο"
 								view="/serviceallocation/report-by-type.xhtml">
 								<f:param name="service_allocation_report_by_type_from"
 									value="/home" />
@@ -213,13 +213,13 @@
 					<rich:menuGroup value="Εκτύπωσεις και Σταστικά"
 						rendered="#{(s:hasRole('ADMIN') or s:hasRole('VIEW_SECONDMENT'))}">
 						<rich:menuItem submitMode="none">
-							<s:link value="Αποσπάσεις Ανα Τύπο"
+							<s:link value="Αποσπάσεις ανά Τύπο"
 								view="/secondment/report-by-type.xhtml">
 								<f:param name="from" value="/home" />
 							</s:link>
 						</rich:menuItem>
 						<rich:menuItem submitMode="none">
-							<s:link value="Αποσπάσεις Απο Άλλο ΠΥΣΔΕ" 
+							<s:link value="Αποσπάσεις από άλλο ΠΥΣΔΕ" 
 								view="/secondment/FromOtherPysdeReport.xhtml">
 								<f:param name="from" value="/home" />
 							</s:link>
@@ -230,7 +230,7 @@
 				<rich:menuSeparator />
 				
 					<rich:menuItem submitMode="none" rendered="#{(s:hasRole('ADMIN'))}">
-					<s:link value="Συνχώνευση Εκπαιδευτικών" view="/admin/merge-employees.xhtml">
+					<s:link value="Συγχώνευση Εκπαιδευτικών" view="/admin/merge-employees.xhtml">
 						<f:param name="merge-employees_from" value="home" />
 					</s:link>
 				</rich:menuItem>
@@ -246,22 +246,22 @@
 
 				</rich:menuGroup>
 				<rich:menuSeparator />
-				<rich:menuGroup value="Εκτύπωσεις και Στατιστικά"
+				<rich:menuGroup value="Εκτυπώσεις και Στατιστικά"
 					rendered="#{(s:hasRole('ADMIN') or s:hasRole('VIEW_EMPLOYEE'))}">
 					<rich:menuItem submitMode="none">
-						<s:link value="Εκπαιδευτικό Προσωπικό Ανα Τύπο"
+						<s:link value="Εκπαιδευτικό Προσωπικό ανά Τύπο"
 							view="/employee/employee-report-by-type.xhtml">
 							<f:param name="employee_report_by_type_from" value="/home" />
 						</s:link>
 					</rich:menuItem>
 					<rich:menuItem submitMode="none">
-						<s:link value="Σχέσεις Εργασίας Ανά Τύπο"
+						<s:link value="Σχέσεις Εργασίας ανά Τύπο"
 							view="/employee/employment-report-by-type.xhtml">
 							<f:param name="employment_report_by_type_from" value="/home" />
 						</s:link>
 					</rich:menuItem>
 					<rich:menuItem submitMode="none">
-						<s:link value="Διδακτικές Ώρες Απασχολήσης Εκπαιδευτικού"
+						<s:link value="Διδακτικές Ώρες Απασχόλησης Εκπαιδευτικού"
 							view="/employee/employee-teaching-hours-report.xhtml">
 							<f:param name="employee-teaching-hours-report_from" value="/home" />
 						</s:link>
@@ -279,7 +279,7 @@
 					</h:panelGroup>
 				</f:facet>
 				<rich:menuItem submitMode="none">
-					<s:link value="Ιστορικό Ενεργείων" view="/admin/audit-report.xhtml">
+					<s:link value="Ιστορικό Ενεργειών" view="/admin/audit-report.xhtml">
 						<f:param name="audit_report_from" value="home" />
 					</s:link>
 				</rich:menuItem>
@@ -287,6 +287,12 @@
 					<s:link value="Λίστα Εξαιρέσεων Εκπαιδευτικών"
 						view="/employee/employees-exclusion-report.xhtml">
 						<f:param name="employees-exclusion_report_from" value="home" />
+					</s:link>
+				</rich:menuItem>
+				<rich:menuItem submitMode="none" rendered="#{(s:hasRole('ADMIN'))}">
+					<s:link value="Ειδικότητες Εκπαιδευτικών"
+						view="/admin/manage-specializations.xhtml">
+						<f:param name="manage_specializations_from" value="home" />
 					</s:link>
 				</rich:menuItem>
 

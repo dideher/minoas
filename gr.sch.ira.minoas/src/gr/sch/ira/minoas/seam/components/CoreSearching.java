@@ -1056,7 +1056,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 
     @SuppressWarnings("unchecked")
     public Collection<Specialization> getSpecializations(EntityManager em) {
-        return (Collection<Specialization>) em.createQuery("SELECT s FROM Specialization s WHERE ORDER BY s.title ASC")
+        return (Collection<Specialization>) em.createQuery("SELECT s FROM Specialization s ORDER BY s.title ASC")
                 .getResultList();
     }
 

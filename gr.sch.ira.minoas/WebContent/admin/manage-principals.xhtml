@@ -117,7 +117,7 @@
 									action="#{principalHome.clearInstance()}"
 									oncomplete="#{rich:component('createPanel')}.show()"
 									value="Δημιουργία Νέου Χρήστη">
-									<h:graphicImage value="/img/icons/update.png" style="border:0" />
+									
 
 								</a4j:commandButton>
 							</h:panelGrid>
@@ -201,7 +201,6 @@
 			</h:form>
 
 		</rich:modalPanel>
-
 		<rich:modalPanel id="updatePanel" autosized="true" width="450">
 			<f:facet name="header">
 				<h:outputText value="Τροποποίηση Ομάδας Ειδικοτήτων" />
@@ -238,6 +237,7 @@
 				</h:panelGrid>
 			</h:form>
 		</rich:modalPanel>
+		
 		<ui:include src="/components/wait-modal-panel.xhtml" />
 	</ui:define>
 </ui:composition>
