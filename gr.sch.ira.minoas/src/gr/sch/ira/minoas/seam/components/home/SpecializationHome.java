@@ -1,25 +1,22 @@
-/**
- * 
- */
 package gr.sch.ira.minoas.seam.components.home;
 
-import gr.sch.ira.minoas.model.core.Address;
+import gr.sch.ira.minoas.model.classrooms.CourseType;
+import gr.sch.ira.minoas.model.core.Specialization;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
 
 /**
- * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
+ * @author <a href="mailto:gand@sch.gr">Yorgos Andreadakis</a>
  * @version $Id$
  */
-@Name("addressHome")
-@Scope(ScopeType.CONVERSATION)
-public class AddressHome extends MinoasEntityHome<Address> {
+@Name(value = "specializationHome")
+public class SpecializationHome extends MinoasEntityHome<Specialization> {
+
 	/**
-	 * 
+	 * Comment for <code>serialVersionUID</code>
 	 */
 	private static final long serialVersionUID = 1L;
 
@@ -27,21 +24,20 @@ public class AddressHome extends MinoasEntityHome<Address> {
 	 * @see org.jboss.seam.framework.Home#createInstance()
 	 */
 	@Override
-	protected Address createInstance() {
-		Address instance = new Address();
+	protected Specialization createInstance() {
+		Specialization instance = new Specialization();
 		return instance;
 	}
-
+	
 	/**
 	 * @see org.jboss.seam.framework.Home#getInstance()
 	 */
 	@Override
-	@Factory(value = "address", scope = ScopeType.PAGE)
-	public Address getInstance() {
-		// TODO Auto-generated method stub
-		return (Address) super.getInstance();
+	@Factory(value = "specialization", scope = ScopeType.PAGE)
+	public Specialization getInstance() {
+		return (Specialization) super.getInstance();
 	}
-
+	
 	/**
 	 * @see gr.sch.ira.minoas.seam.components.home.MinoasEntityHome#persist()
 	 */
@@ -49,23 +45,29 @@ public class AddressHome extends MinoasEntityHome<Address> {
 	@Transactional
 	public String persist() {
 		return super.persist();
-
+	}
+	
+	/**
+	 * @see gr.sch.ira.minoas.seam.components.home.MinoasEntityHome#remove()
+	 */
+	@Override
+	@Transactional
+	public String remove() {
+		return super.remove();
 	}
 
 	@Transactional
 	public String revert() {
-		info("principal #0 is reverting updates to address #1", getPrincipalName(), getInstance());
 		getEntityManager().refresh(getInstance());
 		return "reverted";
 	}
-
+	
 	/**
 	 * @see gr.sch.ira.minoas.seam.components.home.MinoasEntityHome#update()
 	 */
 	@Override
 	@Transactional
 	public String update() {
-
 		return super.update();
 	}
 
