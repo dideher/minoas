@@ -1,4 +1,4 @@
-#Fri Oct 15 12:35:43 EEST 2010
+#Mon May 30 11:41:59 EEST 2011
 eclipse.preferences.version=1
 encoding//WebContent/admin/audit-report.xhtml=UTF-8
 encoding//WebContent/admin/manage-principals.xhtml=UTF-8
@@ -35,10 +35,6 @@ encoding//WebContent/leave/leave-component.xhtml=UTF-8
 encoding//WebContent/login.xhtml=UTF-8
 encoding//WebContent/school/basicInfo.xhtml=UTF-8
 encoding//WebContent/school/detailed-school-status-component.xhtml=UTF-8
-encoding//WebContent/school/school-deputy-employments-component.xhtml=UTF-8
-encoding//WebContent/school/school-employments-analysis-component.xhtml=UTF-8
-encoding//WebContent/school/school-hourlybased-employments-component.xhtml=UTF-8
-encoding//WebContent/school/school-regular-employments-component.xhtml=UTF-8
 encoding//WebContent/school/school.xhtml=UTF-8
 encoding//WebContent/school/teaching-resources.xhtml=UTF-8
 encoding//WebContent/teachingResources/teaching-resource-component.xhtml=UTF-8
