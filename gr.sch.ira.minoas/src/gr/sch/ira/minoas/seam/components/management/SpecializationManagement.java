@@ -1,7 +1,6 @@
 package gr.sch.ira.minoas.seam.components.management;
 
 import java.util.Collection;
-import java.util.Date;
 
 import gr.sch.ira.minoas.model.core.Specialization;
 import org.jboss.seam.ScopeType;
@@ -10,6 +9,7 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.datamodel.DataModel;
 import org.jboss.seam.annotations.Factory;
+import org.jboss.seam.international.StatusMessage.Severity;
 
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.home.SpecializationHome;
@@ -38,21 +38,38 @@ public class SpecializationManagement extends BaseDatabaseAwareSeamComponent {
     
     @Factory(value="specializations")
     public void fetchSpecializations() {
-       
-        
-        
-//        Specialization localSpecialization = new Specialization();
-//        localSpecialization.setTitle("Δοκιμαστική Ειδικότητα 1");
-//        localSpecialization.setId("ΔΟΚ-03");
-//        localSpecialization.setInsertedOn(new Date());
-//        localSpecialization.setInsertedBy(getPrincipal());
-//        getEntityManager().persist(localSpecialization);
-//        getEntityManager().flush();
-       
-        
+
         specializations = getCoreSearching().getSpecializations(getEntityManager());
-        
-        
-        
+
     }
+    
+    
+
+	public String updateSpecialization() {
+		String persistanceReturnValue = null;
+		try {
+			persistanceReturnValue = specializationHome.update();
+			getEntityManager().flush();
+			specializations = getCoreSearching().getSpecializations(getEntityManager());
+		} catch (Exception e) {
+
+			facesMessages.add(Severity.ERROR, "Ο Κωδικός της ειδικότητας υπάρχει ήδη.");
+			
+		}
+		return persistanceReturnValue;
+	}
+	
+	public String insertSpecialization() {
+		String persistanceReturnValue = null;
+		try {
+			persistanceReturnValue = specializationHome.persist();
+			getEntityManager().flush();
+			specializations = getCoreSearching().getSpecializations(getEntityManager());
+		} catch (Exception e) {
+
+			facesMessages.add(Severity.ERROR, "Ο Κωδικός της ειδικότητας υπάρχει ήδη.");
+			
+		}
+		return persistanceReturnValue;
+	}
 }
