@@ -289,12 +289,7 @@
 						<f:param name="employees-exclusion_report_from" value="home" />
 					</s:link>
 				</rich:menuItem>
-				<rich:menuItem submitMode="none" rendered="#{(s:hasRole('ADMIN'))}">
-					<s:link value="Ειδικότητες Εκπαιδευτικών"
-						view="/admin/manage-specializations.xhtml">
-						<f:param name="manage_specializations_from" value="home" />
-					</s:link>
-				</rich:menuItem>
+				
 
 			</rich:dropDownMenu>
 			<rich:dropDownMenu disabled="#{!identity.loggedIn}">
@@ -322,6 +317,13 @@
 						<s:link value="Ομάδες Ειδικοτητών"
 							view="/admin/manage-specialization-groups.xhtml">
 							<f:param name="manage_specialization_groups_from" value="home" />
+						</s:link>
+					</rich:menuItem>
+					
+					<rich:menuItem submitMode="none" rendered="#{(s:hasRole('ADMIN'))}">
+						<s:link value="Ειδικότητες Εκπαιδευτικών"
+							view="/admin/manage-specializations.xhtml">
+							<f:param name="manage_specializations_from" value="home" />
 						</s:link>
 					</rich:menuItem>
 				</rich:menuGroup>

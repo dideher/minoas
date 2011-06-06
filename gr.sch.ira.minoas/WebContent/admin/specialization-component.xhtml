@@ -6,13 +6,18 @@
 	xmlns:rich="http://richfaces.org/rich">
 
 <ui:component>
-	<h:panelGrid columns="1">
+
+	<ui:include src="/components/messages-component.xhtml" />
+
+	<h:panelGrid columns="2">
+		
+	
 		<s:decorate template="/layout/doubleLineEdit.xhtml">
 			<ui:define name="label">
 				<h:outputText value="Κωδικός Ειδικότητας : " />
 			</ui:define>
 			<h:inputText id="specializationId" value="${specialization.id}"
-				required="true" size="8" maxlength="16" styleClass="fieldValueText" />
+				required="true" size="16" maxlength="16" styleClass="fieldValueText" />
 		</s:decorate>
 
 		<s:decorate template="/layout/doubleLineEdit.xhtml">
@@ -20,7 +25,7 @@
 				<h:outputText value="Περιγραφή Ειδικότητας : " />
 			</ui:define>
 			<h:inputText value="${specialization.title}" required="true"
-				size="25" maxlength="90" styleClass="fieldValueText" />
+				size="30" maxlength="90" styleClass="fieldValueText" />
 		</s:decorate>
 
 

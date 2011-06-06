@@ -60,7 +60,8 @@
 									<a4j:commandLink ajaxSingle="true" id="updatelink"
 										oncomplete="#{rich:component('updatePanel')}.show()"
 										value="Τροποποίηση">
-										<h:graphicImage value="/img/icons/update.png" style="border:0" />
+										<h:graphicImage value="/img/icons/update.png" width="15"
+											height="15" style="border:0" />
 										<f:setPropertyActionListener
 											value="#{_specializationGroup.id}"
 											target="#{specializationGroupHome.id}" />
