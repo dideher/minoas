@@ -38,7 +38,7 @@
 					rows="20" var="_specialization" border="0"
 					onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
 					onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
-					width="100%">
+					width="100%" >
 					<f:facet name="header">
 						<h:outputLabel value="Ειδικότητες Εκπαιδευτικών" />
 					</f:facet>
@@ -63,6 +63,7 @@
 
 						<rich:toolBar itemSeparator="line">
 							<a4j:commandLink ajaxSingle="true" id="updatelink"
+								reRender="updateSpecializationOutputPanel"
 								oncomplete="#{rich:component('updatePanel')}.show()">
 								<h:graphicImage value="/img/icons/edit.png" style="border:0"
 									height="12" width="12" />
@@ -92,10 +93,6 @@
 			</rich:panel>
 		</h:form>
 
-
-
-
-
 		<rich:modalPanel id="createPanel" autosized="true" width="450">
 			<f:facet name="header">
 				<h:outputText value="Εισαγωγή Νέας Ειδικότητας" />
@@ -124,7 +121,7 @@
 					</a4j:outputPanel>
 					<h:panelGroup>
 						<a4j:commandButton value="Καταχώρηση"
-							action="#{specializationHome.persist()}"
+							action="#{specializationManagement.insertSpecialization()}"
 							reRender="specializationsTable"
 							data="#{facesContext.maximumSeverity.ordinal ge 2}"
 							oncomplete="if(data == false) Richfaces.hideModalPanel('createPanel');" />
@@ -135,41 +132,7 @@
 				</h:panelGrid>
 			</h:form>
 		</rich:modalPanel>
-		<rich:modalPanel id="deletePanel" autosized="true" width="400">
-			<f:facet name="header">
-				<h:outputText value="Απενεργοποίηση Χρήστη ?"
-					style="padding-right:15px;" />
-			</f:facet>
-			<f:facet name="controls">
-				<h:panelGroup>
-					<h:graphicImage value="/img/modal/close.png" width="18" height="18"
-						styleClass="hidelink" id="hidelink2" />
-					<rich:componentControl for="deletePanel" attachTo="hidelink2"
-						operation="hide" event="onclick" />
-				</h:panelGroup>
-			</f:facet>
-			<h:form>
-				<a4j:outputPanel id="deletePanelContent" layout="inline">
-					<h:panelGroup>
-						<h:outputText value="Να απενεργοποιηθεί ο χρήστης του Μίνωα " />
-						<h:outputText
-							value="#{principalHome.instance.username} (#{principalHome.instance.realName})"
-							styleClass="fieldValueText" />
-						<h:outputText
-							value=". Ο χρήστης δεν θα διαγραφεί απο την βάση και μπορεί να ενεργοποιηθεί ξανά αν το επιθυμείτε." />
-					</h:panelGroup>
-				</a4j:outputPanel>
-				<h:panelGrid columns="2">
-					<a4j:commandButton value="Απενεργοποίηση Χρήστη" ajaxSingle="true"
-						action="#{specializationGroupHome.remove()}"
-						oncomplete="#{rich:component('deletePanel')}.hide();"
-						reRender="specializationGroupTable" />
-					<a4j:commandButton value="Επιστροφή"
-						onclick="#{rich:component('deletePanel')}.hide();return false;" />
-				</h:panelGrid>
-			</h:form>
-
-		</rich:modalPanel>
+		
 		<rich:modalPanel id="updatePanel" autosized="true" width="450">
 			<f:facet name="header">
 				<h:outputText value="Τροποποίηση Ειδικότητας" />
@@ -185,19 +148,34 @@
 			<h:form>
 				<h:panelGrid columns="1">
 
-					<a4j:outputPanel id="editAjaxPanel" ajaxRendered="true">
+					<a4j:outputPanel id="updateSpecializationOutputPanel" ajaxRendered="true">
 						<h:outputText
 							value="Με την παρακάτω φόρμα μπορείτε να τροποποίησετε την ειδικότητα που επιλέξατε." />
 						<rich:panel>
-							<ui:include src="/admin/specialization-component.xhtml">
-								<ui:param name="specialization"
-									value="#{specializationHome.instance}" />
-							</ui:include>
+							
+							<h:panelGrid columns="2">
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Κωδικός Ειδικότητας : " />
+									</ui:define>
+									<h:inputText id="specializationId" value="${specializationHome.instance.id}"
+										required="true" size="16" maxlength="16" styleClass="fieldValueText" readonly="true"/>
+								</s:decorate>
+						
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Περιγραφή Ειδικότητας : " />
+									</ui:define>
+									<h:inputText value="${specializationHome.instance.title}" required="true"
+										size="30" maxlength="90" styleClass="fieldValueText" />
+								</s:decorate>
+							</h:panelGrid>
 						</rich:panel>
 					</a4j:outputPanel>
 					<h:panelGroup>
 						<a4j:commandButton value="Αποθήκευση Αλλαγών"
-							action="#{specializationHome.update()}"
+							action="#{specializationManagement.updateSpecialization()}"
+							reRender="specializationsTable"
 							data="#{facesContext.maximumSeverity.ordinal ge 2}"
 							oncomplete="if(data == false) #{rich:component('updatePanel')}.hide();return true;" />
 						<a4j:commandButton value="Ακύρωση Αλλαγών"
@@ -209,7 +187,8 @@
 		</rich:modalPanel>
 
 
-		<ui:include src="/components/wait-modal-panel.xhtml" />
+	<!-- 	<ui:include src="/components/wait-modal-panel.xhtml" />  -->
 	</ui:define>
 </ui:composition>
+
 </html>
