@@ -47,17 +47,17 @@ public class WorkExperience extends BaseIDModel {
 	@Column(name = "TO_DATE", nullable = false)
 	private Date toDate;
 
-	@Column(name = "CALENDAR_DAYS", nullable = true)
-	private Integer experienceDays;
-
-	@Column(name = "ACTUAL_DAYS", nullable = true)
-	private Integer actualExperienceDays;
+	@Column(name = "CALENDAR_EXPERIENCE_DAYS", nullable = false)
+	private Integer calendarExperienceDays;
+	
+	@Column(name = "PUBLIC_SECTOR_EXPERIENCE", nullable = false)
+	private Integer publicSectorExperience;
+	
+	@Column(name = "EXPERIENCE_UNIT_ID", nullable = true)
+	private String experienceUnitId;
 	
 	@Column(name="COMMENT", nullable = true)
 	private String comment;
-	
-	@Column(name="EDUCATIONAL", nullable = true)
-	private Boolean educationalExpirience;
 	
 	
 	
@@ -121,6 +121,48 @@ public class WorkExperience extends BaseIDModel {
 	
 
 	/**
+	 * @return the calendarExperienceDays
+	 */
+	public Integer getCalendarExperienceDays() {
+		return calendarExperienceDays;
+	}
+
+	/**
+	 * @param calendarExperienceDays the calendarExperienceDays to set
+	 */
+	public void setCalendarExperienceDays(Integer calendarExperienceDays) {
+		this.calendarExperienceDays = calendarExperienceDays;
+	}
+
+	/**
+	 * @return the publicSectorExperience
+	 */
+	public Integer getPublicSectorExperience() {
+		return publicSectorExperience;
+	}
+
+	/**
+	 * @param publicSectorExperience the publicSectorExperience to set
+	 */
+	public void setPublicSectorExperience(Integer publicSectorExperience) {
+		this.publicSectorExperience = publicSectorExperience;
+	}
+
+	/**
+	 * @return the experienceUnitId
+	 */
+	public String getExperienceUnitId() {
+		return experienceUnitId;
+	}
+
+	/**
+	 * @param experienceUnitId the experienceUnitId to set
+	 */
+	public void setExperienceUnitId(String experienceUnitId) {
+		this.experienceUnitId = experienceUnitId;
+	}
+
+	/**
 	 * @return the active
 	 */
 	public Boolean getActive() {
@@ -147,47 +189,5 @@ public class WorkExperience extends BaseIDModel {
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
-
-    /**
-     * @return the experienceDays
-     */
-    public Integer getExperienceDays() {
-        return experienceDays;
-    }
-
-    /**
-     * @param experienceDays the experienceDays to set
-     */
-    public void setExperienceDays(Integer experienceDays) {
-        this.experienceDays = experienceDays;
-    }
-
-    /**
-     * @return the actualExperienceDays
-     */
-    public Integer getActualExperienceDays() {
-        return actualExperienceDays;
-    }
-
-    /**
-     * @param actualExperienceDays the actualExperienceDays to set
-     */
-    public void setActualExperienceDays(Integer actualExperienceDays) {
-        this.actualExperienceDays = actualExperienceDays;
-    }
-
-    /**
-     * @return the educationalExpirience
-     */
-    public Boolean getEducationalExpirience() {
-        return educationalExpirience;
-    }
-
-    /**
-     * @param educationalExpirience the educationalExpirience to set
-     */
-    public void setEducationalExpirience(Boolean educationalExpirience) {
-        this.educationalExpirience = educationalExpirience;
-    }
 
 }

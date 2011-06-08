@@ -3,8 +3,10 @@ package gr.sch.ira.minoas.model.employee;
 import gr.sch.ira.minoas.model.core.PYSDE;
 import gr.sch.ira.minoas.model.core.Specialization;
 import gr.sch.ira.minoas.model.employement.Disposal;
+import gr.sch.ira.minoas.model.employement.EducationalLevelType;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.Leave;
+import gr.sch.ira.minoas.model.employement.LeaveType;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.ServiceAllocation;
 
@@ -105,6 +107,10 @@ public class Employee extends Person {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "EMPLOYEE_TYPE", nullable = false, updatable = false)
 	private EmployeeType type;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "EDUCATIONAL_LEVEL_TYPE", length = 2, nullable = false)
+	private EducationalLevelType educationalLevelType;
 	
 	@OneToOne(fetch=FetchType.LAZY, cascade={CascadeType.ALL}, mappedBy="employee")
 	private EmployeeExclusion exclusion;
@@ -243,6 +249,20 @@ public class Employee extends Person {
 	 */
 	public EmployeeType getType() {
 		return type;
+	}
+
+	/**
+	 * @return the educationalLevelType
+	 */
+	public EducationalLevelType getEducationalLevelType() {
+		return educationalLevelType;
+	}
+
+	/**
+	 * @param educationalLevelType the educationalLevelType to set
+	 */
+	public void setEducationalLevelType(EducationalLevelType educationalLevelType) {
+		this.educationalLevelType = educationalLevelType;
 	}
 
 	/**

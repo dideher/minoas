@@ -87,6 +87,10 @@ public abstract class Person extends BaseIDModel {
 	@Basic
 	@Column(name = "VAT_NUMBER", nullable = true, length = 10)
 	private String vatNumber;
+	
+	@Basic
+	@Column(name = "EMAIL", nullable = true, length = 64)
+	private String email;
 
 	/**
 	 * @return the address
@@ -272,6 +276,20 @@ public abstract class Person extends BaseIDModel {
 	 */
 	public void setVatNumber(String vatNumber) {
 		this.vatNumber = vatNumber;
+	}
+
+	/**
+	 * @return the email
+	 */
+	public String getEmail() {
+		return email;
+	}
+
+	/**
+	 * @param email the email to set
+	 */
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	/**
