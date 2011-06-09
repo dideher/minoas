@@ -72,7 +72,7 @@ public class Unit extends AbstractArchivableEntity implements Comparable<Unit> {
 	private String title;
 	
 	@Basic
-    @Column(name = "PUBLIC_SECTOR", nullable = false)
+    @Column(name = "PUBLIC_SECTOR", nullable = true)
     private Boolean publicSector;
 
 	/**
