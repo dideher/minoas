@@ -50,9 +50,7 @@ public class WorkExperience extends BaseIDModel {
 	@Column(name = "CALENDAR_EXPERIENCE_DAYS", nullable = false)
 	private Integer calendarExperienceDays;
 	
-	@Column(name = "PUBLIC_SECTOR_EXPERIENCE", nullable = false)
-	private Integer publicSectorExperience;
-	
+
 	@Column(name = "EXPERIENCE_UNIT_ID", nullable = true)
 	private String experienceUnitId;
 	
@@ -132,20 +130,6 @@ public class WorkExperience extends BaseIDModel {
 	 */
 	public void setCalendarExperienceDays(Integer calendarExperienceDays) {
 		this.calendarExperienceDays = calendarExperienceDays;
-	}
-
-	/**
-	 * @return the publicSectorExperience
-	 */
-	public Integer getPublicSectorExperience() {
-		return publicSectorExperience;
-	}
-
-	/**
-	 * @param publicSectorExperience the publicSectorExperience to set
-	 */
-	public void setPublicSectorExperience(Integer publicSectorExperience) {
-		this.publicSectorExperience = publicSectorExperience;
 	}
 
 	/**

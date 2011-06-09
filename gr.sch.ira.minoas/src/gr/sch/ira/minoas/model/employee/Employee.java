@@ -109,7 +109,7 @@ public class Employee extends Person {
 	private EmployeeType type;
 	
 	@Enumerated(EnumType.STRING)
-	@Column(name = "EDUCATIONAL_LEVEL_TYPE", length = 2, nullable = false)
+	@Column(name = "EDUCATIONAL_LEVEL_TYPE", length = 2, nullable = true)
 	private EducationalLevelType educationalLevelType;
 	
 	@OneToOne(fetch=FetchType.LAZY, cascade={CascadeType.ALL}, mappedBy="employee")
