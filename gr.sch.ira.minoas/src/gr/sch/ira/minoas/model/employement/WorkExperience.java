@@ -50,8 +50,8 @@ public class WorkExperience extends BaseIDModel {
 	@Column(name = "CALENDAR_EXPERIENCE_DAYS", nullable = false)
 	private Integer calendarExperienceDays;
 	
-
-	@Column(name = "EXPERIENCE_UNIT_ID", nullable = true)
+	@ManyToOne()
+	@JoinColumn(name = "EXPERIENCE_UNIT_ID", nullable = true)
 	private String experienceUnitId;
 	
 	@Column(name="COMMENT", nullable = true)
