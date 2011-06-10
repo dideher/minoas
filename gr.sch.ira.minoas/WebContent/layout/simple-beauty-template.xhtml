@@ -59,17 +59,9 @@
 
 		</s:div>
 
-
-
-
-
-	</s:div>
-
-
-	<s:div id="main_content_bottom">
 		<rich:toolBar itemSeparator="line">
 
-			<rich:toolBarGroup location="right">
+			<rich:toolBarGroup location="right" >
 				<h:form id="conveform">
 					<h:outputText value="Τρέχουσες Διαδικασίες : " />
 					<h:selectOneMenu value="#{switcher.conversationIdOrOutcome}">
@@ -80,21 +72,26 @@
 			</rich:toolBarGroup>
 		</rich:toolBar>
 
-	</s:div>
 
+
+	</s:div>
 
 
 	<s:div id="footer">
-
-		<h:outputText value="Ανάπτυξη και σχεδίαση 2008-2010 - " />
+		<h:outputText value="Ανάπτυξη και σχεδίαση" /> 
+		
 		<h:outputLink value="http://www.slavik.gr" target="new"
 			title="Ο Ισότοπος του Σλαβίκου">
-			<h:outputText value="Φίλιππος Σλάβικ" />
+			<h:outputText value="Φίλιππος Σλάβικ (2008-2011)" />
 		</h:outputLink>
+		<h:outputText value=", " /> 
+		<h:outputLink value="http://" target="new">
+			<h:outputText value="Γιώργος Ανδρεάδακης (2011)" />
+		</h:outputLink>
+	</s:div> 
+	
 
-	</s:div>
-
-
+	
 
 </s:div>
 
