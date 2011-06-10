@@ -1,6 +1,7 @@
 package gr.sch.ira.minoas.model.employement;
 
 import gr.sch.ira.minoas.model.BaseIDModel;
+import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employee.Employee;
 
 import java.util.Date;
@@ -51,8 +52,8 @@ public class WorkExperience extends BaseIDModel {
 	private Integer calendarExperienceDays;
 	
 	@ManyToOne()
-	@JoinColumn(name = "EXPERIENCE_UNIT_ID", nullable = true)
-	private String experienceUnitId;
+	@JoinColumn(name = "EXPERIENCE_UNIT", nullable = true)
+	private Unit experienceUnit;
 	
 	@Column(name="COMMENT", nullable = true)
 	private String comment;
@@ -133,17 +134,17 @@ public class WorkExperience extends BaseIDModel {
 	}
 
 	/**
-	 * @return the experienceUnitId
+	 * @return the experienceUnit
 	 */
-	public String getExperienceUnitId() {
-		return experienceUnitId;
+	public Unit getExperienceUnit() {
+		return experienceUnit;
 	}
 
 	/**
-	 * @param experienceUnitId the experienceUnitId to set
+	 * @param experienceUnit the experienceUnit to set
 	 */
-	public void setExperienceUnitId(String experienceUnitId) {
-		this.experienceUnitId = experienceUnitId;
+	public void setExperienceUnit(Unit experienceUnit) {
+		this.experienceUnit = experienceUnit;
 	}
 
 	/**
