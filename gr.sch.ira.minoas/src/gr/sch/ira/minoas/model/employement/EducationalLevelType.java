@@ -11,15 +11,15 @@ public enum EducationalLevelType {
 	/**
 	 * Πανεπιστημιακής Εκπαίδευσης
 	 */
-	UNIVERSITY_EDUCATION_LEVEL("ΠΕ"),
+	UNIVERSITY_EDUCATION_LEVEL_KEY("ΠΕ"),
 	/**
 	 * Τεχνολογικής Εκπαίδευσης
 	 */
-	TECHNOLOGIGAL_EDUCATION_LEVEL("ΤΕ"),
+	TECHNOLOGIGAL_EDUCATION_LEVEL_KEY("ΤΕ"),
 	/**
 	 * Δευτεροβάθμιας Εκπαίδευσης
 	 */
-	SECONDARY_EDUCATION_LEVEL("ΔΕ")
+	SECONDARY_EDUCATION_LEVEL_KEY("ΔΕ")
 	;
 
 	private String key;
