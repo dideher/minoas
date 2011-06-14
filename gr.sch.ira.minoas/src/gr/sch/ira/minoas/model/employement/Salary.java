@@ -3,6 +3,7 @@ package gr.sch.ira.minoas.model.employement;
 import gr.sch.ira.minoas.model.BaseIDModel;
 import gr.sch.ira.minoas.model.employee.Employee;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -22,17 +23,19 @@ public class Salary extends BaseIDModel {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@OneToOne(optional = true, fetch = FetchType.LAZY)
-	@JoinColumn(name = "EMPLOYEE_ID", nullable = false)
+	@OneToOne(optional = true, fetch = FetchType.LAZY, mappedBy="salary")
 	private Employee employee;
 
+	@Basic
 	@Column(name = "INITIAL_SALARY_LEVEL", nullable = false)
 	private Integer initialSalaryLevel;
 
-	@Column(name = "CURRENT_SALARY_LEVEL", nullable = false)
+	@Basic
+    @Column(name = "CURRENT_SALARY_LEVEL", nullable = false)
 	private Integer currentSalaryLevel;
 
-	@Column(name = "COMMENT", nullable = true)
+	@Basic
+    @Column(name = "COMMENT", nullable = true)
 	private String comment;
 
 	/**

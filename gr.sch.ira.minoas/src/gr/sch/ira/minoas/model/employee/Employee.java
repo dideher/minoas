@@ -7,6 +7,7 @@ import gr.sch.ira.minoas.model.employement.EducationalLevelType;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.Leave;
 import gr.sch.ira.minoas.model.employement.LeaveType;
+import gr.sch.ira.minoas.model.employement.Salary;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.ServiceAllocation;
 
@@ -66,6 +67,11 @@ public class Employee extends Person {
 
 	@OneToMany(mappedBy = "employee", fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
 	private Set<Employment> employments;
+	
+	@OneToOne(optional=true, fetch=FetchType.LAZY, cascade={CascadeType.ALL})
+	@JoinColumn(name="SALARY_ID", nullable=true)
+	private Salary salary;
+	
 
 	/**
 	* Each employee have a specialization, which is actually the last employment's 
@@ -426,6 +432,20 @@ public class Employee extends Person {
 	protected void setDisposals(Collection<Disposal> disposals) {
 		this.disposals = disposals;
 	}
+
+    /**
+     * @return the salary
+     */
+    public Salary getSalary() {
+        return salary;
+    }
+
+    /**
+     * @param salary the salary to set
+     */
+    public void setSalary(Salary salary) {
+        this.salary = salary;
+    }
 	
 	
 
