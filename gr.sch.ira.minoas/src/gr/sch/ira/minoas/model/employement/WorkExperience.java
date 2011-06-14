@@ -7,6 +7,7 @@ import gr.sch.ira.minoas.model.employee.Employee;
 import java.util.Date;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -32,11 +33,11 @@ public class WorkExperience extends BaseIDModel {
 	@Column(name = "IS_ACTIVE", nullable = true)
 	private Boolean active;
 	
-	@ManyToOne
-	@JoinColumn(name="EXPERIENCE_TYPE_ID")
+	@ManyToOne()
+	@JoinColumn(name="EXPERIENCE_TYPE_ID", nullable=false)
 	private WorkExperienceType type;
 
-	@ManyToOne()
+	@ManyToOne(optional=false)
 	@JoinColumn(name = "EMPLOYEE_ID", nullable = false)
 	private Employee employee;
 
