@@ -28,6 +28,10 @@ public class WorkExperience extends BaseIDDeleteAwareModel {
      * Comment for <code>serialVersionUID</code>
      */
     private static final long serialVersionUID = 1L;
+    
+    @Basic
+    @Column(name = "LEGACY_CODE", nullable = true)
+    private Integer legacyCode;
 
 	@Basic
 	@Column(name = "IS_ACTIVE", nullable = true)
@@ -175,5 +179,19 @@ public class WorkExperience extends BaseIDDeleteAwareModel {
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
+
+    /**
+     * @return the legacyCode
+     */
+    public Integer getLegacyCode() {
+        return legacyCode;
+    }
+
+    /**
+     * @param legacyCode the legacyCode to set
+     */
+    public void setLegacyCode(Integer legacyCode) {
+        this.legacyCode = legacyCode;
+    }
 
 }
