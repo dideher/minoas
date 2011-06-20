@@ -1,5 +1,6 @@
 package gr.sch.ira.minoas.model.employement;
 
+import gr.sch.ira.minoas.model.BaseIDDeleteAwareModel;
 import gr.sch.ira.minoas.model.BaseIDModel;
 import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employee.Employee;
@@ -7,7 +8,6 @@ import gr.sch.ira.minoas.model.employee.Employee;
 import java.util.Date;
 
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -22,7 +22,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "WORK_EXPERIENCE")
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
-public class WorkExperience extends BaseIDModel {
+public class WorkExperience extends BaseIDDeleteAwareModel {
     
     /**
      * Comment for <code>serialVersionUID</code>
