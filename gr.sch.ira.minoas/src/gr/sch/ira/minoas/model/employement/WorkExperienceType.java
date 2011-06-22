@@ -18,7 +18,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  * 
  */
 @Entity
-@Table(name = "WORK_EXPERIENCE")
+@Table(name = "WORK_EXPERIENCE_TYPE")
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class WorkExperienceType extends BaseIDModel {
     
