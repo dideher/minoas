@@ -1,6 +1,9 @@
+/**
+ * 
+ */
 package gr.sch.ira.minoas.seam.components.home;
 
-import gr.sch.ira.minoas.model.core.Specialization;
+import gr.sch.ira.minoas.model.employement.WorkExperience;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
@@ -11,11 +14,11 @@ import org.jboss.seam.annotations.Transactional;
  * @author <a href="mailto:gand@sch.gr">Yorgos Andreadakis</a>
  * @version $Id$
  */
-@Name(value = "specializationHome")
-public class SpecializationHome extends MinoasEntityHome<Specialization> {
+@Name(value = "workExperienceHome")
+public class WorkExperienceHome extends MinoasEntityHome<WorkExperience> {
 
 	/**
-	 * Comment for <code>serialVersionUID</code>
+	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
@@ -23,20 +26,23 @@ public class SpecializationHome extends MinoasEntityHome<Specialization> {
 	 * @see org.jboss.seam.framework.Home#createInstance()
 	 */
 	@Override
-	protected Specialization createInstance() {
-		Specialization instance = new Specialization();
+	protected WorkExperience createInstance() {
+		WorkExperience instance = new WorkExperience();
+		instance.setActive(Boolean.TRUE);
+		
 		return instance;
 	}
-	
+
 	/**
 	 * @see org.jboss.seam.framework.Home#getInstance()
 	 */
 	@Override
-	@Factory(value = "specialization", scope = ScopeType.PAGE)
-	public Specialization getInstance() {
-		return (Specialization) super.getInstance();
+	@Factory(value = "workExperience", scope = ScopeType.PAGE)
+	public WorkExperience getInstance() {
+		// TODO Auto-generated method stub
+		return (WorkExperience) super.getInstance();
 	}
-	
+
 	/**
 	 * @see gr.sch.ira.minoas.seam.components.home.MinoasEntityHome#persist()
 	 */
@@ -69,5 +75,7 @@ public class SpecializationHome extends MinoasEntityHome<Specialization> {
 	public String update() {
 		return super.update();
 	}
+	
+
 
 }
