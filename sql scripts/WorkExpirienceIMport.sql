@@ -16,6 +16,7 @@ CREATE PROCEDURE importWorkExpirience
    @calendar_diff int,
    @workExpirenceCode varchar(2),
    @comment varchar(33)
+OUTPUT
 AS
 BEGIN
 DECLARE @minoasEmployeeID int 
@@ -24,11 +25,13 @@ SET @minoasExpirienceType = NULL;
 SET @minoasEmployeeID = NULL;
 
 SELECT @minoasEmployeeID=e.ID FROM minoas..EMPLOYEE e WHERE e.LEGACY_CODE=@employeeLegacyCode
-IF(@minoasEmployeeID= NULL)
+IF(@minoasEmployeeID IS NULL)
 BEGIN
     PRINT 'COULD NOT FIND EMPLOYEE'
-    RETURN (0)
+    RETURN (0);
 END
+ELSE 
+    BEGIN
 
 SET @minoasExpirienceType =
 CASE 
@@ -46,7 +49,7 @@ END;
 IF(@minoasExpirienceType= NULL)
 BEGIN
     PRINT 'COULD NOT MAP EMPLOYEE EXPIRIENCE TYPE'
-    RETURN (0)
+    RETURN (0);
 END
 
 
@@ -75,14 +78,66 @@ INSERT INTO minoas..WORK_EXPERIENCE(
     0, /* CALENDAR_EXPERIENCE_DAYS */
     0 /* ACTUAL_DAYS */
 );
+
+RETURN (1);
+    END
+
+
 END
 GO
 
+/* ---------------------------------------------------------- */
+/* ---------------------------------------------------------- */
+/* ---------------------------------------------------------- */
+
+BEGIN
+
+DECLARE @legacyCode int;
+DECLARE @employeeLegacyCode varchar(6);
+DECLARE @established datetime;
+DECLARE @dueto datetime;
+DECLARE @calendar_diff int;
+DECLARE @workExpirenceCode varchar(2);
+DECLARE @comment varchar(33);
+DECLARE @MyCursor CURSOR; 
+
+SET @MyCursor = CURSOR FOR SELECT  ID, KVD, APO, EVS, 0, CODE, NOTE FROM mkdb..bohu WHERE CODE LIKE '1%'
+
+OPEN @MyCursor 
+
+FETCH NEXT FROM @MyCursor INTO @legacyCode, @employeeLegacyCode,@established, @dueto, @calendar_diff, @workExpirenceCode,@comment
+
+WHILE @@FETCH_STATUS = 0 
+BEGIN 
+    EXEC minoas..importWorkExpirience @legacyCode, @employeeLegacyCode,@established, @dueto, @calendar_diff, @workExpirenceCode,@comment
+    FETCH NEXT FROM @MyCursor INTO @legacyCode, @employeeLegacyCode,@established, @dueto, @calendar_diff, @workExpirenceCode,@comment 
+END 
+
+CLOSE @MyCursor 
+
+DEALLOCATE @MyCursor 
+
+
+END
+ 
+
+
+@legacyCode int,
+   @employeeLegacyCode varchar(6),
+   @established datetime,
+   @dueto datetime,
+   @calendar_diff int,
+   @workExpirenceCode varchar(2),
+   @comment varchar(33)
 
 
 
 
-SELECT * FROM bohu WHERE CODE  LIKE '12'
+
+SELECT COUNT(*) FROM minoas..WORK_EXPERIENCE
+SELECT COUNT(*) FROM mkdb..bohu
+
+DELETE FROM minoas..WORK_EXPERIENCE
 
 SELECT * FROM KVD_PROYP
 
