@@ -2,17 +2,23 @@ package gr.sch.ira.minoas.seam.components.management;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
+
+import javax.persistence.EntityManager;
 
 import gr.sch.ira.minoas.model.core.SchoolYear;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeExclusion;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.TeachingHourCDR;
+import gr.sch.ira.minoas.model.employement.WorkExperience;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.EmployeeMergeRequest;
 import gr.sch.ira.minoas.seam.components.home.EmployeeExclusionHome;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
+import gr.sch.ira.minoas.seam.components.reports.resource.EmployeeWorkExperienceItem;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
@@ -189,7 +195,24 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
 	@DataModel(value="employeeCurrentStatusItems")
 	private Collection<EmployeeCDRReportItem> employeeCurrentStatusItems;
 	
+	@DataModel(value="employeeWorkExperienceItems")
+	private Collection<EmployeeWorkExperienceItem> employeeWorkExperienceItems;
 	
+	/**
+	 * @return the employeeWorkExperienceItems
+	 */
+	public Collection<EmployeeWorkExperienceItem> getEmployeeWorkExperienceItems() {
+		return employeeWorkExperienceItems;
+	}
+
+	/**
+	 * @param employeeWorkExperienceItems the employeeWorkExperienceItems to set
+	 */
+	public void setEmployeeWorkExperienceItems(
+			Collection<EmployeeWorkExperienceItem> employeeWorkExperienceItems) {
+		this.employeeWorkExperienceItems = employeeWorkExperienceItems;
+	}
+
 	/**
 	 * @return the employeeHome
 	 */
@@ -228,6 +251,32 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
 	        employeeCurrentStatusItems.add(new EmployeeManagement.EmployeeCDRReportItem(cdr));
 	    }
 	    setEmployeeCurrentStatusItems(employeeCurrentStatusItems);
+	}
+	
+	
+	/**
+	 * This operation should be removed when merged with gand's work.
+	 * @param entityManager
+	 * @param employee
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	private Collection<WorkExperience> getEmployeeWorkExperience(EntityManager entityManager,
+            Employee employee) {
+        List<WorkExperience> return_value = entityManager.createQuery(
+                "SELECT w FROM WorkExperience w WHERE w.employee=:employee AND w.active IS TRUE")
+                .setParameter("employee", employee).getResultList();
+        return return_value;
+    }
+	
+	@Factory(value="employeeWorkExperienceItems")
+	public void constructEmployeeWorkExperienceHistory() {
+		Employee employee = getEmployeeHome().getInstance();
+	    Collection<WorkExperience> employeeExperience = getEmployeeWorkExperience(getEntityManager(), employee);
+	    employeeCurrentStatusItems = new ArrayList<EmployeeManagement.EmployeeCDRReportItem>(employeeExperience.size());
+	    for(WorkExperience experience : employeeExperience) {
+	    	employeeWorkExperienceItems.add(new EmployeeWorkExperienceItem(experience));
+	    }
 	}
 	
 	@Transactional(TransactionPropagationType.REQUIRED)
