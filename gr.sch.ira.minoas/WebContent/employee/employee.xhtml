@@ -18,6 +18,7 @@
 					value="Καρτέλα Εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}" />
 			</f:facet>
 
+
 			<ui:include src="/components/messages-component.xhtml" />
 			<h:form>
 				<a4j:region>
@@ -635,7 +636,61 @@
 									</rich:dataTable>
 								</h:panelGrid>
 							</rich:tab>
+							 
+							<rich:tab rendered="#{employeeWorkExperienceItems.rowCount gt 0}">
+								<f:facet name="label">
+									<h:outputText value="Ιστορικό Προϋπηρεσιών" />
+								</f:facet>
+								<h:panelGrid columns="1" width="100%">
+									<h:outputText
+										value="Στον παρακάτω πίνακα εμφανίζεται το ιστορικό των προϋπηρεσίων του εκπαιδευτικού." />
+									<rich:dataTable id="employeeWorkExpirenceItemsList"
+										value="#{employeeWorkExperienceItems}" var="_workExperienceItem"
+										rows="15" border="0"
+										onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+										onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+										width="100%">
+										<f:facet name="header">
+											<h:outputLabel value="Ιστορικό Αδειών Εκπαιδευτικού" />
+										</f:facet>
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Τύπος Προϋπηρεσίας" />
+											</f:facet>
+											<h:outputText value="#{_workExperienceItem.typeTitle}" />
+										</rich:column>
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Έναρξη" />
+											</f:facet>
+											<h:outputText value="#{_workExperienceItem.established}">
+												<s:convertDateTime pattern="dd-MM-yyyy" />
+											</h:outputText>
+										</rich:column>
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Λήξη" />
+											</f:facet>
+											<h:outputText value="#{_workExperienceItem.dueTo}">
+												<s:convertDateTime pattern="dd-MM-yyyy" />
+											</h:outputText>
+										</rich:column>
+										
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Σχόλιο" />
+											</f:facet>
+											<h:outputText value="#{_workExperienceItem.comment}" />
+										</rich:column>
+										
+									</rich:dataTable>
+								</h:panelGrid>
+							</rich:tab>
+							
 						</rich:tabPanel>
+						
+						
+						
 
 					</h:form>
 
