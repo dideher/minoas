@@ -273,7 +273,7 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
 	public void constructEmployeeWorkExperienceHistory() {
 		Employee employee = getEmployeeHome().getInstance();
 	    Collection<WorkExperience> employeeExperience = getEmployeeWorkExperience(getEntityManager(), employee);
-	    employeeCurrentStatusItems = new ArrayList<EmployeeManagement.EmployeeCDRReportItem>(employeeExperience.size());
+	    employeeWorkExperienceItems = new ArrayList<EmployeeWorkExperienceItem>(employeeExperience.size());
 	    for(WorkExperience experience : employeeExperience) {
 	    	employeeWorkExperienceItems.add(new EmployeeWorkExperienceItem(experience));
 	    }

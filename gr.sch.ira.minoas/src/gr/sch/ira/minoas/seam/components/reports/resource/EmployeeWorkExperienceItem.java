@@ -24,7 +24,7 @@ public class EmployeeWorkExperienceItem extends BaseIDReportItem {
 	protected Integer typeId;
 
 	protected String typeTitle;
-
+	
 	public EmployeeWorkExperienceItem(WorkExperience workExperience) {
 		super(workExperience);
 		if (workExperience.getEmployee() != null)
