@@ -53,6 +53,10 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.TransactionPropagationType;
 import org.jboss.seam.annotations.Transactional;
 
+/**
+ * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
+ * @version $Id$
+ */
 @Name("coreSearching")
 @Scope(ScopeType.EVENT)
 @AutoCreate
@@ -373,6 +377,17 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         info("searching employee's '#0' leaves.", employee);
         result = entityManager.createQuery(
                 "SELECT s from Leave s WHERE s.active IS FALSE AND s.employee=:employee ORDER BY s.established")
+                .setParameter("employee", employee).getResultList();
+        info("found totally '#0' leave(s) in employee's '#1' history.", result.size(), employee);
+        return result;
+    }
+    
+    
+    public Collection<Leave> getEmployeeLeaveHistoryWithCurrentActive(Person employee) {
+        Collection<Leave> result = null;
+        info("searching employee's '#0' leaves.", employee);
+        result = entityManager.createQuery(
+                "SELECT s from Leave s WHERE ((s.active IS FALSE AND s.autoCanceled IS TRUE) OR (s.active IS TRUE)) AND s.employee=:employee ORDER BY s.established")
                 .setParameter("employee", employee).getResultList();
         info("found totally '#0' leave(s) in employee's '#1' history.", result.size(), employee);
         return result;

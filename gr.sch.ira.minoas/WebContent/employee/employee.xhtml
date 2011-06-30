@@ -580,7 +580,7 @@
 
 
 
-							<rich:tab rendered="#{employeeLeavesListQuery.resultCount gt 0}">
+							<rich:tab rendered="#{employeeLeaveItems.rowCount gt 0}">
 								<f:facet name="label">
 									<h:outputText value="Ιστορικό Αδειών" />
 								</f:facet>
@@ -588,7 +588,7 @@
 									<h:outputText
 										value="Στον παρακάτω πίνακα εμφανίζεται το ιστορικό των αδειών του εκπαιδευτικού." />
 									<rich:dataTable id="employeeLeavesList"
-										value="#{employeeLeavesListQuery.resultList}" var="_leave"
+										value="#{employeeLeaveItems}" var="_leave"
 										rows="15" border="0"
 										onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
 										onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
@@ -600,13 +600,13 @@
 											<f:facet name="header">
 												<h:outputText value="Τύπος Άδειας" />
 											</f:facet>
-											<h:outputText value="#{messages[_leave.leaveType.key]}" />
+											<h:outputText value="#{messages[_leave.leaveTypeKey]}" />
 										</rich:column>
 										<rich:column>
 											<f:facet name="header">
 												<h:outputText value="Έναρξη" />
 											</f:facet>
-											<h:outputText value="#{_leave.established}">
+											<h:outputText value="#{_leave.establishedIn}">
 												<s:convertDateTime pattern="dd-MM-yyyy" />
 											</h:outputText>
 										</rich:column>
@@ -625,7 +625,7 @@
 														value="Εμφανίζεται το Σχολίο της Οργανικής του Εκπαιδευτικού κατά την καταχώρηση της Άδειας." />
 												</h:outputText>
 											</f:facet>
-											<h:outputText value="#{_leave.regularSchool.title}" />
+											<h:outputText value="#{_leave.regularUnit}" />
 										</rich:column>
 										<rich:column>
 											<f:facet name="header">
