@@ -12,6 +12,7 @@ import gr.sch.ira.minoas.model.core.SchoolYear;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeExclusion;
 import gr.sch.ira.minoas.model.employement.Employment;
+import gr.sch.ira.minoas.model.employement.Leave;
 import gr.sch.ira.minoas.model.employement.TeachingHourCDR;
 import gr.sch.ira.minoas.model.employement.WorkExperience;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
@@ -19,6 +20,7 @@ import gr.sch.ira.minoas.seam.components.EmployeeMergeRequest;
 import gr.sch.ira.minoas.seam.components.home.EmployeeExclusionHome;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
 import gr.sch.ira.minoas.seam.components.reports.resource.EmployeeWorkExperienceItem;
+import gr.sch.ira.minoas.seam.components.reports.resource.LeaveReportItem;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
@@ -198,6 +200,9 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
 	@DataModel(value="employeeWorkExperienceItems")
 	private Collection<EmployeeWorkExperienceItem> employeeWorkExperienceItems;
 	
+	@DataModel(value="employeeLeaveItems")
+	private Collection<LeaveReportItem> employeeLeaveItems;
+	
 	/**
 	 * @return the employeeWorkExperienceItems
 	 */
@@ -253,6 +258,17 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
 	    setEmployeeCurrentStatusItems(employeeCurrentStatusItems);
 	}
 	
+	
+	@Factory(value="employeeLeaveItems")
+    public void constructEmployeeLeavesHistory() {
+        Employee employee = getEmployeeHome().getInstance();
+        Collection<Leave> employeeLeavesHistory = getCoreSearching().getEmployeeLeaveHistoryWithCurrentActive(employee);
+        List<LeaveReportItem> employeeLeaveItems = new ArrayList<LeaveReportItem>(employeeLeavesHistory.size());
+        for(Leave leave : employeeLeavesHistory) {
+            employeeLeaveItems.add(new LeaveReportItem(leave));
+        }
+        setEmployeeLeaveItems(employeeLeaveItems);
+    }
 	
 	/**
 	 * This operation should be removed when merged with gand's work.
@@ -364,6 +380,20 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
      */
     public void setEmployeeCurrentStatusItems(Collection<EmployeeCDRReportItem> employeeCurrentStatusItems) {
         this.employeeCurrentStatusItems = employeeCurrentStatusItems;
+    }
+
+    /**
+     * @return the employeeLeaveItems
+     */
+    protected Collection<LeaveReportItem> getEmployeeLeaveItems() {
+        return employeeLeaveItems;
+    }
+
+    /**
+     * @param employeeLeaveItems the employeeLeaveItems to set
+     */
+    protected void setEmployeeLeaveItems(Collection<LeaveReportItem> employeeLeaveItems) {
+        this.employeeLeaveItems = employeeLeaveItems;
     }
 
 }
