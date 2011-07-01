@@ -3,14 +3,20 @@ package gr.sch.ira.minoas.seam.components.management;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employement.Leave;
 import gr.sch.ira.minoas.model.employement.WorkExperience;
+import gr.sch.ira.minoas.model.employement.WorkExperienceType;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.CoreSearching;
+import gr.sch.ira.minoas.seam.components.criteria.EmployeeLeaveCriteria;
+import gr.sch.ira.minoas.seam.components.criteria.WorkExperienceTypesCriteria;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
 import gr.sch.ira.minoas.seam.components.home.LeaveHome;
+import gr.sch.ira.minoas.seam.components.home.WorkExperienceHome;
 
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+
+import javax.persistence.EntityManager;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.jboss.seam.ScopeType;
@@ -37,11 +43,19 @@ public class WorkExperiencesManagement extends BaseDatabaseAwareSeamComponent {
 	@In(required = true, create = true)
 	private EmployeeHome employeeHome;
 	
+
+
+	@In(create = true, required = true)
+	private WorkExperienceTypesCriteria workExperienceTypesCriteria;
+	
+//	@Out(value="workExperienceTypes")
+//	private Collection<WorkExperienceType> workExperienceTypes;
+	
 //	@Out(required=false, scope=ScopeType.PAGE)
 //	private Leave employeeActiveLeave;
-//	
-//	@In(required=false)
-//	private LeaveHome leaveHome;
+	
+	@In(required=false)
+	private WorkExperienceHome workExperienceHome;
 	
 	/**
 	 * Employees current leave history
@@ -55,13 +69,37 @@ public class WorkExperiencesManagement extends BaseDatabaseAwareSeamComponent {
 //	    setEmployeeActiveLeave(employee.getLeave());
 //	}
 
+	@Factory(value="workExperienceTypesCriteria",autoCreate=true)
+	public void constructWorkExperienceTypesCriteria() {
+	    Employee employee = getEmployeeHome().getInstance();
+	    info("constructing work experience types criteria for employee #0", employee);
+	    setWorkExperienceTypesCriteria(new WorkExperienceTypesCriteria());
+	    //setWorkExperienceHistory(coreSearching.getWorkExperienceHistory(employee));
+	}
 	
+	/**
+	 * @return the workExperienceTypesCriteria
+	 */
+	public WorkExperienceTypesCriteria getWorkExperienceTypesCriteria() {
+		return workExperienceTypesCriteria;
+	}
+
+	/**
+	 * @param workExperienceTypesCriteria the workExperienceTypesCriteria to set
+	 */
+	public void setWorkExperienceTypesCriteria(
+			WorkExperienceTypesCriteria workExperienceTypesCriteria) {
+		this.workExperienceTypesCriteria = workExperienceTypesCriteria;
+	}
+
 	@Factory(value="workExperienceHistory",autoCreate=true)
 	public void constructWorkExperienceHistory() {
 	    Employee employee = getEmployeeHome().getInstance();
 	    info("constructing work experience history for employee #0", employee);
 	    setWorkExperienceHistory(coreSearching.getWorkExperienceHistory(employee));
 	}
+	
+	
 	
 	/**
 	 * @return the employeeHome
@@ -92,6 +130,14 @@ public class WorkExperiencesManagement extends BaseDatabaseAwareSeamComponent {
     }
 
 
+//    @SuppressWarnings("unchecked")
+//    @Factory(value = "workExperienceTypes")
+//    public void initializeWorkExperienceTypes() {
+//        workExperienceTypes = getEntityManager().createQuery("SELECT s FROM WorkExperienceType s ORDER BY s.title ASC")
+//                .getResultList();
+//    }
+    
+    
 //    /**
 //     * @return the employeeActiveLeave
 //     */
@@ -108,25 +154,26 @@ public class WorkExperiencesManagement extends BaseDatabaseAwareSeamComponent {
 //    }
     
 //    
-//    public String modifyInactiveLeave() {
-//        if(leaveHome != null && leaveHome.isManaged()) {
-//            info("trying to modify inactive leave #0", leaveHome);
-//            /* check if the leave dates leads us to activate the leave. */
-//            boolean leaveShouldBeActivated = leaveShouldBeActivated(leaveHome.getInstance(), new Date());
-//            
-//            if(leaveShouldBeActivated) {
-//                facesMessages.add(Severity.ERROR, "Οι ημ/νιες έναρξης και λήξης της άδειας, έτσι όπως τις τροποποιήσατε, είναι μή αποδεκτές γιατί καθιστούν την άδεια ενεργή.");
-//                return ACTION_OUTCOME_FAILURE;
-//            } else {
-//                info("employee's #0 leave #1 has been updated!", leaveHome.getInstance().getEmployee(), leaveHome.getInstance());
-//                leaveHome.update();
-//                return ACTION_OUTCOME_SUCCESS;
-//            }
-//        } else {
-//            facesMessages.add(Severity.ERROR, "leave home #0 is not managed, thus #1 leave can't be modified.", leaveHome, leaveHome.getInstance());
-//            return ACTION_OUTCOME_FAILURE;
-//        }
-//    }
+    public String modifyWorkExperience() {
+        if(workExperienceHome != null && workExperienceHome.isManaged()) {
+            info("trying to modify work experience #0", workExperienceHome);
+            /* check if the work experience dates are allowed. */
+            WorkExperience workExp = workExperienceHome.getInstance();
+            if(workExp.getToDate().compareTo(workExp.getFromDate()) <= 0 ) {
+            	facesMessages.add(Severity.ERROR, "Οι ημ/νιες έναρξης και λήξης της προϋπηρεσίας, έτσι όπως τις τροποποιήσατε, είναι μή αποδεκτές.");
+                return ACTION_OUTCOME_FAILURE;
+            } else {
+                info("employee's #0 work experience #1 has been updated!", workExperienceHome.getInstance().getEmployee(), workExperienceHome.getInstance());
+                workExperienceHome.update();
+                return ACTION_OUTCOME_SUCCESS;
+            }
+            
+            
+        } else {
+            facesMessages.add(Severity.ERROR, "work experience home #0 is not managed, thus #1 work experience can't be modified.", workExperienceHome, workExperienceHome.getInstance());
+            return ACTION_OUTCOME_FAILURE;
+        }
+    }
 //       /**
 //     * Checks if a leave should be set active in regards to the reference date.
 //     * @param leave

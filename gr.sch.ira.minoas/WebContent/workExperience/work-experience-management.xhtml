@@ -24,7 +24,6 @@
 
 				<h:form>
 					<h:panelGrid columns="1">
-						
 						<rich:panel>
 							<f:facet name="header">
 								<h:outputText value="Ιστορικό Προϋπηρεσίας Εκπαιδευτικού" />
@@ -44,7 +43,7 @@
 
 									<rich:dataTable id="employeeWorkExperiencesList"
 										value="#{workExperienceHistory}" var="_workExperience"
-										rows="15" border="0"
+										rows="20" border="0"
 										onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
 										onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
 										width="100%">
@@ -116,6 +115,17 @@
 											</rich:toolBar>
 										</rich:column>
 										
+										<f:facet name="footer">
+											<rich:datascroller for="employeeWorkExperiencesList">
+												<f:facet name="first">
+													<h:outputText value="Πρώτη" />
+												</f:facet>
+												<f:facet name="last">
+													<h:outputText value="Τελευταία" />
+												</f:facet>
+											</rich:datascroller>
+					
+										</f:facet>
 
 									</rich:dataTable>
 								</h:panelGrid>
@@ -144,44 +154,59 @@
 		
 		<rich:modalPanel id="updateWorkExperienceModalPanel" autosized="true" width="450">
 			<f:facet name="header">
-				<h:outputText value="Τροποποίηση Άδειας Ιστορικού"
+				<h:outputText value="Τροποποίηση Προϋπηρεσίας"
 					style="padding-right:15px;" />
 			</f:facet>
 			<f:facet name="controls">
 				<h:panelGroup>
 					<h:graphicImage value="/img/modal/close.png" styleClass="hidelink"
-						width="18" height="18" id="hidelink_historyleave" />
-					<rich:componentControl for="updateNotActiveLeaveModalPanel" attachTo="hidelink_historyleave"
+						width="18" height="18" id="hidelink_historyworkexperience" />
+					<rich:componentControl for="updateWorkExperienceModalPanel" attachTo="hidelink_historyworkexperience"
 						operation="hide" event="onclick" />
 				</h:panelGroup>
 			</f:facet>
 			<a4j:region>
 				<h:panelGrid columns="1">
 					<h:form>
-						<a4j:outputPanel id="updateNotActiveLeaveModalPanelContent" layout="inline">
+						<a4j:outputPanel id="updateWorkExperienceModalPanelContent" layout="inline">
 							<h:outputText
-								value="Με την παρακάτω φόρμα, μπορείται να τροποποίησεται την άδεια του/της εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}. Μπορείτε να αλλάξετε τις ημ/νιες αλλά δεν μπορείτε να αλλάξετε τον τύπο της άδειας." />
+								value="Με την παρακάτω φόρμα, μπορείτε να τροποποίησετε την προϋπηρεσία του/της εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}. Μπορείτε να αλλάξετε τις ημ/νιες αλλά δεν μπορείτε να αλλάξετε τον τύπο της προϋπηρεσίας." />
 							<rich:messages style="color:red;"></rich:messages>
 							<h:panelGrid columns="4">
 
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
 									<ui:define name="label">
-										<h:outputText value="Τύπος Άδειας" />
+										<h:outputText value="Τύπος Προϋπηρεσίας" />
 									</ui:define>
-									
-									<h:inputText value="#{messages[leaveHome.instance.leaveType.key]}" readonly="true" size="20" />
-									<!-- 
-									<h:selectOneMenu id="LeaveType" readonly="true"
-										value="#{leaveHome.instance.leaveType}" required="true">
-										<s:selectItems hideNoSelectionLabel="true" var="_leaveType"
-											value="#{leaveTypes}" label="#{messages[_leaveType.key]}" />
-										<s:convertEnum />
-										<a4j:support event="onblur" ajaxSingle="true"
-											bypassUpdates="true" />
+<!-- 
+									<h:selectOneMenu id="WorkExperienceType" readonly="true"
+										value="#{workExperienceHome.instance.type}" required="true">
+										<s:selectItems hideNoSelectionLabel="true" var="_workExperience"
+											value="#{workExperienceTypes}" label="#{messages[_workExperience.title]}" />
+										<s:convertEnum />  
+										<a4j:support event="onblur" ajaxSingle="true" bypassUpdates="true" />
 									</h:selectOneMenu>
-									 -->
+-->
+									<h:inputText id="workExperienceFilter" value="#{workExperienceHome.instance.type.title}" size="30">
+											
+										<rich:suggestionbox height="200" width="350"
+											for="workExperienceFilter" var="workExpVar"
+											suggestionAction="#{workExperienceTypesSuggester.suggest}">
+											<f:facet name="nothingLabel">
+												<h:outputText value="Άγνωστη Προϋπηρεσία" />
+											</f:facet>
+											<h:column>
+												<h:outputText value="#{workExpVar.title}" />
+											</h:column>
+											<!-- 
+											<a4j:support ajaxSingle="true" event="onselect">
+												<f:setPropertyActionListener value="#{workExpVar}"
+													target="#{WorkExperienceTypesCriteria.workExperienceType}" />
+											</a4j:support>
+											 -->
+										</rich:suggestionbox>
+ 									</h:inputText>
 								</s:decorate>
-
 
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
 									<ui:define name="label">
@@ -190,7 +215,7 @@
 									<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
 										style="width:50px" enableManualInput="true"
 										styleClass="fieldValueText" required="true"
-										value="#{leaveHome.instance.established}">
+										value="#{workExperienceHome.instance.fromDate}">
 									</rich:calendar>
 								</s:decorate>
 
@@ -201,7 +226,7 @@
 									<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
 										style="width:50px" enableManualInput="true"
 										styleClass="fieldValueText" required="true"
-										value="#{leaveHome.instance.dueTo}">
+										value="#{workExperienceHome.instance.toDate}">
 									</rich:calendar>
 								</s:decorate>
 
@@ -209,7 +234,7 @@
 									<ui:define name="label">
 										<h:outputText value="Σχόλιο" />
 									</ui:define>
-									<h:inputTextarea value="#{leaveHome.instance.comment}" />
+									<h:inputTextarea value="#{workExperienceHome.instance.comment}" />
 								</s:decorate>
 
 							</h:panelGrid>
@@ -217,15 +242,15 @@
 
 						<h:panelGrid columns="2">
 
-							<a4j:commandButton value="Τροποποίηση Άδειας !"
-								action="#{employeeLeavesManagement.modifyInactiveLeave()}"
+							<a4j:commandButton value="Τροποποίηση Προϋπηρεσίας !"
+								action="#{workExperiencesManagement.modifyWorkExperience()}"
 								data="#{facesContext.maximumSeverity.ordinal ge 2}"
-								oncomplete="if(data == false) Richfaces.hideModalPanel('updateNotActiveLeaveModalPanel');"
-								reRender="activeLeave,leavesOutputPanel" />
+								oncomplete="if(data == false) Richfaces.hideModalPanel('updateWorkExperienceModalPanel');"
+								reRender="workExperiencesOutputPanel,updateWorkExperienceModalPanelContent" />
 							<a4j:commandButton value="Επιστροφή .."
-								action="#{leaveHome.revert()}"
-								reRender="activeLeave"
-								oncomplete="#{rich:component('updateNotActiveLeaveModalPanel')}.hide();" />
+								action="#{workExperienceHome.revert()}"
+								reRender="workExperiencesOutputPanel"
+								oncomplete="#{rich:component('updateWorkExperienceModalPanel')}.hide();" />
 						</h:panelGrid>
 					</h:form>
 				</h:panelGrid>
