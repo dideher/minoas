@@ -1059,6 +1059,8 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         return (Collection<Specialization>) em.createQuery("SELECT s FROM Specialization s ORDER BY s.id ASC")
                 .getResultList();
     }
+    
+
 
     @Factory(value = "specializationSearchTypes")
     public SpecializationSearchType[] getSpecializationSearchTypes() {
