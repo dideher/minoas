@@ -124,6 +124,17 @@
 
 					</rich:menuGroup>
 				</rich:menuGroup>
+				
+				<rich:menuGroup value="Διαχείριση Προϋπηρεσίας">
+					<rich:menuItem submitMode="none"
+						rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_LEAVE'))}">
+						<s:link value="Διαχείριση Προϋπηρεσίας Εκπαιδευτικού" 
+							view="/employee/select-employee.xhtml">
+							<f:param name="from" value="/home" />
+							<f:param name="to" value="/workExperience/work-experience-management" />
+						</s:link>
+					</rich:menuItem>
+				</rich:menuGroup>
 
 				<rich:menuGroup value="Διαχείριση Διαθέσεων">
 					<rich:menuItem submitMode="none"

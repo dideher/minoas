@@ -19,6 +19,10 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+/**
+ * @author <a href="mailto:gand@sch.gr">Yorgos Andreadakis</a>
+ * 
+ */
 @Entity
 @Table(name = "WORK_EXPERIENCE")
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)

@@ -1,6 +1,5 @@
 package gr.sch.ira.minoas.seam.components.home;
 
-import gr.sch.ira.minoas.model.classrooms.CourseType;
 import gr.sch.ira.minoas.model.core.Specialization;
 
 import org.jboss.seam.ScopeType;
