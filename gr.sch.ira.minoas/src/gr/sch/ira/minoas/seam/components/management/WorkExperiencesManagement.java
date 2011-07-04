@@ -1,29 +1,18 @@
 package gr.sch.ira.minoas.seam.components.management;
 
 import gr.sch.ira.minoas.model.employee.Employee;
-import gr.sch.ira.minoas.model.employement.Leave;
 import gr.sch.ira.minoas.model.employement.WorkExperience;
-import gr.sch.ira.minoas.model.employement.WorkExperienceType;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.CoreSearching;
-import gr.sch.ira.minoas.seam.components.criteria.EmployeeLeaveCriteria;
-import gr.sch.ira.minoas.seam.components.criteria.WorkExperienceTypesCriteria;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
-import gr.sch.ira.minoas.seam.components.home.LeaveHome;
 import gr.sch.ira.minoas.seam.components.home.WorkExperienceHome;
 
-import java.util.Calendar;
 import java.util.Collection;
-import java.util.Date;
 
-import javax.persistence.EntityManager;
-
-import org.apache.commons.lang.time.DateUtils;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Out;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.datamodel.DataModel;
 import org.jboss.seam.international.StatusMessage.Severity;
@@ -43,16 +32,6 @@ public class WorkExperiencesManagement extends BaseDatabaseAwareSeamComponent {
 	@In(required = true, create = true)
 	private EmployeeHome employeeHome;
 	
-
-
-	@In(create = true, required = true)
-	private WorkExperienceTypesCriteria workExperienceTypesCriteria;
-	
-//	@Out(value="workExperienceTypes")
-//	private Collection<WorkExperienceType> workExperienceTypes;
-	
-//	@Out(required=false, scope=ScopeType.PAGE)
-//	private Leave employeeActiveLeave;
 	
 	@In(required=false)
 	private WorkExperienceHome workExperienceHome;
@@ -63,35 +42,6 @@ public class WorkExperiencesManagement extends BaseDatabaseAwareSeamComponent {
 	@DataModel(scope=ScopeType.PAGE, value="workExperienceHistory")
 	private Collection<WorkExperience> workExperienceHistory = null;
 	
-//	@Factory(value="employeeActiveLeave")
-//	public void findEmployeeActiveLeave() {
-//	    Employee employee = getEmployeeHome().getInstance();
-//	    setEmployeeActiveLeave(employee.getLeave());
-//	}
-
-	@Factory(value="workExperienceTypesCriteria",autoCreate=true)
-	public void constructWorkExperienceTypesCriteria() {
-	    Employee employee = getEmployeeHome().getInstance();
-	    info("constructing work experience types criteria for employee #0", employee);
-	    setWorkExperienceTypesCriteria(new WorkExperienceTypesCriteria());
-	    //setWorkExperienceHistory(coreSearching.getWorkExperienceHistory(employee));
-	}
-	
-	/**
-	 * @return the workExperienceTypesCriteria
-	 */
-	public WorkExperienceTypesCriteria getWorkExperienceTypesCriteria() {
-		return workExperienceTypesCriteria;
-	}
-
-	/**
-	 * @param workExperienceTypesCriteria the workExperienceTypesCriteria to set
-	 */
-	public void setWorkExperienceTypesCriteria(
-			WorkExperienceTypesCriteria workExperienceTypesCriteria) {
-		this.workExperienceTypesCriteria = workExperienceTypesCriteria;
-	}
-
 	@Factory(value="workExperienceHistory",autoCreate=true)
 	public void constructWorkExperienceHistory() {
 	    Employee employee = getEmployeeHome().getInstance();
