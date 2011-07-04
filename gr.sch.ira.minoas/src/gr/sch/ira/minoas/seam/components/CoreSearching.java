@@ -1059,6 +1059,8 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         return (Collection<Specialization>) em.createQuery("SELECT s FROM Specialization s ORDER BY s.id ASC")
                 .getResultList();
     }
+    
+
 
     @Factory(value = "specializationSearchTypes")
     public SpecializationSearchType[] getSpecializationSearchTypes() {
@@ -1192,4 +1194,21 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         throw new RuntimeException("not implemented yet");
     }
 
+    @SuppressWarnings("unchecked")
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public Collection<WorkExperience> getWorkExperienceHistory(Person employee) {
+        Collection<WorkExperience> result = null;
+        info("searching employee's '#0' work experiences.", employee);
+        result = entityManager.createQuery(
+            "SELECT s from WorkExperience s WHERE s.active IS TRUE AND s.employee=:employee ORDER BY s.fromDate")
+            .setParameter("employee", employee).getResultList();
+//        result = entityManager.createQuery(
+//	        "SELECT s from Leave s WHERE s.active IS FALSE AND s.employee=:employee ORDER BY s.established")
+//	        .setParameter("employee", employee).getResultList();
+        info("found totally '#0' work experience(s) in employee's '#1' history.", result.size(), employee);
+        return result;
+    }
+    
+
+ 
 }
