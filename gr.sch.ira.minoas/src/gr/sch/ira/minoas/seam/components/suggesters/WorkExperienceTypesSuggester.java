@@ -13,7 +13,7 @@ import org.jboss.seam.annotations.Transactional;
 
 /**
  * @author <a href="mailto:gand@sch.gr">Yorgos Andreadakis</a>
- * 
+ * @author <a mailto:filippos@slavik.gr>Filippos Slavik</a>
  */
 @Name("workExperienceTypesSuggester")
 public class WorkExperienceTypesSuggester extends BaseSuggester {
