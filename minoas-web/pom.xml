@@ -123,6 +123,18 @@
                     <target>1.6</target>
                 </configuration>
             </plugin>
+            <!-- http://codebauss.factor45.org/blog/?p=161 
+            	More info can be found @ http://docs.jboss.org/jbossas/7/plugins/maven/deploy-mojo.html
+            -->
+            <plugin>
+            	<groupId>org.jboss.as.plugins</groupId>
+            	<artifactId>jboss-as-maven-plugin</artifactId>
+            	<version>7.0.0.Final</version>
+            	<configuration>
+                	<hostname>localhost</hostname>
+                	<port>9999</port>
+                </configuration>
+        	</plugin>
         </plugins>
     </build>
 
@@ -152,24 +164,6 @@
                         <version>2.4.3</version>
                         <configuration>
                             <skip>true</skip>
-                        </configuration>
-                    </plugin>
-                    <!-- Optional plugin deploys your war to a local JBoss AS container -->
-                    <!-- To use, set the JBOSS_HOME environment variable (or jboss.home in $HOME/.m2/settings.xml) and run:
-                         mvn package jboss:hard-deploy -->
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>jboss-maven-plugin</artifactId>
-                        <version>1.4.1</version>
-                        <configuration>
-                            <jbossHome>${jboss.home}</jbossHome>
-                            <serverName>${jboss.domain}</serverName>
-                            <fileNames>
-                                <!-- JNDI DataSource that connects to in-memory HSQLDB to demonstrate JPA -->
-                                <fileName>src/main/resources-jbossas/default-ds.xml</fileName>
-                                <!-- DataSource needs to go before the application -->
-                                <fileName>${project.build.directory}/${project.build.finalName}.war</fileName>
-                            </fileNames>
                         </configuration>
                     </plugin>
                 </plugins>
