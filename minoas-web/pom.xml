@@ -93,13 +93,6 @@
             <scope>provided</scope>
         </dependency>
         
-        <dependency>
-      		<groupId>org.hibernate</groupId>
-      		<artifactId>hibernate-annotations</artifactId>
-      		<version>3.5.6-Final</version>
-      		<scope>provided</scope>
-    	</dependency>
-
         <!-- Needed for running tests (you may also use TestNG) -->
         <dependency>
             <groupId>junit</groupId>
@@ -116,6 +109,20 @@
             <version>${arquillian.version}</version>
             <scope>test</scope>
         </dependency>
+        
+        <!-- added by slavikos -->
+        <dependency>
+      		<groupId>org.hibernate</groupId>
+      		<artifactId>hibernate-annotations</artifactId>
+      		<version>3.5.6-Final</version>
+      		<scope>provided</scope>
+    	</dependency>
+    	
+    	<dependency>
+      		<groupId>net.sf.ehcache</groupId>
+      		<artifactId>ehcache</artifactId>
+      		<version>1.6.2</version>
+      </dependency>
     </dependencies>
 
     <build>
