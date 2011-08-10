@@ -1,0 +1,230 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title></title>
+<meta name="generator" content="HTML::TextToHTML v2.51"/>
+</head>
+<body>
+<h1><a name="section_1">minoas-web</a></h1>
+<p> <strong>Source archetype:</strong> jboss-javaee6-webapp
+</p><h2><a name="section_1_1">What is it?</a></h2>
+<p> This is your project! It's a sample, deployable Maven 3 project to help you
+ get your foot in the door developing with Java EE 6. This project is setup to
+ allow you to create a compliant Java EE 6 application using JSF 2.0, CDI 1.0,
+ EJB 3.1, JPA 2.0 and Bean Validation 1.0 that can run on a certified
+ application server (Full or Web Profile). It includes a persistence unit and
+ some sample persistence and transaction code to help you get your feet wet
+ with database access in enterprise Java. 
+</p><h2><a name="section_1_2">System requirements</a></h2>
+<p> All you need to build this project is Java 5.0 (Java SDK 1.5) or better, Maven
+ 3.0 or better. We strongly recommend, however, that you use Java 6.0 (Java SDK
+ 1.6).
+</p><p> The application this project produces is designed to be run on a Java EE 6
+ application server. We recommend JBoss AS 6.0.0.Final or GlassFish 3.1, though
+ it should work on any server that is Java EE 6 compliant. In order to use it
+ on GlassFish 3.1, you'll need to update Weld. See instructions below.
+ 
+</p><dl>
+  <dt>NOTE</dt>
+<dd> This project retrieves artifacts from the JBoss Community Maven repository, a
+ superset of the Maven central repository, because there are certain Java EE
+ API JARs that are not published to Maven central (for details, see the JIRA
+ <a href="https://issues.jboss.org/browse/WELD-222">https://issues.jboss.org/browse/WELD-222</a>). The integration testing
+ framework used by the project, Arquillian, is also only available in the JBoss
+ Community Maven repository.</dd></dl>
+<p> With the prerequisites out of the way, you're ready to build and deploy.
+</p><h2><a name="section_1_3">Deploying the application</a></h2>
+<p> To deploy the application, you first need to produce the archive to deploy using
+ the following Maven goal:
+</p><pre>
+  mvn package</pre>
+<p> If you want to deploy the application on JBoss AS (standalone), make sure that
+ your JBOSS_HOME environment variable points to a JBoss AS 6 installation.
+</p><p> Alternatively, you can set the location of JBoss AS using the following
+ profile definition in the .m2/settings.xml file in your home directory:
+</p><pre>
+  &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+  &lt;settings
+     xmlns="<a href="http://maven.apache.org/POM/4.0.0">http://maven.apache.org/POM/4.0.0</a>"
+     xmlns:xsi="<a href="http://www.w3.org/2001/XMLSchema-instance">http://www.w3.org/2001/XMLSchema-instance</a>"
+     xsi:schemaLocation="<a href="http://maven.apache.org/POM/4.0.0">http://maven.apache.org/POM/4.0.0</a> <a href="http://maven.apache.org/xsd/settings-1.0.0.xsd">http://maven.apache.org/xsd/settings-1.0.0.xsd</a>"&gt;
+  
+     &lt;profiles&gt;
+        &lt;profile&gt;
+           &lt;id&gt;environment&lt;/id&gt;
+           &lt;activation&gt;
+              &lt;activeByDefault&gt;true&lt;/activeByDefault&gt;
+           &lt;/activation&gt;
+           &lt;properties&gt;
+              &lt;jboss.home&gt;/path/to/jboss-as-6.0.0.Final&lt;/jboss.home&gt;
+           &lt;/properties&gt;
+        &lt;/profile&gt;
+     &lt;/profiles&gt;
+     
+  &lt;/settings&gt;</pre>
+<p> Once you've set either the JBOSS_HOME environment variable or the jboss.home
+ Maven property, you can deploy to JBoss AS by executing the following command:
+</p><pre>
+  mvn package jboss:hard-deploy</pre>
+<p> This will deploy two artifacts, target/minoas-web.war and
+ default-ds.xml.
+ 
+</p><dl>
+  <dt>IMPORTANT</dt>
+<dd> Don't forget to deploy default-ds.xml!  </dd><dt>NOTE</dt>
+<dd> The default-ds.xml file installs a data source named jdbc/__default, so that
+ both JBoss AS and GlassFish have a data source with the same name.</dd></dl>
+<p> You can also set jboss.home on the commandline:
+</p><pre>
+  mvn package jboss:hard-deploy -Djboss.home=/path/to/jboss-as-6.0.0.Final</pre>
+<p> In all, you have three options to set the path of your JBoss AS installation:
+</p><ol>
+  <li>Set the JBOSS_HOME environment variable (e.g., export JBOSS_HOME=/path/to/jboss-as)
+  </li><li>Define the jboss.home Maven property in $HOME/.m2/settings.xml
+  </li><li>Override the jboss.home Maven property from the commandline using -Djboss.home=/path/to/jboss-as</li></ol>
+<p> Now start JBoss AS. The application will be running at the following URL:
+</p><ul>
+  <li><a href="http://localhost:8080/minoas-web/">http://localhost:8080/minoas-web/</a></li></ul>
+<p> To undeploy from JBoss AS, run this command:
+</p><pre>
+  mvn jboss:hard-undeploy</pre>
+<p> There are several ways to deploy the archive to GlassFish. The recommended
+ approach is to open the project in NetBeans 6.8, right-click on the project
+ and select "Run" from the context menu. That starts JavaDB, GlassFish and
+ deploys the application. NetBeans then provides incremental deployment of web
+ resources.
+</p><dl>
+  <dt>IMPORTANT</dt>
+<dd> Don't forget to upgrade Weld. See Upgrading Weld in GlassFish 3.1 for details.</dd></dl>
+<p> You can also start GlassFish from the commandline. Change to the glassfish/bin
+ directory in the GlassFish install root and run these three commands (leading
+ ./ not required on Windows):
+</p><pre>
+  ./asadmin start-database
+  ./asadmin start-domain domain1</pre>
+<dl>
+  <dt>IMPORTANT</dt>
+<dd> Don't forget to start the JavaDB database!  </dd><dt>NOTE</dt>
+<dd> NetBeans starts the database automatically when it starts up GlassFish. If you
+ have the GlassFish Tools Eclipse plug-in, you have to enable this feature.
+ Select Window &gt; Preferences &gt; GlassFish Server Preferences and check the
+ option "Start JavaDB database process when &gt; Starting GlassFish Server"</dd></dl>
+<p> Now you can either deploy the target/minoas-web.war through the
+ web-based GlassFish admininstration console, or you can again use asadmin:
+</p><pre>
+  ./asadmin deploy target/minoas-web.war</pre>
+<p> To undeploy the application, run:
+</p><pre>
+  ./asadmin undeploy minoas-web</pre>
+<h2><a name="section_1_4">Upgrading Weld in GlassFish 3.1</a></h2>
+<p> There are several known CDI visibility issues in the stock version of Weld
+ that ships with GlassFish 3.1. One of these issues affects the sample code in
+ this application. For more information, see <a href="http://sfwk.org/Seam3/Compatibility">http://sfwk.org/Seam3/Compatibility</a>.
+ 
+</p><p> You can upgrade Weld by following these steps:
+</p><ol>
+  <li>Stop GlassFish
+  </li><li>Download the most recent Weld OSGi Bundle 1.1.0-SNAPSHOT (<a href="https://repository.jboss.org/nexus/content/repositories/snapshots/org/jboss/weld/weld-osgi-bundle/1.1.0-SNAPSHOT">https://repository.jboss.org/nexus/content/repositories/snapshots/org/jboss/weld/weld-osgi-bundle/1.1.0-SNAPSHOT</a>)
+  </li><li>Copy that jar to $GLASSFISH_HOME/glassfish/modules/weld-osgi-bundle.jar
+  </li><li>Start GlassFish</li></ol>
+<p> You can now deploy the application successfully to GlassFish 3.1.
+</p><h2><a name="section_1_5">Running the Arquillian tests</a></h2>
+<p> By default, tests are configured to be skipped. The reason is that the sample
+ test is an Arquillian test, which requires the use of a container. You can
+ activate this test by selecting one of the two container configurations
+ provided, JBoss AS 6 (remote) or GlassFish 3 (embedded).
+</p><p> To run the test in Embedded GlassFish, first make sure that you don't have a
+ GlassFish container running (to avoid port conflicts). Then run the test goal
+ with the following profile activated:
+</p><pre>
+  mvn clean test -Parq-glassfish-embedded</pre>
+<p> (The clean goal is only required when you switch between containers)
+</p><p> To run the test in JBoss AS 6, first start a JBoss AS 6 instance. Then, run the
+ test goal with the following profile activated:
+</p><pre>
+  mvn clean test -Parq-jbossas-remote</pre>
+<p> Consult the Arquillian reference documentation to register profiles for any
+ supported container.
+</p><ul>
+  <li><a href="http://docs.jboss.org/arquillian/reference/latest/en-US/html/containers.html#d0e678">http://docs.jboss.org/arquillian/reference/latest/en-US/html/containers.html#d0e678</a></li></ul>
+<h2><a name="section_1_6">Importing the project into an IDE</a></h2>
+<p> If you created the project using the Maven archetype wizard in your IDE
+ (Eclipse, NetBeans or IntelliJ IDEA), then there is nothing to do. You should
+ already have an IDE project.
+</p><p> If you created the project from the commandline using archetype:generate, then
+ you need to import the project into your IDE. If you are using NetBeans 6.8 or
+ IntelliJ IDEA 9, then all you have to do is open the project as an existing
+ project. Both of these IDEs recognize Maven projects natively.
+</p><p> To import the project into Eclipse, you need the m2eclipse plugins installed.
+ Installation instructions are provided on the m2eclipse project site:
+</p><ul>
+  <li><a href="http://m2eclipse.sonatype.org/installing-m2eclipse.html">http://m2eclipse.sonatype.org/installing-m2eclipse.html</a></li></ul>
+<p> Here's the quick guide:
+</p><ul>
+  <li>Select Help &gt; Install New Software...
+  </li><li>Click the Add... button
+  </li><li>Add the repository URL <a href="http://m2eclipse.sonatype.org/update">http://m2eclipse.sonatype.org/update</a>
+  </li><li>Select and install the Maven Integration for Eclipse
+  </li><li>Restart as suggested
+  </li><li>Repeat the first two steps
+  </li><li>Add the repository URL <a href="http://m2eclipse.sonatype.org/sites/m2e-extras">http://m2eclipse.sonatype.org/sites/m2e-extras</a>
+  </li><li>Select and install the Maven Integration for WTP (Optional)
+  </li><li>Restart as suggested</li></ul>
+<p> Once the m2eclipse plugins are installed, you'll be ready to import the
+ project into Eclipse and run the project on a Java EE server. We also
+ recommend that you install the JBoss Tools plugins if you plan to deploy
+ to JBoss AS - <a href="http://jboss.org/tools">http://jboss.org/tools</a>
+</p><dl>
+  <dt>NOTE</dt>
+<dd> If you are using Eclipse as your IDE, we we strongly recommend that you use
+ Eclipse 3.6 (Helios) - <a href="http://www.eclipse.org/helios">http://www.eclipse.org/helios</a></dd></dl>
+<p> Select File &gt; Import. . . and choose the Maven &gt; Existing Maven Projects option.
+ Navigate to the root directory of your project. Eclipse should recognize the
+ Maven project and preselect it in the Project box. Click Finish and m2eclipse
+ will take it from there.
+</p><dl>
+  <dt>NOTE</dt>
+<dd> You cannot use the import option General &gt; Existing Projects into Workspace
+ because Eclipse does not recognize Maven projects as Eclipse projects
+ natively. You must use the importer provided by m2eclipse as just described.</dd></dl>
+<p> Additional configuration is required to get Eclipse to generate the JPA
+ metamodel. The archetype includes the necessary Eclipse config files in your
+ project. To enable this feature, right click on the project and select:
+</p><pre>
+  Properties &gt; Java Compiler &gt; Annotation Processing</pre>
+<p> Check "Enable annotation processing" then click OK and OK again when your are
+ prompted to run a project build.
+</p><p> This configuration is described in further detail in the Hibernate JPA documentation:
+</p><ul>
+  <li><a href="http://docs.jboss.org/hibernate/stable/jpamodelgen/reference/en-US/html_single/#d0e319">http://docs.jboss.org/hibernate/stable/jpamodelgen/reference/en-US/html_single/#d0e319</a></li></ul>
+<p> Once the project is imported into the IDE, you can execute the Maven commands
+ through the IDE controls to deploy the application to a container.
+</p><p> To deploy to GlassFish from Eclipse, you'll need the GlassFish Tools Bundle,
+ available at the update site <a href="http://download.java.net/glassfish/eclipse/helios">http://download.java.net/glassfish/eclipse/helios</a>
+ or from the Help &gt; Eclipse Marketplace. . .
+</p><h2><a name="section_1_7">Downloading the sources and Javadocs</a></h2>
+<p> If you want to be able to debug into the source code or look at the Javadocs
+ of any library in the project, you can run either of the following two
+ commands to pull them into your local repository. The IDE should then detect
+ them.
+</p><pre>
+  mvn dependency:sources
+  mvn dependency:resolve -Dclassifier=javadoc</pre>
+<h2><a name="section_1_8">Resources</a></h2>
+<ul>
+  <li>Weld archetypes
+  <ul>
+    <li>Quickstart:         <a href="http://tinyurl.com/gojavaee">http://tinyurl.com/gojavaee</a>
+    </li><li>Issue tracker:      <a href="https://issues.jboss.org/browse/WELDRAD">https://issues.jboss.org/browse/WELDRAD</a>
+    </li><li>Source code:        <a href="http://anonsvn.jboss.org/repos/weld/archetypes">http://anonsvn.jboss.org/repos/weld/archetypes</a>
+    </li><li>Forums:             <a href="http://sfwk.org/Community/WeldUsers">http://sfwk.org/Community/WeldUsers</a>
+  </li></ul>
+  </li><li>JSR-299 overview:     <a href="http://sfwk.org/Weld">http://sfwk.org/Weld</a>
+  </li><li>JSF community site:   <a href="http://www.javaserverfaces.org">http://www.javaserverfaces.org</a>
+  </li><li>Download JBoss AS:    <a href="http://jboss.org/jbossas/downloads">http://jboss.org/jbossas/downloads</a>
+  </li><li>Download GlassFish:   <a href="http://glassfish.java.net/public/downloadsindex.html">http://glassfish.java.net/public/downloadsindex.html</a>
+</li></ul>
+
+</body>
+</html>
