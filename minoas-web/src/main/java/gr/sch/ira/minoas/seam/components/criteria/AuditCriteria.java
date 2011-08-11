@@ -6,18 +6,18 @@ import gr.sch.ira.minoas.model.security.Principal;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.enterprise.context.ConversationScoped;
+import javax.inject.Named;
+
 import org.apache.commons.lang.time.DateUtils;
-import org.jboss.seam.ScopeType;
-import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Scope;
 
 /**
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * @version $Id$
  */
-@Name("auditCriteria")
-@Scope(ScopeType.CONVERSATION)
-public class AuditCriteria {
+@Named("auditCriteria")
+@ConversationScoped
+public class AuditCriteria extends BaseCriteria {
 
 	private Date effectiveDateFrom;
 

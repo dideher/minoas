@@ -4,19 +4,19 @@ import gr.sch.ira.minoas.model.core.Specialization;
 import gr.sch.ira.minoas.model.core.SpecializationGroup;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
 
+import java.io.Serializable;
 import java.util.Date;
 
-import org.jboss.seam.ScopeType;
-import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Scope;
+import javax.enterprise.context.ConversationScoped;
+import javax.inject.Named;
 
 /**
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * @version $Id$
  */
-@Name("employeeCriteria")
-@Scope(ScopeType.CONVERSATION)
-public class EmployeeCriteria {
+@Named("employeeCriteria")
+@ConversationScoped
+public class EmployeeCriteria extends BaseCriteria  {
 
 	private Boolean bigFamily;
 

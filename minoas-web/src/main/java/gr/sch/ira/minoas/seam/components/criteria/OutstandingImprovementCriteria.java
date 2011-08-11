@@ -2,17 +2,16 @@ package gr.sch.ira.minoas.seam.components.criteria;
 
 import gr.sch.ira.minoas.model.core.SpecializationGroup;
 
-import org.jboss.seam.ScopeType;
-import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Scope;
+import javax.enterprise.context.ConversationScoped;
+import javax.inject.Named;
 
 /**
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * @version $Id$
  */
-@Name("outstandingImprovementCriteria")
-@Scope(ScopeType.CONVERSATION)
-public class OutstandingImprovementCriteria {
+@Named("outstandingImprovementCriteria")
+@ConversationScoped
+public class OutstandingImprovementCriteria extends BaseCriteria  {
 
 	private SpecializationGroup specializationGroup;
 

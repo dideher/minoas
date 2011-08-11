@@ -7,9 +7,10 @@ import gr.sch.ira.minoas.model.core.Audit;
 import gr.sch.ira.minoas.model.core.AuditType;
 import gr.sch.ira.minoas.model.security.Principal;
 
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
-import org.jboss.seam.annotations.In;
 import org.jboss.seam.security.Identity;
 
 /**
@@ -23,13 +24,13 @@ public abstract class BaseDatabaseAwareSeamComponent extends BaseSeamComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@In(required = true, create = true)
+	@PersistenceContext
 	protected EntityManager entityManager;
 	
-	@In(required = true, create = true)
-    private CoreSearching coreSearching;
+	@Inject
+	private CoreSearching coreSearching;
 
-	@In(required = false)
+	@Inject
 	private Identity identity;
 	
 
@@ -42,7 +43,7 @@ public abstract class BaseDatabaseAwareSeamComponent extends BaseSeamComponent {
 	}
 
 	protected String getPrincipalName() {
-		return getIdentity() != null ? getIdentity().getPrincipal().getName() : "<anonymous>";
+		return getIdentity() != null ? getIdentity().getUser().getId() : "<anonymous>";
 	}
 
 	

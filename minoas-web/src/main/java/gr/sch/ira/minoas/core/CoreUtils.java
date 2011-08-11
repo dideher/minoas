@@ -7,7 +7,7 @@ import java.util.ResourceBundle;
 
 import javax.faces.context.FacesContext;
 
-import org.jboss.seam.core.SeamResourceBundle;
+
 
 /**
  * @author slavikos
@@ -25,14 +25,14 @@ public abstract class CoreUtils {
         return FacesContext.getCurrentInstance();
     }
 
-    public static String getLocalizedMessage(String message_key) {
-    	return getResourceBundle(SEAM_MESSAGES_RESOURCE_BUNDLE_NAME).getString(message_key);
-    }
+//    public static String getLocalizedMessage(String message_key) {
+//    	return getResourceBundle(SEAM_MESSAGES_RESOURCE_BUNDLE_NAME).getString(message_key);
+//    }
 
-    public static ResourceBundle getResourceBundle(String resource_budle_name) {
-        return SeamResourceBundle.getBundle(SEAM_MESSAGES_RESOURCE_BUNDLE_NAME, getFacesContext()
-    			.getViewRoot().getLocale());
-    }
+//    public static ResourceBundle getResourceBundle(String resource_budle_name) {
+//        return SeamResourceBundle.getBundle(SEAM_MESSAGES_RESOURCE_BUNDLE_NAME, getFacesContext()
+//    			.getViewRoot().getLocale());
+//    }
 	
 	
 

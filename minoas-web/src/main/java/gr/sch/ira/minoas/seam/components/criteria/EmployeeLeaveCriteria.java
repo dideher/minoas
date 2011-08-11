@@ -1,25 +1,24 @@
 package gr.sch.ira.minoas.seam.components.criteria;
 
+import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.core.SpecializationGroup;
-import gr.sch.ira.minoas.model.core.Unit;
-import gr.sch.ira.minoas.model.employement.SecondmentType;
+import gr.sch.ira.minoas.model.employement.LeaveType;
 
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.enterprise.context.ConversationScoped;
+import javax.inject.Named;
+
 import org.apache.commons.lang.time.DateUtils;
-import org.jboss.seam.ScopeType;
-import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Scope;
 
 /**
- * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
+ * @author <a href="mailto:filippos@slavik">Filippos Slavik</a>
  * @version $Id$
  */
-@Name("secondmentCriteria")
-@Scope(ScopeType.CONVERSATION)
-public class SecondmentCriteria {
-	private String comment;
+@Named("employeeLeaveCriteria")
+@ConversationScoped
+public class EmployeeLeaveCriteria extends BaseCriteria  {
 
 	private DateSearchType dateSearchType;
 
@@ -29,31 +28,22 @@ public class SecondmentCriteria {
 
 	private Date effectiveDateUntil;
 
-	private Boolean employeeRequested;
+	private LeaveType leaveType;
 
 	private Character region;
 
-	private SecondmentType secondmentType;
+	private School schoolOfIntereset;
 
 	private SpecializationGroup specializationGroup;
 
-	private Unit targetUnit;
-
 	/**
-	 * 
-	 */
-	public SecondmentCriteria() {
+		 * 
+		 */
+	public EmployeeLeaveCriteria() {
 		super();
 		effectiveDate = DateUtils.truncate(new Date(System.currentTimeMillis()), Calendar.DAY_OF_MONTH);
 		effectiveDateFrom = DateUtils.truncate(new Date(System.currentTimeMillis()), Calendar.DAY_OF_MONTH);
 		dateSearchType = DateSearchType.DURING_DATE;
-	}
-
-	/**
-	 * @return the comment
-	 */
-	public String getComment() {
-		return comment;
 	}
 
 	/**
@@ -71,7 +61,7 @@ public class SecondmentCriteria {
 	}
 
 	/**
-	 * @return the effectiveDateFrom
+	 * @return the effectiveDateDueTo
 	 */
 	public Date getEffectiveDateFrom() {
 		return effectiveDateFrom;
@@ -85,10 +75,10 @@ public class SecondmentCriteria {
 	}
 
 	/**
-	 * @return the employeeRequested
+	 * @return the leaveType
 	 */
-	public Boolean getEmployeeRequested() {
-		return employeeRequested;
+	public LeaveType getLeaveType() {
+		return leaveType;
 	}
 
 	/**
@@ -99,10 +89,10 @@ public class SecondmentCriteria {
 	}
 
 	/**
-	 * @return the secondmentType
+	 * @return the schoolOfIntereset
 	 */
-	public SecondmentType getSecondmentType() {
-		return secondmentType;
+	public School getSchoolOfIntereset() {
+		return schoolOfIntereset;
 	}
 
 	/**
@@ -110,20 +100,6 @@ public class SecondmentCriteria {
 	 */
 	public SpecializationGroup getSpecializationGroup() {
 		return specializationGroup;
-	}
-
-	/**
-	 * @return the targetUnit
-	 */
-	public Unit getTargetUnit() {
-		return targetUnit;
-	}
-
-	/**
-	 * @param comment the comment to set
-	 */
-	public void setComment(String comment) {
-		this.comment = comment;
 	}
 
 	/**
@@ -141,10 +117,10 @@ public class SecondmentCriteria {
 	}
 
 	/**
-	 * @param effectiveDateFrom the effectiveDateFrom to set
+	 * @param effectiveDateDueTo the effectiveDateDueTo to set
 	 */
-	public void setEffectiveDateFrom(Date effectiveDateFrom) {
-		this.effectiveDateFrom = effectiveDateFrom;
+	public void setEffectiveDateFrom(Date effectiveDateDueTo) {
+		this.effectiveDateFrom = effectiveDateDueTo;
 	}
 
 	/**
@@ -155,10 +131,10 @@ public class SecondmentCriteria {
 	}
 
 	/**
-	 * @param employeeRequested the employeeRequested to set
+	 * @param leaveType the leaveType to set
 	 */
-	public void setEmployeeRequested(Boolean employeeRequested) {
-		this.employeeRequested = employeeRequested;
+	public void setLeaveType(LeaveType leaveType) {
+		this.leaveType = leaveType;
 	}
 
 	/**
@@ -169,10 +145,10 @@ public class SecondmentCriteria {
 	}
 
 	/**
-	 * @param secondmentType the secondmentType to set
+	 * @param schoolOfIntereset the schoolOfIntereset to set
 	 */
-	public void setSecondmentType(SecondmentType secondmentType) {
-		this.secondmentType = secondmentType;
+	public void setSchoolOfIntereset(School schoolOfIntereset) {
+		this.schoolOfIntereset = schoolOfIntereset;
 	}
 
 	/**
@@ -182,10 +158,4 @@ public class SecondmentCriteria {
 		this.specializationGroup = specializationGroup;
 	}
 
-	/**
-	 * @param targetUnit the targetUnit to set
-	 */
-	public void setTargetUnit(Unit targetUnit) {
-		this.targetUnit = targetUnit;
-	}
 }

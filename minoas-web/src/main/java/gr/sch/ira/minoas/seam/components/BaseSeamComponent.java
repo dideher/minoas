@@ -6,10 +6,11 @@ package gr.sch.ira.minoas.seam.components;
 import java.io.Serializable;
 import java.util.Locale;
 
-import org.jboss.seam.annotations.In;
-import org.jboss.seam.annotations.Logger;
-import org.jboss.seam.faces.FacesMessages;
-import org.jboss.seam.log.Log;
+import javax.inject.Inject;
+
+import org.jboss.logging.Logger;
+import org.jboss.seam.international.status.Messages;
+import org.jboss.seam.solder.logging.Category;
 
 /**
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
@@ -28,11 +29,13 @@ public abstract class BaseSeamComponent implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@In(required = false)
-	protected FacesMessages facesMessages;
+	 @Inject
+	 
+	protected Messages facesMessages;
 
-	@Logger
-	private Log logger;
+	@Inject
+    @Category("minoas-web")
+	private Logger logger;
 
 	/**
 	 * @param arg0
@@ -40,7 +43,7 @@ public abstract class BaseSeamComponent implements Serializable {
 	 * @see org.jboss.seam.log.Log#debug(java.lang.Object, java.lang.Object[])
 	 */
 	public void debug(Object arg0, Object... arg1) {
-		logger.debug(arg0, arg1);
+		logger.debugf(arg0.toString(), arg1);
 	}
 
 	/**
@@ -51,7 +54,7 @@ public abstract class BaseSeamComponent implements Serializable {
 	 *      java.lang.Object[])
 	 */
 	public void debug(Object arg0, Throwable arg1, Object... arg2) {
-		logger.debug(arg0, arg1, arg2);
+		logger.debugf(arg1.toString(), arg0, arg2);
 	}
 
 	/**
@@ -60,7 +63,7 @@ public abstract class BaseSeamComponent implements Serializable {
 	 * @see org.jboss.seam.log.Log#error(java.lang.Object, java.lang.Object[])
 	 */
 	public void error(Object arg0, Object... arg1) {
-		logger.error(arg0, arg1);
+		logger.errorf(arg0.toString(), arg1);
 	}
 
 	/**
@@ -71,7 +74,7 @@ public abstract class BaseSeamComponent implements Serializable {
 	 *      java.lang.Object[])
 	 */
 	public void error(Object arg0, Throwable arg1, Object... arg2) {
-		logger.error(arg0, arg1, arg2);
+		logger.errorf(arg1, arg0.toString(), arg2);
 	}
 
 	/**
@@ -80,7 +83,7 @@ public abstract class BaseSeamComponent implements Serializable {
 	 * @see org.jboss.seam.log.Log#fatal(java.lang.Object, java.lang.Object[])
 	 */
 	public void fatal(Object arg0, Object... arg1) {
-		logger.fatal(arg0, arg1);
+		logger.fatalf(arg0.toString(), arg1);
 	}
 
 	/**
@@ -91,13 +94,13 @@ public abstract class BaseSeamComponent implements Serializable {
 	 *      java.lang.Object[])
 	 */
 	public void fatal(Object arg0, Throwable arg1, Object... arg2) {
-		logger.fatal(arg0, arg1, arg2);
+		logger.fatalf(arg1, arg0.toString(), arg2);
 	}
 
 	/**
 	 * @return the facesMessages
 	 */
-	public FacesMessages getFacesMessages() {
+	public Messages getFacesMessages() {
 		return facesMessages;
 	}
 
@@ -107,7 +110,7 @@ public abstract class BaseSeamComponent implements Serializable {
 	 * @see org.jboss.seam.log.Log#info(java.lang.Object, java.lang.Object[])
 	 */
 	public void info(Object arg0, Object... arg1) {
-		logger.info(arg0, arg1);
+		logger.infof(arg0.toString(), arg1);
 	}
 
 	/**
@@ -118,7 +121,7 @@ public abstract class BaseSeamComponent implements Serializable {
 	 *      java.lang.Object[])
 	 */
 	public void info(Object arg0, Throwable arg1, Object... arg2) {
-		logger.info(arg0, arg1, arg2);
+		logger.infof(arg1, arg0.toString(), arg2);
 	}
 
 	protected boolean isEmpty(Object object) {
@@ -135,7 +138,7 @@ public abstract class BaseSeamComponent implements Serializable {
 	 * @see org.jboss.seam.log.Log#warn(java.lang.Object, java.lang.Object[])
 	 */
 	public void warn(Object arg0, Object... arg1) {
-		logger.warn(arg0, arg1);
+		logger.warnf(arg0.toString(), arg1);
 	}
 
 	/**
@@ -146,7 +149,7 @@ public abstract class BaseSeamComponent implements Serializable {
 	 *      java.lang.Object[])
 	 */
 	public void warn(Object arg0, Throwable arg1, Object... arg2) {
-		logger.warn(arg0, arg1, arg2);
+		logger.warnf(arg1, arg0.toString(), arg2);
 	}
 
 }

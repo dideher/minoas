@@ -42,24 +42,23 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Produces;
+import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
-import org.jboss.seam.ScopeType;
-import org.jboss.seam.annotations.AutoCreate;
-import org.jboss.seam.annotations.Factory;
-import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Scope;
-import org.jboss.seam.annotations.TransactionPropagationType;
-import org.jboss.seam.annotations.Transactional;
+import org.jboss.seam.transaction.TransactionPropagation;
+import org.jboss.seam.transaction.Transactional;
+
+
 
 /**
- * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
+ * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * @version $Id$
  */
-@Name("coreSearching")
-@Scope(ScopeType.EVENT)
-@AutoCreate
+@Named("coreSearching")
+@RequestScoped
 public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 
     /**
@@ -82,9 +81,15 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
             return null;
         }
     }
+    
+    @Produces @Named("activeSchoolYear")
+    @RequestScoped
+    public SchoolYear activeSchoolYearHelper() {
+    	return getActiveSchoolYear(getEntityManager());
+    }
 
     @SuppressWarnings("unchecked")
-    @Transactional(TransactionPropagationType.REQUIRED)
+    @Transactional(TransactionPropagation.REQUIRED)
     public Collection<Secondment> getActiveSecondments(EntityManager em) {
         return em.createQuery("SELECT s from Secondment s WHERE s.active IS TRUE").getResultList();
     }
@@ -92,33 +97,33 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     
 
     @SuppressWarnings("unchecked")
-    @Transactional(TransactionPropagationType.REQUIRED)
+    @Transactional(TransactionPropagation.REQUIRED)
     public Collection<Secondment> getActiveSecondments(EntityManager em, SchoolYear schoolYear) {
         return em.createQuery("SELECT s from Secondment s WHERE s.active IS TRUE AND s.schoolYear=:schoolYear")
                 .setParameter("schoolYear", schoolYear).getResultList();
     }
 
-    @Transactional(TransactionPropagationType.REQUIRED)
+    @Transactional(TransactionPropagation.REQUIRED)
     @SuppressWarnings("unchecked")
     public Collection<ServiceAllocation> getActiveServiceAllocations(EntityManager em) {
         return getEntityManager(em).createQuery("SELECT s FROM ServiceAllocation s WHERE s.active IS TRUE")
                 .getResultList();
     }
     
-    @Transactional(TransactionPropagationType.REQUIRED)
+    @Transactional(TransactionPropagation.REQUIRED)
     @SuppressWarnings("unchecked")
     public Collection<Disposal> getActiveDisposal(EntityManager em, SchoolYear schoolYear) {
         return getEntityManager(em).createQuery("SELECT d FROM Disposal d WHERE d.active IS TRUE AND d.schoolYear=:schoolYear")
                 .setParameter("schoolYear", schoolYear).getResultList();
     }
     
-    @Transactional(TransactionPropagationType.REQUIRED)
+    @Transactional(TransactionPropagation.REQUIRED)
     @SuppressWarnings("unchecked")
     public Collection<Disposal> getActiveDisposal(EntityManager em) {
         return getEntityManager(em).createQuery("SELECT d FROM Disposal d WHERE d.active IS TRUE").getResultList();
     }
     
-    @Transactional(TransactionPropagationType.REQUIRED)
+    @Transactional(TransactionPropagation.REQUIRED)
     @SuppressWarnings("unchecked")
     public Collection<Leave> getActiveLeaves(EntityManager em) {
         return getEntityManager(em).createQuery("SELECT l FROM Leave l WHERE l.active IS TRUE").getResultList();
@@ -130,7 +135,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
      * @return
      */
     @SuppressWarnings("unchecked")
-    @Transactional(TransactionPropagationType.REQUIRED)
+    @Transactional(TransactionPropagation.REQUIRED)
     public Collection<Employment> getAllEmployeeEmploymentsOfType(Person employee, EmploymentType type) {
         List<Employment> result;
         debug("trying to featch all  employments for employee '#0'", employee);
@@ -153,28 +158,33 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         return result;
     }
 
-    @Factory(value = "dateSearchTypes")
+    @Produces 
+    @Named(value = "dateSearchTypes")
     public DateSearchType[] getAvailableDateSearchTypes() {
         return DateSearchType.values();
     }
 
-    @Factory(value = "disposalTargetTypes")
+    @Produces 
+    @Named(value = "disposalTargetTypes")
     public DisposalTargetType[] getAvailableDisposalTargetTypes() {
         return DisposalTargetType.values();
     }
 
-    @Factory(value = "disposalTypes")
+    @Produces 
+    @Named(value = "disposalTypes")
     public DisposalType[] getAvailableDisposalTypes() {
         return DisposalType.values();
     }
 
     @SuppressWarnings("unchecked")
-    @Factory(value = "establishmentLocations")
+    @Produces 
+    @Named(value = "establishmentLocations")
     public Collection<EstablishmentLocation> getAvailableEstablishments() {
         return getEntityManager().createQuery("FROM EstablishmentLocation e ORDER BY (e.title)").getResultList();
     }
 
-    @Factory(value = "leaveTypes")
+    @Produces 
+    @Named(value = "leaveTypes")
     public LeaveType[] getAvailableLeaveTypes() {
         return LeaveType.values();
     }
@@ -187,7 +197,8 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         return return_value;
     }
 
-    @Factory(value = "permanentTransferTypes")
+    @Produces 
+    @Named(value = "permanentTransferTypes")
     public PermanentTransferType[] getAvailablePermanentTransferTypes() {
         return PermanentTransferType.values();
     }
@@ -201,13 +212,15 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 
     }
 
-    @Factory(value = "availableSchoolClasses")
+    @Produces 
+    @Named(value = "availableSchoolClasses")
     @SuppressWarnings("unchecked")
     public List<SchoolClass> getAvailableSchoolClasses() {
         return getEntityManager().createQuery("SELECT s FROM SchoolClass s ORDER BY (s.schoolType)").getResultList();
     }
 
-    @Factory(value = "schoolTypes")
+    @Produces 
+    @Named(value = "schoolTypes")
     public SchoolType[] getAvailableSchoolTypes() {
         return SchoolType.values();
     }
@@ -225,12 +238,14 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         return return_value;
     }
 
-    @Factory(value = "secondmentTypes")
+    @Produces 
+    @Named(value = "secondmentTypes")
     public SecondmentType[] getAvailableSecondmentTypes() {
         return SecondmentType.values();
     }
 
-    @Factory(value = "serviceAllocationTypes")
+    @Produces 
+    @Named(value = "serviceAllocationTypes")
     public ServiceAllocationType[] getAvailableServiceAllocationTypes() {
         return ServiceAllocationType.values();
     }
@@ -243,7 +258,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     }
 
     @SuppressWarnings("unchecked")
-    @Transactional(TransactionPropagationType.REQUIRED)
+    @Transactional(TransactionPropagation.REQUIRED)
     public Collection<Disposal> getEmployeeActiveDisposals(EntityManager em, Person employee, Date dayOfIntereset) {
 
         Collection<Disposal> result = null;
@@ -254,7 +269,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         return result;
     }
 
-    @Transactional(TransactionPropagationType.REQUIRED)
+    @Transactional(TransactionPropagation.REQUIRED)
     public Leave getEmployeeActiveLeave(EntityManager entityManager, Person employee, Date onDate) {
         EntityManager em = getEntityManager(entityManager);
 
@@ -268,7 +283,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         }
     }
 
-    @Transactional(TransactionPropagationType.REQUIRED)
+    @Transactional(TransactionPropagation.REQUIRED)
     public Secondment getEmployeeActiveSecondment(EntityManager entityManager, Person employee, Date onDate) {
         EntityManager em = getEntityManager(entityManager);
         try {
@@ -281,7 +296,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         }
     }
 
-    @Transactional(TransactionPropagationType.REQUIRED)
+    @Transactional(TransactionPropagation.REQUIRED)
     public ServiceAllocation getEmployeeActiveServiceAllocation(EntityManager em, Person employee, Date dayOfIntereset) {
         try {
             return (ServiceAllocation) getEntityManager(em)
@@ -293,7 +308,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         }
     }
 
-    @Transactional(TransactionPropagationType.REQUIRED)
+    @Transactional(TransactionPropagation.REQUIRED)
     public Employee getEmployeeByVatNumber(EntityManager entityManager, String vatNumber) {
         EntityManager em = getEntityManager(entityManager);
         try {
@@ -304,7 +319,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         }
     }
 
-    @Transactional(TransactionPropagationType.REQUIRED)
+    @Transactional(TransactionPropagation.REQUIRED)
     @SuppressWarnings("unchecked")
     public Collection<Employment> getEmployeeEmployments(Person employee) {
         List<Employment> result;
@@ -317,7 +332,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     }
 
     @SuppressWarnings("unchecked")
-    @Transactional(TransactionPropagationType.REQUIRED)
+    @Transactional(TransactionPropagation.REQUIRED)
     public Collection<Employment> getEmployeeEmployments(Person employee, SchoolYear schoolyear) {
         List<Employment> result;
         debug("trying to featch all  employments for employee '#0' during school year '#1'.", employee, schoolyear);
@@ -330,7 +345,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     }
 
     @SuppressWarnings("unchecked")
-    @Transactional(TransactionPropagationType.REQUIRED)
+    @Transactional(TransactionPropagation.REQUIRED)
     public Collection<Employment> getEmployeeEmploymentsOfType(Person employee, EmploymentType type) {
         List<Employment> result;
         debug("trying to featch all  employments for employee '#0'", employee);
@@ -343,7 +358,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     }
 
     @SuppressWarnings("unchecked")
-    @Transactional(TransactionPropagationType.REQUIRED)
+    @Transactional(TransactionPropagation.REQUIRED)
     public Collection<Employment> getEmployeeEmploymentsOfType(Person employee, EmploymentType type,
             SchoolYear schoolYear) {
         List<Employment> result;
@@ -358,7 +373,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     }
 
     @SuppressWarnings("unchecked")
-    @Transactional(TransactionPropagationType.REQUIRED)
+    @Transactional(TransactionPropagation.REQUIRED)
     @Deprecated
     public Collection<Leave> getEmployeeLeaves(Person employee) {
         Collection<Leave> result = null;
@@ -371,7 +386,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     }
     
     @SuppressWarnings("unchecked")
-    @Transactional(TransactionPropagationType.REQUIRED)
+    @Transactional(TransactionPropagation.REQUIRED)
     public Collection<Leave> getEmployeeLeaveHistory(Person employee) {
         Collection<Leave> result = null;
         info("searching employee's '#0' leaves.", employee);
@@ -393,7 +408,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         return result;
     }
 
-    @Transactional(TransactionPropagationType.REQUIRED)
+    @Transactional(TransactionPropagation.REQUIRED)
     public Employee getEmployeeOfTypeByVatNumber(EntityManager entityManager, EmployeeType employeeType,
             String vatNumber) {
         EntityManager em = getEntityManager(entityManager);
@@ -418,7 +433,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     }
 
     @SuppressWarnings("unchecked")
-    @Transactional(TransactionPropagationType.REQUIRED)
+    @Transactional(TransactionPropagation.REQUIRED)
     public Collection<Employee> getEmployeesWithUnProcessedOutstandingImprovements(EntityManager em,
             SchoolYear schoolYear) {
         return getEntityManager(em)
@@ -429,7 +444,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     }
 
     @SuppressWarnings("unchecked")
-    @Transactional(TransactionPropagationType.REQUIRED)
+    @Transactional(TransactionPropagation.REQUIRED)
     public Collection<Employee> getEmployeesWithUnProcessedPermanentTransfers(EntityManager em, SchoolYear schoolYear) {
         return getEntityManager(em).createQuery(
                 "SELECT i.employee FROM PermanentTransfer i WHERE i.isProcessed IS FALSE AND i.schoolYear=:schoolYear")
@@ -437,7 +452,8 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 
     }
 
-    @Factory(value = "employeeTypes")
+    @Produces 
+    @Named(value = "employeeTypes")
     public EmployeeType[] getEmployeeTypes() {
         return EmployeeType.values();
     }
@@ -453,7 +469,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 
     
     @SuppressWarnings("unchecked")
-    @Transactional(TransactionPropagationType.REQUIRED)
+    @Transactional(TransactionPropagation.REQUIRED)
     public Collection<Employment> getEmploymentsOfType(EntityManager em, EmploymentType type, SchoolYear schoolYear) {
         List<Employment> result;
         debug("trying to featch all active employments of type '#0'", type);
@@ -466,13 +482,13 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     }
     
     @SuppressWarnings("unchecked")
-    @Transactional(TransactionPropagationType.REQUIRED)
+    @Transactional(TransactionPropagation.REQUIRED)
     public Collection<Employment> getEmploymentsOfType(EmploymentType type, SchoolYear schoolYear) {
         return getEmploymentsOfType(getEntityManager(), type, schoolYear);
     }
 
     @SuppressWarnings("unchecked")
-    @Transactional(TransactionPropagationType.REQUIRED)
+    @Transactional(TransactionPropagation.REQUIRED)
     public Collection<Employment> getEmploymentsOfType(EmploymentType type, SchoolYear schoolYear,
             Collection<Employee> excludedEmployees) {
         List<Employment> result;
@@ -486,7 +502,8 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         return result;
     }
 
-    @Factory(value = "employmentTypes")
+    @Produces 
+    @Named(value = "employmentTypes")
     public EmploymentType[] getEmploymentTypes() {
         return EmploymentType.values();
     }
@@ -500,7 +517,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     }
 
     @SuppressWarnings("unchecked")
-    @Transactional(TransactionPropagationType.REQUIRED)
+    @Transactional(TransactionPropagation.REQUIRED)
     public Collection<PermanentTransfer> getgetUnProcessedPermanentTransfers(EntityManager em, SchoolYear schoolYear) {
         return getEntityManager(em).createQuery(
                 "SELECT i FROM PermanentTransfer i WHERE i.isProcessed IS FALSE AND i.schoolYear=:schoolYear")
@@ -1064,7 +1081,8 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
                 .setParameter("schoolYear", schoolYear).getResultList();
     }
 
-    @Factory(value = "specializationGroupSearchTypes")
+    @Produces 
+    @Named(value = "specializationGroupSearchTypes")
     public SpecializationGroupSearchType[] getSpecializationGroupSearchTypes() {
         return SpecializationGroupSearchType.values();
     }
@@ -1077,7 +1095,8 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     
 
 
-    @Factory(value = "specializationSearchTypes")
+    @Produces 
+    @Named(value = "specializationSearchTypes")
     public SpecializationSearchType[] getSpecializationSearchTypes() {
         return SpecializationSearchType.values();
     }
@@ -1158,7 +1177,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     }
 
     @SuppressWarnings("unchecked")
-    @Transactional(TransactionPropagationType.REQUIRED)
+    @Transactional(TransactionPropagation.REQUIRED)
     public Collection<OutstandingImprovement> getUnProcessedOutstandingImprovements(EntityManager em,
             SchoolYear schoolYear) {
         return getEntityManager(em).createQuery(
@@ -1210,7 +1229,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     }
 
     @SuppressWarnings("unchecked")
-    @Transactional(TransactionPropagationType.REQUIRED)
+    @Transactional(TransactionPropagation.REQUIRED)
     public Collection<WorkExperience> getWorkExperienceHistory(Person employee) {
         Collection<WorkExperience> result = null;
         info("searching employee's '#0' work experiences.", employee);

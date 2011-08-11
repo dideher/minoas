@@ -3,25 +3,24 @@ package gr.sch.ira.minoas.seam.components.criteria;
 import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.core.SchoolYear;
 
-import org.jboss.seam.ScopeType;
-import org.jboss.seam.annotations.In;
-import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Scope;
+import javax.enterprise.context.ConversationScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * @version $Id$
  */
-@Name("regularEmploymentCriteria")
-@Scope(ScopeType.CONVERSATION)
-public class RegularEmploymentCriteria {
+@Named("regularEmploymentCriteria")
+@ConversationScoped
+public class RegularEmploymentCriteria extends BaseCriteria  {
 
 	private boolean onlyActive = true;
 
-	@In
+	@Inject
 	private School school;
 
-	@In(value = "activeSchoolYear")
+	@Inject @Named(value = "activeSchoolYear")
 	private SchoolYear schoolYear;
 
 	/**

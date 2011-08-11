@@ -4,17 +4,16 @@ import gr.sch.ira.minoas.model.core.SpecializationGroup;
 import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.transfers.PermanentTransferType;
 
-import org.jboss.seam.ScopeType;
-import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Scope;
+import javax.enterprise.context.ConversationScoped;
+import javax.inject.Named;
 
 /**
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * @version $Id$
  */
-@Name("outstandingPermanentTransferCriteria")
-@Scope(ScopeType.CONVERSATION)
-public class OutstandingPermanentTransferCriteria {
+@Named("outstandingPermanentTransferCriteria")
+@ConversationScoped
+public class OutstandingPermanentTransferCriteria extends BaseCriteria  {
 
 	private SpecializationGroup specializationGroup;
 

@@ -7,18 +7,18 @@ import gr.sch.ira.minoas.model.employement.DisposalType;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.enterprise.context.ConversationScoped;
+import javax.inject.Named;
+
 import org.apache.commons.lang.time.DateUtils;
-import org.jboss.seam.ScopeType;
-import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Scope;
 
 /**
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * @version $Id$
  */
-@Name("disposalCriteria")
-@Scope(ScopeType.CONVERSATION)
-public class DisposalCriteria {
+@Named("disposalCriteria")
+@ConversationScoped
+public class DisposalCriteria  extends BaseCriteria  {
 	private String comment;
 
 	private DateSearchType dateSearchType;
