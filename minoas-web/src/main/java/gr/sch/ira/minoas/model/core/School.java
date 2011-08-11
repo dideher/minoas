@@ -23,7 +23,6 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.jboss.seam.annotations.Name;
 
 /**
  * A class representing a school registered in the system.
@@ -33,7 +32,6 @@ import org.jboss.seam.annotations.Name;
  */
 @Entity
 @Table(name = "SCHOOL")
-@Name("school")
 @DiscriminatorValue("SCHOOL")
 @PrimaryKeyJoinColumn(name = "UNIT_ID")
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
