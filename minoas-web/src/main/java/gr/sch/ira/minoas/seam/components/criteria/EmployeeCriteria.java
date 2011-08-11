@@ -4,7 +4,6 @@ import gr.sch.ira.minoas.model.core.Specialization;
 import gr.sch.ira.minoas.model.core.SpecializationGroup;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.enterprise.context.ConversationScoped;
