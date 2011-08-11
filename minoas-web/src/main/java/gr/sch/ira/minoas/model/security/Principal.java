@@ -22,6 +22,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.jboss.seam.annotations.Name;
 
 /**
  * Represents an authorized user.
@@ -29,6 +30,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * */
 @Table(name = "PRINCIPAL")
+@Name("principal")
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class Principal extends BaseIDModel {

@@ -12,12 +12,14 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.jboss.seam.annotations.Name;
 
 /**
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * 
  */
 @Entity
+@Name("address")
 @Table(name = "ADDRESS")
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class Address extends BaseIDModel {
