@@ -3,11 +3,13 @@
  */
 package gr.sch.ira.minoas.seam.components;
 
+import gr.sch.ira.minoas.data.MemberRepository;
 import gr.sch.ira.minoas.model.core.Audit;
 import gr.sch.ira.minoas.model.core.AuditType;
 import gr.sch.ira.minoas.model.security.Principal;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -15,7 +17,7 @@ import org.jboss.seam.security.Identity;
 
 /**
  * @author slavikos
- *
+ * 
  */
 public abstract class BaseDatabaseAwareSeamComponent extends BaseSeamComponent {
 
@@ -24,33 +26,35 @@ public abstract class BaseDatabaseAwareSeamComponent extends BaseSeamComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@PersistenceContext
-	protected EntityManager entityManager;
-	
+	@Inject
+	@MemberRepository
+	protected EntityManager em;
+
 	@Inject
 	private CoreSearching coreSearching;
 
 	@Inject
 	private Identity identity;
-	
 
 	protected EntityManager getEntityManager() {
-		return entityManager;
+		return em;
 	}
-	
+
 	protected Principal getPrincipal() {
-		return coreSearching.getPrincipal(getEntityManager(), getPrincipalName());
+		return coreSearching.getPrincipal(getEntityManager(),
+				getPrincipalName());
 	}
 
 	protected String getPrincipalName() {
-		return getIdentity() != null ? getIdentity().getUser().getId() : "<anonymous>";
+		return getIdentity() != null ? getIdentity().getUser().getId()
+				: "<anonymous>";
 	}
 
-	
 	protected void logAudit(AuditType type, String comment) {
 		Audit audit = new Audit(type, comment, getPrincipal());
 		getEntityManager().persist(audit);
 	}
+
 	/**
 	 * @return the coreSearching
 	 */

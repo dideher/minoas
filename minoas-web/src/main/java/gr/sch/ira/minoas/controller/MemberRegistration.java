@@ -1,6 +1,9 @@
 package gr.sch.ira.minoas.controller;
 
 import org.jboss.seam.solder.logging.Category;
+import org.jboss.seam.transaction.TransactionPropagation;
+import org.jboss.seam.transaction.Transactional;
+
 import gr.sch.ira.minoas.data.MemberRepository;
 import gr.sch.ira.minoas.model.Member;
 import javax.annotation.PostConstruct;
@@ -28,8 +31,7 @@ public class MemberRegistration {
     @MemberRepository
     private EntityManager em;
 
-    @Inject
-    private UserTransaction utx;
+   
 
     @Inject
     private Event<Member> memberEventSrc;
@@ -42,13 +44,11 @@ public class MemberRegistration {
         return newMember;
     }
 
+    @Transactional(TransactionPropagation.REQUIRED)
     public void register() throws Exception {
         log.info("Registering " + newMember.getName());
-        // UserTransaction only needed when bean is not an EJB
-        utx.begin();
-        em.joinTransaction();
         em.persist(newMember);
-        utx.commit();
+        em.flush();
         memberEventSrc.fire(newMember);
         initNewMember();
     }

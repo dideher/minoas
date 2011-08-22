@@ -139,7 +139,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     public Collection<Employment> getAllEmployeeEmploymentsOfType(Person employee, EmploymentType type) {
         List<Employment> result;
         debug("trying to featch all  employments for employee '#0'", employee);
-        result = entityManager
+        result = getEntityManager()
                 .createQuery(
                         "SELECT e from Employment e WHERE e.employee=:employee AND e.type=:type AND e.deleted IS FALSE ORDER BY e.schoolYear.title ")
                 .setParameter("employee", employee).setParameter("type", type).getResultList();
@@ -151,7 +151,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     public Collection<Secondment> getAllEmployeeSecondments(Person employee) {
         Collection<Secondment> result = null;
         info("searching employee's '#0' secondments.", employee);
-        result = entityManager.createQuery(
+        result = getEntityManager().createQuery(
                 "SELECT s from Secondment s WHERE s.employee=:employee ORDER BY s.insertedOn").setParameter("employee",
                 employee).getResultList();
         info("found totally '#0' secondments for employee '#1'.", result.size(), employee);
@@ -324,7 +324,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     public Collection<Employment> getEmployeeEmployments(Person employee) {
         List<Employment> result;
         debug("trying to featch all  employments for employee '#0'", employee);
-        result = entityManager.createQuery(
+        result = getEntityManager().createQuery(
                 "SELECT e from Employment e WHERE e.employee=:employee ORDER BY e.schoolYear.title").setParameter(
                 "employee", employee).getResultList();
         info("found totally '#0' employments for employee '#1'.", result.size(), employee);
@@ -336,7 +336,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     public Collection<Employment> getEmployeeEmployments(Person employee, SchoolYear schoolyear) {
         List<Employment> result;
         debug("trying to featch all  employments for employee '#0' during school year '#1'.", employee, schoolyear);
-        result = entityManager.createQuery(
+        result = getEntityManager().createQuery(
                 "SELECT e from Employment e WHERE e.employee=:employee AND e.schoolYear=:schoolyear").setParameter(
                 "employee", employee).setParameter("schoolyear", schoolyear).getResultList();
         info("found totally '#0' employments for regular employee '#1' during school year '#2'.", result.size(),
@@ -349,7 +349,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     public Collection<Employment> getEmployeeEmploymentsOfType(Person employee, EmploymentType type) {
         List<Employment> result;
         debug("trying to featch all  employments for employee '#0'", employee);
-        result = entityManager
+        result = getEntityManager()
                 .createQuery(
                         "SELECT e from Employment e WHERE e.employee=:employee AND e.active IS TRUE  AND e.type=:type ORDER BY e.schoolYear.title")
                 .setParameter("employee", employee).setParameter("type", type).getResultList();
@@ -363,7 +363,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
             SchoolYear schoolYear) {
         List<Employment> result;
         debug("trying to featch all  employments for employee '#0'", employee);
-        result = entityManager
+        result = getEntityManager()
                 .createQuery(
                         "SELECT e from Employment e WHERE e.employee=:employee AND e.active IS TRUE AND e.type=:type AND e.schoolYear=:schoolyear ORDER BY e.id")
                 .setParameter("employee", employee).setParameter("type", type).setParameter("schoolyear", schoolYear)
@@ -378,7 +378,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     public Collection<Leave> getEmployeeLeaves(Person employee) {
         Collection<Leave> result = null;
         info("searching employee's '#0' leaves.", employee);
-        result = entityManager.createQuery(
+        result = getEntityManager().createQuery(
                 "SELECT s from Leave s WHERE s.active IS TRUE AND s.employee=:employee ORDER BY s.established")
                 .setParameter("employee", employee).getResultList();
         info("found totally '#0' leave(s) for employee '#1'.", result.size(), employee);
@@ -390,7 +390,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     public Collection<Leave> getEmployeeLeaveHistory(Person employee) {
         Collection<Leave> result = null;
         info("searching employee's '#0' leaves.", employee);
-        result = entityManager.createQuery(
+        result = getEntityManager().createQuery(
                 "SELECT s from Leave s WHERE s.active IS FALSE AND s.employee=:employee ORDER BY s.established")
                 .setParameter("employee", employee).getResultList();
         info("found totally '#0' leave(s) in employee's '#1' history.", result.size(), employee);
@@ -401,7 +401,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     public Collection<Leave> getEmployeeLeaveHistoryWithCurrentActive(Person employee) {
         Collection<Leave> result = null;
         info("searching employee's '#0' leaves.", employee);
-        result = entityManager.createQuery(
+        result = getEntityManager().createQuery(
                 "SELECT s from Leave s WHERE ((s.active IS FALSE AND s.autoCanceled IS TRUE) OR (s.active IS TRUE)) AND s.employee=:employee ORDER BY s.established")
                 .setParameter("employee", employee).getResultList();
         info("found totally '#0' leave(s) in employee's '#1' history.", result.size(), employee);
@@ -425,7 +425,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     public Collection<Secondment> getEmployeeSecondments(Person employee) {
         Collection<Secondment> result = null;
         info("searching employee's '#0' secondments.", employee);
-        result = entityManager.createQuery(
+        result = getEntityManager().createQuery(
                 "SELECT s from Secondment s WHERE s.active IS TRUE AND s.employee=:employee ORDER BY s.insertedOn")
                 .setParameter("employee", employee).getResultList();
         info("found totally '#0' secondments for employee '#1'.", result.size(), employee);
@@ -493,7 +493,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
             Collection<Employee> excludedEmployees) {
         List<Employment> result;
         debug("trying to featch all active employments of type '#0'", type);
-        result = entityManager
+        result = getEntityManager()
                 .createQuery(
                         "SELECT e from Employment e WHERE e.active IS TRUE AND e.type=:type AND e.schoolYear=:schoolyear AND e.employee NOT IN (:excludedEmployees) ORDER BY e.id")
                 .setParameter("type", type).setParameter("schoolyear", schoolYear).setParameter("excludedEmployees",
@@ -508,9 +508,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         return EmploymentType.values();
     }
 
-    protected EntityManager getEntityManager() {
-        return this.entityManager;
-    }
+   
 
     protected EntityManager getEntityManager(EntityManager entityManager) {
         return entityManager != null ? entityManager : getEntityManager();
@@ -1233,7 +1231,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     public Collection<WorkExperience> getWorkExperienceHistory(Person employee) {
         Collection<WorkExperience> result = null;
         info("searching employee's '#0' work experiences.", employee);
-        result = entityManager.createQuery(
+        result = getEntityManager().createQuery(
             "SELECT s from WorkExperience s WHERE s.active IS TRUE AND s.employee=:employee ORDER BY s.fromDate")
             .setParameter("employee", employee).getResultList();
 //        result = entityManager.createQuery(

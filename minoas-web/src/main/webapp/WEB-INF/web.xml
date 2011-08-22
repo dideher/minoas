@@ -16,13 +16,11 @@
     <!-- JSF 2.0 Servlet activates automatically when the WEB-INF/faces-config.xml descriptor is present -->
 
     <!-- Enable this mapping to protect your view templates from direct URL access -->
-    <!--
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
-    -->
-
+    
     <!-- This section is optional. We are allowing index.jsf to handle the root URL (i.e., /). -->
     <welcome-file-list>
         <!-- Add additional files here, if desired, for example: <welcome-file>index.html</welcome-file> -->

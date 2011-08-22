@@ -42,6 +42,7 @@ public class SeedDataImporter {
 
     @PostConstruct
     public void importData() {
+    	if(true)return;
         Member member1 = new Member();
         member1.setName("John Smith");
         member1.setEmail("john.smith@mailinator.com");
@@ -49,12 +50,15 @@ public class SeedDataImporter {
         try {
             try {
                 em.persist(member1);
+                em.flush();
             } catch (TransactionRequiredException e) {
                 // manual transaction control required in @PostConstruct method
                 // only use if enforced by JPA provider (due to bug in GlassFish)
                 tx.begin();
                 em.persist(member1);
                 tx.commit();
+            } catch(Exception ex) {
+            	log.warn("unhanled exception in SeedDataImporter", ex);
             }
             log.info("Successfully imported seed data.");
         } catch (Exception e) {

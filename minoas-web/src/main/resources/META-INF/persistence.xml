@@ -4,7 +4,7 @@
         http://java.sun.com/xml/ns/persistence
         http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
 
-  <persistence-unit name="minoas">
+  <persistence-unit name="minoas" transaction-type="JTA">
     <!-- 
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
     <jta-data-source>java:/gr.sch.ira.minoasDatasource</jta-data-source>
@@ -45,10 +45,12 @@
     <class>gr.sch.ira.minoas.model.classrooms.SchoolDepartment</class>
     <class>gr.sch.ira.minoas.model.classrooms.SchoolClass</class>
     <class>gr.sch.ira.minoas.model.classrooms.CourseType</class>
+    <!-- 
     <class>gr.sch.ira.minoas.model.BaseModel</class>
     <class>gr.sch.ira.minoas.model.BaseIDModel</class>
     <class>gr.sch.ira.minoas.model.BaseIDDeleteAwareModel</class>
     <class>gr.sch.ira.minoas.model.AbstractArchivableEntity</class>
+     -->
     <class>gr.sch.ira.minoas.model.employement.WorkExperienceType</class>
     <class>gr.sch.ira.minoas.model.employement.TeachingHourCDR</class>
     <properties>
@@ -58,7 +60,7 @@
         name="hibernate.dialect"
         value="org.hibernate.dialect.MySQL5InnoDBDialect" />
       -->
-      <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect" />
+      <!-- <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect" />  -->
       <!-- <property name="hibernate.default_schema" value="slavikos"/>  -->
       <!--
         <property name="hibernate.dialect"
@@ -95,16 +97,18 @@
         name="hibernate.treecache.mbean.object_name"
         value="jboss.cache:service=EJB3EntityTreeCache" />
       -->
-
+	  <!-- 
       <property name="hibernate.transaction.manager_lookup_class"
         value="org.hibernate.transaction.JBossTransactionManagerLookup" />
+         -->
       <!--
         Binds the EntityManagerFactory to JNDI where Seam can look it up. This
         is only relevant when the container automatically loads the persistence
         unit, as is the case in JBoss AS 5.
       -->
+      <!-- 
       <property name="jboss.entity.manager.factory.jndi.name" value="java:/minoasEntityManagerFactory" />
-
+	   -->
     </properties>
 
   </persistence-unit>

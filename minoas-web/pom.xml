@@ -29,6 +29,8 @@
 		<jboss.domain>default</jboss.domain>
 		<arquillian.version>1.0.0.Alpha5</arquillian.version>
 		<jboss-javaee6-spec.version>1.0.0.Final</jboss-javaee6-spec.version>
+		<seam.faces.version>3.0.2.Final</seam.faces.version>
+		<org.richfaces.bom.version>4.0.0.Final</org.richfaces.bom.version>
 	</properties>
 
 	<repositories>
@@ -68,6 +70,19 @@
 			</snapshots>
 		</pluginRepository>
 	</pluginRepositories>
+	
+	    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.richfaces</groupId>
+                <artifactId>richfaces-bom</artifactId>
+                <version>${org.richfaces.bom.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            
+        </dependencies>
+    </dependencyManagement>
 
 	<dependencies>
 		<!-- Annotation processor to generate the JPA 2.0 metamodel classes for 
@@ -142,15 +157,23 @@
 			<artifactId>seam-persistence</artifactId>
 			<version>3.0.0.Final</version>
 		</dependency>
-		
-		<!-- 
+
 		<dependency>
 			<groupId>org.jboss.seam.faces</groupId>
-			<artifactId>seam-faces</artifactId>
-			<version>3.0.2.Final</version>
+			<artifactId>seam-faces-api</artifactId>
+			<version>${seam.faces.version}</version>
+			<scope>compile</scope>
 		</dependency>
-		 -->
-		 
+
+
+
+		<dependency>
+			<groupId>org.jboss.seam.faces</groupId>
+			<artifactId>seam-faces-impl</artifactId>
+			<version>${seam.faces.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+
 		<dependency>
 			<groupId>org.jboss.seam.security</groupId>
 			<artifactId>seam-security</artifactId>
@@ -175,13 +198,30 @@
 			<artifactId>joda-time</artifactId>
 			<version>2.0</version>
 		</dependency>
-		
+
 		<!-- https://issues.jboss.org/browse/SEAMFACES-187 -->
 		<dependency>
 			<version>3.3.0</version>
 			<groupId>com.ocpsoft</groupId>
 			<artifactId>prettyfaces-jsf2</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>org.jboss.seam.catch</groupId>
+			<artifactId>seam-catch</artifactId>
+			<version>3.0.0.Final</version>
+		</dependency>
+		
+		
+		<dependency>
+        <groupId>org.richfaces.ui</groupId>
+        <artifactId>richfaces-components-ui</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.richfaces.core</groupId>
+        <artifactId>richfaces-core-impl</artifactId>
+    </dependency>
+
 	</dependencies>
 
 	<build>
@@ -246,108 +286,9 @@
 			</build>
 		</profile>
 
-		<profile>
-			<!-- An optional Arquillian testing profile that executes tests in GlassFish 
-				Embedded -->
-			<!-- Tests are broken under Arquillian 1.0.0.Alpha5 since sun-resources.xml 
-				is not supported -->
-			<!-- Run with: mvn clean test -Parq-glassfish-embedded -->
-			<id>arq-glassfish-embedded</id>
-			<dependencies>
-				<dependency>
-					<groupId>org.jboss.arquillian.container</groupId>
-					<artifactId>arquillian-glassfish-embedded-3</artifactId>
-					<version>${arquillian.version}</version>
-					<scope>test</scope>
-				</dependency>
-				<!-- This imports the Java EE 6 runtime libraries provided by GlassFish 
-					Embedded -->
-				<dependency>
-					<groupId>org.glassfish.extras</groupId>
-					<artifactId>glassfish-embedded-all</artifactId>
-					<version>3.0.1</version>
-					<scope>provided</scope>
-				</dependency>
-			</dependencies>
-			<build>
-				<testResources>
-					<testResource>
-						<directory>src/test/resources</directory>
-					</testResource>
-					<!-- Overrides default configuration to use alternate persistence.xml 
-						with eclipselink settings and declare a Glassfish Datasource -->
-					<!-- Used by Arquillian -->
-					<testResource>
-						<directory>src/test/resources-glassfish-embedded</directory>
-					</testResource>
-				</testResources>
-				<plugins>
-					<plugin>
-						<artifactId>maven-surefire-plugin</artifactId>
-						<!-- don't use version 2.5 as it creates seperate test suites per class -->
-						<version>2.4.3</version>
-						<configuration>
-							<systemProperties>
-								<!-- This optional property fixes an annoyance with Glassfish that 
-									puts derby.log in the project root -->
-								<property>
-									<name>derby.stream.error.file</name>
-									<!-- If you save the log in target it is less likely to get committed 
-										in your project -->
-									<value>target/derby.log</value>
-								</property>
-							</systemProperties>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
+		
 
-		<profile>
-			<!-- An optional Arquillian testing profile that executes tests in a remote 
-				JBoss AS instance -->
-			<!-- Run with: mvn clean test -Parq-jbossas-remote -->
-			<id>arq-jbossas-remote</id>
-			<dependencies>
-				<dependency>
-					<groupId>org.jboss.arquillian.container</groupId>
-					<artifactId>arquillian-jbossas-remote-6</artifactId>
-					<version>${arquillian.version}</version>
-					<scope>test</scope>
-				</dependency>
-				<!-- Java EE 6 API dependency -->
-				<!-- This one dependency imports all APIs available for a Java EE 6.0 
-					application -->
-				<dependency>
-					<groupId>org.jboss.spec</groupId>
-					<artifactId>jboss-javaee-6.0</artifactId>
-					<version>${jboss-javaee6-spec.version}</version>
-					<type>pom</type>
-					<scope>provided</scope>
-				</dependency>
-				<!-- needed for org.jnp.interfaces.NamingContextFactory -->
-				<dependency>
-					<groupId>org.jboss.jbossas</groupId>
-					<artifactId>jboss-as-client</artifactId>
-					<version>6.0.0.Final</version>
-					<type>pom</type>
-					<scope>test</scope>
-				</dependency>
-			</dependencies>
-			<build>
-				<testResources>
-					<testResource>
-						<directory>src/test/resources</directory>
-					</testResource>
-					<!-- Overrides default configuration to use alternate persistence.xml 
-						with default JBoss AS data source -->
-					<!-- Used by Arquillian -->
-					<testResource>
-						<directory>src/test/resources-jbossas</directory>
-					</testResource>
-				</testResources>
-			</build>
-		</profile>
+		
 
 		<profile>
 			<id>arq-weld-ee-embedded</id>
