@@ -65,15 +65,12 @@ public class SchoolUniversalEmploymentItem extends EmploymentReportItem {
 	public SchoolUniversalEmploymentItem(Employment employment) {
 		super(employment);
 	}
-
+	
 	public SchoolUniversalEmploymentItem(Secondment secondment) {
+        super(secondment);
+    }
 
-		super(secondment.getAffectedEmployment());
-	}
-
-	public SchoolUniversalEmploymentItem(ServiceAllocation serviceAllocation) {
-		super(serviceAllocation.getAffectedEmployment());
-	}
+	
 
 	
 	/**
