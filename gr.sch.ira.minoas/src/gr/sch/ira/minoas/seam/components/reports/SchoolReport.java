@@ -737,7 +737,7 @@ public class SchoolReport extends BaseReport {
         for (Secondment secondment : incomingSecondents) {
             try {
                 SchoolUniversalEmploymentItem item = secondment.getAffectedEmployment() != null ? new SchoolUniversalEmploymentItem(
-                        secondment) : new SchoolUniversalEmploymentItem(secondment.getEmployee());
+                        secondment.getAffectedEmployment()) : new SchoolUniversalEmploymentItem(secondment.getEmployee());
                 item.addEmploymentComment(constructIncomingComment(secondment));
 
                 if (secondment.getAffectedEmployment() == null) {
@@ -823,7 +823,16 @@ public class SchoolReport extends BaseReport {
                     serviceAllocation.getServiceUnit().getId().equals(serviceAllocation.getSourceUnit().getId())) {
                 continue;
             }
-            SchoolUniversalEmploymentItem item = new SchoolUniversalEmploymentItem(serviceAllocation);
+            SchoolUniversalEmploymentItem item = null;
+            if(serviceAllocation.getAffectedEmployment()!=null) {
+                item = new SchoolUniversalEmploymentItem(serviceAllocation.getAffectedEmployment());
+            } else {
+                /* failback in case the service allocation is not associated with an employment
+                 * This can happen if the service allocation is associated with employee with 
+                 * a secondment.
+                 */
+                item = new SchoolUniversalEmploymentItem(serviceAllocation.getEmployee());
+            }
             item.addEmploymentComment(constructIncomingComment(serviceAllocation));
             item.setEmployeeFinalWorkingHours(serviceAllocation.getWorkingHoursOnServicingPosition());
 
