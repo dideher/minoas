@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
@@ -53,12 +54,9 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
 
         int totalCDRsCreated = 0;
         /* first fetch all current CDRs and remove them */
-        Collection<TeachingHourCDR> oldCRDs = coreSearching.getTeachingHoursCDRs(em, currentSchoolYear);
-        int cdrsDeleted = 0;
-        for (TeachingHourCDR cdr : oldCRDs) {
-            entityManager.remove(cdr);
-            cdrsDeleted++;
-        }
+        Query q = getEntityManager().createQuery("DELETE TeachingHourCDR t WHERE t.schoolYear=:schoolYear");
+        q.setParameter("schoolYear", currentSchoolYear);
+        int cdrsDeleted = q.executeUpdate();       
         em.flush(); /* flush */
         info("successfully deleted totally #0 old CRD(s).", cdrsDeleted);
         
