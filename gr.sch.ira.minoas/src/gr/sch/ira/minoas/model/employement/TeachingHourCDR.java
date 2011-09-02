@@ -21,7 +21,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
 @Table(name = "TEACHING_HOUR_CDR")
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+@Cache(usage=CacheConcurrencyStrategy.NONE)
 public class TeachingHourCDR extends BaseIDModel {
 
     /**
