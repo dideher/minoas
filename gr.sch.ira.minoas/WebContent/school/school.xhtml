@@ -124,9 +124,16 @@
 												<f:facet name="header">
 													<h:outputText value="#{_group.groupTitle}" />
 												</f:facet>
-
-
-												<rich:dataTable var="employeeCDRs"
+												<s:div rendered="#{_group.isEmpty()}">
+													<p>
+														<h:outputText value="Δεν υπάρχει στην μονάδα εκπαιδευτικός αυτής της ειδικότητας ενω απαιτούνται συνολικά " style="color:red;" />
+														<h:outputText value="#{_group.groupRequiredTeachingHours}" style="color:red;font-weight:bold;"/>
+														<h:outputText value=" διδακτικές ώρες." style="color:red;"/>
+													</p>
+												</s:div>
+												<s:div rendered="#{!_group.isEmpty()}">
+												
+												<rich:dataTable var="employeeCDRs" 
 													value="#{_group.groupEmployees}" sortMode="multi"
 													border="0" rowKeyVar="_row"
 													onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
@@ -269,6 +276,8 @@
 													</rich:column>
 
 												</rich:dataTable>
+												</s:div>
+												
 
 											</rich:panel>
 										</a4j:repeat>

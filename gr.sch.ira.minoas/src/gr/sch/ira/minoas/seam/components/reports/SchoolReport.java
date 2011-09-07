@@ -203,6 +203,9 @@ public class SchoolReport extends BaseReport {
             return getMissingHours() > 0;
         }
 
+        public boolean isEmpty() {
+            return  (getGroupRequiredTeachingHours().intValue() + getMissingHours().intValue()  == 0);
+        }
         /**
          * @return the groupTitle
          */
@@ -575,7 +578,7 @@ public class SchoolReport extends BaseReport {
     public void generateEmploymentsCDRReport() {
         long started = System.currentTimeMillis(), finished;
         info("generating employments cdr report ");
-        Date today = DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH);
+       
 
         SchoolYear activeSchoolYear = getCoreSearching().getActiveSchoolYear(getEntityManager());
         // fetch all cdrs that are associated with our unit
@@ -599,6 +602,19 @@ public class SchoolReport extends BaseReport {
         }
 
         Map<String, GroupedEmployeesCDRItem> groupCache = new LinkedHashMap<String, SchoolReport.GroupedEmployeesCDRItem>();
+        
+        /* gh-33 */
+        
+        /* populate the teaching requirement group cache using the required hours for this concrete school unit.
+         * By doing so, even if there is no employee with a matching specialization the group will appear (empty)
+         * in the school report.
+         */
+        for(TeachingRequirement teachingReq : teachingReqs) {
+            String groupTitle = String.format("%s", teachingReq.getSpecialization().getTitle());
+            GroupedEmployeesCDRItem g = new GroupedEmployeesCDRItem(groupTitle, teachingReq.getHours());
+            groupCache.put(groupTitle, g);
+        }
+        /* gh-33 */
 
         Map<Employee, EmployeeSchoolCDRReportItem> cache = new HashMap<Employee, SchoolReport.EmployeeSchoolCDRReportItem>();
         for (TeachingHourCDR cdr : schoolsCDRS) {
