@@ -74,7 +74,7 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
             sb.append(employment.getFinalWorkingHours());
             sb.append(" ώρες.");
             cdr.setComment(sb.toString());
-
+            cdr.setSpecialization(employment.getSpecialization());
             cdr.setEmployee(employment.getEmployee());
             cdr.setEmployment(employment);
             cdr.setHours(employment.getFinalWorkingHours());
@@ -99,6 +99,7 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
             sb.append(employment.getFinalWorkingHours());
             sb.append(" ώρες.");
             cdr.setComment(sb.toString());
+            cdr.setSpecialization(employment.getSpecialization());
             cdr.setEmployee(employment.getEmployee());
             cdr.setEmployment(employment);
             cdr.setHours(employment.getFinalWorkingHours());
@@ -123,6 +124,7 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
             sb.append(employment.getFinalWorkingHours());
             sb.append(" ώρες.");
             cdr.setComment(sb.toString());
+            cdr.setSpecialization(employment.getSpecialization());
             cdr.setEmployee(employment.getEmployee());
             cdr.setEmployment(employment);
             cdr.setHours(employment.getFinalWorkingHours());
@@ -167,6 +169,7 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
             sb.append(secondment.getFinalWorkingHours());
             sb.append(" ώρες.");
             cdr.setComment(sb.toString());
+            cdr.setSpecialization(secondment.getEmployee().getLastSpecialization());
             cdr.setEmployee(secondment.getEmployee());
             cdr.setSecondment(secondment);
             cdr.setHours(secondment.getFinalWorkingHours());
@@ -191,6 +194,7 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
             sb.append(" ώρες.");
             cdr.setComment(sb.toString());
             cdr.setEmployee(secondment.getEmployee());
+            cdr.setSpecialization(secondment.getEmployee().getLastSpecialization());
             cdr.setSecondment(secondment);
             cdr.setHours((-1) * secondment.getFinalWorkingHours());
             cdr.setUnit(secondment.getSourceUnit());
@@ -228,6 +232,7 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
             sb.append(disposal.getHours());
             sb.append(" ώρες.");
             cdr.setComment(sb.toString());
+            cdr.setSpecialization(disposal.getEmployee().getLastSpecialization());
             cdr.setEmployee(disposal.getEmployee());
             cdr.setDisposal(disposal);
             cdr.setHours(disposal.getHours());
@@ -251,6 +256,7 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
             sb.append(disposal.getHours());
             sb.append(" ώρες.");
             cdr.setComment(sb.toString());
+            cdr.setSpecialization(disposal.getEmployee().getLastSpecialization());
             cdr.setEmployee(disposal.getEmployee());
             cdr.setDisposal(disposal);
             cdr.setHours((-1) * disposal.getHours());
@@ -299,7 +305,7 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
                     sb.append(" ώρες λόγω θητείας τύπου ");
                     sb.append(CoreUtils.getLocalizedMessage(serviceAllocation.getServiceType().getKey()));
                     specialEmploymentCDR.setComment(sb.toString());
-
+                    specialEmploymentCDR.setSpecialization(relatedEmployment.getSpecialization());
                     specialEmploymentCDR.setEmployee(relatedEmployment.getEmployee());
                     specialEmploymentCDR.setEmployment(relatedEmployment);
                     specialEmploymentCDR.setHours((-1) * relatedEmployment.getFinalWorkingHours());
@@ -334,6 +340,7 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
                     sb.append(serviceAllocation.getWorkingHoursOnServicingPosition());
                     sb.append(" ώρες.");
                     cdr.setComment(sb.toString());
+                    cdr.setSpecialization(serviceAllocation.getEmployee().getLastSpecialization());
                     cdr.setEmployee(serviceAllocation.getEmployee());
                     cdr.setServiceAllocation(serviceAllocation);
                     cdr.setHours(serviceAllocation.getWorkingHoursOnServicingPosition());
@@ -357,6 +364,7 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
                     sb.append(serviceAllocation.getWorkingHoursOnServicingPosition());
                     sb.append(" ώρες.");
                     cdr.setComment(sb.toString());
+                    cdr.setSpecialization(serviceAllocation.getEmployee().getLastSpecialization());
                     cdr.setEmployee(serviceAllocation.getEmployee());
                     cdr.setServiceAllocation(serviceAllocation);
                     cdr.setHours(serviceAllocation.getWorkingHoursOnServicingPosition());
@@ -380,6 +388,7 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
                     sb.append(serviceAllocation.getWorkingHoursOnServicingPosition());
                     sb.append(" ώρες.");
                     cdr.setComment(sb.toString());
+                    cdr.setSpecialization(serviceAllocation.getEmployee().getLastSpecialization());
                     cdr.setEmployee(serviceAllocation.getEmployee());
                     cdr.setServiceAllocation(serviceAllocation);
                     cdr.setHours(serviceAllocation.getWorkingHoursOnRegularPosition());
@@ -425,6 +434,7 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
                     TeachingHourCDR cdr = new TeachingHourCDR();
                     cdr.setCdrType(TeachingHourCDRType.LEAVE);
                     cdr.setComment(sb.toString());
+                    cdr.setSpecialization(employeeCDR.getSpecialization());
                     cdr.setEmployee(employeeWithLeave);
                     cdr.setHours(0);
                     cdr.setSchoolYear(currentSchoolYear);
