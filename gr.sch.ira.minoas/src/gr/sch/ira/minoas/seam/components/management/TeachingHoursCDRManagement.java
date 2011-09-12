@@ -411,6 +411,10 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
         
         /* WE NEED TO ADD LEAVES */
         
+        /* Leaves are a special case. For each employee with a leave we will compute his hours distribution in all units. For each 
+         * unit for which the employee has teaching hours > 0 we will add a LEAVE CDR with negative hours
+         */
+        
         Collection<Leave> activeLeaves = coreSearching.getActiveLeaves(em);
         info("found #0 totally active leaves.", activeLeaves.size());
         for(Leave activeLeave : activeLeaves) {
@@ -424,7 +428,26 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
             sb.append(" μέχρι και  ");
             sb.append(df.format(activeLeave.getDueTo()));
             
-            Collection<TeachingHourCDR> employeeCDRs = coreSearching.getEmployeeTeachingHoursCDRs(em, currentSchoolYear, employeeWithLeave);
+            Collection<Object[]> o = getEntityManager().createQuery("SELECT t.unit.id, SUM(t.hours) FROM TeachingHourCDR t WHERE t.schoolYear=:schoolYear AND t.employee=:employee GROUP BY (t.unit)").setParameter("schoolYear", currentSchoolYear).setParameter("employee", employeeWithLeave).getResultList();
+            for(Object[] r : o) {
+                Long hours = (Long)r[1];
+                if(hours.longValue()> 0) {
+                    TeachingHourCDR cdr = new TeachingHourCDR();
+                    cdr.setCdrType(TeachingHourCDRType.LEAVE);
+                    cdr.setComment(sb.toString());
+                    cdr.setSpecialization(employeeWithLeave.getLastSpecialization());
+                    cdr.setEmployee(employeeWithLeave);
+                    /* */
+                    cdr.setHours(new Integer(hours.intValue() * -1));
+                    cdr.setSchoolYear(currentSchoolYear);
+                    cdr.setUnit(getEntityManager().find(Unit.class, r[0]));
+                    cdr.setLeave(activeLeave);
+                    entityManager.persist(cdr);
+                    totalCDRsCreated++;
+                }
+            }
+            if(false) {
+                Collection<TeachingHourCDR> employeeCDRs = coreSearching.getEmployeeTeachingHoursCDRs(em, currentSchoolYear, employeeWithLeave);
             //info("when handling leave #0 we found #1 releated CDRs", activeLeave, employeeCDRs.size());
             List<String> unitCache = new ArrayList<String>(employeeCDRs.size()); // use to store units for which we have inserted a leave cdr 
             
@@ -436,6 +459,7 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
                     cdr.setComment(sb.toString());
                     cdr.setSpecialization(employeeCDR.getSpecialization());
                     cdr.setEmployee(employeeWithLeave);
+                    /* */
                     cdr.setHours(0);
                     cdr.setSchoolYear(currentSchoolYear);
                     cdr.setUnit(employeeCDR.getUnit());
@@ -447,7 +471,8 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
                     info("ignoring related CDR #0 since a counterpart has been already registered.", employeeCDR);
                 }
                 
-            }
+            }}
+            
          }
 
         em.flush();
