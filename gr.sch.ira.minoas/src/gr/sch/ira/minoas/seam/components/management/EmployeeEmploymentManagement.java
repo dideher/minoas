@@ -306,8 +306,6 @@ public class EmployeeEmploymentManagement extends BaseDatabaseAwareSeamComponent
 				e.setType(EmploymentType.REGULAR);
 				e.setEstablished(new Date());
 				e.setMandatoryWorkingHours(21);
-				/* be helpfull and calculate the end date */
-				e.setTerminated(e.getSchoolYear().getTeachingSchoolYearStop());
 				e.setSpecialization(getEmployeeHome().getInstance().getLastSpecialization());
 				return "prepared";
 			} else {
