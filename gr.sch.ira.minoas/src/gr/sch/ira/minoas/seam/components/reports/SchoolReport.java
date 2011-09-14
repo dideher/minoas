@@ -51,12 +51,11 @@ import org.jboss.seam.annotations.datamodel.DataModel;
  * @version $Id$
  */
 @Name(value = "schoolReport")
-@Scope(ScopeType.CONVERSATION)
+@Scope(ScopeType.PAGE)
 public class SchoolReport extends BaseReport {
 
     public final class EmployeeSchoolCDRReportItem {
         
-        private boolean containsLeaveCDR = false;
         
         private EmployeeReportItem employee;
 
@@ -84,11 +83,7 @@ public class SchoolReport extends BaseReport {
         public TeachingHourCDR addCDR(TeachingHourCDR employeeCDR) {
             getEmployeeCDRS().add(new TeachingHourCRDReportItem(employeeCDR));
             totalHours += employeeCDR.getHours();
-            if(!containsLeaveCDR) {
-                /* check if the new employee CDR to be added is a leave CDR */
-                containsLeaveCDR = (employeeCDR.getCdrType() == TeachingHourCDRType.LEAVE);
-            }
-            return employeeCDR;
+           return employeeCDR;
         }
 
         /**
@@ -111,7 +106,7 @@ public class SchoolReport extends BaseReport {
          * @return the totalHours
          */
         public Integer getTotalHours() {
-            return containsLeaveCDR ? 0 : totalHours;
+            return totalHours;
         }
 
         /**
