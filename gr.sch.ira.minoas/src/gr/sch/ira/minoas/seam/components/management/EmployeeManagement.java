@@ -14,6 +14,7 @@ import gr.sch.ira.minoas.model.employee.EmployeeExclusion;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.Leave;
 import gr.sch.ira.minoas.model.employement.TeachingHourCDR;
+import gr.sch.ira.minoas.model.employement.TeachingHourCDRType;
 import gr.sch.ira.minoas.model.employement.WorkExperience;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.EmployeeMergeRequest;
@@ -246,14 +247,21 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
 
 	}
 	
+	
 	@Factory(value="employeeCurrentStatusItems")
 	public void constructEmployeeCurrentStatusReport() {
 	    SchoolYear currentSchoolYear =  getCoreSearching().getActiveSchoolYear(getEntityManager());
 	    Employee employee = getEmployeeHome().getInstance();
+	    /* fetch all possitive employee's CDRs. Warning possitive cdrs does not include leaves ! */
 	    Collection<TeachingHourCDR> employeeCDRs = getCoreSearching().getEmployeeTeachingHoursCDRsWithPositiveHours(getEntityManager(), currentSchoolYear, employee);
 	    employeeCurrentStatusItems = new ArrayList<EmployeeManagement.EmployeeCDRReportItem>(employeeCDRs.size());
 	    for(TeachingHourCDR cdr : employeeCDRs) {
 	        employeeCurrentStatusItems.add(new EmployeeManagement.EmployeeCDRReportItem(cdr));
+	    }
+	    /* employee leave cdrs  - if they exists just add the first one */
+	    Collection<TeachingHourCDR> employeeLeaveCDRs = getCoreSearching().getEmployeeTeachingHoursCDRsOfType(getEntityManager(), currentSchoolYear, employee, TeachingHourCDRType.LEAVE);
+	    if(employeeLeaveCDRs.size()>0) {
+	        employeeCurrentStatusItems.add(new EmployeeManagement.EmployeeCDRReportItem(employeeLeaveCDRs.iterator().next()));
 	    }
 	    setEmployeeCurrentStatusItems(employeeCurrentStatusItems);
 	}
