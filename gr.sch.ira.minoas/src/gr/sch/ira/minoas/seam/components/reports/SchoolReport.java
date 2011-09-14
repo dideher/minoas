@@ -47,7 +47,7 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.datamodel.DataModel;
 
 /**
- * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
+ * @author <a href="mailto:fsla@slavik.gr">Filippos Slavik</a>
  * @version $Id$
  */
 @Name(value = "schoolReport")
@@ -450,63 +450,7 @@ public class SchoolReport extends BaseReport {
 
         return item;
     }
-
-    private String constructIncomingComment(Secondment secondment) {
-        StringBuffer sb = new StringBuffer();
-        sb.append("Αποσπασμένος/νη στην μονάδα απο τις ");
-        sb.append(this.dateFormat.format(secondment.getEstablished()));
-        sb.append(" απο το/την ");
-        sb.append(secondment.getSourceUnit().getTitle());
-        sb.append(". ");
-        return sb.toString();
-    }
-
-    private String constructIncomingComment(ServiceAllocation serviceAllocation) {
-        StringBuffer sb = new StringBuffer();
-        sb.append("Υπηρετή στην μονάδα με θητεία τύπου ");
-        sb.append(getLocalizedMessage(serviceAllocation.getServiceType().getKey()));
-        sb.append(" απο τις ");
-        sb.append(this.dateFormat.format(serviceAllocation.getEstablished()));
-        sb.append(" εως και ");
-        sb.append(this.dateFormat.format(serviceAllocation.getDueTo()));
-        sb.append(" απο το/την ");
-        if (serviceAllocation.getSourceUnit() != null && serviceAllocation.getSourceUnit().getTitle() != null) {
-            sb.append(serviceAllocation.getSourceUnit().getTitle());
-        } else
-            sb.append("**** δεν βρέθηκε ****");
-        sb.append(". ");
-        return sb.toString();
-    }
-
-    private String constructIncommingComment(Disposal disposal) {
-        StringBuffer sb = new StringBuffer();
-        sb.append("Υπηρετή στην μονάδα λόγω διάθεσης απο τις ");
-        sb.append(this.dateFormat.format(disposal.getEstablished()));
-        sb.append(" εως και ");
-        sb.append(this.dateFormat.format(disposal.getDueTo()));
-        sb.append(" απο την μονάδα ");
-        if (disposal.getAffectedEmployment() != null) {
-            /* disposal is associated with an employment, proceed normaly */
-            sb.append(disposal.getAffectedEmployment().getSchool().getTitle());
-        } else {
-            /* disposal is associated with a secondment. This means that the
-             * employee has no regular employment and the disposal affects
-             * the employee's secondment target.
-             * 
-             * A typical example is an employee from other PYSDE occupied on a target
-             * school unit due to an secodment having a disposal to other unit for
-             * few hours.
-             */
-            sb.append(disposal.getAffectedSecondment().getTargetUnit().getTitle());
-        }
-        sb.append(" για ");
-        sb.append(disposal.getHours());
-        sb.append(" ώρες και ");
-        sb.append(disposal.getDays());
-        sb.append(" ημέρες. ");
-        return sb.toString();
-
-    }
+   
 
     public SchoolUniversalEmploymentItem constructRegularEmploymentInfoItem(Employment regularEmployment) {
         Date today = DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH);
@@ -616,7 +560,7 @@ public class SchoolReport extends BaseReport {
         }
         /* gh-33 */
 
-        Map<Employee, EmployeeSchoolCDRReportItem> cache = new HashMap<Employee, SchoolReport.EmployeeSchoolCDRReportItem>();
+       
         for (TeachingHourCDR cdr : schoolsCDRS) {
             Employee employee = cdr.getEmployee();
             SpecializationGroup sgroup = specializationGroupCache.get(employee.getLastSpecialization());
@@ -881,7 +825,7 @@ public class SchoolReport extends BaseReport {
 
         long started = System.currentTimeMillis(), finished;
         info("generating report school employment analysis");
-        Date today = DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH);
+        
 
         SchoolYear activeSchoolYear = getCoreSearching().getActiveSchoolYear(getEntityManager());
 
