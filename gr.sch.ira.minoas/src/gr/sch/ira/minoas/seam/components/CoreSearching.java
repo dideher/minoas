@@ -27,6 +27,7 @@ import gr.sch.ira.minoas.model.employement.SecondmentType;
 import gr.sch.ira.minoas.model.employement.ServiceAllocation;
 import gr.sch.ira.minoas.model.employement.ServiceAllocationType;
 import gr.sch.ira.minoas.model.employement.TeachingHourCDR;
+import gr.sch.ira.minoas.model.employement.TeachingHourCDRType;
 import gr.sch.ira.minoas.model.employement.WorkExperience;
 import gr.sch.ira.minoas.model.employement.WorkExperienceType;
 import gr.sch.ira.minoas.model.security.Principal;
@@ -1106,6 +1107,15 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         List<TeachingHourCDR> return_value = getEntityManager(entityManager).createQuery(
                 "SELECT t FROM TeachingHourCDR t WHERE t.schoolYear=:schoolYear AND t.hours >= 0 AND t.employee=:employee")
                 .setParameter("schoolYear", schoolYear).setParameter("employee", employee).getResultList();
+        return return_value;
+    }
+    
+    @SuppressWarnings("unchecked")
+    public Collection<TeachingHourCDR> getEmployeeTeachingHoursCDRsOfType(EntityManager entityManager, SchoolYear schoolYear,
+            Employee employee, TeachingHourCDRType type) {
+        List<TeachingHourCDR> return_value = getEntityManager(entityManager).createQuery(
+                "SELECT t FROM TeachingHourCDR t WHERE t.schoolYear=:schoolYear AND t.hours >= 0 AND t.employee=:employee AND t.type=:type")
+                .setParameter("schoolYear", schoolYear).setParameter("employee", employee).setParameter("type", type).getResultList();
         return return_value;
     }
 
