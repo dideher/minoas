@@ -2,32 +2,19 @@ package gr.sch.ira.minoas.seam.components.reports;
 
 import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.core.SchoolYear;
-import gr.sch.ira.minoas.model.core.Specialization;
 import gr.sch.ira.minoas.model.core.SpecializationGroup;
-import gr.sch.ira.minoas.model.core.TeachingRequirement;
 import gr.sch.ira.minoas.model.core.Unit;
-import gr.sch.ira.minoas.model.employee.Employee;
-import gr.sch.ira.minoas.model.employement.Disposal;
-import gr.sch.ira.minoas.model.employement.Secondment;
-import gr.sch.ira.minoas.model.employement.ServiceAllocation;
-import gr.sch.ira.minoas.model.employement.TeachingHourCDR;
 import gr.sch.ira.minoas.seam.components.criteria.SpecializationGroupSearchType;
-import gr.sch.ira.minoas.seam.components.reports.resource.SchoolTeachingHoursItem;
-import gr.sch.ira.minoas.seam.components.reports.resource.TeachingHoursAnalysisItem;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
 
-import org.apache.commons.lang.time.DateUtils;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
@@ -49,22 +36,14 @@ public class TeachingVoidAnalysisReport extends BaseReport {
 
     public static final int HOURS_FOR_REGULAR_POSITION = 18;
 
-    private Date effectiveDay = new Date(System.currentTimeMillis());
-
     private Character region;
 
     private Boolean regularEmploymentsOnly = Boolean.FALSE;
-
-    @DataModel(value = "reportData")
-    private Collection<TeachingHoursAnalysisItem> reportData;
-    
     
     @DataModel(value = "teachingVoidReport")
     private List<Map<String, Object>> teachingVoidReport;
 
-    @DataModel(value = "reportTextAnalysis")
-    private Collection<String> reportTextAnalysis = new ArrayList<String>(100);
-
+    
     private School school;
 
     private SpecializationGroup specializationGroup;
@@ -72,25 +51,43 @@ public class TeachingVoidAnalysisReport extends BaseReport {
     private List<SpecializationGroup> specializationGroups = new ArrayList<SpecializationGroup>();
 
     @Out(required = false, scope = ScopeType.CONVERSATION)
-    private List<SpecializationGroup> availableSpecializationGroups;
+    private List<SpecializationGroup> availableSpecializationGroupsForVoidAnalysisReport;
 
     private SpecializationGroupSearchType specializationGroupSearchType = SpecializationGroupSearchType.SINGLE_SPECIALIZATION_GROUP;
 
-    @Factory("availableSpecializationGroups2")
+    @Factory("availableSpecializationGroupsForVoidAnalysisReport")
     public void constructAvailableSpecializationGroupList() {
         EntityManager em = getEntityManager();
-        this.availableSpecializationGroups = new ArrayList(getCoreSearching().getSpecializationGroups(
+        this.availableSpecializationGroupsForVoidAnalysisReport = new ArrayList(getCoreSearching().getSpecializationGroups(
                 getCoreSearching().getActiveSchoolYear(em), em));
     }
 
-    
+    public void resetReport() {
+        info("reseting report.");
+        setTeachingVoidReport(new ArrayList<Map<String,Object>>());
+        school = null;
+        region = null;
+        specializationGroup = null;
+        specializationGroups = new ArrayList<SpecializationGroup>();
+        specializationGroupSearchType = SpecializationGroupSearchType.SINGLE_SPECIALIZATION_GROUP;
+        constructAvailableSpecializationGroupList();
+    }
     public void generateReport() {
 
-        boolean useTextAnalysis = (school != null);
         try {
             long started = System.currentTimeMillis(), finished;
-            Date today = DateUtils.truncate(effectiveDay, Calendar.DAY_OF_MONTH);
-
+            
+            /* our report data contains a list contaning a map with key-values. Each map entry coresponds to group report item. 
+             * Each group report item has several attributes, like 'title' and 'groups' and a special 'data' which contains
+             * another hash map contained the rows (the actual report data) for the given group report item. For example :
+             * 
+             * "title" - > "ΠΕ19-20" (String)
+             * "groups" -> {SpecializationGroup}
+             * "data" ->
+             *    "ΓΥ ΜΟΙΡΩΝΑ", xx, yy
+             *    "ΓΥ ΜΠΛΑ", zz,ff
+             */
+    
             List<Map<String, Object>> tempReportData = new ArrayList<Map<String,Object>>();
             
             info("generating report ");
@@ -134,325 +131,95 @@ public class TeachingVoidAnalysisReport extends BaseReport {
             } else {
                 /* user has selected many specialization groups */
                 reportSpecializationGroups = new ArrayList<SpecializationGroup>(getSpecializationGroups().size());
+                StringBuffer sb = new StringBuffer();
+                for(SpecializationGroup group : getSpecializationGroups()) {
+                    sb.append(group.getTitle());
+                    sb.append(" ");
+                }
                 reportSpecializationGroups.addAll(getSpecializationGroups());
                 Map<String, Object> item = new LinkedHashMap<String, Object>();
-                item.put("title", reportSpecializationGroups.toString());
+                item.put("title", sb.toString());
                 item.put("groups", reportSpecializationGroups);
                 tempReportData.add(item);
             }
             
-            info("****** WE WILL USE THE FOLLOWING SPECIALIZATION GROUPS : #0", reportSpecializationGroups);
-            
-            List<Specialization> reportActualSpecializations = new ArrayList<Specialization>();
-            for(SpecializationGroup group : reportSpecializationGroups) {
-                reportActualSpecializations.addAll(group.getSpecializations());
-            }
-            
-            info("****** SELECTED SPECIALIZATION GROUPS MAPS TO : #0", reportActualSpecializations);
-            /* Construct a hash so we can quickly find a specializationGroup from the employee's specialization. */
-            Collection<SpecializationGroup> allSpecializationGroups = getCoreSearching().getSpecializationGroups(
-                    activeSchoolYear, getEntityManager());
-            HashMap<Specialization, SpecializationGroup> specializationGroupMap = new HashMap<Specialization, SpecializationGroup>();
-            for (SpecializationGroup specializationGroup : allSpecializationGroups) {
-                for (Specialization specialization : specializationGroup.getSpecializations())
-                    specializationGroupMap.put(specialization, specializationGroup);
-            }
+            /* Determine on which schools the report should be applied */
 
             Collection<School> schools = null;
-            /* fetch all school units */
-
+            
             if (school != null) {
                 schools = new ArrayList<School>(1);
                 schools.add(school);
-                useTextAnalysis = true;
-                reportTextAnalysis.clear();
             } else {
                 schools = getCoreSearching().getSchools(getEntityManager(), region);
             }
 
-            /* according to school & specialization selection, construct an empty report skeleton */
-            if (getSpecializationGroupSearchType() == SpecializationGroupSearchType.MULTIPLE_SPECIALIZATION_GROUPS) {
-                /* Since the specialization group search type is MULTIPLE, then the report will contain
-                 * one single instance with the selected specialization groups 
-                 */
-                Collection<TeachingHoursAnalysisItem> r = new ArrayList<TeachingHoursAnalysisItem>();
-                TeachingHoursAnalysisItem item = new TeachingHoursAnalysisItem(schools, reportSpecializationGroups);
-                r.add(item);
-                setReportData(r);
-            } else {
-                /* Since the specialization group search type is *NOT* MULTIPLE, then the report will
-                 * contain either one instance with the selected specialization groups or all specialization
-                 * groups, each in it's private instance.
-                 */
-                Collection<TeachingHoursAnalysisItem> r = new ArrayList<TeachingHoursAnalysisItem>(
-                        reportSpecializationGroups.size());
-                for (SpecializationGroup specializationGroup : reportSpecializationGroups) {
-                    r.add(new TeachingHoursAnalysisItem(schools, specializationGroup));
-                }
-                setReportData(r);
-            }
-
-            /* Create a cache map for fast retrieving a requirment (in a school) based on
-             * the specialization group */
-
-            Map<String, Map<SpecializationGroup, TeachingRequirement>> schoolsTeachingRequirementMap = new HashMap<String, Map<SpecializationGroup, TeachingRequirement>>(
-                    schools.size());
-            
-            
+            /* do the report */
+                        
+            int requiredHours = 0;
+            int availableHours = 0;
+            int totalMissingRegularEmployees = 0;
             for(Map<String, Object> reportItem : tempReportData) {
+                /* fetch the actual effective SpecializationGroups */
                 List<SpecializationGroup> effectiveGroup = (List<SpecializationGroup>)reportItem.get("groups");
                 
-                String query2 = "SELECT t.unit.id, SUM(t.hours) FROM TeachingHourCDR t " +
+                /* for the report schools fetch the required hours */
+                String queryRequiredHours = "SELECT t.school.id, SUM(t.hours) FROM TeachingRequirement t " +
+                "WHERE t.schoolYear=:schoolYear " +
+                "AND t.school IN (:reportSchools) " +
+                "AND t.specialization IN (:reportSpecializationGroups) " +
+                "GROUP BY (t.school.id)";
+                
+                Collection<Object[]> declaredRequiredHours  = (Collection<Object[]>)getEntityManager().createQuery(queryRequiredHours).setParameter("schoolYear", activeSchoolYear).setParameter("reportSpecializationGroups", effectiveGroup).setParameter("reportSchools", schools).getResultList();
+                Map<String, Long> declaredRequiredHoursMap = new HashMap<String, Long>(declaredRequiredHours.size());
+                for(Object[] oo : declaredRequiredHours) {
+                    declaredRequiredHoursMap.put((String)oo[0], (Long)oo[1]);
+                }
+                
+                /* fetch the cdrs for for the report schools and the desired specialization groups */
+                String query2 = "SELECT t.unit.id, SUM(t.hours), MAX(t.unit.title) FROM TeachingHourCDR t " +
                 "WHERE t.schoolYear=:schoolYear " +
                 "AND t.unit IN (:reportSchools) " +
                 "AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g IN (:reportSpecializationGroups) AND g.schoolYear=:schoolYear AND t.specialization MEMBER OF g.specializations) " +
-                "GROUP BY (t.unit)";
+                "GROUP BY (t.unit.id)";
+                
+               
                 
                 Collection<Object[]> o2  = (Collection<Object[]>)getEntityManager().createQuery(query2).setParameter("schoolYear", activeSchoolYear).setParameter("reportSpecializationGroups", effectiveGroup).setParameter("reportSchools", schools).getResultList();
-                Map<String, Map<String, Object>> data = new LinkedHashMap<String, Map<String,Object>>();
+                List<Map<String, Object>> data = new ArrayList<Map<String,Object>>();
                 for(Object[] oo : o2) {
-                    Map<String, Object> d = data.get(oo[0]);
-                    if(d==null) {
-                        d = new HashMap<String, Object>();
-                        data.put((String)oo[0], d);
-                    }
-                    d.put("hours", (Long)oo[1]);
+                    Map<String, Object> d = new HashMap<String, Object>();
+                    Long unitAvailableHours = (Long)oo[1];
+                    Long unitRequiredHours = declaredRequiredHoursMap.containsKey(oo[0]) ?  declaredRequiredHoursMap.get(oo[0]) : new Long(0);
+                    Long unitMissingHours = new Long(unitRequiredHours.longValue()-unitAvailableHours.longValue());
+                    Long unitMissingRegularEmployees = new Long(0);
+                    if(unitMissingHours > HOURS_FOR_REGULAR_POSITION) {
+                        unitMissingRegularEmployees = new Long(unitMissingHours.longValue() / HOURS_FOR_REGULAR_POSITION); 
+                    } 
+                    
+                    d.put("unitAvailableHours", unitAvailableHours);
                     d.put("school", getEntityManager().find(Unit.class, oo[0]));
+                    /* at this point we should find the required hours for the given school */
+                    
+                    data.add(d);
+                    availableHours+=unitAvailableHours.longValue();
+                    requiredHours+=unitRequiredHours.longValue();
+                    totalMissingRegularEmployees+=unitMissingRegularEmployees.longValue();
+                    d.put("unitRequiredHours", unitRequiredHours);
+                    d.put("unitMissingHours", unitMissingHours);
+                    d.put("unitMissingHoursNeg", unitMissingHours*(-1));
+                    d.put("unitMissingRegularEmployees", unitMissingRegularEmployees);
                 }
                 reportItem.put("data", data);
+                reportItem.put("totalRequiredHours", new Long(requiredHours));
+                reportItem.put("totalAvailableHours", new Long(availableHours));
+                reportItem.put("totalMissingHours", new Long(requiredHours-availableHours));
+                reportItem.put("totalMissingHoursNeg", new Long((-1)* (requiredHours-availableHours)));
+                reportItem.put("totalMissingRegularEmployees", new Long(totalMissingRegularEmployees));
             }
            
             setTeachingVoidReport(tempReportData);
            
-            
-           
-            if(false) {
-                for (School school : schools) {
-                    info("computing voids for school unit #0", school);
-                    /* fetch the teaching requirement for the given school */
-                    Collection<TeachingRequirement> schoolTeachingRequirments = getCoreSearching()
-                            .getSchoolTeachingRequirement(getEntityManager(), school, activeSchoolYear);
-
-                    /* 
-                     * construct a map so we can easily find a teaching requirement according to the
-                     * specializationGroup
-                     */
-                    Map<SpecializationGroup, TeachingRequirement> schoolTeachingRequirementMap = new HashMap<SpecializationGroup, TeachingRequirement>(
-                            schoolTeachingRequirments.size());
-                    for (TeachingRequirement requirement : schoolTeachingRequirments) {
-                        schoolTeachingRequirementMap.put(requirement.getSpecialization(), requirement);
-                    }
-                    schoolsTeachingRequirementMap.put(school.getId(), schoolTeachingRequirementMap);
-
-                    /* for the given school get all CDRs */
-
-//                    Collection<TeachingHourCDR> schoolCDRs = getCoreSearching().getSchoolTeachingHoursCDRs(
-//                            getEntityManager(), activeSchoolYear, school);
-//                    
-                    String query = "SELECT t.unit.id, SUM(t.hours) FROM TeachingHourCDR t " +
-                            "WHERE t.schoolYear=:schoolYear " +
-                            "AND t.unit=:unit " +
-                            "AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g IN (:reportSpecializationGroups) AND g.schoolYear=:schoolYear AND t.specialization MEMBER OF g.specializations) " +
-                            "GROUP BY (t.unit)";
-                    
-                    Collection<Object[]> o  = (Collection<Object[]>)getEntityManager().createQuery(query).setParameter("schoolYear", activeSchoolYear).setParameter("unit", school).setParameter("reportSpecializationGroups", reportSpecializationGroups).getResultList();
-                    //info("found totally #0 CDRs for school unit #1", schoolCDRs.size(), school);
-                    
-                    Map<SpecializationGroup, Integer> schoolSpecializationGroupHours = new LinkedHashMap<SpecializationGroup, Integer>();
-                    
-//                    for (TeachingHourCDR cdr : schoolCDRs) {
-//                        SpecializationGroup employeeSpecializationGroup = specializationGroupMap.get(cdr.getSpecialization());
-//                        Integer hours = schoolSpecializationGroupHours.get(employeeSpecializationGroup);
-//                        if(hours==null) {
-//                            hours = new Integer(0);
-//                            schoolSpecializationGroupHours.put(employeeSpecializationGroup, hours);
-//                        }
-//                        hours = new Integer(hours.intValue() + cdr.getHours());
-//                        schoolSpecializationGroupHours.put(employeeSpecializationGroup, hours);
-//                    }
-                    for(Object[] oo : o) {
-                        info("school #0 : [unit: '#1', hours: '#2']", school, oo[0], oo[1], oo[1] );
-                    }
-                    
-
-                }
-            }
-            
-            if (false) {
-                for (Iterator<TeachingHoursAnalysisItem> it = getReportData().iterator(); it.hasNext();) {
-
-                    TeachingHoursAnalysisItem reportItem = it.next();
-                    for (SchoolTeachingHoursItem item : reportItem.getSchools()) {
-                        School schoolItem = item.getSchool();
-
-                        int requiredHours = 0;
-                        int hours = 0;
-
-                        /* calculate the required hours */
-                        for (SpecializationGroup specializationGroup : reportItem.getSpecializationGroups()) {
-                            TeachingRequirement requirement = schoolsTeachingRequirementMap.get(schoolItem.getId())
-                                    .get(specializationGroup);
-                            if (requirement != null)
-                                requiredHours += requirement.getHours();
-                        }
-                        reportItem.addSchoolRequiredHours(schoolItem, requiredHours);
-
-                        /* for the given school, get all regular employees with a compatible specialization */
-
-                        Collection<Employee> regularEmployees = getCoreSearching().getSchoolActiveEmployees(
-                                getEntityManager(), schoolItem, activeSchoolYear, today,
-                                reportItem.getSpecializationGroups());
-
-                        for (Employee regularEmployee : regularEmployees) {
-                            int employeeHours = regularEmployee.getCurrentEmployment().getFinalWorkingHours();
-                            Collection<Disposal> disposals = getCoreSearching().getEmployeeActiveDisposals(
-                                    getEntityManager(), regularEmployee, today);
-                            int disposalHours = 0;
-                            for (Disposal disposal : disposals) {
-                                disposalHours += disposal.getHours();
-                            }
-                            hours += (employeeHours - disposalHours);
-                            if (useTextAnalysis) {
-                                if (disposalHours > 0) {
-                                    reportTextAnalysis.add("Ο εκπαιδευτικός " + regularEmployee.toPrettyString() +
-                                            " (" + getLocalizedMessage(regularEmployee.getType().getKey()) +
-                                            ") προσφέρει στην μονάδα " + (employeeHours - disposalHours) + " ([" +
-                                            employeeHours + " - " + disposalHours +
-                                            "] λόγω διάθεσης ) ωρες με ειδικότητα " +
-                                            regularEmployee.getLastSpecialization());
-
-                                } else {
-                                    reportTextAnalysis.add("Ο εκπαιδευτικός " + regularEmployee.toPrettyString() +
-                                            " (" + regularEmployee.getType() + ") προσφέρει στην μονάδα " +
-                                            employeeHours + " ωρες με ειδικότητα " +
-                                            regularEmployee.getLastSpecialization());
-                                }
-                            }
-                        }
-
-                        if (!getRegularEmploymentsOnly()) {
-
-//						Collection<Secondment> schoolSecondments = getCoreSearching().getSchoolSecondments(
-//								getEntityManager(), schoolItem, activeSchoolYear, today,
-//								reportItem.getSpecializationGroups());
-
-                            /* fetch all secondments targeted to this school and not affected by a leave */
-                            Collection<Secondment> schoolSecondments = getCoreSearching()
-                                    .getSchoolSecondmentsNotAffectedByActiveLeave(getEntityManager(), schoolItem,
-                                            activeSchoolYear, today, reportItem.getSpecializationGroups());
-
-                            for (Secondment secondment : schoolSecondments) {
-
-                                /* check if the secondment is associated with disposal. If so, proceed to deductions as appropriate */
-                                int employeeHours = secondment.getFinalWorkingHours();
-                                int disposalHours = 0;
-                                Collection<Disposal> disposals = getCoreSearching()
-                                        .getDisposalAssociatedWithSecondment(getEntityManager(), secondment);
-                                for (Disposal disposal : disposals) {
-                                    disposalHours += disposal.getHours();
-                                }
-                                hours += (employeeHours - disposalHours);
-                                if (useTextAnalysis) {
-                                    if (disposalHours > 0) {
-                                        reportTextAnalysis.add("Ο εκπαιδευτικός " +
-                                                secondment.getEmployee().toPrettyString() + " (" +
-                                                getLocalizedMessage(secondment.getEmployee().getType().getKey()) +
-                                                ") προσφέρει στην μονάδα " + (employeeHours - disposalHours) + " ([" +
-                                                employeeHours + " - " + disposalHours +
-                                                "] λόγω διάθεσης ) ωρες με ειδικότητα " +
-                                                secondment.getEmployee().getLastSpecialization());
-
-                                    } else {
-                                        reportTextAnalysis.add("Ο εκπαιδευτικός " +
-                                                secondment.getEmployee().toPrettyString() + " (" +
-                                                getLocalizedMessage(secondment.getEmployee().getType().getKey()) +
-                                                ") που υπηρετεί στην μονάδα με απόσπαση απο το \"" +
-                                                secondment.getSourceUnit().getTitle() + "\", προσφέρει " +
-                                                employeeHours + " ωρες με ειδικότητα " +
-                                                secondment.getEmployee().getLastSpecialization());
-                                    }
-                                }
-                            }
-
-                            /* handle service allocation that are serving here */
-                            Collection<ServiceAllocation> schoolIncomingServiceAllocations = getCoreSearching()
-                                    .getSchoolIncomingServiceAllocations(getEntityManager(), schoolItem, today,
-                                            reportItem.getSpecializationGroups());
-
-                            for (ServiceAllocation serviceAllocation : schoolIncomingServiceAllocations) {
-                                int employeeHours = serviceAllocation.getWorkingHoursOnServicingPosition();
-                                hours += employeeHours;
-                                if (useTextAnalysis) {
-                                    reportTextAnalysis.add("Ο εκπαιδευτικός " +
-                                            serviceAllocation.getEmployee().toPrettyString() +
-                                            " που υπηρετεί στην μονάδα με θητεία \"" +
-                                            getLocalizedMessage(serviceAllocation.getServiceType().getKey()) +
-                                            "\", προσφέρει " + employeeHours + " ωρες με ειδικότητα " +
-                                            serviceAllocation.getEmployee().getLastSpecialization());
-                                }
-                            }
-
-                            /* handle service allocations that are still serving teaching hours
-                             * in their regular school
-                             */
-                            Collection<ServiceAllocation> schoolOutgoingServiceAllocations = getCoreSearching()
-                                    .getSchoolOutgoingServiceAllocations(getEntityManager(), schoolItem, today,
-                                            reportItem.getSpecializationGroups());
-
-                            for (ServiceAllocation serviceAllocation : schoolOutgoingServiceAllocations) {
-                                int employeeHours = serviceAllocation.getWorkingHoursOnRegularPosition();
-                                if (employeeHours > 0) {
-                                    hours += employeeHours;
-                                    if (useTextAnalysis) {
-                                        reportTextAnalysis.add("Ο εκπαιδευτικός " +
-                                                serviceAllocation.getEmployee().toPrettyString() +
-                                                " που υπηρετεί στην μονάδα \"" +
-                                                serviceAllocation.getServiceUnit().getTitle() + "\" με θητεία \"" +
-                                                getLocalizedMessage(serviceAllocation.getServiceType().getKey()) +
-                                                "\", προσφέρει στην οργανική του μονάδα συνολικά " + employeeHours +
-                                                " ωρες με ειδικότητα " +
-                                                serviceAllocation.getEmployee().getLastSpecialization());
-                                    }
-                                } else
-                                    continue;
-                            }
-
-//						Collection<Disposal> schoolDisposals = getCoreSearching().getSchoolDisposals(
-//								getEntityManager(), schoolItem, activeSchoolYear, today,
-//								reportItem.getSpecializationGroups());
-
-                            Collection<Disposal> schoolDisposals = getCoreSearching()
-                                    .getSchoolDisposalsNotAffectedByActiveLeave(getEntityManager(), schoolItem,
-                                            activeSchoolYear, today, reportItem.getSpecializationGroups());
-
-                            for (Disposal disposal : schoolDisposals) {
-                                int employeeHours = disposal.getHours();
-                                hours += employeeHours;
-                                if (useTextAnalysis) {
-                                    reportTextAnalysis.add("Ο εκπαιδευτικός " +
-                                            disposal.getEmployee().toPrettyString() +
-                                            " που υπηρετεί στην μονάδα με διάθεση προσφέρει " + employeeHours +
-                                            " ωρες με ειδικότητα " + disposal.getEmployee().getLastSpecialization());
-                                }
-                            }
-
-                            reportItem.addSchoolAvailableHours(schoolItem, hours);
-
-                        } else {
-
-                            reportItem.addSchoolAvailableHours(schoolItem, hours);
-                        }
-                    }
-
-                    reportItem.removeItemsWithZeroHours();
-                    if (reportItem.getSchools().size() == 0) {
-                        it.remove();
-                    }
-                }
-            }
-
-            schoolsTeachingRequirementMap.clear();
-
             finished = System.currentTimeMillis();
             info("report has been generated in #0 [ms]", (finished - started));
         } catch (Exception ex) {
@@ -462,12 +229,7 @@ public class TeachingVoidAnalysisReport extends BaseReport {
 
     }
 
-    /**
-     * @return the effectiveDay
-     */
-    public Date getEffectiveDay() {
-        return effectiveDay;
-    }
+   
 
     /**
      * @return the region
@@ -476,20 +238,8 @@ public class TeachingVoidAnalysisReport extends BaseReport {
         return region;
     }
 
-    /**
-     * @return the reportData2
-     */
-    public Collection<TeachingHoursAnalysisItem> getReportData() {
-        return reportData;
-    }
-
-    /**
-     * @return the reportTextAnalysis
-     */
-    public Collection<String> getReportTextAnalysis() {
-        return reportTextAnalysis;
-    }
-
+    
+    
     /**
      * @return the school
      */
@@ -518,12 +268,7 @@ public class TeachingVoidAnalysisReport extends BaseReport {
         return specializationGroupSearchType;
     }
 
-    /**
-     * @param effectiveDay the effectiveDay to set
-     */
-    public void setEffectiveDay(Date effectiveDay) {
-        this.effectiveDay = effectiveDay;
-    }
+    
 
     /**
      * @param region the region to set
@@ -532,19 +277,9 @@ public class TeachingVoidAnalysisReport extends BaseReport {
         this.region = region;
     }
 
-    /**
-     * @param reportData2 the reportData2 to set
-     */
-    public void setReportData(Collection<TeachingHoursAnalysisItem> reportData2) {
-        this.reportData = reportData2;
-    }
+    
 
-    /**
-     * @param reportTextAnalysis the reportTextAnalysis to set
-     */
-    public void setReportTextAnalysis(Collection<String> reportTextAnalysis) {
-        this.reportTextAnalysis = reportTextAnalysis;
-    }
+   
 
     /**
      * @param school the school to set
@@ -588,19 +323,7 @@ public class TeachingVoidAnalysisReport extends BaseReport {
         this.regularEmploymentsOnly = regularEmploymentsOnly;
     }
 
-    /**
-     * @return the availableSpecializationGroups
-     */
-    public List<SpecializationGroup> getAvailableSpecializationGroups() {
-        return availableSpecializationGroups;
-    }
-
-    /**
-     * @param availableSpecializationGroups the availableSpecializationGroups to set
-     */
-    public void setAvailableSpecializationGroups(List<SpecializationGroup> availableSpecializationGroups) {
-        this.availableSpecializationGroups = availableSpecializationGroups;
-    }
+    
 
 
     /**
@@ -616,6 +339,21 @@ public class TeachingVoidAnalysisReport extends BaseReport {
      */
     public void setTeachingVoidReport(List<Map<String, Object>> teachingVoidReport) {
         this.teachingVoidReport = teachingVoidReport;
+    }
+
+    /**
+     * @return the availableSpecializationGroupsForVoidAnalysisReport
+     */
+    public List<SpecializationGroup> getAvailableSpecializationGroupsForVoidAnalysisReport() {
+        return availableSpecializationGroupsForVoidAnalysisReport;
+    }
+
+    /**
+     * @param availableSpecializationGroupsForVoidAnalysisReport the availableSpecializationGroupsForVoidAnalysisReport to set
+     */
+    public void setAvailableSpecializationGroupsForVoidAnalysisReport(
+            List<SpecializationGroup> availableSpecializationGroupsForVoidAnalysisReport) {
+        this.availableSpecializationGroupsForVoidAnalysisReport = availableSpecializationGroupsForVoidAnalysisReport;
     }
 
 }
