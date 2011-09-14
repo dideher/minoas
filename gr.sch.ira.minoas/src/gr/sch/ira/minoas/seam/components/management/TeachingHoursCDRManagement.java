@@ -199,6 +199,7 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
             cdr.setHours((-1) * secondment.getFinalWorkingHours());
             cdr.setUnit(secondment.getSourceUnit());
             cdr.setSchoolYear(currentSchoolYear);
+            cdr.setLogisticCDR(Boolean.TRUE); /* this is a logistic CDR */
             entityManager.persist(cdr);
             totalCDRsCreated++;
         }
@@ -260,6 +261,7 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
             cdr.setEmployee(disposal.getEmployee());
             cdr.setDisposal(disposal);
             cdr.setHours((-1) * disposal.getHours());
+            cdr.setLogisticCDR(Boolean.TRUE); /* this is a logistic CDR */
             cdr.setUnit(sourceUnit);
             cdr.setSchoolYear(currentSchoolYear);
             entityManager.persist(cdr);
@@ -309,6 +311,7 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
                     specialEmploymentCDR.setEmployee(relatedEmployment.getEmployee());
                     specialEmploymentCDR.setEmployment(relatedEmployment);
                     specialEmploymentCDR.setHours((-1) * relatedEmployment.getFinalWorkingHours());
+                    specialEmploymentCDR.setLogisticCDR(Boolean.TRUE); /* this is a logistic CDR */
                     specialEmploymentCDR.setUnit(relatedEmployment.getSchool());
                     specialEmploymentCDR.setSchoolYear(currentSchoolYear);
                     relatedEmployment.getEmploymentCDRs().add(specialEmploymentCDR);
@@ -439,6 +442,7 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
                     cdr.setEmployee(employeeWithLeave);
                     /* */
                     cdr.setHours(new Integer(hours.intValue() * -1));
+                    cdr.setLogisticCDR(Boolean.TRUE); /* this is a logistic CDR */
                     cdr.setSchoolYear(currentSchoolYear);
                     cdr.setUnit(getEntityManager().find(Unit.class, r[0]));
                     cdr.setLeave(activeLeave);
