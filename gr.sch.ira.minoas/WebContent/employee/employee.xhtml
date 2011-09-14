@@ -53,7 +53,7 @@
 						</rich:panel>
 
 						<h:panelGroup>
-
+							<h:panelGrid columns="1">
 							<rich:dataTable id="employeeCurrentStatusTable"
 								value="#{employeeCurrentStatusItems}" var="_item" rows="15"
 								border="0" onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
@@ -86,6 +86,39 @@
 								
 								
 							</rich:dataTable>
+							
+							<rich:spacer height="15"></rich:spacer>
+							
+							<rich:dataTable id="employeeCurrentHoursDistributionTable"
+								value="#{employeeCurrentHoursDistributionItems}" var="_item" rows="15"
+								border="0" onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+								onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+								width="100%">
+								<f:facet name="header">
+									<h:outputLabel value="Τρέχουσα Κατανομή Διδακτικών Ωρών Εκπαιδευτικού" />
+								</f:facet>
+								
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Σχολική Μονάδα" />
+									</f:facet>
+									<h:outputText value="#{_item.get('school').title}" />
+								</rich:column>
+								
+								
+								<rich:column style="text-align:center">
+									<f:facet name="header">
+										<h:outputText value="Διδακτικές Ώρες" />
+									</f:facet>
+									<h:outputText value="#{_item.get('unitHours')}" style="color:green;font-weight:bold;" />
+								</rich:column>
+								
+								
+							</rich:dataTable>
+							
+							</h:panelGrid>
+							
+							
 
 
 						</h:panelGroup>
