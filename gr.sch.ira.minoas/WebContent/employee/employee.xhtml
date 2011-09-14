@@ -65,16 +65,18 @@
 								
 								<rich:column>
 									<f:facet name="header">
-										<h:outputText value="Τύπος" />
-									</f:facet>
-									<h:outputText value="#{messages[_item.cdrTypeKey]}" />
-								</rich:column>
-								<rich:column>
-									<f:facet name="header">
 										<h:outputText value="Σχολική Μονάδα" />
 									</f:facet>
 									<h:outputText value="#{_item.schoolUnit}" />
 								</rich:column>
+								
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Τύπος" />
+									</f:facet>
+									<h:outputText value="#{messages[_item.cdrTypeKey]}" />
+								</rich:column>
+								
 								
 								
 								<rich:column>
