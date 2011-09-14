@@ -3,6 +3,7 @@ package gr.sch.ira.minoas.model.employement;
 
 import gr.sch.ira.minoas.model.BaseIDModel;
 import gr.sch.ira.minoas.model.core.SchoolYear;
+import gr.sch.ira.minoas.model.core.Specialization;
 import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employee.Employee;
 
@@ -44,6 +45,10 @@ public class TeachingHourCDR extends BaseIDModel {
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "EMPLOYEE_ID", nullable = false)
     private Employee employee;
+    
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name="SPECIALIZATION_ID", nullable=true)
+    private Specialization specialization;
     
     @Enumerated(EnumType.STRING)
     @Column(name="CDR_TYPE", nullable=false)
@@ -246,5 +251,19 @@ public class TeachingHourCDR extends BaseIDModel {
         builder.append(comment);
         builder.append("]");
         return builder.toString();
+    }
+
+    /**
+     * @return the specialization
+     */
+    public Specialization getSpecialization() {
+        return specialization;
+    }
+
+    /**
+     * @param specialization the specialization to set
+     */
+    public void setSpecialization(Specialization specialization) {
+        this.specialization = specialization;
     }
 }
