@@ -22,7 +22,7 @@
 				<h:panelGrid columns="1">
 
 					<a4j:region>
-						<a4j:outputPanel>
+						<a4j:outputPanel id="reportFilters">
 							<rich:panel>
 								<f:facet name="header">
 									<h:outputText value="Φίλτρα Ανάλυσης" />
@@ -31,21 +31,6 @@
 								<ui:include src="/components/messages-component.xhtml" />
 
 								<h:panelGrid columns="3">
-
-									<s:decorate id="establishedDateDecoration"
-										template="/layout/doubleLineEdit.xhtml">
-										<ui:define name="label">
-											<h:outputText value="Ημερομηνία Εφαρμογής" />
-										</ui:define>
-										<rich:calendar id="effectiveDate" enableManualInput="true"
-											value="#{teachingVoidAnalysisReport.effectiveDay}"
-											required="false" inputSize="10" mode="ajax" locale="el_GR"
-											inputClass="fieldValueText" datePattern="dd-MM-yyyy">
-											<a4j:support event="onblur"
-												reRender="establishedDateDecoration" bypassUpdates="true"
-												ajaxSingle="true" />
-										</rich:calendar>
-									</s:decorate>
 
 									<s:decorate template="/layout/doubleLineEdit.xhtml">
 										<ui:define name="label">
@@ -152,7 +137,7 @@
 										<ui:define name="label">
 											<h:outputText value="Μόνο Οργανικές" />
 										</ui:define>
-										<h:selectBooleanCheckbox
+										<h:selectBooleanCheckbox disabled="true"
 											value="#{teachingVoidAnalysisReport.regularEmploymentsOnly}" />
 									</s:decorate>
 								</h:panelGrid>
@@ -167,17 +152,13 @@
 						<a4j:outputPanel id="actionsButtonsPanel">
 							<s:div styleClass="actionButtons">
 								<h:panelGrid columns="4">
-									<a4j:commandButton value="Επεξεργασία ...."
+									<a4j:commandButton value="Υπολογίσμός και Επεξεργασία ...."
 										action="#{teachingVoidAnalysisReport.generateReport}"
-										reRender="schoolTeachingResourcesAnalysisTable,reportAnalysisModalPanelContent,showDecisionsButton,reportResultPanel" />
+										reRender="reportResultPanel" />
+									<a4j:commandButton value="Καθαρισμός Φόρμας" action="#{teachingVoidAnalysisReport.resetReport()}" reRender="reportFilters,reportResultPanel"></a4j:commandButton>
 									<s:button action="#{secondmentReportByType.runReport}"
 										value="Εκτύπωση (PDF)" target="new" disabled="true" />
-
-									<a4j:commandButton id="showDecisionsButton"
-										value="Προβολή Πρακτικών" ajaxSingle="true"
-										oncomplete="#{rich:component('reportAnalysisModalPanel')}.show();"
-										reRender="reportAnalysisModalPanelContent"
-										disabled="#{reportTextAnalysis.rowCount == 0}" />
+									
 									<s:button id="endButton" action="endButton"
 										value="Τέλος Εργασίας" />
 								</h:panelGrid>
@@ -189,7 +170,7 @@
 			</h:form>
 
 			<p>
-				<h:outputText value="Το report είναι ακόμα δοκιμαστικό" />
+				<h:outputText value="Το report είναι ακόμα δοκιμαστικό !!!" style="color: red;font-weight:bold;"/>
 			</p>
 
 			<a4j:outputPanel id="reportResultPanel">
@@ -200,10 +181,8 @@
 							<h:outputText value="#{reportItem.get('title')}" />
 						</f:facet>
 
-						<p><h:outputText value="#{reportItem.get('data').values()}"/></p>
-						
 						<rich:dataTable  var="_row"
-							value="#{reportItem.get('data').values()}"
+							value="#{reportItem.get('data')}"
 							onRowMouseOver="this.style.backgfroundColor='#F8F8F8'"
 							onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
 							width="100%">
@@ -253,14 +232,78 @@
 								</rich:columnGroup>
 							</f:facet>
 							<rich:column>
-								<h:outputText value="{_row.get('school').title}" />
+								<h:outputText value="#{_row.get('school').title}" />
+								<f:facet name="footer">
+								<rich:spacer />
+							</f:facet>
 							</rich:column>
 							<rich:column>
-								<h:outputText value="{_row.get('hours')}" />
+								<h:outputText value="#{_row.get('school').regionCode}" />
+								<f:facet name="footer">
+								<rich:spacer />
+							</f:facet>
 							</rich:column>
-							<rich:column>
-								<h:outputText value="#{_row}" />
+							<rich:column style="text-align:center">
+								<h:outputText value="#{_row.get('unitRequiredHours')}" style="color: blue" />
+								<f:facet name="footer">
+								<s:div style="text-align:center">
+									<h:outputText
+										value="#{reportItem.get('totalRequiredHours')}"
+										style="color: blue" />
+								</s:div>
+							</f:facet>
 							</rich:column>
+							<rich:column style="text-align:center">
+								<h:outputText value="#{_row.get('unitAvailableHours')}" style="color: red" />
+								<f:facet name="footer">
+								<s:div style="text-align:center">
+									<h:outputText
+										value="#{reportItem.get('totalAvailableHours')}"
+										style="color: red;font-weight:bold;" />
+								</s:div>
+							</f:facet>
+							</rich:column>
+							<rich:column style="text-align:center">
+								<h:outputText value="+#{_row.get('unitMissingHoursNeg')}"
+								rendered="#{_row.get('unitMissingHoursNeg') &gt; 0 or _row.get('unitMissingHoursNeg') == 0}"
+								style="color:green;">
+							</h:outputText>
+							<h:outputText value="#{_row.get('unitMissingHoursNeg')}"
+								rendered="#{_row.get('unitMissingHoursNeg') &lt; 0}"
+								style="color:green;font-weight:bold;">
+							</h:outputText>
+								<f:facet name="footer">
+								<s:div style="text-align:center">
+									<h:outputText
+										value="#{reportItem.get('totalMissingHoursNeg')}"
+										style="color:green;font-weight:bold;">
+									</h:outputText>
+								</s:div>
+							</f:facet>
+							</rich:column>
+							<rich:column style="text-align:center">
+							<s:div
+								rendered="#{_row.get('unitMissingRegularEmployees') &lt; 0 or _row.get('unitMissingRegularEmployees') == 0}">
+								<h:outputText value="#{_row.get('unitMissingRegularEmployees')}"
+									style="color: blue;" />
+							</s:div>
+							<s:div
+								rendered="#{_row.get('unitMissingRegularEmployees') &gt; 0}">
+								<h:outputText value="#{_row.get('unitMissingRegularEmployees')} "
+									style="color: red;font-weight:bold;" />
+							</s:div>
+
+							<f:facet name="footer">
+								<s:div style="text-align:center">
+									<h:outputText rendered="#{!(reportItem.get('totalMissingRegularEmployees') &gt; 0)}"
+										value="#{reportItem.get('totalMissingRegularEmployees')}"
+										style="color: blue;font-weight:bold;" />
+									<h:outputText rendered="#{(reportItem.get('totalMissingRegularEmployees') &gt; 0)}"
+										value="#{reportItem.get('totalMissingRegularEmployees')}"
+										style="color: red;font-weight:bold;" />
+								</s:div>
+							</f:facet>
+						</rich:column>
 						</rich:dataTable>
 					</rich:panel>
 
@@ -279,56 +322,7 @@
 		</rich:panel>
 
 
-		<rich:modalPanel id="reportAnalysisModalPanel" autosized="true"
-			width="750">
-			<f:facet name="header">
-				<h:outputText value="Πρακτικά Υπολογισμού Κενών ..."
-					style="padding-right:15px;" />
-			</f:facet>
-			<f:facet name="controls">
-				<h:panelGroup>
-					<h:graphicImage value="/img/modal/close.png" styleClass="hidelink"
-						width="18" height="18" id="hidelink2" />
-					<rich:componentControl for="reportAnalysisModalPanel"
-						attachTo="hidelink2" operation="hide" event="onclick" />
-				</h:panelGroup>
-			</f:facet>
-			<h:form>
-				<h:panelGrid columns="1">
-					<a4j:outputPanel id="reportAnalysisModalPanelContent"
-						layout="inline">
-						<h:panelGroup>
-							<rich:dataTable id="reportAnalysisTable"
-								value="#{reportTextAnalysis}" var="_report" rows="8">
-								<rich:column>
-									<f:facet name="header">
-										<h:outputText value="Πρακτικό - Ενέργεια" />
-									</f:facet>
-									<h:outputText value="#{_report}" />
-								</rich:column>
-								<f:facet name="footer">
-
-									<rich:datascroller for="reportAnalysisTable" align="center"
-										maxPages="50">
-										<f:facet name="first">
-											<h:outputText value="Πρώτη" />
-										</f:facet>
-										<f:facet name="last">
-											<h:outputText value="Τελευταία" />
-										</f:facet>
-									</rich:datascroller>
-								</f:facet>
-							</rich:dataTable>
-						</h:panelGroup>
-					</a4j:outputPanel>
-
-					<h:panelGrid columns="2">
-						<a4j:commandButton value="Επιστροφή .."
-							onclick="#{rich:component('reportAnalysisModalPanel')}.hide();return false;" />
-					</h:panelGrid>
-				</h:panelGrid>
-			</h:form>
-		</rich:modalPanel>
+		
 
 
 		<rich:modalPanel id="selectSpecializationGroupsPanel" autosized="true"
@@ -365,9 +359,9 @@
 									value="#{teachingVoidAnalysisReport.specializationGroups}"
 									sourceListWidth="240" targetListWidth="240">
 									<s:selectItems var="item"
-										value="#{specializationGroupsListQuery.resultList}"
+										value="#{availableSpecializationGroupsForVoidAnalysisReport}"
 										label="#{item.title}">
-
+											
 									</s:selectItems>
 									<s:convertEntity></s:convertEntity>
 								</rich:pickList>
