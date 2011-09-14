@@ -450,33 +450,6 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
                     totalCDRsCreated++;
                 }
             }
-            if(false) {
-                Collection<TeachingHourCDR> employeeCDRs = coreSearching.getEmployeeTeachingHoursCDRs(em, currentSchoolYear, employeeWithLeave);
-            //info("when handling leave #0 we found #1 releated CDRs", activeLeave, employeeCDRs.size());
-            List<String> unitCache = new ArrayList<String>(employeeCDRs.size()); // use to store units for which we have inserted a leave cdr 
-            
-            for(TeachingHourCDR employeeCDR : employeeCDRs) {
-                if(!unitCache.contains(employeeCDR.getUnit().getId())) {
-                    //info("related CDR #0", employeeCDR);
-                    TeachingHourCDR cdr = new TeachingHourCDR();
-                    cdr.setCdrType(TeachingHourCDRType.LEAVE);
-                    cdr.setComment(sb.toString());
-                    cdr.setSpecialization(employeeCDR.getSpecialization());
-                    cdr.setEmployee(employeeWithLeave);
-                    /* */
-                    cdr.setHours(0);
-                    cdr.setSchoolYear(currentSchoolYear);
-                    cdr.setUnit(employeeCDR.getUnit());
-                    cdr.setLeave(activeLeave);
-                    entityManager.persist(cdr);
-                    totalCDRsCreated++;
-                    unitCache.add(employeeCDR.getUnit().getId());
-                } else {
-                    info("ignoring related CDR #0 since a counterpart has been already registered.", employeeCDR);
-                }
-                
-            }}
-            
          }
 
         em.flush();
