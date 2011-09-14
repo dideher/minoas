@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 
 import gr.sch.ira.minoas.model.core.SchoolYear;
+import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeExclusion;
 import gr.sch.ira.minoas.model.employement.Employment;
@@ -198,6 +201,9 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
 	@DataModel(value="employeeCurrentStatusItems")
 	private Collection<EmployeeCDRReportItem> employeeCurrentStatusItems;
 	
+	@DataModel(value="employeeCurrentHoursDistributionItems")
+	private Collection<Map<String, Object>> employeeCurrentHoursDistributionItems;
+	
 	@DataModel(value="employeeWorkExperienceItems")
 	private Collection<EmployeeWorkExperienceItem> employeeWorkExperienceItems;
 	
@@ -247,7 +253,27 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
 
 	}
 	
-	
+	@Factory(value="employeeCurrentHoursDistributionItems")
+    public void constructEmployeeCurrentHoursDistributionReport() {
+	    SchoolYear currentSchoolYear =  getCoreSearching().getActiveSchoolYear(getEntityManager());
+        Employee employee = getEmployeeHome().getInstance();
+
+        String query2 = "SELECT t.unit.id, SUM(t.hours),MAX(t.unit.title) FROM TeachingHourCDR t " +
+        "WHERE t.schoolYear=:schoolYear " +
+        "AND t.employee=:employee " +
+        "GROUP BY(t.unit.id)";
+         
+        Collection<Object[]> o2  = (Collection<Object[]>)getEntityManager().createQuery(query2).setParameter("schoolYear", currentSchoolYear).setParameter("employee", employee).getResultList();
+        List<Map<String, Object>> data = new ArrayList<Map<String,Object>>();
+        for(Object[] oo : o2) {
+            Map<String, Object> item = new HashMap<String, Object>();
+            item.put("school", getEntityManager().find(Unit.class, oo[0]));
+            item.put("unitHours", oo[1]);
+            data.add(item);
+        }
+        setEmployeeCurrentHoursDistributionItems(data);
+    }
+    
 	@Factory(value="employeeCurrentStatusItems")
 	public void constructEmployeeCurrentStatusReport() {
 	    SchoolYear currentSchoolYear =  getCoreSearching().getActiveSchoolYear(getEntityManager());
@@ -402,6 +428,21 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
      */
     protected void setEmployeeLeaveItems(Collection<LeaveReportItem> employeeLeaveItems) {
         this.employeeLeaveItems = employeeLeaveItems;
+    }
+
+    /**
+     * @return the employeeCurrentHoursDistributionItems
+     */
+    public Collection<Map<String, Object>> getEmployeeCurrentHoursDistributionItems() {
+        return employeeCurrentHoursDistributionItems;
+    }
+
+    /**
+     * @param employeeCurrentHoursDistributionItems the employeeCurrentHoursDistributionItems to set
+     */
+    public void setEmployeeCurrentHoursDistributionItems(
+            Collection<Map<String, Object>> employeeCurrentHoursDistributionItems) {
+        this.employeeCurrentHoursDistributionItems = employeeCurrentHoursDistributionItems;
     }
 
 }
