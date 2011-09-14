@@ -305,7 +305,7 @@
    
    
    <framework:entity-query name="specializationGroupsListQuery" max-results="200" scope="page">
-    <framework:ejbql>SELECT s FROM SpecializationGroup s  WHERE s.schoolYear.id = 9</framework:ejbql>
+    <framework:ejbql>SELECT s FROM SpecializationGroup s  WHERE s.schoolYear.id = 10</framework:ejbql>
     <framework:order>s.title asc</framework:order>
       <!-- 
       <framework:restrictions>
