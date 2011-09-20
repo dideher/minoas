@@ -27,13 +27,15 @@ import javax.persistence.Query;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Observer;
+import org.jboss.seam.annotations.RaiseEvent;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
 
 import sun.security.action.GetLongAction;
 
 @Name(value = "teachingHoursCDRManagement")
-@Scope(ScopeType.CONVERSATION)
+@Scope(ScopeType.APPLICATION)
 public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
 
     /**
@@ -41,11 +43,17 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
      */
     private static final long serialVersionUID = 1L;
 
-    @In(required = true, create = true)
-    private CoreSearching coreSearching;
+ @In(required = true, create = true)
+ private CoreSearching coreSearching;
+ 
+ @RaiseEvent("generateCDRs")
+ public void doCalculateCDRsInBackground() {
+     info("will generate CDRs in the background.");
+ }
 
-    @Transactional
-    public void doCalculateCurrentCDRs() {
+  @Transactional
+  @Observer("generateCDRs")
+  public void doCalculateCurrentCDRs() {
         long started = System.currentTimeMillis();
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         EntityManager em = getEntityManager();

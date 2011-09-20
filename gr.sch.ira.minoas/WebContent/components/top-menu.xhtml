@@ -358,7 +358,13 @@
 					<a4j:htmlCommandLink action="#{teachingHoursCDRManagement.doCalculateCurrentCDRs()}" value="Ανανέωση CDRs">
 					</a4j:htmlCommandLink>
 				</rich:menuItem>
-				
+		
+				<!-- 		
+				<rich:menuItem rendered="#{(s:hasRole('ADMIN'))}"  submitMode="none">
+					<a4j:htmlCommandLink action="#{teachingHoursCDRManagement.doCalculateCDRsInBackground()}" value="Ανανέωση CDRs - Στο υπόβαθρο">
+					</a4j:htmlCommandLink>
+				</rich:menuItem>
+				 -->
 				
 				<!--  
 				<rich:menuItem submitMode="ajax">
