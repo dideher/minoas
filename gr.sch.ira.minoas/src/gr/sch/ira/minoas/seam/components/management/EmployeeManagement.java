@@ -278,8 +278,8 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
 	public void constructEmployeeCurrentStatusReport() {
 	    SchoolYear currentSchoolYear =  getCoreSearching().getActiveSchoolYear(getEntityManager());
 	    Employee employee = getEmployeeHome().getInstance();
-	    /* fetch all possitive employee's CDRs. Warning possitive cdrs does not include leaves ! */
-	    Collection<TeachingHourCDR> employeeCDRs = getCoreSearching().getEmployeeTeachingHoursCDRsWithPositiveHours(getEntityManager(), currentSchoolYear, employee);
+	    /* fetch all non logistics employee's CDRs */
+	    Collection<TeachingHourCDR> employeeCDRs = getCoreSearching().getEmployeeNonLogisticTeachingHoursCDR(entityManager, currentSchoolYear, employee);
 	    employeeCurrentStatusItems = new ArrayList<EmployeeManagement.EmployeeCDRReportItem>(employeeCDRs.size());
 	    for(TeachingHourCDR cdr : employeeCDRs) {
 	        employeeCurrentStatusItems.add(new EmployeeManagement.EmployeeCDRReportItem(cdr));

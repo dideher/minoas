@@ -1111,6 +1111,24 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     }
     
     @SuppressWarnings("unchecked")
+    public Collection<TeachingHourCDR> getEmployeeLogisticTeachingHoursCDR(EntityManager entityManager, SchoolYear schoolYear,
+            Employee employee) {
+        List<TeachingHourCDR> return_value = getEntityManager(entityManager).createQuery(
+                "SELECT t FROM TeachingHourCDR t WHERE t.schoolYear=:schoolYear AND t.employee=:employee AND t.logisticCDR IS TRUE")
+                .setParameter("schoolYear", schoolYear).setParameter("employee", employee).getResultList();
+        return return_value;
+    }
+    
+    @SuppressWarnings("unchecked")
+    public Collection<TeachingHourCDR> getEmployeeNonLogisticTeachingHoursCDR(EntityManager entityManager, SchoolYear schoolYear,
+            Employee employee) {
+        List<TeachingHourCDR> return_value = getEntityManager(entityManager).createQuery(
+                "SELECT t FROM TeachingHourCDR t WHERE t.schoolYear=:schoolYear AND t.employee=:employee AND t.logisticCDR IS FALSE")
+                .setParameter("schoolYear", schoolYear).setParameter("employee", employee).getResultList();
+        return return_value;
+    }
+    
+    @SuppressWarnings("unchecked")
     public Collection<TeachingHourCDR> getEmployeeTeachingHoursCDRsOfType(EntityManager entityManager, SchoolYear schoolYear,
             Employee employee, TeachingHourCDRType type) {
         List<TeachingHourCDR> return_value = getEntityManager(entityManager).createQuery(
