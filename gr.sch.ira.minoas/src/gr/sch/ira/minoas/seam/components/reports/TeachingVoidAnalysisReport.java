@@ -159,6 +159,7 @@ public class TeachingVoidAnalysisReport extends BaseReport {
             int requiredHours = 0;
             int availableHours = 0;
             int totalMissingRegularEmployees = 0;
+            float totalMissingRegularEmployeesFloat = (float)0;
             for(Map<String, Object> reportItem : tempReportData) {
                 /* fetch the actual effective SpecializationGroups */
                 List<SpecializationGroup> effectiveGroup = (List<SpecializationGroup>)reportItem.get("groups");
@@ -193,8 +194,10 @@ public class TeachingVoidAnalysisReport extends BaseReport {
                     Long unitRequiredHours = declaredRequiredHoursMap.containsKey(oo[0]) ?  declaredRequiredHoursMap.get(oo[0]) : new Long(0);
                     Long unitMissingHours = new Long(unitRequiredHours.longValue()-unitAvailableHours.longValue());
                     Long unitMissingRegularEmployees = new Long(0);
-                    if(unitMissingHours > HOURS_FOR_REGULAR_POSITION) {
+                    Float unitMissingRegularEmployeesFloat = new Float(0);
+                    if((unitMissingHours > HOURS_FOR_REGULAR_POSITION) || (unitMissingHours < HOURS_FOR_REGULAR_POSITION) ) {
                         unitMissingRegularEmployees = new Long(unitMissingHours.longValue() / HOURS_FOR_REGULAR_POSITION); 
+                        unitMissingRegularEmployeesFloat = new Float(unitMissingHours.floatValue() / HOURS_FOR_REGULAR_POSITION);
                     } 
                     
                     d.put("unitAvailableHours", unitAvailableHours);
@@ -205,10 +208,14 @@ public class TeachingVoidAnalysisReport extends BaseReport {
                     availableHours+=unitAvailableHours.longValue();
                     requiredHours+=unitRequiredHours.longValue();
                     totalMissingRegularEmployees+=unitMissingRegularEmployees.longValue();
+                    totalMissingRegularEmployeesFloat+=unitMissingRegularEmployees.floatValue();
                     d.put("unitRequiredHours", unitRequiredHours);
                     d.put("unitMissingHours", unitMissingHours);
                     d.put("unitMissingHoursNeg", unitMissingHours*(-1));
                     d.put("unitMissingRegularEmployees", unitMissingRegularEmployees);
+                    d.put("unitMissingRegularEmployeesNeg", unitMissingRegularEmployees*(-1));
+                    d.put("unitMissingRegularEmployeesFloat", unitMissingRegularEmployeesFloat);
+                    d.put("unitMissingRegularEmployeesFloatNeg", unitMissingRegularEmployeesFloat*(-1));
                 }
                 reportItem.put("data", data);
                 reportItem.put("totalRequiredHours", new Long(requiredHours));
@@ -216,6 +223,9 @@ public class TeachingVoidAnalysisReport extends BaseReport {
                 reportItem.put("totalMissingHours", new Long(requiredHours-availableHours));
                 reportItem.put("totalMissingHoursNeg", new Long((-1)* (requiredHours-availableHours)));
                 reportItem.put("totalMissingRegularEmployees", new Long(totalMissingRegularEmployees));
+                reportItem.put("totalMissingRegularEmployeesNeg", new Long(totalMissingRegularEmployees*(-1)));
+                reportItem.put("totalMissingRegularEmployeesFloat", new Float(totalMissingRegularEmployeesFloat));
+                reportItem.put("totalMissingRegularEmployeesFloatNeg", new Float(totalMissingRegularEmployeesFloat*(-1)));
             }
            
             setTeachingVoidReport(tempReportData);

@@ -155,10 +155,12 @@
 									<a4j:commandButton value="Υπολογίσμός και Επεξεργασία ...."
 										action="#{teachingVoidAnalysisReport.generateReport}"
 										reRender="reportResultPanel" />
-									<a4j:commandButton value="Καθαρισμός Φόρμας" action="#{teachingVoidAnalysisReport.resetReport()}" reRender="reportFilters,reportResultPanel"></a4j:commandButton>
+									<a4j:commandButton value="Καθαρισμός Φόρμας"
+										action="#{teachingVoidAnalysisReport.resetReport()}"
+										reRender="reportFilters,reportResultPanel"></a4j:commandButton>
 									<s:button action="#{secondmentReportByType.runReport}"
 										value="Εκτύπωση (PDF)" target="new" disabled="true" />
-									
+
 									<s:button id="endButton" action="endButton"
 										value="Τέλος Εργασίας" />
 								</h:panelGrid>
@@ -170,7 +172,8 @@
 			</h:form>
 
 			<p>
-				<h:outputText value="Το report είναι ακόμα δοκιμαστικό !!!" style="color: red;font-weight:bold;"/>
+				<h:outputText value="Το report είναι ακόμα δοκιμαστικό !!!"
+					style="color: red;font-weight:bold;" />
 			</p>
 
 			<a4j:outputPanel id="reportResultPanel">
@@ -181,8 +184,7 @@
 							<h:outputText value="#{reportItem.get('title')}" />
 						</f:facet>
 
-						<rich:dataTable  var="_row"
-							value="#{reportItem.get('data')}"
+						<rich:dataTable var="_row" value="#{reportItem.get('data')}"
 							onRowMouseOver="this.style.backgfroundColor='#F8F8F8'"
 							onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
 							width="100%">
@@ -234,76 +236,169 @@
 							<rich:column>
 								<h:outputText value="#{_row.get('school').title}" />
 								<f:facet name="footer">
-								<rich:spacer />
-							</f:facet>
+									<rich:spacer />
+								</f:facet>
 							</rich:column>
 							<rich:column>
 								<h:outputText value="#{_row.get('school').regionCode}" />
 								<f:facet name="footer">
-								<rich:spacer />
-							</f:facet>
+									<rich:spacer />
+								</f:facet>
 							</rich:column>
 							<rich:column style="text-align:center">
-								<h:outputText value="#{_row.get('unitRequiredHours')}" style="color: blue" />
+								<h:outputText value="#{_row.get('unitRequiredHours')}"
+									style="color: blue" />
 								<f:facet name="footer">
-								<s:div style="text-align:center">
-									<h:outputText
-										value="#{reportItem.get('totalRequiredHours')}"
-										style="color: blue" />
-								</s:div>
-							</f:facet>
+									<s:div style="text-align:center">
+										<h:outputText value="#{reportItem.get('totalRequiredHours')}"
+											style="color: blue" />
+									</s:div>
+								</f:facet>
 							</rich:column>
 							<rich:column style="text-align:center">
-								<h:outputText value="#{_row.get('unitAvailableHours')}" style="color: red" />
+								<h:outputText value="#{_row.get('unitAvailableHours')}"
+									style="color: red" />
 								<f:facet name="footer">
-								<s:div style="text-align:center">
-									<h:outputText
-										value="#{reportItem.get('totalAvailableHours')}"
-										style="color: red;font-weight:bold;" />
-								</s:div>
-							</f:facet>
+									<s:div style="text-align:center">
+										<h:outputText value="#{reportItem.get('totalAvailableHours')}"
+											style="color: red;font-weight:bold;" />
+									</s:div>
+								</f:facet>
 							</rich:column>
 							<rich:column style="text-align:center">
 								<h:outputText value="+#{_row.get('unitMissingHoursNeg')}"
-								rendered="#{_row.get('unitMissingHoursNeg') &gt; 0 or _row.get('unitMissingHoursNeg') == 0}"
-								style="color:green;">
-							</h:outputText>
-							<h:outputText value="#{_row.get('unitMissingHoursNeg')}"
-								rendered="#{_row.get('unitMissingHoursNeg') &lt; 0}"
-								style="color:green;font-weight:bold;">
-							</h:outputText>
+									rendered="#{_row.get('unitMissingHoursNeg') &gt; 0 or _row.get('unitMissingHoursNeg') == 0}"
+									style="color:green;">
+								</h:outputText>
+								<h:outputText value="#{_row.get('unitMissingHoursNeg')}"
+									rendered="#{_row.get('unitMissingHoursNeg') &lt; 0}"
+									style="color:red;font-weight:bold;">
+								</h:outputText>
 								<f:facet name="footer">
-								<s:div style="text-align:center">
+									<s:div style="text-align:center">
+										<h:outputText
+											value="#{reportItem.get('totalMissingHoursNeg')}"
+											style="color:green;font-weight:bold;">
+										</h:outputText>
+									</s:div>
+								</f:facet>
+							</rich:column>
+
+							<rich:column style="text-align:center">
+								<s:div
+									rendered="#{_row.get('unitMissingRegularEmployeesNeg') == 0}">
 									<h:outputText
-										value="#{reportItem.get('totalMissingHoursNeg')}"
-										style="color:green;font-weight:bold;">
+										value="#{_row.get('unitMissingRegularEmployeesNeg')}"
+										style="color: blue;font-weight:bold;" />
+									<h:outputText value=" (" style="color: blue;font-weight:bold;">
+									</h:outputText>
+									<h:outputText
+										value="#{_row.get('unitMissingRegularEmployeesFloatNeg')}"
+										style="color: blue;font-weight:bold;">
+										<f:convertNumber type="number" minFractionDigits="1"
+											maxFractionDigits="1" />
+									</h:outputText>
+									<h:outputText value=")" style="color: blue;font-weight:bold;">
 									</h:outputText>
 								</s:div>
-							</f:facet>
-							</rich:column>
-							<rich:column style="text-align:center">
-							<s:div
-								rendered="#{_row.get('unitMissingRegularEmployees') &lt; 0 or _row.get('unitMissingRegularEmployees') == 0}">
-								<h:outputText value="#{_row.get('unitMissingRegularEmployees')}"
-									style="color: blue;" />
-							</s:div>
-							<s:div
-								rendered="#{_row.get('unitMissingRegularEmployees') &gt; 0}">
-								<h:outputText value="#{_row.get('unitMissingRegularEmployees')} "
-									style="color: red;font-weight:bold;" />
-							</s:div>
-
-							<f:facet name="footer">
-								<s:div style="text-align:center">
-									<h:outputText rendered="#{!(reportItem.get('totalMissingRegularEmployees') &gt; 0)}"
-										value="#{reportItem.get('totalMissingRegularEmployees')}"
-										style="color: blue;font-weight:bold;" />
-									<h:outputText rendered="#{(reportItem.get('totalMissingRegularEmployees') &gt; 0)}"
-										value="#{reportItem.get('totalMissingRegularEmployees')}"
+								<s:div
+									rendered="#{_row.get('unitMissingRegularEmployeesNeg') &lt; 0}">
+									<h:outputText
+										value="#{_row.get('unitMissingRegularEmployeesNeg')}"
 										style="color: red;font-weight:bold;" />
+									<h:outputText value=" (" style="color: red;font-weight:bold;">
+									</h:outputText>
+									<h:outputText
+										value="#{_row.get('unitMissingRegularEmployeesFloatNeg')}"
+										style="color: red;font-weight:bold;">
+										<f:convertNumber type="number" minFractionDigits="1"
+											maxFractionDigits="1" />
+									</h:outputText>
+									<h:outputText value=")" style="color: red;font-weight:bold;">
+									</h:outputText>
 								</s:div>
-							</f:facet>
-						</rich:column>
+								<s:div
+									rendered="#{_row.get('unitMissingRegularEmployeesNeg') &gt; 0}">
+									<h:outputText
+										value="+#{_row.get('unitMissingRegularEmployeesNeg')} "
+										style="color: green;font-weight:bold;" />
+									<h:outputText value=" (+"
+										style="color: green;font-weight:bold;">
+									</h:outputText>
+									<h:outputText
+										value="#{_row.get('unitMissingRegularEmployeesFloatNeg')}"
+										style="color: green;font-weight:bold;">
+										<f:convertNumber type="number" minFractionDigits="1"
+											maxFractionDigits="1" />
+									</h:outputText>
+									<h:outputText value=")" style="color: green;font-weight:bold;">
+									</h:outputText>
+								</s:div>
+
+								<f:facet name="footer">
+									<s:div style="text-align:center">
+										<s:div
+											rendered="#{(reportItem.get('totalMissingRegularEmployeesNeg') == 0)}">
+											<h:outputText
+												value="#{reportItem.get('totalMissingRegularEmployeesNeg')}"
+												style="color: blue;font-weight:bold;" />
+											<h:outputText value=" (+"
+												style="color: green;font-weight:bold;">
+											</h:outputText>
+											<h:outputText
+												value="#{reportItem.get('totalMissingRegularEmployeesFloatNeg')}"
+												style="color: blue;font-weight:bold;">
+												<f:convertNumber type="number" minFractionDigits="1"
+													maxFractionDigits="1" />
+											</h:outputText>
+											<h:outputText value=")"
+												style="color: blue;font-weight:bold;">
+											</h:outputText>
+										</s:div>
+
+										<s:div
+											rendered="#{(reportItem.get('totalMissingRegularEmployeesNeg') &gt; 0)}">
+											<h:outputText
+												value="+#{reportItem.get('totalMissingRegularEmployeesNeg')}"
+												style="color: green;font-weight:bold;" />
+
+											<h:outputText value=" (+"
+												style="color: green;font-weight:bold;">
+											</h:outputText>
+											<h:outputText
+												value="#{reportItem.get('totalMissingRegularEmployeesFloatNeg')}"
+												style="color: green;font-weight:bold;">
+												<f:convertNumber type="number" minFractionDigits="1"
+													maxFractionDigits="1" />
+											</h:outputText>
+											<h:outputText value=")"
+												style="color: green;font-weight:bold;">
+											</h:outputText>
+										</s:div>
+
+										<s:div
+											rendered="#{(reportItem.get('totalMissingRegularEmployeesNeg') &lt; 0)}">
+
+											<h:outputText
+												value="-#{reportItem.get('totalMissingRegularEmployeesNeg')}"
+												style="color: red;font-weight:bold;" />
+
+											<h:outputText value=" ("
+												style="color: red;font-weight:bold;">
+											</h:outputText>
+											<h:outputText
+												value="#{reportItem.get('totalMissingRegularEmployeesFloatNeg')}"
+												style="color: red;font-weight:bold;">
+												<f:convertNumber type="number" minFractionDigits="1"
+													maxFractionDigits="1" />
+											</h:outputText>
+											<h:outputText value=")"
+												style="color: red;font-weight:bold;">
+											</h:outputText>
+										</s:div>
+									</s:div>
+								</f:facet>
+							</rich:column>
 						</rich:dataTable>
 					</rich:panel>
 
@@ -322,7 +417,7 @@
 		</rich:panel>
 
 
-		
+
 
 
 		<rich:modalPanel id="selectSpecializationGroupsPanel" autosized="true"
@@ -361,7 +456,7 @@
 									<s:selectItems var="item"
 										value="#{availableSpecializationGroupsForVoidAnalysisReport}"
 										label="#{item.title}">
-											
+
 									</s:selectItems>
 									<s:convertEntity></s:convertEntity>
 								</rich:pickList>
