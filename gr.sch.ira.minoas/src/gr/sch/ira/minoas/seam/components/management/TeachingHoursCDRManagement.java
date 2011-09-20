@@ -56,11 +56,11 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
         /* first fetch all current CDRs and remove them */
         Query q = getEntityManager().createQuery("DELETE TeachingHourCDR t WHERE t.schoolYear=:schoolYear");
         q.setParameter("schoolYear", currentSchoolYear);
-        int cdrsDeleted = q.executeUpdate();       
+        int cdrsDeleted = q.executeUpdate();
         em.flush(); /* flush */
         info("successfully deleted totally #0 old CRD(s).", cdrsDeleted);
-        
 
+        int BatchSize = 150;
         /* fetch all regular employments */
         Collection<Employment> regularEmployments = coreSearching.getEmploymentsOfType(em, EmploymentType.REGULAR,
                 currentSchoolYear);
@@ -82,7 +82,8 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
             cdr.setSchoolYear(currentSchoolYear);
             employment.getEmploymentCDRs().add(cdr);
             entityManager.persist(cdr);
-            totalCDRsCreated++;
+            if (((totalCDRsCreated++) % BatchSize) == 0)
+                em.flush();
         }
         em.flush(); /* flush */
 
@@ -107,7 +108,9 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
             cdr.setSchoolYear(currentSchoolYear);
             employment.getEmploymentCDRs().add(cdr);
             entityManager.persist(cdr);
-            totalCDRsCreated++;
+            if (((totalCDRsCreated++) % BatchSize) == 0)
+                em.flush();
+
         }
         em.flush(); /* flush */
 
@@ -132,7 +135,9 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
             cdr.setSchoolYear(currentSchoolYear);
             employment.getEmploymentCDRs().add(cdr);
             entityManager.persist(cdr);
-            totalCDRsCreated++;
+            if (((totalCDRsCreated++) % BatchSize) == 0)
+                em.flush();
+
         }
         em.flush(); /* flush */
         /* handle secodnments */
@@ -176,10 +181,11 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
             cdr.setUnit(secondment.getTargetUnit());
             cdr.setSchoolYear(currentSchoolYear);
             entityManager.persist(cdr);
-            totalCDRsCreated++;
+            if (((totalCDRsCreated++) % BatchSize) == 0)
+                em.flush();
 
             /* apply on source unit */
-            
+
             cdr = new TeachingHourCDR();
             cdr.setCdrType(TeachingHourCDRType.SECONDMENT);
             sb = new StringBuffer();
@@ -201,11 +207,13 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
             cdr.setSchoolYear(currentSchoolYear);
             cdr.setLogisticCDR(Boolean.TRUE); /* this is a logistic CDR */
             entityManager.persist(cdr);
-            totalCDRsCreated++;
+            if (((totalCDRsCreated++) % BatchSize) == 0)
+                em.flush();
+
         }
-        
+
         em.flush(); /* flush */
-        
+
         /* handle disposal */
 
         Collection<Disposal> disposals = coreSearching.getActiveDisposal(em);
@@ -240,8 +248,9 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
             cdr.setUnit(disposal.getDisposalUnit());
             cdr.setSchoolYear(currentSchoolYear);
             entityManager.persist(cdr);
-            totalCDRsCreated++;
-            
+            if (((totalCDRsCreated++) % BatchSize) == 0)
+                em.flush();
+
             /* apply on source unit */
 
             cdr = new TeachingHourCDR();
@@ -265,37 +274,38 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
             cdr.setUnit(sourceUnit);
             cdr.setSchoolYear(currentSchoolYear);
             entityManager.persist(cdr);
-            totalCDRsCreated++;
+            if (((totalCDRsCreated++) % BatchSize) == 0)
+                em.flush();
 
         }
-        
+
         em.flush(); /* flush */
-        
+
         /* handle service allocation */
 
         Collection<ServiceAllocation> serviceAllocations = coreSearching.getActiveServiceAllocations(em);
         info("found #0 totally active service allocations.", serviceAllocations.size());
-        for(ServiceAllocation serviceAllocation : serviceAllocations) {
+        for (ServiceAllocation serviceAllocation : serviceAllocations) {
             try {
-                if(serviceAllocation.getSourceUnit()==null) {
+                if (serviceAllocation.getSourceUnit() == null) {
                     /* this should never happen */
                     warn("service allocation #0 has no source unit !!!!!!", serviceAllocation);
                     continue;
                 }
-                
+
                 /* service allocation is always associated with an employment */
-                
+
                 Employment relatedEmployment = serviceAllocation.getAffectedEmployment();
-                if(relatedEmployment != null) {
+                if (relatedEmployment != null) {
                     Collection<TeachingHourCDR> employmentsCDRs = relatedEmployment.getEmploymentCDRs();
                     /* Employment should have one only one CDR */
-                    if(employmentsCDRs.size()>1) {
+                    if (employmentsCDRs.size() > 1) {
                         /* this should never happen */
-                        warn("logic error -> employment #0 is associated with more than one cdrs -> #1", relatedEmployment, employmentsCDRs);
+                        warn("logic error -> employment #0 is associated with more than one cdrs -> #1",
+                                relatedEmployment, employmentsCDRs);
                         continue;
                     }
-                   
-                    
+
                     /* construct a special CDR to deduct the employment CDR hours */
                     TeachingHourCDR specialEmploymentCDR = new TeachingHourCDR();
                     specialEmploymentCDR.setCdrType(TeachingHourCDRType.GENERAL);
@@ -316,22 +326,21 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
                     specialEmploymentCDR.setSchoolYear(currentSchoolYear);
                     relatedEmployment.getEmploymentCDRs().add(specialEmploymentCDR);
                     entityManager.persist(specialEmploymentCDR);
-                    totalCDRsCreated++;
-                    
+                    if (((totalCDRsCreated++) % BatchSize) == 0)
+                        em.flush();
+
                 } else {
                     warn("service allocation #0 does not have an regular employment !", serviceAllocation);
                     continue;
                 }
-                
-               
-                
-                if(serviceAllocation.getSourceUnit().equals(serviceAllocation.getServiceUnit())) {
+
+                if (serviceAllocation.getSourceUnit().equals(serviceAllocation.getServiceUnit())) {
                     /* source unit is the same as the servicing unit. This is the case when a regular
                      * employee having a regular employment at a given unit, serves there as the headmaster.
                      */
                     TeachingHourCDR cdr = new TeachingHourCDR();
                     cdr.setCdrType(TeachingHourCDRType.SERVICE_ALLOCATION);
-                    
+
                     StringBuffer sb = new StringBuffer();
                     sb.append("Θητεία στην μονάδα ");
                     sb.append(serviceAllocation.getSourceUnit().getTitle());
@@ -350,8 +359,9 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
                     cdr.setUnit(serviceAllocation.getServiceUnit());
                     cdr.setSchoolYear(currentSchoolYear);
                     entityManager.persist(cdr);
-                    totalCDRsCreated++;
-                    
+                    if (((totalCDRsCreated++) % BatchSize) == 0)
+                        em.flush();
+
                 } else {
                     /* apply on target unit */
                     TeachingHourCDR cdr = new TeachingHourCDR();
@@ -374,10 +384,11 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
                     cdr.setUnit(serviceAllocation.getServiceUnit());
                     cdr.setSchoolYear(currentSchoolYear);
                     entityManager.persist(cdr);
-                    totalCDRsCreated++;
-                    
+                    if (((totalCDRsCreated++) % BatchSize) == 0)
+                        em.flush();
+
                     /* apply on source unit */
-        
+
                     cdr = new TeachingHourCDR();
                     cdr.setCdrType(TeachingHourCDRType.SERVICE_ALLOCATION);
                     sb = new StringBuffer();
@@ -398,29 +409,31 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
                     cdr.setUnit(serviceAllocation.getSourceUnit());
                     cdr.setSchoolYear(currentSchoolYear);
                     entityManager.persist(cdr);
-                    totalCDRsCreated++;
+                    if (((totalCDRsCreated++) % BatchSize) == 0)
+                        em.flush();
+
                 }
-                
-            } catch(Exception ex) {
-                String msg = String.format("unhandled exception '%s' while handling service allocation %s", ex.getMessage(), serviceAllocation);
+
+            } catch (Exception ex) {
+                String msg = String.format("unhandled exception '%s' while handling service allocation %s",
+                        ex.getMessage(), serviceAllocation);
                 error(msg, ex);
                 throw new RuntimeException(msg, ex);
             }
-            
-            
-          }
-        
+
+        }
+
         em.flush(); /* flush */
-        
+
         /* WE NEED TO ADD LEAVES */
-        
+
         /* Leaves are a special case. For each employee with a leave we will compute his hours distribution in all units. For each 
          * unit for which the employee has teaching hours > 0 we will add a LEAVE CDR with negative hours
          */
-        
+
         Collection<Leave> activeLeaves = coreSearching.getActiveLeaves(em);
         info("found #0 totally active leaves.", activeLeaves.size());
-        for(Leave activeLeave : activeLeaves) {
+        for (Leave activeLeave : activeLeaves) {
             Employee employeeWithLeave = activeLeave.getEmployee();
             /* fix the common leave message */
             StringBuffer sb = new StringBuffer();
@@ -430,11 +443,15 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
             sb.append(df.format(activeLeave.getEstablished()));
             sb.append(" μέχρι και  ");
             sb.append(df.format(activeLeave.getDueTo()));
-            
-            Collection<Object[]> o = getEntityManager().createQuery("SELECT t.unit.id, SUM(t.hours) FROM TeachingHourCDR t WHERE t.schoolYear=:schoolYear AND t.employee=:employee GROUP BY (t.unit)").setParameter("schoolYear", currentSchoolYear).setParameter("employee", employeeWithLeave).getResultList();
-            for(Object[] r : o) {
-                Long hours = (Long)r[1];
-                if(hours.longValue()> 0) {
+
+            Collection<Object[]> o = getEntityManager()
+                    .createQuery(
+                            "SELECT t.unit.id, SUM(t.hours) FROM TeachingHourCDR t WHERE t.schoolYear=:schoolYear AND t.employee=:employee GROUP BY (t.unit)")
+                    .setParameter("schoolYear", currentSchoolYear).setParameter("employee", employeeWithLeave)
+                    .getResultList();
+            for (Object[] r : o) {
+                Long hours = (Long) r[1];
+                if (hours.longValue() > 0) {
                     TeachingHourCDR cdr = new TeachingHourCDR();
                     cdr.setCdrType(TeachingHourCDRType.LEAVE);
                     cdr.setComment(sb.toString());
@@ -447,10 +464,12 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
                     cdr.setUnit(getEntityManager().find(Unit.class, r[0]));
                     cdr.setLeave(activeLeave);
                     entityManager.persist(cdr);
-                    totalCDRsCreated++;
+                    if (((totalCDRsCreated++) % BatchSize) == 0)
+                        em.flush();
+
                 }
             }
-         }
+        }
 
         em.flush();
         long finished = System.currentTimeMillis();
