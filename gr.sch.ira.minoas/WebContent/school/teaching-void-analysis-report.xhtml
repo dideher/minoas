@@ -191,7 +191,7 @@
 							<f:facet name="header">
 
 								<rich:columnGroup>
-									<rich:column colspan="6">
+									<rich:column colspan="7">
 										<h:outputText value="Αναλύση Κενών και Ορών Διδασκαλίας" />
 									</rich:column>
 									<rich:column breakBefore="true">
@@ -226,6 +226,13 @@
 									</rich:column>
 									<rich:column>
 										<h:outputText value="Πλ/Κν (+/-)" />
+										<rich:toolTip>
+											<h:outputText
+												value="Εμφανίζονται τα πιθανά κενά μόνιμου προσωπικού, βάση των λειτουργικών και καλυπτόμενων θέσεων. Θετικό Νούμερο σημαίνει Πλαιόνασμα, αρνητικό κενό." />
+										</rich:toolTip>
+									</rich:column>
+									<rich:column>
+										<h:outputText value="Στρογγ. Πλ/Κν (+/-)" />
 										<rich:toolTip>
 											<h:outputText
 												value="Εμφανίζονται τα πιθανά κενά μόνιμου προσωπικού, βάση των λειτουργικών και καλυπτόμενων θέσεων. Θετικό Νούμερο σημαίνει Πλαιόνασμα, αρνητικό κενό." />
@@ -285,115 +292,165 @@
 							</rich:column>
 
 							<rich:column style="text-align:center">
-								<s:div
-									rendered="#{_row.get('unitMissingRegularEmployeesNeg') == 0}">
+							   <s:div
+									rendered="#{_row.get('unitMissingFlag') eq '='}">
 									<h:outputText
-										value="#{_row.get('unitMissingRegularEmployeesNeg')}"
-										style="color: blue;font-weight:bold;" />
-									<h:outputText value=" (" style="color: blue;font-weight:bold;">
-									</h:outputText>
-									<h:outputText
-										value="#{_row.get('unitMissingRegularEmployeesFloatNeg')}"
+										value="#{_row.get('unitMissingRegularEmployeesDouble')}"
 										style="color: blue;font-weight:bold;">
 										<f:convertNumber type="number" minFractionDigits="1"
 											maxFractionDigits="1" />
 									</h:outputText>
-									<h:outputText value=")" style="color: blue;font-weight:bold;">
-									</h:outputText>
 								</s:div>
 								<s:div
-									rendered="#{_row.get('unitMissingRegularEmployeesNeg') &lt; 0}">
+									rendered="#{_row.get('unitMissingFlag') eq '-'}">
 									<h:outputText
-										value="#{_row.get('unitMissingRegularEmployeesNeg')}"
-										style="color: red;font-weight:bold;" />
-									<h:outputText value=" (" style="color: red;font-weight:bold;">
-									</h:outputText>
-									<h:outputText
-										value="#{_row.get('unitMissingRegularEmployeesFloatNeg')}"
+										value="#{_row.get('unitMissingRegularEmployeesDoubleNeg')}"
 										style="color: red;font-weight:bold;">
 										<f:convertNumber type="number" minFractionDigits="1"
 											maxFractionDigits="1" />
 									</h:outputText>
-									<h:outputText value=")" style="color: red;font-weight:bold;">
-									</h:outputText>
 								</s:div>
 								<s:div
-									rendered="#{_row.get('unitMissingRegularEmployeesNeg') &gt; 0}">
-									<h:outputText
-										value="+#{_row.get('unitMissingRegularEmployeesNeg')} "
-										style="color: green;font-weight:bold;" />
-									<h:outputText value=" (+"
+									rendered="#{_row.get('unitMissingFlag') eq '+'}">
+									<h:outputText value=" +"
 										style="color: green;font-weight:bold;">
 									</h:outputText>
 									<h:outputText
-										value="#{_row.get('unitMissingRegularEmployeesFloatNeg')}"
+										value="#{_row.get('unitMissingRegularEmployeesDoubleNeg')}"
 										style="color: green;font-weight:bold;">
 										<f:convertNumber type="number" minFractionDigits="1"
 											maxFractionDigits="1" />
 									</h:outputText>
-									<h:outputText value=")" style="color: green;font-weight:bold;">
+								</s:div>
+
+								<f:facet name="footer">
+										<s:div
+											rendered="#{reportItem.get('totalMissingRegularEmployeesDoubleNeg') == 0}">
+											<h:outputText
+												value="#{reportItem.get('totalMissingRegularEmployeesDoubleNeg')}"
+												style="color: blue;font-weight:bold;" />
+											<h:outputText
+												value="#{reportItem.get('totalMissingRegularEmployeesDoubleNeg')}"
+												style="color: blue;font-weight:bold;">
+												<f:convertNumber type="number" minFractionDigits="1"
+													maxFractionDigits="1" />
+											</h:outputText>
+										</s:div>
+
+										<s:div
+											rendered="#{reportItem.get('totalMissingRegularEmployeesDoubleNeg') &gt; 0} ">
+											<h:outputText value=" +"
+												style="color: green;font-weight:bold;">
+											</h:outputText>
+											<h:outputText
+												value="#{reportItem.get('totalMissingRegularEmployeesDoubleNeg')}"
+												style="color: green;font-weight:bold;">
+												<f:convertNumber type="number" minFractionDigits="1"
+													maxFractionDigits="1" />
+											</h:outputText>
+										</s:div>
+
+										<s:div
+											rendered="#{reportItem.get('totalMissingRegularEmployeesDoubleNeg') &lt; 0} ">
+											<h:outputText
+												value="#{reportItem.get('totalMissingRegularEmployeesDoubleNeg')}"
+												style="color: red;font-weight:bold;">
+												<f:convertNumber type="number" minFractionDigits="1"
+													maxFractionDigits="1" />
+											</h:outputText>
+										</s:div>
+									
+								</f:facet>
+							</rich:column>
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							<rich:column style="text-align:center">
+							
+								<s:div
+									rendered="#{_row.get('unitMissingProcessedFlag') eq '='}">
+									<h:outputText
+										value="#{_row.get('unitMissingRegularProcessedEmployeesDouble')}"
+										style="color: blue;font-weight:bold;">
+										<f:convertNumber type="number" minFractionDigits="1"
+											maxFractionDigits="1" />
+									</h:outputText>
+								</s:div>
+								<s:div
+									rendered="#{_row.get('unitMissingProcessedFlag') eq '-'}">
+									<h:outputText
+										value="#{_row.get('unitMissingRegularProcessedEmployeesDoubleNeg')}"
+										style="color: red;font-weight:bold;">
+										<f:convertNumber type="number" minFractionDigits="1"
+											maxFractionDigits="1" />
+									</h:outputText>
+								</s:div>
+								<s:div
+									rendered="#{_row.get('unitMissingProcessedFlag') eq '+'}">
+									<h:outputText value=" +"
+										style="color: green;font-weight:bold;">
+									</h:outputText>
+									<h:outputText
+										value="#{_row.get('unitMissingRegularProcessedEmployeesDoubleNeg')}"
+										style="color: green;font-weight:bold;">
+										<f:convertNumber type="number" minFractionDigits="1"
+											maxFractionDigits="1" />
 									</h:outputText>
 								</s:div>
 
 								<f:facet name="footer">
 									<s:div style="text-align:center">
 										<s:div
-											rendered="#{(reportItem.get('totalMissingRegularEmployeesNeg') == 0)}">
+											rendered="#{(reportItem.get('totalMissingRegularProcessedEmployeesDoubleNeg') == 0)}">
 											<h:outputText
-												value="#{reportItem.get('totalMissingRegularEmployeesNeg')}"
-												style="color: blue;font-weight:bold;" />
-											<h:outputText value=" (+"
-												style="color: green;font-weight:bold;">
-											</h:outputText>
-											<h:outputText
-												value="#{reportItem.get('totalMissingRegularEmployeesFloatNeg')}"
-												style="color: blue;font-weight:bold;">
+												value="#{reportItem.get('totalMissingRegularProcessedEmployeesDoubleNeg')}"
+												style="color:blue;font-weight:bold;">
 												<f:convertNumber type="number" minFractionDigits="1"
 													maxFractionDigits="1" />
-											</h:outputText>
-											<h:outputText value=")"
-												style="color: blue;font-weight:bold;">
 											</h:outputText>
 										</s:div>
 
 										<s:div
-											rendered="#{(reportItem.get('totalMissingRegularEmployeesNeg') &gt; 0)}">
-											<h:outputText
-												value="+#{reportItem.get('totalMissingRegularEmployeesNeg')}"
-												style="color: green;font-weight:bold;" />
-
-											<h:outputText value=" (+"
+											rendered="#{(reportItem.get('totalMissingRegularProcessedEmployeesDoubleNeg') &gt; 0)}">
+											<h:outputText value=" +"
 												style="color: green;font-weight:bold;">
 											</h:outputText>
 											<h:outputText
-												value="#{reportItem.get('totalMissingRegularEmployeesFloatNeg')}"
+												value="#{reportItem.get('totalMissingRegularProcessedEmployeesDoubleNeg')}"
 												style="color: green;font-weight:bold;">
 												<f:convertNumber type="number" minFractionDigits="1"
 													maxFractionDigits="1" />
-											</h:outputText>
-											<h:outputText value=")"
-												style="color: green;font-weight:bold;">
 											</h:outputText>
 										</s:div>
 
 										<s:div
-											rendered="#{(reportItem.get('totalMissingRegularEmployeesNeg') &lt; 0)}">
+											rendered="#{(reportItem.get('totalMissingRegularProcessedEmployeesDoubleNeg') &lt; 0)}">
 
 											<h:outputText
-												value="-#{reportItem.get('totalMissingRegularEmployeesNeg')}"
-												style="color: red;font-weight:bold;" />
-
-											<h:outputText value=" ("
-												style="color: red;font-weight:bold;">
-											</h:outputText>
-											<h:outputText
-												value="#{reportItem.get('totalMissingRegularEmployeesFloatNeg')}"
+												value="#{reportItem.get('totalMissingRegularProcessedEmployeesDoubleNeg')}"
 												style="color: red;font-weight:bold;">
 												<f:convertNumber type="number" minFractionDigits="1"
 													maxFractionDigits="1" />
-											</h:outputText>
-											<h:outputText value=")"
-												style="color: red;font-weight:bold;">
 											</h:outputText>
 										</s:div>
 									</s:div>
