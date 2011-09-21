@@ -156,12 +156,13 @@ public class TeachingVoidAnalysisReport extends BaseReport {
 
             /* do the report */
                         
-            int requiredHours = 0;
-            int availableHours = 0;
-            int totalMissingRegularEmployees = 0;
-            double totalMissingRegularEmployeesDouble = (double)0;
-            double totalMissingRegularProcessedEmployeesDouble = (double)0;
+            
             for(Map<String, Object> reportItem : tempReportData) {
+                int requiredHours = 0;
+                int availableHours = 0;
+                int totalMissingRegularEmployees = 0;
+                double totalMissingRegularEmployeesDouble = (double)0;
+                double totalMissingRegularProcessedEmployeesDouble = (double)0;
                 /* fetch the actual effective SpecializationGroups */
                 List<SpecializationGroup> effectiveGroup = (List<SpecializationGroup>)reportItem.get("groups");
                 
