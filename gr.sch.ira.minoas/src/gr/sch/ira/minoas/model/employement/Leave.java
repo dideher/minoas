@@ -1,5 +1,6 @@
 package gr.sch.ira.minoas.model.employement;
 
+import gr.sch.ira.minoas.model.BaseIDDeleteAwareModel;
 import gr.sch.ira.minoas.model.BaseIDModel;
 import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.employee.Employee;
@@ -32,7 +33,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "EMPLOYEE_LEAVE")
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
-public class Leave extends BaseIDModel {
+public class Leave extends BaseIDDeleteAwareModel {
 
 	/**
 	 * Comment for <code>serialVersionUID</code>

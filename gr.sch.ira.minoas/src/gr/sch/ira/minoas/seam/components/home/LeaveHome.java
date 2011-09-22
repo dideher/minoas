@@ -81,6 +81,10 @@ public class LeaveHome extends MinoasEntityHome<Leave> {
 	@Override
 	@Transactional
 	public String persist() {
+	    if(true) {
+	        return super.persist();
+	        
+	    }
 		Leave newLeave = getInstance();
 		Employee employee = getEntityManager().merge(employeeHome.getInstance());
 		Date established = DateUtils.truncate(newLeave.getEstablished(), Calendar.DAY_OF_MONTH);
@@ -122,6 +126,8 @@ public class LeaveHome extends MinoasEntityHome<Leave> {
 	@Override
 	@Transactional
 	public String update() {
+	    if(true)
+	        super.update();
 		Leave current_leave = getInstance();
 		Employee employee = getEntityManager().merge(employeeHome.getInstance());
 		Date established = DateUtils.truncate(current_leave.getEstablished(), Calendar.DAY_OF_MONTH);
