@@ -2,6 +2,7 @@ package gr.sch.ira.minoas.seam.components.management;
 
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employement.Leave;
+import gr.sch.ira.minoas.model.employement.LeaveType;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.CoreSearching;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
@@ -18,6 +19,7 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Out;
 import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.annotations.datamodel.DataModel;
 import org.jboss.seam.international.StatusMessage.Severity;
 
@@ -33,15 +35,17 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
     @In(required=true)
     private CoreSearching coreSearching;
 
-	@In(required = true, create = true)
+	@In(required = true)
 	private EmployeeHome employeeHome;
 	
 	@Out(required=false, scope=ScopeType.PAGE)
 	private Leave employeeActiveLeave;
 	
-	@In(required=false)
+	@In(required=false, create=true)
 	private LeaveHome leaveHome;
 	
+	
+
 	/**
 	 * Employees current leave history
 	 */
@@ -55,11 +59,12 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
 	}
 
 	
+	
 	@Factory(value="employeeLeaveHistory",autoCreate=true)
 	public void constructLeaveHistory() {
 	    Employee employee = getEmployeeHome().getInstance();
 	    info("constructing leave history for employee #0", employee);
-	    setEmployeeLeaveHistory(coreSearching.getEmployeeLeaveHistory(employee));
+	    setEmployeeLeaveHistory(coreSearching.getEmployeeLeaves(employee));
 	}
 	
 	/**
@@ -106,6 +111,55 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
         this.employeeActiveLeave = employeeActiveLeave;
     }
     
+    
+    @Transactional
+    public String createNewLeave() {
+        if(!leaveHome.isManaged()) {
+            info("trying to create new leave #0", leaveHome.getInstance());
+            if(validateLeave(leaveHome.getInstance(), true)) {
+                leaveHome.persist();
+                constructLeaveHistory();
+                findEmployeeActiveLeave();
+                facesMessages.add(Severity.INFO, "Η εισαγωγή νέας άδειας έγινε");
+                return ACTION_OUTCOME_SUCCESS;
+            } else {
+                facesMessages.add(Severity.WARN, "Η εισαγωγή νέας άδειας δεν ήταν εφικτή.");
+                return ACTION_OUTCOME_FAILURE;
+            }
+        } else {
+            facesMessages.add(Severity.ERROR, "Employee's #0 leave #1 is managed.", employeeHome.getInstance(), leaveHome.getInstance());
+            return ACTION_OUTCOME_FAILURE;
+        }
+        
+    }
+    
+    @Transactional
+    public String deleteLeave() {
+        if(leaveHome.isManaged()) {
+            Leave leave = leaveHome.getInstance();
+            leave.setActive(Boolean.FALSE);
+            leave.setDeleted(Boolean.TRUE);
+            leave.setDeletedOn(new Date());
+            leave.setDeletedBy(getPrincipal());
+            leaveHome.update();
+            constructLeaveHistory();
+            findEmployeeActiveLeave();
+            return ACTION_OUTCOME_SUCCESS;
+        } else {
+            facesMessages.add(Severity.ERROR, "Employee's #0 leave #1 is not managed.", employeeHome.getInstance(), leaveHome.getInstance());
+            return ACTION_OUTCOME_FAILURE;
+        }
+    }
+    
+    /* this method is called when the user clicks the "add new leave" */
+    public void prepeareNewLeave() {
+        leaveHome.clearInstance();
+        Leave leave = leaveHome.getInstance();
+        leave.setEstablished(new Date());
+        leave.setDueTo(null);
+        leave.setEmployee(employeeHome.getInstance());
+        leave.setLeaveType(LeaveType.MEDICAL_LABOUR_LEAVE);
+    }
     
     public String modifyInactiveLeave() {
         if(leaveHome != null && leaveHome.isManaged()) {
@@ -198,7 +252,9 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
         return true;
 
     }
-	
+
+
+   
 	
 
 }

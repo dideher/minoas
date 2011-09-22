@@ -296,7 +296,7 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
 	@Factory(value="employeeLeaveItems")
     public void constructEmployeeLeavesHistory() {
         Employee employee = getEmployeeHome().getInstance();
-        Collection<Leave> employeeLeavesHistory = getCoreSearching().getEmployeeLeaveHistoryWithCurrentActive(employee);
+        Collection<Leave> employeeLeavesHistory = getCoreSearching().getEmployeeLeaves(employee);
         List<LeaveReportItem> employeeLeaveItems = new ArrayList<LeaveReportItem>(employeeLeavesHistory.size());
         for(Leave leave : employeeLeavesHistory) {
             employeeLeaveItems.add(new LeaveReportItem(leave));

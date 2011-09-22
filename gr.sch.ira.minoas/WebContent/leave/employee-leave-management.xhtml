@@ -87,8 +87,8 @@
 											</f:facet>
 											<rich:toolBar itemSeparator="line">
 												<a4j:commandLink id="cancellink"
-													reRender="cancelModalPanelContent"
-													oncomplete="#{rich:component('cancelModalPanel')}.show()"
+													reRender="deleteModalPanelContent"
+													oncomplete="#{rich:component('deleteModalPanel')}.show()"
 													value="Ακύρωση">
 													<h:graphicImage value="/img/icons/delete.png" width="12"
 														height="12" style="border:0" />
@@ -181,17 +181,16 @@
 												<h:outputText value="Ενέργεια" />
 											</f:facet>
 											<rich:toolBar itemSeparator="line">
-												<!-- 
-												<a4j:commandLink id="cancellink"
-													reRender="cancelModalPanelContent"
-													oncomplete="#{rich:component('cancelModalPanel')}.show()"
-													value="Ακύρωση">
+												
+												<a4j:commandLink id="deletelink"
+													reRender="deleteModalPanelContent"
+													oncomplete="#{rich:component('deleteModalPanel')}.show()"
+													value="Διαγραφή">
 													<h:graphicImage value="/img/icons/delete.png" width="12"
 														height="12" style="border:0" />
 													<f:setPropertyActionListener value="#{_leave.id}"
 														target="#{leaveHome.id}" />
 												</a4j:commandLink>
-												 -->
 												<a4j:commandLink id="updatelink"
 													reRender="updateNotActiveLeaveModalPanelContent"
 													oncomplete="#{rich:component('updateNotActiveLeaveModalPanel')}.show()"
@@ -214,7 +213,7 @@
 								<s:button action="backButton" value="Επιστροφή" />
 								<s:button action="endButton" value="Τέλος Ενέργειας" />
 								<a4j:commandButton id="createButton" disabled="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_LEAVE'))}"
-									action="#{leaveHome.clearInstance()}"
+									action="#{employeeLeavesManagement.prepeareNewLeave()}"
 									reRender="createModalPanelContent" immediate="true"
 									oncomplete="#{rich:component('createModalPanel')}.show()"
 									value="Καταχώρηση Νέας Άδειας">
@@ -321,7 +320,7 @@
 		</rich:modalPanel>
 		
 
-		<rich:modalPanel id="cancelModalPanel" autosized="true" width="350">
+		<rich:modalPanel id="deleteModalPanel" autosized="true" width="350">
 			<f:facet name="header">
 				<h:outputText value="Να ακυρωθή η άδεια ?"
 					style="padding-right:15px;" />
@@ -330,15 +329,15 @@
 				<h:panelGroup>
 					<h:graphicImage value="/img/modal/close.png" styleClass="hidelink"
 						width="18" height="18" id="hidelink2" />
-					<rich:componentControl for="cancelModalPanel" attachTo="hidelink2"
+					<rich:componentControl for="deleteModalPanel" attachTo="hidelink2"
 						operation="hide" event="onclick" />
 				</h:panelGroup>
 			</f:facet>
 			<h:form>
 				<h:panelGrid columns="1">
-					<a4j:outputPanel id="cancelModalPanelContent" layout="inline">
+					<a4j:outputPanel id="deleteModalPanelContent" layout="inline">
 						<h:panelGroup>
-							<h:outputText value="Να ακυρωθή η τρέχουσα ενεργή άδεια " />
+							<h:outputText value="Να διαγραφή η άδεια " />
 							<h:outputText
 								value="#{messages[leaveHome.instance.leaveType.key]}"
 								styleClass="fieldValueText" />
@@ -355,12 +354,12 @@
 					</a4j:outputPanel>
 
 					<h:panelGrid columns="2">
-						<a4j:commandButton value="Ακύρωση Άδειας !" ajaxSingle="true"
-							action="#{leaveHome.cancel()}"
-							oncomplete="#{rich:component('cancelModalPanel')}.hide();"
+						<a4j:commandButton value="Διαγραφή Άδειας !" ajaxSingle="true"
+							action="#{employeeLeavesManagement.deleteLeave()}"
+							oncomplete="#{rich:component('deleteModalPanel')}.hide();"
 							reRender="activeLeave,leavesOutputPanel" />
 						<a4j:commandButton value="Επιστροφή .."
-							onclick="#{rich:component('cancelModalPanel')}.hide();return false;" />
+							onclick="#{rich:component('deleteModalPanel')}.hide();return false;" />
 					</h:panelGrid>
 				</h:panelGrid>
 			</h:form>
@@ -452,7 +451,14 @@
 				</h:panelGrid>
 			</a4j:region>
 		</rich:modalPanel>
-
+		
+		<!-- ******************************************************* -->
+		<!-- ******************************************************* -->
+		<!-- ADD NEW LEAVE MODEL PANEL -->		
+		<!-- ******************************************************* -->
+		<!-- ******************************************************* -->
+		
+		
 		<rich:modalPanel id="createModalPanel" autosized="true" width="450">
 			<f:facet name="header">
 				<h:outputText
@@ -482,7 +488,7 @@
 						<h:panelGrid columns="2">
 
 							<a4j:commandButton value="Καταχώρηση Άδειας !"
-								action="#{leaveHome.persist()}"
+								action="#{employeeLeavesManagement.createNewLeave()}"
 								data="#{facesContext.maximumSeverity.ordinal ge 2}"
 								oncomplete="if(data == false) Richfaces.hideModalPanel('createModalPanel');"
 								reRender="activeLeave,leavesOutputPanel" />
