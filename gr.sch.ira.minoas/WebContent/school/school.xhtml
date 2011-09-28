@@ -18,15 +18,52 @@
 				<h:outputText value="Καρτέλα Σχολικής Μονάδας #{school.title}" />
 			</f:facet>
 			<h:panelGrid columns="1" width="100%">
+			
 				<rich:panel>
 					<f:facet name="header">
 						<h:outputText value="Βασικά Στοιχεία" />
 					</f:facet>
-
+					<h:panelGrid columns="2" width="100%">
 					<ui:include src="/school/basicInfo.xhtml">
 						<ui:param name="activeSchool" value="#{school}" />
 					</ui:include>
+					
+					
+					<rich:panel>
+										<f:facet name="header">
+											<h:outputText value="Τμήματα Γενικής Παιδείας" />
+										</f:facet>
+									<h:panelGrid columns="3">
+										<h:panelGrid columns="1">
+												<h:outputText value="Α' Τάξη " />
+												<h:inputText value="#{school.divisionsOfFirstGrade}" styleClass="fieldValueText" readonly="true" size="2" maxlength="2" />
+										</h:panelGrid>
+										
+										<h:panelGrid columns="1">
+												<h:outputText value="Β' Τάξη : " />
+												<h:inputText value="#{school.divisionsOfSecondGrade}" styleClass="fieldValueText" readonly="true" size="2" maxlength="2" />
+										</h:panelGrid>
+										
+										<h:panelGrid columns="1">
+												<h:outputText value="Γ' Τάξη : "  />
+												<h:inputText value="#{school.divisionsOfThirdGrade}" styleClass="fieldValueText" readonly="true" size="2" maxlength="2" />
+										</h:panelGrid>
+										
+					
+										
+									</h:panelGrid>
+									<s:link value="( Επεξεργασία ...)" styleClass="fieldValueText" rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_SCHOOL_BASIC'))}"
+						view="/school/school-unit-management.xhtml">
+						<f:param name="school_unit_management_from" value="/school" />
+					</s:link>
+									</rich:panel>
+					</h:panelGrid>
+			
+					
 				</rich:panel>
+				
+									
+								
 
 				<rich:panel>
 					<f:facet name="header">
