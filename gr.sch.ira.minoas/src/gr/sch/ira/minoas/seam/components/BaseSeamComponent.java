@@ -122,7 +122,7 @@ public abstract class BaseSeamComponent implements Serializable {
 	}
 
 	protected boolean isEmpty(Object object) {
-		return !isEmpty(object);
+		return !isNonEmpty(object);
 	}
 
 	protected boolean isNonEmpty(Object object) {
