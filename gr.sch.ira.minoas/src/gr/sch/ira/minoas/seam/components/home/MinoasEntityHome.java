@@ -161,7 +161,6 @@ public abstract class MinoasEntityHome<E> extends EntityHome<BaseModel> {
 	@Override
 	public void setId(Object id) {
 		super.setId(id);
-		getLogger().info("id \"#0\" has been set.", id);
 	}
 
 	/**
