@@ -27,74 +27,125 @@
 
 			<h:form id="employeeSearchForm">
 				<h:panelGrid columns="1" width="100%">
-					<h:panelGroup>
-						<h:panelGrid columns="5">
-							<s:decorate template="/layout/doubleLineEdit.xhtml">
-								<ui:define name="label">
-									<h:outputText value="Επώνυμο : " />
-								</ui:define>
-								<h:inputText value="#{employeeCriteria.lastName}" size="12" />
-							</s:decorate>
+					<a4j:region>
+						<h:panelGroup>
+							<h:panelGrid columns="6">
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Επώνυμο : " />
+									</ui:define>
+									<h:inputText value="#{employeeCriteria.lastName}" size="12"
+										styleClass="fieldValueText" />
+								</s:decorate>
 
-							<s:decorate template="/layout/doubleLineEdit.xhtml">
-								<ui:define name="label">
-									<h:outputText value="Όνομα : " />
-								</ui:define>
-								<h:inputText value="#{employeeCriteria.firstName}" size="12" />
-							</s:decorate>
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Όνομα : " />
+									</ui:define>
+									<h:inputText value="#{employeeCriteria.firstName}" size="12"
+										styleClass="fieldValueText" />
+								</s:decorate>
 
-							<s:decorate template="/layout/doubleLineEdit.xhtml">
-								<ui:define name="label">
-									<h:outputText value="Ειδικότητα : " />
-								</ui:define>
-								<h:inputText id="specializationFilter"
-									styleClass="fieldValueText">
-									<rich:suggestionbox height="100" width="250"
-										for="specializationFilter" var="a_spec"
-										suggestionAction="#{specializationSuggester.suggest}">
-										<f:facet name="nothingLabel">
-											<h:outputText value="Άγνωστη Ειδικότητα" />
-										</f:facet>
+								<s:decorate template="/layout/doubleLineEdit.xhtml" id="specializationFilterDecoration">
+									<ui:define name="label">
+										<h:outputText value="Κωδ : " />
+									</ui:define>
+									<h:inputText id="specializationFilter" maxlength="6" size="4"
+										styleClass="fieldValueText" />
+									<rich:suggestionbox height="100" width="250" limitToList="true"
+										ajaxSingle="true"
+										eventsQueue="specializationFilterEventsQueue"
+										for="specializationFilter" minChars="2" var="a_spec"
+										suggestionAction="#{specializationSuggester.suggest}"
+										nothingLabel="Άγνωστη Ειδικότητα">
 										<h:column>
 											<h:outputText value="#{a_spec.id}" />
 										</h:column>
 										<h:column>
 											<h:outputText value="#{a_spec.title}" />
 										</h:column>
-										<a4j:support ajaxSingle="true" event="onselect">
+										<a4j:support ajaxSingle="true" event="onselect"
+											reRender="specializationReadOnlyTextDecoration">
 											<f:setPropertyActionListener value="#{a_spec}"
 												target="#{employeeCriteria.specialization}" />
 										</a4j:support>
 									</rich:suggestionbox>
-								</h:inputText>
-							</s:decorate>
+								</s:decorate>
 
-							<s:decorate template="/layout/doubleLineEdit.xhtml">
-								<ui:define name="label">
-									<h:outputText value="Τύπος Εκπαιδευτικού : " />
-								</ui:define>
-								<h:selectOneMenu value="#{employeeCriteria.type}">
-									<s:selectItems noSelectionLabel="Επιλέξτε Τύπο Εκπαιδευτικού"
-										var="_employeeType" value="#{employeeTypes}"
-										label="#{messages[_employeeType.key]}">
-									</s:selectItems>
-								</h:selectOneMenu>
-							</s:decorate>
+								<s:decorate template="/layout/doubleLineEdit.xhtml"
+									id="specializationReadOnlyTextDecoration">
+									<ui:define name="label">
+										<h:outputText value="Ειδικότητα" />
+									</ui:define>
+									<h:inputText size="38"
+										value="#{employeeCriteria.specialization.title}"
+										readonly="true" styleClass="fieldValueText"
+										id="specializationReadOnlyText" />
+									<a4j:commandLink
+										reRender="specializationReadOnlyTextDecoration,specializationFilterDecoration">
+										<h:graphicImage value="/img/icons/delete.png" width="16" onclick="document.getElementById('specializationFilter').value='';"
+											height="16" />
+										<f:setPropertyActionListener value="#{null}"
+											target="#{employeeCriteria.specialization}" />
+									</a4j:commandLink>
+								</s:decorate>
 
-							<s:decorate template="/layout/doubleLineEdit.xhtml">
-								<ui:define name="label">
-									<h:outputText value="Σε ενεργεία : " />
-								</ui:define>
-								<h:selectBooleanCheckbox value="#{employeeCriteria.onlyActive}" />
-							</s:decorate>
-						</h:panelGrid>
-					</h:panelGroup>
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Τύπος Εκπαιδευτικού : " />
+									</ui:define>
+									<h:selectOneMenu value="#{employeeCriteria.type}">
+										<f:selectItem itemValue="#{null}" itemLabel="Όλοι Οι Tύποι" />
+										<s:enumItem enumValue="DEPUTY" itemLabel="Αναπληρωτής"></s:enumItem>
+										<s:enumItem enumValue="HOURLYPAID" itemLabel="Ωρομίσθιος"></s:enumItem>
+										<s:enumItem enumValue="REGULAR" itemLabel="Μόνιμος"></s:enumItem>
+									</h:selectOneMenu>
+								</s:decorate>
+
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Σε ενεργεία : " />
+									</ui:define>
+									<h:selectBooleanCheckbox value="#{employeeCriteria.onlyActive}" />
+								</s:decorate>
+							</h:panelGrid>
+						</h:panelGroup>
+
+						<rich:separator lineType="beveled" height="3" />
+						<h:panelGroup>
+							<h:panelGrid columns="2">
+								<s:decorate template="/layout/doubleLineEdit.xhtml"
+									id="registryNumberDecoration">
+									<ui:define name="label">
+										<h:outputText value="ΑΜ : " />
+									</ui:define>
+									<h:inputText value="#{employeeCriteria.registryNumber}"
+										size="12" styleClass="fieldValueText" />
+									<a4j:support event="onblur">
+
+									</a4j:support>
+								</s:decorate>
+
+								<s:decorate template="/layout/doubleLineEdit.xhtml"
+									id="vatNumberDecoration">
+									<ui:define name="label">
+										<h:outputText value="ΑΦΜ : " />
+									</ui:define>
+									<h:inputText value="#{employeeCriteria.vatNumber}" size="12"
+										styleClass="fieldValueText" />
+								</s:decorate>
+							</h:panelGrid>
+						</h:panelGroup>
+					</a4j:region>
 
 					<s:div styleClass="actionButtons">
-						<h:commandButton id="searchButton" value="Αναζήτηση"
-							actionListener="#{employeeListQuery.first}">
+
+						<a4j:commandButton id="searchButton2" value="Αναζήτηση"
+							action="#{searchEmployeeAction.searchEmployeesAction()}"
+							reRender="employeeList">
 							<s:defaultAction />
-						</h:commandButton>
+						</a4j:commandButton>
+
 						<s:button disabled="#{empty preparatoryOwnersListFrom}"
 							action="backButton" value="Επιστροφή" />
 						<rich:spacer width="20" />
@@ -105,9 +156,9 @@
 						<rich:separator height="2" lineType="dashed" />
 						<rich:spacer height="5" />
 					</h:panelGroup>
-					<rich:dataTable id="employeeList"
-						value="#{employeeListQuery.resultList}" var="employee" rows="15"
-						border="0" onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+					<rich:dataTable id="employeeList" value="#{foundEmployees}"
+						var="employee" rows="15" border="0"
+						onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
 						onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
 						width="100%">
 						<f:facet name="header">
@@ -199,10 +250,11 @@
 				</h:panelGrid>
 			</h:form>
 
+
 		</rich:panel>
 
 
-
+		<ui:include src="/components/wait-modal-panel.xhtml" />
 
 	</ui:define>
 </ui:composition>
