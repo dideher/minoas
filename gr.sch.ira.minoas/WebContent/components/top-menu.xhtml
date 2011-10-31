@@ -59,15 +59,8 @@
 					rendered="#{(s:hasRole('ADMIN') or s:hasRole('VIEW_SCHOOL_REPORT'))}">
 					<rich:menuItem submitMode="none">
 						<s:link value="Διδακτικά Κενά - Πλεονάσματα Ανα Ειδικότητα"
-							view="/school/teaching-resources-report.xhtml">
-							<f:param name="service_allocation_report_by_type_from"
-								value="/home" />
-						</s:link>
-					</rich:menuItem>
-					<rich:menuItem submitMode="none">
-						<s:link value="Διδακτικά Κενά - Πλεονάσματα Ανα Ειδικότητα (Take2)"
 							view="/school/teaching-void-analysis-report.xhtml">
-							<f:param name="service_allocation_report_by_type_from"
+							<f:param name="teaching-void-analysis-report_from"
 								value="/home" />
 						</s:link>
 					</rich:menuItem>
