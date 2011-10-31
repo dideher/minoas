@@ -11,7 +11,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
- * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
+ * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * @version $Id$
  */
 @Entity
