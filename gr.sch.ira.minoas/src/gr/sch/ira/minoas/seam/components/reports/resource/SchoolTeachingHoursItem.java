@@ -1,7 +1,7 @@
 package gr.sch.ira.minoas.seam.components.reports.resource;
 
 import gr.sch.ira.minoas.model.core.School;
-import gr.sch.ira.minoas.seam.components.reports.TeachingHourAnalysisReport;
+import gr.sch.ira.minoas.seam.components.reports.TeachingVoidAnalysisReport;
 
 /**
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
@@ -45,7 +45,7 @@ public class SchoolTeachingHoursItem {
 	}
 
 	public Integer getMissingReqularEmployees() {
-		return (getMissingHours()) / TeachingHourAnalysisReport.HOURS_FOR_REGULAR_POSITION;
+		return (getMissingHours()) / TeachingVoidAnalysisReport.HOURS_FOR_REGULAR_POSITION;
 	}
 
 	/**
