@@ -18,7 +18,7 @@ import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.international.StatusMessage.Severity;
 
 /**
- * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
+ * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * @version $Id$
  */
 @Name("secondmentHome")

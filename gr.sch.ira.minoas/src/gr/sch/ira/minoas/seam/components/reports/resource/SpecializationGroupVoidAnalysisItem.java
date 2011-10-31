@@ -3,7 +3,7 @@ package gr.sch.ira.minoas.seam.components.reports.resource;
 import gr.sch.ira.minoas.model.core.School;
 
 /**
- * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
+ * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * @version $Id$
  */
 public class SpecializationGroupVoidAnalysisItem implements Comparable<SpecializationGroupVoidAnalysisItem> {

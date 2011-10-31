@@ -13,7 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 
 /**
- * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
+ * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * @version $Id$
  */
 @MappedSuperclass
