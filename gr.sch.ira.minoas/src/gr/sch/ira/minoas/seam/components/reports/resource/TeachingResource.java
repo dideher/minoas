@@ -1,7 +1,7 @@
 package gr.sch.ira.minoas.seam.components.reports.resource;
 
 import gr.sch.ira.minoas.model.core.SpecializationGroup;
-import gr.sch.ira.minoas.seam.components.reports.TeachingHourAnalysisReport;
+import gr.sch.ira.minoas.seam.components.reports.TeachingVoidAnalysisReport;
 
 public class TeachingResource {
 	private Integer available;
@@ -44,12 +44,12 @@ public class TeachingResource {
 	}
 
 	public Integer getMissingReqularEmployees() {
-		return ((-1) * getMissingHours()) / TeachingHourAnalysisReport.HOURS_FOR_REGULAR_POSITION;
+		return ((-1) * getMissingHours()) / TeachingVoidAnalysisReport.HOURS_FOR_REGULAR_POSITION;
 	}
 
 	public Float getMissingReqularEmployeesAsFloat() {
 		return new Float((float) ((-1) * getMissingHours())
-				/ (float) TeachingHourAnalysisReport.HOURS_FOR_REGULAR_POSITION);
+				/ (float) TeachingVoidAnalysisReport.HOURS_FOR_REGULAR_POSITION);
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class TeachingResource {
 	}
 
 	public Integer getRequiredRegularEmployees() {
-		return required > 0 ? required / TeachingHourAnalysisReport.HOURS_FOR_REGULAR_POSITION : 0;
+		return required > 0 ? required / TeachingVoidAnalysisReport.HOURS_FOR_REGULAR_POSITION : 0;
 	}
 
 	/**

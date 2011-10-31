@@ -2,7 +2,7 @@ package gr.sch.ira.minoas.seam.components.reports.resource;
 
 import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.core.SpecializationGroup;
-import gr.sch.ira.minoas.seam.components.reports.TeachingHourAnalysisReport;
+import gr.sch.ira.minoas.seam.components.reports.TeachingVoidAnalysisReport;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -90,7 +90,7 @@ public class TeachingHoursAnalysisItem {
 	}
 
 	public Integer getTotalMissingReqularEmployees() {
-		return (getTotalMissingHours()) / TeachingHourAnalysisReport.HOURS_FOR_REGULAR_POSITION;
+		return (getTotalMissingHours()) / TeachingVoidAnalysisReport.HOURS_FOR_REGULAR_POSITION;
 	}
 
 	/**
