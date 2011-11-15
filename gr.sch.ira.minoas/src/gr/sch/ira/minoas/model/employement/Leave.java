@@ -69,6 +69,10 @@ public class Leave extends BaseIDDeleteAwareModel {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "LEAVE_TYPE", length = 64, nullable = false)
 	private LeaveType leaveType;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="EMPLOYEE_LEAVE_TYPE_ID", nullable=true)
+	private EmployeeLeaveType employeeLeaveType;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "REGULAR_SCHOOL_ID", nullable = true)
@@ -76,7 +80,11 @@ public class Leave extends BaseIDDeleteAwareModel {
 	
 	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.LAZY, mappedBy="leave")
     private Collection<TeachingHourCDR> leaveCDRs = new ArrayList<TeachingHourCDR>();
-
+	
+	@Basic
+    @Column(name="GENERATES_CDRS", nullable=true)
+    private Boolean generatesCDRs = Boolean.FALSE;
+	
 	public Leave() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -238,6 +246,34 @@ public class Leave extends BaseIDDeleteAwareModel {
      */
     public void setAutoCanceled(Boolean autoCanceled) {
         this.autoCanceled = autoCanceled;
+    }
+
+    /**
+     * @return the employeeLeaveType
+     */
+    public EmployeeLeaveType getEmployeeLeaveType() {
+        return employeeLeaveType;
+    }
+
+    /**
+     * @param employeeLeaveType the employeeLeaveType to set
+     */
+    public void setEmployeeLeaveType(EmployeeLeaveType employeeLeaveType) {
+        this.employeeLeaveType = employeeLeaveType;
+    }
+
+    /**
+     * @return the generatesCDRs
+     */
+    public Boolean getGeneratesCDRs() {
+        return generatesCDRs;
+    }
+
+    /**
+     * @param generatesCDRs the generatesCDRs to set
+     */
+    public void setGeneratesCDRs(Boolean generatesCDRs) {
+        this.generatesCDRs = generatesCDRs;
     }
 
 }
