@@ -34,7 +34,6 @@ public class EmployeeLeaves extends BaseDatabaseAwareSeamComponent {
     @Unwrap
     public Collection<Leave> getEmployeeLeaves() {
         if(employeeLeaves == null) {
-            info("NULL !!!!");
             constructEmployeeLeaveHistory(); 
         }
         return this.employeeLeaves;
@@ -42,8 +41,6 @@ public class EmployeeLeaves extends BaseDatabaseAwareSeamComponent {
     
     @Observer(value= { "leaveCreated", "leaveDeleted","leaveModified" })
     public void constructEmployeeLeaveHistory() {
-        info("observer !");
-        info("searcing !!!!!! ");
         this.employeeLeaves = getCoreSearching().getEmployeeLeaves(employeeHome.getInstance());
     }
     

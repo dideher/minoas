@@ -402,6 +402,14 @@ public Collection<Leave> getEmployeeLeaves(Person employee) {
       return result;
   }
 
+public Collection<Leave> getEmployeeFutureLeaves(Person employee, Date referenceDate) {
+    Collection<Leave> result = null;
+    result = entityManager.createQuery(
+            "SELECT s from Leave s WHERE (s.deleted IS FALSE OR s.deleted IS NULL) AND s.employee=:employee AND s.established > :referenceDate ORDER BY s.established DESC")
+            .setParameter("employee", employee).setParameter("referenceDate", referenceDate).getResultList();
+    return result;
+}
+
     @Transactional(TransactionPropagationType.REQUIRED)
     public Employee getEmployeeOfTypeByVatNumber(EntityManager entityManager, EmployeeType employeeType,
             String vatNumber) {

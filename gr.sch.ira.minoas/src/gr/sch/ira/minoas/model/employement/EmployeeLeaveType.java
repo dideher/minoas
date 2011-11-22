@@ -1,5 +1,7 @@
 package gr.sch.ira.minoas.model.employement;
 
+import java.util.Collection;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,6 +13,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import gr.sch.ira.minoas.model.BaseIDModel;
+import gr.sch.ira.minoas.model.employee.EmployeeType;
 
 @Entity
 @Table(name = "EMPLOYEE_LEAVE_TYPE")
@@ -38,6 +41,10 @@ public class EmployeeLeaveType extends BaseIDModel {
     @Basic
     @Column(name="LEGACY_CODE", nullable=false, unique=true)
     private String legacyCode;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(name="EMPLOYEE_TYPE", nullable=false)
+    private EmployeeType suitableForEmployeeType;
    
     /**
      * @return the description
@@ -93,5 +100,19 @@ public class EmployeeLeaveType extends BaseIDModel {
      */
     public void setLegacyCode(String legacyCode) {
         this.legacyCode = legacyCode;
+    }
+
+    /**
+     * @return the suitableForEmployeeType
+     */
+    public EmployeeType getSuitableForEmployeeType() {
+        return suitableForEmployeeType;
+    }
+
+    /**
+     * @param suitableForEmployeeType the suitableForEmployeeType to set
+     */
+    public void setSuitableForEmployeeType(EmployeeType suitableForEmployeeType) {
+        this.suitableForEmployeeType = suitableForEmployeeType;
     }
 }
