@@ -191,6 +191,18 @@
 								value="/serviceallocation/employee-service-allocation-management" />
 						</s:link>
 					</rich:menuItem>
+					<rich:menuSeparator />
+					<rich:menuItem submitMode="none"
+						rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_SERVICE_ALLOCATION'))}">
+						<s:link value="Διαχείριση Θητείας Εκπαιδευτικού [take2]"
+							action="#{serviceHome.clearInstance()}"
+							view="/employee/select-employee.xhtml">
+							<f:param name="from" value="/home" />
+							<f:param name="to"
+								value="/serviceallocation/employee-service-management" />
+						</s:link>
+					</rich:menuItem>
+					<rich:menuSeparator />
 					
 					
 					

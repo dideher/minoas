@@ -92,6 +92,13 @@ public class ServiceAllocation extends BaseIDModel {
 	
 	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.LAZY, mappedBy="serviceAllocation")
     private Collection<TeachingHourCDR> serviceAllocationCDRs = new ArrayList<TeachingHourCDR>();
+	
+	/**
+	 * Denotes if the given service allocation has been moved to the new infrastructure.
+	 */
+	@Basic
+	@Column(name = "HAS_BEEN_IMPORTED", nullable=true)
+	private Boolean hasBeenImported;
 
 	public ServiceAllocation() {
 		super();
@@ -337,5 +344,19 @@ public class ServiceAllocation extends BaseIDModel {
      */
     public void setAutoCanceled(Boolean autoCanceled) {
         this.autoCanceled = autoCanceled;
+    }
+
+    /**
+     * @return the hasBeenImported
+     */
+    public Boolean getHasBeenImported() {
+        return hasBeenImported;
+    }
+
+    /**
+     * @param hasBeenImported the hasBeenImported to set
+     */
+    public void setHasBeenImported(Boolean hasBeenImported) {
+        this.hasBeenImported = hasBeenImported;
     }
 }

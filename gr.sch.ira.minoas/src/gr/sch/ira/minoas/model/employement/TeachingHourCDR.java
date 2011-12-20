@@ -83,6 +83,10 @@ public class TeachingHourCDR extends BaseIDModel {
     private ServiceAllocation serviceAllocation;
     
     @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="SERVICE_ID", nullable=true)
+    private Service service;
+    
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="LEAVE_ID", nullable=true)
     private Leave leave;
     
@@ -292,5 +296,19 @@ public class TeachingHourCDR extends BaseIDModel {
      */
     public void setLogisticCDR(Boolean logisticCDR) {
         this.logisticCDR = logisticCDR;
+    }
+
+    /**
+     * @return the service
+     */
+    public Service getService() {
+        return service;
+    }
+
+    /**
+     * @param service the service to set
+     */
+    public void setService(Service service) {
+        this.service = service;
     }
 }
