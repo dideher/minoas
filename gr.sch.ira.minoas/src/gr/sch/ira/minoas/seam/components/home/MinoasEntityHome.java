@@ -32,7 +32,7 @@ public abstract class MinoasEntityHome<E> extends EntityHome<BaseModel> {
 	public static final String PERSITESTENCE_CONTEXT_NAME = "entityManager";
 
 	private static final String SEAM_MESSAGES_RESOURCE_BUNDLE_NAME = "messages";
-
+	
 	/**
 	 * Comment for <code>serialVersionUID</code>
 	 */
@@ -174,5 +174,14 @@ public abstract class MinoasEntityHome<E> extends EntityHome<BaseModel> {
 		getLogger().info("principal '#0' successfully updated '#1'", getPrincipalName(), getInstance());
 		return result;
 	}
+
+    
+    /**
+     * @see org.jboss.seam.framework.Home#clearInstance()
+     */
+    @Override
+    public void clearInstance() {
+        super.clearInstance();
+    }
 
 }
