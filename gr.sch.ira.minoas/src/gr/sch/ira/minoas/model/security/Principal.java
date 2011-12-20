@@ -72,7 +72,7 @@ public class Principal extends BaseIDModel {
 	@Column(updatable = false, name = "USERNAME", length = 16, nullable = false, unique = true)
 	private String username;
 	
-	@OneToMany(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="INFORMATION_TELEPHONE_ID", nullable=true)
 	private Telephone informationTelephone;
 	
