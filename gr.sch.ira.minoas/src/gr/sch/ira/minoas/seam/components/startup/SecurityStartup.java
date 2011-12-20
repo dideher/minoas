@@ -116,6 +116,7 @@ public class SecurityStartup extends BaseDatabaseAwareSeamComponent {
 		createRole("ADD_LEAVE", "Add New Leave", admin);
 		createRole("MANAGE_LEAVE", "Manage Leave", admin);
 		createRole("VIEW_LEAVE", "View Leave", admin);
+		createRole("PRINT_LEAVE", "Print Leave", admin);
 		/* Disposal */
 		createRole("ADD_DISPOSAL", "Add New Disposal", admin);
 		createRole("MANAGE_DISPOSAL", "Manage Disposal", admin);
