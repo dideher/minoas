@@ -50,6 +50,7 @@
     <class>gr.sch.ira.minoas.model.employement.WorkExperienceType</class>
     <class>gr.sch.ira.minoas.model.employement.TeachingHourCDR</class>
     <class>gr.sch.ira.minoas.model.employement.EmployeeLeaveType</class>
+    <class>gr.sch.ira.minoas.model.core.WorkingOffice</class>
     <properties>
       <!--
         <property name="hibernate.dialect"

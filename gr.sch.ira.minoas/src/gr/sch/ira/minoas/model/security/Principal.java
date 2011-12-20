@@ -5,6 +5,8 @@ package gr.sch.ira.minoas.model.security;
 
 import gr.sch.ira.minoas.model.BaseIDModel;
 import gr.sch.ira.minoas.model.core.OrganizationalOffice;
+import gr.sch.ira.minoas.model.core.Telephone;
+import gr.sch.ira.minoas.model.core.WorkingOffice;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +20,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
@@ -68,6 +71,14 @@ public class Principal extends BaseIDModel {
 	@Basic
 	@Column(updatable = false, name = "USERNAME", length = 16, nullable = false, unique = true)
 	private String username;
+	
+	@OneToMany(fetch=FetchType.LAZY)
+	@JoinColumn(name="INFORMATION_TELEPHONE_ID", nullable=true)
+	private Telephone informationTelephone;
+	
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="WORKING_OFFICE_ID", nullable=false)
+	private WorkingOffice workingOffice;
 
 	/**
 	 * 
@@ -208,5 +219,33 @@ public class Principal extends BaseIDModel {
 		sb.append("]");
 		return sb.toString();
 	}
+
+    /**
+     * @return the telephone
+     */
+    public Telephone getInformationTelephone() {
+        return informationTelephone;
+    }
+
+    /**
+     * @param telephone the telephone to set
+     */
+    public void setInformationTelephone(Telephone telephone) {
+        this.informationTelephone = telephone;
+    }
+
+    /**
+     * @return the workingOffice
+     */
+    public WorkingOffice getWorkingOffice() {
+        return workingOffice;
+    }
+
+    /**
+     * @param workingOffice the workingOffice to set
+     */
+    public void setWorkingOffice(WorkingOffice workingOffice) {
+        this.workingOffice = workingOffice;
+    }
 
 }
