@@ -306,6 +306,38 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
         }
     }
     
+    public void computeLeaveDuration() {
+        Leave leave = leaveHome.getInstance();
+        Date established = leave.getEstablished() != null ? DateUtils.truncate(leave.getEstablished(), Calendar.DAY_OF_MONTH) : null;
+        Date dueTo = leave.getDueTo() != null ? DateUtils.truncate(leave.getDueTo(), Calendar.DAY_OF_MONTH) : null;
+        
+        info("computeLeaveDuration: established -> '#0', due to -> '#1'", established, dueTo);
+        if(established==null || dueTo==null) {
+            facesMessages
+            .add(Severity.ERROR,
+                    "Πρέπει πρώτα να συμπληρώσετε την ημ/νια έναρξης και λήξεις της άδειας");
+            return;
+        }
+        
+     
+        /* check if the dates are correct */
+        if (established.after(dueTo)) {
+
+                facesMessages
+                        .add(Severity.ERROR,
+                                "H ημ/νία έναρξης είναι μεταγενέστερη της ημ/νιας λήξης της άδειας. Μάλλον πρέπει να κάνεις ενα διάλειμα.");
+            return;
+        }
+        // temp computation
+        long DAY_TIME_IN_MILLIS = 24 * 60 * 60 * 1000;
+        long date1DaysMS = established.getTime() - (established.getTime() % DAY_TIME_IN_MILLIS);
+        long date2DaysMS = dueTo.getTime() - (dueTo.getTime() % DAY_TIME_IN_MILLIS);
+
+        long timeInMillisDiff = (date2DaysMS - date1DaysMS);
+        int ret = (int) (timeInMillisDiff / DAY_TIME_IN_MILLIS); 
+        leave.setEffectiveNumberOfDays(new Integer(ret)); 
+    }
+    
     /**
      * TODO: We need to re-fresh the method
      * @param leave

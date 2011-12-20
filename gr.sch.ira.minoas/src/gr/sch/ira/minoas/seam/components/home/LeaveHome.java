@@ -14,6 +14,7 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
+import org.omg.CosCollection.SetHolder;
 
 /**
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
@@ -21,12 +22,15 @@ import org.jboss.seam.annotations.Transactional;
  */
 @Name(value = "leaveHome")
 public class LeaveHome extends MinoasEntityHome<Leave> {
-
-	/**
+    
+    
+    /**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
+	
+	protected String tempValueHolder1; /* used as a holder value in forms */ 
 	
 
 	@Transactional
@@ -150,8 +154,28 @@ public class LeaveHome extends MinoasEntityHome<Leave> {
 //		return super.update();
 	}
 
-	
+    /**
+     * @return the tempValueHolder1
+     */
+    public String getTempValueHolder1() {
+        return tempValueHolder1;
+    }
 
+    /**
+     * @param tempValueHolder1 the tempValueHolder1 to set
+     */
+    public void setTempValueHolder1(String tempValueHolder1) {
+        this.tempValueHolder1 = tempValueHolder1;
+    }
+
+    /**
+     * @see gr.sch.ira.minoas.seam.components.home.MinoasEntityHome#clearInstance()
+     */
+    @Override
+    public void clearInstance() {
+        super.clearInstance();
+        setTempValueHolder1(null);
+    }
 	
 
 }

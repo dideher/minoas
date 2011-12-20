@@ -82,6 +82,10 @@ public class Leave extends BaseIDDeleteAwareModel {
     private Collection<TeachingHourCDR> leaveCDRs = new ArrayList<TeachingHourCDR>();
 	
 	@Basic
+	@Column(name="EFFECTIVE_DAYS_COUNT", nullable=true)
+	private Integer effectiveNumberOfDays;
+	
+	@Basic
     @Column(name="GENERATES_CDRS", nullable=true)
     private Boolean generatesCDRs = Boolean.FALSE;
 	
@@ -274,6 +278,20 @@ public class Leave extends BaseIDDeleteAwareModel {
      */
     public void setGeneratesCDRs(Boolean generatesCDRs) {
         this.generatesCDRs = generatesCDRs;
+    }
+
+    /**
+     * @return the effectiveNumberOfDays
+     */
+    public Integer getEffectiveNumberOfDays() {
+        return effectiveNumberOfDays;
+    }
+
+    /**
+     * @param effectiveNumberOfDays the effectiveNumberOfDays to set
+     */
+    public void setEffectiveNumberOfDays(Integer effectiveNumberOfDays) {
+        this.effectiveNumberOfDays = effectiveNumberOfDays;
     }
 
 }
