@@ -25,7 +25,7 @@ import org.jboss.seam.async.QuartzTriggerHandle;
  * Searches for active leaves that should be set as current for a given
  * employee.
  * 
- * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
+ * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * @version $Id$
  */
 @Name("leaveActivationProcessor")

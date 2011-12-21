@@ -22,7 +22,7 @@ import org.jboss.seam.log.Log;
 import org.jboss.seam.security.Identity;
 
 /**
- * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
+ * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * @version $Id$
  */
 public abstract class MinoasEntityHome<E> extends EntityHome<BaseModel> {
@@ -161,7 +161,6 @@ public abstract class MinoasEntityHome<E> extends EntityHome<BaseModel> {
 	@Override
 	public void setId(Object id) {
 		super.setId(id);
-		getLogger().info("id \"#0\" has been set.", id);
 	}
 
 	/**

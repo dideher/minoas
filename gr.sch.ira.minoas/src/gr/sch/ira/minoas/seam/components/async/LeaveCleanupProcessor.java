@@ -23,7 +23,7 @@ import org.jboss.seam.annotations.async.IntervalDuration;
 import org.jboss.seam.async.QuartzTriggerHandle;
 
 /**
- * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
+ * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * @version $Id$
  */
 @Name("leaveCleanupProcessor")
@@ -47,7 +47,7 @@ public class LeaveCleanupProcessor extends BaseDatabaseAwareSeamComponent {
 	@SuppressWarnings("unchecked")
     @Transactional(TransactionPropagationType.REQUIRED)
     public Collection<Leave> getActiveLeaveThatSouldBeAutoCanceled(EntityManager em, Date today) {
-        return em.createQuery("SELECT s from Leave s WHERE s.active IS TRUE AND :onDate NOT BETWEEN s.established AND s.dueTo ORDER BY s.established").setParameter("onDate", today).getResultList();
+        return em.createQuery("SELECT s from Leave s WHERE s.active IS TRUE AND :onDate > s.dueTo ORDER BY s.established").setParameter("onDate", today).getResultList();
     }
 	
 	@Asynchronous

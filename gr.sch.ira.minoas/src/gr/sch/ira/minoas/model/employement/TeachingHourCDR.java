@@ -3,6 +3,7 @@ package gr.sch.ira.minoas.model.employement;
 
 import gr.sch.ira.minoas.model.BaseIDModel;
 import gr.sch.ira.minoas.model.core.SchoolYear;
+import gr.sch.ira.minoas.model.core.Specialization;
 import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employee.Employee;
 
@@ -21,7 +22,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
 @Table(name = "TEACHING_HOUR_CDR")
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+@Cache(usage=CacheConcurrencyStrategy.NONE)
 public class TeachingHourCDR extends BaseIDModel {
 
     /**
@@ -45,9 +46,26 @@ public class TeachingHourCDR extends BaseIDModel {
     @JoinColumn(name = "EMPLOYEE_ID", nullable = false)
     private Employee employee;
     
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name="SPECIALIZATION_ID", nullable=true)
+    private Specialization specialization;
+    
     @Enumerated(EnumType.STRING)
     @Column(name="CDR_TYPE", nullable=false)
     private TeachingHourCDRType cdrType;
+    
+    /**
+     * Is set to 'true' then this CDR is 'logistic'. A logistic CDR is a special CDR (most of the time 
+     * with negative hours) generated to substract teaching hours from a unit. It is almost always the
+     * result of some other CDR. For example, assume that there is an employee with a regular employment 
+     * in unit A that has been moved (with a secondment) to unit B. There will be 3 CDRs. One for the 
+     * regular employment and one for the secondment and one logistic CDR that will substract hours from 
+     * unit A due to the CDR that adds hours to unit B (due to the secodnament)
+     * Comment for <code>logisticCDR</code>
+     */
+    @Basic
+    @Column(name="IS_LOGISTIC", nullable=true)
+    private Boolean logisticCDR = Boolean.FALSE;
     
     @Basic
     @Column(name="COMMENT", length=1024)
@@ -246,5 +264,33 @@ public class TeachingHourCDR extends BaseIDModel {
         builder.append(comment);
         builder.append("]");
         return builder.toString();
+    }
+
+    /**
+     * @return the specialization
+     */
+    public Specialization getSpecialization() {
+        return specialization;
+    }
+
+    /**
+     * @param specialization the specialization to set
+     */
+    public void setSpecialization(Specialization specialization) {
+        this.specialization = specialization;
+    }
+
+    /**
+     * @return the logisticCDR
+     */
+    public Boolean getLogisticCDR() {
+        return logisticCDR;
+    }
+
+    /**
+     * @param logisticCDR the logisticCDR to set
+     */
+    public void setLogisticCDR(Boolean logisticCDR) {
+        this.logisticCDR = logisticCDR;
     }
 }

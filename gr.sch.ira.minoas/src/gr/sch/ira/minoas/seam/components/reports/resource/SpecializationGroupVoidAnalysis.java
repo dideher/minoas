@@ -1,14 +1,14 @@
 package gr.sch.ira.minoas.seam.components.reports.resource;
 
 import gr.sch.ira.minoas.model.core.SpecializationGroup;
-import gr.sch.ira.minoas.seam.components.reports.TeachingHourAnalysisReport;
+import gr.sch.ira.minoas.seam.components.reports.TeachingVoidAnalysisReport;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 /**
- * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
+ * @author <a href="mailto:filippos@slavik.grr">Filippos Slavik</a>
  * @version $Id$
  */
 public class SpecializationGroupVoidAnalysis implements Comparable<SpecializationGroupVoidAnalysis> {
@@ -69,11 +69,11 @@ public class SpecializationGroupVoidAnalysis implements Comparable<Specializatio
 	}
 
 	public Integer getTotalMissingReqularEmployees() {
-		return ((-1) * getTotalMissingHours()) / TeachingHourAnalysisReport.HOURS_FOR_REGULAR_POSITION;
+		return ((-1) * getTotalMissingHours()) / TeachingVoidAnalysisReport.HOURS_FOR_REGULAR_POSITION;
 	}
 
 	public Float getTotalMissingReqularEmployeesAsFloat() {
-		return (float) ((-1) * getTotalMissingHours()) / (float) TeachingHourAnalysisReport.HOURS_FOR_REGULAR_POSITION;
+		return (float) ((-1) * getTotalMissingHours()) / (float) TeachingVoidAnalysisReport.HOURS_FOR_REGULAR_POSITION;
 	}
 
 	/**
@@ -84,7 +84,7 @@ public class SpecializationGroupVoidAnalysis implements Comparable<Specializatio
 	}
 
 	public Integer getTotalRequiredRegularEmployees() {
-		return getTotalRequiredHours() / TeachingHourAnalysisReport.HOURS_FOR_REGULAR_POSITION;
+		return getTotalRequiredHours() / TeachingVoidAnalysisReport.HOURS_FOR_REGULAR_POSITION;
 	}
 
 	public boolean hasMissingHours() {
