@@ -6,7 +6,7 @@ import gr.sch.ira.minoas.model.employement.Employment;
 import java.util.Date;
 
 /**
- * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
+ * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * @version $Id$
  */
 public class EmployeeReportItem extends BaseIDReportItem {

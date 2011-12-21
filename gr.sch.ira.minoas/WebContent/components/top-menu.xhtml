@@ -59,8 +59,8 @@
 					rendered="#{(s:hasRole('ADMIN') or s:hasRole('VIEW_SCHOOL_REPORT'))}">
 					<rich:menuItem submitMode="none">
 						<s:link value="Διδακτικά Κενά - Πλεονάσματα Ανα Ειδικότητα"
-							view="/school/teaching-resources-report.xhtml">
-							<f:param name="service_allocation_report_by_type_from"
+							view="/school/teaching-void-analysis-report.xhtml">
+							<f:param name="teaching-void-analysis-report_from"
 								value="/home" />
 						</s:link>
 					</rich:menuItem>
@@ -351,7 +351,13 @@
 					<a4j:htmlCommandLink action="#{teachingHoursCDRManagement.doCalculateCurrentCDRs()}" value="Ανανέωση CDRs">
 					</a4j:htmlCommandLink>
 				</rich:menuItem>
-				
+		
+				<!-- 		
+				<rich:menuItem rendered="#{(s:hasRole('ADMIN'))}"  submitMode="none">
+					<a4j:htmlCommandLink action="#{teachingHoursCDRManagement.doCalculateCDRsInBackground()}" value="Ανανέωση CDRs - Στο υπόβαθρο">
+					</a4j:htmlCommandLink>
+				</rich:menuItem>
+				 -->
 				
 				<!--  
 				<rich:menuItem submitMode="ajax">

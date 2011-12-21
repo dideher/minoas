@@ -22,7 +22,7 @@ import org.jboss.seam.annotations.async.IntervalDuration;
 import org.jboss.seam.async.QuartzTriggerHandle;
 
 /**
- * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
+ * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * @version $Id$
  */
 @Name("disposalCleanupProcessor")
@@ -48,7 +48,7 @@ public class DisposalCleanupProcessor extends BaseDatabaseAwareSeamComponent {
     public Collection<Disposal> getActiveDisposalThatSouldBeAutoCanceled(EntityManager em, Date today) {
         return em
                 .createQuery(
-                        "SELECT s from Disposal s WHERE s.active IS TRUE AND :onDate NOT BETWEEN s.established AND s.dueTo")
+                        "SELECT s from Disposal s WHERE s.active IS TRUE AND :onDate > s.dueTo")
                 .setParameter("onDate", today).getResultList();
     }
 

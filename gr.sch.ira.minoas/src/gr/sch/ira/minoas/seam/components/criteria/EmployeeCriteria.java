@@ -15,7 +15,7 @@ import org.jboss.seam.annotations.Scope;
  * @version $Id$
  */
 @Name("employeeCriteria")
-@Scope(ScopeType.CONVERSATION)
+@Scope(ScopeType.PAGE)
 public class EmployeeCriteria {
 
 	private Boolean bigFamily;
@@ -43,6 +43,10 @@ public class EmployeeCriteria {
 	private SpecializationSearchType specializationSearchType;
 
 	private EmployeeType type;
+	
+	private String vatNumber;
+	
+	private String registryNumber;
 	
 	private String sorting;
 
@@ -250,5 +254,33 @@ public class EmployeeCriteria {
 	public void setSorting(String sorting) {
 		this.sorting = sorting;
 	}
+
+    /**
+     * @return the vatNumber
+     */
+    public String getVatNumber() {
+        return vatNumber;
+    }
+
+    /**
+     * @param vatNumber the vatNumber to set
+     */
+    public void setVatNumber(String vatNumber) {
+        this.vatNumber = vatNumber;
+    }
+
+    /**
+     * @return the registryNumber
+     */
+    public String getRegistryNumber() {
+        return registryNumber;
+    }
+
+    /**
+     * @param registryNumber the registryNumber to set
+     */
+    public void setRegistryNumber(String registryNumber) {
+        this.registryNumber = registryNumber;
+    }
 
 }

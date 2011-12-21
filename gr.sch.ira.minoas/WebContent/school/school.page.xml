@@ -10,7 +10,7 @@
   <param name="schoolID" value="#{schoolHome.id}" />
   
   <action execute="#{schoolReport.fetchSchoolChiefs}" on-postback="false"/>
-  <action execute="#{schoolReport.generateEmploymentsReport}" on-postback="false"/>
+  <action execute="#{schoolReport.generateEmploymentsCDRReport}" on-postback="false"/>
    
   <!-- navigation rules -->
   <navigation from-action="endButton">
