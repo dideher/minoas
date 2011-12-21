@@ -18,7 +18,7 @@ import javax.persistence.Table;
 /**
  * Μάθημα
  * 
- * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
+ * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * @version $Id$
  */
 @Entity

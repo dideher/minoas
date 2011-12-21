@@ -22,7 +22,7 @@ import org.jboss.seam.annotations.async.IntervalDuration;
 import org.jboss.seam.async.QuartzTriggerHandle;
 
 /**
- * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
+ * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * @version $Id$
  */
 @Name("secondmentCleanupProcessor")
@@ -47,7 +47,7 @@ public class SecondmentCleanupProcessor extends BaseDatabaseAwareSeamComponent {
 	@SuppressWarnings("unchecked")
     @Transactional(TransactionPropagationType.REQUIRED)
     public Collection<Secondment> getActiveSecondmentsThatSouldBeAutoCanceled(EntityManager em, Date today) {
-        return em.createQuery("SELECT s from Secondment s WHERE s.active IS TRUE AND :onDate NOT BETWEEN s.established AND s.dueTo").setParameter("onDate", today).getResultList();
+        return em.createQuery("SELECT s from Secondment s WHERE s.active IS TRUE AND :onDate > s.dueTo").setParameter("onDate", today).getResultList();
     }
 	
 	@Asynchronous

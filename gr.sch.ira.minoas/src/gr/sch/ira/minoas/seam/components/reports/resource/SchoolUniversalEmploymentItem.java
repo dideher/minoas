@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
+ * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * @version $Id$
  */
 public class SchoolUniversalEmploymentItem extends EmploymentReportItem {
@@ -65,15 +65,12 @@ public class SchoolUniversalEmploymentItem extends EmploymentReportItem {
 	public SchoolUniversalEmploymentItem(Employment employment) {
 		super(employment);
 	}
-
+	
 	public SchoolUniversalEmploymentItem(Secondment secondment) {
+        super(secondment);
+    }
 
-		super(secondment.getAffectedEmployment());
-	}
-
-	public SchoolUniversalEmploymentItem(ServiceAllocation serviceAllocation) {
-		super(serviceAllocation.getAffectedEmployment());
-	}
+	
 
 	
 	/**

@@ -304,17 +304,6 @@
    </framework:entity-query>
    
    
-   <framework:entity-query name="specializationGroupsListQuery" max-results="200" scope="page">
-    <framework:ejbql>SELECT s FROM SpecializationGroup s  WHERE s.schoolYear.id = 9</framework:ejbql>
-    <framework:order>s.title asc</framework:order>
-      <!-- 
-      <framework:restrictions>
-        <value>s.schoolYear = #{activeShoolYear}</value> 
-   
-      </framework:restrictions>    -->  
-   </framework:entity-query>
-   
-   
    <!-- Leave Components -->
    
    <component name="exampleLeave" class="gr.sch.ira.minoas.model.employement.Leave" />
