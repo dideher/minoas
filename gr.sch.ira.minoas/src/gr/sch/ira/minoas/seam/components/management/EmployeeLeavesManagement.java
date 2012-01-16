@@ -8,15 +8,31 @@ import gr.sch.ira.minoas.model.employement.EmploymentType;
 import gr.sch.ira.minoas.model.employement.Leave;
 import gr.sch.ira.minoas.model.employement.LeaveType;
 import gr.sch.ira.minoas.model.employement.TeachingHourCDR;
+import gr.sch.ira.minoas.model.security.Principal;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.CoreSearching;
 import gr.sch.ira.minoas.seam.components.holders.EmployeeLeaveHolder;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
 import gr.sch.ira.minoas.seam.components.home.LeaveHome;
 
+import java.security.MessageDigest;
+import java.security.Signature;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JasperRunManager;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.data.JRMapCollectionDataSource;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.jboss.seam.ScopeType;
@@ -304,6 +320,133 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
             facesMessages.add(Severity.ERROR, "leave home #0 is not managed.", leaveHome);
             return ACTION_OUTCOME_FAILURE;
         }
+    }
+    
+    private static String convertToHex(byte[] data) { 
+        StringBuffer buf = new StringBuffer();
+        for (int i = 0; i < data.length; i++) { 
+            int halfbyte = (data[i] >>> 4) & 0x0F;
+            int two_halfs = 0;
+            do { 
+                if ((0 <= halfbyte) && (halfbyte <= 9)) 
+                    buf.append((char) ('0' + halfbyte));
+                else 
+                    buf.append((char) ('a' + (halfbyte - 10)));
+                halfbyte = data[i] & 0x0F;
+            } while(two_halfs++ < 1);
+        } 
+        return buf.toString();
+    } 
+    
+    @Transactional
+    public String printEmployeeLeaveAction() {
+        
+        if(leaveHome.isManaged()) {
+            Employee employee = getEntityManager().merge(employeeHome.getInstance());
+            Leave leave = leaveHome.getInstance();
+            
+            
+            
+
+
+            try {
+                Map<String, Object> parameters = new HashMap<String, Object>();
+                Principal currentPrincipal = getPrincipal();
+                parameters.put("employeeForInformation", currentPrincipal.getRealName());
+                parameters.put("employeeForInformationTelephone", currentPrincipal.getInformationTelephone());
+                parameters.put("leaveRequestDate", new Date());
+                parameters.put("employeeName", employee.getFirstName());
+                parameters.put("employeeSurname", employee.getLastName());
+                parameters.put("employeeSpecialization", employee.getLastSpecialization().getTitle());
+                parameters.put("leaveDueToDate", leave.getDueTo());
+                parameters.put("leaveEstablishedDate", leave.getEstablished());
+                parameters.put("leaveDayDuration", leave.getEffectiveNumberOfDays());
+                parameters.put("employeeFatherName", employee.getFatherName());
+                parameters.put("referenceNumber", "53453456");
+                parameters.put("printDate", new Date());
+                parameters.put("signatureTitle", "Ο Διευθυντής της Δ/νσης Εκπ/σης");
+                parameters.put("signatureName", "Μανουσάκης Γεώργιος");
+                
+                /* compute a SHA-1 digest */
+                MessageDigest digest = MessageDigest.getInstance("SHA");
+                digest.update(String.format("%s-%d-%d", parameters.toString(), System.currentTimeMillis(), parameters.hashCode()).getBytes("UTF-8"));
+                byte[] digest_array = digest.digest();
+                parameters.put("localReferenceNumber", convertToHex(digest_array));
+                
+                List<String> notificationList = new ArrayList<String>();
+                notificationList.add("Ενδιαφερόμενος/νη");
+                notificationList.add("Σχολείο Οργανικής");
+                notificationList.add("Σχολείο που Υπηρετεί");
+                notificationList.add("Υπηρεσία που Υπηρετεί");
+                
+                StringBuffer sb = new StringBuffer();
+                sb.append("<b>");
+                int counter = 1;
+                for(String lineString : notificationList) {
+                    sb.append(String.format("%d %s<br />", counter++, lineString));
+                }
+                sb.append("</b>");
+                parameters.put("notificationList", sb.toString());
+//                parameters.put("LEAVE_TYPE_FILTER",
+//                        employeeLeaveCriteria.getLeaveType() != null ? getLocalizedMessage(employeeLeaveCriteria
+//                                .getLeaveType().getKey()) : "Όλοι οι Τύποι");
+//                parameters.put("LEAVE_SPECIALIZATION_FILTER",
+//                        employeeLeaveCriteria.getSpecializationGroup() != null ? employeeLeaveCriteria
+//                                .getSpecializationGroup().getTitle() : "Όλες οι Ειδικότητες");
+//
+//                parameters.put("LEAVE_SCHOOL_FILTER",
+//                        employeeLeaveCriteria.getSchoolOfIntereset() != null ? employeeLeaveCriteria.getSchoolOfIntereset()
+//                                .getTitle() : "Όλες οι Σχολικές Μονάδες");
+//
+//                parameters.put("LEAVE_REGION_FILTER", employeeLeaveCriteria.getRegion() != null ? employeeLeaveCriteria
+//                        .getRegion().toString()
+//                        + "' Ηρακλείου" : "Όλες οι Περιοχές");
+//
+//                parameters.put("LEAVE_DATE_SEARCH_FILTER", getLocalizedMessage(employeeLeaveCriteria.getDateSearchType()
+//                        .getKey()));
+//
+//                parameters.put("LEAVE_EFFECTIVE_DATE_FILTER", employeeLeaveCriteria.getEffectiveDate());
+//                parameters.put("LEAVE_EFFECTIVE_DATE_FROM_FILTER", employeeLeaveCriteria.getEffectiveDateFrom());
+//                parameters.put("LEAVE_EFFECTIVE_DATE_UNTIL_FILTER", employeeLeaveCriteria.getEffectiveDateUntil());
+
+                /* create the leave type helper */
+                
+//                for (LeaveType leaveType : getCoreSearching().getAvailableLeaveTypes()) {
+//                    parameters.put(leaveType.name(), getLocalizedMessage(leaveType.getKey()));
+//                }
+
+                //JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(reportData);
+                
+                JRBeanCollectionDataSource main = new JRBeanCollectionDataSource(Collections.EMPTY_LIST);
+                byte[] bytes = JasperRunManager.runReportToPdf(this.getClass().getResourceAsStream(
+                        "/reports/leavePrintout_31.jasper"), parameters, (JRDataSource) main);
+                HttpServletResponse response = (HttpServletResponse) CoreUtils.getFacesContext().getExternalContext()
+                        .getResponse();
+                response.setContentType("application/pdf");
+                String pdfFile = String.format("ΑΔΕΙΑ_%s_%s_(%s).pdf", employee.getLastName(), employee.getFirstName(), employee.getLastSpecialization().getTitle());
+                // http://greenbytes.de/tech/webdav/rfc6266.html
+                //response.addHeader("Content-Disposition", String.format("attachment; filename*=UTF-8 ' '%s", pdfFile));
+                response.addHeader("Content-Disposition", String.format("attachment; filename=lalala.pdf", pdfFile));
+                response.setContentLength(bytes.length);
+                ServletOutputStream servletOutputStream = response.getOutputStream();
+                servletOutputStream.write(bytes, 0, bytes.length);
+                servletOutputStream.flush();
+                servletOutputStream.close();
+                CoreUtils.getFacesContext().responseComplete();
+            } catch (Exception ex) {
+                ex.printStackTrace(System.out);
+            }
+
+        
+            
+            
+            
+                info("leave #0 for employee #1 has been printed !", leave, employee);
+                
+                return ACTION_OUTCOME_SUCCESS;
+            } else {
+                return ACTION_OUTCOME_FAILURE;
+            }
     }
     
     public void computeLeaveDuration() {
