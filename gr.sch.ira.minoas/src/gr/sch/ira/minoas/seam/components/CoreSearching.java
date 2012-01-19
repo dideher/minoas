@@ -30,6 +30,8 @@ import gr.sch.ira.minoas.model.employement.TeachingHourCDR;
 import gr.sch.ira.minoas.model.employement.TeachingHourCDRType;
 import gr.sch.ira.minoas.model.employement.WorkExperience;
 import gr.sch.ira.minoas.model.employement.WorkExperienceType;
+import gr.sch.ira.minoas.model.printout.PrintoutRecipients;
+import gr.sch.ira.minoas.model.printout.PrintoutSignatures;
 import gr.sch.ira.minoas.model.security.Principal;
 import gr.sch.ira.minoas.model.security.Role;
 import gr.sch.ira.minoas.model.transfers.OutstandingImprovement;
@@ -91,6 +93,17 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     }
     
     
+    @SuppressWarnings("unchecked")
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public Collection<PrintoutRecipients> getPrintoutRecipients(EntityManager em) {
+        return em.createQuery("SELECT s from PrintoutRecipients s").getResultList();
+    }
+    
+    @SuppressWarnings("unchecked")
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public Collection<PrintoutSignatures> getPrintoutSignatures(EntityManager em) {
+        return em.createQuery("SELECT s from PrintoutSignatures s").getResultList();
+    }
 
     @SuppressWarnings("unchecked")
     @Transactional(TransactionPropagationType.REQUIRED)

@@ -275,6 +275,7 @@
 										assignTo="#{leaveHome.tempValueHolder1}" />
 								</rich:menuItem>
 								<rich:menuItem icon="/img/icons/printer.png" immediate="true"
+									action="#{employeeLeavesManagement.prepeareForLeavePrint()}"
 									submitMode="ajax" reRender="printModalPanel" value="Εκτύπωση"
 									oncomplete="#{rich:component('printModalPanel')}.show()">
 									<a4j:actionparam name="leaveid" value="{leaveid}"
@@ -516,11 +517,11 @@
 
 										<a4j:commandLink value="Υπολογισμός"
 											action="#{employeeLeavesManagement.computeLeaveDuration()}"
-											reRender="employeeLeaveEffectiveNumberOfDaysDecoration" ajaxSingle="true"
-											 />
+											reRender="employeeLeaveEffectiveNumberOfDaysDecoration"
+											ajaxSingle="true" />
 									</h:panelGrid>
 								</h:panelGroup>
-								
+
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
 									<ui:define name="label">
 										<h:outputText value="Σχόλιο" />
@@ -665,7 +666,7 @@
 										<a4j:support event="onchanged" ajaxSingle="true" />
 									</rich:calendar>
 								</s:decorate>
-								
+
 								<h:panelGroup>
 									<h:panelGrid columns="1">
 										<s:decorate template="/layout/doubleLineEdit.xhtml"
@@ -681,14 +682,14 @@
 
 										<a4j:commandLink value="Υπολογισμός"
 											action="#{employeeLeavesManagement.computeLeaveDuration()}"
-											reRender="employeeLeaveEffectiveNumberOfDaysDecoration" ajaxSingle="true"
-											 />
+											reRender="employeeLeaveEffectiveNumberOfDaysDecoration"
+											ajaxSingle="true" />
 									</h:panelGrid>
 								</h:panelGroup>
 
 							</h:panelGrid>
-							
-							
+
+
 
 							<s:decorate template="/layout/doubleLineEdit.xhtml">
 								<ui:define name="label">
@@ -715,8 +716,8 @@
 				</h:panelGrid>
 			</a4j:region>
 		</rich:modalPanel>
-		
-		
+
+
 		<!-- ******************************************************* -->
 		<!-- ******************************************************* -->
 		<!-- PRINT LEAVE MODEL PANEL -->
@@ -733,12 +734,12 @@
 				<h:panelGroup>
 					<h:graphicImage value="/img/modal/close.png" styleClass="hidelink"
 						width="18" height="18">
-						<rich:componentControl for="printModalPanel" 
-						operation="hide" event="onclick" />
-						</h:graphicImage>
-					
+						<rich:componentControl for="printModalPanel" operation="hide"
+							event="onclick" />
+					</h:graphicImage>
+
 				</h:panelGroup>
-			</f:facet> 
+			</f:facet>
 			<a4j:region>
 				<h:panelGrid columns="1">
 					<h:form>
@@ -748,96 +749,93 @@
 							<ui:include src="/components/messages-component.xhtml" />
 							<h:outputText
 								value="Εκτύπωση άδειας του/της εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}." />
-							<h:panelGrid columns="4">
-
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<h:panelGrid columns="1">
+									<h:panelGrid columns="3">
+									<s:decorate template="/layout/doubleLineEdit.xhtml">
 									<ui:define name="label">
-										<h:outputText value="Τύπος Άδειας" />
-									</ui:define>
-									<h:panelGrid columns="2" border="0" cellpadding="2"
-										cellspacing="2">
-											<h:inputText
-											value="#{leaveHome.instance.employeeLeaveType.legacyCode}" size="3" maxlength="2"
-											styleClass="fieldValueText" required="true" readonly="yes" disabled="true" />
-											<h:inputText
-											value="#{leaveHome.instance.employeeLeaveType.description}" size="20" maxlength="20"
-											styleClass="fieldValueText" required="true" readonly="yes" disabled="true" />
-									</h:panelGrid>
-								</s:decorate>
-
-								<s:decorate id="leaveGeneratesCDRsDecoration"
-									template="/layout/doubleLineEdit.xhtml">
-									<ui:define name="label">
-										<h:outputText value="Υπολογισμός στα κενά" />
-									</ui:define>
-									<h:selectBooleanCheckbox
-										value="#{leaveHome.instance.generatesCDRs}" disabled="true" readonly="true"/>
-								</s:decorate>
-
-
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
-									<ui:define name="label">
-										<h:outputText value="Έναρξη : " />
+										<h:outputText value="Ημερομηνία Αίτησης : " />
 									</ui:define>
 									<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
-										style="width:50px" enableManualInput="true" disabled="true"
-										styleClass="fieldValueText" required="true" readonly="true"
-										value="#{leaveHome.instance.established}">
+										style="width:50px" enableManualInput="true"
+										styleClass="fieldValueText" required="true"
+										value="#{employeeLeavesManagement.leavePrintoutRequestDate}">
 										<a4j:support event="onchanged" ajaxSingle="true" />
 									</rich:calendar>
 								</s:decorate>
 
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
 									<ui:define name="label">
-										<h:outputText value="Λήξη : " />
+										<h:outputText value="Ημερομηνία Εκτυπώσης : " />
 									</ui:define>
 									<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
-										style="width:50px" enableManualInput="true" disabled="true"
-										styleClass="fieldValueText" required="true" readonly="true"
-										value="#{leaveHome.instance.dueTo}">
+										style="width:50px" enableManualInput="true"
+										styleClass="fieldValueText" required="true"
+										value="#{employeeLeavesManagement.leavePrintoutDate}">
 										<a4j:support event="onchanged" ajaxSingle="true" />
 									</rich:calendar>
 								</s:decorate>
 
-								<h:panelGroup>
-									<h:panelGrid columns="1">
-										<s:decorate template="/layout/doubleLineEdit.xhtml"
-											id="employeeLeaveEffectiveNumberOfDaysDecoration">
-											<ui:define name="label">
-												<h:outputText value="Διάρκεια (ημέρες) : " />
-											</ui:define>
-											<h:inputText id="employeeLeaveEffectiveNumberOfDaysTextField"
-												value="#{leaveHome.instance.effectiveNumberOfDays}" size="3" disabled="true"
-												maxlength="3" styleClass="fieldValueText" required="true" readonly="true"/>
 
-										</s:decorate>
 
-										
+								<s:decorate template="/layout/doubleLineEdit.xhtml"
+									id="employeeLeaveEffectiveNumberOfDaysDecoration">
+									<ui:define name="label">
+										<h:outputText value="Αριθμός Πρωτ. : " />
+									</ui:define>
+									<h:inputText id="employeeLeaveEffectiveNumberOfDaysTextField"
+										value="#{employeeLeavesManagement.leavePrintoutReferenceNumber}"
+										size="6" disabled="false" maxlength="10"
+										styleClass="fieldValueText" required="true" readonly="false" />
+
+								</s:decorate>
 									</h:panelGrid>
-								</h:panelGroup>
+									
+									<h:panelGrid columns="2">
+									<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Κοινοποίηση. : " />
+									</ui:define>
+									<rich:pickList >
+									<s:selectItems
+											value="#{employeeLeavesManagement.leavePrintounRecipientListSource}"
+											var="recipient" label="#{recipient.recipientTitle}" />
+									</rich:pickList>
+								</s:decorate>
+
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Υπογραφή Απο  : " />
+									</ui:define>
+									<h:selectOneListbox 
+										value="#{employeeLeavesManagement.leavePrintoutSignature}">
+										<s:selectItems
+											value="#{employeeLeavesManagement.leavePrintoutSignatureSource}"
+											var="signature" label="#{signature.signatureTitle}" />
+										<s:convertEntity></s:convertEntity>
+									</h:selectOneListbox>
+								</s:decorate>
 								
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
-									<ui:define name="label">
-										<h:outputText value="Σχόλιο" />
-									</ui:define>
-									<h:inputTextarea value="#{leaveHome.instance.comment}" readonly="true"/>
-								</s:decorate>
+								</h:panelGrid>
+
+
+								
+
+								
 
 							</h:panelGrid>
 						</a4j:outputPanel>
 
-						<h:panelGrid columns="2">
-							<s:button action="#{employeeLeavesManagement.printEmployeeLeaveAction()}"
-									value="Εκτύπωση (PDF)" target="new" type="button" />
-									
-							<a4j:commandButton value="Εκτύπωση Άδειας !"
+						<h:panelGrid columns="6">
+							<h:commandButton value="PDF commandbutton" action="#{employeeLeavesManagement.printEmployeeLeaveAction()}"  />	
+
+							<a4j:commandLink value="PDF commandbutton (ajax/link) " target="_blank" action="#{employeeLeavesManagement.printEmployeeLeaveAction()}"></a4j:commandLink>
+							<a4j:commandButton value="PDF commandbutton (ajax)" action="#{employeeLeavesManagement.printEmployeeLeaveAction()}"></a4j:commandButton>
+							
+							<s:button
 								action="#{employeeLeavesManagement.printEmployeeLeaveAction()}"
-								data="#{facesContext.maximumSeverity.ordinal ge 2}"
-								limitToList="true" 
-								oncomplete="if(data == false) Richfaces.hideModalPanel('printModalPanel');"
-								reRender="futureLeavesPanel,allLeavesPanel,activeLeavePanel,updateModalPanelContent" />
+								value="Εκτύπωση (PDF)" target="new" type="button" />
+
 							<a4j:commandButton value="Επιστροφή .."
-								action="#{leaveHome.revert()}"
 								reRender="futureLeavesPanel,allLeavesPanel,activeLeavePanel"
 								oncomplete="#{rich:component('updateModalPanel')}.hide();" />
 						</h:panelGrid>
@@ -845,7 +843,7 @@
 				</h:panelGrid>
 			</a4j:region>
 		</rich:modalPanel>
-		
+
 
 		<ui:include src="/components/wait-modal-panel.xhtml" />
 

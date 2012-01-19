@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="leaveByType" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
-	<style name="Crosstab Data Text" isDefault="false" hAlign="Center"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Crosstab Data Text" hAlign="Center"/>
 	<subDataset name="dataset1"/>
 	<parameter name="LEAVE_TYPE" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
@@ -35,7 +38,7 @@
 				<staticText>
 					<reportElement x="184" y="0" width="368" height="25" forecolor="#0000FF"/>
 					<textElement textAlignment="Right">
-						<font size="18" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H"/>
+						<font size="18" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H" isPdfEmbedded="false"/>
 					</textElement>
 					<text><![CDATA[Ολοκληρωμένο Πληροφοριακό Σύστημα]]></text>
 				</staticText>
@@ -103,28 +106,28 @@
 						<textElement>
 							<font pdfFontName="/fonts/arialb.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 						</textElement>
-						<textFieldExpression class="java.lang.String"><![CDATA[$P{LEAVE_TYPE_FILTER}]]></textFieldExpression>
+						<textFieldExpression><![CDATA[$P{LEAVE_TYPE_FILTER}]]></textFieldExpression>
 					</textField>
 					<textField>
 						<reportElement x="116" y="30" width="152" height="20"/>
 						<textElement>
 							<font pdfFontName="/fonts/arialb.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 						</textElement>
-						<textFieldExpression class="java.lang.String"><![CDATA[$P{LEAVE_SPECIALIZATION_FILTER}]]></textFieldExpression>
+						<textFieldExpression><![CDATA[$P{LEAVE_SPECIALIZATION_FILTER}]]></textFieldExpression>
 					</textField>
 					<textField>
 						<reportElement x="116" y="50" width="152" height="20"/>
 						<textElement>
 							<font pdfFontName="/fonts/arialb.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 						</textElement>
-						<textFieldExpression class="java.lang.String"><![CDATA[$P{LEAVE_SCHOOL_FILTER}]]></textFieldExpression>
+						<textFieldExpression><![CDATA[$P{LEAVE_SCHOOL_FILTER}]]></textFieldExpression>
 					</textField>
 					<textField>
 						<reportElement x="116" y="70" width="152" height="20"/>
 						<textElement>
 							<font pdfFontName="/fonts/arialb.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 						</textElement>
-						<textFieldExpression class="java.lang.String"><![CDATA[$P{LEAVE_REGION_FILTER}]]></textFieldExpression>
+						<textFieldExpression><![CDATA[$P{LEAVE_REGION_FILTER}]]></textFieldExpression>
 					</textField>
 					<staticText>
 						<reportElement x="270" y="10" width="100" height="20"/>
@@ -159,28 +162,28 @@
 						<textElement>
 							<font pdfFontName="/fonts/arialb.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 						</textElement>
-						<textFieldExpression class="java.lang.String"><![CDATA[$P{LEAVE_DATE_SEARCH_FILTER}]]></textFieldExpression>
+						<textFieldExpression><![CDATA[$P{LEAVE_DATE_SEARCH_FILTER}]]></textFieldExpression>
 					</textField>
 					<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
 						<reportElement x="373" y="30" width="168" height="20"/>
 						<textElement>
 							<font pdfFontName="/fonts/arialb.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 						</textElement>
-						<textFieldExpression class="java.util.Date"><![CDATA[$P{LEAVE_EFFECTIVE_DATE_FILTER}]]></textFieldExpression>
+						<textFieldExpression><![CDATA[$P{LEAVE_EFFECTIVE_DATE_FILTER}]]></textFieldExpression>
 					</textField>
 					<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
 						<reportElement x="373" y="50" width="168" height="20"/>
 						<textElement>
 							<font pdfFontName="/fonts/arialb.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 						</textElement>
-						<textFieldExpression class="java.util.Date"><![CDATA[$P{LEAVE_EFFECTIVE_DATE_FROM_FILTER}]]></textFieldExpression>
+						<textFieldExpression><![CDATA[$P{LEAVE_EFFECTIVE_DATE_FROM_FILTER}]]></textFieldExpression>
 					</textField>
 					<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
 						<reportElement x="373" y="70" width="168" height="20"/>
 						<textElement>
 							<font pdfFontName="/fonts/arialb.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 						</textElement>
-						<textFieldExpression class="java.util.Date"><![CDATA[$P{LEAVE_EFFECTIVE_DATE_UNTIL_FILTER}]]></textFieldExpression>
+						<textFieldExpression><![CDATA[$P{LEAVE_EFFECTIVE_DATE_UNTIL_FILTER}]]></textFieldExpression>
 					</textField>
 				</elementGroup>
 				<line>
@@ -268,56 +271,56 @@
 				<textElement>
 					<font size="9" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{comment}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{comment}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
 				<reportElement mode="Opaque" x="436" y="1" width="53" height="15" backcolor="#FFFFFF"/>
 				<textElement>
 					<font size="9" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression class="java.util.Date"><![CDATA[$F{dueTo}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{dueTo}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
 				<reportElement mode="Opaque" x="44" y="1" width="132" height="15" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left">
 					<font size="9" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{employeeLastName} + " " + $F{employeeFirstName} + " ("+  $F{employeeCode} + ")"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{employeeLastName} + " " + $F{employeeFirstName} + " ("+  $F{employeeCode} + ")"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
 				<reportElement mode="Opaque" x="379" y="1" width="50" height="15" backcolor="#FFFFFF"/>
 				<textElement>
 					<font size="9" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H"/>
 				</textElement>
-				<textFieldExpression class="java.util.Date"><![CDATA[$F{established}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{established}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement mode="Opaque" x="209" y="0" width="96" height="15" backcolor="#FFFFFF"/>
 				<textElement>
 					<font size="9" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{school}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{school}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement mode="Opaque" x="0" y="0" width="39" height="15" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Center">
 					<font size="9" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{employeeSpecializationID}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{employeeSpecializationID}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement mode="Opaque" x="181" y="0" width="23" height="15" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Center">
 					<font size="9" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{region}.toString()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{region}.toString()]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement mode="Opaque" x="311" y="0" width="58" height="15" backcolor="#FFFFFF"/>
 				<textElement>
 					<font size="9" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{REPORT_PARAMETERS_MAP}.get($F{leaveType})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{REPORT_PARAMETERS_MAP}.get($F{leaveType})]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
@@ -338,19 +341,19 @@
 				<textElement textAlignment="Right">
 					<font size="10" pdfFontName="/fonts/arial.ttf" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="423" y="0" width="80" height="20"/>
 				<textElement textAlignment="Right">
 					<font pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["Σελίδα "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Σελίδα "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Report">
 				<reportElement x="508" y="0" width="40" height="16"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageFooter>

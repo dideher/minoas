@@ -45,7 +45,7 @@ public class PrintoutHistory extends BaseIDModel {
     private String note;
     
     @Basic
-    @Column(name = "PRINTOUT_TITLE", nullable = false, length = 512)
+    @Column(name = "PRINTOUT_FROM", nullable = true, length = 128)
     private String printedFrom;
 
     /**
