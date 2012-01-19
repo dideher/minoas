@@ -15,7 +15,12 @@ import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
 import gr.sch.ira.minoas.seam.components.home.LeaveHome;
 
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -25,12 +30,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.faces.model.SelectItem;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
 import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRExporterParameter;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperRunManager;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.export.JRXlsExporter;
+import net.sf.jasperreports.engine.export.oasis.JROdsExporter;
+import net.sf.jasperreports.engine.export.oasis.JROdtExporter;
+import net.sf.jasperreports.engine.export.oasis.JROpenDocumentExporter;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.jboss.seam.ScopeType;
@@ -44,61 +57,55 @@ import org.jboss.seam.international.StatusMessage.Severity;
 @Name(value = "employeeLeavesManagement")
 @Scope(ScopeType.PAGE)
 public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
-    
+
     /**
      * Comment for <code>serialVersionUID</code>
      */
     private static final long serialVersionUID = 1L;
-    
-  	@In(required = true)
-	private EmployeeHome employeeHome;
-  	
-  	private Collection<PrintoutRecipients> leavePrintounRecipientList = new ArrayList<PrintoutRecipients>();
-	
-	private Collection<PrintoutRecipients> leavePrintounRecipientListSource = new ArrayList<PrintoutRecipients>();
-	
-	private PrintoutSignatures leavePrintoutSignature;
-	
-	private Collection<PrintoutSignatures> leavePrintoutSignatureSource = new ArrayList<PrintoutSignatures>();
-	
-	private Date leavePrintoutDate;
-	
-	private Date leavePrintoutRequestDate;
-	
-	private String leavePrintoutReferenceNumber;
-	
-	
-  	
-  	@SuppressWarnings("unchecked")
+
+    @In(required = true)
+    private EmployeeHome employeeHome;
+
+    private List<PrintoutRecipients> leavePrintounRecipientList = new ArrayList<PrintoutRecipients>();
+
+    private List<PrintoutRecipients> leavePrintounRecipientListSource = new ArrayList<PrintoutRecipients>();
+
+    private PrintoutSignatures leavePrintoutSignature;
+
+    private Collection<PrintoutSignatures> leavePrintoutSignatureSource = new ArrayList<PrintoutSignatures>();
+
+    private Date leavePrintoutDate;
+
+    private Date leavePrintoutRequestDate;
+
+    private String leavePrintoutReferenceNumber;
+
+    @SuppressWarnings("unchecked")
     @Transactional
     public Collection<EmployeeLeaveType> suggestLeaveTypesBasedOnSelectedEmployee(Object search_pattern) {
         System.err.println(getEmployeeHome().getInstance().getType());
         return getEntityManager()
-                .createQuery("SELECT s FROM EmployeeLeaveType s WHERE (LOWER(s.description) LIKE LOWER(:search_pattern) OR (s.legacyCode LIKE :search_pattern2)) AND s.suitableForEmployeeType=:employeeType ORDER BY s.legacyCode" ).setParameter(
-                        "search_pattern", CoreUtils.getSearchPattern(String.valueOf(search_pattern))).setParameter(
-                                "search_pattern2", CoreUtils.getSearchPattern(String.valueOf(search_pattern))).setParameter("employeeType", employeeHome.getInstance().getType())
-                .getResultList();
+                .createQuery(
+                        "SELECT s FROM EmployeeLeaveType s WHERE (LOWER(s.description) LIKE LOWER(:search_pattern) OR (s.legacyCode LIKE :search_pattern2)) AND s.suitableForEmployeeType=:employeeType ORDER BY s.legacyCode")
+                .setParameter("search_pattern", CoreUtils.getSearchPattern(String.valueOf(search_pattern)))
+                .setParameter("search_pattern2", CoreUtils.getSearchPattern(String.valueOf(search_pattern)))
+                .setParameter("employeeType", employeeHome.getInstance().getType()).getResultList();
     }
-	
-	
-	/**
-	 * @return the employeeHome
-	 */
-	public EmployeeHome getEmployeeHome() {
-		return employeeHome;
-	}
 
-	/**
-	 * @param employeeHome the employeeHome to set
-	 */
-	public void setEmployeeHome(EmployeeHome employeeHome) {
-		this.employeeHome = employeeHome;
-	}
-	
-    
+    /**
+     * @return the employeeHome
+     */
+    public EmployeeHome getEmployeeHome() {
+        return employeeHome;
+    }
 
-   
-    
+    /**
+     * @param employeeHome the employeeHome to set
+     */
+    public void setEmployeeHome(EmployeeHome employeeHome) {
+        this.employeeHome = employeeHome;
+    }
+
 //    @Transactional
 //    public String createNewLeave() {
 //        if(!leaveHome.isManaged()) {
@@ -147,7 +154,7 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
 //        leave.setEmployee(employeeHome.getInstance());
 //        leave.setLeaveType(LeaveType.MEDICAL_LABOUR_LEAVE);
 //    }
-    
+
 //    public String modifyInactiveLeave() {
 //        if(leaveHome != null && leaveHome.isManaged()) {
 //            info("trying to modify inactive leave #0", leaveHome);
@@ -167,8 +174,7 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
 //            return ACTION_OUTCOME_FAILURE;
 //        }
 //    }
-    
-    
+
 //    /**
 //     * Checks if a leave should be set active in regards to the reference date.
 //     * @param leave
@@ -240,33 +246,27 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
 //
 //    }
 
-
-	
-    
-    
-    @In(required=true)
+    @In(required = true)
     private LeaveHome leaveHome;
-    
-    
-    
+
     @Transactional
     @RaiseEvent("leaveCreated")
     public String addEmployeeLeaveAction() {
-        if(employeeHome.isManaged() && !(leaveHome.isManaged())) {
+        if (employeeHome.isManaged() && !(leaveHome.isManaged())) {
             Employee employee = getEntityManager().merge(employeeHome.getInstance());
             Leave newLeave = leaveHome.getInstance();
             newLeave.setEmployee(employee);
             newLeave.setInsertedBy(getPrincipal());
             newLeave.setInsertedOn(new Date());
             newLeave.setActive(leaveShouldBeActivated(newLeave, new Date()));
-            
+
             /* check if the employee has a current regular employment */
             Employment employment = employee.getCurrentEmployment();
-            if(employment!=null && employment.getType()==EmploymentType.REGULAR) {
+            if (employment != null && employment.getType() == EmploymentType.REGULAR) {
                 newLeave.setRegularSchool(employment.getSchool());
             }
-            
-            if(validateLeave(newLeave, true)) {
+
+            if (validateLeave(newLeave, true)) {
                 leaveHome.persist();
                 getEntityManager().flush();
                 info("leave #0 for employee #1 has been created", newLeave, employee);
@@ -279,7 +279,7 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
             return ACTION_OUTCOME_FAILURE;
         }
     }
-    
+
     @Transactional
     @RaiseEvent("leaveDeleted")
     public String deleteEmployeeLeaveAction() {
@@ -287,13 +287,13 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
             Employee employee = getEntityManager().merge(employeeHome.getInstance());
             Leave leave = leaveHome.getInstance();
             info("deleting employee #0 leave #1", employee, leave);
-            
+
             for (TeachingHourCDR cdr : leave.getLeaveCDRs()) {
                 info("deleting leave's #0 cdr #1", employee, cdr);
                 cdr.setLeave(null);
                 getEntityManager().remove(cdr);
             }
-            
+
             leave.getLeaveCDRs().removeAll(leave.getLeaveCDRs());
             leave.setActive(Boolean.FALSE);
             leave.setDeleted(Boolean.TRUE);
@@ -313,11 +313,11 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
     @Transactional
     @RaiseEvent("leaveModified")
     public String modifyEmployeeLeaveAction() {
-        
-        if(leaveHome.isManaged()) {
+
+        if (leaveHome.isManaged()) {
             Employee employee = getEntityManager().merge(employeeHome.getInstance());
             Leave newLeave = leaveHome.getInstance();
-            if(validateLeave(newLeave, true)) {
+            if (validateLeave(newLeave, true)) {
                 newLeave.setActive(leaveShouldBeActivated(newLeave, new Date()));
                 leaveHome.update();
                 getEntityManager().flush();
@@ -331,35 +331,29 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
             return ACTION_OUTCOME_FAILURE;
         }
     }
-    
-    private static String convertToHex(byte[] data) { 
+
+    private static String convertToHex(byte[] data) {
         StringBuffer buf = new StringBuffer();
-        for (int i = 0; i < data.length; i++) { 
+        for (int i = 0; i < data.length; i++) {
             int halfbyte = (data[i] >>> 4) & 0x0F;
             int two_halfs = 0;
-            do { 
-                if ((0 <= halfbyte) && (halfbyte <= 9)) 
+            do {
+                if ((0 <= halfbyte) && (halfbyte <= 9))
                     buf.append((char) ('0' + halfbyte));
-                else 
+                else
                     buf.append((char) ('a' + (halfbyte - 10)));
                 halfbyte = data[i] & 0x0F;
-            } while(two_halfs++ < 1);
-        } 
+            } while (two_halfs++ < 1);
+        }
         return buf.toString();
-    } 
-    
-    @Transactional
-    public String printEmployeeLeaveAction() {
-        
-        if(leaveHome.isManaged()) {
+    }
+
+    protected Map<String, Object> prepareParametersForLeavePrintout() throws NoSuchAlgorithmException, UnsupportedEncodingException {
+
+        if (leaveHome.isManaged()) {
             Employee employee = getEntityManager().merge(employeeHome.getInstance());
             Leave leave = leaveHome.getInstance();
             
-            
-            
-
-
-            try {
                 Map<String, Object> parameters = new HashMap<String, Object>();
                 Principal currentPrincipal = getPrincipal();
                 parameters.put("employeeForInformation", currentPrincipal.getRealName());
@@ -376,63 +370,52 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
                 parameters.put("printDate", leavePrintoutDate);
                 parameters.put("signatureTitle", leavePrintoutSignature.getSignatureTitle());
                 parameters.put("signatureName", leavePrintoutSignature.getSignatureName());
-                
+
                 /* compute a SHA-1 digest */
                 MessageDigest digest = MessageDigest.getInstance("SHA");
-                digest.update(String.format("%s-%d-%d", parameters.toString(), System.currentTimeMillis(), parameters.hashCode()).getBytes("UTF-8"));
+                digest.update(String.format("%s-%d-%d", parameters.toString(), System.currentTimeMillis(),
+                        parameters.hashCode()).getBytes("UTF-8"));
                 byte[] digest_array = digest.digest();
                 parameters.put("localReferenceNumber", convertToHex(digest_array));
-                
+
                 StringBuffer sb = new StringBuffer();
                 sb.append("<b>");
                 int counter = 1;
-                System.out.println("******");
-                for(PrintoutRecipients recipient : leavePrintounRecipientList) {
-                    System.out.println(counter+" "+recipient.getRecipientTitle());
+                for (PrintoutRecipients recipient : leavePrintounRecipientList) {
                     sb.append(String.format("%d %s<br />", counter++, recipient.getRecipientTitle()));
                 }
-                
+
                 sb.append("</b>");
                 parameters.put("notificationList", sb.toString());
-                
-                
-//                parameters.put("LEAVE_TYPE_FILTER",
-//                        employeeLeaveCriteria.getLeaveType() != null ? getLocalizedMessage(employeeLeaveCriteria
-//                                .getLeaveType().getKey()) : "Όλοι οι Τύποι");
-//                parameters.put("LEAVE_SPECIALIZATION_FILTER",
-//                        employeeLeaveCriteria.getSpecializationGroup() != null ? employeeLeaveCriteria
-//                                .getSpecializationGroup().getTitle() : "Όλες οι Ειδικότητες");
-//
-//                parameters.put("LEAVE_SCHOOL_FILTER",
-//                        employeeLeaveCriteria.getSchoolOfIntereset() != null ? employeeLeaveCriteria.getSchoolOfIntereset()
-//                                .getTitle() : "Όλες οι Σχολικές Μονάδες");
-//
-//                parameters.put("LEAVE_REGION_FILTER", employeeLeaveCriteria.getRegion() != null ? employeeLeaveCriteria
-//                        .getRegion().toString()
-//                        + "' Ηρακλείου" : "Όλες οι Περιοχές");
-//
-//                parameters.put("LEAVE_DATE_SEARCH_FILTER", getLocalizedMessage(employeeLeaveCriteria.getDateSearchType()
-//                        .getKey()));
-//
-//                parameters.put("LEAVE_EFFECTIVE_DATE_FILTER", employeeLeaveCriteria.getEffectiveDate());
-//                parameters.put("LEAVE_EFFECTIVE_DATE_FROM_FILTER", employeeLeaveCriteria.getEffectiveDateFrom());
-//                parameters.put("LEAVE_EFFECTIVE_DATE_UNTIL_FILTER", employeeLeaveCriteria.getEffectiveDateUntil());
 
-                /* create the leave type helper */
                 
-//                for (LeaveType leaveType : getCoreSearching().getAvailableLeaveTypes()) {
-//                    parameters.put(leaveType.name(), getLocalizedMessage(leaveType.getKey()));
-//                }
 
-                //JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(reportData);
+            
+            return parameters;
+        } else {
+            return null;
+        }
+
+    }
+
+    @Transactional
+    public String printEmployeeLeaveAction() {
+
+        if (leaveHome.isManaged()) {
+            Employee employee = getEntityManager().merge(employeeHome.getInstance());
+            Leave leave = leaveHome.getInstance();
+            try {
+                Map<String, Object> parameters = prepareParametersForLeavePrintout();
                 
                 JRBeanCollectionDataSource main = new JRBeanCollectionDataSource(Collections.EMPTY_LIST);
-                byte[] bytes = JasperRunManager.runReportToPdf(this.getClass().getResourceAsStream(
-                        "/reports/leavePrintout_31.jasper"), parameters, (JRDataSource) main);
+                byte[] bytes = JasperRunManager.runReportToPdf(
+                        this.getClass().getResourceAsStream("/reports/leavePrintout_31.jasper"), parameters,
+                        (JRDataSource) main);
                 HttpServletResponse response = (HttpServletResponse) CoreUtils.getFacesContext().getExternalContext()
                         .getResponse();
                 response.setContentType("application/pdf");
-                String pdfFile = String.format("ΑΔΕΙΑ_%s_%s_(%s).pdf", employee.getLastName(), employee.getFirstName(), employee.getLastSpecialization().getTitle());
+                String pdfFile = String.format("ΑΔΕΙΑ_%s_%s_(%s).pdf", employee.getLastName(), employee.getFirstName(),
+                        employee.getLastSpecialization().getTitle());
                 // http://greenbytes.de/tech/webdav/rfc6266.html
                 //response.addHeader("Content-Disposition", String.format("attachment; filename*=UTF-8 ' '%s", pdfFile));
                 response.addHeader("Content-Disposition", String.format("attachment; filename=lalala.pdf", pdfFile));
@@ -446,38 +429,86 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
                 ex.printStackTrace(System.out);
             }
 
-        
-            
-            
-            
-                info("leave #0 for employee #1 has been printed !", leave, employee);
-                
-                return ACTION_OUTCOME_SUCCESS;
-            } else {
-                return ACTION_OUTCOME_FAILURE;
-            }
+            info("leave #0 for employee #1 has been printed !", leave, employee);
+
+            return ACTION_OUTCOME_SUCCESS;
+        } else {
+            return ACTION_OUTCOME_FAILURE;
+        }
     }
     
+    @Transactional
+    public String printWordEmployeeLeaveAction() {
+        
+
+        if (leaveHome.isManaged()) {
+            Employee employee = getEntityManager().merge(employeeHome.getInstance());
+            Leave leave = leaveHome.getInstance();
+            OutputStream output = null;
+            try {
+                Map<String, Object> parameters = prepareParametersForLeavePrintout();
+                JRBeanCollectionDataSource main = new JRBeanCollectionDataSource(Collections.EMPTY_LIST);
+                JasperPrint jasperPrint = JasperFillManager.fillReport(this.getClass().getResourceAsStream(
+                        "/reports/leavePrintout_31.jasper"), parameters, main);
+                ByteArrayOutputStream bout = new ByteArrayOutputStream();
+                output = new BufferedOutputStream(bout);
+                JROdtExporter exporter = new JROdtExporter();
+                
+                exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+                exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, output);
+                exporter.setParameter(JRExporterParameter.INPUT_FILE, "ffsd");
+                try {
+                    exporter.exportReport();
+                    output.flush();
+                    
+                } catch (Throwable t) {
+                    System.err.println(t);
+                }
+                byte[] bytes = bout.toByteArray();
+                HttpServletResponse response = (HttpServletResponse) CoreUtils.getFacesContext().getExternalContext()
+                        .getResponse();
+                response.setContentType("application/vnd.oasis.opendocument.text");
+                String pdfFile = String.format("ΑΔΕΙΑ_%s_%s_(%s).pdf", employee.getLastName(), employee.getFirstName(),
+                        employee.getLastSpecialization().getTitle());
+                // http://greenbytes.de/tech/webdav/rfc6266.html
+                //response.addHeader("Content-Disposition", String.format("attachment; filename*=UTF-8 ' '%s", pdfFile));
+                response.addHeader("Content-Disposition", String.format("attachment; filename=lalala.odt", pdfFile));
+                response.setContentLength(bytes.length);
+                ServletOutputStream servletOutputStream = response.getOutputStream();
+                servletOutputStream.write(bytes, 0, bytes.length);
+                servletOutputStream.flush();
+                servletOutputStream.close();
+                CoreUtils.getFacesContext().responseComplete();
+            } catch (Exception ex) {
+                ex.printStackTrace(System.out);
+            }
+
+            info("leave #0 for employee #1 has been printed !", leave, employee);
+
+            return ACTION_OUTCOME_SUCCESS;
+        } else {
+            return ACTION_OUTCOME_FAILURE;
+        }
+    }
+
     public void computeLeaveDuration() {
         Leave leave = leaveHome.getInstance();
-        Date established = leave.getEstablished() != null ? DateUtils.truncate(leave.getEstablished(), Calendar.DAY_OF_MONTH) : null;
+        Date established = leave.getEstablished() != null ? DateUtils.truncate(leave.getEstablished(),
+                Calendar.DAY_OF_MONTH) : null;
         Date dueTo = leave.getDueTo() != null ? DateUtils.truncate(leave.getDueTo(), Calendar.DAY_OF_MONTH) : null;
-        
+
         info("computeLeaveDuration: established -> '#0', due to -> '#1'", established, dueTo);
-        if(established==null || dueTo==null) {
-            facesMessages
-            .add(Severity.ERROR,
-                    "Πρέπει πρώτα να συμπληρώσετε την ημ/νια έναρξης και λήξεις της άδειας");
+        if (established == null || dueTo == null) {
+            facesMessages.add(Severity.ERROR, "Πρέπει πρώτα να συμπληρώσετε την ημ/νια έναρξης και λήξεις της άδειας");
             return;
         }
-        
-     
+
         /* check if the dates are correct */
         if (established.after(dueTo)) {
 
-                facesMessages
-                        .add(Severity.ERROR,
-                                "H ημ/νία έναρξης είναι μεταγενέστερη της ημ/νιας λήξης της άδειας. Μάλλον πρέπει να κάνεις ενα διάλειμα.");
+            facesMessages
+                    .add(Severity.ERROR,
+                            "H ημ/νία έναρξης είναι μεταγενέστερη της ημ/νιας λήξης της άδειας. Μάλλον πρέπει να κάνεις ενα διάλειμα.");
             return;
         }
         // temp computation
@@ -486,10 +517,10 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
         long date2DaysMS = dueTo.getTime() - (dueTo.getTime() % DAY_TIME_IN_MILLIS);
 
         long timeInMillisDiff = (date2DaysMS - date1DaysMS);
-        int ret = (int) (timeInMillisDiff / DAY_TIME_IN_MILLIS); 
-        leave.setEffectiveNumberOfDays(new Integer(ret)); 
+        int ret = (int) (timeInMillisDiff / DAY_TIME_IN_MILLIS);
+        leave.setEffectiveNumberOfDays(new Integer(ret));
     }
-    
+
     /**
      * TODO: We need to re-fresh the method
      * @param leave
@@ -531,9 +562,9 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
                 return false;
             }
 
-            if ((established.before(current_established) && dueTo.after(current_established))
-                    || (established.after(current_established) && dueTo.before(current_dueTo))
-                    || (established.before(current_dueTo) && dueTo.after(current_dueTo))) {
+            if ((established.before(current_established) && dueTo.after(current_established)) ||
+                    (established.after(current_established) && dueTo.before(current_dueTo)) ||
+                    (established.before(current_dueTo) && dueTo.after(current_dueTo))) {
                 if (addMessages)
                     facesMessages
                             .add(Severity.ERROR,
@@ -546,7 +577,7 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
         return true;
 
     }
-    
+
     /**
      * Checks if a leave should be set active in regards to the reference date.
      * @param leave
@@ -557,151 +588,132 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
         Date established = DateUtils.truncate(leave.getEstablished(), Calendar.DAY_OF_MONTH);
         Date dueTo = DateUtils.truncate(leave.getDueTo(), Calendar.DAY_OF_MONTH);
         Date today = DateUtils.truncate(referenceDate, Calendar.DAY_OF_MONTH);
-        if((established.before(today) || established.equals(today)) && (dueTo.after(today) || dueTo.equals(today))) {
+        if ((established.before(today) || established.equals(today)) && (dueTo.after(today) || dueTo.equals(today))) {
             return true;
-        } else return false;
+        } else
+            return false;
     }
-    
-  /* this method is called when the user clicks the "add new leave" */
-  public void prepeareNewLeave() {
-      leaveHome.clearInstance();
-      Leave leave = leaveHome.getInstance();
-      leave.setEstablished(new Date());
-      leave.setDueTo(null);
-      leave.setEmployee(employeeHome.getInstance());
-      leave.setLeaveType(LeaveType.MEDICAL_LABOUR_LEAVE);
-  }
-  
-  /* this method is called when the user clicks the "print leave" */
-  public void prepeareForLeavePrint() {
-      info("fgdfgkldfjglkdjfglkdfjldfjkgkldjf print, print");
-      this.leavePrintoutDate = new Date();
-      
-      this.leavePrintounRecipientListSource = getCoreSearching().getPrintoutRecipients(getEntityManager());
-      
-      this.leavePrintoutSignatureSource = getCoreSearching().getPrintoutSignatures(getEntityManager());
-  }
 
+    /* this method is called when the user clicks the "add new leave" */
+    public void prepeareNewLeave() {
+        leaveHome.clearInstance();
+        Leave leave = leaveHome.getInstance();
+        leave.setEstablished(new Date());
+        leave.setDueTo(null);
+        leave.setEmployee(employeeHome.getInstance());
+        leave.setLeaveType(LeaveType.MEDICAL_LABOUR_LEAVE);
+    }
 
+    /* this method is called when the user clicks the "print leave" */
+    public void prepeareForLeavePrint() {
+        info("fgdfgkldfjglkdjfglkdfjldfjkgkldjf print, print");
+        this.leavePrintoutDate = new Date();
+        Collection<SelectItem> list = new ArrayList<SelectItem>();
+        for (PrintoutRecipients r : getCoreSearching().getPrintoutRecipients(getEntityManager())) {
+            list.add(new SelectItem(r, r.getRecipientTitle()));
+        }
 
+        this.leavePrintounRecipientListSource = new ArrayList<PrintoutRecipients>(getCoreSearching()
+                .getPrintoutRecipients(getEntityManager()));
+        this.leavePrintoutSignatureSource = getCoreSearching().getPrintoutSignatures(getEntityManager());
+    }
 
+    /**
+     * @return the leavePrintoutSignature
+     */
+    public PrintoutSignatures getLeavePrintoutSignature() {
+        return leavePrintoutSignature;
+    }
 
-/**
- * @return the leavePrintoutSignature
- */
-public PrintoutSignatures getLeavePrintoutSignature() {
-    return leavePrintoutSignature;
-}
+    /**
+     * @param leavePrintoutSignature the leavePrintoutSignature to set
+     */
+    public void setLeavePrintoutSignature(PrintoutSignatures leavePrintoutSignature) {
+        this.leavePrintoutSignature = leavePrintoutSignature;
+    }
 
+    /**
+     * @return the leavePrintoutDate
+     */
+    public Date getLeavePrintoutDate() {
+        return leavePrintoutDate;
+    }
 
-/**
- * @param leavePrintoutSignature the leavePrintoutSignature to set
- */
-public void setLeavePrintoutSignature(PrintoutSignatures leavePrintoutSignature) {
-    this.leavePrintoutSignature = leavePrintoutSignature;
-}
+    /**
+     * @param leavePrintoutDate the leavePrintoutDate to set
+     */
+    public void setLeavePrintoutDate(Date leavePrintoutDate) {
+        this.leavePrintoutDate = leavePrintoutDate;
+    }
 
+    /**
+     * @return the leavePrintoutRequestDate
+     */
+    public Date getLeavePrintoutRequestDate() {
+        return leavePrintoutRequestDate;
+    }
 
-/**
- * @return the leavePrintoutDate
- */
-public Date getLeavePrintoutDate() {
-    return leavePrintoutDate;
-}
+    /**
+     * @param leavePrintoutRequestDate the leavePrintoutRequestDate to set
+     */
+    public void setLeavePrintoutRequestDate(Date leavePrintoutRequestDate) {
+        this.leavePrintoutRequestDate = leavePrintoutRequestDate;
+    }
 
+    /**
+     * @return the leavePrintoutReferenceNumber
+     */
+    public String getLeavePrintoutReferenceNumber() {
+        return leavePrintoutReferenceNumber;
+    }
 
-/**
- * @param leavePrintoutDate the leavePrintoutDate to set
- */
-public void setLeavePrintoutDate(Date leavePrintoutDate) {
-    this.leavePrintoutDate = leavePrintoutDate;
-}
+    /**
+     * @param leavePrintoutReferenceNumber the leavePrintoutReferenceNumber to set
+     */
+    public void setLeavePrintoutReferenceNumber(String leavePrintoutReferenceNumber) {
+        this.leavePrintoutReferenceNumber = leavePrintoutReferenceNumber;
+    }
 
+    /**
+     * @return the leavePrintoutSignatureSource
+     */
+    public Collection<PrintoutSignatures> getLeavePrintoutSignatureSource() {
+        return leavePrintoutSignatureSource;
+    }
 
-/**
- * @return the leavePrintoutRequestDate
- */
-public Date getLeavePrintoutRequestDate() {
-    return leavePrintoutRequestDate;
-}
+    /**
+     * @param leavePrintoutSignatureSource the leavePrintoutSignatureSource to set
+     */
+    public void setLeavePrintoutSignatureSource(Collection<PrintoutSignatures> leavePrintoutSignatureSource) {
+        this.leavePrintoutSignatureSource = leavePrintoutSignatureSource;
+    }
 
+    /**
+     * @return the leavePrintounRecipientListSource
+     */
+    public List<PrintoutRecipients> getLeavePrintounRecipientListSource() {
+        return leavePrintounRecipientListSource;
+    }
 
-/**
- * @param leavePrintoutRequestDate the leavePrintoutRequestDate to set
- */
-public void setLeavePrintoutRequestDate(Date leavePrintoutRequestDate) {
-    this.leavePrintoutRequestDate = leavePrintoutRequestDate;
-}
+    /**
+     * @param leavePrintounRecipientListSource the leavePrintounRecipientListSource to set
+     */
+    public void setLeavePrintounRecipientListSource(List<PrintoutRecipients> leavePrintounRecipientListSource) {
+        this.leavePrintounRecipientListSource = leavePrintounRecipientListSource;
+    }
 
+    /**
+     * @return the leavePrintounRecipientList
+     */
+    public List<PrintoutRecipients> getLeavePrintounRecipientList() {
+        return leavePrintounRecipientList;
+    }
 
-/**
- * @return the leavePrintoutReferenceNumber
- */
-public String getLeavePrintoutReferenceNumber() {
-    return leavePrintoutReferenceNumber;
-}
-
-
-/**
- * @param leavePrintoutReferenceNumber the leavePrintoutReferenceNumber to set
- */
-public void setLeavePrintoutReferenceNumber(String leavePrintoutReferenceNumber) {
-    this.leavePrintoutReferenceNumber = leavePrintoutReferenceNumber;
-}
-
-
-
-/**
- * @return the leavePrintoutSignatureSource
- */
-public Collection<PrintoutSignatures> getLeavePrintoutSignatureSource() {
-    return leavePrintoutSignatureSource;
-}
-
-
-/**
- * @param leavePrintoutSignatureSource the leavePrintoutSignatureSource to set
- */
-public void setLeavePrintoutSignatureSource(Collection<PrintoutSignatures> leavePrintoutSignatureSource) {
-    this.leavePrintoutSignatureSource = leavePrintoutSignatureSource;
-}
-
-
-/**
- * @return the leavePrintounRecipientListSource
- */
-public Collection<PrintoutRecipients> getLeavePrintounRecipientListSource() {
-    return leavePrintounRecipientListSource;
-}
-
-
-/**
- * @param leavePrintounRecipientListSource the leavePrintounRecipientListSource to set
- */
-public void setLeavePrintounRecipientListSource(Collection<PrintoutRecipients> leavePrintounRecipientListSource) {
-    this.leavePrintounRecipientListSource = leavePrintounRecipientListSource;
-}
-
-
-/**
- * @return the leavePrintounRecipientList
- */
-public Collection<PrintoutRecipients> getLeavePrintounRecipientList() {
-    return leavePrintounRecipientList;
-}
-
-
-/**
- * @param leavePrintounRecipientList the leavePrintounRecipientList to set
- */
-public void setLeavePrintounRecipientList(Collection<PrintoutRecipients> leavePrintounRecipientList) {
-    this.leavePrintounRecipientList = leavePrintounRecipientList;
-}
-
-
-
-
-
-
+    /**
+     * @param leavePrintounRecipientList the leavePrintounRecipientList to set
+     */
+    public void setLeavePrintounRecipientList(List<PrintoutRecipients> leavePrintounRecipientList) {
+        this.leavePrintounRecipientList = leavePrintounRecipientList;
+    }
 
 }
