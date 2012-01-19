@@ -8,15 +8,14 @@ import gr.sch.ira.minoas.model.employement.EmploymentType;
 import gr.sch.ira.minoas.model.employement.Leave;
 import gr.sch.ira.minoas.model.employement.LeaveType;
 import gr.sch.ira.minoas.model.employement.TeachingHourCDR;
+import gr.sch.ira.minoas.model.printout.PrintoutRecipients;
+import gr.sch.ira.minoas.model.printout.PrintoutSignatures;
 import gr.sch.ira.minoas.model.security.Principal;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
-import gr.sch.ira.minoas.seam.components.CoreSearching;
-import gr.sch.ira.minoas.seam.components.holders.EmployeeLeaveHolder;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
 import gr.sch.ira.minoas.seam.components.home.LeaveHome;
 
 import java.security.MessageDigest;
-import java.security.Signature;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -32,18 +31,14 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JasperRunManager;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.data.JRMapCollectionDataSource;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.jboss.seam.ScopeType;
-import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Out;
 import org.jboss.seam.annotations.RaiseEvent;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
-import org.jboss.seam.annotations.datamodel.DataModel;
 import org.jboss.seam.international.StatusMessage.Severity;
 
 @Name(value = "employeeLeavesManagement")
@@ -57,8 +52,23 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
     
   	@In(required = true)
 	private EmployeeHome employeeHome;
+  	
+  	private Collection<PrintoutRecipients> leavePrintounRecipientList = new ArrayList<PrintoutRecipients>();
 	
-		
+	private Collection<PrintoutRecipients> leavePrintounRecipientListSource = new ArrayList<PrintoutRecipients>();
+	
+	private PrintoutSignatures leavePrintoutSignature;
+	
+	private Collection<PrintoutSignatures> leavePrintoutSignatureSource = new ArrayList<PrintoutSignatures>();
+	
+	private Date leavePrintoutDate;
+	
+	private Date leavePrintoutRequestDate;
+	
+	private String leavePrintoutReferenceNumber;
+	
+	
+  	
   	@SuppressWarnings("unchecked")
     @Transactional
     public Collection<EmployeeLeaveType> suggestLeaveTypesBasedOnSelectedEmployee(Object search_pattern) {
@@ -354,7 +364,7 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
                 Principal currentPrincipal = getPrincipal();
                 parameters.put("employeeForInformation", currentPrincipal.getRealName());
                 parameters.put("employeeForInformationTelephone", currentPrincipal.getInformationTelephone());
-                parameters.put("leaveRequestDate", new Date());
+                parameters.put("leaveRequestDate", leavePrintoutRequestDate);
                 parameters.put("employeeName", employee.getFirstName());
                 parameters.put("employeeSurname", employee.getLastName());
                 parameters.put("employeeSpecialization", employee.getLastSpecialization().getTitle());
@@ -362,10 +372,10 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
                 parameters.put("leaveEstablishedDate", leave.getEstablished());
                 parameters.put("leaveDayDuration", leave.getEffectiveNumberOfDays());
                 parameters.put("employeeFatherName", employee.getFatherName());
-                parameters.put("referenceNumber", "53453456");
-                parameters.put("printDate", new Date());
-                parameters.put("signatureTitle", "Ο Διευθυντής της Δ/νσης Εκπ/σης");
-                parameters.put("signatureName", "Μανουσάκης Γεώργιος");
+                parameters.put("referenceNumber", leavePrintoutReferenceNumber);
+                parameters.put("printDate", leavePrintoutDate);
+                parameters.put("signatureTitle", leavePrintoutSignature.getSignatureTitle());
+                parameters.put("signatureName", leavePrintoutSignature.getSignatureName());
                 
                 /* compute a SHA-1 digest */
                 MessageDigest digest = MessageDigest.getInstance("SHA");
@@ -373,20 +383,19 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
                 byte[] digest_array = digest.digest();
                 parameters.put("localReferenceNumber", convertToHex(digest_array));
                 
-                List<String> notificationList = new ArrayList<String>();
-                notificationList.add("Ενδιαφερόμενος/νη");
-                notificationList.add("Σχολείο Οργανικής");
-                notificationList.add("Σχολείο που Υπηρετεί");
-                notificationList.add("Υπηρεσία που Υπηρετεί");
-                
                 StringBuffer sb = new StringBuffer();
                 sb.append("<b>");
                 int counter = 1;
-                for(String lineString : notificationList) {
-                    sb.append(String.format("%d %s<br />", counter++, lineString));
+                System.out.println("******");
+                for(PrintoutRecipients recipient : leavePrintounRecipientList) {
+                    System.out.println(counter+" "+recipient.getRecipientTitle());
+                    sb.append(String.format("%d %s<br />", counter++, recipient.getRecipientTitle()));
                 }
+                
                 sb.append("</b>");
                 parameters.put("notificationList", sb.toString());
+                
+                
 //                parameters.put("LEAVE_TYPE_FILTER",
 //                        employeeLeaveCriteria.getLeaveType() != null ? getLocalizedMessage(employeeLeaveCriteria
 //                                .getLeaveType().getKey()) : "Όλοι οι Τύποι");
@@ -562,6 +571,137 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
       leave.setEmployee(employeeHome.getInstance());
       leave.setLeaveType(LeaveType.MEDICAL_LABOUR_LEAVE);
   }
-	
+  
+  /* this method is called when the user clicks the "print leave" */
+  public void prepeareForLeavePrint() {
+      info("fgdfgkldfjglkdjfglkdfjldfjkgkldjf print, print");
+      this.leavePrintoutDate = new Date();
+      
+      this.leavePrintounRecipientListSource = getCoreSearching().getPrintoutRecipients(getEntityManager());
+      
+      this.leavePrintoutSignatureSource = getCoreSearching().getPrintoutSignatures(getEntityManager());
+  }
+
+
+
+
+
+/**
+ * @return the leavePrintoutSignature
+ */
+public PrintoutSignatures getLeavePrintoutSignature() {
+    return leavePrintoutSignature;
+}
+
+
+/**
+ * @param leavePrintoutSignature the leavePrintoutSignature to set
+ */
+public void setLeavePrintoutSignature(PrintoutSignatures leavePrintoutSignature) {
+    this.leavePrintoutSignature = leavePrintoutSignature;
+}
+
+
+/**
+ * @return the leavePrintoutDate
+ */
+public Date getLeavePrintoutDate() {
+    return leavePrintoutDate;
+}
+
+
+/**
+ * @param leavePrintoutDate the leavePrintoutDate to set
+ */
+public void setLeavePrintoutDate(Date leavePrintoutDate) {
+    this.leavePrintoutDate = leavePrintoutDate;
+}
+
+
+/**
+ * @return the leavePrintoutRequestDate
+ */
+public Date getLeavePrintoutRequestDate() {
+    return leavePrintoutRequestDate;
+}
+
+
+/**
+ * @param leavePrintoutRequestDate the leavePrintoutRequestDate to set
+ */
+public void setLeavePrintoutRequestDate(Date leavePrintoutRequestDate) {
+    this.leavePrintoutRequestDate = leavePrintoutRequestDate;
+}
+
+
+/**
+ * @return the leavePrintoutReferenceNumber
+ */
+public String getLeavePrintoutReferenceNumber() {
+    return leavePrintoutReferenceNumber;
+}
+
+
+/**
+ * @param leavePrintoutReferenceNumber the leavePrintoutReferenceNumber to set
+ */
+public void setLeavePrintoutReferenceNumber(String leavePrintoutReferenceNumber) {
+    this.leavePrintoutReferenceNumber = leavePrintoutReferenceNumber;
+}
+
+
+
+/**
+ * @return the leavePrintoutSignatureSource
+ */
+public Collection<PrintoutSignatures> getLeavePrintoutSignatureSource() {
+    return leavePrintoutSignatureSource;
+}
+
+
+/**
+ * @param leavePrintoutSignatureSource the leavePrintoutSignatureSource to set
+ */
+public void setLeavePrintoutSignatureSource(Collection<PrintoutSignatures> leavePrintoutSignatureSource) {
+    this.leavePrintoutSignatureSource = leavePrintoutSignatureSource;
+}
+
+
+/**
+ * @return the leavePrintounRecipientListSource
+ */
+public Collection<PrintoutRecipients> getLeavePrintounRecipientListSource() {
+    return leavePrintounRecipientListSource;
+}
+
+
+/**
+ * @param leavePrintounRecipientListSource the leavePrintounRecipientListSource to set
+ */
+public void setLeavePrintounRecipientListSource(Collection<PrintoutRecipients> leavePrintounRecipientListSource) {
+    this.leavePrintounRecipientListSource = leavePrintounRecipientListSource;
+}
+
+
+/**
+ * @return the leavePrintounRecipientList
+ */
+public Collection<PrintoutRecipients> getLeavePrintounRecipientList() {
+    return leavePrintounRecipientList;
+}
+
+
+/**
+ * @param leavePrintounRecipientList the leavePrintounRecipientList to set
+ */
+public void setLeavePrintounRecipientList(Collection<PrintoutRecipients> leavePrintounRecipientList) {
+    this.leavePrintounRecipientList = leavePrintounRecipientList;
+}
+
+
+
+
+
+
 
 }

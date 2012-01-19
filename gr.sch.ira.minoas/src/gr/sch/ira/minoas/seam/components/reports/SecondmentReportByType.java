@@ -50,7 +50,7 @@ public class SecondmentReportByType extends BaseReport {
 
 	public void generatePDFReport() throws Exception {
 		try {
-			Map<String, String> parameters = new HashMap<String, String>();
+			Map<String, Object> parameters = new HashMap<String, Object>();
 			parameters.put("SECONDMENT_TYPE_FILTER",
 					secondmentCriteria.getSecondmentType() != null ? getLocalizedMessage(secondmentCriteria
 							.getSecondmentType().getKey()) : "Όλοι οι Τύποι");
