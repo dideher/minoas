@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="leavePrintout" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="20" bottomMargin="20" whenResourceMissingType="Key">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="442"/>
 	<style name="normalText" fontName="DejaVu Serif" fontSize="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
 	<style name="boldText" fontName="DejaVu Serif" fontSize="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
 	<style name="headlineText" fontName="DejaVu Serif" fontSize="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
@@ -66,7 +66,7 @@
 		<defaultValueExpression><![CDATA["xxxxxxxxyyyyyzzzzzzzz"]]></defaultValueExpression>
 	</parameter>
 	<variable name="DATE_FORMATTER" class="java.text.DateFormat">
-		<initialValueExpression><![CDATA[new java.text.SimpleDateFormat("MM/dd/yyyy")]]></initialValueExpression>
+		<initialValueExpression><![CDATA[new java.text.SimpleDateFormat("dd/MM/yyyy")]]></initialValueExpression>
 	</variable>
 	<background>
 		<band splitType="Stretch"/>
@@ -167,17 +167,17 @@ E-mail]]></text>
 				<textFieldExpression><![CDATA["Αρθμ.Πρωτ. ΔΕΑΦ/"+$P{referenceNumber}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="boldText" x="306" y="729" width="178" height="20"/>
+				<reportElement style="boldText" x="287" y="729" width="178" height="20"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$P{signatureName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="boldText" x="276" y="648" width="238" height="20"/>
+				<reportElement style="boldText" x="220" y="648" width="313" height="20"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$P{signatureTitle}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement style="normalText" x="342" y="632" width="107" height="14"/>
+				<reportElement style="normalText" x="323" y="632" width="107" height="14"/>
 				<textElement textAlignment="Center"/>
 				<text><![CDATA[Ε.Υ.]]></text>
 			</staticText>

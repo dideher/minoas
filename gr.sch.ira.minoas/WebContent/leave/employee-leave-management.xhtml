@@ -795,10 +795,12 @@
 									<ui:define name="label">
 										<h:outputText value="Κοινοποίηση. : " />
 									</ui:define>
-									<rich:pickList >
-									<s:selectItems
+									<rich:pickList value="#{employeeLeavesManagement.leavePrintounRecipientList}">
+									 <s:selectItems
 											value="#{employeeLeavesManagement.leavePrintounRecipientListSource}"
+											itemValue="${recipient}"
 											var="recipient" label="#{recipient.recipientTitle}" />
+											<s:convertEntity />
 									</rich:pickList>
 								</s:decorate>
 
@@ -811,7 +813,7 @@
 										<s:selectItems
 											value="#{employeeLeavesManagement.leavePrintoutSignatureSource}"
 											var="signature" label="#{signature.signatureTitle}" />
-										<s:convertEntity></s:convertEntity>
+										<s:convertEntity />
 									</h:selectOneListbox>
 								</s:decorate>
 								
@@ -827,17 +829,19 @@
 
 						<h:panelGrid columns="6">
 							<h:commandButton value="PDF commandbutton" action="#{employeeLeavesManagement.printEmployeeLeaveAction()}"  />	
-
+							<h:commandButton value="WORD commandbutton" action="#{employeeLeavesManagement.printWordEmployeeLeaveAction()}"  />
+							<!-- 
 							<a4j:commandLink value="PDF commandbutton (ajax/link) " target="_blank" action="#{employeeLeavesManagement.printEmployeeLeaveAction()}"></a4j:commandLink>
 							<a4j:commandButton value="PDF commandbutton (ajax)" action="#{employeeLeavesManagement.printEmployeeLeaveAction()}"></a4j:commandButton>
 							
 							<s:button
 								action="#{employeeLeavesManagement.printEmployeeLeaveAction()}"
 								value="Εκτύπωση (PDF)" target="new" type="button" />
-
+							 -->
 							<a4j:commandButton value="Επιστροφή .."
 								reRender="futureLeavesPanel,allLeavesPanel,activeLeavePanel"
-								oncomplete="#{rich:component('updateModalPanel')}.hide();" />
+								oncomplete="#{rich:component('printModalPanel')}.hide();" />
+								
 						</h:panelGrid>
 					</h:form>
 				</h:panelGrid>
