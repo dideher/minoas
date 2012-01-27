@@ -9,7 +9,7 @@
          <default-locale>el</default-locale>
          <supported-locale>el</supported-locale>
       </locale-config>
-      <message-bundle>resources.application</message-bundle>
+      <!--  <message-bundle>resources.application</message-bundle>  -->
       <view-handler>com.sun.facelets.FaceletViewHandler</view-handler>
    </application>
 
