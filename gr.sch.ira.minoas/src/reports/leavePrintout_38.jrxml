@@ -137,7 +137,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA["Χορηγούμε στον/στην "
 +"<b>"+$P{employeeSurname}+" "+$P{employeeName}+"</b> του <b>"+$P{employeeFatherName}+"</b>"+
-" εκπαιδευτικού κλάδου "+$P{employeeSpecializationCode}+" - "+$P{employeeSpecialization}+
+" εκπαιδευτικό κλάδου "+$P{employeeSpecializationCode}+" - "+$P{employeeSpecialization}+
 " του "+$P{employeeRegularSchool}+", <b>"+$P{leaveDayDuration}+"</b> ημέρες άδεια λόγω υοθεσίας με αποδοχές, από <b>"+$V{DATE_FORMATTER}.format($P{leaveEstablishedDate})+" </b> εώς και <b>"+$V{DATE_FORMATTER}.format($P{leaveDueToDate})+"</b>"+
 "."]]></textFieldExpression>
 			</textField>

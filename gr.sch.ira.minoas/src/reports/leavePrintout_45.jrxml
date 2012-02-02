@@ -123,7 +123,7 @@
 "2. Την εγκύκλιο 35758/∆2/29.3.2007 του ΥΠΕΠΘ<br/><br/>"+
 "3. Την αριθμ. ΣΤ5/56/2000 (ΦΕΚ 1409/B/17-11-2000 τ.Β') Υπουργική απόφαση (Μεταβίβαση δικαιώματος υπογραφής στους Προισταμένους ∆/νσεων και Γραφείων ∆Ε των νομών και νομαρχιών «με εντολή Υπουργού»)<br/><br/>"+
 "4. Την αριθμ.Φ353.1/324/105675/∆1/ΦΕΚ 1340 τ.B /16-10-2002 Υπουργική απόφαση (καθήκοντα και αρμοδιότητες Περ/κών ∆/ντών Εκπ/σης και των Προΐσταμένων Τμημάτων των ∆/νσεων αυτών)<br/><br/>"+
-"5. Την από <b>"+$V{DATE_FORMATTER}.format($P{leaveRequestDate})+"</b> αίτηση του <b>"+$P{employeeSurname}+" "+$P{employeeName}+"</b> του "+$P{employeeFatherName}+" εκπαιδευτικού λειτουργού κλάδου <b>"+$P{employeeSpecializationCode}+"</b>.<br/><br/>"+
+"5. Την από <b>"+$V{DATE_FORMATTER}.format($P{leaveRequestDate})+"</b> αίτηση της <b>"+$P{employeeSurname}+" "+$P{employeeName}+"</b> του "+$P{employeeFatherName}+" εκπαιδευτικού λειτουργού κλάδου <b>"+$P{employeeSpecializationCode}+"</b>.<br/><br/>"+
 "6. Την από <b>"+$V{DATE_FORMATTER}.format($P{doctorOpinionDate})+"</b> ιατρική βεβαίωση του Μαιευτήρα ιατρού <b>"+$P{doctorName}+"</b> με πιθανή ημερομηνία τοκετού (Π.Η.Τ) : <b>"+$V{DATE_FORMATTER}.format($P{externalDecisionDate})+"</b><br/><br/>"]]></textFieldExpression>
 			</textField>
 			<staticText>
@@ -138,9 +138,9 @@
 				<textElement textAlignment="Justified" markup="styled">
 					<paragraph lineSpacing="1_1_2"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Χορηγούμε στον/στην "
+				<textFieldExpression><![CDATA["Χορηγούμε στην "
 +"<b>"+$P{employeeSurname}+" "+$P{employeeName}+"</b> του <b>"+$P{employeeFatherName}+"</b>"+
-" εκπαιδευτικού κλάδου "+$P{employeeSpecializationCode}+" - "+$P{employeeSpecialization}+
+" εκπαιδευτικό κλάδου "+$P{employeeSpecializationCode}+" - "+$P{employeeSpecialization}+
 " του "+$P{employeeRegularSchool}+", <b>"+$P{leaveDayDuration}+"</b> ημέρες άδεια κύησης, από <b>"+$V{DATE_FORMATTER}.format($P{leaveEstablishedDate})+" </b> εώς και <b>"+$V{DATE_FORMATTER}.format($P{leaveDueToDate})+"</b>"+
 "."]]></textFieldExpression>
 			</textField>
