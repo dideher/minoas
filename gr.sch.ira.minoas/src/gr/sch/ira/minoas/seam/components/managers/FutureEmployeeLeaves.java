@@ -1,5 +1,6 @@
 package gr.sch.ira.minoas.seam.components.managers;
 
+import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 import gr.sch.ira.minoas.model.employement.Leave;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
@@ -25,13 +26,13 @@ public class FutureEmployeeLeaves extends BaseDatabaseAwareSeamComponent {
      */
     private static final long serialVersionUID = 1L;
     
-    Collection<Leave> futureLeaves = null;
+    Collection<EmployeeLeave> futureLeaves = null;
 
     @In
     private EmployeeHome employeeHome;
     
     @Unwrap
-    public Collection<Leave> getEmployeeLeaves() {
+    public Collection<EmployeeLeave> getEmployeeLeaves() {
         if(futureLeaves==null) {
             constructFutureLeavesForEmployee();
         }
@@ -40,7 +41,7 @@ public class FutureEmployeeLeaves extends BaseDatabaseAwareSeamComponent {
     
     @Observer(value= { "leaveCreated", "leaveDeleted","leaveModified" })
     public void constructFutureLeavesForEmployee() {
-        this.futureLeaves = getCoreSearching().getEmployeeFutureLeaves(employeeHome.getInstance(), new Date());
+        this.futureLeaves = getCoreSearching().getEmployeeFutureLeaves2(employeeHome.getInstance(), new Date());
     }
     
    

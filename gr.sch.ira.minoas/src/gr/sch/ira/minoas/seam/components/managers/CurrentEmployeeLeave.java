@@ -1,12 +1,10 @@
 package gr.sch.ira.minoas.seam.components.managers;
 
-import gr.sch.ira.minoas.model.employee.Employee;
+import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 import gr.sch.ira.minoas.model.employement.Leave;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
-import gr.sch.ira.minoas.seam.components.CoreSearching;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
 
-import java.util.Collection;
 import java.util.Date;
 
 import org.jboss.seam.ScopeType;
@@ -30,10 +28,10 @@ public class CurrentEmployeeLeave extends BaseDatabaseAwareSeamComponent {
     @In
     private EmployeeHome employeeHome;
     
-    private Leave currentLeave = null;
+    private EmployeeLeave currentLeave = null;
     
     @Unwrap
-    public Leave getEmployeeLeaves() {
+    public EmployeeLeave getEmployeeLeaves() {
         if(currentLeave==null) {
             constructCurrentLeaveForEmployee();
         }
@@ -43,7 +41,7 @@ public class CurrentEmployeeLeave extends BaseDatabaseAwareSeamComponent {
     
     @Observer(value= { "leaveCreated", "leaveDeleted","leaveModified" })
     public void constructCurrentLeaveForEmployee() {
-        this.currentLeave = getCoreSearching().getEmployeeActiveLeave(getEntityManager(), employeeHome.getInstance(), new Date());
+        this.currentLeave = getCoreSearching().getEmployeeActiveLeave2(getEntityManager(), employeeHome.getInstance(), new Date());
     }
    
 

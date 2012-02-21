@@ -18,6 +18,7 @@ import gr.sch.ira.minoas.model.employee.Person;
 import gr.sch.ira.minoas.model.employement.Disposal;
 import gr.sch.ira.minoas.model.employement.DisposalTargetType;
 import gr.sch.ira.minoas.model.employement.DisposalType;
+import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
 import gr.sch.ira.minoas.model.employement.Leave;
@@ -91,14 +92,13 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     public Collection<Secondment> getActiveSecondments(EntityManager em) {
         return em.createQuery("SELECT s from Secondment s WHERE s.active IS TRUE").getResultList();
     }
-    
-    
+
     @SuppressWarnings("unchecked")
     @Transactional(TransactionPropagationType.REQUIRED)
     public Collection<PrintoutRecipients> getPrintoutRecipients(EntityManager em) {
         return em.createQuery("SELECT s from PrintoutRecipients s").getResultList();
     }
-    
+
     @SuppressWarnings("unchecked")
     @Transactional(TransactionPropagationType.REQUIRED)
     public Collection<PrintoutSignatures> getPrintoutSignatures(EntityManager em) {
@@ -118,20 +118,21 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         return getEntityManager(em).createQuery("SELECT s FROM ServiceAllocation s WHERE s.active IS TRUE")
                 .getResultList();
     }
-    
+
     @Transactional(TransactionPropagationType.REQUIRED)
     @SuppressWarnings("unchecked")
     public Collection<Disposal> getActiveDisposal(EntityManager em, SchoolYear schoolYear) {
-        return getEntityManager(em).createQuery("SELECT d FROM Disposal d WHERE d.active IS TRUE AND d.schoolYear=:schoolYear")
+        return getEntityManager(em)
+                .createQuery("SELECT d FROM Disposal d WHERE d.active IS TRUE AND d.schoolYear=:schoolYear")
                 .setParameter("schoolYear", schoolYear).getResultList();
     }
-    
+
     @Transactional(TransactionPropagationType.REQUIRED)
     @SuppressWarnings("unchecked")
     public Collection<Disposal> getActiveDisposal(EntityManager em) {
         return getEntityManager(em).createQuery("SELECT d FROM Disposal d WHERE d.active IS TRUE").getResultList();
     }
-    
+
     @Transactional(TransactionPropagationType.REQUIRED)
     @SuppressWarnings("unchecked")
     public Collection<Leave> getActiveLeaves(EntityManager em) {
@@ -160,9 +161,9 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     public Collection<Secondment> getAllEmployeeSecondments(Person employee) {
         Collection<Secondment> result = null;
         info("searching employee's '#0' secondments.", employee);
-        result = entityManager.createQuery(
-                "SELECT s from Secondment s WHERE s.employee=:employee ORDER BY s.insertedOn").setParameter("employee",
-                employee).getResultList();
+        result = entityManager
+                .createQuery("SELECT s from Secondment s WHERE s.employee=:employee ORDER BY s.insertedOn")
+                .setParameter("employee", employee).getResultList();
         info("found totally '#0' secondments for employee '#1'.", result.size(), employee);
         return result;
     }
@@ -251,9 +252,9 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 
     @SuppressWarnings("unchecked")
     public Collection<Disposal> getDisposalAssociatedWithSecondment(EntityManager em, Secondment secondment) {
-        return getEntityManager().createQuery(
-                "SELECT DISTINCT d FROM Disposal d WHERE d.affectedSecondment = :secondment").setParameter(
-                "secondment", secondment).getResultList();
+        return getEntityManager()
+                .createQuery("SELECT DISTINCT d FROM Disposal d WHERE d.affectedSecondment = :secondment")
+                .setParameter("secondment", secondment).getResultList();
     }
 
     @SuppressWarnings("unchecked")
@@ -269,6 +270,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     }
 
     @Transactional(TransactionPropagationType.REQUIRED)
+    @Deprecated
     public Leave getEmployeeActiveLeave(EntityManager entityManager, Person employee, Date onDate) {
         EntityManager em = getEntityManager(entityManager);
 
@@ -281,6 +283,22 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
             return null;
         }
     }
+    
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public EmployeeLeave getEmployeeActiveLeave2(EntityManager entityManager, Person employee, Date onDate) {
+        EntityManager em = getEntityManager(entityManager);
+
+        try {
+            return (EmployeeLeave) em
+                    .createQuery(
+                            "SELECT s from EmployeeLeave s WHERE s.active IS TRUE AND s.employee=:employee AND :onDate BETWEEN s.established AND s.dueTo ORDER BY s.established")
+                    .setParameter("employee", employee).setParameter("onDate", onDate).getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
+        }
+    }
+    
+    
 
     @Transactional(TransactionPropagationType.REQUIRED)
     public Secondment getEmployeeActiveSecondment(EntityManager entityManager, Person employee, Date onDate) {
@@ -311,8 +329,8 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     public Employee getEmployeeByVatNumber(EntityManager entityManager, String vatNumber) {
         EntityManager em = getEntityManager(entityManager);
         try {
-            return (Employee) em.createQuery("SELECT e from Employee e WHERE e.vatNumber=:vatNumber").setParameter(
-                    "vatNumber", vatNumber).getSingleResult();
+            return (Employee) em.createQuery("SELECT e from Employee e WHERE e.vatNumber=:vatNumber")
+                    .setParameter("vatNumber", vatNumber).getSingleResult();
         } catch (NoResultException nre) {
             return null;
         }
@@ -323,9 +341,9 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     public Collection<Employment> getEmployeeEmployments(Person employee) {
         List<Employment> result;
         debug("trying to featch all  employments for employee '#0'", employee);
-        result = entityManager.createQuery(
-                "SELECT e from Employment e WHERE e.employee=:employee ORDER BY e.schoolYear.title").setParameter(
-                "employee", employee).getResultList();
+        result = entityManager
+                .createQuery("SELECT e from Employment e WHERE e.employee=:employee ORDER BY e.schoolYear.title")
+                .setParameter("employee", employee).getResultList();
         info("found totally '#0' employments for employee '#1'.", result.size(), employee);
         return result;
     }
@@ -335,9 +353,9 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     public Collection<Employment> getEmployeeEmployments(Person employee, SchoolYear schoolyear) {
         List<Employment> result;
         debug("trying to featch all  employments for employee '#0' during school year '#1'.", employee, schoolyear);
-        result = entityManager.createQuery(
-                "SELECT e from Employment e WHERE e.employee=:employee AND e.schoolYear=:schoolyear").setParameter(
-                "employee", employee).setParameter("schoolyear", schoolyear).getResultList();
+        result = entityManager
+                .createQuery("SELECT e from Employment e WHERE e.employee=:employee AND e.schoolYear=:schoolyear")
+                .setParameter("employee", employee).setParameter("schoolyear", schoolyear).getResultList();
         info("found totally '#0' employments for regular employee '#1' during school year '#2'.", result.size(),
                 employee, schoolyear);
         return result;
@@ -383,7 +401,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 //        info("found totally '#0' leave(s) for employee '#1'.", result.size(), employee);
 //        return result;
 //    }
-    
+
 //    @SuppressWarnings("unchecked")
 //    @Transactional(TransactionPropagationType.REQUIRED)
 //    public Collection<Leave> getEmployeeLeaveHistory(Person employee) {
@@ -406,31 +424,53 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 //        info("found totally '#0' leave(s) in employee's '#1' history.", result.size(), employee);
 //        return result;
 //    }
-    
-public Collection<Leave> getEmployeeLeaves(Person employee) {
-      Collection<Leave> result = null;
-      result = entityManager.createQuery(
-              "SELECT s from Leave s WHERE (s.deleted IS FALSE OR s.deleted IS NULL) AND s.employee=:employee ORDER BY s.established DESC")
-              .setParameter("employee", employee).getResultList();
-      return result;
-  }
 
-public Collection<Leave> getEmployeeFutureLeaves(Person employee, Date referenceDate) {
-    Collection<Leave> result = null;
-    result = entityManager.createQuery(
-            "SELECT s from Leave s WHERE (s.deleted IS FALSE OR s.deleted IS NULL) AND s.employee=:employee AND s.established > :referenceDate ORDER BY s.established DESC")
-            .setParameter("employee", employee).setParameter("referenceDate", referenceDate).getResultList();
-    return result;
-}
+    @Deprecated
+    public Collection<Leave> getEmployeeLeaves(Person employee) {
+        Collection<Leave> result = null;
+        result = entityManager
+                .createQuery(
+                        "SELECT s from Leave s WHERE (s.deleted IS FALSE OR s.deleted IS NULL) AND s.employee=:employee ORDER BY s.established DESC")
+                .setParameter("employee", employee).getResultList();
+        return result;
+    }
+    
+    public Collection<EmployeeLeave> getEmployeeLeaves2(Person employee) {
+        Collection<EmployeeLeave> result = null;
+        result = entityManager
+                .createQuery(
+                        "SELECT s from EmployeeLeave s WHERE (s.deleted IS FALSE OR s.deleted IS NULL) AND s.employee=:employee ORDER BY s.established DESC")
+                .setParameter("employee", employee).getResultList();
+        return result;
+    }
+
+    @Deprecated
+    public Collection<Leave> getEmployeeFutureLeaves(Person employee, Date referenceDate) {
+        Collection<Leave> result = null;
+        result = entityManager
+                .createQuery(
+                        "SELECT s from Leave s WHERE (s.deleted IS FALSE OR s.deleted IS NULL) AND s.employee=:employee AND s.established > :referenceDate ORDER BY s.established DESC")
+                .setParameter("employee", employee).setParameter("referenceDate", referenceDate).getResultList();
+        return result;
+    }
+    
+    public Collection<EmployeeLeave> getEmployeeFutureLeaves2(Person employee, Date referenceDate) {
+        Collection<EmployeeLeave> result = null;
+        result = entityManager
+                .createQuery(
+                        "SELECT s from EmployeeLeave s WHERE (s.deleted IS FALSE OR s.deleted IS NULL) AND s.employee=:employee AND s.established > :referenceDate ORDER BY s.established DESC")
+                .setParameter("employee", employee).setParameter("referenceDate", referenceDate).getResultList();
+        return result;
+    }
 
     @Transactional(TransactionPropagationType.REQUIRED)
     public Employee getEmployeeOfTypeByVatNumber(EntityManager entityManager, EmployeeType employeeType,
             String vatNumber) {
         EntityManager em = getEntityManager(entityManager);
         try {
-            return (Employee) em.createQuery(
-                    "SELECT e from Employee e WHERE e.vatNumber=:vatNumber AND e.type=:employeeType").setParameter(
-                    "vatNumber", vatNumber).setParameter("employeeType", employeeType).getSingleResult();
+            return (Employee) em
+                    .createQuery("SELECT e from Employee e WHERE e.vatNumber=:vatNumber AND e.type=:employeeType")
+                    .setParameter("vatNumber", vatNumber).setParameter("employeeType", employeeType).getSingleResult();
         } catch (NoResultException nre) {
             return null;
         }
@@ -440,8 +480,9 @@ public Collection<Leave> getEmployeeFutureLeaves(Person employee, Date reference
     public Collection<Secondment> getEmployeeSecondments(Person employee) {
         Collection<Secondment> result = null;
         info("searching employee's '#0' secondments.", employee);
-        result = entityManager.createQuery(
-                "SELECT s from Secondment s WHERE s.active IS TRUE AND s.employee=:employee ORDER BY s.insertedOn")
+        result = entityManager
+                .createQuery(
+                        "SELECT s from Secondment s WHERE s.active IS TRUE AND s.employee=:employee ORDER BY s.insertedOn")
                 .setParameter("employee", employee).getResultList();
         info("found totally '#0' secondments for employee '#1'.", result.size(), employee);
         return result;
@@ -461,8 +502,9 @@ public Collection<Leave> getEmployeeFutureLeaves(Person employee, Date reference
     @SuppressWarnings("unchecked")
     @Transactional(TransactionPropagationType.REQUIRED)
     public Collection<Employee> getEmployeesWithUnProcessedPermanentTransfers(EntityManager em, SchoolYear schoolYear) {
-        return getEntityManager(em).createQuery(
-                "SELECT i.employee FROM PermanentTransfer i WHERE i.isProcessed IS FALSE AND i.schoolYear=:schoolYear")
+        return getEntityManager(em)
+                .createQuery(
+                        "SELECT i.employee FROM PermanentTransfer i WHERE i.isProcessed IS FALSE AND i.schoolYear=:schoolYear")
                 .setParameter("schoolYear", schoolYear).getResultList();
 
     }
@@ -481,7 +523,6 @@ public Collection<Leave> getEmployeeFutureLeaves(Person employee, Date reference
         return null;
     }
 
-    
     @SuppressWarnings("unchecked")
     @Transactional(TransactionPropagationType.REQUIRED)
     public Collection<Employment> getEmploymentsOfType(EntityManager em, EmploymentType type, SchoolYear schoolYear) {
@@ -494,7 +535,7 @@ public Collection<Leave> getEmployeeFutureLeaves(Person employee, Date reference
         info("found totally '#0' active employments of type '#1'.", result.size(), type);
         return result;
     }
-    
+
     @SuppressWarnings("unchecked")
     @Transactional(TransactionPropagationType.REQUIRED)
     public Collection<Employment> getEmploymentsOfType(EmploymentType type, SchoolYear schoolYear) {
@@ -510,8 +551,8 @@ public Collection<Leave> getEmployeeFutureLeaves(Person employee, Date reference
         result = entityManager
                 .createQuery(
                         "SELECT e from Employment e WHERE e.active IS TRUE AND e.type=:type AND e.schoolYear=:schoolyear AND e.employee NOT IN (:excludedEmployees) ORDER BY e.id")
-                .setParameter("type", type).setParameter("schoolyear", schoolYear).setParameter("excludedEmployees",
-                        excludedEmployees).getResultList();
+                .setParameter("type", type).setParameter("schoolyear", schoolYear)
+                .setParameter("excludedEmployees", excludedEmployees).getResultList();
         info("found totally '#0' active employments of type '#1'.", result.size(), type);
         return result;
     }
@@ -532,8 +573,9 @@ public Collection<Leave> getEmployeeFutureLeaves(Person employee, Date reference
     @SuppressWarnings("unchecked")
     @Transactional(TransactionPropagationType.REQUIRED)
     public Collection<PermanentTransfer> getgetUnProcessedPermanentTransfers(EntityManager em, SchoolYear schoolYear) {
-        return getEntityManager(em).createQuery(
-                "SELECT i FROM PermanentTransfer i WHERE i.isProcessed IS FALSE AND i.schoolYear=:schoolYear")
+        return getEntityManager(em)
+                .createQuery(
+                        "SELECT i FROM PermanentTransfer i WHERE i.isProcessed IS FALSE AND i.schoolYear=:schoolYear")
                 .setParameter("schoolYear", schoolYear).getResultList();
 
     }
@@ -596,9 +638,10 @@ public Collection<Leave> getEmployeeFutureLeaves(Person employee, Date reference
                                     + " AND NOT EXISTS(SELECT s FROM Secondment s WHERE s.employee=e AND s.active IS TRUE AND s.sourceUnit=:school AND (:dayOfInterest BETWEEN s.established AND s.dueTo)) "
                                     + " AND NOT EXISTS(SELECT l FROM Leave l WHERE l.employee=e AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
                                     + " AND NOT EXISTS(SELECT a FROM ServiceAllocation a WHERE a.employee=e AND a.active IS TRUE AND a.sourceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo)) "
-                                    + " ORDER BY e.lastSpecialization.id, e.lastName ").setParameter("specialization",
-                            specializationGroup).setParameter("school", school).setParameter("schoolYear", schoolYear)
-                    .setParameter("dayOfInterest", dayOfPrecense).getResultList();
+                                    + " ORDER BY e.lastSpecialization.id, e.lastName ")
+                    .setParameter("specialization", specializationGroup).setParameter("school", school)
+                    .setParameter("schoolYear", schoolYear).setParameter("dayOfInterest", dayOfPrecense)
+                    .getResultList();
 
         } else {
             return getEntityManager(em)
@@ -660,10 +703,10 @@ public Collection<Leave> getEmployeeFutureLeaves(Person employee, Date reference
                                     + " AND NOT EXISTS(SELECT s FROM Secondment s WHERE s.employee=e AND s.active IS TRUE AND s.sourceUnit=:school AND (:dayOfInterest BETWEEN s.established AND s.dueTo)) "
                                     + " AND NOT EXISTS(SELECT l FROM Leave l WHERE l.employee=e AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
                                     + " AND NOT EXISTS(SELECT a FROM ServiceAllocation a WHERE a.employee=e AND a.active IS TRUE AND a.sourceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo)) "
-                                    + " ORDER BY e.lastSpecialization.id, e.lastName ").setParameter("specialization",
-                            specializationGroup).setParameter("school", school).setParameter("schoolYear", schoolYear)
-                    .setParameter("employmentType", employmentType).setParameter("dayOfInterest", dayOfPrecense)
-                    .getResultList();
+                                    + " ORDER BY e.lastSpecialization.id, e.lastName ")
+                    .setParameter("specialization", specializationGroup).setParameter("school", school)
+                    .setParameter("schoolYear", schoolYear).setParameter("employmentType", employmentType)
+                    .setParameter("dayOfInterest", dayOfPrecense).getResultList();
 
         } else {
             return getEntityManager(em)
@@ -680,9 +723,9 @@ public Collection<Leave> getEmployeeFutureLeaves(Person employee, Date reference
 
     @SuppressWarnings("unchecked")
     public List<SchoolClass> getSchoolClassesForSchoolType(SchoolType schoolType) {
-        return getEntityManager().createQuery(
-                "SELECT s FROM SchoolClass s WHERE s.schoolType=:schoolType ORDER BY (s.sortOrder)").setParameter(
-                "schoolType", schoolType).getResultList();
+        return getEntityManager()
+                .createQuery("SELECT s FROM SchoolClass s WHERE s.schoolType=:schoolType ORDER BY (s.sortOrder)")
+                .setParameter("schoolType", schoolType).getResultList();
     }
 
     @SuppressWarnings("unchecked")
@@ -694,16 +737,17 @@ public Collection<Leave> getEmployeeFutureLeaves(Person employee, Date reference
                     .createQuery(
                             "SELECT DISTINCT s FROM Disposal s JOIN FETCH s.employee WHERE (s.active IS TRUE AND s.disposalUnit=:school AND s.schoolYear=:schoolYear AND (:dayOfInterest BETWEEN s.established AND s.dueTo)) "
                                     + " AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g IN (:specializations) AND s.employee.lastSpecialization MEMBER OF g.specializations)"
-                                    + " ORDER BY s.employee.lastSpecialization.id, s.employee.lastName ").setParameter(
-                            "specializations", specializationGroups).setParameter("school", school).setParameter(
-                            "schoolYear", schoolYear).setParameter("dayOfInterest", dayOfPrecense).getResultList();
+                                    + " ORDER BY s.employee.lastSpecialization.id, s.employee.lastName ")
+                    .setParameter("specializations", specializationGroups).setParameter("school", school)
+                    .setParameter("schoolYear", schoolYear).setParameter("dayOfInterest", dayOfPrecense)
+                    .getResultList();
         } else {
             return getEntityManager(em)
                     .createQuery(
                             "SELECT DISTINCT s FROM Disposal s JOIN FETCH s.employee WHERE (s.active IS TRUE AND s.disposalUnit=:school AND s.schoolYear=:schoolYear AND (:dayOfInterest BETWEEN s.established AND s.dueTo)) "
-                                    + " ORDER BY s.employee.lastSpecialization.id, s.employee.lastName ").setParameter(
-                            "school", school).setParameter("schoolYear", schoolYear).setParameter("dayOfInterest",
-                            dayOfPrecense).getResultList();
+                                    + " ORDER BY s.employee.lastSpecialization.id, s.employee.lastName ")
+                    .setParameter("school", school).setParameter("schoolYear", schoolYear)
+                    .setParameter("dayOfInterest", dayOfPrecense).getResultList();
         }
     }
 
@@ -727,17 +771,18 @@ public Collection<Leave> getEmployeeFutureLeaves(Person employee, Date reference
                             "SELECT DISTINCT s FROM Disposal s JOIN FETCH s.employee WHERE (s.active IS TRUE AND s.disposalUnit=:school AND s.schoolYear=:schoolYear AND (:dayOfInterest BETWEEN s.established AND s.dueTo)) "
                                     + " AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g IN (:specializations) AND s.employee.lastSpecialization MEMBER OF g.specializations)"
                                     + " AND NOT EXISTS(SELECT l FROM Leave l WHERE l.employee=s.employee AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
-                                    + " ORDER BY s.employee.lastSpecialization.id, s.employee.lastName ").setParameter(
-                            "specializations", specializationGroups).setParameter("school", school).setParameter(
-                            "schoolYear", schoolYear).setParameter("dayOfInterest", dayOfPrecense).getResultList();
+                                    + " ORDER BY s.employee.lastSpecialization.id, s.employee.lastName ")
+                    .setParameter("specializations", specializationGroups).setParameter("school", school)
+                    .setParameter("schoolYear", schoolYear).setParameter("dayOfInterest", dayOfPrecense)
+                    .getResultList();
         } else {
             return getEntityManager(em)
                     .createQuery(
                             "SELECT DISTINCT s FROM Disposal s JOIN FETCH s.employee WHERE (s.active IS TRUE AND s.disposalUnit=:school AND s.schoolYear=:schoolYear AND (:dayOfInterest BETWEEN s.established AND s.dueTo)) "
                                     + " AND NOT EXISTS(SELECT l FROM Leave l WHERE l.employee=s.employee AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
-                                    + " ORDER BY s.employee.lastSpecialization.id, s.employee.lastName ").setParameter(
-                            "school", school).setParameter("schoolYear", schoolYear).setParameter("dayOfInterest",
-                            dayOfPrecense).getResultList();
+                                    + " ORDER BY s.employee.lastSpecialization.id, s.employee.lastName ")
+                    .setParameter("school", school).setParameter("schoolYear", schoolYear)
+                    .setParameter("dayOfInterest", dayOfPrecense).getResultList();
         }
     }
 
@@ -747,8 +792,8 @@ public Collection<Leave> getEmployeeFutureLeaves(Person employee, Date reference
         return getEntityManager(entityManager)
                 .createQuery(
                         "SELECT e FROM Employee e LEFT OUTER JOIN e.secondments sec WHERE (e.currentEmployment.active IS TRUE AND e.currentEmployment.school=:school AND e.currentEmployment.schoolYear=:schoolYear) AND (:dayOfPrecense >= sec.established AND :dayOfPrecense <= sec.dueTo)")
-                .setParameter("school", school).setParameter("schoolYear", schoolYear).setParameter("dayOfPrecense",
-                        dayOfPrecense).getResultList();
+                .setParameter("school", school).setParameter("schoolYear", schoolYear)
+                .setParameter("dayOfPrecense", dayOfPrecense).getResultList();
     }
 
     @SuppressWarnings("unchecked")
@@ -760,8 +805,7 @@ public Collection<Leave> getEmployeeFutureLeaves(Person employee, Date reference
                         "SELECT e FROM Employment e WHERE e.school=:school AND e.schoolYear=:schoolyear AND e.active IS TRUE ORDER BY e.specialization.id, e.employee.lastName")
                 .setParameter("school", school).setParameter("schoolyear", schoolyear).getResultList();
         finished = System.currentTimeMillis();
-        info(
-                "found totally #0 deputy employment(s) in school unit #1 and school year #2. The operation tool #3 [ms] to complete",
+        info("found totally #0 deputy employment(s) in school unit #1 and school year #2. The operation tool #3 [ms] to complete",
                 return_value.size(), school, schoolyear, Long.valueOf((finished - started)));
         return return_value;
     }
@@ -777,8 +821,7 @@ public Collection<Leave> getEmployeeFutureLeaves(Person employee, Date reference
                 .setParameter("school", school).setParameter("schoolyear", schoolyear).setParameter("type", type)
                 .getResultList();
         finished = System.currentTimeMillis();
-        info(
-                "found totally #0 employment(s) of type #3 in school unit #1 during school year #2. The operation took #4 [ms] to complete. ",
+        info("found totally #0 employment(s) of type #3 in school unit #1 during school year #2. The operation took #4 [ms] to complete. ",
                 return_value.size(), school, schoolyear, type, Long.valueOf(finished - started));
         return return_value;
     }
@@ -796,8 +839,8 @@ public Collection<Leave> getEmployeeFutureLeaves(Person employee, Date reference
                     .createQuery(
                             "SELECT DISTINCT a FROM ServiceAllocation a JOIN FETCH a.employee WHERE (a.active IS TRUE AND a.serviceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo))"
                                     + " AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g IN (:specializations) AND a.employee.lastSpecialization MEMBER OF g.specializations)")
-                    .setParameter("specializations", specializationGroups).setParameter("school", school).setParameter(
-                            "dayOfInterest", dayOfPrecense).getResultList();
+                    .setParameter("specializations", specializationGroups).setParameter("school", school)
+                    .setParameter("dayOfInterest", dayOfPrecense).getResultList();
 
         } else {
             return getEntityManager(em)
@@ -817,16 +860,16 @@ public Collection<Leave> getEmployeeFutureLeaves(Person employee, Date reference
                     .createQuery(
                             "SELECT DISTINCT a FROM ServiceAllocation a JOIN FETCH a.employee WHERE (a.active IS TRUE AND a.serviceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo)) "
                                     + " AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g=:specialization AND a.employee.lastSpecialization MEMBER OF g.specializations) "
-                                    + " ORDER BY a.employee.lastSpecialization.id, a.employee.lastName ").setParameter(
-                            "specialization", specializationGroup).setParameter("school", school).setParameter(
-                            "dayOfInterest", dayOfPrecense).getResultList();
+                                    + " ORDER BY a.employee.lastSpecialization.id, a.employee.lastName ")
+                    .setParameter("specialization", specializationGroup).setParameter("school", school)
+                    .setParameter("dayOfInterest", dayOfPrecense).getResultList();
 
         } else {
             return getEntityManager(em)
                     .createQuery(
                             "SELECT DISTINCT a FROM ServiceAllocation a JOIN FETCH a.employee WHERE (a.active IS TRUE AND a.serviceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo)) "
-                                    + " ORDER BY a.employee.lastSpecialization.id, a.employee.lastName ").setParameter(
-                            "school", school).setParameter("dayOfInterest", dayOfPrecense).getResultList();
+                                    + " ORDER BY a.employee.lastSpecialization.id, a.employee.lastName ")
+                    .setParameter("school", school).setParameter("dayOfInterest", dayOfPrecense).getResultList();
 
         }
 
@@ -839,8 +882,8 @@ public Collection<Leave> getEmployeeFutureLeaves(Person employee, Date reference
             return getEntityManager(em)
                     .createQuery(
                             "SELECT DISTINCT a FROM ServiceAllocation a JOIN FETCH a.employee WHERE (a.active IS TRUE AND a.serviceUnit=:school AND a.serviceType IN (:serviceTypes)) AND (:dayOfInterest BETWEEN a.established AND a.dueTo))")
-                    .setParameter("serviceTypes", serviceAllocationTypes).setParameter("school", school).setParameter(
-                            "dayOfInterest", dayOfPrecense).getResultList();
+                    .setParameter("serviceTypes", serviceAllocationTypes).setParameter("school", school)
+                    .setParameter("dayOfInterest", dayOfPrecense).getResultList();
 
         } else {
             return getEntityManager(em)
@@ -862,15 +905,15 @@ public Collection<Leave> getEmployeeFutureLeaves(Person employee, Date reference
                     .createQuery(
                             "SELECT DISTINCT l FROM Leave l JOIN FETCH l.employee WHERE (l.active IS TRUE AND l.employee.currentEmployment.school=:school AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
                                     + " AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g IN (:specializations) AND s.employee.lastSpecialization MEMBER OF g.specializations) "
-                                    + " ORDER BY l.employee.lastSpecialization.id, l.employee.lastName ").setParameter(
-                            "specializations", specializationGroups).setParameter("school", school).setParameter(
-                            "dayOfInterest", effectiveDate).getResultList();
+                                    + " ORDER BY l.employee.lastSpecialization.id, l.employee.lastName ")
+                    .setParameter("specializations", specializationGroups).setParameter("school", school)
+                    .setParameter("dayOfInterest", effectiveDate).getResultList();
         } else {
             return getEntityManager(em)
                     .createQuery(
                             "SELECT DISTINCT l FROM Leave l JOIN FETCH l.employee WHERE (l.active IS TRUE AND l.employee.currentEmployment.school=:school AND (:dayOfInterest BETWEEN l.established AND l.dueTo)) "
-                                    + " ORDER BY l.employee.lastSpecialization.id, l.employee.lastName ").setParameter(
-                            "school", school).setParameter("dayOfInterest", effectiveDate).getResultList();
+                                    + " ORDER BY l.employee.lastSpecialization.id, l.employee.lastName ")
+                    .setParameter("school", school).setParameter("dayOfInterest", effectiveDate).getResultList();
         }
     }
 
@@ -888,14 +931,15 @@ public Collection<Leave> getEmployeeFutureLeaves(Person employee, Date reference
                     .createQuery(
                             "SELECT DISTINCT s FROM Secondment s JOIN FETCH s.employee WHERE (s.active IS TRUE AND s.sourceUnit=:school AND s.schoolYear=:schoolYear AND (:dayOfInterest BETWEEN s.established AND s.dueTo))"
                                     + " AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g IN (:specializations) AND s.employee.lastSpecialization MEMBER OF g.specializations)")
-                    .setParameter("specializations", specializationGroups).setParameter("school", school).setParameter(
-                            "schoolYear", schoolYear).setParameter("dayOfInterest", dayOfPrecense).getResultList();
+                    .setParameter("specializations", specializationGroups).setParameter("school", school)
+                    .setParameter("schoolYear", schoolYear).setParameter("dayOfInterest", dayOfPrecense)
+                    .getResultList();
         } else {
             return getEntityManager(em)
                     .createQuery(
                             "SELECT DISTINCT s FROM Secondment s JOIN FETCH s.employee WHERE (s.active IS TRUE AND s.sourceUnit=:school AND s.schoolYear=:schoolYear AND (:dayOfInterest BETWEEN s.established AND s.dueTo))")
-                    .setParameter("school", school).setParameter("schoolYear", schoolYear).setParameter(
-                            "dayOfInterest", dayOfPrecense).getResultList();
+                    .setParameter("school", school).setParameter("schoolYear", schoolYear)
+                    .setParameter("dayOfInterest", dayOfPrecense).getResultList();
         }
     }
 
@@ -908,16 +952,17 @@ public Collection<Leave> getEmployeeFutureLeaves(Person employee, Date reference
                     .createQuery(
                             "SELECT DISTINCT s FROM Secondment s JOIN FETCH s.employee WHERE (s.active IS TRUE AND s.sourceUnit=:school AND s.schoolYear=:schoolYear AND (:dayOfInterest BETWEEN s.established AND s.dueTo))"
                                     + " AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g=:specialization AND s.employee.lastSpecialization MEMBER OF g.specializations) "
-                                    + " ORDER BY s.employee.lastSpecialization.id, s.employee.lastName ").setParameter(
-                            "specialization", specializationGroup).setParameter("school", school).setParameter(
-                            "schoolYear", schoolYear).setParameter("dayOfInterest", dayOfPrecense).getResultList();
+                                    + " ORDER BY s.employee.lastSpecialization.id, s.employee.lastName ")
+                    .setParameter("specialization", specializationGroup).setParameter("school", school)
+                    .setParameter("schoolYear", schoolYear).setParameter("dayOfInterest", dayOfPrecense)
+                    .getResultList();
         } else {
             return getEntityManager(em)
                     .createQuery(
                             "SELECT DISTINCT s FROM Secondment s JOIN FETCH s.employee WHERE (s.active IS TRUE AND s.sourceUnit=:school AND s.schoolYear=:schoolYear AND (:dayOfInterest BETWEEN s.established AND s.dueTo)) "
-                                    + " ORDER BY s.employee.lastSpecialization.id, s.employee.lastName ").setParameter(
-                            "school", school).setParameter("schoolYear", schoolYear).setParameter("dayOfInterest",
-                            dayOfPrecense).getResultList();
+                                    + " ORDER BY s.employee.lastSpecialization.id, s.employee.lastName ")
+                    .setParameter("school", school).setParameter("schoolYear", schoolYear)
+                    .setParameter("dayOfInterest", dayOfPrecense).getResultList();
         }
     }
 
@@ -929,8 +974,8 @@ public Collection<Leave> getEmployeeFutureLeaves(Person employee, Date reference
                     .createQuery(
                             "SELECT DISTINCT a FROM ServiceAllocation a JOIN FETCH a.employee WHERE (a.active IS TRUE AND a.sourceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo))"
                                     + " AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g IN (:specializations) AND a.employee.lastSpecialization MEMBER OF g.specializations)")
-                    .setParameter("specializations", specializationGroups).setParameter("school", school).setParameter(
-                            "dayOfInterest", dayOfPrecense).getResultList();
+                    .setParameter("specializations", specializationGroups).setParameter("school", school)
+                    .setParameter("dayOfInterest", dayOfPrecense).getResultList();
 
         } else {
             return getEntityManager(em)
@@ -959,8 +1004,8 @@ public Collection<Leave> getEmployeeFutureLeaves(Person employee, Date reference
                     .createQuery(
                             "SELECT DISTINCT a FROM ServiceAllocation a JOIN FETCH a.employee WHERE (a.active IS TRUE AND a.sourceUnit=:school AND a.serviceUnit != :school AND (:dayOfInterest BETWEEN a.established AND a.dueTo))"
                                     + " AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g IN (:specializations) AND a.employee.lastSpecialization MEMBER OF g.specializations)")
-                    .setParameter("specializations", specializationGroups).setParameter("school", school).setParameter(
-                            "dayOfInterest", dayOfPrecense).getResultList();
+                    .setParameter("specializations", specializationGroups).setParameter("school", school)
+                    .setParameter("dayOfInterest", dayOfPrecense).getResultList();
 
         } else {
             return getEntityManager(em)
@@ -981,9 +1026,9 @@ public Collection<Leave> getEmployeeFutureLeaves(Person employee, Date reference
     @SuppressWarnings("unchecked")
     public Collection<School> getSchools(EntityManager em, Character region) {
         if (region != null)
-            return getEntityManager(em).createQuery(
-                    "SELECT s from School s WHERE s.regionCode=:region ORDER BY s.title ASC").setParameter("region",
-                    region).getResultList();
+            return getEntityManager(em)
+                    .createQuery("SELECT s from School s WHERE s.regionCode=:region ORDER BY s.title ASC")
+                    .setParameter("region", region).getResultList();
         else
             return getSchools(em);
     }
@@ -1002,14 +1047,15 @@ public Collection<Leave> getEmployeeFutureLeaves(Person employee, Date reference
                     .createQuery(
                             "SELECT DISTINCT s FROM Secondment s JOIN FETCH s.employee WHERE (s.active IS TRUE AND s.targetUnit=:school AND s.schoolYear=:schoolYear AND (:dayOfInterest BETWEEN s.established AND s.dueTo))"
                                     + " AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g IN (:specializations) AND s.employee.lastSpecialization MEMBER OF g.specializations)")
-                    .setParameter("specializations", specializationGroups).setParameter("school", school).setParameter(
-                            "schoolYear", schoolYear).setParameter("dayOfInterest", dayOfPrecense).getResultList();
+                    .setParameter("specializations", specializationGroups).setParameter("school", school)
+                    .setParameter("schoolYear", schoolYear).setParameter("dayOfInterest", dayOfPrecense)
+                    .getResultList();
         } else {
             return getEntityManager(em)
                     .createQuery(
                             "SELECT DISTINCT s FROM Secondment s JOIN FETCH s.employee WHERE (s.active IS TRUE AND s.targetUnit=:school AND s.schoolYear=:schoolYear AND (:dayOfInterest BETWEEN s.established AND s.dueTo))")
-                    .setParameter("school", school).setParameter("schoolYear", schoolYear).setParameter(
-                            "dayOfInterest", dayOfPrecense).getResultList();
+                    .setParameter("school", school).setParameter("schoolYear", schoolYear)
+                    .setParameter("dayOfInterest", dayOfPrecense).getResultList();
         }
     }
 
@@ -1022,16 +1068,17 @@ public Collection<Leave> getEmployeeFutureLeaves(Person employee, Date reference
                     .createQuery(
                             "SELECT DISTINCT s FROM Secondment s JOIN FETCH s.employee WHERE (s.active IS TRUE AND s.targetUnit=:school AND s.schoolYear=:schoolYear AND (:dayOfInterest BETWEEN s.established AND s.dueTo))"
                                     + " AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g=:specialization AND s.employee.lastSpecialization MEMBER OF g.specializations) "
-                                    + " ORDER BY s.employee.lastSpecialization.id, s.employee.lastName ").setParameter(
-                            "specialization", specializationGroup).setParameter("school", school).setParameter(
-                            "schoolYear", schoolYear).setParameter("dayOfInterest", dayOfPrecense).getResultList();
+                                    + " ORDER BY s.employee.lastSpecialization.id, s.employee.lastName ")
+                    .setParameter("specialization", specializationGroup).setParameter("school", school)
+                    .setParameter("schoolYear", schoolYear).setParameter("dayOfInterest", dayOfPrecense)
+                    .getResultList();
         } else {
             return getEntityManager(em)
                     .createQuery(
                             "SELECT DISTINCT s FROM Secondment s JOIN FETCH s.employee WHERE (s.active IS TRUE AND s.targetUnit=:school AND s.schoolYear=:schoolYear AND (:dayOfInterest BETWEEN s.established AND s.dueTo)) "
-                                    + " ORDER BY s.employee.lastSpecialization.id, s.employee.lastName ").setParameter(
-                            "school", school).setParameter("schoolYear", schoolYear).setParameter("dayOfInterest",
-                            dayOfPrecense).getResultList();
+                                    + " ORDER BY s.employee.lastSpecialization.id, s.employee.lastName ")
+                    .setParameter("school", school).setParameter("schoolYear", schoolYear)
+                    .setParameter("dayOfInterest", dayOfPrecense).getResultList();
         }
     }
 
@@ -1053,15 +1100,16 @@ public Collection<Leave> getEmployeeFutureLeaves(Person employee, Date reference
                             "SELECT DISTINCT s FROM Secondment s JOIN FETCH s.employee WHERE (s.active IS TRUE AND s.targetUnit=:school AND s.schoolYear=:schoolYear AND (:dayOfInterest BETWEEN s.established AND s.dueTo))"
                                     + " AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g IN (:specializations) AND s.employee.lastSpecialization MEMBER OF g.specializations)"
                                     + " AND NOT EXISTS(SELECT l FROM Leave l WHERE l.employee=s.employee AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))")
-                    .setParameter("specializations", specializationGroups).setParameter("school", school).setParameter(
-                            "schoolYear", schoolYear).setParameter("dayOfInterest", dayOfPrecense).getResultList();
+                    .setParameter("specializations", specializationGroups).setParameter("school", school)
+                    .setParameter("schoolYear", schoolYear).setParameter("dayOfInterest", dayOfPrecense)
+                    .getResultList();
         } else {
             return getEntityManager(em)
                     .createQuery(
                             "SELECT DISTINCT s FROM Secondment s JOIN FETCH s.employee WHERE (s.active IS TRUE AND s.targetUnit=:school AND s.schoolYear=:schoolYear AND (:dayOfInterest BETWEEN s.established AND s.dueTo))"
                                     + " AND NOT EXISTS(SELECT l FROM Leave l WHERE l.employee=s.employee AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))")
-                    .setParameter("school", school).setParameter("schoolYear", schoolYear).setParameter(
-                            "dayOfInterest", dayOfPrecense).getResultList();
+                    .setParameter("school", school).setParameter("schoolYear", schoolYear)
+                    .setParameter("dayOfInterest", dayOfPrecense).getResultList();
         }
     }
 
@@ -1090,8 +1138,8 @@ public Collection<Leave> getEmployeeFutureLeaves(Person employee, Date reference
 
     @SuppressWarnings("unchecked")
     public Collection<SpecializationGroup> getSpecializationGroups(SchoolYear schoolYear, EntityManager em) {
-        return (Collection<SpecializationGroup>) em.createQuery(
-                "SELECT s FROM SpecializationGroup s WHERE s.schoolYear=:schoolYear ORDER BY s.title ASC")
+        return (Collection<SpecializationGroup>) em
+                .createQuery("SELECT s FROM SpecializationGroup s WHERE s.schoolYear=:schoolYear ORDER BY s.title ASC")
                 .setParameter("schoolYear", schoolYear).getResultList();
     }
 
@@ -1105,8 +1153,6 @@ public Collection<Leave> getEmployeeFutureLeaves(Person employee, Date reference
         return (Collection<Specialization>) em.createQuery("SELECT s FROM Specialization s ORDER BY s.id ASC")
                 .getResultList();
     }
-    
-
 
     @Factory(value = "specializationSearchTypes")
     public SpecializationSearchType[] getSpecializationSearchTypes() {
@@ -1115,8 +1161,8 @@ public Collection<Leave> getEmployeeFutureLeaves(Person employee, Date reference
 
     @SuppressWarnings("unchecked")
     public Collection<TeachingHourCDR> getTeachingHoursCDRs(EntityManager entityManager, SchoolYear schoolYear) {
-        List<TeachingHourCDR> return_value = getEntityManager(entityManager).createQuery(
-                "SELECT t FROM TeachingHourCDR t WHERE t.schoolYear=:schoolYear")
+        List<TeachingHourCDR> return_value = getEntityManager(entityManager)
+                .createQuery("SELECT t FROM TeachingHourCDR t WHERE t.schoolYear=:schoolYear")
                 .setParameter("schoolYear", schoolYear).getResultList();
         info("found totally #0 CDRs", return_value.size());
         return return_value;
@@ -1125,54 +1171,61 @@ public Collection<Leave> getEmployeeFutureLeaves(Person employee, Date reference
     @SuppressWarnings("unchecked")
     public Collection<TeachingHourCDR> getEmployeeTeachingHoursCDRs(EntityManager entityManager, SchoolYear schoolYear,
             Employee employee) {
-        List<TeachingHourCDR> return_value = getEntityManager(entityManager).createQuery(
-                "SELECT t FROM TeachingHourCDR t WHERE t.schoolYear=:schoolYear AND t.employee=:employee")
+        List<TeachingHourCDR> return_value = getEntityManager(entityManager)
+                .createQuery("SELECT t FROM TeachingHourCDR t WHERE t.schoolYear=:schoolYear AND t.employee=:employee")
                 .setParameter("schoolYear", schoolYear).setParameter("employee", employee).getResultList();
         return return_value;
     }
-    
+
     @SuppressWarnings("unchecked")
-    public Collection<TeachingHourCDR> getEmployeeTeachingHoursCDRsWithPositiveHours(EntityManager entityManager, SchoolYear schoolYear,
-            Employee employee) {
-        List<TeachingHourCDR> return_value = getEntityManager(entityManager).createQuery(
-                "SELECT t FROM TeachingHourCDR t WHERE t.schoolYear=:schoolYear AND t.hours >= 0 AND t.employee=:employee")
+    public Collection<TeachingHourCDR> getEmployeeTeachingHoursCDRsWithPositiveHours(EntityManager entityManager,
+            SchoolYear schoolYear, Employee employee) {
+        List<TeachingHourCDR> return_value = getEntityManager(entityManager)
+                .createQuery(
+                        "SELECT t FROM TeachingHourCDR t WHERE t.schoolYear=:schoolYear AND t.hours >= 0 AND t.employee=:employee")
                 .setParameter("schoolYear", schoolYear).setParameter("employee", employee).getResultList();
         return return_value;
     }
-    
+
     @SuppressWarnings("unchecked")
-    public Collection<TeachingHourCDR> getEmployeeLogisticTeachingHoursCDR(EntityManager entityManager, SchoolYear schoolYear,
-            Employee employee) {
-        List<TeachingHourCDR> return_value = getEntityManager(entityManager).createQuery(
-                "SELECT t FROM TeachingHourCDR t WHERE t.schoolYear=:schoolYear AND t.employee=:employee AND t.logisticCDR IS TRUE")
+    public Collection<TeachingHourCDR> getEmployeeLogisticTeachingHoursCDR(EntityManager entityManager,
+            SchoolYear schoolYear, Employee employee) {
+        List<TeachingHourCDR> return_value = getEntityManager(entityManager)
+                .createQuery(
+                        "SELECT t FROM TeachingHourCDR t WHERE t.schoolYear=:schoolYear AND t.employee=:employee AND t.logisticCDR IS TRUE")
                 .setParameter("schoolYear", schoolYear).setParameter("employee", employee).getResultList();
         return return_value;
     }
-    
+
     @SuppressWarnings("unchecked")
-    public Collection<TeachingHourCDR> getEmployeeNonLogisticTeachingHoursCDR(EntityManager entityManager, SchoolYear schoolYear,
-            Employee employee) {
-        List<TeachingHourCDR> return_value = getEntityManager(entityManager).createQuery(
-                "SELECT t FROM TeachingHourCDR t WHERE t.schoolYear=:schoolYear AND t.employee=:employee AND t.logisticCDR IS FALSE")
+    public Collection<TeachingHourCDR> getEmployeeNonLogisticTeachingHoursCDR(EntityManager entityManager,
+            SchoolYear schoolYear, Employee employee) {
+        List<TeachingHourCDR> return_value = getEntityManager(entityManager)
+                .createQuery(
+                        "SELECT t FROM TeachingHourCDR t WHERE t.schoolYear=:schoolYear AND t.employee=:employee AND t.logisticCDR IS FALSE")
                 .setParameter("schoolYear", schoolYear).setParameter("employee", employee).getResultList();
         return return_value;
     }
-    
+
     @SuppressWarnings("unchecked")
-    public Collection<TeachingHourCDR> getEmployeeTeachingHoursCDRsOfType(EntityManager entityManager, SchoolYear schoolYear,
-            Employee employee, TeachingHourCDRType type) {
-        List<TeachingHourCDR> return_value = getEntityManager(entityManager).createQuery(
-                "SELECT t FROM TeachingHourCDR t WHERE t.schoolYear=:schoolYear AND t.employee=:employee AND t.cdrType=:type")
-                .setParameter("schoolYear", schoolYear).setParameter("employee", employee).setParameter("type", type).getResultList();
+    public Collection<TeachingHourCDR> getEmployeeTeachingHoursCDRsOfType(EntityManager entityManager,
+            SchoolYear schoolYear, Employee employee, TeachingHourCDRType type) {
+        List<TeachingHourCDR> return_value = getEntityManager(entityManager)
+                .createQuery(
+                        "SELECT t FROM TeachingHourCDR t WHERE t.schoolYear=:schoolYear AND t.employee=:employee AND t.cdrType=:type")
+                .setParameter("schoolYear", schoolYear).setParameter("employee", employee).setParameter("type", type)
+                .getResultList();
         return return_value;
     }
 
     @SuppressWarnings("unchecked")
     public Collection<TeachingHourCDR> getSchoolTeachingHoursCDRs(EntityManager entityManager, SchoolYear schoolYear,
             Unit unit) {
-        List<TeachingHourCDR> return_value = getEntityManager(entityManager).createQuery(
-                "SELECT t FROM TeachingHourCDR t WHERE t.schoolYear=:schoolYear " + "AND t.unit=:unit ORDER BY (t.employee)")
-                .setParameter("schoolYear", schoolYear).setParameter("unit", unit).getResultList();
+        List<TeachingHourCDR> return_value = getEntityManager(entityManager)
+                .createQuery(
+                        "SELECT t FROM TeachingHourCDR t WHERE t.schoolYear=:schoolYear "
+                                + "AND t.unit=:unit ORDER BY (t.employee)").setParameter("schoolYear", schoolYear)
+                .setParameter("unit", unit).getResultList();
         info("found totally #0 CDRs", return_value.size());
         return return_value;
     }
@@ -1180,9 +1233,9 @@ public Collection<Leave> getEmployeeFutureLeaves(Person employee, Date reference
     @SuppressWarnings("unchecked")
     @Transactional
     public Collection<TeachingRequirement> getTeachingRequirement(EntityManager em, SchoolYear schoolYear) {
-        return getEntityManager().createQuery(
-                "SELECT DISTINCT r FROM TeachingRequirement r WHERE r.schoolYear=:schoolYear").setParameter(
-                "schoolYear", schoolYear).getResultList();
+        return getEntityManager()
+                .createQuery("SELECT DISTINCT r FROM TeachingRequirement r WHERE r.schoolYear=:schoolYear")
+                .setParameter("schoolYear", schoolYear).getResultList();
     }
 
     /**
@@ -1219,8 +1272,9 @@ public Collection<Leave> getEmployeeFutureLeaves(Person employee, Date reference
     @Transactional(TransactionPropagationType.REQUIRED)
     public Collection<OutstandingImprovement> getUnProcessedOutstandingImprovements(EntityManager em,
             SchoolYear schoolYear) {
-        return getEntityManager(em).createQuery(
-                "SELECT i FROM OutstandingImprovement i WHERE i.isProcessed IS FALSE AND i.schoolYear=:schoolYear")
+        return getEntityManager(em)
+                .createQuery(
+                        "SELECT i FROM OutstandingImprovement i WHERE i.isProcessed IS FALSE AND i.schoolYear=:schoolYear")
                 .setParameter("schoolYear", schoolYear).getResultList();
 
     }
@@ -1237,17 +1291,17 @@ public Collection<Leave> getEmployeeFutureLeaves(Person employee, Date reference
     public List<Principal> searchPrincipals(EntityManager entityManager, String search_string) {
         EntityManager em = getEntityManager(entityManager);
         String pattern = CoreUtils.getSearchPattern(search_string);
-        return em.createQuery("SELECT p FROM Principal p WHERE lower(p.username) LIKE :search_pattern").setParameter(
-                "search_pattern", pattern).getResultList();
+        return em.createQuery("SELECT p FROM Principal p WHERE lower(p.username) LIKE :search_pattern")
+                .setParameter("search_pattern", pattern).getResultList();
     }
 
     @SuppressWarnings("unchecked")
     public List<Role> searchRoles(String role_search_pattern) {
         String pattern = CoreUtils.getSearchPattern(role_search_pattern);
         info("searching for roles with #0 search pattern", pattern);
-        List<Role> return_value = getEntityManager().createQuery(
-                "SELECT r from Role r WHERE lower(r.id) LIKE :search_pattern").setParameter("search_pattern", pattern)
-                .getResultList();
+        List<Role> return_value = getEntityManager()
+                .createQuery("SELECT r from Role r WHERE lower(r.id) LIKE :search_pattern")
+                .setParameter("search_pattern", pattern).getResultList();
         info("found totally #0 role(s).", return_value.size());
         return return_value;
     }
@@ -1256,8 +1310,9 @@ public Collection<Leave> getEmployeeFutureLeaves(Person employee, Date reference
     public List<School> searchShools(String school_search_pattern) {
         String pattern = CoreUtils.getSearchPattern(school_search_pattern);
         info("searching for schools with #0 search pattern.", pattern);
-        List<School> return_value = getEntityManager().createQuery(
-                "SELECT s from School s WHERE lower(s.title) LIKE :search_pattern AND s.ministryCode != '0000000'")
+        List<School> return_value = getEntityManager()
+                .createQuery(
+                        "SELECT s from School s WHERE lower(s.title) LIKE :search_pattern AND s.ministryCode != '0000000'")
                 .setParameter("search_pattern", pattern).getResultList();
         info("found totally #0 school(s).", return_value.size());
         return return_value;
@@ -1272,16 +1327,15 @@ public Collection<Leave> getEmployeeFutureLeaves(Person employee, Date reference
     public Collection<WorkExperience> getWorkExperienceHistory(Person employee) {
         Collection<WorkExperience> result = null;
         info("searching employee's '#0' work experiences.", employee);
-        result = entityManager.createQuery(
-            "SELECT s from WorkExperience s WHERE s.active IS TRUE AND s.employee=:employee ORDER BY s.fromDate")
-            .setParameter("employee", employee).getResultList();
+        result = entityManager
+                .createQuery(
+                        "SELECT s from WorkExperience s WHERE s.active IS TRUE AND s.employee=:employee ORDER BY s.fromDate")
+                .setParameter("employee", employee).getResultList();
 //        result = entityManager.createQuery(
 //	        "SELECT s from Leave s WHERE s.active IS FALSE AND s.employee=:employee ORDER BY s.established")
 //	        .setParameter("employee", employee).getResultList();
         info("found totally '#0' work experience(s) in employee's '#1' history.", result.size(), employee);
         return result;
     }
-    
 
- 
 }
