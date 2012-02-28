@@ -11,6 +11,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.AutoCreate;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
@@ -21,6 +22,7 @@ import org.omg.CosCollection.SetHolder;
  * @version $Id$
  */
 @Name(value = "leaveHome")
+@AutoCreate
 public class LeaveHome extends MinoasEntityHome<Leave> {
     
     

@@ -14,6 +14,10 @@ import gr.sch.ira.minoas.model.security.Principal;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
 import gr.sch.ira.minoas.seam.components.home.LeaveHome;
+import gr.sch.ira.minoas.seam.components.managers.MedicalEmployeeLeavesOfCurrentYear;
+import gr.sch.ira.minoas.seam.components.managers.MedicalEmployeeLeavesOfPrevious5Years;
+import gr.sch.ira.minoas.seam.components.managers.RegularEmployeeLeavesOfCurrentYear;
+import gr.sch.ira.minoas.seam.components.managers.RegularEmployeeLeavesOfPreviousYear;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
@@ -49,6 +53,7 @@ import org.apache.commons.lang.time.DateUtils;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Out;
 import org.jboss.seam.annotations.RaiseEvent;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
@@ -79,6 +84,13 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
     private Date leavePrintoutRequestDate;
 
     private String leavePrintoutReferenceNumber;
+    
+    /**
+     * It is the date used for various leave count computation. It is used by {@link RegularEmployeeLeavesOfCurrentYear}, 
+     * {@link RegularEmployeeLeavesOfPreviousYear}, {@link MedicalEmployeeLeavesOfCurrentYear} and {@link MedicalEmployeeLeavesOfPrevious5Years}
+     */
+    @Out(value="leaveComputationReferenceDay", scope=ScopeType.PAGE, required=true)
+    private Date leaveComputationReferenceDay = new Date();
 
     @SuppressWarnings("unchecked")
     @Transactional
@@ -278,6 +290,13 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
             facesMessages.add(Severity.ERROR, "employee home #0 is not managed.", employeeHome);
             return ACTION_OUTCOME_FAILURE;
         }
+    }
+    
+    @Transactional
+    @RaiseEvent("leaveCreated")
+    public String triggerLeaveAddedAction() {
+        info("triggered!");
+        return ACTION_OUTCOME_SUCCESS;
     }
 
     @Transactional
@@ -714,6 +733,20 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
      */
     public void setLeavePrintounRecipientList(List<PrintoutRecipients> leavePrintounRecipientList) {
         this.leavePrintounRecipientList = leavePrintounRecipientList;
+    }
+
+    /**
+     * @return the leaveComputationReferenceDay
+     */
+    public Date getLeaveComputationReferenceDay() {
+        return leaveComputationReferenceDay;
+    }
+
+    /**
+     * @param leaveComputationReferenceDay the leaveComputationReferenceDay to set
+     */
+    public void setLeaveComputationReferenceDay(Date leaveComputationReferenceDay) {
+        this.leaveComputationReferenceDay = leaveComputationReferenceDay;
     }
 
 }

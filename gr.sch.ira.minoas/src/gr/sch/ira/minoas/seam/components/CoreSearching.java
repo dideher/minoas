@@ -19,6 +19,7 @@ import gr.sch.ira.minoas.model.employement.Disposal;
 import gr.sch.ira.minoas.model.employement.DisposalTargetType;
 import gr.sch.ira.minoas.model.employement.DisposalType;
 import gr.sch.ira.minoas.model.employement.EmployeeLeave;
+import gr.sch.ira.minoas.model.employement.EmployeeLeaveType;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
 import gr.sch.ira.minoas.model.employement.Leave;
@@ -42,6 +43,7 @@ import gr.sch.ira.minoas.seam.components.criteria.DateSearchType;
 import gr.sch.ira.minoas.seam.components.criteria.SpecializationGroupSearchType;
 import gr.sch.ira.minoas.seam.components.criteria.SpecializationSearchType;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -65,6 +67,8 @@ import org.jboss.seam.annotations.Transactional;
 @Scope(ScopeType.EVENT)
 @AutoCreate
 public class CoreSearching extends BaseDatabaseAwareSeamComponent {
+    
+    
 
     /**
      * 
@@ -74,6 +78,18 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     public Role findRole(String roleID) {
         return getEntityManager().find(Role.class, roleID);
     }
+    
+    /**
+     * Represents regular leave types 
+     */
+    public static final Collection<String> REGULAR_TYPE_LEAVE_TYPES = Arrays.asList("31", "54", "74");
+    
+    /**
+     * Represents medical leave types 
+     */
+    public static final Collection<String> MEDICAL_TYPE_LEAVE_TYPES = Arrays.asList("41", "42", "47", "48", "55", "71");
+    
+    
 
     public SchoolYear getActiveSchoolYear(EntityManager entityManager) {
         try {
@@ -443,6 +459,34 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
                 .setParameter("employee", employee).getResultList();
         return result;
     }
+    
+    public Collection<EmployeeLeave> getEmployeeLeaves(Person employee, Date established, Date dueTo) {
+        Collection<EmployeeLeave> result = null;
+        result = entityManager
+                .createQuery(
+                        "SELECT s from EmployeeLeave s WHERE (s.deleted IS FALSE OR s.deleted IS NULL) AND s.employee=:employee AND (s.established >= :established AND s.dueTo <= :dueTo) ORDER BY s.established DESC")
+                .setParameter("employee", employee).setParameter("established", established).setParameter("dueTo", dueTo).getResultList();
+        return result;
+    }
+    
+    public Collection<EmployeeLeave> getEmployeeLeaves(Person employee, Date established, Date dueTo, Collection<EmployeeLeaveType> ofTypeList) {
+        Collection<EmployeeLeave> result = null;
+        info("searching employee leaves #0 from '#1' to '#2' of type '#3'", employee, established, dueTo, ofTypeList);
+        result = entityManager
+                .createQuery(
+                        "SELECT s from EmployeeLeave s WHERE (s.deleted IS FALSE OR s.deleted IS NULL) AND s.employee=:employee AND (s.established >= :established AND s.dueTo <= :dueTo AND s.employeeLeaveType IN (:typesList)) ORDER BY s.established DESC")
+                .setParameter("employee", employee).setParameter("established", established).setParameter("dueTo", dueTo).setParameter("typesList", ofTypeList).getResultList();
+        info("found '#4' leave(s) for employee '#0' from '#1' to '#2' of type '#3'", employee, established, dueTo, ofTypeList, result.size());
+        return result;
+    }
+    
+   public Collection<EmployeeLeaveType> getLeaveTypes(Collection<String> legacyCodes) {
+       Collection<EmployeeLeaveType> result = null;
+       result = entityManager
+               .createQuery(
+                       "SELECT s from EmployeeLeaveType s WHERE s.legacyCode IN (:legacyCodes) ORDER BY s.legacyCode").setParameter("legacyCodes", legacyCodes).getResultList();
+       return result; 
+   }
 
     @Deprecated
     public Collection<Leave> getEmployeeFutureLeaves(Person employee, Date referenceDate) {
