@@ -444,5 +444,46 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
             Collection<Map<String, Object>> employeeCurrentHoursDistributionItems) {
         this.employeeCurrentHoursDistributionItems = employeeCurrentHoursDistributionItems;
     }
+    
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public String updateEmployeeSpecialization() {
+        if (getEmployeeHome().isManaged()) {
+            return ACTION_OUTCOME_SUCCESS;
+        } else {
+            return ACTION_OUTCOME_FAILURE;
+        }
+    }
+    
+    protected boolean isVATValid(String vat) {
+        if(vat!=null)
+            return vat.trim().length()==10;
+        else return false;
+    }
+    
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public String updateEmployeeBasicInfo() {
+        if (getEmployeeHome().isManaged()) {
+            Employee employee = getEmployeeHome().getInstance();
+            if(!isVATValid(employee.getVatNumber())) {
+                getFacesMessages().add(Severity.ERROR, "Το ΑΦΜ '#0' που εισάγατε, δεν είναι έγκυρο", employee.getVatNumber());
+                return ACTION_OUTCOME_FAILURE;
+            }
+            info("updated employee '#0'", employee);
+            getEmployeeHome().update();
+            getEntityManager().flush();
+            return ACTION_OUTCOME_SUCCESS;
+        } else {
+            return ACTION_OUTCOME_FAILURE;
+        }
+    }
+    
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public String updateEmployeeRegularRegistry() {
+        if (getEmployeeHome().isManaged()) {
+            return ACTION_OUTCOME_SUCCESS;
+        } else {
+            return ACTION_OUTCOME_FAILURE;
+        }
+    }
 
 }
