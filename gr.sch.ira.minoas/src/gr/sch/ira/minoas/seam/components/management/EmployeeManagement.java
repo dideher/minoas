@@ -14,6 +14,7 @@ import gr.sch.ira.minoas.model.core.SchoolYear;
 import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeExclusion;
+import gr.sch.ira.minoas.model.employee.RegularEmployeeInfo;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.Leave;
 import gr.sch.ira.minoas.model.employement.TeachingHourCDR;
@@ -23,6 +24,7 @@ import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.EmployeeMergeRequest;
 import gr.sch.ira.minoas.seam.components.home.EmployeeExclusionHome;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
+import gr.sch.ira.minoas.seam.components.home.RegularEmployeeInfoHome;
 import gr.sch.ira.minoas.seam.components.reports.resource.EmployeeWorkExperienceItem;
 import gr.sch.ira.minoas.seam.components.reports.resource.LeaveReportItem;
 
@@ -191,6 +193,9 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
 
 	@In(required = true, create = true)
 	private EmployeeHome employeeHome;
+	
+	@In(required = true, create = true)
+	private RegularEmployeeInfoHome regularEmployeeInfoHome;
 
 	@In(required = true, create = true)
 	private EmployeeExclusionHome employeeExclusionHome;
@@ -460,6 +465,12 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
         else return false;
     }
     
+    protected boolean isRegularRegistryIDValid(String registryID) {
+        if(registryID!=null)
+            return registryID.trim().length()==7;
+        else return false;
+    }
+    
     @Transactional(TransactionPropagationType.REQUIRED)
     public String updateEmployeeBasicInfo() {
         if (getEmployeeHome().isManaged()) {
@@ -479,11 +490,35 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
     
     @Transactional(TransactionPropagationType.REQUIRED)
     public String updateEmployeeRegularRegistry() {
-        if (getEmployeeHome().isManaged()) {
+        if (getEmployeeHome().isManaged() && getRegularEmployeeInfoHome().isManaged()) {
+            Employee employee = getEmployeeHome().getInstance();
+            RegularEmployeeInfo employeeInfo = getRegularEmployeeInfoHome().getInstance();
+            if(!isRegularRegistryIDValid(employeeInfo.getRegistryID())) {
+                getFacesMessages().add(Severity.ERROR, "Ο αριθμός μητρώου '#0' που εισάγατε, δεν είναι έγκυρος", employeeInfo.getRegistryID());
+                return ACTION_OUTCOME_FAILURE;
+            }
+            info("updated employee '#0' registry ID to '#1'", employee, employeeInfo.getRegistryID());
+            getEmployeeHome().update();
+            getRegularEmployeeInfoHome().update();
+            getEntityManager().flush();
             return ACTION_OUTCOME_SUCCESS;
         } else {
             return ACTION_OUTCOME_FAILURE;
         }
+    }
+
+    /**
+     * @return the regularEmployeeInfoHome
+     */
+    public RegularEmployeeInfoHome getRegularEmployeeInfoHome() {
+        return regularEmployeeInfoHome;
+    }
+
+    /**
+     * @param regularEmployeeInfoHome the regularEmployeeInfoHome to set
+     */
+    public void setRegularEmployeeInfoHome(RegularEmployeeInfoHome regularEmployeeInfoHome) {
+        this.regularEmployeeInfoHome = regularEmployeeInfoHome;
     }
 
 }
