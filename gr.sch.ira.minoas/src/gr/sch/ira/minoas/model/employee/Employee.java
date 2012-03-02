@@ -464,15 +464,15 @@ public class Employee extends Person {
     }
 	
     public boolean isRegularEmployee() {
-        return type==REGULAR;
+        return type==EmployeeType.REGULAR;
     }
     
     public boolean isDeputyEmployee() {
-        return type==DEPUTY;
+        return type==EmployeeType.DEPUTY;
     }
     
     public boolean isHourlyPaidEmployee() {
-        return type==HOURLYPAID;
+        return type==EmployeeType.HOURLYPAID;
     }
 	
 
