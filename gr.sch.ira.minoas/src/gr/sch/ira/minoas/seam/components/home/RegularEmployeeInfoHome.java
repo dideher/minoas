@@ -62,4 +62,11 @@ public class RegularEmployeeInfoHome extends MinoasEntityHome<RegularEmployeeInf
 	public boolean wire() {
 		return true;
 	}
+	
+	@Transactional
+    public String revert() {
+        info("principal #0 is reverting updates to regular employee info  #1", getPrincipalName(), getInstance());
+        getEntityManager().refresh(getInstance());
+        return "reverted";
+    }
 }

@@ -296,6 +296,13 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 	public String update() {
 		return super.update();
 	}
+	
+	@Transactional
+    public String revert() {
+        info("principal #0 is reverting updates to employee #1", getPrincipalName(), getInstance());
+        getEntityManager().refresh(getInstance());
+        return "reverted";
+    }
 
 	@Transactional
 	public boolean wire() {
