@@ -14,6 +14,7 @@ import gr.sch.ira.minoas.model.core.SchoolYear;
 import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeExclusion;
+import gr.sch.ira.minoas.model.employee.Person;
 import gr.sch.ira.minoas.model.employee.RegularEmployeeInfo;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.Leave;
@@ -453,6 +454,27 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
     @Transactional(TransactionPropagationType.REQUIRED)
     public String updateEmployeeSpecialization() {
         if (getEmployeeHome().isManaged()) {
+            Employee employee = getEmployeeHome().getInstance();
+            
+            /* fix the current employement field */
+            Employment currentEmployment = employee.getCurrentEmployment();
+            if(currentEmployment!=null) {
+                currentEmployment.setSpecialization(employee.getLastSpecialization());
+            }
+            
+            /* if the employee is hourly paid, then it is quite possible
+             * that the employee has more than one employments
+             */
+            if(employee.isHourlyPaid()) {
+                SchoolYear currentSchoolYear = getCoreSearching().getActiveSchoolYear(getEntityManager());
+                Collection<Employment> employments = getCoreSearching().getEmployeeEmployments(employee, currentSchoolYear);
+                for(Employement em : employments) {
+                    em.setSpecialization(employee.getLastSpecialization());
+                }
+            }
+            info("updated employee '#0' specialization", employee);
+            getEmployeeHome().update();
+            getEntityManager().flush();
             return ACTION_OUTCOME_SUCCESS;
         } else {
             return ACTION_OUTCOME_FAILURE;
