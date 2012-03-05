@@ -463,6 +463,17 @@ public class Employee extends Person {
         this.workExperience = workExperience;
     }
 	
+    public boolean isRegularEmployee() {
+        return type==REGULAR;
+    }
+    
+    public boolean isDeputyEmployee() {
+        return type==DEPUTY;
+    }
+    
+    public boolean isHourlyPaidEmployee() {
+        return type==HOURLYPAID;
+    }
 	
 
 }

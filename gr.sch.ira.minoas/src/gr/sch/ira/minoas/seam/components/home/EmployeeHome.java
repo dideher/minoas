@@ -334,5 +334,17 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 	public Boolean isInExclusionList() {
 		return getInstance().getExclusion()!=null;
 	}
+	
+	public Boolean isRegularEmployee() {
+        return getInstance().isRegularEmployee();
+    }
+    
+    public Boolean isDeputyEmployee() {
+       return getInstance().isDeputyEmployee();
+    }
+    
+    public Boolean isHourlyPaidEmployee() {
+        return getInstance().isHourlyPaidEmpoyee();
+    }
 
 }
