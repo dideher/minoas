@@ -67,8 +67,8 @@
 											height="12" style="border:0" />
 									</a4j:commandLink>
 									<a4j:commandLink id="updateRegistryLink"
-										reRender="updateRegularRegistryIDModalPanelContent" rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE_REGULAR_REGISTRY'))}"
-										oncomplete="#{rich:component('updateRegularRegistryIDModalPanel')}.show()"
+										reRender="updateRegularRegistryIDModalPanelContent" rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE_REGULAR_REGISTRY')) and (employeeHome.instance.type eq 'REGULAR')}"
+										oncomplete="#{rich:component('updateRegularRegistryIDModalPanel')}.show()" 
 										value="Ενημέρωση ΑΜ">
 										<h:graphicImage value="/img/icons/edit.png" width="12"
 											height="12" style="border:0" />
