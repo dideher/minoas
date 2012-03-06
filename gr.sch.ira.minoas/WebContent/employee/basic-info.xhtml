@@ -7,22 +7,22 @@
 
 <ui:component>
 	<h:panelGrid columns="6">
-		<h:outputLabel value="Επώνυμο" for="" />
+		<h:outputText value="Επώνυμο"  />
 		<h:outputText styleClass="fieldValueText" value="#{employee.lastName}"/>
-		<h:outputLabel value="Όνομα" for="" />
+		<h:outputText value="Όνομα"  />
 		<h:outputText styleClass="fieldValueText" value="#{employee.firstName}" />
-		<h:outputLabel value="Όνομα Πατρός" for="" />
+		<h:outputText value="Όνομα Πατρός"  />
 		<h:outputText styleClass="fieldValueText" value="#{employee.fatherName}" />
-		<h:outputLabel value="Ειδικότητα" />
+		<h:outputText value="Ειδικότητα" />
 		<h:outputText styleClass="fieldValueText" value="#{employee.lastSpecialization}" />
 		
-		<h:outputLabel value="Όνομα Μητρος" for="" />
+		<h:outputText value="Όνομα Μητρος"  />
 		<h:outputText styleClass="fieldValueText" value="#{employee.motherName}" />
-		<h:outputLabel value="ΑΦΜ" for="" />
+		<h:outputText value="ΑΦΜ"  />
 		<h:outputText styleClass="fieldValueText" value="#{employee.vatNumber}" />
-		<h:outputLabel value="ΑΜ" for="" />
+		<h:outputText value="ΑΜ" />
 		<h:outputText styleClass="fieldValueText" value="#{employeeUtil.getRegistryID(employee)}" />
-		<h:outputLabel value="Ημ/νια Γεννήσεως" for="" />
+		<h:outputText value="Ημ/νια Γεννήσεως" />
 		<h:outputText styleClass="fieldValueText" value="#{employee.dateOfBirth}">
 			<s:convertDateTime type="date" pattern="dd-MM-yyyy" />
 		</h:outputText>
