@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import javax.persistence.EntityManager;
 
@@ -483,13 +484,13 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
     
     protected boolean isVATValid(String vat) {
         if(vat!=null)
-            return vat.trim().length()==10;
+            return Pattern.matches("d{10}", vat);
         else return false;
     }
     
     protected boolean isRegularRegistryIDValid(String registryID) {
         if(registryID!=null)
-            return registryID.trim().length()==7;
+            return Pattern.matches("d{10}", registryID);
         else return false;
     }
     
