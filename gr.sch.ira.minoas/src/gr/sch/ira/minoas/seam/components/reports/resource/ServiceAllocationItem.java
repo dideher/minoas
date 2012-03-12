@@ -5,7 +5,7 @@ import gr.sch.ira.minoas.model.employement.ServiceAllocation;
 import java.util.Date;
 
 /**
- * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
+ * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * @version $Id$
  */
 public class ServiceAllocationItem extends EmployeeReportItem {
@@ -163,5 +163,19 @@ public class ServiceAllocationItem extends EmployeeReportItem {
 	public void setWorkingHoursOnServicingPosition(Integer workingHoursOnServicingPosition) {
 		this.workingHoursOnServicingPosition = workingHoursOnServicingPosition;
 	}
+
+    /**
+     * @return the comment
+     */
+    public String getComment() {
+        return comment;
+    }
+
+    /**
+     * @param comment the comment to set
+     */
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
 
 }

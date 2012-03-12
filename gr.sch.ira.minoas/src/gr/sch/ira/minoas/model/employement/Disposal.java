@@ -22,10 +22,12 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * @author slavikos
@@ -33,6 +35,7 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "DISPOSAL")
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class Disposal extends BaseIDModel {
 
 	/**

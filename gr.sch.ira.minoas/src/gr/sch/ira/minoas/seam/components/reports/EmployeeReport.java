@@ -31,7 +31,7 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.datamodel.DataModel;
 
 /**
- * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
+ * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * @version $Id$
  */
 @Name(value = "employeeReport")
@@ -109,6 +109,7 @@ public class EmployeeReport extends BaseReport {
 	/**
 	 * 
 	 */
+	@SuppressWarnings("unchecked")
 	public void generateReport() {
 
 		Date effectiveDate = getEmployeeCriteria().getEffectiveDate();
@@ -118,8 +119,7 @@ public class EmployeeReport extends BaseReport {
 		SpecializationSearchType specializationSearchType = getEmployeeCriteria().getSpecializationSearchType();
 		SpecializationGroup specializationGroup = getEmployeeCriteria().getSpecializationGroup();
 		Specialization specialization = getEmployeeCriteria().getSpecialization();
-		Boolean specialCategory = getEmployeeCriteria().getSpecialCategory();
-		Boolean bigFamily = getEmployeeCriteria().getBigFamily();
+		
 
 		DateSearchType dateSearchType = getEmployeeCriteria().getDateSearchType();
 		//

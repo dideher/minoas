@@ -13,15 +13,19 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 
 
 /**
- * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
+ * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * @version $Id$
  */
 @Entity
 @Table(name = "DISPOSAL_UNIT", uniqueConstraints = { @UniqueConstraint(columnNames = { "UNIT_ID",
 		"DISPOSAL_TARGET_TYPE" }) })
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class DisposalUnit extends BaseIDModel {
 
 	/**

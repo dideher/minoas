@@ -27,6 +27,7 @@ import gr.sch.ira.minoas.model.employement.SecondmentType;
 import gr.sch.ira.minoas.model.employement.ServiceAllocation;
 import gr.sch.ira.minoas.model.employement.ServiceAllocationType;
 import gr.sch.ira.minoas.model.employement.TeachingHourCDR;
+import gr.sch.ira.minoas.model.employement.TeachingHourCDRType;
 import gr.sch.ira.minoas.model.employement.WorkExperience;
 import gr.sch.ira.minoas.model.employement.WorkExperienceType;
 import gr.sch.ira.minoas.model.security.Principal;
@@ -53,6 +54,10 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.TransactionPropagationType;
 import org.jboss.seam.annotations.Transactional;
 
+/**
+ * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
+ * @version $Id$
+ */
 @Name("coreSearching")
 @Scope(ScopeType.EVENT)
 @AutoCreate
@@ -110,9 +115,14 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     
     @Transactional(TransactionPropagationType.REQUIRED)
     @SuppressWarnings("unchecked")
-    public Collection<Leave> getActiveLeaves(EntityManager em, SchoolYear schoolYear) {
-        return getEntityManager(em).createQuery("SELECT l FROM Leave l WHERE l.active IS TRUE AND l.schoolYear=:schoolYear")
-                .setParameter("schoolYear", schoolYear).getResultList();
+    public Collection<Disposal> getActiveDisposal(EntityManager em) {
+        return getEntityManager(em).createQuery("SELECT d FROM Disposal d WHERE d.active IS TRUE").getResultList();
+    }
+    
+    @Transactional(TransactionPropagationType.REQUIRED)
+    @SuppressWarnings("unchecked")
+    public Collection<Leave> getActiveLeaves(EntityManager em) {
+        return getEntityManager(em).createQuery("SELECT l FROM Leave l WHERE l.active IS TRUE").getResultList();
     }
 
     /**
@@ -368,6 +378,17 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         info("searching employee's '#0' leaves.", employee);
         result = entityManager.createQuery(
                 "SELECT s from Leave s WHERE s.active IS FALSE AND s.employee=:employee ORDER BY s.established")
+                .setParameter("employee", employee).getResultList();
+        info("found totally '#0' leave(s) in employee's '#1' history.", result.size(), employee);
+        return result;
+    }
+    
+    
+    public Collection<Leave> getEmployeeLeaveHistoryWithCurrentActive(Person employee) {
+        Collection<Leave> result = null;
+        info("searching employee's '#0' leaves.", employee);
+        result = entityManager.createQuery(
+                "SELECT s from Leave s WHERE ((s.active IS FALSE AND s.autoCanceled IS TRUE) OR (s.active IS TRUE)) AND s.employee=:employee ORDER BY s.established")
                 .setParameter("employee", employee).getResultList();
         info("found totally '#0' leave(s) in employee's '#1' history.", result.size(), employee);
         return result;
@@ -1051,9 +1072,11 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 
     @SuppressWarnings("unchecked")
     public Collection<Specialization> getSpecializations(EntityManager em) {
-        return (Collection<Specialization>) em.createQuery("SELECT s FROM Specialization s WHERE ORDER BY s.title ASC")
+        return (Collection<Specialization>) em.createQuery("SELECT s FROM Specialization s ORDER BY s.id ASC")
                 .getResultList();
     }
+    
+
 
     @Factory(value = "specializationSearchTypes")
     public SpecializationSearchType[] getSpecializationSearchTypes() {
@@ -1062,8 +1085,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 
     @SuppressWarnings("unchecked")
     public Collection<TeachingHourCDR> getTeachingHoursCDRs(EntityManager entityManager, SchoolYear schoolYear) {
-        info("searching for teaching hour CDRs during school year #0", schoolYear);
-        List return_value = getEntityManager(entityManager).createQuery(
+        List<TeachingHourCDR> return_value = getEntityManager(entityManager).createQuery(
                 "SELECT t FROM TeachingHourCDR t WHERE t.schoolYear=:schoolYear")
                 .setParameter("schoolYear", schoolYear).getResultList();
         info("found totally #0 CDRs", return_value.size());
@@ -1073,20 +1095,53 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     @SuppressWarnings("unchecked")
     public Collection<TeachingHourCDR> getEmployeeTeachingHoursCDRs(EntityManager entityManager, SchoolYear schoolYear,
             Employee employee) {
-        info("searching for teaching hour CDRs of employee #0 during school year #1", employee, schoolYear);
-        List return_value = getEntityManager(entityManager).createQuery(
-                "SELECT t FROM TeachingHourCDR t WHERE t.schoolYear=:schoolYear " + "AND t.employee=:employee")
+        List<TeachingHourCDR> return_value = getEntityManager(entityManager).createQuery(
+                "SELECT t FROM TeachingHourCDR t WHERE t.schoolYear=:schoolYear AND t.employee=:employee")
                 .setParameter("schoolYear", schoolYear).setParameter("employee", employee).getResultList();
-        info("found totally #0 CDRs", return_value.size());
+        return return_value;
+    }
+    
+    @SuppressWarnings("unchecked")
+    public Collection<TeachingHourCDR> getEmployeeTeachingHoursCDRsWithPositiveHours(EntityManager entityManager, SchoolYear schoolYear,
+            Employee employee) {
+        List<TeachingHourCDR> return_value = getEntityManager(entityManager).createQuery(
+                "SELECT t FROM TeachingHourCDR t WHERE t.schoolYear=:schoolYear AND t.hours >= 0 AND t.employee=:employee")
+                .setParameter("schoolYear", schoolYear).setParameter("employee", employee).getResultList();
+        return return_value;
+    }
+    
+    @SuppressWarnings("unchecked")
+    public Collection<TeachingHourCDR> getEmployeeLogisticTeachingHoursCDR(EntityManager entityManager, SchoolYear schoolYear,
+            Employee employee) {
+        List<TeachingHourCDR> return_value = getEntityManager(entityManager).createQuery(
+                "SELECT t FROM TeachingHourCDR t WHERE t.schoolYear=:schoolYear AND t.employee=:employee AND t.logisticCDR IS TRUE")
+                .setParameter("schoolYear", schoolYear).setParameter("employee", employee).getResultList();
+        return return_value;
+    }
+    
+    @SuppressWarnings("unchecked")
+    public Collection<TeachingHourCDR> getEmployeeNonLogisticTeachingHoursCDR(EntityManager entityManager, SchoolYear schoolYear,
+            Employee employee) {
+        List<TeachingHourCDR> return_value = getEntityManager(entityManager).createQuery(
+                "SELECT t FROM TeachingHourCDR t WHERE t.schoolYear=:schoolYear AND t.employee=:employee AND t.logisticCDR IS FALSE")
+                .setParameter("schoolYear", schoolYear).setParameter("employee", employee).getResultList();
+        return return_value;
+    }
+    
+    @SuppressWarnings("unchecked")
+    public Collection<TeachingHourCDR> getEmployeeTeachingHoursCDRsOfType(EntityManager entityManager, SchoolYear schoolYear,
+            Employee employee, TeachingHourCDRType type) {
+        List<TeachingHourCDR> return_value = getEntityManager(entityManager).createQuery(
+                "SELECT t FROM TeachingHourCDR t WHERE t.schoolYear=:schoolYear AND t.employee=:employee AND t.cdrType=:type")
+                .setParameter("schoolYear", schoolYear).setParameter("employee", employee).setParameter("type", type).getResultList();
         return return_value;
     }
 
     @SuppressWarnings("unchecked")
     public Collection<TeachingHourCDR> getSchoolTeachingHoursCDRs(EntityManager entityManager, SchoolYear schoolYear,
             Unit unit) {
-        info("searching for teaching hour CDRs in unit #0 during school year #1", unit, schoolYear);
-        List return_value = getEntityManager(entityManager).createQuery(
-                "SELECT t FROM TeachingHourCDR t WHERE t.schoolYear=:schoolYear " + "AND t.unit=:unit")
+        List<TeachingHourCDR> return_value = getEntityManager(entityManager).createQuery(
+                "SELECT t FROM TeachingHourCDR t WHERE t.schoolYear=:schoolYear " + "AND t.unit=:unit ORDER BY (t.employee)")
                 .setParameter("schoolYear", schoolYear).setParameter("unit", unit).getResultList();
         info("found totally #0 CDRs", return_value.size());
         return return_value;
@@ -1160,7 +1215,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     public List<Role> searchRoles(String role_search_pattern) {
         String pattern = CoreUtils.getSearchPattern(role_search_pattern);
         info("searching for roles with #0 search pattern", pattern);
-        List return_value = getEntityManager().createQuery(
+        List<Role> return_value = getEntityManager().createQuery(
                 "SELECT r from Role r WHERE lower(r.id) LIKE :search_pattern").setParameter("search_pattern", pattern)
                 .getResultList();
         info("found totally #0 role(s).", return_value.size());
@@ -1171,7 +1226,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     public List<School> searchShools(String school_search_pattern) {
         String pattern = CoreUtils.getSearchPattern(school_search_pattern);
         info("searching for schools with #0 search pattern.", pattern);
-        List return_value = getEntityManager().createQuery(
+        List<School> return_value = getEntityManager().createQuery(
                 "SELECT s from School s WHERE lower(s.title) LIKE :search_pattern AND s.ministryCode != '0000000'")
                 .setParameter("search_pattern", pattern).getResultList();
         info("found totally #0 school(s).", return_value.size());
@@ -1182,4 +1237,21 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         throw new RuntimeException("not implemented yet");
     }
 
+    @SuppressWarnings("unchecked")
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public Collection<WorkExperience> getWorkExperienceHistory(Person employee) {
+        Collection<WorkExperience> result = null;
+        info("searching employee's '#0' work experiences.", employee);
+        result = entityManager.createQuery(
+            "SELECT s from WorkExperience s WHERE s.active IS TRUE AND s.employee=:employee ORDER BY s.fromDate")
+            .setParameter("employee", employee).getResultList();
+//        result = entityManager.createQuery(
+//	        "SELECT s from Leave s WHERE s.active IS FALSE AND s.employee=:employee ORDER BY s.established")
+//	        .setParameter("employee", employee).getResultList();
+        info("found totally '#0' work experience(s) in employee's '#1' history.", result.size(), employee);
+        return result;
+    }
+    
+
+ 
 }

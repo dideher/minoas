@@ -21,6 +21,8 @@ import javax.persistence.OrderBy;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.jboss.seam.annotations.Name;
 
 /**
@@ -34,6 +36,7 @@ import org.jboss.seam.annotations.Name;
 @Name("school")
 @DiscriminatorValue("SCHOOL")
 @PrimaryKeyJoinColumn(name = "UNIT_ID")
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class School extends Unit {
 
 	private static final long serialVersionUID = 1L;
@@ -62,6 +65,17 @@ public class School extends Unit {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "SCHOOL_TYPE", nullable = true)
 	private SchoolType type;
+	
+	@Basic
+	@Column(name="A_GRADE_DIVISIONS", nullable=true)
+	private Integer divisionsOfFirstGrade;
+	
+	@Column(name="B_GRADE_DIVISIONS", nullable=true)
+    private Integer divisionsOfSecondGrade;
+    
+	@Column(name="C_GRADE_DIVISIONS", nullable=true)
+    private Integer divisionsOfThirdGrade;
+    
 
 	public void addTeachingRequirement(TeachingRequirement req) {
 		req.setSchool(this);
@@ -167,5 +181,47 @@ public class School extends Unit {
 		sb.append(")] ");
 		return sb.toString();
 	}
+
+    /**
+     * @return the divisionsOfFirstGrade
+     */
+    public Integer getDivisionsOfFirstGrade() {
+        return divisionsOfFirstGrade;
+    }
+
+    /**
+     * @param divisionsOfFirstGrade the divisionsOfFirstGrade to set
+     */
+    public void setDivisionsOfFirstGrade(Integer divisionsOfFirstGrade) {
+        this.divisionsOfFirstGrade = divisionsOfFirstGrade;
+    }
+
+    /**
+     * @return the divisionsOfSecondGrade
+     */
+    public Integer getDivisionsOfSecondGrade() {
+        return divisionsOfSecondGrade;
+    }
+
+    /**
+     * @param divisionsOfSecondGrade the divisionsOfSecondGrade to set
+     */
+    public void setDivisionsOfSecondGrade(Integer divisionsOfSecondGrade) {
+        this.divisionsOfSecondGrade = divisionsOfSecondGrade;
+    }
+
+    /**
+     * @return the divisionsOfThirdGrade
+     */
+    public Integer getDivisionsOfThirdGrade() {
+        return divisionsOfThirdGrade;
+    }
+
+    /**
+     * @param divisionsOfThirdGrade the divisionsOfThirdGrade to set
+     */
+    public void setDivisionsOfThirdGrade(Integer divisionsOfThirdGrade) {
+        this.divisionsOfThirdGrade = divisionsOfThirdGrade;
+    }
 
 }

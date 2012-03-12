@@ -2,12 +2,8 @@ package gr.sch.ira.minoas.seam.components.async;
 
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employement.Leave;
-import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.TeachingHourCDR;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
-import gr.sch.ira.minoas.seam.components.BaseSeamComponent;
-import gr.sch.ira.minoas.seam.components.CoreSearching;
-import gr.sch.ira.minoas.seam.components.converters.DatabaseAwareBaseConverter;
 
 import java.util.Collection;
 import java.util.Date;
@@ -16,7 +12,6 @@ import javax.persistence.EntityManager;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.AutoCreate;
-import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.TransactionPropagationType;
@@ -24,12 +19,11 @@ import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.annotations.async.Asynchronous;
 import org.jboss.seam.annotations.async.Expiration;
 import org.jboss.seam.annotations.async.FinalExpiration;
-import org.jboss.seam.annotations.async.IntervalCron;
 import org.jboss.seam.annotations.async.IntervalDuration;
 import org.jboss.seam.async.QuartzTriggerHandle;
 
 /**
- * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
+ * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * @version $Id$
  */
 @Name("leaveCleanupProcessor")
@@ -37,10 +31,6 @@ import org.jboss.seam.async.QuartzTriggerHandle;
 @AutoCreate
 public class LeaveCleanupProcessor extends BaseDatabaseAwareSeamComponent {
 
-    
-    @In
-    private CoreSearching coreSearching;
-    
     /**
      * Comment for <code>serialVersionUID</code>
      */
@@ -57,7 +47,7 @@ public class LeaveCleanupProcessor extends BaseDatabaseAwareSeamComponent {
 	@SuppressWarnings("unchecked")
     @Transactional(TransactionPropagationType.REQUIRED)
     public Collection<Leave> getActiveLeaveThatSouldBeAutoCanceled(EntityManager em, Date today) {
-        return em.createQuery("SELECT s from Leave s WHERE s.active IS TRUE AND :onDate NOT BETWEEN s.established AND s.dueTo ORDER BY s.established").setParameter("onDate", today).getResultList();
+        return em.createQuery("SELECT s from Leave s WHERE s.active IS TRUE AND :onDate > s.dueTo ORDER BY s.established").setParameter("onDate", today).getResultList();
     }
 	
 	@Asynchronous

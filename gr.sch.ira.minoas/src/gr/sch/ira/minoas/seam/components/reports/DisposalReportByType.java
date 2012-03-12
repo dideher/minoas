@@ -21,7 +21,7 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.datamodel.DataModel;
 
 /**
- * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
+ * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * @version $Id$
  */
 @Name("disposalReportByType")
@@ -108,6 +108,7 @@ public class DisposalReportByType extends BaseReport {
 			q.setParameter("specializationGroup", specializationGroup);
 		}
 
+		@SuppressWarnings("unchecked")
 		Collection<Disposal> disposals = q.getResultList();
 		info("found totally #0 disposals matching criteria", disposals.size());
 		reportData = new ArrayList<DisposalReportItem>(disposals.size());

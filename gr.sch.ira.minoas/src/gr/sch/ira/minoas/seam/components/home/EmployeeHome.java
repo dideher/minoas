@@ -24,7 +24,7 @@ import org.jboss.seam.annotations.security.Restrict;
 import org.jboss.seam.international.StatusMessage.Severity;
 
 /**
- * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
+ * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * @version $Id$
  */
 @Name("employeeHome")
@@ -296,6 +296,13 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 	public String update() {
 		return super.update();
 	}
+	
+	@Transactional
+    public String revert() {
+        info("principal #0 is reverting updates to employee #1", getPrincipalName(), getInstance());
+        getEntityManager().refresh(getInstance());
+        return "reverted";
+    }
 
 	@Transactional
 	public boolean wire() {
@@ -327,5 +334,17 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 	public Boolean isInExclusionList() {
 		return getInstance().getExclusion()!=null;
 	}
+	
+	public Boolean isRegularEmployee() {
+        return getInstance().isRegularEmployee();
+    }
+    
+    public Boolean isDeputyEmployee() {
+       return getInstance().isDeputyEmployee();
+    }
+    
+    public Boolean isHourlyPaidEmployee() {
+        return getInstance().isHourlyPaidEmpoyee();
+    }
 
 }

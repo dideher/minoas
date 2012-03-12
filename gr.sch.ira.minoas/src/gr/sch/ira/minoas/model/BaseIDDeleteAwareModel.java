@@ -16,7 +16,12 @@ import javax.persistence.TemporalType;
 @MappedSuperclass
 public class BaseIDDeleteAwareModel extends BaseIDModel {
 
-	@Basic
+	/**
+     * Comment for <code>serialVersionUID</code>
+     */
+    private static final long serialVersionUID = 1L;
+
+    @Basic
 	@Column(name = "IS_DELETED", nullable = true)
 	private Boolean deleted;
 	

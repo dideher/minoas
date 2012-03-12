@@ -14,7 +14,7 @@ import org.jboss.seam.annotations.Out;
 import org.jboss.seam.annotations.Transactional;
 
 /**
- * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
+ * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * @version $Id$
  */
 @Name(value = "schoolHome")

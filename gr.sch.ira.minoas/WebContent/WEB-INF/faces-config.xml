@@ -8,7 +8,8 @@
       <locale-config>
          <default-locale>el</default-locale>
          <supported-locale>el</supported-locale>
-        </locale-config>
+      </locale-config>
+      <!--  <message-bundle>resources.application</message-bundle>  -->
       <view-handler>com.sun.facelets.FaceletViewHandler</view-handler>
    </application>
 

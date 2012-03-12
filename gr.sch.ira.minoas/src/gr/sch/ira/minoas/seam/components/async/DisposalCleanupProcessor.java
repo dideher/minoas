@@ -1,12 +1,8 @@
 package gr.sch.ira.minoas.seam.components.async;
 
 import gr.sch.ira.minoas.model.employement.Disposal;
-import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.TeachingHourCDR;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
-import gr.sch.ira.minoas.seam.components.BaseSeamComponent;
-import gr.sch.ira.minoas.seam.components.CoreSearching;
-import gr.sch.ira.minoas.seam.components.converters.DatabaseAwareBaseConverter;
 
 import java.util.Collection;
 import java.util.Date;
@@ -15,7 +11,6 @@ import javax.persistence.EntityManager;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.AutoCreate;
-import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.TransactionPropagationType;
@@ -23,12 +18,11 @@ import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.annotations.async.Asynchronous;
 import org.jboss.seam.annotations.async.Expiration;
 import org.jboss.seam.annotations.async.FinalExpiration;
-import org.jboss.seam.annotations.async.IntervalCron;
 import org.jboss.seam.annotations.async.IntervalDuration;
 import org.jboss.seam.async.QuartzTriggerHandle;
 
 /**
- * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
+ * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * @version $Id$
  */
 @Name("disposalCleanupProcessor")
@@ -36,8 +30,7 @@ import org.jboss.seam.async.QuartzTriggerHandle;
 @AutoCreate
 public class DisposalCleanupProcessor extends BaseDatabaseAwareSeamComponent {
 
-    @In
-    private CoreSearching coreSearching;
+  
 
     /**
      * Comment for <code>serialVersionUID</code>
@@ -55,7 +48,7 @@ public class DisposalCleanupProcessor extends BaseDatabaseAwareSeamComponent {
     public Collection<Disposal> getActiveDisposalThatSouldBeAutoCanceled(EntityManager em, Date today) {
         return em
                 .createQuery(
-                        "SELECT s from Disposal s WHERE s.active IS TRUE AND :onDate NOT BETWEEN s.established AND s.dueTo")
+                        "SELECT s from Disposal s WHERE s.active IS TRUE AND :onDate > s.dueTo")
                 .setParameter("onDate", today).getResultList();
     }
 

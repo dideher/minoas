@@ -23,6 +23,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 
 /**
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
@@ -32,6 +35,7 @@ import javax.persistence.Table;
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "UNIT_TYPE")
 @Table(name = "UNIT")
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class Unit extends AbstractArchivableEntity implements Comparable<Unit> {
 
 	/**
@@ -66,6 +70,10 @@ public class Unit extends AbstractArchivableEntity implements Comparable<Unit> {
 	@Basic
 	@Column(name = "TITLE", nullable = false, unique = true, length = 80)
 	private String title;
+	
+	@Basic
+    @Column(name = "PUBLIC_SECTOR", nullable = true)
+    private Boolean publicSector;
 
 	/**
 	 * 
@@ -175,6 +183,20 @@ public class Unit extends AbstractArchivableEntity implements Comparable<Unit> {
 	 */
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	/**
+	 * @return the publicSector
+	 */
+	public Boolean getPublicSector() {
+		return publicSector;
+	}
+
+	/**
+	 * @param publicSector the publicSector to set
+	 */
+	public void setPublicSector(Boolean publicSector) {
+		this.publicSector = publicSector;
 	}
 
 	@Override

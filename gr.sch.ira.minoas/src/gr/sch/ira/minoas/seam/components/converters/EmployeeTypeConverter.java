@@ -6,13 +6,13 @@ package gr.sch.ira.minoas.seam.components.converters;
 import gr.sch.ira.minoas.model.employee.Employee;
 
 import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.faces.Converter;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
-import javax.faces.context.FacesContext;
 
 /**
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>

@@ -1,4 +1,3 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
@@ -15,8 +14,7 @@
 	<ui:define name="body">
 		<rich:panel>
 			<f:facet name="header">
-				<h:outputText
-					value="Διαχείρηση Σχολικής Μονάδας" />
+				<h:outputText value="Διαχείρηση Σχολικής Μονάδας" />
 			</f:facet>
 
 			<ui:include src="/components/messages-component.xhtml" />
@@ -150,6 +148,40 @@
 									</h:selectOneMenu>
 								</s:decorate>
 
+								<h:panelGroup>
+									<rich:panel>
+										<f:facet name="header">
+											<h:outputText value="Τμήματα Γενικής Παιδείας" />
+										</f:facet>
+									<h:panelGrid columns="3">
+										<s:decorate template="/layout/doubleLineEdit.xhtml">
+											<ui:define name="label">
+												<h:outputText value="Α' Τάξη" />
+											</ui:define>
+											<h:inputText value="#{schoolHome.instance.divisionsOfFirstGrade}"
+												size="2" required="false" maxlength="2" />
+										</s:decorate>
+										
+										<s:decorate template="/layout/doubleLineEdit.xhtml">
+											<ui:define name="label">
+												<h:outputText value="Β' Τάξη" />
+											</ui:define>
+											<h:inputText value="#{schoolHome.instance.divisionsOfSecondGrade}"
+												size="2" required="false" maxlength="2" />
+										</s:decorate>
+										
+										<s:decorate template="/layout/doubleLineEdit.xhtml">
+											<ui:define name="label">
+												<h:outputText value="Γ' Τάξη" />
+											</ui:define>
+											<h:inputText value="#{schoolHome.instance.divisionsOfThirdGrade}"
+												size="2" required="false" maxlength="2" />
+										</s:decorate>
+										
+									</h:panelGrid>
+									</rich:panel>
+								</h:panelGroup>
+
 							</h:panelGrid>
 
 							<h:panelGroup>
@@ -160,7 +192,7 @@
 								<s:div styleClass="actionButtons">
 									<h:commandButton rendered="${schoolHome.managed}"
 										action="#{schoolHome.update}"
-										onclick="if(!confirm('Να καταχωρηθούν οι αλλαγές ?')) {form.reset(); return false;}"	 
+										onclick="if(!confirm('Να καταχωρηθούν οι αλλαγές ?')) {form.reset(); return false;}"
 										value="Τροποποίηση" id="persistButton" />
 									<rich:spacer width="10" />
 

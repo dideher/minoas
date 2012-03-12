@@ -18,7 +18,7 @@ import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.international.StatusMessage.Severity;
 
 /**
- * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
+ * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * @version $Id$
  */
 @Name("secondmentHome")
@@ -86,7 +86,6 @@ public class SecondmentHome extends MinoasEntityHome<Secondment> {
 	public String persist() {
 		Employee employee = employeeHome.getInstance();
 		Employment currentEmployment = employee.getCurrentEmployment();
-		Secondment currentSecondment = currentEmployment != null ? currentEmployment.getSecondment() : null;
 		Secondment newSecondment = getInstance();
 
 		Date established = DateUtils.truncate(newSecondment.getEstablished(), Calendar.DAY_OF_MONTH);

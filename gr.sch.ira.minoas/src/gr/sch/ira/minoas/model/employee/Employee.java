@@ -3,10 +3,13 @@ package gr.sch.ira.minoas.model.employee;
 import gr.sch.ira.minoas.model.core.PYSDE;
 import gr.sch.ira.minoas.model.core.Specialization;
 import gr.sch.ira.minoas.model.employement.Disposal;
+import gr.sch.ira.minoas.model.employement.EducationalLevelType;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.Leave;
+import gr.sch.ira.minoas.model.employement.Salary;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.ServiceAllocation;
+import gr.sch.ira.minoas.model.employement.WorkExperience;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,9 +28,13 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 
 @Entity
 @Table(name = "EMPLOYEE")
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class Employee extends Person {
 
 	/**
@@ -60,6 +67,13 @@ public class Employee extends Person {
 
 	@OneToMany(mappedBy = "employee", fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
 	private Set<Employment> employments;
+	
+	@OneToOne(optional=true, fetch=FetchType.LAZY, cascade={CascadeType.ALL})
+	@JoinColumn(name="SALARY_ID", nullable=true)
+	private Salary salary;
+	
+	@OneToMany(fetch=FetchType.LAZY,cascade={CascadeType.ALL}, mappedBy="employee")
+	private Collection<WorkExperience> workExperience =  new ArrayList<WorkExperience>();
 
 	/**
 	* Each employee have a specialization, which is actually the last employment's 
@@ -101,6 +115,10 @@ public class Employee extends Person {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "EMPLOYEE_TYPE", nullable = false, updatable = false)
 	private EmployeeType type;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "EDUCATIONAL_LEVEL_TYPE", length = 2, nullable = true)
+	private EducationalLevelType educationalLevelType;
 	
 	@OneToOne(fetch=FetchType.LAZY, cascade={CascadeType.ALL}, mappedBy="employee")
 	private EmployeeExclusion exclusion;
@@ -239,6 +257,20 @@ public class Employee extends Person {
 	 */
 	public EmployeeType getType() {
 		return type;
+	}
+
+	/**
+	 * @return the educationalLevelType
+	 */
+	public EducationalLevelType getEducationalLevelType() {
+		return educationalLevelType;
+	}
+
+	/**
+	 * @param educationalLevelType the educationalLevelType to set
+	 */
+	public void setEducationalLevelType(EducationalLevelType educationalLevelType) {
+		this.educationalLevelType = educationalLevelType;
 	}
 
 	/**
@@ -402,7 +434,46 @@ public class Employee extends Person {
 	protected void setDisposals(Collection<Disposal> disposals) {
 		this.disposals = disposals;
 	}
+
+    /**
+     * @return the salary
+     */
+    public Salary getSalary() {
+        return salary;
+    }
+
+    /**
+     * @param salary the salary to set
+     */
+    public void setSalary(Salary salary) {
+        this.salary = salary;
+    }
+
+    /**
+     * @return the workExperience
+     */
+    public Collection<WorkExperience> getWorkExperience() {
+        return workExperience;
+    }
+
+    /**
+     * @param workExperience the workExperience to set
+     */
+    public void setWorkExperience(Collection<WorkExperience> workExperience) {
+        this.workExperience = workExperience;
+    }
 	
+    public boolean isRegularEmployee() {
+        return type==REGULAR;
+    }
+    
+    public boolean isDeputyEmployee() {
+        return type==DEPUTY;
+    }
+    
+    public boolean isHourlyPaidEmployee() {
+        return type==HOURLYPAID;
+    }
 	
 
 }

@@ -9,7 +9,7 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
 
 /**
- * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
+ * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * @version $Id$
  */
 @Name("regularEmployeeInfoHome")
@@ -62,4 +62,11 @@ public class RegularEmployeeInfoHome extends MinoasEntityHome<RegularEmployeeInf
 	public boolean wire() {
 		return true;
 	}
+	
+	@Transactional
+    public String revert() {
+        info("principal #0 is reverting updates to regular employee info  #1", getPrincipalName(), getInstance());
+        getEntityManager().refresh(getInstance());
+        return "reverted";
+    }
 }

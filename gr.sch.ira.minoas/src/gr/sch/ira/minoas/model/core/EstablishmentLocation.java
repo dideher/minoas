@@ -7,12 +7,16 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 /**
- * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
+ * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * @version $Id$
  */
 @Entity
 @Table(name = "ESTABLISHMENT_LOCATION")
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class EstablishmentLocation extends BaseModel {
 
 	/**

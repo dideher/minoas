@@ -1,4 +1,3 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
@@ -31,8 +30,7 @@
 							<h:outputText value="Πλήθος Ενεργειών Χρηστών" />
 						</f:facet>
 						<h:graphicImage
-							url="
-							{auditWinningReport.auditWinnersGoogleChartURL}" />
+							url="#{auditWinningReport.auditWinnersGoogleChartURL}" />
 
 					</rich:panel>
 
@@ -41,7 +39,7 @@
 							<h:outputText value="Κατανομή Ενεργού Προσωπικού" />
 						</f:facet>
 						<h:graphicImage
-							value="{auditWinningReport.employeeReportGoogleChartURL}" />
+							value="#{auditWinningReport.employeeReportGoogleChartURL}" />
 					</rich:panel>
 				</h:panelGrid>
 			</rich:panel>

@@ -1,6 +1,8 @@
 package gr.sch.ira.minoas.model.employement;
 
+import gr.sch.ira.minoas.model.BaseIDDeleteAwareModel;
 import gr.sch.ira.minoas.model.BaseIDModel;
+import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employee.Employee;
 
 import java.util.Date;
@@ -8,32 +10,42 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+/**
+ * @author <a href="mailto:gand@sch.gr">Yorgos Andreadakis</a>
+ * 
+ */
 @Entity
 @Table(name = "WORK_EXPERIENCE")
-public class WorkExperience extends BaseIDModel {
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+public class WorkExperience extends BaseIDDeleteAwareModel {
     
     /**
      * Comment for <code>serialVersionUID</code>
      */
     private static final long serialVersionUID = 1L;
+    
+    @Basic
+    @Column(name = "LEGACY_CODE", nullable = true)
+    private Integer legacyCode;
 
 	@Basic
 	@Column(name = "IS_ACTIVE", nullable = true)
 	private Boolean active;
 	
-	@ManyToOne
-	@JoinColumn(name="EXPERIENCE_TYPE_ID")
+	@ManyToOne()
+	@JoinColumn(name="EXPERIENCE_TYPE_ID", nullable=false)
 	private WorkExperienceType type;
 
-	@ManyToOne()
+	@ManyToOne(optional=false)
 	@JoinColumn(name = "EMPLOYEE_ID", nullable = false)
 	private Employee employee;
 
@@ -45,17 +57,15 @@ public class WorkExperience extends BaseIDModel {
 	@Column(name = "TO_DATE", nullable = false)
 	private Date toDate;
 
-	@Column(name = "CALENDAR_DAYS", nullable = true)
-	private Integer experienceDays;
-
-	@Column(name = "ACTUAL_DAYS", nullable = true)
-	private Integer actualExperienceDays;
+	@Column(name = "CALENDAR_EXPERIENCE_DAYS", nullable = false)
+	private Integer calendarExperienceDays;
+	
+	@ManyToOne()
+	@JoinColumn(name = "EXPERIENCE_UNIT", nullable = true)
+	private Unit experienceUnit;
 	
 	@Column(name="COMMENT", nullable = true)
 	private String comment;
-	
-	@Column(name="EDUCATIONAL", nullable = true)
-	private Boolean educationalExpirience;
 	
 	
 	
@@ -119,6 +129,34 @@ public class WorkExperience extends BaseIDModel {
 	
 
 	/**
+	 * @return the calendarExperienceDays
+	 */
+	public Integer getCalendarExperienceDays() {
+		return calendarExperienceDays;
+	}
+
+	/**
+	 * @param calendarExperienceDays the calendarExperienceDays to set
+	 */
+	public void setCalendarExperienceDays(Integer calendarExperienceDays) {
+		this.calendarExperienceDays = calendarExperienceDays;
+	}
+
+	/**
+	 * @return the experienceUnit
+	 */
+	public Unit getExperienceUnit() {
+		return experienceUnit;
+	}
+
+	/**
+	 * @param experienceUnit the experienceUnit to set
+	 */
+	public void setExperienceUnit(Unit experienceUnit) {
+		this.experienceUnit = experienceUnit;
+	}
+
+	/**
 	 * @return the active
 	 */
 	public Boolean getActive() {
@@ -147,45 +185,17 @@ public class WorkExperience extends BaseIDModel {
 	}
 
     /**
-     * @return the experienceDays
+     * @return the legacyCode
      */
-    public Integer getExperienceDays() {
-        return experienceDays;
+    public Integer getLegacyCode() {
+        return legacyCode;
     }
 
     /**
-     * @param experienceDays the experienceDays to set
+     * @param legacyCode the legacyCode to set
      */
-    public void setExperienceDays(Integer experienceDays) {
-        this.experienceDays = experienceDays;
-    }
-
-    /**
-     * @return the actualExperienceDays
-     */
-    public Integer getActualExperienceDays() {
-        return actualExperienceDays;
-    }
-
-    /**
-     * @param actualExperienceDays the actualExperienceDays to set
-     */
-    public void setActualExperienceDays(Integer actualExperienceDays) {
-        this.actualExperienceDays = actualExperienceDays;
-    }
-
-    /**
-     * @return the educationalExpirience
-     */
-    public Boolean getEducationalExpirience() {
-        return educationalExpirience;
-    }
-
-    /**
-     * @param educationalExpirience the educationalExpirience to set
-     */
-    public void setEducationalExpirience(Boolean educationalExpirience) {
-        this.educationalExpirience = educationalExpirience;
+    public void setLegacyCode(Integer legacyCode) {
+        this.legacyCode = legacyCode;
     }
 
 }

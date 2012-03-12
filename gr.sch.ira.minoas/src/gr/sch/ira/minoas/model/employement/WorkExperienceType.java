@@ -10,14 +10,23 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 /**
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * 
  */
 @Entity
-@Table(name = "WORK_EXPERIENCE")
+@Table(name = "WORK_EXPERIENCE_TYPE")
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class WorkExperienceType extends BaseIDModel {
     
+    /**
+     * Comment for <code>serialVersionUID</code>
+     */
+    private static final long serialVersionUID = 1L;
+
     @Basic
     @Column(name = "IS_ACTIVE", nullable = true)
     private Boolean active;

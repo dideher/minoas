@@ -18,12 +18,12 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.apache.commons.lang.time.DateUtils;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import org.apache.commons.lang.time.DateUtils;
 
@@ -31,6 +31,7 @@ import org.apache.commons.lang.time.DateUtils;
 
 @Entity
 @Table(name = "SERVICE_ALLOCATION")
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class ServiceAllocation extends BaseIDModel {
 	/**
 	 * 

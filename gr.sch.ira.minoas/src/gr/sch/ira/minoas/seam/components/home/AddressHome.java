@@ -12,7 +12,7 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
 
 /**
- * @author <a href="mailto:fsla@forthnet.gr">Filippos Slavik</a>
+ * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * @version $Id$
  */
 @Name("addressHome")
@@ -54,7 +54,7 @@ public class AddressHome extends MinoasEntityHome<Address> {
 
 	@Transactional
 	public String revert() {
-		info("principal #0 is reverting updates to adress #1", getPrincipalName(), getInstance());
+		info("principal #0 is reverting updates to address #1", getPrincipalName(), getInstance());
 		getEntityManager().refresh(getInstance());
 		return "reverted";
 	}

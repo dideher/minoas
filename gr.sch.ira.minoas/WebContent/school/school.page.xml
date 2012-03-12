@@ -10,8 +10,8 @@
   <param name="schoolID" value="#{schoolHome.id}" />
   
   <action execute="#{schoolReport.fetchSchoolChiefs}" on-postback="false"/>
-  <action execute="#{schoolReport.generateEmploymentsReport}" on-postback="false"/>
-  
+  <action execute="#{schoolReport.generateEmploymentsCDRReport}" on-postback="false"/>
+   
   <!-- navigation rules -->
   <navigation from-action="endButton">
     <end-conversation />
@@ -25,7 +25,9 @@
   </navigation>
   
   <navigation from-action="selectEmployee">
-      <redirect view-id="/employee/employee.xhtml" />
+      <redirect view-id="/employee/employee.xhtml">
+        <param name="from" value="/school/school" />
+      </redirect>
   </navigation>
   
 </page>
