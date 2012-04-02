@@ -11,6 +11,7 @@ INSERT INTO minoas..SPECIALIZATION(SPECIALIZATION_ID, TITLE)
 
 INSERT INTO minoas..SPECIALIZATION(SPECIALIZATION_ID, TITLE) VALUES('ΚΑΛΧ', 'Κίνηση Χορός - Κλασικός Χορός -Σύγχρονος Χορός')
 INSERT INTO minoas..SPECIALIZATION(SPECIALIZATION_ID, TITLE) VALUES('ΚΑΛΚΘ','Κινηματογράφος - Θέατρο')
+INSERT INTO minoas..SPECIALIZATION(SPECIALIZATION_ID, TITLE) VALUES('ΠΕ1714','Μουσικής Τεχνολογίας')
 
 ##############################################
 # ΠΥΣΔΕ

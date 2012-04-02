@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="leavePrintout" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="20" bottomMargin="20" whenResourceMissingType="Key">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="124"/>
+	<property name="ireport.y" value="391"/>
 	<style name="normalText" fontName="DejaVu Serif" fontSize="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
 	<style name="boldText" fontName="DejaVu Serif" fontSize="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
 	<style name="headlineText" fontName="DejaVu Serif" fontSize="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
@@ -111,32 +111,30 @@
 				<text><![CDATA[Έχοντας υπόψη :]]></text>
 			</staticText>
 			<textField>
-				<reportElement style="normalText" x="0" y="288" width="515" height="198"/>
+				<reportElement style="normalText" x="0" y="288" width="515" height="138"/>
 				<textElement textAlignment="Justified" markup="styled"/>
 				<textFieldExpression><![CDATA["1. Τις διατάξεις των άρθρων 2 και 52 παρ.3 του Ν.3528/07 (ΦΕΚ 26/9.2.2007 τ.Α)<br/><br/>"+
-"2. Την εγκύκλιο 35758/∆2/29.3.2007 του ΥΠΕΠΘ<br/><br/>"+
-"3. Την αριθμ. ΣΤ5/56/2000 (ΦΕΚ 1409/B/17-11-2000 τ.Β') Υπουργική απόφαση (Μεταβίβαση δικαιώματος υπογραφής στους Προισταμένους ∆/νσεων και Γραφείων ∆Ε των νομών και νομαρχιών «με εντολή Υπουργού»)<br/><br/>"+
-"4. Την αριθμ.Φ353.1/324/105675/∆1/ΦΕΚ 1340 τ.B /16-10-2002 Υπουργική απόφαση (καθήκοντα και αρμοδιότητες Περ/κών ∆/ντών Εκπ/σης και των Προΐσταμένων Τμημάτων των ∆/νσεων αυτών)<br/><br/>"+
-"5. Την απο <b>"+$V{DATE_FORMATTER}.format($P{leaveRequestDate})+"</b> αίτηση του <b>"+$P{employeeSurname}+" "+$P{employeeName}+"</b> του "+$P{employeeFatherName}+" εκπαιδευτικού λειτουργού κλάδου <b>"+$P{employeeSpecializationCode}+"</b>.<br/><br/>"]]></textFieldExpression>
+"2. Την με αριθμό 74275/Δ2/10.07.2007 εγκύκλιο του ΥΠ.Π.Δ.Β.Μ.Θ<br/><br/>"+
+"3. Την αριθμ.Φ353.1/324/105675/∆1/ΦΕΚ 1340 τ.B /16-10-2002 Υπουργική απόφαση (καθήκοντα και αρμοδιότητες Περ/κών ∆/ντών Εκπ/σης και των Προΐσταμένων Τμημάτων των ∆/νσεων αυτών)<br/><br/>"+
+"4. Την απο <b>"+$V{DATE_FORMATTER}.format($P{leaveRequestDate})+"</b> αίτηση του <b>"+$P{employeeSurname}+" "+$P{employeeName}+"</b> του "+$P{employeeFatherName}+" εκπαιδευτικού λειτουργού κλάδου <b>"+$P{employeeSpecializationCode}+"</b>.<br/><br/>"]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement style="boldText" x="138" y="514" width="279" height="20"/>
+				<reportElement style="boldText" x="138" y="428" width="279" height="20"/>
 				<textElement textAlignment="Center">
 					<font isItalic="false" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[Α Π Ο Φ Α Σ Ι Ζ Ο Υ Μ Ε]]></text>
 			</staticText>
 			<textField>
-				<reportElement style="normalText" x="2" y="541" width="513" height="94"/>
+				<reportElement style="normalText" x="2" y="451" width="513" height="163"/>
 				<textElement textAlignment="Justified" markup="styled">
 					<paragraph lineSpacing="1_1_2"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Χορηγούμε στον/στην "
 +"<b>"+$P{employeeSurname}+" "+$P{employeeName}+"</b> του <b>"+$P{employeeFatherName}+"</b>"+
 " εκπαιδευτικού κλάδου "+$P{employeeSpecializationCode}+" - "+$P{employeeSpecialization}+
-" του "+$P{employeeRegularSchool}+", <b>"+$P{leaveDayDuration}+"</b> ημέρες άδεια λόγω ανυπαιτίου κωλύματος «<b>"+$P{leaveReason}+
-"</b>» με αποδοχές, από <b>"+$V{DATE_FORMATTER}.format($P{leaveEstablishedDate})+" </b> εώς και <b>"+$V{DATE_FORMATTER}.format($P{leaveDueToDate})+"</b>"+
-"."]]></textFieldExpression>
+" του "+$P{employeeRegularSchool}+", άδεια <b>"+$P{leaveDayDuration}+"</b> ημερών με τις δικαιούμενες αποδοχές, λόγω ανυπαιτίου κωλύματος «<b>"+$P{leaveReason}+"</b>»,"+
+" από <b>"+$V{DATE_FORMATTER}.format($P{leaveEstablishedDate})+" </b> εώς και <b>"+$V{DATE_FORMATTER}.format($P{leaveDueToDate})+"</b>."]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement style="normalText" x="4" y="109" width="179" height="35"/>
@@ -185,11 +183,6 @@ E-mail]]></text>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$P{signatureTitle}]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement style="normalText" x="323" y="676" width="107" height="14"/>
-				<textElement textAlignment="Center"/>
-				<text><![CDATA[Ε.Υ.]]></text>
-			</staticText>
 			<textField>
 				<reportElement style="normalText" x="84" y="169" width="250" height="60"/>
 				<textElement textAlignment="Left" markup="styled"/>
