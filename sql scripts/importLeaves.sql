@@ -74,6 +74,10 @@ exec minoas..importEmployeeLeave 420029, 8879
         END
         CLOSE @cursor 
         DEALLOCATE @cursor
+
+        DECLARE @NOW DATETIME
+        SET @NOW=GETDATE()
+        UPDATE EMPLOYEE_LEAVES SET IS_ACTIVE=1 WHERE ESTABLISHED < @NOW AND DUE_TO > @NOW
     END
 
 
