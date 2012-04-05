@@ -2,6 +2,7 @@ package gr.sch.ira.minoas.seam.components.criteria;
 
 import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.core.SpecializationGroup;
+import gr.sch.ira.minoas.model.employement.EmployeeLeaveType;
 import gr.sch.ira.minoas.model.employement.LeaveType;
 
 import java.util.Calendar;
@@ -29,6 +30,10 @@ public class EmployeeLeaveCriteria {
 	private Date effectiveDateUntil;
 
 	private LeaveType leaveType;
+	
+	private EmployeeLeaveType employeeLeaveType;
+	
+	private String employeeLeaveTypeCode;
 
 	private Character region;
 
@@ -157,5 +162,33 @@ public class EmployeeLeaveCriteria {
 	public void setSpecializationGroup(SpecializationGroup specializationGroup) {
 		this.specializationGroup = specializationGroup;
 	}
+
+    /**
+     * @return the employeeLeaveType
+     */
+    public EmployeeLeaveType getEmployeeLeaveType() {
+        return employeeLeaveType;
+    }
+
+    /**
+     * @param employeeLeaveType the employeeLeaveType to set
+     */
+    public void setEmployeeLeaveType(EmployeeLeaveType employeeLeaveType) {
+        this.employeeLeaveType = employeeLeaveType;
+    }
+
+    /**
+     * @return the employeeLeaveTypeCode
+     */
+    public String getEmployeeLeaveTypeCode() {
+        return employeeLeaveTypeCode;
+    }
+
+    /**
+     * @param employeeLeaveTypeCode the employeeLeaveTypeCode to set
+     */
+    public void setEmployeeLeaveTypeCode(String employeeLeaveTypeCode) {
+        this.employeeLeaveTypeCode = employeeLeaveTypeCode;
+    }
 
 }

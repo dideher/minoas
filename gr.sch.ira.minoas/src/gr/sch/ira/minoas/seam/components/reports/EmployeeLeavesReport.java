@@ -2,6 +2,8 @@ package gr.sch.ira.minoas.seam.components.reports;
 
 import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.core.SpecializationGroup;
+import gr.sch.ira.minoas.model.employement.EmployeeLeave;
+import gr.sch.ira.minoas.model.employement.EmployeeLeaveType;
 import gr.sch.ira.minoas.model.employement.Leave;
 import gr.sch.ira.minoas.model.employement.LeaveType;
 import gr.sch.ira.minoas.seam.components.criteria.DateSearchType;
@@ -121,9 +123,10 @@ public class EmployeeLeavesReport extends BaseReport {
 		School school = getEmployeeLeaveCriteria().getSchoolOfIntereset();
 		SpecializationGroup specializationGroup = getEmployeeLeaveCriteria().getSpecializationGroup();
 		DateSearchType dateSearchType = getEmployeeLeaveCriteria().getDateSearchType();
+		EmployeeLeaveType employeeLeaveType = getEmployeeLeaveCriteria().getEmployeeLeaveType();
 
 		StringBuffer sb = new StringBuffer();
-		sb.append("SELECT l FROM Leave l WHERE l.active IS TRUE ");
+		sb.append("SELECT l FROM EmployeeLeave l WHERE l.active IS TRUE ");
 		switch (dateSearchType) {
 		case AFTER_DATE:
 			sb.append("AND l.dueTo >= :effectiveDate ");
@@ -138,8 +141,8 @@ public class EmployeeLeavesReport extends BaseReport {
 			sb.append(" AND (:effectiveDateFrom <= l.established AND  :effectiveDateUntil >= l.dueTo) ");
 			break;
 		}
-		if (leaveType != null) {
-			sb.append(" AND l.leaveType=:leaveType ");
+		if (employeeLeaveType != null) {
+			sb.append(" AND l.employeeLeaveType=:leaveType ");
 		}
 		if (school != null) {
 			sb.append(" AND l.employee.currentEmployment.school = :school ");
@@ -153,7 +156,7 @@ public class EmployeeLeavesReport extends BaseReport {
 		}
 
 		sb.append(" ORDER BY l.employee.lastSpecialization, l.employee.lastName");
-
+		
 		Query q = getEntityManager().createQuery(sb.toString());
 		if (dateSearchType != DateSearchType.DURING_DATE_PERIOD) {
 			q.setParameter("effectiveDate", effectiveDate);
@@ -168,8 +171,9 @@ public class EmployeeLeavesReport extends BaseReport {
 			q.setParameter("today", today);
 		}
 		
-		if (leaveType != null) {
-			q.setParameter("leaveType", leaveType);
+		if (employeeLeaveType != null) {
+			q.setParameter("leaveType", employeeLeaveType);
+			System.err.println(employeeLeaveType.getDescription());
 		}
 		if (school != null) {
 			q.setParameter("school", school);
@@ -181,10 +185,10 @@ public class EmployeeLeavesReport extends BaseReport {
 			q.setParameter("specializationGroup", specializationGroup);
 		}
 
-		Collection<Leave> leaves = q.getResultList();
+		Collection<EmployeeLeave> leaves = q.getResultList();
 		info("found totally #0 leaves matching criteria", leaves.size());
 		reportData = new ArrayList<EmployeeLeaveReportItem>(leaves.size());
-		for (Leave leave : leaves) {
+		for (EmployeeLeave leave : leaves) {
 			reportData.add(new EmployeeLeaveReportItem(leave));
 		}
 	}
