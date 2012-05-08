@@ -2,18 +2,16 @@ package gr.sch.ira.minoas.seam.components.management;
 
 import gr.sch.ira.minoas.core.CoreUtils;
 import gr.sch.ira.minoas.model.employee.Employee;
+import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 import gr.sch.ira.minoas.model.employement.EmployeeLeaveType;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
-import gr.sch.ira.minoas.model.employement.Leave;
-import gr.sch.ira.minoas.model.employement.LeaveType;
-import gr.sch.ira.minoas.model.employement.TeachingHourCDR;
 import gr.sch.ira.minoas.model.printout.PrintoutRecipients;
 import gr.sch.ira.minoas.model.printout.PrintoutSignatures;
 import gr.sch.ira.minoas.model.security.Principal;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
-import gr.sch.ira.minoas.seam.components.home.LeaveHome;
+import gr.sch.ira.minoas.seam.components.home.EmployeeLeaveHome;
 import gr.sch.ira.minoas.seam.components.managers.MedicalEmployeeLeavesOfCurrentYear;
 import gr.sch.ira.minoas.seam.components.managers.MedicalEmployeeLeavesOfPrevious5Years;
 import gr.sch.ira.minoas.seam.components.managers.RegularEmployeeLeavesOfCurrentYear;
@@ -44,10 +42,7 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperRunManager;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.export.JRXlsExporter;
-import net.sf.jasperreports.engine.export.oasis.JROdsExporter;
 import net.sf.jasperreports.engine.export.oasis.JROdtExporter;
-import net.sf.jasperreports.engine.export.oasis.JROpenDocumentExporter;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.jboss.seam.ScopeType;
@@ -259,14 +254,14 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
 //    }
 
     @In(required = true)
-    private LeaveHome leaveHome;
+    private EmployeeLeaveHome employeeLeaveHome;
 
     @Transactional
     @RaiseEvent("leaveCreated")
     public String addEmployeeLeaveAction() {
-        if (employeeHome.isManaged() && !(leaveHome.isManaged())) {
+        if (employeeHome.isManaged() && !(employeeLeaveHome.isManaged())) {
             Employee employee = getEntityManager().merge(employeeHome.getInstance());
-            Leave newLeave = leaveHome.getInstance();
+            EmployeeLeave newLeave = employeeLeaveHome.getInstance();
             newLeave.setEmployee(employee);
             newLeave.setInsertedBy(getPrincipal());
             newLeave.setInsertedOn(new Date());
@@ -279,7 +274,7 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
             }
 
             if (validateLeave(newLeave, true)) {
-                leaveHome.persist();
+                employeeLeaveHome.persist();
                 getEntityManager().flush();
                 info("leave #0 for employee #1 has been created", newLeave, employee);
                 return ACTION_OUTCOME_SUCCESS;
@@ -302,29 +297,29 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
     @Transactional
     @RaiseEvent("leaveDeleted")
     public String deleteEmployeeLeaveAction() {
-        if (employeeHome.isManaged() && leaveHome.isManaged()) {
+        if (employeeHome.isManaged() && employeeLeaveHome.isManaged()) {
             Employee employee = getEntityManager().merge(employeeHome.getInstance());
-            Leave leave = leaveHome.getInstance();
+            EmployeeLeave leave = employeeLeaveHome.getInstance();
             info("deleting employee #0 leave #1", employee, leave);
 
-            for (TeachingHourCDR cdr : leave.getLeaveCDRs()) {
-                info("deleting leave's #0 cdr #1", employee, cdr);
-                cdr.setLeave(null);
-                getEntityManager().remove(cdr);
-            }
-
-            leave.getLeaveCDRs().removeAll(leave.getLeaveCDRs());
+//            for (TeachingHourCDR cdr : leave.getLeaveCDRs()) {
+//                info("deleting leave's #0 cdr #1", employee, cdr);
+//                cdr.setLeave(null);
+//                getEntityManager().remove(cdr);
+//            }
+//
+//            leave.getLeaveCDRs().removeAll(leave.getLeaveCDRs());
             leave.setActive(Boolean.FALSE);
             leave.setDeleted(Boolean.TRUE);
             leave.setDeletedOn(new Date());
             leave.setDeletedBy(getPrincipal());
-            leaveHome.update();
+            employeeLeaveHome.update();
             info("leave #0 for employee #1 has been deleted", leave, employee);
             getEntityManager().flush();
             return ACTION_OUTCOME_FAILURE;
         } else {
             facesMessages
-                    .add(Severity.ERROR, "employee home #0 or leave home #1 not managed.", employeeHome, leaveHome);
+                    .add(Severity.ERROR, "employee home #0 or leave home #1 not managed.", employeeHome, employeeLeaveHome);
             return ACTION_OUTCOME_FAILURE;
         }
     }
@@ -333,12 +328,12 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
     @RaiseEvent("leaveModified")
     public String modifyEmployeeLeaveAction() {
 
-        if (leaveHome.isManaged()) {
+        if (employeeLeaveHome.isManaged()) {
             Employee employee = getEntityManager().merge(employeeHome.getInstance());
-            Leave newLeave = leaveHome.getInstance();
+            EmployeeLeave newLeave = employeeLeaveHome.getInstance();
             if (validateLeave(newLeave, true)) {
                 newLeave.setActive(leaveShouldBeActivated(newLeave, new Date()));
-                leaveHome.update();
+                employeeLeaveHome.update();
                 getEntityManager().flush();
                 info("leave #0 for employee #1 has been modified", newLeave, employee);
                 return ACTION_OUTCOME_SUCCESS;
@@ -346,7 +341,7 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
                 return ACTION_OUTCOME_FAILURE;
             }
         } else {
-            facesMessages.add(Severity.ERROR, "leave home #0 is not managed.", leaveHome);
+            facesMessages.add(Severity.ERROR, "leave home #0 is not managed.", employeeLeaveHome);
             return ACTION_OUTCOME_FAILURE;
         }
     }
@@ -369,9 +364,9 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
 
     protected Map<String, Object> prepareParametersForLeavePrintout() throws NoSuchAlgorithmException, UnsupportedEncodingException {
 
-        if (leaveHome.isManaged()) {
+        if (employeeLeaveHome.isManaged()) {
             Employee employee = getEntityManager().merge(employeeHome.getInstance());
-            Leave leave = leaveHome.getInstance();
+            EmployeeLeave leave = employeeLeaveHome.getInstance();
             
                 Map<String, Object> parameters = new HashMap<String, Object>();
                 Principal currentPrincipal = getPrincipal();
@@ -420,9 +415,9 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
     @Transactional
     public String printEmployeeLeaveAction() {
 
-        if (leaveHome.isManaged()) {
+        if (employeeLeaveHome.isManaged()) {
             Employee employee = getEntityManager().merge(employeeHome.getInstance());
-            Leave leave = leaveHome.getInstance();
+            EmployeeLeave leave = employeeLeaveHome.getInstance();
             try {
                 Map<String, Object> parameters = prepareParametersForLeavePrintout();
                 
@@ -460,9 +455,9 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
     public String printWordEmployeeLeaveAction() {
         
 
-        if (leaveHome.isManaged()) {
+        if (employeeLeaveHome.isManaged()) {
             Employee employee = getEntityManager().merge(employeeHome.getInstance());
-            Leave leave = leaveHome.getInstance();
+            EmployeeLeave leave = employeeLeaveHome.getInstance();
             OutputStream output = null;
             try {
                 Map<String, Object> parameters = prepareParametersForLeavePrintout();
@@ -511,7 +506,7 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
     }
 
     public void computeLeaveDuration() {
-        Leave leave = leaveHome.getInstance();
+        EmployeeLeave leave = employeeLeaveHome.getInstance();
         Date established = leave.getEstablished() != null ? DateUtils.truncate(leave.getEstablished(),
                 Calendar.DAY_OF_MONTH) : null;
         Date dueTo = leave.getDueTo() != null ? DateUtils.truncate(leave.getDueTo(), Calendar.DAY_OF_MONTH) : null;
@@ -546,7 +541,7 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
      * @param addMessages
      * @return
      */
-    protected boolean validateLeave(Leave leave, boolean addMessages) {
+    protected boolean validateLeave(EmployeeLeave leave, boolean addMessages) {
         Date established = DateUtils.truncate(leave.getEstablished(), Calendar.DAY_OF_MONTH);
         Date dueTo = DateUtils.truncate(leave.getDueTo(), Calendar.DAY_OF_MONTH);
         /* check if the dates are correct */
@@ -559,8 +554,8 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
             return false;
         }
 
-        Collection<Leave> current_leaves = getCoreSearching().getEmployeeLeaves(employeeHome.getInstance());
-        for (Leave current_leave : current_leaves) {
+        Collection<EmployeeLeave> current_leaves = getCoreSearching().getEmployeeLeaves2(employeeHome.getInstance());
+        for (EmployeeLeave current_leave : current_leaves) {
             if (current_leave.getId().equals(leave.getId()))
                 continue;
             Date current_established = DateUtils.truncate(current_leave.getEstablished(), Calendar.DAY_OF_MONTH);
@@ -603,7 +598,7 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
      * @param referenceDate
      * @return
      */
-    protected boolean leaveShouldBeActivated(Leave leave, Date referenceDate) {
+    protected boolean leaveShouldBeActivated(EmployeeLeave leave, Date referenceDate) {
         Date established = DateUtils.truncate(leave.getEstablished(), Calendar.DAY_OF_MONTH);
         Date dueTo = DateUtils.truncate(leave.getDueTo(), Calendar.DAY_OF_MONTH);
         Date today = DateUtils.truncate(referenceDate, Calendar.DAY_OF_MONTH);
@@ -615,12 +610,11 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
 
     /* this method is called when the user clicks the "add new leave" */
     public void prepeareNewLeave() {
-        leaveHome.clearInstance();
-        Leave leave = leaveHome.getInstance();
+        employeeLeaveHome.clearInstance();
+        EmployeeLeave leave = employeeLeaveHome.getInstance();
         leave.setEstablished(new Date());
         leave.setDueTo(null);
         leave.setEmployee(employeeHome.getInstance());
-        leave.setLeaveType(LeaveType.MEDICAL_LABOUR_LEAVE);
     }
 
     /* this method is called when the user clicks the "print leave" */
@@ -747,6 +741,18 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
      */
     public void setLeaveComputationReferenceDay(Date leaveComputationReferenceDay) {
         this.leaveComputationReferenceDay = leaveComputationReferenceDay;
+    }
+    
+    
+    /* this method is being called from the page containing a list of leaves and returns the CSS class that should be used by the leave row */
+    public String getTableCellClassForLeave(EmployeeLeave leave) {
+        if(leave.isFuture()) {
+            return "rich-table-future-leave";
+        } else if(leave.isCurrent()) {
+            return "rich-table-current-leave";
+        } else if(leave.isPast()) {
+            return "rich-table-past-leave";
+        } else return "";
     }
 
 }

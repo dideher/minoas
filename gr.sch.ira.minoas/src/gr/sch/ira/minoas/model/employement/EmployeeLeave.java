@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -256,6 +257,21 @@ public class EmployeeLeave extends BaseIDDeleteAwareModel {
      */
     public void setEffectiveNumberOfDays(Integer effectiveNumberOfDays) {
         this.effectiveNumberOfDays = effectiveNumberOfDays;
+    }
+    
+    public boolean isFuture() {
+        Date currentDate = new Date();
+        return getEstablished().after(currentDate);   
+    }
+    
+    public boolean isCurrent() {
+        Date currentDate = new Date();
+        return  getActive() && ( getEstablished().before(currentDate) && getDueTo().after(currentDate));
+    }
+    
+    public boolean isPast() {
+        Date currentDate = new Date();
+        return getEstablished().before(currentDate);
     }
 
 }

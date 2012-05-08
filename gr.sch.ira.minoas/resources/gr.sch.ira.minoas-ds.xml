@@ -8,7 +8,7 @@
 <datasources>
   <local-tx-datasource>
     <jndi-name>gr.sch.ira.minoasDatasource</jndi-name>
-    <connection-url>jdbc:sqlserver://agaph.dide.ira.net:1433;DatabaseName=minoas</connection-url>
+    <connection-url>jdbc:sqlserver://192.168.2.71:1433;DatabaseName=minoas</connection-url>
     <driver-class>com.microsoft.sqlserver.jdbc.SQLServerDriver</driver-class>
     <user-name>slavikos</user-name>
     <password>slavikos</password>
