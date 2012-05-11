@@ -19,6 +19,7 @@ import gr.sch.ira.minoas.seam.components.managers.RegularEmployeeLeavesOfPreviou
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -57,6 +58,126 @@ import org.jboss.seam.international.StatusMessage.Severity;
 @Name(value = "employeeLeavesManagement")
 @Scope(ScopeType.PAGE)
 public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
+    
+    public class PrintingHelper {
+        private String fieldText1;
+        private String fieldText2;
+        private String fieldText3;
+        private String fieldText4;
+        private String fieldText5;
+        private String fieldText6;
+        private String fieldText7;
+        private String fieldText8;
+        private String fieldText9;
+        /**
+         * @return the fieldText1
+         */
+        public String getFieldText1() {
+            return fieldText1;
+        }
+        /**
+         * @param fieldText1 the fieldText1 to set
+         */
+        public void setFieldText1(String fieldText1) {
+            this.fieldText1 = fieldText1;
+        }
+        /**
+         * @return the fieldText2
+         */
+        public String getFieldText2() {
+            return fieldText2;
+        }
+        /**
+         * @param fieldText2 the fieldText2 to set
+         */
+        public void setFieldText2(String fieldText2) {
+            this.fieldText2 = fieldText2;
+        }
+        /**
+         * @return the fieldText3
+         */
+        public String getFieldText3() {
+            return fieldText3;
+        }
+        /**
+         * @param fieldText3 the fieldText3 to set
+         */
+        public void setFieldText3(String fieldText3) {
+            this.fieldText3 = fieldText3;
+        }
+        /**
+         * @return the fieldText4
+         */
+        public String getFieldText4() {
+            return fieldText4;
+        }
+        /**
+         * @param fieldText4 the fieldText4 to set
+         */
+        public void setFieldText4(String fieldText4) {
+            this.fieldText4 = fieldText4;
+        }
+        /**
+         * @return the fieldText5
+         */
+        public String getFieldText5() {
+            return fieldText5;
+        }
+        /**
+         * @param fieldText5 the fieldText5 to set
+         */
+        public void setFieldText5(String fieldText5) {
+            this.fieldText5 = fieldText5;
+        }
+        /**
+         * @return the fieldText6
+         */
+        public String getFieldText6() {
+            return fieldText6;
+        }
+        /**
+         * @param fieldText6 the fieldText6 to set
+         */
+        public void setFieldText6(String fieldText6) {
+            this.fieldText6 = fieldText6;
+        }
+        /**
+         * @return the fieldText7
+         */
+        public String getFieldText7() {
+            return fieldText7;
+        }
+        /**
+         * @param fieldText7 the fieldText7 to set
+         */
+        public void setFieldText7(String fieldText7) {
+            this.fieldText7 = fieldText7;
+        }
+        /**
+         * @return the fieldText8
+         */
+        public String getFieldText8() {
+            return fieldText8;
+        }
+        /**
+         * @param fieldText8 the fieldText8 to set
+         */
+        public void setFieldText8(String fieldText8) {
+            this.fieldText8 = fieldText8;
+        }
+        /**
+         * @return the fieldText9
+         */
+        public String getFieldText9() {
+            return fieldText9;
+        }
+        /**
+         * @param fieldText9 the fieldText9 to set
+         */
+        public void setFieldText9(String fieldText9) {
+            this.fieldText9 = fieldText9;
+        }
+    }
 
     /**
      * Comment for <code>serialVersionUID</code>
@@ -79,6 +200,10 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
     private Date leavePrintoutRequestDate;
 
     private String leavePrintoutReferenceNumber;
+    
+    private PrintingHelper printHelper = new PrintingHelper();
+    
+    
     
     /**
      * It is the date used for various leave count computation. It is used by {@link RegularEmployeeLeavesOfCurrentYear}, 
@@ -384,6 +509,15 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
                 parameters.put("printDate", leavePrintoutDate);
                 parameters.put("signatureTitle", leavePrintoutSignature.getSignatureTitle());
                 parameters.put("signatureName", leavePrintoutSignature.getSignatureName());
+                
+                /* according to the leave type, populate the parameters map accordinally */
+                
+                if(leave.getEmployeeLeaveType().getLegacyCode().equals("33")) {
+                    parameters.put("numberOfBirthCertificate", printHelper.getFieldText1());
+                    parameters.put("numberOfCertificateFamilyStatus", printHelper.getFieldText2());
+                }
+                
+               
 
                 /* compute a SHA-1 digest */
                 MessageDigest digest = MessageDigest.getInstance("SHA");
@@ -412,19 +546,20 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
 
     }
 
-    @Transactional
     public String printEmployeeLeaveAction() {
 
         if (employeeLeaveHome.isManaged()) {
             Employee employee = getEntityManager().merge(employeeHome.getInstance());
             EmployeeLeave leave = employeeLeaveHome.getInstance();
+            
+            
             try {
-                Map<String, Object> parameters = prepareParametersForLeavePrintout();
                 
+                InputStream leaveTemplateInputStream = this.getClass().getResourceAsStream(String.format("/reports/leavePrintout_%s.jasper", leave.getEmployeeLeaveType().getLegacyCode()));
+                
+                Map<String, Object> parameters = prepareParametersForLeavePrintout();
                 JRBeanCollectionDataSource main = new JRBeanCollectionDataSource(Collections.EMPTY_LIST);
-                byte[] bytes = JasperRunManager.runReportToPdf(
-                        this.getClass().getResourceAsStream("/reports/leavePrintout_31.jasper"), parameters,
-                        (JRDataSource) main);
+                byte[] bytes = JasperRunManager.runReportToPdf(leaveTemplateInputStream, parameters, (JRDataSource) main);
                 HttpServletResponse response = (HttpServletResponse) CoreUtils.getFacesContext().getExternalContext()
                         .getResponse();
                 response.setContentType("application/pdf");
@@ -619,7 +754,6 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
 
     /* this method is called when the user clicks the "print leave" */
     public void prepeareForLeavePrint() {
-        info("fgdfgkldfjglkdjfglkdfjldfjkgkldjf print, print");
         this.leavePrintoutDate = new Date();
         Collection<SelectItem> list = new ArrayList<SelectItem>();
         for (PrintoutRecipients r : getCoreSearching().getPrintoutRecipients(getEntityManager())) {
@@ -753,6 +887,20 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
         } else if(leave.isPast()) {
             return "rich-table-past-leave";
         } else return "";
+    }
+
+    /**
+     * @return the printHelper
+     */
+    public PrintingHelper getPrintHelper() {
+        return printHelper;
+    }
+
+    /**
+     * @param printHelper the printHelper to set
+     */
+    public void setPrintHelper(PrintingHelper printHelper) {
+        this.printHelper = printHelper;
     }
 
 }

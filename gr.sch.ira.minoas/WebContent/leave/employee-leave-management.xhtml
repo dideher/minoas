@@ -129,12 +129,9 @@
 									</rich:componentControl>
 
 								</rich:dataTable>
-							</h:form>
-
-
-							<h:form>
+							
 								<rich:contextMenu styleClass="normal" attached="false" id="menu"
-									submitMode="nove">
+									submitMode="none" >
 									<rich:menuItem icon="/img/icons/edit.png" immediate="true"
 										submitMode="ajax" reRender="updateModalPanel"
 										value="Επεξεργασία"
@@ -146,6 +143,7 @@
 											value="{leaveLegacyCode}"
 											assignTo="#{employeeLeaveHome.tempValueHolder1}" />
 									</rich:menuItem>
+									
 									<rich:menuItem icon="/img/icons/printer.png" immediate="true"
 										action="#{employeeLeavesManagement.prepeareForLeavePrint()}"
 										submitMode="ajax" reRender="printModalPanel" value="Εκτύπωση"
@@ -154,7 +152,7 @@
 											assignTo="#{employeeLeaveHome.id}"
 											converter="javax.faces.Integer" />
 									</rich:menuItem>
-
+									
 									<rich:menuSeparator />
 									<rich:menuItem icon="/img/icons/delete.png" immediate="true"
 										submitMode="ajax" reRender="deleteModalPanelContent"
@@ -460,7 +458,7 @@
 								reRender="employeeAllLeavesList,updateModalPanelContent" />
 							<a4j:commandButton value="Επιστροφή .."
 								action="#{employeeLeaveHome.revert()}"
-								reRender="futureLeavesPanel,allLeavesPanel,activeLeavePanel"
+								reRender="employeeAllLeavesList"
 								oncomplete="#{rich:component('updateModalPanel')}.hide();" />
 						</h:panelGrid>
 					</h:form>
@@ -643,7 +641,6 @@
 		<!-- ******************************************************* -->
 		<!-- ******************************************************* -->
 
-
 		<rich:modalPanel id="printModalPanel" autosized="true">
 			<f:facet name="header">
 				<h:outputText value="Εκτύπωση Άδειας Εκπαιδεύτικου"
@@ -739,27 +736,19 @@
 
 								</h:panelGrid>
 
-
-
-
-
-
+								<!--  this is the dynamic (according to leave type) section  -->	
+								<h:panelGrid columns="4" rendered="${employeeLeaveHome.instance.employeeLeaveType.legacyCode eq 33}">
+									<ui:include src="/leave/print-forms/leave_33.xhtml" />
+								</h:panelGrid>
 							</h:panelGrid>
 						</a4j:outputPanel>
 
 						<h:panelGrid columns="6">
+						
+								
 							<h:commandButton value="PDF commandbutton"
 								action="#{employeeLeavesManagement.printEmployeeLeaveAction()}" />
-							<h:commandButton value="WORD commandbutton"
-								action="#{employeeLeavesManagement.printWordEmployeeLeaveAction()}" />
-							<!-- 
-							<a4j:commandLink value="PDF commandbutton (ajax/link) " target="_blank" action="#{employeeLeavesManagement.printEmployeeLeaveAction()}"></a4j:commandLink>
-							<a4j:commandButton value="PDF commandbutton (ajax)" action="#{employeeLeavesManagement.printEmployeeLeaveAction()}"></a4j:commandButton>
 							
-							<s:button
-								action="#{employeeLeavesManagement.printEmployeeLeaveAction()}"
-								value="Εκτύπωση (PDF)" target="new" type="button" />
-							 -->
 							<a4j:commandButton value="Επιστροφή .."
 								reRender="employeeAllLeavesList"
 								oncomplete="#{rich:component('printModalPanel')}.hide();" />
@@ -769,6 +758,7 @@
 				</h:panelGrid>
 			</a4j:region>
 		</rich:modalPanel>
+		
 
 
 		<ui:include src="/components/wait-modal-panel.xhtml" />

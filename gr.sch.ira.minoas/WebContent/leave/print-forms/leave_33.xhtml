@@ -1,0 +1,31 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich">
+
+<ui:component>
+	<h:panelGrid columns="2">
+		<s:decorate template="/layout/doubleLineEdit.xhtml">
+			<ui:define name="label">
+				<h:outputText value="Ληξιαρχική Πράξη Γεννήσεως : " />
+			</ui:define>
+			<h:inputText
+				value="${employeeLeavesManagement.printHelper.fieldText1}" size="10"
+				disabled="false" maxlength="20" styleClass="fieldValueText"
+				required="true" readonly="false" />
+		</s:decorate>
+
+		<s:decorate template="/layout/doubleLineEdit.xhtml">
+			<ui:define name="label">
+				<h:outputText value="Βεβαίωση Οικογ. Κατάστασης : " />
+			</ui:define>
+			<h:inputText
+				value="${employeeLeavesManagement.printHelper.fieldText2}" size="10"
+				disabled="false" maxlength="20" styleClass="fieldValueText"
+				required="true" readonly="false" />
+		</s:decorate>
+	</h:panelGrid>
+</ui:component>
+</html>
