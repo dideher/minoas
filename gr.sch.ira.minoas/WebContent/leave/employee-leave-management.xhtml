@@ -737,9 +737,20 @@
 								</h:panelGrid>
 
 								<!--  this is the dynamic (according to leave type) section  -->	
-								<h:panelGrid columns="4" rendered="${employeeLeaveHome.instance.employeeLeaveType.legacyCode eq 33}">
+								<h:panelGrid columns="2" rendered="${employeeLeaveHome.instance.employeeLeaveType.legacyCode eq 33}">
 									<ui:include src="/leave/print-forms/leave_33.xhtml" />
 								</h:panelGrid>
+								
+								<h:panelGrid columns="2" rendered="${employeeLeaveHome.instance.employeeLeaveType.legacyCode eq 35}">
+									<ui:include src="/leave/print-forms/leave_35.xhtml" />
+								</h:panelGrid>
+								
+								<h:panelGrid columns="2" rendered="${employeeLeaveHome.instance.employeeLeaveType.legacyCode eq 36}">
+									<ui:include src="/leave/print-forms/leave_36.xhtml" />
+								</h:panelGrid>
+								
+								
+								
 							</h:panelGrid>
 						</a4j:outputPanel>
 

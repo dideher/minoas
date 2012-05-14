@@ -69,6 +69,15 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
         private String fieldText7;
         private String fieldText8;
         private String fieldText9;
+        private Date fieldDate1;
+        private Date fieldDate2;
+        private Date fieldDate3;
+        private Date fieldDate4;
+        private Date fieldDate5;
+        private Date fieldDate6;
+        private Date fieldDate7;
+        private Date fieldDate8;
+        private Date fieldDate9;
         /**
          * @return the fieldText1
          */
@@ -176,6 +185,114 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
          */
         public void setFieldText9(String fieldText9) {
             this.fieldText9 = fieldText9;
+        }
+        /**
+         * @return the fieldDate1
+         */
+        public Date getFieldDate1() {
+            return fieldDate1;
+        }
+        /**
+         * @param fieldDate1 the fieldDate1 to set
+         */
+        public void setFieldDate1(Date fieldDate1) {
+            this.fieldDate1 = fieldDate1;
+        }
+        /**
+         * @return the fieldDate2
+         */
+        public Date getFieldDate2() {
+            return fieldDate2;
+        }
+        /**
+         * @param fieldDate2 the fieldDate2 to set
+         */
+        public void setFieldDate2(Date fieldDate2) {
+            this.fieldDate2 = fieldDate2;
+        }
+        /**
+         * @return the fieldDate3
+         */
+        public Date getFieldDate3() {
+            return fieldDate3;
+        }
+        /**
+         * @param fieldDate3 the fieldDate3 to set
+         */
+        public void setFieldDate3(Date fieldDate3) {
+            this.fieldDate3 = fieldDate3;
+        }
+        /**
+         * @return the fieldDate4
+         */
+        public Date getFieldDate4() {
+            return fieldDate4;
+        }
+        /**
+         * @param fieldDate4 the fieldDate4 to set
+         */
+        public void setFieldDate4(Date fieldDate4) {
+            this.fieldDate4 = fieldDate4;
+        }
+        /**
+         * @return the fieldDate5
+         */
+        public Date getFieldDate5() {
+            return fieldDate5;
+        }
+        /**
+         * @param fieldDate5 the fieldDate5 to set
+         */
+        public void setFieldDate5(Date fieldDate5) {
+            this.fieldDate5 = fieldDate5;
+        }
+        /**
+         * @return the fieldDate6
+         */
+        public Date getFieldDate6() {
+            return fieldDate6;
+        }
+        /**
+         * @param fieldDate6 the fieldDate6 to set
+         */
+        public void setFieldDate6(Date fieldDate6) {
+            this.fieldDate6 = fieldDate6;
+        }
+        /**
+         * @return the fieldDate7
+         */
+        public Date getFieldDate7() {
+            return fieldDate7;
+        }
+        /**
+         * @param fieldDate7 the fieldDate7 to set
+         */
+        public void setFieldDate7(Date fieldDate7) {
+            this.fieldDate7 = fieldDate7;
+        }
+        /**
+         * @return the fieldDate8
+         */
+        public Date getFieldDate8() {
+            return fieldDate8;
+        }
+        /**
+         * @param fieldDate8 the fieldDate8 to set
+         */
+        public void setFieldDate8(Date fieldDate8) {
+            this.fieldDate8 = fieldDate8;
+        }
+        /**
+         * @return the fieldDate9
+         */
+        public Date getFieldDate9() {
+            return fieldDate9;
+        }
+        /**
+         * @param fieldDate9 the fieldDate9 to set
+         */
+        public void setFieldDate9(Date fieldDate9) {
+            this.fieldDate9 = fieldDate9;
         }
     }
 
@@ -517,9 +634,16 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
                     parameters.put("numberOfCertificateFamilyStatus", printHelper.getFieldText2());
                 }
                 
-               
-
-                /* compute a SHA-1 digest */
+                if(leave.getEmployeeLeaveType().getLegacyCode().equals("35")) {
+                    parameters.put("doctorOpinionDate", printHelper.getFieldDate1());
+                    parameters.put("doctorName", printHelper.getFieldText1());
+                }
+                
+                if(leave.getEmployeeLeaveType().getLegacyCode().equals("36")) {
+                    parameters.put("leaveReason", printHelper.getFieldText1());
+                }
+                
+               /* compute a SHA-1 digest */
                 MessageDigest digest = MessageDigest.getInstance("SHA");
                 digest.update(String.format("%s-%d-%d", parameters.toString(), System.currentTimeMillis(),
                         parameters.hashCode()).getBytes("UTF-8"));
