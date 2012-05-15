@@ -632,15 +632,17 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
                 if(leave.getEmployeeLeaveType().getLegacyCode().equals("33")) {
                     parameters.put("numberOfBirthCertificate", printHelper.getFieldText1());
                     parameters.put("numberOfCertificateFamilyStatus", printHelper.getFieldText2());
-                }
-                
-                if(leave.getEmployeeLeaveType().getLegacyCode().equals("35")) {
+                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("35")) {
                     parameters.put("doctorOpinionDate", printHelper.getFieldDate1());
                     parameters.put("doctorName", printHelper.getFieldText1());
-                }
-                
-                if(leave.getEmployeeLeaveType().getLegacyCode().equals("36")) {
+                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("36")) {
                     parameters.put("leaveReason", printHelper.getFieldText1());
+                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("37")) {
+                    parameters.put("externalDecisionNumber", printHelper.getFieldText1());
+                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("38")) {
+                    parameters.put("externalDecisionNumber", printHelper.getFieldText1());
+                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("41")) {
+                    parameters.put("externalDecisionNumber", printHelper.getFieldText1());
                 }
                 
                /* compute a SHA-1 digest */
