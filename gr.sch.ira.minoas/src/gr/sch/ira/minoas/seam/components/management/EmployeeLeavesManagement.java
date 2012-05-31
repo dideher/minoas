@@ -603,6 +603,8 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
         }
         return buf.toString();
     }
+    
+    
 
     protected Map<String, Object> prepareParametersForLeavePrintout() throws NoSuchAlgorithmException, UnsupportedEncodingException {
 
@@ -687,7 +689,127 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
         }
 
     }
+    
+    protected Map<String, Object> prepareSpecialParametersForLeavePrintout() throws NoSuchAlgorithmException, UnsupportedEncodingException {
 
+        if (employeeLeaveHome.isManaged()) {
+            Employee employee = getEntityManager().merge(employeeHome.getInstance());
+            EmployeeLeave leave = employeeLeaveHome.getInstance();
+            
+                Map<String, Object> parameters = new HashMap<String, Object>();
+               
+                
+                /* according to the leave type, populate the parameters map accordinally */
+                
+                if(leave.getEmployeeLeaveType().getLegacyCode().equals("33")) {
+                    parameters.put("numberOfBirthCertificate", printHelper.getFieldText1());
+                    parameters.put("numberOfCertificateFamilyStatus", printHelper.getFieldText2());
+                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("35")) {
+                    parameters.put("doctorOpinionDate", printHelper.getFieldDate1());
+                    parameters.put("doctorName", printHelper.getFieldText1());
+                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("36")) {
+                    parameters.put("leaveReason", printHelper.getFieldText1());
+                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("37")) {
+                    parameters.put("externalDecisionNumber", printHelper.getFieldText1());
+                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("38")) {
+                    parameters.put("externalDecisionNumber", printHelper.getFieldText1());
+                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("41")) {
+                    parameters.put("externalDecisionNumber", printHelper.getFieldText1());
+                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("42")) {
+                    parameters.put("externalDecisionDate", printHelper.getFieldDate1());
+                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("45")) {
+                    parameters.put("doctorOpinionDate", printHelper.getFieldDate1());
+                    parameters.put("doctorName", printHelper.getFieldText1());
+                    parameters.put("externalDecisionDate", printHelper.getFieldDate2());
+                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("46")) {
+                    parameters.put("doctorOpinionDate", printHelper.getFieldDate1());
+                    parameters.put("doctorName", printHelper.getFieldText1());
+                    parameters.put("externalDecisionDate", printHelper.getFieldDate2());
+                    parameters.put("textField2", printHelper.getFieldText2());
+                    parameters.put("numberOfBirthCertificate", printHelper.getFieldText3());
+                    parameters.put("textField1", printHelper.getFieldText4());
+                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("47")) {
+                    parameters.put("doctorOpinionDate", printHelper.getFieldDate1());
+                    parameters.put("doctorName", printHelper.getFieldText1());
+                }
+                       
+            return parameters;
+        } else {
+            return null;
+        }
+
+    }
+    
+    protected Map<String, Object> prepareSpecialParametersForLeaveCoverPrintout()  {
+
+        if (employeeLeaveHome.isManaged()) {
+            EmployeeLeave leave = employeeLeaveHome.getInstance();
+            Map<String, Object> parameters = new HashMap<String, Object>();
+            
+                if(leave.getEmployeeLeaveType().getLegacyCode().equals("55")) {
+                    parameters.put("textField2", printHelper.getFieldText2());
+                    parameters.put("textField3", printHelper.getFieldText3());
+                    parameters.put("textField4", printHelper.getFieldText4());
+                    parameters.put("textField5", printHelper.getFieldText5());
+                    parameters.put("textField6", printHelper.getFieldText6());
+                    parameters.put("textField1", printHelper.getFieldText8());
+                    parameters.put("doctorName", printHelper.getFieldText7());
+                    parameters.put("dateField1", printHelper.getFieldDate2());
+                    
+                } 
+            
+            return parameters;
+        } else {
+            return null;
+        }
+
+    }
+
+    
+    public String printEmployeeLeaveCoverAction() {
+
+        if (employeeLeaveHome.isManaged()) {
+            Employee employee = getEntityManager().merge(employeeHome.getInstance());
+            EmployeeLeave leave = employeeLeaveHome.getInstance();
+            
+            
+            try {
+                
+                InputStream leaveTemplateInputStream = this.getClass().getResourceAsStream(String.format("/reports/leaveHandlingRequest_%s.jasper", leave.getEmployeeLeaveType().getLegacyCode()));
+                
+                Map<String, Object> parameters = prepareParametersForLeavePrintout();
+                /* add special parameters for the cover printout */
+                parameters.putAll(prepareSpecialParametersForLeaveCoverPrintout());
+                JRBeanCollectionDataSource main = new JRBeanCollectionDataSource(Collections.EMPTY_LIST);
+                byte[] bytes = JasperRunManager.runReportToPdf(leaveTemplateInputStream, parameters, (JRDataSource) main);
+                HttpServletResponse response = (HttpServletResponse) CoreUtils.getFacesContext().getExternalContext()
+                        .getResponse();
+                response.setContentType("application/pdf");
+                String pdfFile = String.format("ΑΔΕΙΑ_%s_%s_(%s).pdf", employee.getLastName(), employee.getFirstName(),
+                        employee.getLastSpecialization().getTitle());
+                // http://greenbytes.de/tech/webdav/rfc6266.html
+                //response.addHeader("Content-Disposition", String.format("attachment; filename*=UTF-8 ' '%s", pdfFile));
+                response.addHeader("Content-Disposition", String.format("attachment; filename=lalala.pdf", pdfFile));
+                response.setContentLength(bytes.length);
+                ServletOutputStream servletOutputStream = response.getOutputStream();
+                servletOutputStream.write(bytes, 0, bytes.length);
+                servletOutputStream.flush();
+                servletOutputStream.close();
+                CoreUtils.getFacesContext().responseComplete();
+            } catch (Exception ex) {
+                ex.printStackTrace(System.out);
+            }
+
+            info("leave #0 for employee #1 has been printed !", leave, employee);
+
+            return ACTION_OUTCOME_SUCCESS;
+        } else {
+            return ACTION_OUTCOME_FAILURE;
+        }
+    
+        
+    }
+    
     public String printEmployeeLeaveAction() {
 
         if (employeeLeaveHome.isManaged()) {
@@ -700,6 +822,8 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
                 InputStream leaveTemplateInputStream = this.getClass().getResourceAsStream(String.format("/reports/leavePrintout_%s.jasper", leave.getEmployeeLeaveType().getLegacyCode()));
                 
                 Map<String, Object> parameters = prepareParametersForLeavePrintout();
+                /* add special parameters for the printout */
+                parameters.putAll(prepareSpecialParametersForLeavePrintout());
                 JRBeanCollectionDataSource main = new JRBeanCollectionDataSource(Collections.EMPTY_LIST);
                 byte[] bytes = JasperRunManager.runReportToPdf(leaveTemplateInputStream, parameters, (JRDataSource) main);
                 HttpServletResponse response = (HttpServletResponse) CoreUtils.getFacesContext().getExternalContext()
