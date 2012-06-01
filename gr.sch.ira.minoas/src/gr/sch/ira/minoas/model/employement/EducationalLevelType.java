@@ -16,11 +16,17 @@ public enum EducationalLevelType {
 	 * Τεχνολογικής Εκπαίδευσης
 	 */
 	TECHNOLOGIGAL_EDUCATION_LEVEL("TECHNOLOGIGAL_EDUCATION_LEVEL_KEY"),
+	
 	/**
 	 * Δευτεροβάθμιας Εκπαίδευσης
 	 */
-	SECONDARY_EDUCATION_LEVEL("SECONDARY_EDUCATION_LEVEL_KEY");
+	SECONDARY_EDUCATION_LEVEL("SECONDARY_EDUCATION_LEVEL_KEY"),
 
+	/**
+	 * Υποχρεωτικής Εκπαίδευσης
+	 */
+	COMPULSORY_EDUCATION_LEVEL("COMPULSORY_EDUCATION_LEVEL_KEY");
+	
 	private String key;
 
 	private EducationalLevelType(String key) {
