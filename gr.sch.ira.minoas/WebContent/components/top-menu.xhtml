@@ -201,7 +201,7 @@
 
 				</rich:menuGroup>
 
-				<rich:menuGroup value="Διαχείριση ΑποσπάσεωνΤΕΣΤ">
+				<rich:menuGroup value="Διαχείριση Αποσπάσεων">
 					<rich:menuItem submitMode="none"
 						rendered="#{(s:hasRole('ADMIN') or s:hasRole('ADD_SECONDMENT'))}">
 
@@ -240,11 +240,11 @@
 				</rich:menuGroup>
 				
 				<rich:menuItem submitMode="none"
-					rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYMENT'))}">
-					<s:link value="Διαχείριση Βαθμού/ΜΚ" 
+					rendered="#{(s:hasRole('ADMIN') )}">
+					<s:link value="Διαχείριση Στοιχείων Μισθοδοσίας" 
 						view="/employee/select-employee.xhtml">
 						<f:param name="from" value="/home" />
-						<f:param name="to" value="/employee/manage-rank" />
+						<f:param name="to" value="/employee/manageEmployeeInfo" />
 					</s:link>
 				</rich:menuItem>
 				
