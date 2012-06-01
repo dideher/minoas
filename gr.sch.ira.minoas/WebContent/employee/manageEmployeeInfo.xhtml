@@ -1,0 +1,262 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	</head>
+
+	<ui:composition template="/layout/simple-beauty-template.xhtml">
+		<ui:define name="body">
+			<rich:panel>
+				<f:facet name="header">
+					<h:outputText value="Διαχείριση Στοιχείων Μισθοδοσίας" />
+				</f:facet>
+	
+				<ui:include src="/components/messages-component.xhtml" />
+				
+				<h:form>
+				<h:panelGrid columns="1">
+					<rich:panel>
+						<f:facet name="header">
+							<h:outputText value="Βασικά Στοιχεία" />
+						</f:facet>
+						<ui:include src="/components/employee/basicInfo.xhtml" />
+					</rich:panel>
+				</h:panelGrid>
+	
+				<a4j:outputPanel id="employeeInfoOutputPanel">
+					<h:panelGrid columns="1">
+						<rich:panel>
+							<f:facet name="header">
+								<h:outputText value="Στοιχεία Βαθμού/ΜΚ" />
+							</f:facet>
+		
+							<h:panelGrid columns="6">
+								<h:outputLabel value="ΦΕΚ Διορισμού" for="" />
+								<h:outputText styleClass="fieldValueText" value="#{employee.employeeInfo.gogAppointmentNo} - #{employee.employeeInfo.getGogAppointmentDateString()}"/>
+								<h:outputLabel value="Ανάληψη Υπηρεσίας" for="" />
+								<h:outputText styleClass="fieldValueText" value="#{employee.employeeInfo.entryIntoServiceDate}">
+										<s:convertDateTime type="date" pattern="dd-MM-yyyy" />
+								</h:outputText>
+								<h:outputLabel value="" for="" />
+								<h:outputText value="" />
+								
+								<h:outputLabel value="Μεταπυχιακό (MSc)" for="" />
+								<h:selectBooleanCheckbox disabled="true" value="#{employee.employeeInfo.hasAMasterDegree}" />
+								<h:outputLabel value="Διδακτορικό (PhD)" for="" />
+								<h:selectBooleanCheckbox  disabled="true" value="#{employee.employeeInfo.hasAPhD}" />
+								<h:outputLabel value="Ανώτ.Σχολ.Δημ.Διοίκ." for="" />
+								<h:selectBooleanCheckbox disabled="true" value="#{employee.employeeInfo.isANatSchPubAdminGraduate}" />
+								
+								<h:outputLabel value="Βαθμός" for="" />
+								<h:outputText styleClass="fieldValueText" value="#{messages[employee.employeeInfo.rankInfo.rank.key]}"/>
+								<h:outputLabel value="Ημ/νία Απόδοσης" for="" />
+								<h:outputText styleClass="fieldValueText" value="#{employee.employeeInfo.rankInfo.lastRankDate}">
+										<s:convertDateTime type="date" pattern="dd-MM-yyyy" />
+								</h:outputText>
+								<h:outputLabel value="" for="" />
+								<h:outputText value="" />
+								
+								<h:outputLabel value="Μισθ. Κλιμάκιο" for="" />
+								<h:outputText styleClass="fieldValueText" value="#{employee.employeeInfo.rankInfo.salaryGrade}"/>
+								<h:outputLabel value="Ημ/νία Απόδοσης" for="" />
+								<h:outputText styleClass="fieldValueText" value="#{employee.employeeInfo.rankInfo.lastSalaryGradeDate}">
+										<s:convertDateTime type="date" pattern="dd-MM-yyyy" />
+								</h:outputText>
+								<h:outputLabel value="" for="" />
+								<a4j:commandLink id="updatelink"
+									rendered="#{(s:hasRole('ADMIN') or s:hasRole('MODIFY_EMPLOYEE_INFO'))}"
+									reRender="updateEmployeeInfoModalPanel"
+									oncomplete="#{rich:component('updateEmployeeInfoModalPanel')}.show()"
+									value="Τροποποίηση">
+									<h:graphicImage value="/img/icons/edit.png" width="12"
+										height="12" style="border:0" />
+									<f:setPropertyActionListener value="#{employee.employeeInfo.id}"
+										target="#{employeeInfoHome.id}" />
+								</a4j:commandLink>
+								
+	
+							</h:panelGrid>					
+						</rich:panel>
+					</h:panelGrid>
+				</a4j:outputPanel>
+				
+				</h:form>
+	
+	
+			</rich:panel>
+
+
+
+
+
+		<a4j:region>
+		<rich:modalPanel id="updateEmployeeInfoModalPanel" autosized="true"
+			width="500">
+			<f:facet name="header">
+				<h:outputText value="Τροποποίηση Στοιχείων Μισθοδοσίας"
+					style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<h:graphicImage value="/img/modal/close.png" styleClass="hidelink"
+						width="18" height="18" id="hidelink_EmployeeInfoModification" />
+					<rich:componentControl for="updateEmployeeInfoModalPanel"
+						attachTo="hidelink_EmployeeInfoModification" operation="hide"
+						event="onclick" />
+				</h:panelGroup>
+			</f:facet>
+			
+			<a4j:region>
+				<h:panelGrid columns="2">
+					<h:form>
+						
+						
+						<a4j:outputPanel id="updateEmployeeOutputPanel"
+							layout="inline">
+							<h:outputText
+								value="Με την παρακάτω φόρμα, μπορείτε να τροποποίησετε τα στοιχεία μισθοδοσίας του/της εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}." />
+							<rich:messages style="color:red;"></rich:messages>
+
+							
+							<h:panelGrid columns="2">
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="ΦΕΚ Διορισμού" />
+									</ui:define>
+									<h:inputText id="gogAppointmentNoFilter" value="#{employee.employeeInfo.gogAppointmentNo}" size="10"></h:inputText>
+								</s:decorate>
+								
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Ημ/νία ΦΕΚ : " />
+									</ui:define>
+									<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
+										style="width:50px" enableManualInput="true"
+										styleClass="fieldValueText" required="true"
+										value="#{employee.employeeInfo.gogAppointmentDate}">
+									</rich:calendar>
+								</s:decorate>
+								
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Ημ/νία Ανάληψης Υπηρεσίας : " />
+									</ui:define>
+									<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
+										style="width:50px" enableManualInput="true"
+										styleClass="fieldValueText" required="true"
+										value="#{employee.employeeInfo.entryIntoServiceDate}">
+									</rich:calendar>
+								</s:decorate>
+								
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Μεταπυχιακό (MSc) : " />
+									</ui:define>
+									<h:selectBooleanCheckbox value="#{employee.employeeInfo.hasAMasterDegree}" />
+								</s:decorate>
+							
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Διδακτορικό (PhD) : " />
+									</ui:define>
+									<h:selectBooleanCheckbox value="#{employee.employeeInfo.hasAPhD}" />
+								</s:decorate>
+								
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Ανώτ.Σχολ.Δημ.Διοίκ. : " />
+									</ui:define>
+									<h:selectBooleanCheckbox value="#{employee.employeeInfo.isANatSchPubAdminGraduate}" />
+								</s:decorate>
+							
+							
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Βαθμός" />
+									</ui:define>
+							
+									<h:selectOneMenu id="Rank" value="#{employee.employeeInfo.rankInfo.rank}">
+										<s:selectItems hideNoSelectionLabel="false"
+											var="_rankType"
+											value="#{rankTypes}"
+											label="#{messages[_rankType.key]}" />
+										<s:convertEnum />
+									</h:selectOneMenu>
+								</s:decorate>
+							
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Ημ/νία Απόδοσης Βαθμού : " />
+									</ui:define>
+									<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
+										style="width:50px" enableManualInput="true"
+										styleClass="fieldValueText" required="true"
+										value="#{employee.employeeInfo.rankInfo.lastRankDate}">
+									</rich:calendar>
+								</s:decorate>
+							
+							
+							
+							
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Μισθ. Κλιμάκιο" />
+									</ui:define>
+									<h:inputText id="salaryGradeFilter" value="#{employee.employeeInfo.rankInfo.salaryGrade}" size="1"></h:inputText>
+								</s:decorate>
+							
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Ημ/νία Απόδοσης Μ.Κ. : " />
+									</ui:define>
+									<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
+										style="width:50px" enableManualInput="true"
+										styleClass="fieldValueText" required="true"
+										value="#{employee.employeeInfo.rankInfo.lastSalaryGradeDate}">
+									</rich:calendar>
+								</s:decorate>
+
+							
+							
+							
+							
+							</h:panelGrid>
+							
+							
+						
+
+						</a4j:outputPanel>
+
+						<h:panelGrid columns="2">
+							<a4j:commandButton value="Τροποποίηση Στοιχείων Μισθοδοσίας!"
+								action="#{employeeInfoManagement.modifyEmployeeInfo()}"
+								data="#{facesContext.maximumSeverity.ordinal ge 2}"
+								oncomplete="if(data == false) Richfaces.hideModalPanel('updateEmployeeInfoModalPanel');"
+								reRender="employeeInfoOutputPanel" />
+							<a4j:commandButton value="Επιστροφή .."
+								action="#{employeeInfoHome.revert()}"
+								reRender="employeeInfoOutputPanel"
+								oncomplete="#{rich:component('updateEmployeeInfoModalPanel')}.hide();" />
+						</h:panelGrid>
+					
+					
+					
+					</h:form>
+				</h:panelGrid>
+			</a4j:region>
+		</rich:modalPanel>
+		</a4j:region>
+
+
+
+
+
+		</ui:define>
+	</ui:composition>
+</html>

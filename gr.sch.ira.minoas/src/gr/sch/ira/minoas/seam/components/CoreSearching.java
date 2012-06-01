@@ -15,6 +15,7 @@ import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
 import gr.sch.ira.minoas.model.employee.Person;
+import gr.sch.ira.minoas.model.employee.RankType;
 import gr.sch.ira.minoas.model.employement.Disposal;
 import gr.sch.ira.minoas.model.employement.DisposalTargetType;
 import gr.sch.ira.minoas.model.employement.DisposalType;
@@ -1253,5 +1254,9 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     }
     
 
+    @Factory(value = "rankTypes")
+    public RankType[] getRankTypes() {
+        return RankType.values();
+    }
  
 }
