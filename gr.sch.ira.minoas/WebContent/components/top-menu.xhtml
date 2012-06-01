@@ -238,6 +238,16 @@
 
 					</rich:menuGroup>
 				</rich:menuGroup>
+				
+				<rich:menuItem submitMode="none"
+					rendered="#{(s:hasRole('ADMIN') )}">
+					<s:link value="Διαχείριση Στοιχείων Μισθοδοσίας" 
+						view="/employee/select-employee.xhtml">
+						<f:param name="from" value="/home" />
+						<f:param name="to" value="/employee/manageEmployeeInfo" />
+					</s:link>
+				</rich:menuItem>
+				
 				<rich:menuSeparator />
 				
 					<rich:menuItem submitMode="none" rendered="#{(s:hasRole('ADMIN'))}">

@@ -157,6 +157,13 @@ a.menu_link:hover {
 	color: black;
 }
 
+.fieldValueLabel {
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: black;
+	float: right;
+}
+
 .vertTop {
         vertical-align:top;
 }
