@@ -93,8 +93,8 @@
 											</f:facet>
 											<rich:toolBar itemSeparator="line">
 												<a4j:commandLink id="updatelink"
-													disabled="#{(s:hasRole('ADMIN') or s:hasRole('MODIFY_WORKEXPERIENCE'))}"
-													reRender="updateWorkExperienceModalPanelContent"
+													rendered="#{(s:hasRole('ADMIN') or s:hasRole('MODIFY_WORKEXPERIENCE'))}"
+													reRender="updateWorkExperienceModalPanel"
 													oncomplete="#{rich:component('updateWorkExperienceModalPanel')}.show()"
 													value="Τροποποίηση">
 													<h:graphicImage value="/img/icons/edit.png" width="12"
@@ -102,6 +102,8 @@
 													<f:setPropertyActionListener value="#{_workExperience.id}"
 														target="#{workExperienceHome.id}" />
 												</a4j:commandLink>
+							
+																								
 												<a4j:commandLink id="deletelink"
 													rendered="#{(s:hasRole('ADMIN') or s:hasRole('DELETE_WORKEXPERIENCE'))}"
 													reRender="deleteWorkExperienceModalPanel"
@@ -153,7 +155,7 @@
 		</a4j:region>
 
 
-
+		<a4j:region>
 		<rich:modalPanel id="updateWorkExperienceModalPanel" autosized="true"
 			width="450">
 			<f:facet name="header">
@@ -270,8 +272,9 @@
 						</h:panelGrid>
 					</h:form>
 				</h:panelGrid>
+			</a4j:region>
 		</rich:modalPanel>
-		
+		</a4j:region>
 		
 		<a4j:region>
 		<rich:modalPanel id="deleteWorkExperienceModalPanel" autosized="true"
