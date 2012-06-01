@@ -65,6 +65,9 @@ public class Employee extends Person {
 	@JoinColumn(name = "PYSDE_ID", nullable = false, updatable = true)
 	private PYSDE currentPYSDE;
 
+	@OneToOne(mappedBy="employee")
+	private EmployeeInfo employeeInfo;
+	
 	@OneToMany(mappedBy = "employee", fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
 	private Set<Employment> employments;
 	
@@ -462,6 +465,20 @@ public class Employee extends Person {
     public void setWorkExperience(Collection<WorkExperience> workExperience) {
         this.workExperience = workExperience;
     }
+
+	/**
+	 * @return the employeeInfo
+	 */
+	public EmployeeInfo getEmployeeInfo() {
+		return employeeInfo;
+	}
+
+	/**
+	 * @param employeeInfo the employeeInfo to set
+	 */
+	public void setEmployeeInfo(EmployeeInfo employeeInfo) {
+		this.employeeInfo = employeeInfo;
+	}
 	
 	
 
