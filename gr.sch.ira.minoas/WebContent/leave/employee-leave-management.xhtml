@@ -187,7 +187,7 @@
 								<h:form id="employeeLeaveStatsForm">
 									<h:panelGrid columns="2">
 
-										<s:decorate template="/layout/doubleLineEdit.xhtml">
+										<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 											<ui:define name="label">
 												<h:outputText value="Ημερομηνία Υπολογισμού : " />
 											</ui:define>
@@ -274,7 +274,7 @@
 							<h:outputText value=" ;" />
 
 
-							<s:decorate template="/layout/doubleLineEdit.xhtml">
+							<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 								<ui:define name="label">
 									<h:outputText value="Σχόλιο Διαγραφής" />
 								</ui:define>
@@ -333,7 +333,7 @@
 								value="Με την παρακάτω φόρμα, μπορείται να τροποποίησεται την άδεια του/της εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}." />
 							<h:panelGrid columns="4">
 
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 									<ui:define name="label">
 										<h:outputText value="Τύπος Άδειας" />
 									</ui:define>
@@ -383,7 +383,7 @@
 								</s:decorate>
 
 								<s:decorate id="leaveGeneratesCDRsDecoration"
-									template="/layout/doubleLineEdit.xhtml">
+									template="/layout/newDoubleLineEdit.xhtml">
 									<ui:define name="label">
 										<h:outputText value="Υπολογισμός στα κενά" />
 									</ui:define>
@@ -392,7 +392,7 @@
 								</s:decorate>
 
 
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 									<ui:define name="label">
 										<h:outputText value="Έναρξη : " />
 									</ui:define>
@@ -404,7 +404,7 @@
 									</rich:calendar>
 								</s:decorate>
 
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 									<ui:define name="label">
 										<h:outputText value="Λήξη : " />
 									</ui:define>
@@ -418,7 +418,7 @@
 
 								<h:panelGroup>
 									<h:panelGrid columns="1">
-										<s:decorate template="/layout/doubleLineEdit.xhtml"
+										<s:decorate template="/layout/newDoubleLineEdit.xhtml"
 											id="employeeLeaveEffectiveNumberOfDaysDecoration">
 											<ui:define name="label">
 												<h:outputText value="Διάρκεια (ημέρες) : " />
@@ -437,7 +437,7 @@
 									</h:panelGrid>
 								</h:panelGroup>
 
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 									<ui:define name="label">
 										<h:outputText value="Σχόλιο" />
 									</ui:define>
@@ -497,7 +497,7 @@
 								value="Συμπληρώστε τα στοιχεία της παρακάτω φόρμας για να εισάγεται νέα άδεια για τον εκπαιδευτικό." />
 							<h:panelGrid columns="2" cellpadding="2">
 
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 									<ui:define name="label">
 										<h:outputText value="Τύπος Άδειας" />
 									</ui:define>
@@ -547,7 +547,7 @@
 								</s:decorate>
 
 								<s:decorate id="leaveGeneratesCDRsDecoration"
-									template="/layout/doubleLineEdit.xhtml">
+									template="/layout/newDoubleLineEdit.xhtml">
 									<ui:define name="label">
 										<h:outputText value="Υπολογισμός στα κενά" />
 									</ui:define>
@@ -557,7 +557,7 @@
 
 
 								<s:decorate id="establishedDateDecoration"
-									template="/layout/doubleLineEdit.xhtml">
+									template="/layout/newDoubleLineEdit.xhtml">
 									<ui:define name="label">
 										<h:outputText value="Έναρξη Άδειας" />
 									</ui:define>
@@ -569,7 +569,7 @@
 									</rich:calendar>
 								</s:decorate>
 								<s:decorate id="dueToDateDecoration"
-									template="/layout/doubleLineEdit.xhtml">
+									template="/layout/newDoubleLineEdit.xhtml">
 									<ui:define name="label">
 										<h:outputText value="Λήξη Άδειας" />
 									</ui:define>
@@ -584,7 +584,7 @@
 
 								<h:panelGroup>
 									<h:panelGrid columns="1">
-										<s:decorate template="/layout/doubleLineEdit.xhtml"
+										<s:decorate template="/layout/newDoubleLineEdit.xhtml"
 											id="employeeLeaveEffectiveNumberOfDaysDecoration">
 											<ui:define name="label">
 												<h:outputText value="Διάρκεια (ημέρες) : " />
@@ -607,7 +607,7 @@
 
 
 
-							<s:decorate template="/layout/doubleLineEdit.xhtml">
+							<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 								<ui:define name="label">
 									<h:outputText value="Σχόλιο" />
 								</ui:define>
@@ -666,7 +666,7 @@
 								value="Εκτύπωση διαβιβαστικού άδειας του/της εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}." />
 							<h:panelGrid columns="1">
 								<h:panelGrid columns="3">
-									<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 										<ui:define name="label">
 											<h:outputText value="Ημερομηνία Αίτησης : " />
 										</ui:define>
@@ -678,7 +678,7 @@
 										</rich:calendar>
 									</s:decorate>
 
-									<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 										<ui:define name="label">
 											<h:outputText value="Ημερομηνία Εκτυπώσης : " />
 										</ui:define>
@@ -692,7 +692,7 @@
 
 
 
-									<s:decorate template="/layout/doubleLineEdit.xhtml"
+									<s:decorate template="/layout/newDoubleLineEdit.xhtml"
 										id="employeeLeaveEffectiveNumberOfDaysDecoration">
 										<ui:define name="label">
 											<h:outputText value="Αριθμός Πρωτ. : " />
@@ -706,7 +706,7 @@
 								</h:panelGrid>
 
 								<h:panelGrid columns="2">
-									<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 										<ui:define name="label">
 											<h:outputText value="Κοινοποίηση. : " />
 										</ui:define>
@@ -720,9 +720,9 @@
 										</rich:pickList>
 									</s:decorate>
 
-									<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 										<ui:define name="label">
-											<h:outputText value="Υπογραφή Απο  : " />
+											<h:outputText value="Υπογραφή Απο  : " styleClass="fieldValueLabel"  />
 										</ui:define>
 										<h:selectOneListbox
 											value="#{employeeLeavesManagement.leavePrintoutSignature}">
@@ -740,9 +740,9 @@
 									rendered="${employeeLeaveHome.instance.employeeLeaveType.legacyCode eq 55}">
 
 									<h:panelGrid columns="4">
-										<s:decorate template="/layout/doubleLineEdit.xhtml">
+										<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 											<ui:define name="label">
-												<h:outputText value="Έτη Υπηρεσίας : " />
+												<h:outputText value="Έτη Υπηρεσίας : " styleClass="fieldValueLabel" />
 											</ui:define>
 											<h:inputText
 												value="#{employeeLeavesManagement.printHelper.fieldText2}"
@@ -750,9 +750,9 @@
 												styleClass="fieldValueText" required="true" readonly="false" />
 										</s:decorate>
 
-										<s:decorate template="/layout/doubleLineEdit.xhtml">
+										<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 											<ui:define name="label">
-												<h:outputText value="Αναρ. Άδεια Έτους : " />
+												<h:outputText value="Αναρ. Άδεια Έτους : " styleClass="fieldValueLabel" />
 											</ui:define>
 											<h:inputText
 												value="#{employeeLeavesManagement.printHelper.fieldText3}"
@@ -760,9 +760,9 @@
 												styleClass="fieldValueText" required="true" readonly="false" />
 										</s:decorate>
 
-										<s:decorate template="/layout/doubleLineEdit.xhtml">
+										<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 											<ui:define name="label">
-												<h:outputText value="Αναρ. Αδεια Πενταετίας : " />
+												<h:outputText value="Αναρ. Αδεια Πενταετίας : " styleClass="fieldValueLabel" />
 											</ui:define>
 											<h:inputText
 												value="#{employeeLeavesManagement.printHelper.fieldText4}"
@@ -770,9 +770,9 @@
 												styleClass="fieldValueText" required="true" readonly="false" />
 										</s:decorate>
 
-										<s:decorate template="/layout/doubleLineEdit.xhtml">
+										<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 											<ui:define name="label">
-												<h:outputText value="Ταχ Διεύθυνση Υπαλλήλου : " />
+												<h:outputText value="Ταχ Διεύθυνση Υπαλλήλου : " styleClass="fieldValueLabel" />
 											</ui:define>
 											<h:inputText
 												value="#{employeeLeavesManagement.printHelper.fieldText5}"
@@ -780,9 +780,9 @@
 												styleClass="fieldValueText" required="true" readonly="false" />
 										</s:decorate>
 
-										<s:decorate template="/layout/doubleLineEdit.xhtml">
+										<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 											<ui:define name="label">
-												<h:outputText value="Τηλ. Επικοινωνίας : " />
+												<h:outputText value="Τηλ. Επικοινωνίας : " styleClass="fieldValueLabel" />
 											</ui:define>
 											<h:inputText
 												value="#{employeeLeavesManagement.printHelper.fieldText6}"
@@ -791,9 +791,9 @@
 										</s:decorate>
 
 
-										<s:decorate template="/layout/doubleLineEdit.xhtml">
+										<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 											<ui:define name="label">
-												<h:outputText value="Όνομα Ιατρού : " />
+												<h:outputText value="Όνομα Ιατρού : " styleClass="fieldValueLabel" />
 											</ui:define>
 											<h:inputText
 												value="#{employeeLeavesManagement.printHelper.fieldText7}"
@@ -802,9 +802,9 @@
 										</s:decorate>
 
 
-										<s:decorate template="/layout/doubleLineEdit.xhtml">
+										<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 											<ui:define name="label">
-												<h:outputText value="Όνομα Νοσοκομείου : " />
+												<h:outputText value="Όνομα Νοσοκομείου : " styleClass="fieldValueLabel" />
 											</ui:define>
 											<h:inputText
 												value="#{employeeLeavesManagement.printHelper.fieldText8}"
@@ -812,9 +812,9 @@
 												styleClass="fieldValueText" required="true" readonly="false" />
 										</s:decorate>
 
-										<s:decorate template="/layout/doubleLineEdit.xhtml">
+										<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 											<ui:define name="label">
-												<h:outputText value="Ημ/νια Συνεδριάσης Επιτροπής : " />
+												<h:outputText value="Ημ/νια Συνεδριάσης Επιτροπής : " styleClass="fieldValueLabel" />
 											</ui:define>
 											<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
 												style="width:50px" enableManualInput="true"
@@ -824,11 +824,7 @@
 											</rich:calendar>
 										</s:decorate>
 
-
-
 									</h:panelGrid>
-
-
 
 								</h:panelGroup>
 							</h:panelGrid>
@@ -887,7 +883,7 @@
 								value="Εκτύπωση άδειας του/της εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}." />
 							<h:panelGrid columns="1">
 								<h:panelGrid columns="3">
-									<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 										<ui:define name="label">
 											<h:outputText value="Ημερομηνία Αίτησης : " />
 										</ui:define>
@@ -899,7 +895,7 @@
 										</rich:calendar>
 									</s:decorate>
 
-									<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 										<ui:define name="label">
 											<h:outputText value="Ημερομηνία Εκτυπώσης : " />
 										</ui:define>
@@ -913,7 +909,7 @@
 
 
 
-									<s:decorate template="/layout/doubleLineEdit.xhtml"
+									<s:decorate template="/layout/newDoubleLineEdit.xhtml"
 										id="employeeLeaveEffectiveNumberOfDaysDecoration">
 										<ui:define name="label">
 											<h:outputText value="Αριθμός Πρωτ. : " />
@@ -927,7 +923,7 @@
 								</h:panelGrid>
 
 								<h:panelGrid columns="2">
-									<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 										<ui:define name="label">
 											<h:outputText value="Κοινοποίηση. : " />
 										</ui:define>
@@ -941,7 +937,7 @@
 										</rich:pickList>
 									</s:decorate>
 
-									<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 										<ui:define name="label">
 											<h:outputText value="Υπογραφή Απο  : " />
 										</ui:define>

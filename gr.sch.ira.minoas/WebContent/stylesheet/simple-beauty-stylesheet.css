@@ -357,3 +357,24 @@ vertical-align:top;
 	.rich-table-past-leave {
 		background:#D6D6C2;
 	}
+	
+.required-flag {
+	color:#CC0000;
+	font-weight:bold;
+}
+
+.form-label {
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: blue;
+	font-weight:bold;
+}
+
+.form-input {
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	color: black;
+}
+
+
