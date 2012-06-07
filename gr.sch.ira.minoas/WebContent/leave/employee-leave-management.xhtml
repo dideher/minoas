@@ -243,7 +243,7 @@
 
 		<rich:modalPanel id="deleteModalPanel" autosized="true">
 			<f:facet name="header">
-				<h:outputText value="Να διαγραφεί η άδεια ?"
+				<h:outputText value="Διαγραφή Άδειας ?"
 					style="padding-right:15px;" />
 			</f:facet>
 			<f:facet name="controls">
@@ -261,18 +261,25 @@
 						<ui:include src="/components/messages-component.xhtml" />
 
 						<h:panelGroup>
-							<h:outputText value="Να διαγραφή η άδεια " />
-							<h:outputText value="#{messages[employeeLeaveHome.instance]}"
-								styleClass="fieldValueText" />
-							<h:outputText
-								value=" του εκπαιδευτικού #{employeeUtil.prettyFormat(employeeLeaveHome.instance.employee)} " />
-							<h:outputText value=" με λήξη την " />
-							<h:outputText value="#{employeeLeaveHome.instance.dueTo}"
-								styleClass="fieldValueText">
-								<s:convertDateTime pattern="dd/MM/yyyy" />
-							</h:outputText>
-							<h:outputText value=" ;" />
-
+							<s:div>
+								<h:outputText value="Να διαγραφή η άδεια τύπου " />
+								<h:outputText
+									value="#{employeeLeaveHome.instance.employeeLeaveType.description}"
+									styleClass="fieldValueText" />
+								<h:outputText value=" με έναρξη την " />
+								<h:outputText value="#{employeeLeaveHome.instance.established}"
+									styleClass="fieldValueText">
+									<s:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+								<h:outputText value=" και λήξη την " />
+								<h:outputText value="#{employeeLeaveHome.instance.dueTo}"
+									styleClass="fieldValueText">
+									<s:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+								<h:outputText value=" του εκπαιδευτικού " />
+								<h:outputText styleClass="fieldValueText"
+									value=" #{employeeUtil.prettyFormat(employeeLeaveHome.instance.employee)} " />
+							</s:div>
 
 							<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 								<ui:define name="label">
@@ -927,27 +934,29 @@
 										<ui:define name="label">
 											<h:outputText value="Κοινοποίηση. : " />
 										</ui:define>
-										<rich:pickList
-											value="#{employeeLeavesManagement.leavePrintounRecipientList}">
-											<s:selectItems
+										<h:selectManyCheckbox value="#{employeeLeavesManagement.leavePrintounRecipientList}" 
+										layout="pageDirection" styleClass="fieldValueText">
+												<s:selectItems
 												value="#{employeeLeavesManagement.leavePrintounRecipientListSource}"
 												itemValue="${recipient}" var="recipient"
 												label="#{recipient.recipientTitle}" />
 											<s:convertEntity />
-										</rich:pickList>
+										</h:selectManyCheckbox>
+										
 									</s:decorate>
 
 									<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 										<ui:define name="label">
 											<h:outputText value="Υπογραφή Απο  : " />
 										</ui:define>
-										<h:selectOneListbox
-											value="#{employeeLeavesManagement.leavePrintoutSignature}">
-											<s:selectItems
-												value="#{employeeLeavesManagement.leavePrintoutSignatureSource}"
-												var="signature" label="#{signature.signatureTitle}" />
+										
+										<h:selectOneMenu value="#{employeeLeavesManagement.leavePrintoutSignature}"  > 
+										<s:selectItems
+												value="#{employeeLeavesManagement.leavePrintoutSignatureSource}" 
+												var="signature" label="#{signature.signatureShortAlias}" />
 											<s:convertEntity />
-										</h:selectOneListbox>
+										</h:selectOneMenu>
+																	
 									</s:decorate>
 
 								</h:panelGrid>
@@ -1000,7 +1009,7 @@
 						<h:panelGrid columns="6">
 
 
-							<h:commandButton value="PDF commandbutton"
+							<h:commandButton value="Εκτύπωση"
 								action="#{employeeLeavesManagement.printEmployeeLeaveAction()}" />
 
 							<a4j:commandButton value="Επιστροφή .."

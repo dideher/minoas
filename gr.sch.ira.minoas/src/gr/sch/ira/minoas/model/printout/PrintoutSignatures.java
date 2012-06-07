@@ -27,6 +27,10 @@ public class PrintoutSignatures extends BaseIDModel {
     @Basic
     @Column(name = "SIGNATURE_NAME", nullable = false, length = 128)
     private String signatureName;
+    
+    @Basic
+    @Column(name = "SIGNATURE_SHORT_ALIAS", nullable = true, length = 32)
+    private String signatureShortAlias;
 
     /**
      * @return the signatureTitle
@@ -54,5 +58,19 @@ public class PrintoutSignatures extends BaseIDModel {
      */
     public void setSignatureName(String signatureName) {
         this.signatureName = signatureName;
+    }
+
+    /**
+     * @return the signatureShortAlias
+     */
+    public String getSignatureShortAlias() {
+        return signatureShortAlias;
+    }
+
+    /**
+     * @param signatureShortAlias the signatureShortAlias to set
+     */
+    public void setSignatureShortAlias(String signatureShortAlias) {
+        this.signatureShortAlias = signatureShortAlias;
     }
 }
