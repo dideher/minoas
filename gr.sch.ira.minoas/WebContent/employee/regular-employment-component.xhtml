@@ -8,7 +8,7 @@
 
 <ui:component>
 	<h:outputText styleClass="fieldValueText"
-		value="Δεν έχεται το δικαίωμα καταχώρησης αυτού του τύπου εκπαιδευτικού."
+		value="Δεν έχετε το δικαίωμα καταχώρησης αυτού του τύπου εκπαιδευτικού."
 		rendered="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_EMPLOYEE_REGULAR'))}" />
 	<rich:panel
 		rendered="#{(s:hasRole('ADMIN') or s:hasRole('ADD_EMPLOYEE_REGULAR'))}">
@@ -80,7 +80,7 @@
 
 			<s:decorate template="/layout/doubleLineEdit.xhtml">
 				<ui:define name="label">
-					<h:outputText value="Ημ/μια Ανάληψης Υπηρεσίας : " />
+					<h:outputText value="Ημ/νια Ανάληψης Υπηρεσίας : " />
 				</ui:define>
 				<rich:calendar datePattern="dd-MM-yyyy" style="width:50px"
 					enableManualInput="true" styleClass="fieldValueText" inputSize="10"
