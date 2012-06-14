@@ -519,6 +519,8 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
 
             if (validateLeave(newLeave, true)) {
                 employeeLeaveHome.persist();
+                setLeaveDurarionInDaysHelper(0);
+                setLeaveDurationInDaysWithoutWeekends(0);
                 getEntityManager().flush();
                 info("leave #0 for employee #1 has been created", newLeave, employee);
                 return ACTION_OUTCOME_SUCCESS;
@@ -953,6 +955,11 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
             setLeaveDurarionInDaysHelper(new Integer(0));
             setLeaveDurationInDaysWithoutWeekends(new Integer(0));
         }
+        /* this method is being called when the user clicks one
+         * of the two calendars, so reset the leaves effective
+         * duration 
+         */
+        leave.setEffectiveNumberOfDays(null);
     }
     
     public void computeLeaveDuration() {
@@ -977,8 +984,6 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
         }
         setLeaveDurarionInDaysHelper(computeLeaveDuration(established, dueTo));
         setLeaveDurationInDaysWithoutWeekends(computeLeaveDurationWithoutWeekend(established, dueTo));
-        // temp computation
-        leave.setEffectiveNumberOfDays(new Integer(computeLeaveDuration(established, dueTo)));
     }
 
     /**

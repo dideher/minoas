@@ -336,56 +336,96 @@
 
 							<ui:include src="/components/messages-component.xhtml" />
 							<h:outputText
-								value="Με την παρακάτω φόρμα, μπορείται να τροποποίησεται την άδεια του/της εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}." />
-							<h:panelGrid columns="4">
+								value="Με την παρακάτω φόρμα, μπορείται να τροποποίησεται την άδεια του/της εκπαιδευτικού " />
+							<h:outputText styleClass="fieldValueText"
+								value="#{employeeUtil.prettyFormat(employeeHome.instance)}" />
+
+							<h:panelGrid columns="5" cellpadding="2">
 
 								<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 									<ui:define name="label">
 										<h:outputText value="Τύπος Άδειας" />
 									</ui:define>
-									<h:panelGrid columns="3" border="0" cellpadding="2"
+
+									<h:panelGrid columns="1" border="0" cellpadding="2"
 										cellspacing="2">
-										<h:inputText id="employeeLeaveTypeCodeTextField"
-											value="#{employeeLeaveHome.tempValueHolder1}" size="3"
-											maxlength="2" styleClass="fieldValueText" required="true">
-											<rich:suggestionbox width="400" id="leaveTypeSuggestionbox"
-												suggestionAction="#{employeeLeavesManagement.suggestLeaveTypesBasedOnSelectedEmployee}"
-												var="_leaveType" ajaxSingle="true"
-												for="employeeLeaveTypeCodeTextField"
-												fetchValue="#{_leaveType.legacyCode}">
-												<rich:column>
-													<h:outputText value="#{_leaveType.legacyCode}" />
-												</rich:column>
-												<rich:column>
-													<h:outputText value="#{_leaveType.description}" />
-												</rich:column>
-												<a4j:support ajaxSingle="true" event="onselect"
-													reRender="leaveTypeDescriptionDiv,leaveGeneratesCDRsDecoration">
-													<f:setPropertyActionListener value="#{_leaveType}"
-														target="#{employeeLeaveHome.instance.employeeLeaveType}" />
-													<f:setPropertyActionListener
-														target="#{employeeLeaveHome.instance.generatesCDRs}"
-														value="#{_leaveType.generatesCDRs}" />
-												</a4j:support>
+										<h:panelGroup>
+											<h:inputText id="employeeLeaveTypeCodeTextField"
+												value="#{employeeLeaveHome.tempValueHolder1}" size="3"
+												maxlength="2" styleClass="fieldValueText" required="true">
+												<rich:suggestionbox width="400" id="leaveTypeSuggestionbox"
+													suggestionAction="#{employeeLeavesManagement.suggestLeaveTypesBasedOnSelectedEmployee}"
+													var="_leaveType" ajaxSingle="true"
+													for="employeeLeaveTypeCodeTextField"
+													fetchValue="#{_leaveType.legacyCode}">
+													<rich:column>
+														<h:outputText value="#{_leaveType.legacyCode}" />
+													</rich:column>
+													<rich:column>
+														<h:outputText value="#{_leaveType.description}" />
+													</rich:column>
+													<a4j:support ajaxSingle="true" event="onselect"
+														reRender="leaveTypeDescriptionDiv,leaveGeneratesCDRsDecoration">
+														<f:setPropertyActionListener value="#{_leaveType}"
+															target="#{employeeLeaveHome.instance.employeeLeaveType}" />
+														<f:setPropertyActionListener
+															target="#{employeeLeaveHome.instance.generatesCDRs}"
+															value="#{_leaveType.generatesCDRs}" />
+													</a4j:support>
 
-											</rich:suggestionbox>
-										</h:inputText>
-										<h:graphicImage value="/img/icons/arrowDown.jpg" height="16"
-											width="16"
-											onclick="#{rich:component('leaveTypeSuggestionbox')}.callSuggestion(true)"
-											alt="" />
-										<s:div id="leaveTypeDescriptionDiv">
-											<h:outputText
-												value="#{employeeLeaveHome.instance.employeeLeaveType.description}"
-												styleClass="fieldValueText"
-												rendered="#{employeeLeaveHome.instance.employeeLeaveType ne null}" />
-											<h:outputText value="Άγνωστος Κωδικός Άδειας"
-												styleClass="fieldValueText"
-												rendered="#{employeeLeaveHome.instance.employeeLeaveType eq null}" />
-										</s:div>
+												</rich:suggestionbox>
+											</h:inputText>
+											<h:graphicImage value="/img/icons/arrowDown.jpg" height="16"
+												width="16"
+												onclick="#{rich:component('leaveTypeSuggestionbox')}.callSuggestion(true)"
+												alt="" />
+										</h:panelGroup>
+										<h:panelGroup>
+											<s:div id="leaveTypeDescriptionDiv">
+												<h:outputText
+													value="#{employeeLeaveHome.instance.employeeLeaveType.description}"
+													styleClass="fieldValueText"
+													rendered="#{employeeLeaveHome.instance.employeeLeaveType ne null}" />
+												<h:outputText value="Άγνωστος Κωδικός Άδειας"
+													styleClass="fieldValueText"
+													rendered="#{employeeLeaveHome.instance.employeeLeaveType eq null}" />
+											</s:div>
+										</h:panelGroup>
+
 									</h:panelGrid>
+								</s:decorate>
 
+								<s:decorate id="establishedDateDecoration"
+									template="/layout/newDoubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Έναρξη Άδειας" />
+									</ui:define>
+									<rich:calendar id="establishedDate" enableManualInput="true"
+										value="#{employeeLeaveHome.instance.established}"
+										required="true" inputSize="10" mode="ajax" locale="el_GR"
+										inputClass="fieldValueText" datePattern="dd/MM/yyyy">
+										<a4j:support event="onchanged" ajaxSingle="true"
+											eventsQueue="lalal"
+											action="#{employeeLeavesManagement.silentlyComputeLeaveDuration()}"
+											reRender="leaveDurationPanel" />
+									</rich:calendar>
+								</s:decorate>
 
+								<s:decorate id="dueToDateDecoration"
+									template="/layout/newDoubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Λήξη Άδειας" />
+									</ui:define>
+									<rich:calendar id="dueToDate"
+										value="#{employeeLeaveHome.instance.dueTo}" required="true"
+										mode="ajax" locale="el_GR" inputSize="10"
+										enableManualInput="true" inputClass="fieldValueText"
+										datePattern="dd/MM/yyyy">
+										<a4j:support event="onchanged" ajaxSingle="true"
+											eventsQueue="lalal"
+											action="#{employeeLeavesManagement.silentlyComputeLeaveDuration()}"
+											reRender="leaveDurationPanel" />
+									</rich:calendar>
 								</s:decorate>
 
 								<s:decorate id="leaveGeneratesCDRsDecoration"
@@ -396,62 +436,88 @@
 									<h:selectBooleanCheckbox
 										value="#{employeeLeaveHome.instance.generatesCDRs}" />
 								</s:decorate>
+							</h:panelGrid>
 
+							<h:panelGrid columns="2">
 
-								<s:decorate template="/layout/newDoubleLineEdit.xhtml">
-									<ui:define name="label">
-										<h:outputText value="Έναρξη : " />
-									</ui:define>
-									<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
-										style="width:50px" enableManualInput="true"
-										styleClass="fieldValueText" required="true"
-										value="#{employeeLeaveHome.instance.established}">
-										<a4j:support event="onchanged" ajaxSingle="true" />
-									</rich:calendar>
-								</s:decorate>
-
-								<s:decorate template="/layout/newDoubleLineEdit.xhtml">
-									<ui:define name="label">
-										<h:outputText value="Λήξη : " />
-									</ui:define>
-									<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
-										style="width:50px" enableManualInput="true"
-										styleClass="fieldValueText" required="true"
-										value="#{employeeLeaveHome.instance.dueTo}">
-										<a4j:support event="onchanged" ajaxSingle="true" />
-									</rich:calendar>
-								</s:decorate>
 
 								<h:panelGroup>
-									<h:panelGrid columns="1">
-										<s:decorate template="/layout/newDoubleLineEdit.xhtml"
-											id="employeeLeaveEffectiveNumberOfDaysDecoration">
-											<ui:define name="label">
-												<h:outputText value="Διάρκεια (ημέρες) : " />
-											</ui:define>
-											<h:inputText id="employeeLeaveEffectiveNumberOfDaysTextField"
-												value="#{employeeLeaveHome.instance.effectiveNumberOfDays}"
-												size="3" maxlength="3" styleClass="fieldValueText"
-												required="true" />
+									<!-- panel containing the leave duration in days -->
+									<rich:panel>
+										<f:facet name="header">
+											Διάρκεια Άδειας
+										</f:facet>
+										<h:panelGrid columns="1">
+											<h:panelGroup>
+												<a4j:outputPanel id="leaveDurationPanel">
+													<h:panelGrid columns="3">
 
-										</s:decorate>
+														<s:decorate template="/layout/newDoubleLineEdit.xhtml"
+															id="employeeLeaveEffectiveNumberOfDaysDecoration">
+															<ui:define name="label">
+																<h:outputText value="Πραγματική Διάρκεια : " />
+															</ui:define>
+															<h:inputText
+																id="employeeLeaveEffectiveNumberOfDaysTextField"
+																value="#{employeeLeaveHome.instance.effectiveNumberOfDays}"
+																size="3" maxlength="3" styleClass="fieldValueText"
+																required="true" />
 
-										<a4j:commandLink value="Υπολογισμός"
-											action="#{employeeLeavesManagement.computeLeaveDuration()}"
-											reRender="employeeLeaveEffectiveNumberOfDaysDecoration"
-											ajaxSingle="true" />
-									</h:panelGrid>
+														</s:decorate>
+
+														<s:decorate template="/layout/newDoubleLineEdit.xhtml"
+															id="employeeLeaveEffectiveNumberOfDaysDecoration3">
+															<ui:define name="label">
+																<h:outputText value="Ημερολογιακή Διαφορά : " />
+															</ui:define>
+															<h:inputText
+																id="employeeLeaveEffectiveNumberOfDaysTextField"
+																value="#{employeeLeavesManagement.leaveDurarionInDaysHelper}"
+																size="3" maxlength="3" styleClass="fieldValueText"
+																required="false" readonly="true" disabled="true" />
+														</s:decorate>
+
+														<s:decorate template="/layout/newDoubleLineEdit.xhtml"
+															id="employeeLeaveEffectiveNumberOfDaysDecoration2">
+															<ui:define name="label">
+																<h:outputText value="Εργάσιμες Ημέρες : " />
+															</ui:define>
+															<h:inputText
+																id="employeeLeaveEffectiveNumberOfDaysTextField"
+																value="#{employeeLeavesManagement.leaveDurationInDaysWithoutWeekends}"
+																size="3" maxlength="3" styleClass="fieldValueText"
+																required="false" readonly="true" disabled="true" />
+														</s:decorate>
+
+													</h:panelGrid>
+												</a4j:outputPanel>
+											</h:panelGroup>
+											<a4j:commandLink value="Υπολογισμός"
+												action="#{employeeLeavesManagement.computeLeaveDuration()}"
+												reRender="leaveDurationPanel" ajaxSingle="true" />
+
+										</h:panelGrid>
+									</rich:panel>
+									<!-- end of panel containing the leave duration in days -->
+
+
 								</h:panelGroup>
 
 								<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 									<ui:define name="label">
 										<h:outputText value="Σχόλιο" />
 									</ui:define>
-									<h:inputTextarea value="#{employeeLeaveHome.instance.comment}" />
+									<h:inputTextarea value="#{employeeLeaveHome.instance.comment}"
+										rows="3" cols="50" />
 								</s:decorate>
 
 							</h:panelGrid>
+
 						</a4j:outputPanel>
+
+						<rich:separator lineType="dashed" height="2" />
+
+
 
 						<h:panelGrid columns="2">
 
@@ -566,12 +632,13 @@
 										value="#{employeeLeaveHome.instance.established}"
 										required="true" inputSize="10" mode="ajax" locale="el_GR"
 										inputClass="fieldValueText" datePattern="dd/MM/yyyy">
-										<a4j:support event="onchanged" ajaxSingle="true" eventsQueue="lalal"
-										action="#{employeeLeavesManagement.silentlyComputeLeaveDuration()}" 
-										reRender="leaveDurationPanel"/>
+										<a4j:support event="onchanged" ajaxSingle="true"
+											eventsQueue="lalal"
+											action="#{employeeLeavesManagement.silentlyComputeLeaveDuration()}"
+											reRender="leaveDurationPanel" />
 									</rich:calendar>
 								</s:decorate>
-								
+
 								<s:decorate id="dueToDateDecoration"
 									template="/layout/newDoubleLineEdit.xhtml">
 									<ui:define name="label">
@@ -582,12 +649,13 @@
 										mode="ajax" locale="el_GR" inputSize="10"
 										enableManualInput="true" inputClass="fieldValueText"
 										datePattern="dd/MM/yyyy">
-										<a4j:support event="onchanged" ajaxSingle="true"  eventsQueue="lalal"
-										action="#{employeeLeavesManagement.silentlyComputeLeaveDuration()}" 
-										reRender="leaveDurationPanel"/>
+										<a4j:support event="onchanged" ajaxSingle="true"
+											eventsQueue="lalal"
+											action="#{employeeLeavesManagement.silentlyComputeLeaveDuration()}"
+											reRender="leaveDurationPanel" />
 									</rich:calendar>
 								</s:decorate>
-								
+
 								<s:decorate id="leaveGeneratesCDRsDecoration"
 									template="/layout/newDoubleLineEdit.xhtml">
 									<ui:define name="label">
@@ -596,10 +664,10 @@
 									<h:selectBooleanCheckbox
 										value="#{employeeLeaveHome.instance.generatesCDRs}" />
 								</s:decorate>
-								</h:panelGrid>
-								
-								<h:panelGrid columns="2">
-								
+							</h:panelGrid>
+
+							<h:panelGrid columns="2">
+
 
 								<h:panelGroup>
 									<!-- panel containing the leave duration in days -->
@@ -664,19 +732,19 @@
 								</h:panelGroup>
 
 								<s:decorate template="/layout/newDoubleLineEdit.xhtml">
-								<ui:define name="label">
-									<h:outputText value="Σχόλιο" />
-								</ui:define>
-								<h:inputTextarea value="#{employeeLeaveHome.instance.comment}"
-									rows="3" cols="50" />
-							</s:decorate>
+									<ui:define name="label">
+										<h:outputText value="Σχόλιο" />
+									</ui:define>
+									<h:inputTextarea value="#{employeeLeaveHome.instance.comment}"
+										rows="3" cols="50" />
+								</s:decorate>
 
 							</h:panelGrid>
-							
+
 						</a4j:outputPanel>
-						
-						<rich:separator lineType="dashed" height="2"/>					
-				
+
+						<rich:separator lineType="dashed" height="2" />
+
 						<h:panelGrid columns="2">
 
 							<a4j:commandButton value="Καταχώρηση Άδειας !"
