@@ -134,12 +134,14 @@
 									<rich:contextMenu styleClass="normal" attached="false"
 										id="menu" submitMode="none">
 										<rich:menuItem icon="/img/icons/edit.png" immediate="true"
+											disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MANAGE_LEAVE'))}"
 											submitMode="ajax" reRender="updateModalPanel"
 											value="Επεξεργασία"
 											oncomplete="#{rich:component('updateModalPanel')}.show()">
 										</rich:menuItem>
 
 										<rich:menuItem icon="/img/icons/printer.png" immediate="true"
+											disabled="#{!(s:hasRole('ADMIN') or s:hasRole('PRINT_LEAVE'))}"
 											action="#{employeeLeavesManagement.prepeareForLeavePrint()}"
 											submitMode="ajax" reRender="printModalPanel" value="Εκτύπωση"
 											oncomplete="#{rich:component('printModalPanel')}.show()">
@@ -147,6 +149,7 @@
 
 
 										<rich:menuItem icon="/img/icons/printer.png" immediate="true"
+											disabled="#{!(s:hasRole('ADMIN') or s:hasRole('PRINT_LEAVE'))}"
 											rendered="#{employeeLeaveHome.instance.employeeLeaveType.legacyCode eq 55}"
 											action="#{employeeLeavesManagement.prepeareForLeavePrint()}"
 											submitMode="ajax" reRender="printCoverModalPanelContent"
@@ -156,6 +159,7 @@
 
 										<rich:menuSeparator />
 										<rich:menuItem icon="/img/icons/delete.png" immediate="true"
+											disabled="#{!(s:hasRole('ADMIN') or s:hasRole('DELETE_LEAVE'))}"
 											submitMode="ajax" reRender="deleteModalPanelContent"
 											value="Διαγραφή"
 											oncomplete="#{rich:component('deleteModalPanel')}.show()">
