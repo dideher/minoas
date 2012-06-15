@@ -510,7 +510,6 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
             newLeave.setInsertedBy(getPrincipal());
             newLeave.setInsertedOn(new Date());
             newLeave.setActive(leaveShouldBeActivated(newLeave, new Date()));
-
             /* check if the employee has a current regular employment */
             Employment employment = employee.getCurrentEmployment();
             if (employment != null && employment.getType() == EmploymentType.REGULAR) {
@@ -518,6 +517,7 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
             }
 
             if (validateLeave(newLeave, true)) {
+                newLeave.setNumberOfDays(computeLeaveDuration(newLeave.getEstablished(), newLeave.getDueTo()));
                 employeeLeaveHome.persist();
                 setLeaveDurarionInDaysHelper(0);
                 setLeaveDurationInDaysWithoutWeekends(0);
@@ -579,6 +579,7 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
             EmployeeLeave newLeave = employeeLeaveHome.getInstance();
             if (validateLeave(newLeave, true)) {
                 newLeave.setActive(leaveShouldBeActivated(newLeave, new Date()));
+                newLeave.setNumberOfDays(computeLeaveDuration(newLeave.getEstablished(), newLeave.getDueTo()));
                 employeeLeaveHome.update();
                 getEntityManager().flush();
                 info("leave #0 for employee #1 has been modified", newLeave, employee);

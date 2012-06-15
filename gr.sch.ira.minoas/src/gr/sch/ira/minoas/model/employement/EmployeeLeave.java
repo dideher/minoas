@@ -77,6 +77,10 @@ public class EmployeeLeave extends BaseIDDeleteAwareModel {
 	private Integer effectiveNumberOfDays;
 	
 	@Basic
+    @Column(name="DAYS_COUNT", nullable=true)
+    private Integer numberOfDays;
+	
+	@Basic
     @Column(name="GENERATES_CDRS", nullable=true)
     private Boolean generatesCDRs = Boolean.FALSE;
 	
@@ -272,6 +276,20 @@ public class EmployeeLeave extends BaseIDDeleteAwareModel {
     public boolean isPast() {
         Date currentDate = new Date();
         return getEstablished().before(currentDate);
+    }
+
+    /**
+     * @return the numberOfDays
+     */
+    public Integer getNumberOfDays() {
+        return numberOfDays;
+    }
+
+    /**
+     * @param numberOfDays the numberOfDays to set
+     */
+    public void setNumberOfDays(Integer numberOfDays) {
+        this.numberOfDays = numberOfDays;
     }
 
 }
