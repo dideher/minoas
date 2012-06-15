@@ -4,8 +4,6 @@ import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.core.SpecializationGroup;
 import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 import gr.sch.ira.minoas.model.employement.EmployeeLeaveType;
-import gr.sch.ira.minoas.model.employement.Leave;
-import gr.sch.ira.minoas.model.employement.LeaveType;
 import gr.sch.ira.minoas.seam.components.criteria.DateSearchType;
 import gr.sch.ira.minoas.seam.components.criteria.EmployeeLeaveCriteria;
 import gr.sch.ira.minoas.seam.components.reports.resource.EmployeeLeaveReportItem;
@@ -66,8 +64,7 @@ public class EmployeeLeavesReport extends BaseReport {
 		try {
 			Map<String, Object> parameters = new HashMap<String, Object>();
 			parameters.put("LEAVE_TYPE_FILTER",
-					employeeLeaveCriteria.getLeaveType() != null ? getLocalizedMessage(employeeLeaveCriteria
-							.getLeaveType().getKey()) : "Όλοι οι Τύποι");
+					employeeLeaveCriteria.getEmployeeLeaveType() != null ? getEmployeeLeaveCriteria().getEmployeeLeaveType().getDescription() : "Όλοι οι Τύποι");
 			parameters.put("LEAVE_SPECIALIZATION_FILTER",
 					employeeLeaveCriteria.getSpecializationGroup() != null ? employeeLeaveCriteria
 							.getSpecializationGroup().getTitle() : "Όλες οι Ειδικότητες");
@@ -87,11 +84,7 @@ public class EmployeeLeavesReport extends BaseReport {
 			parameters.put("LEAVE_EFFECTIVE_DATE_FROM_FILTER", employeeLeaveCriteria.getEffectiveDateFrom());
 			parameters.put("LEAVE_EFFECTIVE_DATE_UNTIL_FILTER", employeeLeaveCriteria.getEffectiveDateUntil());
 
-			/* create the leave type helper */
-			for (LeaveType leaveType : getCoreSearching().getAvailableLeaveTypes()) {
-				parameters.put(leaveType.name(), getLocalizedMessage(leaveType.getKey()));
-			}
-
+			
 			JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(reportData);
 			byte[] bytes = JasperRunManager.runReportToPdf(this.getClass().getResourceAsStream(
 					"/reports/leaveByType.jasper"), parameters, (JRDataSource) ds);
@@ -118,7 +111,6 @@ public class EmployeeLeavesReport extends BaseReport {
 		Date effectiveDateFrom = getEmployeeLeaveCriteria().getEffectiveDateFrom();
 		Date effectiveDateUntil = getEmployeeLeaveCriteria().getEffectiveDateUntil();
 		Date today = DateUtils.truncate(new Date(System.currentTimeMillis()), Calendar.DAY_OF_MONTH);
-		LeaveType leaveType = getEmployeeLeaveCriteria().getLeaveType();
 		Character region = getEmployeeLeaveCriteria().getRegion();
 		School school = getEmployeeLeaveCriteria().getSchoolOfIntereset();
 		SpecializationGroup specializationGroup = getEmployeeLeaveCriteria().getSpecializationGroup();

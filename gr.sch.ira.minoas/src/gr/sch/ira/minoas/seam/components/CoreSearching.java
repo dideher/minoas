@@ -22,8 +22,6 @@ import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 import gr.sch.ira.minoas.model.employement.EmployeeLeaveType;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
-import gr.sch.ira.minoas.model.employement.Leave;
-import gr.sch.ira.minoas.model.employement.LeaveType;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.SecondmentType;
 import gr.sch.ira.minoas.model.employement.ServiceAllocation;
@@ -149,13 +147,14 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         return getEntityManager(em).createQuery("SELECT d FROM Disposal d WHERE d.active IS TRUE").getResultList();
     }
 
+
     @Transactional(TransactionPropagationType.REQUIRED)
     @SuppressWarnings("unchecked")
-    public Collection<Leave> getActiveLeaves(EntityManager em) {
-        return getEntityManager(em).createQuery("SELECT l FROM Leave l WHERE l.active IS TRUE").getResultList();
+    public Collection<EmployeeLeave> getActiveLeaves(EntityManager em) {
+        return getEntityManager(em).createQuery("SELECT l FROM EmployeeLeave l WHERE l.active IS TRUE").getResultList();
     }
-
-    /**
+    
+     /**
      * @param employee
      * @param type
      * @return
@@ -205,11 +204,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         return getEntityManager().createQuery("FROM EstablishmentLocation e ORDER BY (e.title)").getResultList();
     }
 
-    @Factory(value = "leaveTypes")
-    public LeaveType[] getAvailableLeaveTypes() {
-        return LeaveType.values();
-    }
-
+    
     @SuppressWarnings("unchecked")
     public List<OrganizationalOffice> getAvailableOrganizationalOffices() {
         debug("fetching all available organizational offices");
@@ -226,7 +221,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     @SuppressWarnings("unchecked")
     public List<Role> getAvailableRoles() {
         debug("fetching all available groups");
-        List return_value = getEntityManager().createQuery("SELECT r from Role r").getResultList();
+        List<Role> return_value = (List<Role>)getEntityManager().createQuery("SELECT r from Role r").getResultList();
         debug("found totally #0 role(s).", return_value.size());
         return return_value;
 
@@ -285,20 +280,20 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         return result;
     }
 
-    @Transactional(TransactionPropagationType.REQUIRED)
-    @Deprecated
-    public Leave getEmployeeActiveLeave(EntityManager entityManager, Person employee, Date onDate) {
-        EntityManager em = getEntityManager(entityManager);
-
-        try {
-            return (Leave) em
-                    .createQuery(
-                            "SELECT s from Leave s WHERE s.active IS TRUE AND s.employee=:employee AND :onDate BETWEEN s.established AND s.dueTo ORDER BY s.established")
-                    .setParameter("employee", employee).setParameter("onDate", onDate).getSingleResult();
-        } catch (NoResultException nre) {
-            return null;
-        }
-    }
+//    @Transactional(TransactionPropagationType.REQUIRED)
+//    @Deprecated
+//    public Leave getEmployeeActiveLeave(EntityManager entityManager, Person employee, Date onDate) {
+//        EntityManager em = getEntityManager(entityManager);
+//
+//        try {
+//            return (Leave) em
+//                    .createQuery(
+//                            "SELECT s from Leave s WHERE s.active IS TRUE AND s.employee=:employee AND :onDate BETWEEN s.established AND s.dueTo ORDER BY s.established")
+//                    .setParameter("employee", employee).setParameter("onDate", onDate).getSingleResult();
+//        } catch (NoResultException nre) {
+//            return null;
+//        }
+//    }
     
     @Transactional(TransactionPropagationType.REQUIRED)
     public EmployeeLeave getEmployeeActiveLeave2(EntityManager entityManager, Person employee, Date onDate) {
@@ -441,15 +436,15 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 //        return result;
 //    }
 
-    @Deprecated
-    public Collection<Leave> getEmployeeLeaves(Person employee) {
-        Collection<Leave> result = null;
-        result = entityManager
-                .createQuery(
-                        "SELECT s from Leave s WHERE (s.deleted IS FALSE OR s.deleted IS NULL) AND s.employee=:employee ORDER BY s.established DESC")
-                .setParameter("employee", employee).getResultList();
-        return result;
-    }
+//    @Deprecated
+//    public Collection<Leave> getEmployeeLeaves(Person employee) {
+//        Collection<Leave> result = null;
+//        result = entityManager
+//                .createQuery(
+//                        "SELECT s from Leave s WHERE (s.deleted IS FALSE OR s.deleted IS NULL) AND s.employee=:employee ORDER BY s.established DESC")
+//                .setParameter("employee", employee).getResultList();
+//        return result;
+//    }
     
     public Collection<EmployeeLeave> getEmployeeLeaves2(Person employee) {
         Collection<EmployeeLeave> result = null;
@@ -488,15 +483,15 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
        return result; 
    }
 
-    @Deprecated
-    public Collection<Leave> getEmployeeFutureLeaves(Person employee, Date referenceDate) {
-        Collection<Leave> result = null;
-        result = entityManager
-                .createQuery(
-                        "SELECT s from Leave s WHERE (s.deleted IS FALSE OR s.deleted IS NULL) AND s.employee=:employee AND s.established > :referenceDate ORDER BY s.established DESC")
-                .setParameter("employee", employee).setParameter("referenceDate", referenceDate).getResultList();
-        return result;
-    }
+//    @Deprecated
+//    public Collection<Leave> getEmployeeFutureLeaves(Person employee, Date referenceDate) {
+//        Collection<Leave> result = null;
+//        result = entityManager
+//                .createQuery(
+//                        "SELECT s from Leave s WHERE (s.deleted IS FALSE OR s.deleted IS NULL) AND s.employee=:employee AND s.established > :referenceDate ORDER BY s.established DESC")
+//                .setParameter("employee", employee).setParameter("referenceDate", referenceDate).getResultList();
+//        return result;
+//    }
     
     public Collection<EmployeeLeave> getEmployeeFutureLeaves2(Person employee, Date referenceDate) {
         Collection<EmployeeLeave> result = null;
@@ -941,13 +936,13 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 
     @SuppressWarnings("unchecked")
     @Transactional
-    public Collection<Leave> getSchoolLeaves(EntityManager em, School school, SchoolYear schoolYear,
+    public Collection<EmployeeLeave> getSchoolLeaves(EntityManager em, School school, SchoolYear schoolYear,
             Date effectiveDate, Collection<SpecializationGroup> specializationGroups) {
 
         if (specializationGroups != null && specializationGroups.size() > 0) {
             return getEntityManager(em)
                     .createQuery(
-                            "SELECT DISTINCT l FROM Leave l JOIN FETCH l.employee WHERE (l.active IS TRUE AND l.employee.currentEmployment.school=:school AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
+                            "SELECT DISTINCT l FROM EmployeeLeave l JOIN FETCH l.employee WHERE (l.active IS TRUE AND l.employee.currentEmployment.school=:school AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
                                     + " AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g IN (:specializations) AND s.employee.lastSpecialization MEMBER OF g.specializations) "
                                     + " ORDER BY l.employee.lastSpecialization.id, l.employee.lastName ")
                     .setParameter("specializations", specializationGroups).setParameter("school", school)
@@ -955,7 +950,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         } else {
             return getEntityManager(em)
                     .createQuery(
-                            "SELECT DISTINCT l FROM Leave l JOIN FETCH l.employee WHERE (l.active IS TRUE AND l.employee.currentEmployment.school=:school AND (:dayOfInterest BETWEEN l.established AND l.dueTo)) "
+                            "SELECT DISTINCT l FROM EmployeeLeave l JOIN FETCH l.employee WHERE (l.active IS TRUE AND l.employee.currentEmployment.school=:school AND (:dayOfInterest BETWEEN l.established AND l.dueTo)) "
                                     + " ORDER BY l.employee.lastSpecialization.id, l.employee.lastName ")
                     .setParameter("school", school).setParameter("dayOfInterest", effectiveDate).getResultList();
         }

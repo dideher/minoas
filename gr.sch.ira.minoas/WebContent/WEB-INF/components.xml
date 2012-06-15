@@ -304,28 +304,7 @@
    </framework:entity-query>
    
    
-   <!-- Leave Components -->
-   
-   <component name="exampleLeave" class="gr.sch.ira.minoas.model.employement.Leave" />
-   
-   <framework:entity-query name="employeeLeavesListQuery" max-results="200" scope="page">
-    <framework:ejbql>SELECT l FROM Leave l WHERE l.active IS TRUE</framework:ejbql>
-    <framework:order>l.established desc</framework:order>
-    <framework:restrictions>
-      <value>l.employee = #{employeeHome.instance}</value>
-    </framework:restrictions> 
-   </framework:entity-query>
-   
-    
-     <framework:entity-query name="leavesByTypeListQuery" max-results="1000" scope="page">
-    <framework:ejbql>SELECT l FROM Leave l INNER JOIN FETCH l.employee WHERE l.active IS TRUE</framework:ejbql>
-    <framework:order>l.employee.lastName asc, l.employee.firstName asc</framework:order>
-    <framework:restrictions>
-      <value>l.leaveType = #{employeeLeaveCriteria.leaveType}</value>
-      <value>#{employeeLeaveCriteria.effectiveDate} BETWEEN l.establishedOn AND l.dueTo</value>
-    </framework:restrictions> 
-   </framework:entity-query>
-   
+  
    <!-- Disposal -->
    
    <framework:entity-query name="employeeCurrentDisposalsListQuery" max-results="200" scope="page">

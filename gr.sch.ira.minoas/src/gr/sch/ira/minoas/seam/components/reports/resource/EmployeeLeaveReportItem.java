@@ -2,7 +2,6 @@ package gr.sch.ira.minoas.seam.components.reports.resource;
 
 import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 
-
 import java.util.Date;
 
 /**

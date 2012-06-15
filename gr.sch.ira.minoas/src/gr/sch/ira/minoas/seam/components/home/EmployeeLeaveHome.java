@@ -3,7 +3,6 @@
  */
 package gr.sch.ira.minoas.seam.components.home;
 
-import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 
 import java.util.Calendar;
@@ -33,23 +32,7 @@ public class EmployeeLeaveHome extends MinoasEntityHome<EmployeeLeave> {
 	protected String tempValueHolder1; /* used as a holder value in forms */ 
 	
 
-	@Transactional
-	public String cancel() {
-	    EmployeeLeave current_leave = getInstance();
-		current_leave.setActive(Boolean.FALSE);
-		Employee employee = current_leave.getEmployee();
-
-		/*
-		 * if the canceled leave is the employee's current leave then update the
-		 * employee as well.
-		 */
-		if (employee.getLeave() != null && employee.getLeave().getId().equals(current_leave.getId()))
-			employee.setLeave(null);
-		super.update();
-		info("principal '#0' canceled employee #1 current leave #1.", getPrincipalName(), employee, current_leave);
-		clearInstance();
-		return "updated";
-	}
+	
 
 	/**
 	 * @see org.jboss.seam.framework.Home#createInstance()

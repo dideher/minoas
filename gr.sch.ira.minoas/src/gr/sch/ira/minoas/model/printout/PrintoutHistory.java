@@ -1,5 +1,8 @@
 package gr.sch.ira.minoas.model.printout;
 
+import gr.sch.ira.minoas.model.BaseIDModel;
+import gr.sch.ira.minoas.model.security.Principal;
+
 import java.util.Date;
 
 import javax.persistence.Basic;
@@ -10,9 +13,6 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import gr.sch.ira.minoas.model.BaseIDModel;
-import gr.sch.ira.minoas.model.security.Principal;
 
 @Entity
 @Table(name = "PRINTOUT_HISTORY")

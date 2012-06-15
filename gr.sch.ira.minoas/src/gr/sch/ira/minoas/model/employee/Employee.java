@@ -4,8 +4,8 @@ import gr.sch.ira.minoas.model.core.PYSDE;
 import gr.sch.ira.minoas.model.core.Specialization;
 import gr.sch.ira.minoas.model.employement.Disposal;
 import gr.sch.ira.minoas.model.employement.EducationalLevelType;
+import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 import gr.sch.ira.minoas.model.employement.Employment;
-import gr.sch.ira.minoas.model.employement.Leave;
 import gr.sch.ira.minoas.model.employement.Salary;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.ServiceAllocation;
@@ -85,11 +85,11 @@ public class Employee extends Person {
 
 	@OneToOne(optional = true, fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.PERSIST,
 			CascadeType.REFRESH })
-	@JoinColumn(name = "LEAVE_ID", nullable = true)
-	private Leave leave;
+	@JoinColumn(name = "EMPLOYEE_LEAVE_ID", nullable = true)
+	private EmployeeLeave leave;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", cascade = { CascadeType.ALL })
-	private Collection<Leave> leaves = new ArrayList<Leave>();
+	private Collection<EmployeeLeave> leaves = new ArrayList<EmployeeLeave>();
 
 	@Basic
 	@Column(name = "LEGACY_CODE", nullable = true, updatable = false, length = 10)
@@ -130,13 +130,13 @@ public class Employee extends Person {
 		super();
 	}
 
-	public Leave addLeave(Leave leave) {
-		if (!getLeaves().contains(leave)) {
-			getLeaves().add(leave);
-			leave.setEmployee(this);
-		}
-		return leave;
-	}
+//	public Leave addLeave(Leave leave) {
+//		if (!getLeaves().contains(leave)) {
+//			getLeaves().add(leave);
+//			leave.setEmployee(this);
+//		}
+//		return leave;
+//	}
 
 	public Secondment addSecondment(Secondment secondment) {
 		if (!getSecondments().contains(secondment)) {
@@ -206,14 +206,14 @@ public class Employee extends Person {
 	/**
 	 * @return the leave
 	 */
-	public Leave getLeave() {
+	public EmployeeLeave getLeave() {
 		return leave;
 	}
 
 	/**
 	 * @return the leaves
 	 */
-	public Collection<Leave> getLeaves() {
+	public Collection<EmployeeLeave> getLeaves() {
 		return leaves;
 	}
 
@@ -325,14 +325,14 @@ public class Employee extends Person {
 	/**
 	 * @param leave the leave to set
 	 */
-	public void setLeave(Leave leave) {
+	public void setLeave(EmployeeLeave leave) {
 		this.leave = leave;
 	}
 
 	/**
 	 * @param leaves the leaves to set
 	 */
-	public void setLeaves(Collection<Leave> leaves) {
+	public void setLeaves(Collection<EmployeeLeave> leaves) {
 		this.leaves = leaves;
 	}
 

@@ -1,21 +1,11 @@
 package gr.sch.ira.minoas.seam.components.management;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.persistence.EntityManager;
-
 import gr.sch.ira.minoas.model.core.SchoolYear;
 import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeExclusion;
+import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 import gr.sch.ira.minoas.model.employement.Employment;
-import gr.sch.ira.minoas.model.employement.Leave;
 import gr.sch.ira.minoas.model.employement.TeachingHourCDR;
 import gr.sch.ira.minoas.model.employement.TeachingHourCDRType;
 import gr.sch.ira.minoas.model.employement.WorkExperience;
@@ -25,6 +15,15 @@ import gr.sch.ira.minoas.seam.components.home.EmployeeExclusionHome;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
 import gr.sch.ira.minoas.seam.components.reports.resource.EmployeeWorkExperienceItem;
 import gr.sch.ira.minoas.seam.components.reports.resource.LeaveReportItem;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.persistence.EntityManager;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
@@ -296,9 +295,9 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
 	@Factory(value="employeeLeaveItems")
     public void constructEmployeeLeavesHistory() {
         Employee employee = getEmployeeHome().getInstance();
-        Collection<Leave> employeeLeavesHistory = getCoreSearching().getEmployeeLeaves(employee);
+        Collection<EmployeeLeave> employeeLeavesHistory = getCoreSearching().getEmployeeLeaves2(employee);
         List<LeaveReportItem> employeeLeaveItems = new ArrayList<LeaveReportItem>(employeeLeavesHistory.size());
-        for(Leave leave : employeeLeavesHistory) {
+        for(EmployeeLeave leave : employeeLeavesHistory) {
             employeeLeaveItems.add(new LeaveReportItem(leave));
         }
         setEmployeeLeaveItems(employeeLeaveItems);

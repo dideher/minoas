@@ -3,9 +3,9 @@
  */
 package gr.sch.ira.minoas.seam.components.reports.resource;
 
-import java.util.Date;
-
 import gr.sch.ira.minoas.model.employement.WorkExperience;
+
+import java.util.Date;
 
 /**
  * @author slavikos

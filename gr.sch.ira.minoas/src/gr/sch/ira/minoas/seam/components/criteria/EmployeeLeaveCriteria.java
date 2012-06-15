@@ -3,7 +3,6 @@ package gr.sch.ira.minoas.seam.components.criteria;
 import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.core.SpecializationGroup;
 import gr.sch.ira.minoas.model.employement.EmployeeLeaveType;
-import gr.sch.ira.minoas.model.employement.LeaveType;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -29,7 +28,6 @@ public class EmployeeLeaveCriteria {
 
 	private Date effectiveDateUntil;
 
-	private LeaveType leaveType;
 	
 	private EmployeeLeaveType employeeLeaveType;
 	
@@ -79,12 +77,7 @@ public class EmployeeLeaveCriteria {
 		return effectiveDateUntil;
 	}
 
-	/**
-	 * @return the leaveType
-	 */
-	public LeaveType getLeaveType() {
-		return leaveType;
-	}
+	
 
 	/**
 	 * @return the region
@@ -135,13 +128,7 @@ public class EmployeeLeaveCriteria {
 		this.effectiveDateUntil = effectiveDateUntil;
 	}
 
-	/**
-	 * @param leaveType the leaveType to set
-	 */
-	public void setLeaveType(LeaveType leaveType) {
-		this.leaveType = leaveType;
-	}
-
+	
 	/**
 	 * @param region the region to set
 	 */

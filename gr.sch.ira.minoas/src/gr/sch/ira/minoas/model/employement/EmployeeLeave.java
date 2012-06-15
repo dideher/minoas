@@ -4,19 +4,22 @@ import gr.sch.ira.minoas.model.BaseIDDeleteAwareModel;
 import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.employee.Employee;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.apache.commons.lang.time.DateUtils;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -69,9 +72,9 @@ public class EmployeeLeave extends BaseIDDeleteAwareModel {
 	@JoinColumn(name = "REGULAR_SCHOOL_ID", nullable = true)
 	private School regularSchool;
 	
-//	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.LAZY, mappedBy="leave")
-//    private Collection<TeachingHourCDR> leaveCDRs = new ArrayList<TeachingHourCDR>();
-//	
+	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.LAZY, mappedBy="leave")
+    private Collection<TeachingHourCDR> leaveCDRs = new ArrayList<TeachingHourCDR>();
+	
 	@Basic
 	@Column(name="EFFECTIVE_DAYS_COUNT", nullable=true)
 	private Integer effectiveNumberOfDays;
@@ -290,6 +293,20 @@ public class EmployeeLeave extends BaseIDDeleteAwareModel {
      */
     public void setNumberOfDays(Integer numberOfDays) {
         this.numberOfDays = numberOfDays;
+    }
+
+    /**
+     * @return the leaveCDRs
+     */
+    public Collection<TeachingHourCDR> getLeaveCDRs() {
+        return leaveCDRs;
+    }
+
+    /**
+     * @param leaveCDRs the leaveCDRs to set
+     */
+    public void setLeaveCDRs(Collection<TeachingHourCDR> leaveCDRs) {
+        this.leaveCDRs = leaveCDRs;
     }
 
 }

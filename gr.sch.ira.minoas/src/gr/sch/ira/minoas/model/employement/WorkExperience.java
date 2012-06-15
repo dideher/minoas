@@ -1,7 +1,6 @@
 package gr.sch.ira.minoas.model.employement;
 
 import gr.sch.ira.minoas.model.BaseIDDeleteAwareModel;
-import gr.sch.ira.minoas.model.BaseIDModel;
 import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employee.Employee;
 

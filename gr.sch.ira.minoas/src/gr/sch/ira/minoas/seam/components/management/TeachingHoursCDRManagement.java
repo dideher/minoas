@@ -5,9 +5,9 @@ import gr.sch.ira.minoas.model.core.SchoolYear;
 import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employement.Disposal;
+import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
-import gr.sch.ira.minoas.model.employement.Leave;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.ServiceAllocation;
 import gr.sch.ira.minoas.model.employement.TeachingHourCDR;
@@ -17,9 +17,7 @@ import gr.sch.ira.minoas.seam.components.CoreSearching;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -31,8 +29,6 @@ import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.RaiseEvent;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
-
-import sun.security.action.GetLongAction;
 
 @Name(value = "teachingHoursCDRManagement")
 @Scope(ScopeType.APPLICATION)
@@ -439,14 +435,14 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
          * unit for which the employee has teaching hours > 0 we will add a LEAVE CDR with negative hours
          */
 
-        Collection<Leave> activeLeaves = coreSearching.getActiveLeaves(em);
+        Collection<EmployeeLeave> activeLeaves = coreSearching.getActiveLeaves(em);
         info("found #0 totally active leaves.", activeLeaves.size());
-        for (Leave activeLeave : activeLeaves) {
+        for (EmployeeLeave activeLeave : activeLeaves) {
             Employee employeeWithLeave = activeLeave.getEmployee();
             /* fix the common leave message */
             StringBuffer sb = new StringBuffer();
             sb.append("Άδεια τύπου  ");
-            sb.append(CoreUtils.getLocalizedMessage(activeLeave.getLeaveType().getKey()));
+            sb.append(activeLeave.getEmployeeLeaveType().getDescription());
             sb.append(" απο τις ");
             sb.append(df.format(activeLeave.getEstablished()));
             sb.append(" μέχρι και  ");

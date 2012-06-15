@@ -4,7 +4,6 @@ package gr.sch.ira.minoas.seam.components.holders;
 
 import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.employement.EmployeeLeaveType;
-import gr.sch.ira.minoas.model.employement.LeaveType;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -29,8 +28,7 @@ public class EmployeeLeaveHolder implements Serializable {
     
     private Date established;
 
-    private LeaveType leaveType;
-
+   
     private School regularSchool;
     
     private EmployeeLeaveType employeeLeaveType;
@@ -77,19 +75,7 @@ public class EmployeeLeaveHolder implements Serializable {
         this.established = established;
     }
 
-    /**
-     * @return the leaveType
-     */
-    public LeaveType getLeaveType() {
-        return leaveType;
-    }
-
-    /**
-     * @param leaveType the leaveType to set
-     */
-    public void setLeaveType(LeaveType leaveType) {
-        this.leaveType = leaveType;
-    }
+    
 
     /**
      * @return the regularSchool

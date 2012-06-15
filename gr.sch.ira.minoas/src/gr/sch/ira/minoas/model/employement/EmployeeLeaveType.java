@@ -1,6 +1,7 @@
 package gr.sch.ira.minoas.model.employement;
 
-import java.util.Collection;
+import gr.sch.ira.minoas.model.BaseIDModel;
+import gr.sch.ira.minoas.model.employee.EmployeeType;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -11,9 +12,6 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import gr.sch.ira.minoas.model.BaseIDModel;
-import gr.sch.ira.minoas.model.employee.EmployeeType;
 
 @Entity
 @Table(name = "EMPLOYEE_LEAVE_TYPE")
