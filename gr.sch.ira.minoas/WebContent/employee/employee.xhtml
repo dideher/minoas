@@ -615,7 +615,7 @@
 
 
 
-							<rich:tab rendered="#{employeeLeaveItems.rowCount gt 0}">
+							<rich:tab rendered="#{employeeLeaveItems.rowCount gt 0  and (s:hasRole('ADMIN') or s:hasRole('VIEW_LEAVE')) }">
 								<f:facet name="label">
 									<h:outputText value="Ιστορικό Αδειών" />
 								</f:facet>
@@ -633,9 +633,15 @@
 										</f:facet>
 										<rich:column>
 											<f:facet name="header">
+												<h:outputText value="Κωδ." />
+											</f:facet>
+											<h:outputText value="#{_leave.leaveTypeKey}" />
+										</rich:column>
+										<rich:column>
+											<f:facet name="header">
 												<h:outputText value="Τύπος Άδειας" />
 											</f:facet>
-											<h:outputText value="#{messages[_leave.leaveTypeKey]}" />
+											<h:outputText value="#{_leave.leaveType}" />
 										</rich:column>
 										<rich:column>
 											<f:facet name="header">
@@ -652,6 +658,13 @@
 											<h:outputText value="#{_leave.dueTo}">
 												<s:convertDateTime pattern="dd-MM-yyyy" />
 											</h:outputText>
+										</rich:column>
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Διάρκεια" />
+											</f:facet>
+											<h:outputText value="#{_leave.leaveEffectiveDuration}" />
+											
 										</rich:column>
 										<rich:column>
 											<f:facet name="header">

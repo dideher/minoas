@@ -16,6 +16,8 @@ public class LeaveReportItem extends EmployeeReportItem {
 	private String leaveTypeKey;
 
 	private String regularUnit;
+	
+	private Integer leaveEffectiveDuration;
 
 	public LeaveReportItem() {
 		super();
@@ -30,6 +32,7 @@ public class LeaveReportItem extends EmployeeReportItem {
 			this.regularUnit = leave.getEmployee().getCurrentEmployment().getSchool().getTitle();
 		this.leaveType = leave.getEmployeeLeaveType().getDescription();
 		this.leaveTypeKey = leave.getEmployeeLeaveType().getLegacyCode();
+		this.leaveEffectiveDuration = leave.getEffectiveNumberOfDays();
 	}
 
 	public String getComment() {
@@ -106,5 +109,19 @@ public class LeaveReportItem extends EmployeeReportItem {
 	public void setRegularUnit(String regularUnit) {
 		this.regularUnit = regularUnit;
 	}
+
+    /**
+     * @return the leaveEffectiveDuration
+     */
+    public Integer getLeaveEffectiveDuration() {
+        return leaveEffectiveDuration;
+    }
+
+    /**
+     * @param leaveEffectiveDuration the leaveEffectiveDuration to set
+     */
+    public void setLeaveEffectiveDuration(Integer leaveEffectiveDuration) {
+        this.leaveEffectiveDuration = leaveEffectiveDuration;
+    }
 
 }
