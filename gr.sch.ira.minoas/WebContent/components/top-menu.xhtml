@@ -121,7 +121,13 @@
 								<f:param name="leaves_report_by_type_from" value="/home" />
 							</s:link>
 						</rich:menuItem>
-
+						<rich:menuItem submitMode="none"
+							rendered="#{(s:hasRole('ADMIN') or s:hasRole('VIEW_LEAVE'))}">
+							<s:link value="Άδειες Που Λήγουν Σύντομα" 
+								view="/leave/leave-report-by-endingleaves.xhtml">
+								<f:param name="leaves_report_by_endingleaves_from" value="/home" />
+							</s:link>
+						</rich:menuItem>
 					</rich:menuGroup>
 				</rich:menuGroup>
 				

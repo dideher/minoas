@@ -105,6 +105,61 @@ public class EmployeeLeavesReport extends BaseReport {
 	}
 
 	@SuppressWarnings("unchecked")
+    public void generateReportEndingLeaves() {
+	    Date today = DateUtils.truncate(new Date(System.currentTimeMillis()), Calendar.DAY_OF_MONTH);
+        Character region = getEmployeeLeaveCriteria().getRegion();
+        School school = getEmployeeLeaveCriteria().getSchoolOfIntereset();
+        SpecializationGroup specializationGroup = getEmployeeLeaveCriteria().getSpecializationGroup();
+        DateSearchType dateSearchType = getEmployeeLeaveCriteria().getDateSearchType();
+        EmployeeLeaveType employeeLeaveType = getEmployeeLeaveCriteria().getEmployeeLeaveType();
+        Date effectiveDateUntil = getEmployeeLeaveCriteria().getEffectiveDateUntil();
+
+        StringBuffer sb = new StringBuffer();
+        sb.append("SELECT l FROM EmployeeLeave l WHERE l.active IS TRUE AND (l.dueTo >= :today AND l.dueTo <= :effectiveDateUntil) ");
+        
+        if (employeeLeaveType != null) {
+            sb.append(" AND l.employeeLeaveType=:leaveType ");
+        }
+        if (school != null) {
+            sb.append(" AND l.employee.currentEmployment.school = :school ");
+        }
+        if (region != null) {
+            sb.append(" AND l.employee.currentEmployment.school.regionCode = :region ");
+        }
+        if (specializationGroup != null) {
+            sb
+                    .append(" AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g=:specializationGroup AND l.employee.lastSpecialization MEMBER OF g.specializations) ");
+        }
+
+        sb.append(" ORDER BY l.employee.lastSpecialization, l.employee.lastName");
+        
+        Query q = getEntityManager().createQuery(sb.toString());
+        q.setParameter("today", today);
+        q.setParameter("effectiveDateUntil", effectiveDateUntil);
+        
+        if (employeeLeaveType != null) {
+            q.setParameter("leaveType", employeeLeaveType);
+        }
+        if (school != null) {
+            q.setParameter("school", school);
+        }
+        if (region != null) {
+            q.setParameter("region", region);
+        }
+        if (specializationGroup != null) {
+            q.setParameter("specializationGroup", specializationGroup);
+        }
+
+        Collection<EmployeeLeave> leaves = q.getResultList();
+        info("found totally #0 leaves matching criteria", leaves.size());
+        reportData = new ArrayList<EmployeeLeaveReportItem>(leaves.size());
+        for (EmployeeLeave leave : leaves) {
+            reportData.add(new EmployeeLeaveReportItem(leave));
+        }
+	    
+	}
+	
+	@SuppressWarnings("unchecked")
 	public void generateReport() {
 
 		Date effectiveDate = getEmployeeLeaveCriteria().getEffectiveDate();
