@@ -31,14 +31,15 @@
 						<h:panelGrid columns="4">
 
 							<s:decorate template="/layout/doubleLineEdit.xhtml">
-									<ui:define name="label">
-										<h:outputText value="Τύπος Άδειας" />
-									</ui:define>
-									<h:panelGrid columns="3" border="0" cellpadding="2"
-										cellspacing="2">
+								<ui:define name="label">
+									<h:outputText value="Τύπος Άδειας" />
+								</ui:define>
+								<h:panelGrid>
+									<h:panelGroup>
 										<h:inputText id="employeeLeaveTypeCodeTextField"
-											value="#{employeeLeaveCriteria.employeeLeaveTypeCode}" size="3" maxlength="7"
-											styleClass="fieldValueText" required="false">
+											value="#{employeeLeaveCriteria.employeeLeaveTypeCode}"
+											size="3" maxlength="7" styleClass="fieldValueText"
+											required="false">
 											<rich:suggestionbox width="400" id="leaveTypeSuggestionbox"
 												suggestionAction="#{employeeLeaveTypeSuggester.suggest}"
 												var="_leaveType" ajaxSingle="true"
@@ -62,6 +63,8 @@
 											width="16"
 											onclick="#{rich:component('leaveTypeSuggestionbox')}.callSuggestion(true)"
 											alt="" />
+									</h:panelGroup>
+									<h:panelGroup>
 										<s:div id="leaveTypeDescriptionDiv">
 											<h:outputText
 												value="#{employeeLeaveCriteria.employeeLeaveType.description}"
@@ -71,12 +74,13 @@
 												styleClass="fieldValueText"
 												rendered="#{employeeLeaveCriteria.employeeLeaveType eq null}" />
 										</s:div>
-									</h:panelGrid>
+									</h:panelGroup>
+								</h:panelGrid>
 
 
-								</s:decorate>
-							
-							
+							</s:decorate>
+
+
 							<s:decorate template="/layout/doubleLineEdit.xhtml">
 								<ui:define name="label">
 									<h:outputText value="Ομάδα Ειδικοτήτων : " />
@@ -269,12 +273,11 @@
 							<h:outputText value="Εκπαιδευτικός" />
 						</f:facet>
 						<a4j:commandLink action="selectEmployee"
-								value="#{_leave.employeeLastName} #{_leave.employeeFirstName} του #{_leave.employeeFatherName}">
-								<f:setPropertyActionListener
-									value="#{_leave.id}"
-									target="#{employeeHome.id}" />
-								<s:conversationPropagation type="nested" />
-							</a4j:commandLink>
+							value="#{_leave.employeeLastName} #{_leave.employeeFirstName} του #{_leave.employeeFatherName}">
+							<f:setPropertyActionListener value="#{_leave.id}"
+								target="#{employeeHome.id}" />
+							<s:conversationPropagation type="nested" />
+						</a4j:commandLink>
 					</rich:column>
 					<rich:column>
 						<f:facet name="header">
