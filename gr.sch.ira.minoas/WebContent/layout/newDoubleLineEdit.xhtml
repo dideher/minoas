@@ -1,0 +1,32 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:rich="http://richfaces.org/rich"
+                 xmlns:s="http://jboss.com/products/seam/taglib">
+
+	<s:div>
+		<h:panelGrid columns="1" border="0">
+			<h:panelGroup>
+				<s:label styleClass="form-label"  >
+					<ui:insert name="label" />
+					<s:span styleClass="required-flag" rendered="#{required}">*</s:span>
+				</s:label>
+			</h:panelGroup>
+			<h:panelGroup id="lala" styleClass="form-input">
+				<span class="value #{invalid?'errors':''}"> <s:validateAll>
+					<ui:insert />
+				</s:validateAll> </span>
+			</h:panelGroup>
+			<f:facet name="footer">
+				<h:panelGroup>
+					<h:graphicImage value="/img/error.png" rendered="#{invalid}"
+						styleClass="errors" />
+					<s:message styleClass="errors"></s:message>
+					
+				</h:panelGroup>
+			</f:facet>
+		</h:panelGrid>
+	</s:div>
+
+</ui:composition>
