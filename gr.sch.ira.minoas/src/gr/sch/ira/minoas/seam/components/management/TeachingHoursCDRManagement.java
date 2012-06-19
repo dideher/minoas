@@ -5,6 +5,7 @@ import gr.sch.ira.minoas.model.core.SchoolYear;
 import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employement.Disposal;
+import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
 import gr.sch.ira.minoas.model.employement.Leave;
@@ -194,8 +195,6 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
 
             /* apply on source unit */
 
-            /* apply on source unit */
-            
             cdr = new TeachingHourCDR();
             cdr.setCdrType(TeachingHourCDRType.SECONDMENT);
             sb = new StringBuffer();
@@ -441,14 +440,14 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
          * unit for which the employee has teaching hours > 0 we will add a LEAVE CDR with negative hours
          */
 
-        Collection<Leave> activeLeaves = coreSearching.getActiveLeaves(em);
+        Collection<EmployeeLeave> activeLeaves = coreSearching.getActiveLeaves(em);
         info("found #0 totally active leaves.", activeLeaves.size());
-        for (Leave activeLeave : activeLeaves) {
+        for (EmployeeLeave activeLeave : activeLeaves) {
             Employee employeeWithLeave = activeLeave.getEmployee();
             /* fix the common leave message */
             StringBuffer sb = new StringBuffer();
             sb.append("Άδεια τύπου  ");
-            sb.append(CoreUtils.getLocalizedMessage(activeLeave.getLeaveType().getKey()));
+            sb.append(activeLeave.getEmployeeLeaveType().getDescription());
             sb.append(" απο τις ");
             sb.append(df.format(activeLeave.getEstablished()));
             sb.append(" μέχρι και  ");

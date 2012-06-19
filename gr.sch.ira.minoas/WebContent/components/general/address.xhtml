@@ -6,17 +6,17 @@
       xmlns:rich="http://richfaces.org/rich">
 
 <ui:component>
-	<h:panelGrid columns="4">
-		<h:outputLabel value="Διεύθυνση" for="address" />
+	<h:panelGrid columns="4" cellspacing="8">
+		<h:outputLabel styleClass="fieldValueLabel" value="Διεύθυνση" for="address" />
 		<h:panelGroup>
 			<h:outputText id="address" styleClass="fieldValueText" value="#{address.address}" />
 			<h:outputText styleClass="fieldValueText" value="#{address.addressAdditional}" />
 		</h:panelGroup>
-		<h:outputLabel value="Αριθμός" for="addressNumber" />
+		<h:outputLabel styleClass="fieldValueLabel" value="Αριθμός" for="addressNumber" />
 		<h:outputText id="addressNumber" styleClass="fieldValueText" value="#{address.number}" />
-		<h:outputLabel value="ΤΚ" for="addressPostalCode" />
+		<h:outputLabel styleClass="fieldValueLabel" value="ΤΚ" for="addressPostalCode" />
 		<h:outputText id="addressPostalCode" styleClass="fieldValueText"  value="#{address.postCode}" />
-		<h:outputLabel value="Πόλη" for="addressCity" />
+		<h:outputLabel styleClass="fieldValueLabel" value="Πόλη" for="addressCity" />
 		<h:outputText id="addressCity" styleClass="fieldValueText" value="#{address.city}" />
 	</h:panelGrid>
 </ui:component>

@@ -2,7 +2,7 @@ package gr.sch.ira.minoas.seam.components.criteria;
 
 import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.core.SpecializationGroup;
-import gr.sch.ira.minoas.model.employement.LeaveType;
+import gr.sch.ira.minoas.model.employement.EmployeeLeaveType;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -28,7 +28,10 @@ public class EmployeeLeaveCriteria {
 
 	private Date effectiveDateUntil;
 
-	private LeaveType leaveType;
+	
+	private EmployeeLeaveType employeeLeaveType;
+	
+	private String employeeLeaveTypeCode;
 
 	private Character region;
 
@@ -74,12 +77,7 @@ public class EmployeeLeaveCriteria {
 		return effectiveDateUntil;
 	}
 
-	/**
-	 * @return the leaveType
-	 */
-	public LeaveType getLeaveType() {
-		return leaveType;
-	}
+	
 
 	/**
 	 * @return the region
@@ -130,13 +128,7 @@ public class EmployeeLeaveCriteria {
 		this.effectiveDateUntil = effectiveDateUntil;
 	}
 
-	/**
-	 * @param leaveType the leaveType to set
-	 */
-	public void setLeaveType(LeaveType leaveType) {
-		this.leaveType = leaveType;
-	}
-
+	
 	/**
 	 * @param region the region to set
 	 */
@@ -157,5 +149,33 @@ public class EmployeeLeaveCriteria {
 	public void setSpecializationGroup(SpecializationGroup specializationGroup) {
 		this.specializationGroup = specializationGroup;
 	}
+
+    /**
+     * @return the employeeLeaveType
+     */
+    public EmployeeLeaveType getEmployeeLeaveType() {
+        return employeeLeaveType;
+    }
+
+    /**
+     * @param employeeLeaveType the employeeLeaveType to set
+     */
+    public void setEmployeeLeaveType(EmployeeLeaveType employeeLeaveType) {
+        this.employeeLeaveType = employeeLeaveType;
+    }
+
+    /**
+     * @return the employeeLeaveTypeCode
+     */
+    public String getEmployeeLeaveTypeCode() {
+        return employeeLeaveTypeCode;
+    }
+
+    /**
+     * @param employeeLeaveTypeCode the employeeLeaveTypeCode to set
+     */
+    public void setEmployeeLeaveTypeCode(String employeeLeaveTypeCode) {
+        this.employeeLeaveTypeCode = employeeLeaveTypeCode;
+    }
 
 }

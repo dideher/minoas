@@ -7,14 +7,13 @@ import gr.sch.ira.minoas.model.core.SpecializationGroup;
 import gr.sch.ira.minoas.model.core.TeachingRequirement;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employement.Disposal;
+import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
-import gr.sch.ira.minoas.model.employement.Leave;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.ServiceAllocation;
 import gr.sch.ira.minoas.model.employement.ServiceAllocationType;
 import gr.sch.ira.minoas.model.employement.TeachingHourCDR;
-import gr.sch.ira.minoas.model.employement.TeachingHourCDRType;
 import gr.sch.ira.minoas.seam.components.home.SchoolHome;
 import gr.sch.ira.minoas.seam.components.reports.resource.DisposalReportItem;
 import gr.sch.ira.minoas.seam.components.reports.resource.EmployeeReportItem;
@@ -372,10 +371,10 @@ public class SchoolReport extends BaseReport {
 
     }
 
-    private String constructComment(Leave leave) {
+    private String constructComment(EmployeeLeave leave) {
         StringBuffer sb = new StringBuffer();
         sb.append("Άδεια τύπου ");
-        sb.append(getLocalizedMessage(leave.getLeaveType().getKey()));
+        sb.append(leave.getEmployeeLeaveType().getDescription());
         sb.append(" απο τις ");
         sb.append(this.dateFormat.format(leave.getEstablished()));
         sb.append(" εως και ");
@@ -436,7 +435,7 @@ public class SchoolReport extends BaseReport {
         }
 
         /* check if the employment is associated with a leave */
-        Leave leave = getCoreSearching().getEmployeeActiveLeave(getEntityManager(), employment.getEmployee(), today);
+        EmployeeLeave leave = getCoreSearching().getEmployeeActiveLeave2(getEntityManager(), employment.getEmployee(), today);
         if (leave != null) {
             /* the employment is overriden by a service allocation */
             item.setEmployeeFinalWorkingHours(0);
@@ -495,7 +494,7 @@ public class SchoolReport extends BaseReport {
         }
 
         /* check if the employment is associated with a leave */
-        Leave leave = getCoreSearching().getEmployeeActiveLeave(getEntityManager(), regularEmployment.getEmployee(),
+        EmployeeLeave leave = getCoreSearching().getEmployeeActiveLeave2(getEntityManager(), regularEmployment.getEmployee(),
                 today);
         if (leave != null) {
             /* the employment is overriden by a service allocation */

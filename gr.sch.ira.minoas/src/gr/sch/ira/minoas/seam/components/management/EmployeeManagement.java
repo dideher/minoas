@@ -1,24 +1,11 @@
 package gr.sch.ira.minoas.seam.components.management;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
-
-import javax.persistence.EntityManager;
-
 import gr.sch.ira.minoas.model.core.SchoolYear;
 import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeExclusion;
-import gr.sch.ira.minoas.model.employee.Person;
-import gr.sch.ira.minoas.model.employee.RegularEmployeeInfo;
+import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 import gr.sch.ira.minoas.model.employement.Employment;
-import gr.sch.ira.minoas.model.employement.Leave;
 import gr.sch.ira.minoas.model.employement.TeachingHourCDR;
 import gr.sch.ira.minoas.model.employement.TeachingHourCDRType;
 import gr.sch.ira.minoas.model.employement.WorkExperience;
@@ -26,9 +13,17 @@ import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.EmployeeMergeRequest;
 import gr.sch.ira.minoas.seam.components.home.EmployeeExclusionHome;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
-import gr.sch.ira.minoas.seam.components.home.RegularEmployeeInfoHome;
 import gr.sch.ira.minoas.seam.components.reports.resource.EmployeeWorkExperienceItem;
 import gr.sch.ira.minoas.seam.components.reports.resource.LeaveReportItem;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.persistence.EntityManager;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
@@ -217,6 +212,24 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
 	@DataModel(value="employeeLeaveItems")
 	private Collection<LeaveReportItem> employeeLeaveItems;
 	
+	@DataModel(value="employeeLeaveItems")
+	private Collection<LeaveReportItem> employeeLeaveItems;
+	
+	/**
+	 * @return the employeeWorkExperienceItems
+	 */
+	public Collection<EmployeeWorkExperienceItem> getEmployeeWorkExperienceItems() {
+		return employeeWorkExperienceItems;
+	}
+
+	/**
+	 * @param employeeWorkExperienceItems the employeeWorkExperienceItems to set
+	 */
+	public void setEmployeeWorkExperienceItems(
+			Collection<EmployeeWorkExperienceItem> employeeWorkExperienceItems) {
+		this.employeeWorkExperienceItems = employeeWorkExperienceItems;
+	}
+
 	/**
 	 * @return the employeeWorkExperienceItems
 	 */
@@ -303,9 +316,9 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
 	@Factory(value="employeeLeaveItems")
     public void constructEmployeeLeavesHistory() {
         Employee employee = getEmployeeHome().getInstance();
-        Collection<Leave> employeeLeavesHistory = getCoreSearching().getEmployeeLeaveHistoryWithCurrentActive(employee);
+        Collection<EmployeeLeave> employeeLeavesHistory = getCoreSearching().getEmployeeLeaves2(employee);
         List<LeaveReportItem> employeeLeaveItems = new ArrayList<LeaveReportItem>(employeeLeavesHistory.size());
-        for(Leave leave : employeeLeavesHistory) {
+        for(EmployeeLeave leave : employeeLeavesHistory) {
             employeeLeaveItems.add(new LeaveReportItem(leave));
         }
         setEmployeeLeaveItems(employeeLeaveItems);
@@ -450,98 +463,6 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
     public void setEmployeeCurrentHoursDistributionItems(
             Collection<Map<String, Object>> employeeCurrentHoursDistributionItems) {
         this.employeeCurrentHoursDistributionItems = employeeCurrentHoursDistributionItems;
-    }
-    
-    @Transactional(TransactionPropagationType.REQUIRED)
-    public String updateEmployeeSpecialization() {
-        if (getEmployeeHome().isManaged()) {
-            Employee employee = getEmployeeHome().getInstance();
-            
-            /* fix the current employement field */
-            Employment currentEmployment = employee.getCurrentEmployment();
-            if(currentEmployment!=null) {
-                currentEmployment.setSpecialization(employee.getLastSpecialization());
-            }
-            
-            /* if the employee is hourly paid, then it is quite possible
-             * that the employee has more than one employments
-             */
-            if(employee.isHourlyPaid()) {
-                SchoolYear currentSchoolYear = getCoreSearching().getActiveSchoolYear(getEntityManager());
-                Collection<Employment> employments = getCoreSearching().getEmployeeEmployments(employee, currentSchoolYear);
-                for(Employement em : employments) {
-                    em.setSpecialization(employee.getLastSpecialization());
-                }
-            }
-            info("updated employee '#0' specialization", employee);
-            getEmployeeHome().update();
-            getEntityManager().flush();
-            return ACTION_OUTCOME_SUCCESS;
-        } else {
-            return ACTION_OUTCOME_FAILURE;
-        }
-    }
-    
-    protected boolean isVATValid(String vat) {
-        if(vat!=null)
-            return Pattern.matches("d{9}", vat);
-        else return false;
-    }
-    
-    protected boolean isRegularRegistryIDValid(String registryID) {
-        if(registryID!=null)
-            return Pattern.matches("d{6}", registryID);
-        else return false;
-    }
-    
-    @Transactional(TransactionPropagationType.REQUIRED)
-    public String updateEmployeeBasicInfo() {
-        if (getEmployeeHome().isManaged()) {
-            Employee employee = getEmployeeHome().getInstance();
-            if(!isVATValid(employee.getVatNumber())) {
-                getFacesMessages().add(Severity.ERROR, "Το ΑΦΜ '#0' που εισάγατε, δεν είναι έγκυρο", employee.getVatNumber());
-                return ACTION_OUTCOME_FAILURE;
-            }
-            info("updated employee '#0'", employee);
-            getEmployeeHome().update();
-            getEntityManager().flush();
-            return ACTION_OUTCOME_SUCCESS;
-        } else {
-            return ACTION_OUTCOME_FAILURE;
-        }
-    }
-    
-    @Transactional(TransactionPropagationType.REQUIRED)
-    public String updateEmployeeRegularRegistry() {
-        if (getEmployeeHome().isManaged() && getRegularEmployeeInfoHome().isManaged()) {
-            Employee employee = getEmployeeHome().getInstance();
-            RegularEmployeeInfo employeeInfo = getRegularEmployeeInfoHome().getInstance();
-            if(!isRegularRegistryIDValid(employeeInfo.getRegistryID())) {
-                getFacesMessages().add(Severity.ERROR, "Ο αριθμός μητρώου '#0' που εισάγατε, δεν είναι έγκυρος", employeeInfo.getRegistryID());
-                return ACTION_OUTCOME_FAILURE;
-            }
-            info("updated employee '#0' registry ID to '#1'", employee, employeeInfo.getRegistryID());
-            getEmployeeHome().update();
-            getRegularEmployeeInfoHome().update();
-            getEntityManager().flush();
-            return ACTION_OUTCOME_SUCCESS;
-        } else {
-            return ACTION_OUTCOME_FAILURE;
-        }
-    }
-
-    /**
-     * @return the regularEmployeeInfoHome
-     */
-    public RegularEmployeeInfoHome getRegularEmployeeInfoHome() {
-        return regularEmployeeInfoHome;
-    }
-
-    /**
-     * @param regularEmployeeInfoHome the regularEmployeeInfoHome to set
-     */
-    public void setRegularEmployeeInfoHome(RegularEmployeeInfoHome regularEmployeeInfoHome) {
-        this.regularEmployeeInfoHome = regularEmployeeInfoHome;
     }
 
 }
