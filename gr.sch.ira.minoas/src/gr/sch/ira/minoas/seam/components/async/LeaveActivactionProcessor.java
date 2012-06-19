@@ -1,7 +1,7 @@
 package gr.sch.ira.minoas.seam.components.async;
 
 import gr.sch.ira.minoas.model.employee.Employee;
-import gr.sch.ira.minoas.model.employement.Leave;
+import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 
 import java.util.Collection;
@@ -51,8 +51,8 @@ public class LeaveActivactionProcessor extends BaseDatabaseAwareSeamComponent {
 	
 	@SuppressWarnings("unchecked")
     @Transactional(TransactionPropagationType.REQUIRED)
-    public Collection<Leave> getActiveLeaveThatSouldBeSetCurrent(EntityManager em, Date today) {
-        return em.createQuery("SELECT s from Leave s WHERE s.active IS TRUE AND s.employee.leave IS NULL AND  :onDate  BETWEEN s.established AND s.dueTo ORDER BY s.established").setParameter("onDate", today).getResultList();
+    public Collection<EmployeeLeave> getActiveLeaveThatSouldBeSetCurrent(EntityManager em, Date today) {
+        return em.createQuery("SELECT s from EmployeeLeave s WHERE s.active IS TRUE AND s.employee.leave IS NULL AND  :onDate  BETWEEN s.established AND s.dueTo ORDER BY s.established").setParameter("onDate", today).getResultList();
     }
 	
 	@Asynchronous
@@ -62,9 +62,9 @@ public class LeaveActivactionProcessor extends BaseDatabaseAwareSeamComponent {
             @FinalExpiration Date endDate) {
 	    Date today = new Date();
 	    info("will check for leaves that should be set current on #0", today);
-	    Collection<Leave> activeLeaves = getActiveLeaveThatSouldBeSetCurrent(getEntityManager(), today);
+	    Collection<EmployeeLeave> activeLeaves = getActiveLeaveThatSouldBeSetCurrent(getEntityManager(), today);
 	    info("found totally #0 leaves should be set current", activeLeaves.size());
-	    for(Leave newCurrentLeave : activeLeaves) {
+	    for(EmployeeLeave newCurrentLeave : activeLeaves) {
 	        Employee employee = newCurrentLeave.getEmployee();
 	        info("setting leave #0 as current for employee #1", newCurrentLeave, employee);
 	        employee.setLeave(newCurrentLeave);

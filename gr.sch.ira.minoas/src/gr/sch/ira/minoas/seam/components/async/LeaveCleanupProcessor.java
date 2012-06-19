@@ -1,7 +1,7 @@
 package gr.sch.ira.minoas.seam.components.async;
 
 import gr.sch.ira.minoas.model.employee.Employee;
-import gr.sch.ira.minoas.model.employement.Leave;
+import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 import gr.sch.ira.minoas.model.employement.TeachingHourCDR;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 
@@ -46,8 +46,8 @@ public class LeaveCleanupProcessor extends BaseDatabaseAwareSeamComponent {
 	
 	@SuppressWarnings("unchecked")
     @Transactional(TransactionPropagationType.REQUIRED)
-    public Collection<Leave> getActiveLeaveThatSouldBeAutoCanceled(EntityManager em, Date today) {
-        return em.createQuery("SELECT s from Leave s WHERE s.active IS TRUE AND :onDate > s.dueTo ORDER BY s.established").setParameter("onDate", today).getResultList();
+    public Collection<EmployeeLeave> getActiveLeaveThatSouldBeAutoCanceled(EntityManager em, Date today) {
+        return em.createQuery("SELECT s from EmployeeLeave s WHERE s.active IS TRUE AND :onDate > s.dueTo ORDER BY s.established").setParameter("onDate", today).getResultList();
     }
 	
 	@Asynchronous
@@ -57,9 +57,9 @@ public class LeaveCleanupProcessor extends BaseDatabaseAwareSeamComponent {
             @FinalExpiration Date endDate) {
 	    Date today = new Date();
 	    info("will check for leaves that should be canceled on #0", today);
-	    Collection<Leave> activeLeaves = getActiveLeaveThatSouldBeAutoCanceled(getEntityManager(), today);
+	    Collection<EmployeeLeave> activeLeaves = getActiveLeaveThatSouldBeAutoCanceled(getEntityManager(), today);
 	    info("found totally #0 leaves that should be auto-canceled", activeLeaves.size());
-	    for(Leave invalidLeave : activeLeaves) {
+	    for(EmployeeLeave invalidLeave : activeLeaves) {
 	        info("auto canceling leave #0", invalidLeave);
 	        invalidLeave.setActive(false);
 	        invalidLeave.setAutoCanceled(Boolean.TRUE);

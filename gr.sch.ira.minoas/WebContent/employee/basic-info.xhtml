@@ -6,23 +6,23 @@
       xmlns:rich="http://richfaces.org/rich">
 
 <ui:component>
-	<h:panelGrid columns="6">
-		<h:outputText value="Επώνυμο"  />
+	<h:panelGrid columns="6" cellspacing="8">
+		<h:outputLabel styleClass="fieldValueLabel" value="Επώνυμο" for="" />
 		<h:outputText styleClass="fieldValueText" value="#{employee.lastName}"/>
-		<h:outputText value="Όνομα"  />
+		<h:outputLabel styleClass="fieldValueLabel" value="Όνομα" for="" />
 		<h:outputText styleClass="fieldValueText" value="#{employee.firstName}" />
-		<h:outputText value="Όνομα Πατρός"  />
+		<h:outputLabel styleClass="fieldValueLabel" value="Όνομα Πατρός" for="" />
 		<h:outputText styleClass="fieldValueText" value="#{employee.fatherName}" />
-		<h:outputText value="Ειδικότητα" />
+		<h:outputLabel styleClass="fieldValueLabel" value="Ειδικότητα" />
 		<h:outputText styleClass="fieldValueText" value="#{employee.lastSpecialization}" />
 		
-		<h:outputText value="Όνομα Μητρος"  />
+		<h:outputLabel styleClass="fieldValueLabel" value="Όνομα Μητρός" for="" />
 		<h:outputText styleClass="fieldValueText" value="#{employee.motherName}" />
-		<h:outputText value="ΑΦΜ"  />
+		<h:outputLabel styleClass="fieldValueLabel" value="ΑΦΜ" for="" />
 		<h:outputText styleClass="fieldValueText" value="#{employee.vatNumber}" />
-		<h:outputText value="ΑΜ" />
+		<h:outputLabel styleClass="fieldValueLabel" value="ΑΜ" for="" />
 		<h:outputText styleClass="fieldValueText" value="#{employeeUtil.getRegistryID(employee)}" />
-		<h:outputText value="Ημ/νια Γεννήσεως" />
+		<h:outputLabel styleClass="fieldValueLabel" value="Ημ/νία Γεννήσεως" for="" />
 		<h:outputText styleClass="fieldValueText" value="#{employee.dateOfBirth}">
 			<s:convertDateTime type="date" pattern="dd-MM-yyyy" />
 		</h:outputText>
