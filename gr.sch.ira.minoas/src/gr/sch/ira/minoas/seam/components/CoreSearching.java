@@ -647,7 +647,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
                             "SELECT DISTINCT e FROM Employee AS e WHERE (e.active IS TRUE AND e.currentEmployment.active IS TRUE AND e.currentEmployment.school=:school AND e.currentEmployment.schoolYear=:schoolYear) "
                                     + " AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g IN (:specializations) AND e.lastSpecialization MEMBER OF g.specializations)"
                                     + " AND NOT EXISTS(SELECT s FROM Secondment s WHERE s.employee=e AND s.active IS TRUE AND s.sourceUnit=:school AND (:dayOfInterest BETWEEN s.established AND s.dueTo)) "
-                                    + " AND NOT EXISTS(SELECT l FROM Leave l WHERE l.employee=e AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
+                                    + " AND NOT EXISTS(SELECT l FROM EmployeeLeave l WHERE l.employee=e AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
                                     + " AND NOT EXISTS(SELECT a FROM ServiceAllocation a WHERE a.employee=e AND a.active IS TRUE AND a.sourceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo)) "
                                     + " ORDER BY e.lastSpecialization.id, e.lastName ").setParameter("school", school)
                     .setParameter("specializations", specializationGroups).setParameter("schoolYear", schoolYear)
@@ -658,7 +658,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
                     .createQuery(
                             "SELECT DISTINCT e FROM Employee AS e WHERE (e.active IS TRUE AND  e.currentEmployment.active IS TRUE AND e.currentEmployment.school=:school AND e.currentEmployment.schoolYear=:schoolYear) "
                                     + " AND NOT EXISTS(SELECT s FROM Secondment s WHERE s.employee=e AND s.active IS TRUE AND s.sourceUnit=:school AND (:dayOfInterest BETWEEN s.established AND s.dueTo)) "
-                                    + " AND NOT EXISTS(SELECT l FROM Leave l WHERE l.employee=e AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
+                                    + " AND NOT EXISTS(SELECT l FROM EmployeeLeave l WHERE l.employee=e AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
                                     + " AND NOT EXISTS(SELECT a FROM ServiceAllocation a WHERE a.employee=e AND a.active IS TRUE AND a.sourceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo)) "
                                     + " ORDER BY e.lastSpecialization.id, e.lastName ").setParameter("school", school)
                     .setParameter("schoolYear", schoolYear).setParameter("dayOfInterest", dayOfPrecense)
@@ -675,7 +675,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
                             "SELECT DISTINCT e FROM Employee AS e WHERE (e.active IS TRUE AND e.currentEmployment.active IS TRUE AND e.currentEmployment.school=:school AND e.currentEmployment.schoolYear=:schoolYear) "
                                     + " AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g=:specialization AND e.lastSpecialization MEMBER OF g.specializations)"
                                     + " AND NOT EXISTS(SELECT s FROM Secondment s WHERE s.employee=e AND s.active IS TRUE AND s.sourceUnit=:school AND (:dayOfInterest BETWEEN s.established AND s.dueTo)) "
-                                    + " AND NOT EXISTS(SELECT l FROM Leave l WHERE l.employee=e AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
+                                    + " AND NOT EXISTS(SELECT l FROM EmployeeLeave l WHERE l.employee=e AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
                                     + " AND NOT EXISTS(SELECT a FROM ServiceAllocation a WHERE a.employee=e AND a.active IS TRUE AND a.sourceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo)) "
                                     + " ORDER BY e.lastSpecialization.id, e.lastName ")
                     .setParameter("specialization", specializationGroup).setParameter("school", school)
@@ -687,7 +687,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
                     .createQuery(
                             "SELECT DISTINCT e FROM Employee AS e WHERE (e.active IS TRUE AND  e.currentEmployment.active IS TRUE AND e.currentEmployment.school=:school AND e.currentEmployment.schoolYear=:schoolYear) "
                                     + " AND NOT EXISTS(SELECT s FROM Secondment s WHERE s.employee=e AND s.active IS TRUE AND s.sourceUnit=:school AND (:dayOfInterest BETWEEN s.established AND s.dueTo)) "
-                                    + " AND NOT EXISTS(SELECT l FROM Leave l WHERE l.employee=e AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
+                                    + " AND NOT EXISTS(SELECT l FROM EmployeeLeave l WHERE l.employee=e AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
                                     + " AND NOT EXISTS(SELECT a FROM ServiceAllocation a WHERE a.employee=e AND a.active IS TRUE AND a.sourceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo)) "
                                     + " ORDER BY e.lastSpecialization.id, e.lastName ").setParameter("school", school)
                     .setParameter("schoolYear", schoolYear).setParameter("dayOfInterest", dayOfPrecense)
@@ -704,7 +704,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
                             "SELECT DISTINCT e FROM Employee AS e WHERE (e.active IS TRUE AND e.currentEmployment.active IS TRUE AND e.currentEmployment.type=:employmentType AND e.currentEmployment.school=:school AND e.currentEmployment.schoolYear=:schoolYear) "
                                     + " AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g IN (:specializations) AND e.lastSpecialization MEMBER OF g.specializations)"
                                     + " AND NOT EXISTS(SELECT s FROM Secondment s WHERE s.employee=e AND s.active IS TRUE AND s.sourceUnit=:school AND (:dayOfInterest BETWEEN s.established AND s.dueTo)) "
-                                    + " AND NOT EXISTS(SELECT l FROM Leave l WHERE l.employee=e AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
+                                    + " AND NOT EXISTS(SELECT l FROM EmployeeLeave l WHERE l.employee=e AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
                                     + " AND NOT EXISTS(SELECT a FROM ServiceAllocation a WHERE a.employee=e AND a.active IS TRUE AND a.sourceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo)) "
                                     + " ORDER BY e.lastSpecialization.id, e.lastName ").setParameter("school", school)
                     .setParameter("specializations", specializationGroups).setParameter("schoolYear", schoolYear)
@@ -716,7 +716,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
                     .createQuery(
                             "SELECT DISTINCT e FROM Employee AS e WHERE (e.active IS TRUE AND  e.currentEmployment.active IS TRUE AND e.currentEmployment.type=:employmentType AND e.currentEmployment.school=:school AND e.currentEmployment.schoolYear=:schoolYear) "
                                     + " AND NOT EXISTS(SELECT s FROM Secondment s WHERE s.employee=e AND s.active IS TRUE AND s.sourceUnit=:school AND (:dayOfInterest BETWEEN s.established AND s.dueTo)) "
-                                    + " AND NOT EXISTS(SELECT l FROM Leave l WHERE l.employee=e AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
+                                    + " AND NOT EXISTS(SELECT l FROM EmployeeLeave l WHERE l.employee=e AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
                                     + " AND NOT EXISTS(SELECT a FROM ServiceAllocation a WHERE a.employee=e AND a.active IS TRUE AND a.sourceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo)) "
                                     + " ORDER BY e.lastSpecialization.id, e.lastName ").setParameter("school", school)
                     .setParameter("employmentType", employmentType).setParameter("schoolYear", schoolYear)
@@ -740,7 +740,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
                             "SELECT DISTINCT e FROM Employee AS e WHERE (e.active IS TRUE AND e.currentEmployment.active IS TRUE AND e.currentEmployment.type=:employmentType AND e.currentEmployment.school=:school AND e.currentEmployment.schoolYear=:schoolYear) "
                                     + " AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g=:specialization AND e.lastSpecialization MEMBER OF g.specializations)"
                                     + " AND NOT EXISTS(SELECT s FROM Secondment s WHERE s.employee=e AND s.active IS TRUE AND s.sourceUnit=:school AND (:dayOfInterest BETWEEN s.established AND s.dueTo)) "
-                                    + " AND NOT EXISTS(SELECT l FROM Leave l WHERE l.employee=e AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
+                                    + " AND NOT EXISTS(SELECT l FROM EmployeeLeave l WHERE l.employee=e AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
                                     + " AND NOT EXISTS(SELECT a FROM ServiceAllocation a WHERE a.employee=e AND a.active IS TRUE AND a.sourceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo)) "
                                     + " ORDER BY e.lastSpecialization.id, e.lastName ")
                     .setParameter("specialization", specializationGroup).setParameter("school", school)
@@ -752,7 +752,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
                     .createQuery(
                             "SELECT DISTINCT e FROM Employee AS e WHERE (e.active IS TRUE AND e.currentEmployment.active IS TRUE AND e.currentEmployment.type=:employmentType AND e.currentEmployment.school=:school AND e.currentEmployment.schoolYear=:schoolYear) "
                                     + " AND NOT EXISTS(SELECT s FROM Secondment s WHERE s.employee=e AND s.active IS TRUE AND s.sourceUnit=:school AND (:dayOfInterest BETWEEN s.established AND s.dueTo)) "
-                                    + " AND NOT EXISTS(SELECT l FROM Leave l WHERE l.employee=e AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
+                                    + " AND NOT EXISTS(SELECT l FROM EmployeeLeave l WHERE l.employee=e AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
                                     + " AND NOT EXISTS(SELECT a FROM ServiceAllocation a WHERE a.employee=e AND a.active IS TRUE AND a.sourceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo)) "
                                     + " ORDER BY e.lastSpecialization.id, e.lastName ").setParameter("school", school)
                     .setParameter("employmentType", employmentType).setParameter("schoolYear", schoolYear)
@@ -809,7 +809,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
                     .createQuery(
                             "SELECT DISTINCT s FROM Disposal s JOIN FETCH s.employee WHERE (s.active IS TRUE AND s.disposalUnit=:school AND s.schoolYear=:schoolYear AND (:dayOfInterest BETWEEN s.established AND s.dueTo)) "
                                     + " AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g IN (:specializations) AND s.employee.lastSpecialization MEMBER OF g.specializations)"
-                                    + " AND NOT EXISTS(SELECT l FROM Leave l WHERE l.employee=s.employee AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
+                                    + " AND NOT EXISTS(SELECT l FROM EmployeeLeave l WHERE l.employee=s.employee AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
                                     + " ORDER BY s.employee.lastSpecialization.id, s.employee.lastName ")
                     .setParameter("specializations", specializationGroups).setParameter("school", school)
                     .setParameter("schoolYear", schoolYear).setParameter("dayOfInterest", dayOfPrecense)
@@ -818,7 +818,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
             return getEntityManager(em)
                     .createQuery(
                             "SELECT DISTINCT s FROM Disposal s JOIN FETCH s.employee WHERE (s.active IS TRUE AND s.disposalUnit=:school AND s.schoolYear=:schoolYear AND (:dayOfInterest BETWEEN s.established AND s.dueTo)) "
-                                    + " AND NOT EXISTS(SELECT l FROM Leave l WHERE l.employee=s.employee AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
+                                    + " AND NOT EXISTS(SELECT l FROM EmployeeLeave l WHERE l.employee=s.employee AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
                                     + " ORDER BY s.employee.lastSpecialization.id, s.employee.lastName ")
                     .setParameter("school", school).setParameter("schoolYear", schoolYear)
                     .setParameter("dayOfInterest", dayOfPrecense).getResultList();
@@ -1138,7 +1138,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
                     .createQuery(
                             "SELECT DISTINCT s FROM Secondment s JOIN FETCH s.employee WHERE (s.active IS TRUE AND s.targetUnit=:school AND s.schoolYear=:schoolYear AND (:dayOfInterest BETWEEN s.established AND s.dueTo))"
                                     + " AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g IN (:specializations) AND s.employee.lastSpecialization MEMBER OF g.specializations)"
-                                    + " AND NOT EXISTS(SELECT l FROM Leave l WHERE l.employee=s.employee AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))")
+                                    + " AND NOT EXISTS(SELECT l FROM EmployeeLeave l WHERE l.employee=s.employee AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))")
                     .setParameter("specializations", specializationGroups).setParameter("school", school)
                     .setParameter("schoolYear", schoolYear).setParameter("dayOfInterest", dayOfPrecense)
                     .getResultList();
@@ -1146,7 +1146,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
             return getEntityManager(em)
                     .createQuery(
                             "SELECT DISTINCT s FROM Secondment s JOIN FETCH s.employee WHERE (s.active IS TRUE AND s.targetUnit=:school AND s.schoolYear=:schoolYear AND (:dayOfInterest BETWEEN s.established AND s.dueTo))"
-                                    + " AND NOT EXISTS(SELECT l FROM Leave l WHERE l.employee=s.employee AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))")
+                                    + " AND NOT EXISTS(SELECT l FROM EmployeeLeave l WHERE l.employee=s.employee AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))")
                     .setParameter("school", school).setParameter("schoolYear", schoolYear)
                     .setParameter("dayOfInterest", dayOfPrecense).getResultList();
         }
