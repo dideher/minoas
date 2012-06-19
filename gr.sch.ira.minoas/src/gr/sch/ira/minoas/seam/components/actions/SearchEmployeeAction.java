@@ -1,5 +1,9 @@
 package gr.sch.ira.minoas.seam.components.actions;
 
+import gr.sch.ira.minoas.model.employee.Employee;
+import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
+import gr.sch.ira.minoas.seam.components.criteria.EmployeeCriteria;
+
 import java.util.Collection;
 
 import javax.persistence.Query;
@@ -9,11 +13,6 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.datamodel.DataModel;
-
-import gr.sch.ira.minoas.model.employee.Employee;
-import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
-import gr.sch.ira.minoas.seam.components.BaseSeamComponent;
-import gr.sch.ira.minoas.seam.components.criteria.EmployeeCriteria;
 
 @Name(value = "searchEmployeeAction")
 @Scope(ScopeType.PAGE)

@@ -1,18 +1,18 @@
 package gr.sch.ira.minoas.seam.components.management;
 
+import gr.sch.ira.minoas.model.core.Specialization;
+import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
+import gr.sch.ira.minoas.seam.components.home.SpecializationHome;
+
 import java.util.Collection;
 
-import gr.sch.ira.minoas.model.core.Specialization;
 import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.datamodel.DataModel;
-import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.international.StatusMessage.Severity;
-
-import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
-import gr.sch.ira.minoas.seam.components.home.SpecializationHome;
 
 /**
  * @author <a href="mailto:gand@sch.gr">Yorgos Andreadakis</a>

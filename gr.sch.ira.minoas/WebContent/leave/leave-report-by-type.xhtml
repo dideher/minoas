@@ -30,22 +30,54 @@
 
 						<h:panelGrid columns="4">
 
-
-							<s:decorate id="leaveTypeDecoration"
-								template="/layout/doubleLineEdit.xhtml">
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
 								<ui:define name="label">
 									<h:outputText value="Τύπος Άδειας" />
 								</ui:define>
+								<h:panelGrid>
+									<h:panelGroup>
+										<h:inputText id="employeeLeaveTypeCodeTextField"
+											value="#{employeeLeaveCriteria.employeeLeaveTypeCode}"
+											size="3" maxlength="7" styleClass="fieldValueText"
+											required="false">
+											<rich:suggestionbox width="400" id="leaveTypeSuggestionbox"
+												suggestionAction="#{employeeLeaveTypeSuggester.suggest}"
+												var="_leaveType" ajaxSingle="true"
+												for="employeeLeaveTypeCodeTextField"
+												fetchValue="#{_leaveType.legacyCode}">
+												<rich:column>
+													<h:outputText value="#{_leaveType.legacyCode}" />
+												</rich:column>
+												<rich:column>
+													<h:outputText value="#{_leaveType.description}" />
+												</rich:column>
+												<a4j:support ajaxSingle="true" event="onselect"
+													reRender="leaveTypeDescriptionDiv">
+													<f:setPropertyActionListener value="#{_leaveType}"
+														target="#{employeeLeaveCriteria.employeeLeaveType}" />
+												</a4j:support>
 
-								<h:selectOneMenu id="leaveType"
-									value="#{employeeLeaveCriteria.leaveType}">
-									<s:selectItems hideNoSelectionLabel="false"
-										noSelectionLabel="Όλοι οι Τύποι" var="_leaveType"
-										value="#{leaveTypes}" label="#{messages[_leaveType.key]}" />
-									<s:convertEnum />
-									<a4j:support event="onblur" reRender="leaveTargetDecoration"
-										ajaxSingle="true" />
-								</h:selectOneMenu>
+											</rich:suggestionbox>
+										</h:inputText>
+										<h:graphicImage value="/img/icons/arrowDown.jpg" height="16"
+											width="16"
+											onclick="#{rich:component('leaveTypeSuggestionbox')}.callSuggestion(true)"
+											alt="" />
+									</h:panelGroup>
+									<h:panelGroup>
+										<s:div id="leaveTypeDescriptionDiv">
+											<h:outputText
+												value="#{employeeLeaveCriteria.employeeLeaveType.description}"
+												styleClass="fieldValueText"
+												rendered="#{employeeLeaveCriteria.employeeLeaveType ne null}" />
+											<h:outputText value="Άγνωστος Κωδικός Άδειας"
+												styleClass="fieldValueText"
+												rendered="#{employeeLeaveCriteria.employeeLeaveType eq null}" />
+										</s:div>
+									</h:panelGroup>
+								</h:panelGrid>
+
+
 							</s:decorate>
 
 
@@ -77,7 +109,7 @@
 							<s:decorate id="leaveTargetDecoration"
 								template="/layout/doubleLineEdit.xhtml">
 								<ui:define name="label">
-									<h:outputText value="Σχολική Μονάδα Οργανικής Αδειούχων" />
+									<h:outputText value="Οργανική Αδειούχων" />
 								</ui:define>
 
 								<h:inputText id="leaveTarget" styleClass="fieldValueText">
@@ -241,12 +273,11 @@
 							<h:outputText value="Εκπαιδευτικός" />
 						</f:facet>
 						<a4j:commandLink action="selectEmployee"
-								value="#{_leave.employeeLastName} #{_leave.employeeFirstName} του #{_leave.employeeFatherName}">
-								<f:setPropertyActionListener
-									value="#{_leave.id}"
-									target="#{employeeHome.id}" />
-								<s:conversationPropagation type="nest" />
-							</a4j:commandLink>
+							value="#{_leave.employeeLastName} #{_leave.employeeFirstName} του #{_leave.employeeFatherName}">
+							<f:setPropertyActionListener value="#{_leave.id}"
+								target="#{employeeHome.id}" />
+							<s:conversationPropagation type="nested" />
+						</a4j:commandLink>
 					</rich:column>
 					<rich:column>
 						<f:facet name="header">
@@ -285,7 +316,8 @@
 						<f:facet name="header">
 							<h:outputText value="Tύπος Άδειας" />
 						</f:facet>
-						<h:outputText value="#{messages[_leave.leaveTypeKey]}" />
+						<!-- <h:outputText styleClass="fieldValueText" value="#{_leave.leaveTypeKey}" /> -->
+						<h:outputText value="#{_leave.leaveType}" />
 					</rich:column>
 					<rich:column>
 						<f:facet name="header">

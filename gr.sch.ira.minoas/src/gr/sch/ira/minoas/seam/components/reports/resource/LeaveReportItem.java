@@ -1,6 +1,6 @@
 package gr.sch.ira.minoas.seam.components.reports.resource;
 
-import gr.sch.ira.minoas.model.employement.Leave;
+import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 
 import java.util.Date;
 
@@ -16,20 +16,23 @@ public class LeaveReportItem extends EmployeeReportItem {
 	private String leaveTypeKey;
 
 	private String regularUnit;
+	
+	private Integer leaveEffectiveDuration;
 
 	public LeaveReportItem() {
 		super();
 	}
 
-	public LeaveReportItem(Leave leave) {
+	public LeaveReportItem(EmployeeLeave leave) {
 		super(leave.getEmployee());
 		this.comment = leave.getComment();
 		this.dueTo = leave.getDueTo();
 		this.establishedIn = leave.getEstablished();
 		if (leave.getEmployee().getCurrentEmployment() != null)
 			this.regularUnit = leave.getEmployee().getCurrentEmployment().getSchool().getTitle();
-		this.leaveType = leave.getLeaveType().name();
-		this.leaveTypeKey = leave.getLeaveType().getKey();
+		this.leaveType = leave.getEmployeeLeaveType().getDescription();
+		this.leaveTypeKey = leave.getEmployeeLeaveType().getLegacyCode();
+		this.leaveEffectiveDuration = leave.getEffectiveNumberOfDays();
 	}
 
 	public String getComment() {
@@ -106,5 +109,19 @@ public class LeaveReportItem extends EmployeeReportItem {
 	public void setRegularUnit(String regularUnit) {
 		this.regularUnit = regularUnit;
 	}
+
+    /**
+     * @return the leaveEffectiveDuration
+     */
+    public Integer getLeaveEffectiveDuration() {
+        return leaveEffectiveDuration;
+    }
+
+    /**
+     * @param leaveEffectiveDuration the leaveEffectiveDuration to set
+     */
+    public void setLeaveEffectiveDuration(Integer leaveEffectiveDuration) {
+        this.leaveEffectiveDuration = leaveEffectiveDuration;
+    }
 
 }

@@ -41,7 +41,7 @@
 			<h:panelGrid columns="1" width="100%">
 				<h:panelGroup>
 					<h:panelGrid columns="2">
-						<rich:panel id="basicEmployeeInfoPanel">
+						<rich:panel>
 							<f:facet name="header">
 								<h:outputText value="Βασικά Στοιχεία" />
 							</f:facet>
@@ -50,35 +50,6 @@
 							<ui:include src="/employee/basic-info.xhtml">
 								<ui:param name="employee" value="#{employee}" />
 							</ui:include>
-								<h:form id="updateEmployeeForm">
-								<rich:toolBar itemSeparator="line">
-									<a4j:commandLink id="updateBasicInfolink" 
-										reRender="updateBasicInfoModalPanelContent" rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE_BASIC_INFO'))}"
-										oncomplete="#{rich:component('updateBasicInfoModalPanel')}.show()"
-										value="Τροποποίηση Στοιχείων">
-										<h:graphicImage value="/img/icons/edit.png" width="12"
-											height="12" style="border:0" />
-									</a4j:commandLink>
-									<a4j:commandLink id="updateSpecializationLink"
-										reRender="updateSpecializationModalPanelContent" rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE_SPECIALIZATION'))}"
-										oncomplete="#{rich:component('updateSpecializationModalPanel')}.show()"
-										value="Αλλαγή Ειδικότητας">
-										<h:graphicImage value="/img/icons/edit.png" width="12"
-											height="12" style="border:0" />
-									</a4j:commandLink>
-									<a4j:commandLink id="updateRegistryLink"
-										reRender="updateRegularRegistryIDModalPanelContent" rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE_REGULAR_REGISTRY')) and (employeeHome.instance.type eq 'REGULAR')}"
-										oncomplete="#{rich:component('updateRegularRegistryIDModalPanel')}.show()" 
-										value="Ενημέρωση ΑΜ">
-										<h:graphicImage value="/img/icons/edit.png" width="12"
-											height="12" style="border:0" />
-										<f:setPropertyActionListener value="#{employee.regularDetail.id}"
-											target="#{regularEmployeeInfoHome.id}" />
-									</a4j:commandLink>
-								</rich:toolBar>
-								</h:form>
-							</h:panelGrid>
-							
 						</rich:panel>
 
 						<h:panelGroup>
@@ -532,6 +503,7 @@
 											</f:facet>
 											<h:outputText value="#{_disposal.hours}" />
 										</rich:column>
+
 										<rich:column>
 											<f:facet name="header">
 												<h:outputText value="'Ημέρες" />
@@ -644,7 +616,7 @@
 
 
 
-							<rich:tab rendered="#{employeeLeaveItems.rowCount gt 0}">
+							<rich:tab rendered="#{employeeLeaveItems.rowCount gt 0  and (s:hasRole('ADMIN') or s:hasRole('VIEW_LEAVE')) }">
 								<f:facet name="label">
 									<h:outputText value="Ιστορικό Αδειών" />
 								</f:facet>
@@ -662,9 +634,15 @@
 										</f:facet>
 										<rich:column>
 											<f:facet name="header">
+												<h:outputText value="Κωδ." />
+											</f:facet>
+											<h:outputText value="#{_leave.leaveTypeKey}" />
+										</rich:column>
+										<rich:column>
+											<f:facet name="header">
 												<h:outputText value="Τύπος Άδειας" />
 											</f:facet>
-											<h:outputText value="#{messages[_leave.leaveTypeKey]}" />
+											<h:outputText value="#{_leave.leaveType}" />
 										</rich:column>
 										<rich:column>
 											<f:facet name="header">
@@ -681,6 +659,13 @@
 											<h:outputText value="#{_leave.dueTo}">
 												<s:convertDateTime pattern="dd-MM-yyyy" />
 											</h:outputText>
+										</rich:column>
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Διάρκεια" />
+											</f:facet>
+											<h:outputText value="#{_leave.leaveEffectiveDuration}" />
+											
 										</rich:column>
 										<rich:column>
 											<f:facet name="header">

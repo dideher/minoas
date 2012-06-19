@@ -1,6 +1,6 @@
 package gr.sch.ira.minoas.seam.components.reports.resource;
 
-import gr.sch.ira.minoas.model.employement.Leave;
+import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 
 import java.util.Date;
 
@@ -31,10 +31,10 @@ public class EmployeeLeaveReportItem extends EmployeeReportItem {
 		super();
 	}
 
-	public EmployeeLeaveReportItem(Leave leave) {
+	public EmployeeLeaveReportItem(EmployeeLeave leave) {
 		super(leave.getEmployee());
-		this.leaveType = leave.getLeaveType().toString();
-		this.leaveTypeKey = leave.getLeaveType().getKey();
+		this.leaveType = leave.getEmployeeLeaveType().getDescription();
+		this.leaveTypeKey = leave.getEmployeeLeaveType().getLegacyCode();
 		this.established = leave.getEstablished();
 		this.dueTo = leave.getDueTo();
 		this.comment = leave.getComment();
@@ -42,6 +42,7 @@ public class EmployeeLeaveReportItem extends EmployeeReportItem {
 			this.school = leave.getEmployee().getCurrentEmployment().getSchool().getTitle();
 			this.region = leave.getEmployee().getCurrentEmployment().getSchool().getRegionCode();
 		}
+		
 	}
 
 	/**
