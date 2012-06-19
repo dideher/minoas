@@ -794,7 +794,7 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
                         employee.getLastSpecialization().getTitle());
                 // http://greenbytes.de/tech/webdav/rfc6266.html
                 //response.addHeader("Content-Disposition", String.format("attachment; filename*=UTF-8 ' '%s", pdfFile));
-                response.addHeader("Content-Disposition", String.format("attachment; filename=lalala.pdf", pdfFile));
+                response.addHeader("Content-Disposition", String.format("attachment; filename=ADEIA.pdf", pdfFile));
                 response.setContentLength(bytes.length);
                 ServletOutputStream servletOutputStream = response.getOutputStream();
                 servletOutputStream.write(bytes, 0, bytes.length);
