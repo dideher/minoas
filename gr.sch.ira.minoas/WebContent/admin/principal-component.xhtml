@@ -31,8 +31,15 @@
 				<h:inputText value="${principal.password}" required="true" size="20"
 					maxlength="20" styleClass="fieldValueText" />
 			</s:decorate>
-
-
+	
+			<s:decorate template="/layout/doubleLineEdit.xhtml">
+				<ui:define name="label">
+					<h:outputText value="Τηλ. για Πληρ. : " />
+				</ui:define>
+				<h:inputText value="#{principalHome.tempValueHolder1}" required="false" size="25"
+					maxlength="60" styleClass="fieldValueText" />
+			</s:decorate>
+			
 			<s:decorate template="/layout/doubleLineEdit.xhtml">
 				<ui:define name="label">
 					<h:outputText value="Ηλεκτρονικό Ταχυδρομείο : " />

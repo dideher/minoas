@@ -76,7 +76,7 @@ public class Principal extends BaseIDModel {
 	private Telephone informationTelephone;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="WORKING_OFFICE_ID", nullable=false)
+	@JoinColumn(name="WORKING_OFFICE_ID", nullable=true)
 	private WorkingOffice workingOffice;
 
 	/**
