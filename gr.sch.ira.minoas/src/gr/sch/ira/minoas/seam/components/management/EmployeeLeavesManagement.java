@@ -628,6 +628,11 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
                 parameters.put("employeeName", employee.getFirstName());
                 parameters.put("employeeSurname", employee.getLastName());
                 parameters.put("employeeSpecialization", employee.getLastSpecialization().getTitle());
+                parameters.put("employeeSpecializationCode", employee.getLastSpecialization().getId());
+                Employment e = employee.getCurrentEmployment();
+                if(e != null) {
+                    parameters.put("employeeRegularSchool", e.getSchool().getTitle());
+                }
                 parameters.put("leaveDueToDate", leave.getDueTo());
                 parameters.put("leaveEstablishedDate", leave.getEstablished());
                 parameters.put("leaveDayDuration", leave.getEffectiveNumberOfDays());
