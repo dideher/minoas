@@ -759,7 +759,7 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
             EmployeeLeave leave = employeeLeaveHome.getInstance();
             Map<String, Object> parameters = new HashMap<String, Object>();
             
-                if(leave.getEmployeeLeaveType().getLegacyCode().equals("55")) {
+                if(leave.getEmployeeLeaveType().getLegacyCode().equals("41") || leave.getEmployeeLeaveType().getLegacyCode().equals("55")) {
                     parameters.put("textField2", printHelper.getFieldText2());
                     parameters.put("textField3", printHelper.getFieldText3());
                     parameters.put("textField4", printHelper.getFieldText4());
@@ -768,7 +768,6 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
                     parameters.put("textField1", printHelper.getFieldText8());
                     parameters.put("doctorName", printHelper.getFieldText7());
                     parameters.put("dateField1", printHelper.getFieldDate2());
-                    
                 } 
             
             return parameters;

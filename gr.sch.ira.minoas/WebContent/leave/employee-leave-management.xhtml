@@ -150,7 +150,7 @@
 
 										<rich:menuItem icon="/img/icons/printer.png" immediate="true"
 											disabled="#{!(s:hasRole('ADMIN') or s:hasRole('PRINT_LEAVE'))}"
-											rendered="#{employeeLeaveHome.instance.employeeLeaveType.legacyCode eq 55}"
+											rendered="#{(employeeLeaveHome.instance.employeeLeaveType.legacyCode eq 55) or (employeeLeaveHome.instance.employeeLeaveType.legacyCode eq 41)}"
 											action="#{employeeLeavesManagement.prepeareForLeavePrint()}"
 											submitMode="ajax" reRender="printCoverModalPanelContent"
 											value="Εκτύπωση Διαβιβαστικού"
@@ -798,7 +798,7 @@
 							<h:outputText
 								value="Εκτύπωση διαβιβαστικού άδειας του/της εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}." />
 							<h:panelGrid columns="1">
-								<h:panelGrid columns="3">
+								<h:panelGrid columns="5">
 									<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 										<ui:define name="label">
 											<h:outputText value="Ημερομηνία Αίτησης : " />
@@ -836,48 +836,52 @@
 											styleClass="fieldValueText" required="true" readonly="false" />
 
 									</s:decorate>
-								</h:panelGrid>
-
-								<h:panelGrid columns="2">
+									
 									<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 										<ui:define name="label">
 											<h:outputText value="Κοινοποίηση. : " />
 										</ui:define>
-										<rich:pickList
-											value="#{employeeLeavesManagement.leavePrintounRecipientList}">
+										<h:selectManyCheckbox
+											value="#{employeeLeavesManagement.leavePrintounRecipientList}"
+											layout="pageDirection" styleClass="fieldValueText">
 											<s:selectItems
 												value="#{employeeLeavesManagement.leavePrintounRecipientListSource}"
 												itemValue="${recipient}" var="recipient"
 												label="#{recipient.recipientTitle}" />
 											<s:convertEntity />
-										</rich:pickList>
+										</h:selectManyCheckbox>
+
 									</s:decorate>
 
 									<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 										<ui:define name="label">
-											<h:outputText value="Υπογραφή Απο  : "
-												styleClass="fieldValueLabel" />
+											<h:outputText value="Υπογραφή Απο  : " />
 										</ui:define>
-										<h:selectOneListbox
+
+										<h:selectOneMenu
 											value="#{employeeLeavesManagement.leavePrintoutSignature}">
 											<s:selectItems
 												value="#{employeeLeavesManagement.leavePrintoutSignatureSource}"
-												var="signature" label="#{signature.signatureTitle}" />
+												var="signature" label="#{signature.signatureShortAlias}" />
 											<s:convertEntity />
-										</h:selectOneListbox>
+										</h:selectOneMenu>
+
 									</s:decorate>
+								</h:panelGrid>
+
+								<h:panelGrid columns="2">
+									
 
 								</h:panelGrid>
 
 								<!--  this is the dynamic (according to leave type) section  -->
 								<h:panelGroup
-									rendered="${employeeLeaveHome.instance.employeeLeaveType.legacyCode eq 55}">
+									rendered="${(employeeLeaveHome.instance.employeeLeaveType.legacyCode eq 55) or (employeeLeaveHome.instance.employeeLeaveType.legacyCode eq 41 )}">
 
 									<h:panelGrid columns="4">
 										<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 											<ui:define name="label">
-												<h:outputText value="Έτη Υπηρεσίας : "
-													styleClass="fieldValueLabel" />
+												<h:outputText value="Έτη Υπηρεσίας : " />
 											</ui:define>
 											<h:inputText
 												value="#{employeeLeavesManagement.printHelper.fieldText2}"
@@ -887,8 +891,7 @@
 
 										<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 											<ui:define name="label">
-												<h:outputText value="Αναρ. Άδεια Έτους : "
-													styleClass="fieldValueLabel" />
+												<h:outputText value="Αναρ. Άδεια Έτους : " />
 											</ui:define>
 											<h:inputText
 												value="#{employeeLeavesManagement.printHelper.fieldText3}"
@@ -898,8 +901,7 @@
 
 										<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 											<ui:define name="label">
-												<h:outputText value="Αναρ. Αδεια Πενταετίας : "
-													styleClass="fieldValueLabel" />
+												<h:outputText value="Αναρ. Αδεια Πενταετίας : " />
 											</ui:define>
 											<h:inputText
 												value="#{employeeLeavesManagement.printHelper.fieldText4}"
@@ -909,43 +911,39 @@
 
 										<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 											<ui:define name="label">
-												<h:outputText value="Ταχ Διεύθυνση Υπαλλήλου : "
-													styleClass="fieldValueLabel" />
+												<h:outputText value="Ταχ Διεύθυνση Υπαλλήλου : " />
 											</ui:define>
 											<h:inputText
 												value="#{employeeLeavesManagement.printHelper.fieldText5}"
-												size="20" disabled="false" maxlength="50"
-												styleClass="fieldValueText" required="true" readonly="false" />
+												size="20" disabled="false" maxlength="50" required="true"
+												readonly="false" />
 										</s:decorate>
 
 										<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 											<ui:define name="label">
-												<h:outputText value="Τηλ. Επικοινωνίας : "
-													styleClass="fieldValueLabel" />
+												<h:outputText value="Τηλ. Επικοινωνίας : " />
 											</ui:define>
 											<h:inputText
 												value="#{employeeLeavesManagement.printHelper.fieldText6}"
-												size="20" disabled="false" maxlength="50"
-												styleClass="fieldValueText" required="true" readonly="false" />
+												size="12" disabled="false" maxlength="18" required="true"
+												readonly="false" />
 										</s:decorate>
 
 
 										<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 											<ui:define name="label">
-												<h:outputText value="Όνομα Ιατρού : "
-													styleClass="fieldValueLabel" />
+												<h:outputText value="Όνομα Ιατρού : " />
 											</ui:define>
 											<h:inputText
 												value="#{employeeLeavesManagement.printHelper.fieldText7}"
-												size="30" disabled="false" maxlength="50"
-												styleClass="fieldValueText" required="true" readonly="false" />
+												size="20" disabled="false" maxlength="50" required="true"
+												readonly="false" />
 										</s:decorate>
 
 
 										<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 											<ui:define name="label">
-												<h:outputText value="Όνομα Νοσοκομείου : "
-													styleClass="fieldValueLabel" />
+												<h:outputText value="Όνομα Νοσοκομείου : " />
 											</ui:define>
 											<h:inputText
 												value="#{employeeLeavesManagement.printHelper.fieldText8}"
@@ -955,8 +953,7 @@
 
 										<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 											<ui:define name="label">
-												<h:outputText value="Ημ/νια Συνεδριάσης Επιτροπής : "
-													styleClass="fieldValueLabel" />
+												<h:outputText value="Ημ/νια Συνεδριάσης Επιτροπής : " />
 											</ui:define>
 											<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
 												style="width:50px" enableManualInput="true"
