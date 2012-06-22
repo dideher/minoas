@@ -876,14 +876,14 @@
 									<ui:define name="label">
 										<h:outputText value="Επώνυμο" />
 									</ui:define>
-									<h:inputText value="#{employeeHome.instance.lastName}" required="true" maxlength="40" size="20" />
+									<h:inputText value="#{employeeHome.instance.lastName}" required="true" maxlength="35" size="20" />
 								</s:decorate>
 																
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
 									<ui:define name="label">
 										<h:outputText value="Όνομα" />
 									</ui:define>
-									<h:inputText value="#{employeeHome.instance.firstName}" required="true" maxlength="30" size="14" />
+									<h:inputText value="#{employeeHome.instance.firstName}" required="true" maxlength="25" size="14" />
 								</s:decorate>
 								
 								
@@ -891,14 +891,14 @@
 									<ui:define name="label">
 										<h:outputText value="Όνομα Πατρός" />
 									</ui:define>
-									<h:inputText value="#{employeeHome.instance.fatherName}" required="true" maxlength="40" size="20" />
+									<h:inputText value="#{employeeHome.instance.fatherName}" required="true" maxlength="25" size="20" />
 								</s:decorate>
 								
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
 									<ui:define name="label">
 										<h:outputText value="Όνομα Μητρός" />
 									</ui:define>
-									<h:inputText value="#{employeeHome.instance.motherName}" required="false" maxlength="40" size="20" />
+									<h:inputText value="#{employeeHome.instance.motherName}" required="false" maxlength="25" size="20" />
 								</s:decorate>
 								
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
