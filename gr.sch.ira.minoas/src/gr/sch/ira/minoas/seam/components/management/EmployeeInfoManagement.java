@@ -1,15 +1,20 @@
 package gr.sch.ira.minoas.seam.components.management;
 
-import gr.sch.ira.minoas.model.employee.EmployeeInfo;
+import java.util.Collection;
+
+import gr.sch.ira.minoas.model.employee.Employee;
+import gr.sch.ira.minoas.model.employee.RankInfo;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.CoreSearching;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
 import gr.sch.ira.minoas.seam.components.home.EmployeeInfoHome;
 
 import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.annotations.datamodel.DataModel;
 import org.jboss.seam.international.StatusMessage.Severity;
 
 /**
@@ -34,6 +39,11 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 	@In(required = false)
 	EmployeeInfoHome employeeInfoHome;
 
+	/**
+	 * Employee's rank transitions history
+	 */
+	@DataModel(scope=ScopeType.PAGE, value="rankInfoHistory")
+	private Collection<RankInfo> rankInfoHistory = null;
 
 	/**
 	 * @return the employeeHome
@@ -80,6 +90,21 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 	}
 
 	
+	
+	/**
+	 * @return the rankInfoHistory
+	 */
+	public Collection<RankInfo> getRankInfoHistory() {
+		return rankInfoHistory;
+	}
+
+	/**
+	 * @param rankInfoHistory the rankInfoHistory to set
+	 */
+	public void setRankInfoHistory(Collection<RankInfo> rankInfoHistory) {
+		this.rankInfoHistory = rankInfoHistory;
+	}
+
 	public String modifyEmployeeInfo() {
         if(employeeInfoHome != null && employeeInfoHome.isManaged()) {
             info("trying to modify work experience #0", employeeInfoHome);
@@ -98,4 +123,12 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
             return ACTION_OUTCOME_FAILURE;
         }
     }
+	
+	
+	@Factory(value="rankInfoHistory",autoCreate=true)
+	public void constructRankInfoHistory() {
+	    Employee employee = getEmployeeHome().getInstance();
+	    info("constructing evaluation history for employee #0", employee);
+	    setRankInfoHistory(coreSearching.getRankInfoHistory(employee));
+	}
 }

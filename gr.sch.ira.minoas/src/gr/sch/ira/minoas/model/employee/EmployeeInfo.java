@@ -7,6 +7,8 @@ import java.util.Date;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -16,9 +18,7 @@ import javax.persistence.Entity;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import sun.text.resources.DateFormatZoneData_el;
-
-
+import gr.sch.ira.minoas.model.employee.SectorType;
 
 /**
  * @author <a href="mailto:gand@sch.gr">Yorgos Andreadakis</a>
@@ -52,15 +52,37 @@ public class EmployeeInfo extends BaseIDModel {
 	 * Greek Official Gazette Αppointment Date (Ημερομηνία ΦΕΚ Διορισμού)
 	 */
 	@Basic
-	@Column(name = "APPOINTMENT_GOG_DATE")
+	@Column(name = "GOG_APPOINTMENT_DATE")
 	private Date gogAppointmentDate;
 
+	
+	/**
+	 * Entry into service Act (Πράξη ανάληψης υπηρεσίας)
+	 */
+	@Basic
+	@Column(name = "ENTRY_INTO_SERVICE_ACT", length = 5)
+	private String entryIntoServiceAct;
+	
 	/**
 	 * Entry into service date (Ημερομηνία ανάληψης υπηρεσίας)
 	 */
 	@Basic
 	@Column(name = "ENTRY_INTO_SERVICE_DATE")
 	private Date entryIntoServiceDate;
+	
+	/**
+	 * Permanent Employee Act (Πράξη Μονιμοποίησης)
+	 */
+	@Basic
+	@Column(name = "PERMANENT_EMPLOYEE_ACT", length = 8)
+	private String permanentEmployeeAct;
+	
+	/**
+	 * Permanent Empoloyee Act Date (Ημερομηνία Πράξης Μονιμοποίησης)
+	 */
+	@Basic
+	@Column(name = "PERMANENT_EMPLOYEE_ACT_DATE")
+	private Date permanentEmployeeActDate;
 
 	/**
 	 * Has a Master's Degree (Κατοχή Μεταπτυχιακού Διπλώματος)
@@ -68,6 +90,13 @@ public class EmployeeInfo extends BaseIDModel {
 	@Basic
 	@Column(name = "HAS_A_MASTER_DEGREE")
 	private Boolean hasAMasterDegree;
+	
+	/**
+	 * Master's Degree Date (Ημερομηνία Μεταπτυχιακού Διπλώματος)
+	 */
+	@Basic
+	@Column(name = "MSC_DATE")
+	private Date mscDate;
 
 	/**
 	 * Has a PhD Degree (Κατοχή Διδακτορικού)
@@ -75,6 +104,13 @@ public class EmployeeInfo extends BaseIDModel {
 	@Basic
 	@Column(name = "HAS_A_PHD_DEGREE")
 	private Boolean hasAPhD;
+	
+	/**
+	 * PhD Degree Date (Ημερομηνία Διδακτορικού)
+	 */
+	@Basic
+	@Column(name = "PHD_DATE")
+	private Date phdDate;
 
 	/**
 	 * Is a National School for Public Administration Graduate (Απόφοιτος της Σχολής Δημόσιας Διοίκησης)
@@ -84,10 +120,33 @@ public class EmployeeInfo extends BaseIDModel {
 	private Boolean isANatSchPubAdminGraduate;
 	
 	/**
+	 * National School for Public Administration Degree Date (Ημερομηνία Σχολής Δημόσιας Διοίκησης)
+	 */
+	@Basic
+	@Column(name = "NAT_SCH_PUB_ADMIN_DATE")
+	private Date natSchPubAdminDate;
+	
+	/**
+	 * Is Recently Hired (Νεοδιορισμένος)
+	 */
+	@Basic
+	@Column(name = "IS_RECENTLY_HIRED")
+	private Boolean isRecentlyHired;
+
+	
+	/**
 	 * Rank Information (Στοιχεία Βαθμού και Μισθολογικού Κλιμακίου)
 	 */
 	@OneToOne(mappedBy="employeeInfo")
 	private RankInfo rankInfo;
+	
+	
+	/**
+	 * Public/Private Sector (Δημόσιος/Ιδιωτικός Τομέας)
+	 */
+	@Enumerated(EnumType.STRING)
+	@Column(name = "SECTOR", nullable = false, updatable = false)
+	private SectorType sector;
 
 	
 	
@@ -210,5 +269,112 @@ public class EmployeeInfo extends BaseIDModel {
 	public void setRankInfo(RankInfo rankInfo) {
 		this.rankInfo = rankInfo;
 	}
+
+	/**
+	 * @return the mscDate
+	 */
+	public Date getMscDate() {
+		return mscDate;
+	}
+
+	/**
+	 * @param mscDate the mscDate to set
+	 */
+	public void setMscDate(Date mscDate) {
+		this.mscDate = mscDate;
+	}
+
+	/**
+	 * @return the phdDate
+	 */
+	public Date getPhdDate() {
+		return phdDate;
+	}
+
+	/**
+	 * @param phdDate the phdDate to set
+	 */
+	public void setPhdDate(Date phdDate) {
+		this.phdDate = phdDate;
+	}
+
+	/**
+	 * @return the natSchPubAdminDate
+	 */
+	public Date getNatSchPubAdminDate() {
+		return natSchPubAdminDate;
+	}
+
+	/**
+	 * @param natSchPubAdminDate the natSchPubAdminDate to set
+	 */
+	public void setNatSchPubAdminDate(Date natSchPubAdminDate) {
+		this.natSchPubAdminDate = natSchPubAdminDate;
+	}
+
+	/**
+	 * @return the entryIntoServiceAct
+	 */
+	public String getEntryIntoServiceAct() {
+		return entryIntoServiceAct;
+	}
+
+	/**
+	 * @param entryIntoServiceAct the entryIntoServiceAct to set
+	 */
+	public void setEntryIntoServiceAct(String entryIntoServiceAct) {
+		this.entryIntoServiceAct = entryIntoServiceAct;
+	}
+
+	/**
+	 * @return the permanentEmployeeAct
+	 */
+	public String getPermanentEmployeeAct() {
+		return permanentEmployeeAct;
+	}
+
+	/**
+	 * @param permanentEmployeeAct the permanentEmployeeAct to set
+	 */
+	public void setPermanentEmployeeAct(String permanentEmployeeAct) {
+		this.permanentEmployeeAct = permanentEmployeeAct;
+	}
+
+	/**
+	 * @return the permanentEmployeeActDate
+	 */
+	public Date getPermanentEmployeeActDate() {
+		return permanentEmployeeActDate;
+	}
+
+	/**
+	 * @param permanentEmployeeActDate the permanentEmployeeActDate to set
+	 */
+	public void setPermanentEmployeeActDate(Date permanentEmployeeActDate) {
+		this.permanentEmployeeActDate = permanentEmployeeActDate;
+	}
+
+	/**
+	 * @return the isRecentlyHired
+	 */
+	public Boolean getIsRecentlyHired() {
+		return isRecentlyHired;
+	}
+
+	/**
+	 * @param isRecentlyHired the isRecentlyHired to set
+	 */
+	public void setIsRecentlyHired(Boolean isRecentlyHired) {
+		this.isRecentlyHired = isRecentlyHired;
+	}
+
+	public void setSector(SectorType sector) {
+		this.sector = sector;
+	}
+
+	public SectorType getSector() {
+		return sector;
+	}
+	
 	
 }

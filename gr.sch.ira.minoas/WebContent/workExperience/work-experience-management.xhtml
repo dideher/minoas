@@ -304,7 +304,7 @@
 
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
 									<ui:define name="label">
-										<h:outputText value="Λόγος / Επεξήγησει Διαγραφής Προϋπηρεσίας" />
+										<h:outputText value="Λόγος / Επεξήγηση Διαγραφής Προϋπηρεσίας" />
 									</ui:define>
 									<h:inputTextarea value="#{workExperienceHome.instance.deletedComment}" required="true" rows="2" cols="40"></h:inputTextarea>
 									</s:decorate>
@@ -329,6 +329,7 @@
 		</rich:modalPanel>
 		</a4j:region>
 
+<!-- 
 		<rich:modalPanel id="cancelModalPanel" autosized="true" width="350">
 			<f:facet name="header">
 				<h:outputText value="Να ακυρωθή η άδεια ?"
@@ -374,7 +375,7 @@
 			</h:form>
 		</rich:modalPanel>
 
-
+ -->
 
 		<!-- *********************************************** -->
 		<!-- ** create modal panel -->
@@ -403,7 +404,7 @@
 						<a4j:outputPanel id="createWorkExperienceModalPanelContent"
 							layout="inline">
 							<h:outputText
-								value="Συμπληρώστε τα στοιχεία της παρακάτω φόρμας για να εισάγεται νέα προϋπηρεσία για τον εκπαιδευτικό." />
+								value="Συμπληρώστε τα στοιχεία της παρακάτω φόρμας για να εισάγετε νέα προϋπηρεσία για τον εκπαιδευτικό." />
 
 
 							<h:panelGrid columns="5">

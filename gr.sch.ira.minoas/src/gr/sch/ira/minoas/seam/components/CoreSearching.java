@@ -14,7 +14,9 @@ import gr.sch.ira.minoas.model.core.TeachingRequirement;
 import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
+import gr.sch.ira.minoas.model.employee.Evaluation;
 import gr.sch.ira.minoas.model.employee.Person;
+import gr.sch.ira.minoas.model.employee.RankInfo;
 import gr.sch.ira.minoas.model.employee.RankType;
 import gr.sch.ira.minoas.model.employement.Disposal;
 import gr.sch.ira.minoas.model.employement.DisposalTargetType;
@@ -1252,7 +1254,32 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         info("found totally '#0' work experience(s) in employee's '#1' history.", result.size(), employee);
         return result;
     }
+
     
+    @SuppressWarnings("unchecked")
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public Collection<Evaluation> getEvaluationHistory(Employee employee) {
+        Collection<Evaluation> result = null;
+        info("searching employee's '#0' evaluations.", employee);
+        result = entityManager.createQuery(
+            "SELECT s from Evaluation s WHERE s.employee=:employee AND s.deleted IS FALSE ORDER BY s.evaluationDate")
+            .setParameter("employee", employee).getResultList();
+        info("found totally '#0' evaluation(s) in employee's '#1' history.", result.size(), employee);
+        return result;
+    }
+   
+    
+    @SuppressWarnings("unchecked")
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public Collection<RankInfo> getRankInfoHistory(Employee employee) {
+        Collection<RankInfo> result = null;
+        info("searching employee's '#0' rank information.", employee);
+        result = entityManager.createQuery(
+            "SELECT r from RankInfo r WHERE r.employeeInfo=:employeeInfo ORDER BY r.lastRankDate, r.lastSalaryGradeDate")
+            .setParameter("employeeInfo", employee.getEmployeeInfo()).getResultList();
+        info("found totally '#0' rank transitions in employee's '#1' history.", result.size(), employee);
+        return result;
+    }
 
     @Factory(value = "rankTypes")
     public RankType[] getRankTypes() {

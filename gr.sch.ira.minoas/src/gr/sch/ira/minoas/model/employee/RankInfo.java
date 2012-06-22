@@ -172,6 +172,20 @@ public class RankInfo extends BaseIDModel {
 	@Basic
 	@Column(name = "LAST_SALARY_GRADE_DATE")
 	private Date lastSalaryGradeDate;
+	
+	/**
+	 * Surplus Time in the Rank (Πλεονάζων Χρόνος στο Βαθμό σε αριθμό ημερών)
+	 */
+	@Basic
+	@Column(name = "SURPLUS_TIME_IN_RANK")
+	private Integer surplusTimeInRank;
+	
+	/**
+	 * Surplus Time in the Salary Grade (Πλεονάζων Χρόνος στο Μ.Κ. σε αριθμό ημερών)
+	 */
+	@Basic
+	@Column(name = "SURPLUS_TIME_IN_SALARY_GRADE")
+	private Integer surplusTimeInSalaryGrade;
 
 	/**
 	 * Educational Level (Βαθμός Εκπαίδευσης)
@@ -561,4 +575,41 @@ public class RankInfo extends BaseIDModel {
 	public void setEmployeeInfo(EmployeeInfo employeeInfo) {
 		this.employeeInfo = employeeInfo;
 	}
+
+	/**
+	 * @return the surplusTimeInRank
+	 */
+	public Integer getSurplusTimeInRank() {
+		return surplusTimeInRank;
+	}
+
+	/**
+	 * @param surplusTimeInRank the surplusTimeInRank to set
+	 */
+	public void setSurplusTimeInRank(Integer surplusTimeInRank) {
+		this.surplusTimeInRank = surplusTimeInRank;
+	}
+
+	/**
+	 * @return the surplusTimeInSalaryGrade
+	 */
+	public Integer getSurplusTimeInSalaryGrade() {
+		return surplusTimeInSalaryGrade;
+	}
+
+	/**
+	 * @param surplusTimeInSalaryGrade the surplusTimeInSalaryGrade to set
+	 */
+	public void setSurplusTimeInSalaryGrade(Integer surplusTimeInSalaryGrade) {
+		this.surplusTimeInSalaryGrade = surplusTimeInSalaryGrade;
+	}
+
+	/**
+	 * @return the startingsalarygrade
+	 */
+	public static int getStartingsalarygrade() {
+		return startingSalaryGrade;
+	}
+	
+	
 }

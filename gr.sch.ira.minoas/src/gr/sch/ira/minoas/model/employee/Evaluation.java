@@ -13,7 +13,8 @@ import javax.persistence.Entity;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import gr.sch.ira.minoas.model.BaseIDModel;
+import gr.sch.ira.minoas.model.BaseIDDeleteAwareModel;
+
 
 /**
  * @author <a href="mailto:gand@sch.gr">Yorgos Andreadakis</a>
@@ -21,7 +22,7 @@ import gr.sch.ira.minoas.model.BaseIDModel;
 @Entity
 @Table(name = "EVALUATION")
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
-public class Evaluation extends BaseIDModel {
+public class Evaluation extends BaseIDDeleteAwareModel {
 
 	/**
 	 * Comment for <code>serialVersionUID</code>
@@ -62,6 +63,9 @@ public class Evaluation extends BaseIDModel {
 	@Basic
 	@Column(name = "EVALUATION_END_DATE")
 	private Date evaluationEndDate;
+	
+	@Column(name="COMMENT", nullable = true)
+	private String comment;
 
 	/**
 	 * @return the employee
@@ -131,6 +135,20 @@ public class Evaluation extends BaseIDModel {
 	 */
 	public void setEvaluationEndDate(Date evaluationEndDate) {
 		this.evaluationEndDate = evaluationEndDate;
+	}
+
+	/**
+	 * @return the comment
+	 */
+	public String getComment() {
+		return comment;
+	}
+
+	/**
+	 * @param comment the comment to set
+	 */
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 	
 }
