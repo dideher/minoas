@@ -488,7 +488,7 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
     
     protected boolean isRegularRegistryIDValid(String registryID) {
         if(registryID!=null)
-            return Pattern.matches("\\d{7}", registryID);
+            return Pattern.matches("\\d{6,7}", registryID);
         else return false;
     }
     
@@ -511,6 +511,19 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
     
     @Transactional(TransactionPropagationType.REQUIRED)
     public String updateEmployeeRegularRegistry() {
+        
+        /* there is a rare situation (due bugs of the past) to have a regular employee with no regular employee info */
+        if(getEmployeeHome().isManaged() && (!getRegularEmployeeInfoHome().isManaged())) {
+            RegularEmployeeInfo i = new RegularEmployeeInfo();
+            i.setInsertedBy(getPrincipal());
+            i.setInsertedOn(new Date());
+            i.setEmployee(getEmployeeHome().getInstance());
+            i.setRegistryID("1234567");
+            getEntityManager().persist(i);
+            getRegularEmployeeInfoHome().setInstance(i);
+            getEmployeeHome().getInstance().setRegularDetail(i);
+         }
+        
         if (getEmployeeHome().isManaged() && getRegularEmployeeInfoHome().isManaged()) {
             Employee employee = getEmployeeHome().getInstance();
             RegularEmployeeInfo employeeInfo = getRegularEmployeeInfoHome().getInstance();
