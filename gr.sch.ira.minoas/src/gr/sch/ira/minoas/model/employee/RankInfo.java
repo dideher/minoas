@@ -206,6 +206,20 @@ public class RankInfo extends BaseIDModel {
 		this.salaryGrade = salaryGrade;
 		this.educationalLevel = educationalLevel;
 	}
+	
+	
+	/**
+	 * @param rank
+	 * @param salaryGrade
+	 * @param educationalLevel
+	 */
+	public RankInfo(RankInfo rankInfo) {
+		super();
+		this.rank = rankInfo.getRank();
+		this.salaryGrade = rankInfo.getSalaryGrade();
+		this.educationalLevel = rankInfo.getEducationalLevel();
+	}
+	
 
 	/**
 	 * 

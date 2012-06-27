@@ -107,15 +107,15 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 
 	public String modifyEmployeeInfo() {
         if(employeeInfoHome != null && employeeInfoHome.isManaged()) {
-            info("trying to modify work experience #0", employeeInfoHome);
+            info("trying to modify employee info #0", employeeInfoHome);
             /* check if the work experience dates are allowed. */
 //            EmployeeInfo employeeInfo = employeeInfoHome.getInstance();
 //            if(workExp.getToDate().compareTo(workExp.getFromDate()) <= 0 ) {
 //            	facesMessages.add(Severity.ERROR, "Οι ημ/νιες έναρξης και λήξης της προϋπηρεσίας, έτσι όπως τις τροποποιήσατε, είναι μή αποδεκτές.");
 //                return ACTION_OUTCOME_FAILURE;
 //            } else {
-                info("employee's #0 employee info #1 has been updated!", employeeInfoHome.getInstance().getEmployee(), employeeInfoHome.getInstance());
                 employeeInfoHome.update();
+                info("employee's #0 employee info #1 has been updated!", employeeInfoHome.getInstance().getEmployee(), employeeInfoHome.getInstance());
                 return ACTION_OUTCOME_SUCCESS;
 //            }
         } else {
@@ -124,6 +124,18 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
         }
     }
 	
+	public String insertRankInfo() {
+        if(employeeInfoHome != null && employeeInfoHome.isManaged()) {
+            info("trying to insert a rank info for employee info #0", employeeInfoHome);
+                employeeInfoHome.insertRankInfo();
+                info("employee's #0 Rank Info #1 has been updated!", employeeInfoHome.getInstance().getEmployee(), employeeInfoHome.getInstance().getRankInfo());
+                return ACTION_OUTCOME_SUCCESS;
+
+        } else {
+            facesMessages.add(Severity.ERROR, "employeeInfo home #0 is not managed, thus #1 can't be inserted.", employeeInfoHome, employeeInfoHome.getInstance().getRankInfo());
+            return ACTION_OUTCOME_FAILURE;
+        }
+    }
 	
 	@Factory(value="rankInfoHistory",autoCreate=true)
 	public void constructRankInfoHistory() {

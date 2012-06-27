@@ -4,6 +4,7 @@
 package gr.sch.ira.minoas.seam.components.home;
 
 import gr.sch.ira.minoas.model.employee.EmployeeInfo;
+import gr.sch.ira.minoas.model.employee.RankInfo;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
@@ -75,7 +76,21 @@ public class EmployeeInfoHome extends MinoasEntityHome<EmployeeInfo> {
 	public String update() {
 		return super.update();
 	}
+
 	
+	/**
+	 * @see gr.sch.ira.minoas.seam.components.home.MinoasEntityHome#update()
+	 */
+	@Transactional
+	public String insertRankInfo() {
+		
+		EmployeeInfo employeeInfo = (EmployeeInfo)super.getInstance();
+		RankInfo newRankInfo = new RankInfo(employeeInfo.getRankInfo());
+		
+		employeeInfo.setRankInfo(newRankInfo);
+	
+		return update();
+	}
 
 
 }
