@@ -135,10 +135,10 @@
 										target="#{employeeInfoHome.id}" />
 								</a4j:commandLink>
 
-<!-- 
+ 
 								<a4j:commandLink id="insertlink"
 									rendered="#{(s:hasRole('ADMIN') or s:hasRole('MODIFY_EMPLOYEE_INFO'))}"
-									action="#{employeeInfoHome.rankinfo.clearInstance()}"
+									action="#{employeeInfoHome.rankInfo.clearInstance()}"
 									reRender="insertRankInfoModalPanel"
 									oncomplete="#{rich:component('insertRankInfoModalPanel')}.show()"
 									value="Εισαγωγή RankInfo"  styleClass="rich-toolbar-item">
@@ -147,7 +147,7 @@
 									<f:setPropertyActionListener value="#{employee.employeeInfo.id}"
 										target="#{employeeInfoHome.id}" />
 								</a4j:commandLink>								
- -->	
+ 	
 
 								<a4j:commandButton id="createButton"
 									disabled="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_WORKEXPERIENCE'))}"
