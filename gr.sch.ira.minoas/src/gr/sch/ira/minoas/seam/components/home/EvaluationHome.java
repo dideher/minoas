@@ -8,7 +8,6 @@ import java.util.Collection;
 import java.util.Date;
 
 import gr.sch.ira.minoas.model.employee.Evaluation;
-import gr.sch.ira.minoas.model.employement.Leave;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.jboss.seam.ScopeType;
