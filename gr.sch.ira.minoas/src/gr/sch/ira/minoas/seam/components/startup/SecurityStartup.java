@@ -86,17 +86,27 @@ public class SecurityStartup extends BaseDatabaseAwareSeamComponent {
 
 		/* Employee */
 		createRole("ADD_EMPLOYEE", "Add New Employee", admin);
+		
+		
 		createRole("ADD_EMPLOYEE_HOURLY_BASED", "Add New Hourly Based Employee", admin);
 		createRole("ADD_EMPLOYEE_DEPUTY", "Add New Deputy Employee", admin);
 		createRole("ADD_EMPLOYEE_REGULAR", "Add New Regular Employee", admin);
-
+        
+		/* Employee Management */
 		createRole("MANAGE_EMPLOYEE", "Manage Employee", admin);
+        
+        createRole("MANAGE_EMPLOYEE_BASIC_INFO", "Manage Employee's Basic Info", admin);
+        createRole("MANAGE_EMPLOYEE_SPECIALIZATION", "Manage Employee's Specialization", admin);
+        createRole("MANAGE_EMPLOYEE_REGULAR_REGISTRY", "Manage Employee's Regular Registry ID", admin);
+        
 		createRole("MANAGE_EMPLOYMENT", "Manage Employment", admin);
 		createRole("MANAGE_EMPLOYMENT_HOURLY_BASED", "Manage Hourly Based Employment", admin);
 		createRole("MANAGE_EMPLOYMENT_DEPUTY", "Manage Deputy Employment", admin);
 		createRole("MANAGE_EMPLOYMENT_REGULAR", "Manage Regular Employment", admin);
 		createRole("DELETE_EMPLOYMENT_REGULAR", "Delete Regular Employment", admin);
 		createRole("DELETE_EMPLOYMENT_DEUPTY", "Delete Deputy Employment", admin);
+		
+		
 
 		createRole("VIEW_EMPLOYEE", "View Employee", admin);
 
@@ -116,6 +126,8 @@ public class SecurityStartup extends BaseDatabaseAwareSeamComponent {
 		createRole("ADD_LEAVE", "Add New Leave", admin);
 		createRole("MANAGE_LEAVE", "Manage Leave", admin);
 		createRole("VIEW_LEAVE", "View Leave", admin);
+		createRole("PRINT_LEAVE", "Print Leave", admin);
+		createRole("DELETE_LEAVE", "Delete Leave", admin);
 		/* Disposal */
 		createRole("ADD_DISPOSAL", "Add New Disposal", admin);
 		createRole("MANAGE_DISPOSAL", "Manage Disposal", admin);

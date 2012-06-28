@@ -17,7 +17,6 @@
     <class>gr.sch.ira.minoas.model.employement.ServiceAllocation</class>
     <class>gr.sch.ira.minoas.model.employement.SecondmentUnit</class>
     <class>gr.sch.ira.minoas.model.employement.Secondment</class>
-    <class>gr.sch.ira.minoas.model.employement.Leave</class>
     <class>gr.sch.ira.minoas.model.employement.Employment</class>
     <class>gr.sch.ira.minoas.model.employement.DisposalUnit</class>
     <class>gr.sch.ira.minoas.model.employement.Disposal</class>
@@ -53,6 +52,12 @@
     <class>gr.sch.ira.minoas.model.employee.Penalty</class>
     <class>gr.sch.ira.minoas.model.employee.EmployeeInfo</class>
     <class>gr.sch.ira.minoas.model.employee.EvolutionCDR</class>
+    <class>gr.sch.ira.minoas.model.employement.EmployeeLeaveType</class>
+    <class>gr.sch.ira.minoas.model.core.WorkingOffice</class>
+    <class>gr.sch.ira.minoas.model.printout.PrintoutSignatures</class>
+    <class>gr.sch.ira.minoas.model.printout.PrintoutRecipients</class>
+    <class>gr.sch.ira.minoas.model.printout.PrintoutHistory</class>
+    <class>gr.sch.ira.minoas.model.employement.EmployeeLeave</class>
     <properties>
       <!--
         <property name="hibernate.dialect"

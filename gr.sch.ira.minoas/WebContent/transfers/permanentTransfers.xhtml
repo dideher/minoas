@@ -55,7 +55,7 @@
 
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
 									<ui:define name="label">
-										<h:outputText value="Τύπος Μετάθεσεις" />
+										<h:outputText value="Τύπος Μετάθεσης" />
 									</ui:define>
 
 									<h:selectOneMenu
@@ -183,7 +183,7 @@
 										value="#{_outstandingPermanentTransfer.employeeSpecialization}" />
 								</rich:column>
 								<rich:column style="text-align:center">
-									<f:facet name="header">Τύπος Μετάθεσεις</f:facet>
+									<f:facet name="header">Τύπος Μετάθεσης</f:facet>
 									<h:outputText
 										value="#{messages[_outstandingPermanentTransfer.transferTypeKey]}" />
 								</rich:column>
@@ -268,11 +268,11 @@
 
 									<s:decorate template="/layout/doubleLineEdit.xhtml">
 										<ui:define name="label">
-											<h:outputText value="Τύπος Μετάθεσεις : " />
+											<h:outputText value="Τύπος Μετάθεσης : " />
 										</ui:define>
 										<h:selectOneMenu
 											value="#{permanentTransferHome.instance.type}">
-											<s:selectItems noSelectionLabel="Επιλέξτε Τύπο Μετάθεσεις"
+											<s:selectItems noSelectionLabel="Επιλέξτε Τύπο Μετάθεσης"
 												var="_permanentTransferType"
 												value="#{permanentTransferTypes}"
 												label="#{messages[_permanentTransferType.key]}">

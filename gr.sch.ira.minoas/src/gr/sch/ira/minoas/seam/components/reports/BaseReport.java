@@ -3,8 +3,8 @@ package gr.sch.ira.minoas.seam.components.reports;
 import gr.sch.ira.minoas.core.CoreUtils;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employement.Disposal;
+import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 import gr.sch.ira.minoas.model.employement.Employment;
-import gr.sch.ira.minoas.model.employement.Leave;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.ServiceAllocation;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
@@ -58,9 +58,9 @@ public abstract class BaseReport extends BaseDatabaseAwareSeamComponent {
 		return returnValue;
 	}
 
-	protected Collection<LeaveReportItem> convertLeaveCollection(Collection<Leave> leaves) {
+	protected Collection<LeaveReportItem> convertLeaveCollection(Collection<EmployeeLeave> leaves) {
 		Collection<LeaveReportItem> returnValue = new ArrayList<LeaveReportItem>(leaves.size());
-		for (Leave leave : leaves) {
+		for (EmployeeLeave leave : leaves) {
 			returnValue.add(new LeaveReportItem(leave));
 		}
 		return returnValue;

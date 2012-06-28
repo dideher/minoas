@@ -1,5 +1,6 @@
 package gr.sch.ira.minoas.seam.components.home;
 
+import gr.sch.ira.minoas.model.core.Telephone;
 import gr.sch.ira.minoas.model.security.Principal;
 
 import org.jboss.seam.ScopeType;
@@ -19,22 +20,10 @@ public class PrincipalHome extends MinoasEntityHome<Principal> {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@Transactional
-	public String disablePrincipal() {
-		Principal p = getInstance();
-		p.setActive(Boolean.FALSE);
-		getLogger().info("Principal '#0' disabled principal '#1'", getPrincipalName(), p.getUsername());
-		return super.update();
-	}
-
-	@Transactional
-	public String enablePrincipal() {
-		Principal p = getInstance();
-		p.setActive(Boolean.TRUE);
-		getLogger().info("Principal '#0' enabled principal '#1'", getPrincipalName(), p.getUsername());
-		return super.update();
-
-	}
+	
+	protected String tempValueHolder1; /* used as a holder value in forms */ 
+	
+	protected String tempValueHolder2; /* used as a holder value in forms */ 
 
 	/**
 	 * @see org.jboss.seam.framework.Home#getInstance()
@@ -86,5 +75,43 @@ public class PrincipalHome extends MinoasEntityHome<Principal> {
 	public String update() {
 		return super.update();
 	}
+
+    /**
+     * @return the tempValueHolder1
+     */
+    public String getTempValueHolder1() {
+        return tempValueHolder1;
+    }
+
+    /**
+     * @param tempValueHolder1 the tempValueHolder1 to set
+     */
+    public void setTempValueHolder1(String tempValueHolder1) {
+        this.tempValueHolder1 = tempValueHolder1;
+    }
+
+    /**
+     * @return the tempValueHolder2
+     */
+    public String getTempValueHolder2() {
+        return tempValueHolder2;
+    }
+
+    /**
+     * @param tempValueHolder2 the tempValueHolder2 to set
+     */
+    public void setTempValueHolder2(String tempValueHolder2) {
+        this.tempValueHolder2 = tempValueHolder2;
+    }
+
+    /**
+     * @see gr.sch.ira.minoas.seam.components.home.MinoasEntityHome#setId(java.lang.Object)
+     */
+    @Override
+    public void setId(Object id) {
+        super.setId(id);
+        Telephone t = getInstance().getInformationTelephone();
+        setTempValueHolder1(t != null ? t.getNumber() : null);
+    }
 
 }

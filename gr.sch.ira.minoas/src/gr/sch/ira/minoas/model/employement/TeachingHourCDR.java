@@ -83,8 +83,8 @@ public class TeachingHourCDR extends BaseIDModel {
     private ServiceAllocation serviceAllocation;
     
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="LEAVE_ID", nullable=true)
-    private Leave leave;
+    @JoinColumn(name="EMPLOYEE_LEAVE_ID", nullable=true)
+    private EmployeeLeave leave;
     
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="DISPOSAL_ID", nullable=true)
@@ -205,14 +205,14 @@ public class TeachingHourCDR extends BaseIDModel {
     /**
      * @return the leave
      */
-    public Leave getLeave() {
+    public EmployeeLeave getLeave() {
         return leave;
     }
 
     /**
      * @param leave the leave to set
      */
-    public void setLeave(Leave leave) {
+    public void setLeave(EmployeeLeave leave) {
         this.leave = leave;
     }
 
