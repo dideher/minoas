@@ -2,14 +2,17 @@ package gr.sch.ira.minoas.seam.components.management;
 
 import gr.sch.ira.minoas.core.CoreUtils;
 import gr.sch.ira.minoas.model.employee.Employee;
+import gr.sch.ira.minoas.model.employement.Disposal;
 import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 import gr.sch.ira.minoas.model.employement.EmployeeLeaveType;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
+import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.printout.PrintoutRecipients;
 import gr.sch.ira.minoas.model.printout.PrintoutSignatures;
 import gr.sch.ira.minoas.model.security.Principal;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
+import gr.sch.ira.minoas.seam.components.CoreSearching;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
 import gr.sch.ira.minoas.seam.components.home.EmployeeLeaveHome;
 import gr.sch.ira.minoas.seam.components.managers.MedicalEmployeeLeavesOfCurrentYear;
@@ -324,6 +327,8 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
     
     private Integer leaveDurationInDaysWithoutWeekends = 0;
     
+    private String employeeRegularPositionForLeavePrintout;
+    
     /**
      * It is the date used for various leave count computation. It is used by {@link RegularEmployeeLeavesOfCurrentYear}, 
      * {@link RegularEmployeeLeavesOfPreviousYear}, {@link MedicalEmployeeLeavesOfCurrentYear} and {@link MedicalEmployeeLeavesOfPrevious5Years}
@@ -629,10 +634,7 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
                 parameters.put("employeeSurname", employee.getLastName());
                 parameters.put("employeeSpecialization", employee.getLastSpecialization().getTitle());
                 parameters.put("employeeSpecializationCode", employee.getLastSpecialization().getId());
-                Employment e = employee.getCurrentEmployment();
-                if(e != null) {
-                    parameters.put("employeeRegularSchool", e.getSchool().getTitle());
-                }
+                parameters.put("employeeRegularSchool", this.employeeRegularPositionForLeavePrintout);
                 parameters.put("leaveDueToDate", leave.getDueTo());
                 parameters.put("leaveEstablishedDate", leave.getEstablished());
                 parameters.put("leaveDayDuration", leave.getEffectiveNumberOfDays());
@@ -1083,6 +1085,7 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
 
     /* this method is called when the user clicks the "print leave" */
     public void prepeareForLeavePrint() {
+        this.printHelper = new PrintingHelper();
         this.leavePrintoutDate = new Date();
         Collection<SelectItem> list = new ArrayList<SelectItem>();
         for (PrintoutRecipients r : getCoreSearching().getPrintoutRecipients(getEntityManager())) {
@@ -1092,6 +1095,20 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
         this.leavePrintounRecipientListSource = new ArrayList<PrintoutRecipients>(getCoreSearching()
                 .getPrintoutRecipients(getEntityManager()));
         this.leavePrintoutSignatureSource = getCoreSearching().getPrintoutSignatures(getEntityManager());
+        
+        Employment e = getEmployeeHome().getInstance().getCurrentEmployment();
+        if(e != null) {
+            this.employeeRegularPositionForLeavePrintout = e.getSchool().getTitle();
+        } else {
+            /* the employee has no regular employment */
+            String schoolTitle = null;
+            /* if the employee has no employment, then he might have a secondment here */
+            Secondment secodment = getCoreSearching().getEmployeeActiveSecondment(getEntityManager(), getEmployeeHome().getInstance(), new Date());
+            if(secodment != null) {
+                schoolTitle = secodment.getTargetUnit().getTitle();
+            }
+            this.employeeRegularPositionForLeavePrintout = schoolTitle;
+        }
     }
 
     /**
@@ -1258,6 +1275,20 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
      */
     public void setLeaveDurationInDaysWithoutWeekends(Integer leaveDurationInDaysWithoutWeekends) {
         this.leaveDurationInDaysWithoutWeekends = leaveDurationInDaysWithoutWeekends;
+    }
+
+    /**
+     * @return the employeeRegularPositionForLeavePrintout
+     */
+    public String getEmployeeRegularPositionForLeavePrintout() {
+        return employeeRegularPositionForLeavePrintout;
+    }
+
+    /**
+     * @param employeeRegularPositionForLeavePrintout the employeeRegularPositionForLeavePrintout to set
+     */
+    public void setEmployeeRegularPositionForLeavePrintout(String employeeRegularPositionForLeavePrintout) {
+        this.employeeRegularPositionForLeavePrintout = employeeRegularPositionForLeavePrintout;
     }
 
 }

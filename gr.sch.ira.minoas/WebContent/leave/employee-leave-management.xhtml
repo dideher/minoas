@@ -1053,15 +1053,28 @@
 										<ui:define name="label">
 											<h:outputText value="Αριθμός Πρωτ. : " />
 										</ui:define>
-										<h:inputText id="employeeLeaveEffectiveNumberOfDaysTextField"
-											value="#{employeeLeavesManagement.leavePrintoutReferenceNumber}"
+										<h:inputText value="#{employeeLeavesManagement.leavePrintoutReferenceNumber}"
 											size="6" disabled="false" maxlength="10"
 											styleClass="fieldValueText" required="true" readonly="false" />
 
 									</s:decorate>
+									
+									<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+										<ui:define name="label">
+											<h:outputText value="Θέση που Υπηρετή. : " />
+										</ui:define>
+										<h:inputTextarea value="#{employeeLeavesManagement.employeeRegularPositionForLeavePrintout}" cols="20"
+										styleClass="fieldValueText" required="true" readonly="false" rows="3" />
+									</s:decorate>
+									
+									
+									
 								</h:panelGrid>
 
 								<h:panelGrid columns="2">
+								
+									
+								
 									<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 										<ui:define name="label">
 											<h:outputText value="Κοινοποίηση. : " />
