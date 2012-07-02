@@ -1,6 +1,7 @@
 package gr.sch.ira.minoas.seam.components.management;
 
 import gr.sch.ira.minoas.model.employee.Employee;
+import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 import gr.sch.ira.minoas.model.employement.WorkExperience;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.CoreSearching;
@@ -151,6 +152,16 @@ public class WorkExperiencesManagement extends BaseDatabaseAwareSeamComponent {
             return ACTION_OUTCOME_FAILURE;
         }
     }
-	
+
+    /* this method is called when the user clicks the "add new leave" */
+    public void prepareNewWorkExperience() {
+    	workExperienceHome.clearInstance();
+    	WorkExperience workExp = workExperienceHome.getInstance();
+    	workExp.setFromDate(new Date());
+    	workExp.setToDate(new Date());
+    	workExp.setComment(null);
+    	workExp.setEmployee(employeeHome.getInstance());
+
+    }
 
 }

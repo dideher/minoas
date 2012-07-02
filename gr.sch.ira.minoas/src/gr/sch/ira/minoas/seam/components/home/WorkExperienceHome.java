@@ -21,6 +21,9 @@ public class WorkExperienceHome extends MinoasEntityHome<WorkExperience> {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	/* used as a holder value in forms */ 
+	protected String tempValueHolder1; 
 
 	/**
 	 * @see org.jboss.seam.framework.Home#createInstance()
@@ -74,6 +77,29 @@ public class WorkExperienceHome extends MinoasEntityHome<WorkExperience> {
 	@Transactional
 	public String update() {
 		return super.update();
+	}
+
+    /**
+     * @see gr.sch.ira.minoas.seam.components.home.MinoasEntityHome#clearInstance()
+     */
+    @Override
+    public void clearInstance() {
+        super.clearInstance();
+        setTempValueHolder1(null);
+    }
+    
+	/**
+	 * @return the tempValueHolder1
+	 */
+	public String getTempValueHolder1() {
+		return tempValueHolder1;
+	}
+
+	/**
+	 * @param tempValueHolder1 the tempValueHolder1 to set
+	 */
+	public void setTempValueHolder1(String tempValueHolder1) {
+		this.tempValueHolder1 = tempValueHolder1;
 	}
 	
 
