@@ -174,6 +174,9 @@ SET IDENTITY_INSERT minoas..UNIT ON
    INSERT INTO minoas..UNIT(UNIT_ID, TITLE, version) VALUES('2010', 'ΓΥ 1ο ΗΡΑΚΛΕΙΟΥ (ΤΜΗΝΑ ΕΝΤΑΞΗΣ)', 0)
    INSERT INTO minoas..SCHOOL(UNIT_ID, MINISTRY_CODE, POINTS, REGION) VALUES('2010', NULL, NULL, 'Α')
 
+   INSERT INTO minoas..UNIT(UNIT_ID, TITLE, version) VALUES('9999', 'ΔΙΑΘΕΣΗ ΠΥΣΔΕ ΗΡΑΚΛΕΙΟΥ', 0)
+   INSERT INTO minoas..SCHOOL(UNIT_ID, MINISTRY_CODE, POINTS, REGION) VALUES('9999', NULL, NULL, 'Α')
+
  
     INSERT INTO minoas..UNIT(UNIT_ID, TITLE, PYSDE_ID, version)
     VALUES ('600', 'ΣΧΟΛΕΙΟ ΔΕΥΤΕΡΗΣ ΕΥΚΑΙΡΙΑΣ (ΣΔΕ)', 1, 0)
