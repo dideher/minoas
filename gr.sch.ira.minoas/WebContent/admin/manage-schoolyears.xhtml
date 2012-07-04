@@ -65,7 +65,7 @@
 									<h:outputText value="Ενέργειες" />
 								</f:facet>
 								<rich:toolBar itemSeparator="line">
-									<a4j:commandLink id="updatelink"
+									<a4j:commandLink id="updatelink" disabled="=true"
 										reRender="schoolYearsResultTable"
 										rendered="#{!_schoolYear.currentSchoolYear}"
 										action="#{schoolYearManagement.doUpgrade()}"
