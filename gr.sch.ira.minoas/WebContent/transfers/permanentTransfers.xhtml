@@ -107,7 +107,7 @@
 											height="200" width="300"
 											suggestionAction="#{unitSuggester.suggest}">
 											<f:facet name="nothingLabel">
-												<h:outputText value="Άγνωστη Σχολική Μονάδα" />
+												<h:outputText value="Άγνωστη Μονάδα" />
 											</f:facet>
 											<h:column>
 												<h:outputText value="#{leaveSourceUnit.title}" />
@@ -117,6 +117,7 @@
 													target="#{outstandingPermanentTransferCriteria.targetUnit}" />
 											</a4j:support>
 										</rich:suggestionbox>
+
 									</h:inputText>
 								</s:decorate>
 
@@ -375,9 +376,9 @@
 
 													<rich:suggestionbox for="schoolTarget"
 														var="leaveSourceUnit" height="200" width="300"
-														suggestionAction="#{schoolUnitSuggester.suggest}">
+														suggestionAction="#{permanentTransferAwareUnitSuggester.suggest}">
 														<f:facet name="nothingLabel">
-															<h:outputText value="Άγνωστη Σχολική Μονάδα" />
+															<h:outputText value="Άγνωστη Μονάδα" />
 														</f:facet>
 														<h:column>
 															<h:outputText value="#{leaveSourceUnit.title}" />
@@ -387,6 +388,7 @@
 																target="#{permanentTransferHome.instance.targetUnit}" />
 														</a4j:support>
 													</rich:suggestionbox>
+													
 												</h:inputText>
 											</s:decorate>
 
