@@ -2,7 +2,6 @@ package gr.sch.ira.minoas.seam.components.management;
 
 import gr.sch.ira.minoas.core.CoreUtils;
 import gr.sch.ira.minoas.model.employee.Employee;
-import gr.sch.ira.minoas.model.employement.Disposal;
 import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 import gr.sch.ira.minoas.model.employement.EmployeeLeaveType;
 import gr.sch.ira.minoas.model.employement.Employment;
@@ -12,7 +11,6 @@ import gr.sch.ira.minoas.model.printout.PrintoutRecipients;
 import gr.sch.ira.minoas.model.printout.PrintoutSignatures;
 import gr.sch.ira.minoas.model.security.Principal;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
-import gr.sch.ira.minoas.seam.components.CoreSearching;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
 import gr.sch.ira.minoas.seam.components.home.EmployeeLeaveHome;
 import gr.sch.ira.minoas.seam.components.managers.MedicalEmployeeLeavesOfCurrentYear;

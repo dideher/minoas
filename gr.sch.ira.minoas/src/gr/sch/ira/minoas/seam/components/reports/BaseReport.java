@@ -21,8 +21,6 @@ import java.util.ResourceBundle;
 
 import javax.faces.context.FacesContext;
 
-import org.jboss.seam.core.SeamResourceBundle;
-
 
 public abstract class BaseReport extends BaseDatabaseAwareSeamComponent {
     
