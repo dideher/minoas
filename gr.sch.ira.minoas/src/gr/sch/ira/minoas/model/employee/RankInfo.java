@@ -234,7 +234,7 @@ public class RankInfo extends BaseIDModel {
 	 * @return Return the new Rank after the promotion. Note that the new RankInfo returned may be identical to the one before if hasPossitiveValidationInLast2Years is false.  
 	 */
 	public RankInfo promote(Boolean hasPossitiveValidationInLast2Years, Boolean achievedPromotionQuota) {
-		switch (educationalLevel) {
+		switch (getEducationalLevel()) {
 		case UNIVERSITY_EDUCATION_LEVEL:
 			switch (rank) {
 			case RANK_ST:
@@ -625,5 +625,557 @@ public class RankInfo extends BaseIDModel {
 		return startingSalaryGrade;
 	}
 	
+
+	/**
+	 *  Η ρουτίνα επιστρέφει τον Βαθμό (Α, Β, Γ, Δ, Ε, ΣΤ) και το ΜΚ (0, 1, 2, 3, 4, 5, 6) 
+	 *  κάποιου υπαλλήλου ανάλογα την Katigoria του (ΥΕ, ΔΕ, ΤΕ, ΠΕ)
+	 *	αν έχει η όχι Μεταπτυχιακό, Διδακτορικό ή Α.Σ.Δ.Δ., και την Proyphresia του (σε αριθμό ημερών)
+	 *
+	 * @param Proyphresia The employee's length of service (Προϋπηρεσία) in number of days.
+	 * @param educationalLevel The employee's educational level from gr.sch.ira.minoas.model.employement.EducationalLevelType (UNIVERSITY_EDUCATION_LEVEL, TECHNOLOGIGAL_EDUCATION_LEVEL, SECONDARY_EDUCATION_LEVEL, COMPULSORY_EDUCATION_LEVEL)
+	 * @param hasAMasterDegree True if the employee has a Master Degree
+	 * @param hasAPhD True if the employee has a PhD
+	 * @param isANatSchPubAdminGraduate True if the employee is a National School of Public Administration (Α.Σ.Δ.Δ.) graduate
+	 * @return Returnw the employee's Rank info (rank & salary grade) after the classification in grade.
+	 */
+	public RankInfo Katataxi(Integer Proyphresia, EducationalLevelType educationalLevel, Boolean hasAMasterDegree, Boolean hasAPhD, Boolean isANatSchPubAdminGraduate) {
+	    setEducationalLevel(educationalLevel);
+		
+		if(hasAMasterDegree && (!hasAPhD && !isANatSchPubAdminGraduate))		//	Αν έχει Μεταπτυχιακό επιδότησέ τον
+			Proyphresia += 720;													//	με 2 χρόνια προϋπηρεσία (2 * 360 = 720)
+		else if (!hasAMasterDegree && (hasAPhD || isANatSchPubAdminGraduate))	//	Αν έχει Διδακτορικό ή είναι απόφοιτος της Α.Σ.Δ.Δ. αλλά δεν έχει Master, επιδότησέ τον 
+			Proyphresia += 2160;												//	με 6 χρόνια προϋπηρεσία (6 * 360 = 2160)	
+		else if (hasAMasterDegree && (hasAPhD || isANatSchPubAdminGraduate))	//	Αν έχει Διδακτορικό ή είναι απόφοιτος της Α.Σ.Δ.Δ. και έχει ΚΑΙ Master, επιδότησέ τον
+			Proyphresia += 2520;												//	με 7 χρόνια προϋπηρεσία (7 * 360 = 2520)
+	    
+	    switch (getEducationalLevel()) {
+			case UNIVERSITY_EDUCATION_LEVEL:
+				if(Proyphresia >= 0 &&  Proyphresia<=1079) {
+					setRank(RankType.RANK_ST);
+		            setSalaryGrade(0);
+				} else if (Proyphresia >= 1080 &&  Proyphresia<=3239) {
+					setRank(RankType.RANK_E);
+					if (Proyphresia >= 1080 &&  Proyphresia<=1799) {
+			            setSalaryGrade(0);
+					} else if (Proyphresia >= 1800 &&  Proyphresia<=2519) {
+						setSalaryGrade(1);
+					} else if (Proyphresia >= 2520 &&  Proyphresia<=3239) {
+						setSalaryGrade(2);
+					}
+				} else if (Proyphresia >= 3240 &&  Proyphresia<=5399) {
+					setRank(RankType.RANK_D);
+					if (Proyphresia >= 3240 &&  Proyphresia<=3959) {
+			            setSalaryGrade(0);
+					} else if (Proyphresia >= 3960 &&  Proyphresia<=4679) {
+						setSalaryGrade(1);
+					} else if (Proyphresia >= 4680 &&  Proyphresia<=5399) {
+						setSalaryGrade(2);
+					}
+				} else if (Proyphresia >= 5400 &&  Proyphresia<=7559) {
+					setRank(RankType.RANK_C);
+					if (Proyphresia >= 5400 &&  Proyphresia<=6119) {
+			            setSalaryGrade(0);
+					} else if (Proyphresia >= 6120 &&  Proyphresia<=6839) {
+						setSalaryGrade(1);
+					} else if (Proyphresia >= 6840 &&  Proyphresia<=7559) {
+						setSalaryGrade(2);
+					}
+				} else if (Proyphresia >= 7560) {
+					setRank(RankType.RANK_B);
+					if (Proyphresia >= 7560 &&  Proyphresia<=8639) {
+			            setSalaryGrade(0);
+					} else if (Proyphresia >= 8640 &&  Proyphresia<=9719) {
+						setSalaryGrade(1);
+					} else if (Proyphresia >= 9720 &&  Proyphresia<=10799) {
+						setSalaryGrade(2);
+					} else if (Proyphresia >= 10800 &&  Proyphresia<=11879) {
+						setSalaryGrade(3);
+					} else if (Proyphresia >= 11880 &&  Proyphresia<=12959) {
+						setSalaryGrade(4);
+					} else if (Proyphresia >= 12960 &&  Proyphresia<=14039) {
+						setSalaryGrade(5);
+					} else if (Proyphresia >= 14040 &&  Proyphresia<=15119) {
+						setSalaryGrade(6);
+					} else if (Proyphresia >= 15120 &&  Proyphresia<=16199) {
+						setSalaryGrade(7);
+					} else if (Proyphresia >= 16200 &&  Proyphresia<=17279) {
+						setSalaryGrade(8);
+					}
+				}
+				
+				break;	// End UNIVERSITY_EDUCATION_LEVEL case
+			case TECHNOLOGIGAL_EDUCATION_LEVEL:
+				if(Proyphresia >= 0 &&  Proyphresia<=1079) {
+					setRank(RankType.RANK_ST);
+		            setSalaryGrade(0);
+				} else if (Proyphresia >= 1080 &&  Proyphresia<=3239) {
+					setRank(RankType.RANK_E);
+					if (Proyphresia >= 1080 &&  Proyphresia<=1799) {
+			            setSalaryGrade(0);
+					} else if (Proyphresia >= 1800 &&  Proyphresia<=2519) {
+						setSalaryGrade(1);
+					} else if (Proyphresia >= 2520 &&  Proyphresia<=3239) {
+						setSalaryGrade(2);
+					}
+				} else if (Proyphresia >= 3240 &&  Proyphresia<=5399) {
+					setRank(RankType.RANK_D);
+					if (Proyphresia >= 3240 &&  Proyphresia<=3959) {
+			            setSalaryGrade(0);
+					} else if (Proyphresia >= 3960 &&  Proyphresia<=4679) {
+						setSalaryGrade(1);
+					} else if (Proyphresia >= 4680 &&  Proyphresia<=5399) {
+						setSalaryGrade(2);
+					}
+				} else if (Proyphresia >= 5400 &&  Proyphresia<=8279) {
+					setRank(RankType.RANK_C);
+					if (Proyphresia >= 5400 &&  Proyphresia<=6119) {
+			            setSalaryGrade(0);
+					} else if (Proyphresia >= 6120 &&  Proyphresia<=6839) {
+						setSalaryGrade(1);
+					} else if (Proyphresia >= 6840 &&  Proyphresia<=7559) {
+						setSalaryGrade(2);
+					} else if (Proyphresia >= 7560 &&  Proyphresia<=8279) {
+						setSalaryGrade(3);
+					}
+				} else if (Proyphresia >= 8280) {
+					setRank(RankType.RANK_B);
+					if (Proyphresia >= 8280 &&  Proyphresia<=9359) {
+			            setSalaryGrade(0);
+					} else if (Proyphresia >= 9360 &&  Proyphresia<=10439) {
+						setSalaryGrade(1);
+					} else if (Proyphresia >= 10440 &&  Proyphresia<=11519) {
+						setSalaryGrade(2);
+					} else if (Proyphresia >= 11520 &&  Proyphresia<=12599) {
+						setSalaryGrade(3);
+					} else if (Proyphresia >= 12600 &&  Proyphresia<=13679) {
+						setSalaryGrade(4);
+					} else if (Proyphresia >= 13680 &&  Proyphresia<=14759) {
+						setSalaryGrade(5);
+					} else if (Proyphresia >= 14760 &&  Proyphresia<=15839) {
+						setSalaryGrade(6);
+					} else if (Proyphresia >= 15840 &&  Proyphresia<=16919) {
+						setSalaryGrade(7);
+					}
+				}
 	
+				break;	// End TECHNOLOGIGAL_EDUCATION_LEVEL case
+			case SECONDARY_EDUCATION_LEVEL:
+				
+				if(Proyphresia >= 0 &&  Proyphresia<=1079) {
+					setRank(RankType.RANK_ST);
+		            setSalaryGrade(0);
+				} else if (Proyphresia >= 1080 &&  Proyphresia<=3959) {
+					setRank(RankType.RANK_E);
+					if (Proyphresia >= 1080 &&  Proyphresia<=1799) {
+			            setSalaryGrade(0);
+					} else if (Proyphresia >= 1800 &&  Proyphresia<=2519) {
+						setSalaryGrade(1);
+					} else if (Proyphresia >= 2520 &&  Proyphresia<=3239) {
+						setSalaryGrade(2);
+					} else if (Proyphresia >= 3240 &&  Proyphresia<=3959) {
+						setSalaryGrade(3);
+					}
+				} else if (Proyphresia >= 3960 &&  Proyphresia<=6839) {
+					setRank(RankType.RANK_D);
+					if (Proyphresia >= 3960 &&  Proyphresia<=4679) {
+			            setSalaryGrade(0);
+					} else if (Proyphresia >= 4680 &&  Proyphresia<=5399) {
+						setSalaryGrade(1);
+					} else if (Proyphresia >= 5400 &&  Proyphresia<=6119) {
+						setSalaryGrade(2);
+					} else if (Proyphresia >= 6120 &&  Proyphresia<=6839) {
+						setSalaryGrade(3);
+					}
+				} else if (Proyphresia >= 6840 &&  Proyphresia<=9719) {
+					setRank(RankType.RANK_C);
+					if (Proyphresia >= 6840 &&  Proyphresia<=7559) {
+			            setSalaryGrade(0);
+					} else if (Proyphresia >= 7560 &&  Proyphresia<=8279) {
+						setSalaryGrade(1);
+					} else if (Proyphresia >= 8280 &&  Proyphresia<=8999) {
+						setSalaryGrade(2);
+					} else if (Proyphresia >= 9000 &&  Proyphresia<=9719) {
+						setSalaryGrade(3);
+					}
+				} else if (Proyphresia >= 9720) {
+					setRank(RankType.RANK_B);
+					if (Proyphresia >= 9720 &&  Proyphresia<=10799) {
+			            setSalaryGrade(0);
+					} else if (Proyphresia >= 10800 &&  Proyphresia<=11879) {
+						setSalaryGrade(1);
+					} else if (Proyphresia >= 11880 &&  Proyphresia<=12959) {
+						setSalaryGrade(2);
+					} else if (Proyphresia >= 12960 &&  Proyphresia<=14039) {
+						setSalaryGrade(3);
+					} else if (Proyphresia >= 14040 &&  Proyphresia<=15119) {
+						setSalaryGrade(4);
+					} else if (Proyphresia >= 15120 &&  Proyphresia<=16199) {
+						setSalaryGrade(5);
+					}
+				}
+					
+				break;	// End SECONDARY_EDUCATION_LEVEL case
+			case COMPULSORY_EDUCATION_LEVEL:
+				if(Proyphresia >= 0 &&  Proyphresia<=1079) {
+					setRank(RankType.RANK_ST);
+		            setSalaryGrade(0);
+				} else if (Proyphresia >= 1080 &&  Proyphresia<=5399) {
+					setRank(RankType.RANK_E);
+					if (Proyphresia >= 1080 &&  Proyphresia<=1799) {
+			            setSalaryGrade(0);
+					} else if (Proyphresia >= 1800 &&  Proyphresia<=2519) {
+						setSalaryGrade(1);
+					} else if (Proyphresia >= 2520 &&  Proyphresia<=3239) {
+						setSalaryGrade(2);
+					} else if (Proyphresia >= 3240 &&  Proyphresia<=3959) {
+						setSalaryGrade(3);
+					} else if (Proyphresia >= 3960 &&  Proyphresia<=4679) {
+						setSalaryGrade(4);
+					} else if (Proyphresia >= 4680 &&  Proyphresia<=5399) {
+						setSalaryGrade(5);
+					}
+				} else if (Proyphresia >= 5400 &&  Proyphresia<=8999) {
+					setRank(RankType.RANK_D);
+					if (Proyphresia >= 5400 &&  Proyphresia<=6119) {
+			            setSalaryGrade(0);
+					} else if (Proyphresia >= 6120 &&  Proyphresia<=6839) {
+						setSalaryGrade(1);
+					} else if (Proyphresia >= 6840 &&  Proyphresia<=7559) {
+						setSalaryGrade(2);
+					} else if (Proyphresia >= 7560 &&  Proyphresia<=8279) {
+						setSalaryGrade(3);
+					} else if (Proyphresia >= 8280 &&  Proyphresia<=8999) {
+						setSalaryGrade(4);
+					}
+				} else if (Proyphresia >= 9000) {
+					setRank(RankType.RANK_C);
+					if (Proyphresia >= 9000 &&  Proyphresia<=9719) {
+			            setSalaryGrade(0);
+					} else if (Proyphresia >= 9720 &&  Proyphresia<=10439) {
+						setSalaryGrade(1);
+					} else if (Proyphresia >= 10440 &&  Proyphresia<=11159) {
+						setSalaryGrade(2);
+					} else if (Proyphresia >= 11160 &&  Proyphresia<=11879) {
+						setSalaryGrade(3);
+					} else if (Proyphresia >= 11880 &&  Proyphresia<=12599) {
+						setSalaryGrade(4);
+					} else if (Proyphresia >= 12600 &&  Proyphresia<=13319) {
+						setSalaryGrade(5);
+					} else if (Proyphresia >= 13320 &&  Proyphresia<=14039) {
+						setSalaryGrade(6);
+					}
+				}
+	
+				break;	// End COMPULSORY_EDUCATION_LEVEL case
+			
+			default:
+				break;
+		}
+
+	    return this;
+	}
+
+	
+	/**
+	 *  Η ρουτίνα επιστρέφει τον Πλεονάζοντα Χρόνο στο Βαθμό (Α, Β, Γ, Δ, Ε, ΣΤ) (σε αριθμό ημερών)
+	 *  κάποιου υπαλλήλου κατά την επανακατάταξή του την 1/11/2011, ανάλογα το επίπεδο σπουδών του (ΥΕ, ΔΕ, ΤΕ, ΠΕ)
+	 *	αν έχει η όχι Μεταπτυχιακό, Διδακτορικό ή Α.Σ.Δ.Δ., και την συνολική υπηρεσία του για κατάταξη(σε αριθμό ημερών)
+	 *
+	 * @param SynolYphrGiaKatatx The employee's length of service (Προϋπηρεσία) in number of days.
+	 * @param educationalLevel The employee's educational level from gr.sch.ira.minoas.model.employement.EducationalLevelType (UNIVERSITY_EDUCATION_LEVEL, TECHNOLOGIGAL_EDUCATION_LEVEL, SECONDARY_EDUCATION_LEVEL, COMPULSORY_EDUCATION_LEVEL)
+	 * @param hasAMasterDegree True if the employee has a Master Degree
+	 * @param hasAPhD True if the employee has a PhD
+	 * @param isANatSchPubAdminGraduate True if the employee is a National School of Public Administration (Α.Σ.Δ.Δ.) graduate
+	 * @return Returns the employee's surplus time in his rank after his classification on 1/11/2011
+	 */
+	public Integer SurplusTimeInRankAfterClassification(Integer SynolYphrGiaKatatx, EducationalLevelType educationalLevel, Boolean hasAMasterDegree, Boolean hasAPhD, Boolean isANatSchPubAdminGraduate) {
+	    RankInfo rankInfo = Katataxi(SynolYphrGiaKatatx, educationalLevel, hasAMasterDegree, hasAPhD, isANatSchPubAdminGraduate);
+	    
+	    switch (educationalLevel) {
+		case UNIVERSITY_EDUCATION_LEVEL :
+			switch (rankInfo.getRank()) {
+			case RANK_ST:
+				return SynolYphrGiaKatatx - 0;
+			case RANK_E:
+				return SynolYphrGiaKatatx - 1080;
+			case RANK_D:
+				return SynolYphrGiaKatatx - 3240;
+			case RANK_C:
+				return SynolYphrGiaKatatx - 5400;
+			case RANK_B:
+				return SynolYphrGiaKatatx - 7560;
+			default:
+				return -1;
+			}
+			// End UNIVERSITY_EDUCATION_LEVEL case
+		case TECHNOLOGIGAL_EDUCATION_LEVEL :
+			switch (rankInfo.getRank()) {
+			case RANK_ST:
+				return SynolYphrGiaKatatx - 0;
+			case RANK_E:
+				return SynolYphrGiaKatatx - 1080;
+			case RANK_D:
+				return SynolYphrGiaKatatx - 3240;
+			case RANK_C:
+				return SynolYphrGiaKatatx - 5400;
+			case RANK_B:
+				return SynolYphrGiaKatatx - 8280;
+			default:
+				return -1;
+			}
+			// End TECHNOLOGIGAL_EDUCATION_LEVEL case
+		case SECONDARY_EDUCATION_LEVEL :
+			switch (rankInfo.getRank()) {
+			case RANK_ST:
+				return SynolYphrGiaKatatx - 0;
+			case RANK_E:
+				return SynolYphrGiaKatatx - 1080;
+			case RANK_D:
+				return SynolYphrGiaKatatx - 3960;
+			case RANK_C:
+				return SynolYphrGiaKatatx - 6840;
+			case RANK_B:
+				return SynolYphrGiaKatatx - 9720;
+			default:
+				return -1;
+			}
+			// End SECONDARY_EDUCATION_LEVEL case
+		case COMPULSORY_EDUCATION_LEVEL :
+			switch (rankInfo.getRank()) {
+			case RANK_ST:
+				return SynolYphrGiaKatatx - 0;
+			case RANK_E:
+				return SynolYphrGiaKatatx - 1080;
+			case RANK_D:
+				return SynolYphrGiaKatatx - 5400;
+			case RANK_C:
+				return SynolYphrGiaKatatx - 9000;
+			default:
+				return -1;
+			}
+			// End COMPULSORY_EDUCATION_LEVEL case
+		default:
+			return -1;
+		}
+	    
+
+	}
+
+
+	
+	/**
+	 * Η ρουτίνα επιστρέφει τον πλεονάζοντα χρόνο (σε αριθμό ημερών) στο ΜΚ του υπαλλήλου μετά την επανακατάταξή του την 1/11/2011 
+	 * στο νέο βαθμό, ανάλογα το επίπεδο σπουδών του (ΥΕ, ΔΕ, ΤΕ, ΠΕ)
+	 * αν έχει η όχι Μεταπτυχιακό, Διδακτορικό ή Α.Σ.Δ.Δ., και την συνολική υπηρεσία του για κατάταξη(σε αριθμό ημερών)
+	 *
+	 * @param SynolYphrGiaKatatx The employee's length of service (Προϋπηρεσία) in number of days.
+	 * @param educationalLevel The employee's educational level from gr.sch.ira.minoas.model.employement.EducationalLevelType (UNIVERSITY_EDUCATION_LEVEL, TECHNOLOGIGAL_EDUCATION_LEVEL, SECONDARY_EDUCATION_LEVEL, COMPULSORY_EDUCATION_LEVEL)
+	 * @param hasAMasterDegree True if the employee has a Master Degree
+	 * @param hasAPhD True if the employee has a PhD
+	 * @param isANatSchPubAdminGraduate True if the employee is a National School of Public Administration (Α.Σ.Δ.Δ.) graduate
+	 * @return Returns the employee's surplus time in his salary grade after his classification on 1/11/2011
+	 */
+	public Integer SurplusTimeInSalaryGradeAfterClassification(Integer synolYphrGiaKatatx, EducationalLevelType educationalLevel, Boolean hasAMasterDegree, Boolean hasAPhD, Boolean isANatSchPubAdminGraduate) {
+	    
+	    switch (educationalLevel) {
+		case UNIVERSITY_EDUCATION_LEVEL:
+			if(synolYphrGiaKatatx >= 0 &&  synolYphrGiaKatatx<=1079) {
+				return synolYphrGiaKatatx - 0;
+			} else if (synolYphrGiaKatatx >= 1080 &&  synolYphrGiaKatatx<=1799) {
+				return synolYphrGiaKatatx - 1080;
+			} else if (synolYphrGiaKatatx >= 1800 &&  synolYphrGiaKatatx<=2519) {
+				return synolYphrGiaKatatx - 1800;
+			} else if (synolYphrGiaKatatx >= 2520 &&  synolYphrGiaKatatx<=3239) {
+				return synolYphrGiaKatatx - 2520;
+			} else if (synolYphrGiaKatatx >= 3240 &&  synolYphrGiaKatatx<=3959) {
+				return synolYphrGiaKatatx - 3240;
+			} else if (synolYphrGiaKatatx >= 3960 &&  synolYphrGiaKatatx<=4679) {
+				return synolYphrGiaKatatx - 3960;
+			} else if (synolYphrGiaKatatx >= 4680 &&  synolYphrGiaKatatx<=5399) {
+				return synolYphrGiaKatatx - 4680;
+			} else if (synolYphrGiaKatatx >= 5400 &&  synolYphrGiaKatatx<=6119) {
+				return synolYphrGiaKatatx - 5400;
+			} else if (synolYphrGiaKatatx >= 6120 &&  synolYphrGiaKatatx<=6839) {
+				return synolYphrGiaKatatx - 6120;
+			} else if (synolYphrGiaKatatx >= 6840 &&  synolYphrGiaKatatx<=7559) {
+				return synolYphrGiaKatatx - 6840;
+			} else if (synolYphrGiaKatatx >= 7560 &&  synolYphrGiaKatatx<=8639) {
+				return synolYphrGiaKatatx - 7560;
+			} else if (synolYphrGiaKatatx >= 8640 &&  synolYphrGiaKatatx<=9719) {
+				return synolYphrGiaKatatx - 8640;
+			} else if (synolYphrGiaKatatx >= 9720 &&  synolYphrGiaKatatx<=10799) {
+				return synolYphrGiaKatatx - 9720;
+			} else if (synolYphrGiaKatatx >= 10800 &&  synolYphrGiaKatatx<=11879) {
+				return synolYphrGiaKatatx - 10800;
+			} else if (synolYphrGiaKatatx >= 11880 &&  synolYphrGiaKatatx<=12959) {
+				return synolYphrGiaKatatx - 11880;
+			} else if (synolYphrGiaKatatx >= 12960 &&  synolYphrGiaKatatx<=14039) {
+				return synolYphrGiaKatatx - 12960;
+			} else if (synolYphrGiaKatatx >= 14040 &&  synolYphrGiaKatatx<=15119) {
+				return synolYphrGiaKatatx - 14040;
+			} else if (synolYphrGiaKatatx >= 15120 &&  synolYphrGiaKatatx<=16199) {
+				return synolYphrGiaKatatx - 15120;
+			} else if (synolYphrGiaKatatx >= 16200 &&  synolYphrGiaKatatx<=17279) {
+				return synolYphrGiaKatatx - 16200;
+			}
+			
+			return -1;	// End UNIVERSITY_EDUCATION_LEVEL case
+		case TECHNOLOGIGAL_EDUCATION_LEVEL:
+			if(synolYphrGiaKatatx >= 0 &&  synolYphrGiaKatatx<=1079) {
+				return synolYphrGiaKatatx - 0;
+			} else if (synolYphrGiaKatatx >= 1080 &&  synolYphrGiaKatatx<=1799) {
+				return synolYphrGiaKatatx - 1080;
+			} else if (synolYphrGiaKatatx >= 1800 &&  synolYphrGiaKatatx<=2519) {
+				return synolYphrGiaKatatx - 1800;
+			} else if (synolYphrGiaKatatx >= 2520 &&  synolYphrGiaKatatx<=3239) {
+				return synolYphrGiaKatatx - 2520;
+			} else if (synolYphrGiaKatatx >= 3240 &&  synolYphrGiaKatatx<=3959) {
+				return synolYphrGiaKatatx - 3240;
+			} else if (synolYphrGiaKatatx >= 3960 &&  synolYphrGiaKatatx<=4679) {
+				return synolYphrGiaKatatx - 3960;
+			} else if (synolYphrGiaKatatx >= 4680 &&  synolYphrGiaKatatx<=5399) {
+				return synolYphrGiaKatatx - 4680;
+			} else if (synolYphrGiaKatatx >= 5400 &&  synolYphrGiaKatatx<=6119) {
+				return synolYphrGiaKatatx - 5400;
+			} else if (synolYphrGiaKatatx >= 6120 &&  synolYphrGiaKatatx<=6839) {
+				return synolYphrGiaKatatx - 6120;
+			} else if (synolYphrGiaKatatx >= 6840 &&  synolYphrGiaKatatx<=7559) {
+				return synolYphrGiaKatatx - 6840;
+			} else if (synolYphrGiaKatatx >= 7560 &&  synolYphrGiaKatatx<=8279) {
+				return synolYphrGiaKatatx - 7560;
+			} else if (synolYphrGiaKatatx >= 8280 &&  synolYphrGiaKatatx<=9359) {
+				return synolYphrGiaKatatx - 8280;
+			} else if (synolYphrGiaKatatx >= 9360 &&  synolYphrGiaKatatx<=10439) {
+				return synolYphrGiaKatatx - 9360;
+			} else if (synolYphrGiaKatatx >= 10440 &&  synolYphrGiaKatatx<=11519) {
+				return synolYphrGiaKatatx - 10440;
+			} else if (synolYphrGiaKatatx >= 11520 &&  synolYphrGiaKatatx<=12599) {
+				return synolYphrGiaKatatx - 11520;
+			} else if (synolYphrGiaKatatx >= 12600 &&  synolYphrGiaKatatx<=13679) {
+				return synolYphrGiaKatatx - 12600;
+			} else if (synolYphrGiaKatatx >= 13680 &&  synolYphrGiaKatatx<=14759) {
+				return synolYphrGiaKatatx - 13680;
+			} else if (synolYphrGiaKatatx >= 14760 &&  synolYphrGiaKatatx<=15839) {
+				return synolYphrGiaKatatx - 14760;
+			} else if (synolYphrGiaKatatx >= 15840 &&  synolYphrGiaKatatx<=16919) {
+				return synolYphrGiaKatatx - 15840;
+			}
+			return -1;	// End TECHNOLOGIGAL_EDUCATION_LEVEL case
+		case SECONDARY_EDUCATION_LEVEL:
+			if(synolYphrGiaKatatx >= 0 &&  synolYphrGiaKatatx<=1079) {
+				return synolYphrGiaKatatx - 0;
+			} else if (synolYphrGiaKatatx >= 1080 &&  synolYphrGiaKatatx<=1799) {
+				return synolYphrGiaKatatx - 1080;
+			} else if (synolYphrGiaKatatx >= 1800 &&  synolYphrGiaKatatx<=2519) {
+				return synolYphrGiaKatatx - 1800;
+			} else if (synolYphrGiaKatatx >= 2520 &&  synolYphrGiaKatatx<=3239) {
+				return synolYphrGiaKatatx - 2520;
+			} else if (synolYphrGiaKatatx >= 3240 &&  synolYphrGiaKatatx<=3959) {
+				return synolYphrGiaKatatx - 3240;
+			} else if (synolYphrGiaKatatx >= 3960 &&  synolYphrGiaKatatx<=4679) {
+				return synolYphrGiaKatatx - 3960;
+			} else if (synolYphrGiaKatatx >= 4680 &&  synolYphrGiaKatatx<=5399) {
+				return synolYphrGiaKatatx - 4680;
+			} else if (synolYphrGiaKatatx >= 5400 &&  synolYphrGiaKatatx<=6119) {
+				return synolYphrGiaKatatx - 5400;
+			} else if (synolYphrGiaKatatx >= 6120 &&  synolYphrGiaKatatx<=6839) {
+				return synolYphrGiaKatatx - 6120;
+			} else if (synolYphrGiaKatatx >= 6840 &&  synolYphrGiaKatatx<=7559) {
+				return synolYphrGiaKatatx - 6840;
+			} else if (synolYphrGiaKatatx >= 7560 &&  synolYphrGiaKatatx<=8279) {
+				return synolYphrGiaKatatx - 7560;
+			} else if (synolYphrGiaKatatx >= 8280 &&  synolYphrGiaKatatx<=8999) {
+				return synolYphrGiaKatatx - 8280;
+			} else if (synolYphrGiaKatatx >= 9000 &&  synolYphrGiaKatatx<=9719) {
+				return synolYphrGiaKatatx - 9000;
+			} else if (synolYphrGiaKatatx >= 9720 &&  synolYphrGiaKatatx<=10799) {
+				return synolYphrGiaKatatx - 9720;
+			} else if (synolYphrGiaKatatx >= 10800 &&  synolYphrGiaKatatx<=11879) {
+				return synolYphrGiaKatatx - 10800;
+			} else if (synolYphrGiaKatatx >= 11880 &&  synolYphrGiaKatatx<=12959) {
+				return synolYphrGiaKatatx - 11880;
+			} else if (synolYphrGiaKatatx >= 12960 &&  synolYphrGiaKatatx<=14039) {
+				return synolYphrGiaKatatx - 12960;
+			} else if (synolYphrGiaKatatx >= 14040 &&  synolYphrGiaKatatx<=15119) {
+				return synolYphrGiaKatatx - 14040;
+			} else if (synolYphrGiaKatatx >= 15120 &&  synolYphrGiaKatatx<=16199) {
+				return synolYphrGiaKatatx - 15120;
+			}
+			return -1;	// End SECONDARY_EDUCATION_LEVEL case
+		case COMPULSORY_EDUCATION_LEVEL:
+			if(synolYphrGiaKatatx >= 0 &&  synolYphrGiaKatatx<=1079) {
+				return synolYphrGiaKatatx - 0;
+			} else if (synolYphrGiaKatatx >= 1080 &&  synolYphrGiaKatatx<=1799) {
+				return synolYphrGiaKatatx - 1080;
+			} else if (synolYphrGiaKatatx >= 1800 &&  synolYphrGiaKatatx<=2519) {
+				return synolYphrGiaKatatx - 1800;
+			} else if (synolYphrGiaKatatx >= 2520 &&  synolYphrGiaKatatx<=3239) {
+				return synolYphrGiaKatatx - 2520;
+			} else if (synolYphrGiaKatatx >= 3240 &&  synolYphrGiaKatatx<=3959) {
+				return synolYphrGiaKatatx - 3240;
+			} else if (synolYphrGiaKatatx >= 3960 &&  synolYphrGiaKatatx<=4679) {
+				return synolYphrGiaKatatx - 3960;
+			} else if (synolYphrGiaKatatx >= 4680 &&  synolYphrGiaKatatx<=5399) {
+				return synolYphrGiaKatatx - 4680;
+			} else if (synolYphrGiaKatatx >= 5400 &&  synolYphrGiaKatatx<=6119) {
+				return synolYphrGiaKatatx - 5400;
+			} else if (synolYphrGiaKatatx >= 6120 &&  synolYphrGiaKatatx<=6839) {
+				return synolYphrGiaKatatx - 6120;
+			} else if (synolYphrGiaKatatx >= 6840 &&  synolYphrGiaKatatx<=7559) {
+				return synolYphrGiaKatatx - 6840;
+			} else if (synolYphrGiaKatatx >= 7560 &&  synolYphrGiaKatatx<=8279) {
+				return synolYphrGiaKatatx - 7560;
+			} else if (synolYphrGiaKatatx >= 8280 &&  synolYphrGiaKatatx<=8999) {
+				return synolYphrGiaKatatx - 8280;
+			} else if (synolYphrGiaKatatx >= 9000 &&  synolYphrGiaKatatx<=9719) {
+				return synolYphrGiaKatatx - 9000;
+			} else if (synolYphrGiaKatatx >= 9720 &&  synolYphrGiaKatatx<=10439) {
+				return synolYphrGiaKatatx - 9720;
+			} else if (synolYphrGiaKatatx >= 10440 &&  synolYphrGiaKatatx<=11159) {
+				return synolYphrGiaKatatx - 10440;
+			} else if (synolYphrGiaKatatx >= 11160 &&  synolYphrGiaKatatx<=11879) {
+				return synolYphrGiaKatatx - 11160;
+			} else if (synolYphrGiaKatatx >= 11880 &&  synolYphrGiaKatatx<=12599) {
+				return synolYphrGiaKatatx - 11880;
+			} else if (synolYphrGiaKatatx >= 12600 &&  synolYphrGiaKatatx<=13319) {
+				return synolYphrGiaKatatx - 12600;
+			} else if (synolYphrGiaKatatx >= 13320 &&  synolYphrGiaKatatx<=14039) {
+				return synolYphrGiaKatatx - 13320;
+			}
+			return -1;	// End COMPULSORY_EDUCATION_LEVEL case
+		
+			default:
+				return -1;
+	    }
+	}
+
+
+
+	/**
+	 * Μετατροπή Αριθμού Ημερών σε -> Έτη - Μήνες - Ημέρες 
+	 *
+	 * @param noOfDays The number of days we wish to convers to Years - Months - Days  
+	 * 
+	 * @return Returns a string of the form: 3 έτη 11 μήνες 24 ημέρες  
+	 */
+	public static String Year_Month_Day(Integer noOfDays) {
+	//	**********************************
+	//	Μετατροπή Ημερών σε -> ετη - μηνες - ημέρες
+		if(noOfDays != null) {
+			int years, months, days;
+			
+			years = noOfDays / 360;
+			months = (noOfDays - years * 360) / 30;
+			days = noOfDays - (years * 360) - (months * 30);
+			
+			return years + " έτη " + months + " μήνες " + days + " ημέρες";
+		} else 
+			return "";
+	}
+
+
+
+
+
+
 }
