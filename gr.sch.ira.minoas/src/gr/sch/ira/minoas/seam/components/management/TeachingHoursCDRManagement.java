@@ -438,40 +438,45 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
         Collection<EmployeeLeave> activeLeaves = coreSearching.getActiveLeaves(em);
         info("found #0 totally active leaves.", activeLeaves.size());
         for (EmployeeLeave activeLeave : activeLeaves) {
-            Employee employeeWithLeave = activeLeave.getEmployee();
-            /* fix the common leave message */
-            StringBuffer sb = new StringBuffer();
-            sb.append("Άδεια τύπου  ");
-            sb.append(activeLeave.getEmployeeLeaveType().getDescription());
-            sb.append(" απο τις ");
-            sb.append(df.format(activeLeave.getEstablished()));
-            sb.append(" μέχρι και  ");
-            sb.append(df.format(activeLeave.getDueTo()));
+            Boolean generatesCDR = activeLeave.getGeneratesCDRs();
+            if (activeLeave.getEffectiveNumberOfDays() !=null && activeLeave.getEffectiveNumberOfDays() > 60){
+                Employee employeeWithLeave = activeLeave.getEmployee();
+                /* fix the common leave message */
+                StringBuffer sb = new StringBuffer();
+                sb.append("Άδεια τύπου  ");
+                sb.append(activeLeave.getEmployeeLeaveType().getDescription());
+                sb.append(" απο τις ");
+                sb.append(df.format(activeLeave.getEstablished()));
+                sb.append(" μέχρι και  ");
+                sb.append(df.format(activeLeave.getDueTo()));
 
-            Collection<Object[]> o = getEntityManager()
-                    .createQuery(
-                            "SELECT t.unit.id, SUM(t.hours) FROM TeachingHourCDR t WHERE t.schoolYear=:schoolYear AND t.employee=:employee GROUP BY (t.unit)")
-                    .setParameter("schoolYear", currentSchoolYear).setParameter("employee", employeeWithLeave)
-                    .getResultList();
-            for (Object[] r : o) {
-                Long hours = (Long) r[1];
-                if (hours.longValue() > 0) {
-                    TeachingHourCDR cdr = new TeachingHourCDR();
-                    cdr.setCdrType(TeachingHourCDRType.LEAVE);
-                    cdr.setComment(sb.toString());
-                    cdr.setSpecialization(employeeWithLeave.getLastSpecialization());
-                    cdr.setEmployee(employeeWithLeave);
-                    /* */
-                    cdr.setHours(new Integer(hours.intValue() * -1));
-                    cdr.setLogisticCDR(Boolean.TRUE); /* this is a logistic CDR */
-                    cdr.setSchoolYear(currentSchoolYear);
-                    cdr.setUnit(getEntityManager().find(Unit.class, r[0]));
-                    cdr.setLeave(activeLeave);
-                    entityManager.persist(cdr);
-                    if (((totalCDRsCreated++) % BatchSize) == 0)
-                        em.flush();
+                Collection<Object[]> o = getEntityManager()
+                        .createQuery(
+                                "SELECT t.unit.id, SUM(t.hours) FROM TeachingHourCDR t WHERE t.schoolYear=:schoolYear AND t.employee=:employee GROUP BY (t.unit)")
+                        .setParameter("schoolYear", currentSchoolYear).setParameter("employee", employeeWithLeave)
+                        .getResultList();
+                for (Object[] r : o) {
+                    Long hours = (Long) r[1];
+                    if (hours.longValue() > 0) {
+                        TeachingHourCDR cdr = new TeachingHourCDR();
+                        cdr.setCdrType(TeachingHourCDRType.LEAVE);
+                        cdr.setComment(sb.toString());
+                        cdr.setSpecialization(employeeWithLeave.getLastSpecialization());
+                        cdr.setEmployee(employeeWithLeave);
+                        /* */
+                        cdr.setHours(new Integer(hours.intValue() * -1));
+                        cdr.setLogisticCDR(Boolean.TRUE); /* this is a logistic CDR */
+                        cdr.setSchoolYear(currentSchoolYear);
+                        cdr.setUnit(getEntityManager().find(Unit.class, r[0]));
+                        cdr.setLeave(activeLeave);
+                        entityManager.persist(cdr);
+                        if (((totalCDRsCreated++) % BatchSize) == 0)
+                            em.flush();
 
+                    }
                 }
+            } else {
+                info("ingoring leave #0 because it's duration does not exceeds 60 days", activeLeave);
             }
         }
 
