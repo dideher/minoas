@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="leavePrintout" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="20" bottomMargin="20" whenResourceMissingType="Key">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="96"/>
 	<style name="normalText" fontName="DejaVu Serif" fontSize="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
 	<style name="boldText" fontName="DejaVu Serif" fontSize="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
 	<style name="headlineText" fontName="DejaVu Serif" fontSize="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
@@ -157,7 +157,7 @@
 				<reportElement style="normalText" x="0" y="266" width="515" height="346"/>
 				<textElement textAlignment="Justified" markup="styled"/>
 				<textFieldExpression><![CDATA["1. Σας στέλνουμε, συνημμένα την απο <b>"+$V{DATE_FORMATTER}.format($P{leaveRequestDate})+"</b> αίτηση του/της <b>"+$P{employeeSurname}+" "+$P{employeeName}+"</b> του "+$P{employeeFatherName}+" "+
-"εκπαιδευτικού λειτουργού κλάδου <b>"+$P{employeeSpecializationCode}+"</b> με τη συνημμένη σε αυτή ιατρική γνωμάτευση του <b>"+$P{doctorName}+"</b> ιατρού του <b>"+$P{textField1}+"</b>. "+
+"εκπαιδευτικού λειτουργού κλάδου <b>"+$P{employeeSpecializationCode}+"</b> με τη συνημμένη σε αυτή ιατρική γνωμάτευση του <b>"+$P{doctorName}+"</b> ιατρού "+
 "και παρακαλούμε να γνωματεύσετε για χορήγηση ή μη αναρρωτικής άδειας, σύμφωνα με τις διατάξεις "+
 "του άρθρου 53 του Ν.2721/99 (ΦΕΚ 112 τ.Α) με τον οποίο επεκτείνεται η εφαρμογή των διατάξεων του "+
 "άρθρου 56 του Ν.3528/07 (ΦΕΚ 26/9.2.2007 τ.Α) και στους καθηγητές, <b>"+$P{leaveDayDuration}+"</b> ημερών απο <b>"+$V{DATE_FORMATTER}.format($P{leaveEstablishedDate})+"</b> έως και <b>"+$V{DATE_FORMATTER}.format($P{leaveDueToDate})+"</b><br/><br/>"+
