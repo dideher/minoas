@@ -146,6 +146,18 @@ public class SecurityStartup extends BaseDatabaseAwareSeamComponent {
 		createRole("VIEW_PERMANENT_TRANSFERS", "View Permanent Transfers", admin);
 		createRole("MANAGE_PERMANENT_TRANSFERS", "Manage Permanent Transfers", admin);
 		
-
+		/* Work Experience */
+		createRole("MODIFY_WORKEXPERIENCE", "Modify a Work Experience", admin);
+		createRole("DELETE_WORKEXPERIENCE", "Delete a Work Experience", admin);
+		createRole("ADD_WORKEXPERIENCE", "Add a Work Experience", admin);
+		
+		/* Evaluations - Αξιολογήσεις Εκπαιδευτικού */
+		createRole("MODIFY_EVALUATION", "Modify an Evaluation", admin);
+		createRole("DELETE_EVALUATION", "Delete an Evaluation", admin);
+		createRole("ADD_EVALUATION", "Add an Evaluation", admin);
+		
+		/* Employee Info */
+		createRole("MODIFY_EMPLOYEE_INFO", "Modify an Employee's Info Data", admin);
+		
 	}
 }

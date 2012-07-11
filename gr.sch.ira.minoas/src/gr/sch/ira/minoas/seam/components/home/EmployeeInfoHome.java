@@ -3,9 +3,11 @@
  */
 package gr.sch.ira.minoas.seam.components.home;
 
-import gr.sch.ira.minoas.model.employement.WorkExperience;
+import gr.sch.ira.minoas.model.employee.EmployeeInfo;
+import gr.sch.ira.minoas.model.employee.RankInfo;
 
 import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.AutoCreate;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
@@ -14,24 +16,22 @@ import org.jboss.seam.annotations.Transactional;
  * @author <a href="mailto:gand@sch.gr">Yorgos Andreadakis</a>
  * @version $Id$
  */
-@Name(value = "workExperienceHome")
-public class WorkExperienceHome extends MinoasEntityHome<WorkExperience> {
+@Name(value = "employeeInfoHome")
+@AutoCreate
+public class EmployeeInfoHome extends MinoasEntityHome<EmployeeInfo> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	/* used as a holder value in forms */ 
-	protected String tempValueHolder1; 
 
 	/**
 	 * @see org.jboss.seam.framework.Home#createInstance()
 	 */
 	@Override
-	protected WorkExperience createInstance() {
-		WorkExperience instance = new WorkExperience();
-		instance.setActive(Boolean.TRUE);
+	protected EmployeeInfo createInstance() {
+		EmployeeInfo instance = new EmployeeInfo();
+//		instance.setActive(Boolean.TRUE);
 		
 		return instance;
 	}
@@ -40,10 +40,10 @@ public class WorkExperienceHome extends MinoasEntityHome<WorkExperience> {
 	 * @see org.jboss.seam.framework.Home#getInstance()
 	 */
 	@Override
-	@Factory(value = "workExperience", scope = ScopeType.PAGE)
-	public WorkExperience getInstance() {
+	@Factory(value = "employeeInfo", scope = ScopeType.PAGE)
+	public EmployeeInfo getInstance() {
 		// TODO Auto-generated method stub
-		return (WorkExperience) super.getInstance();
+		return (EmployeeInfo) super.getInstance();
 	}
 
 	/**
@@ -79,29 +79,29 @@ public class WorkExperienceHome extends MinoasEntityHome<WorkExperience> {
 		return super.update();
 	}
 
+	
+	
     /**
      * @see gr.sch.ira.minoas.seam.components.home.MinoasEntityHome#clearInstance()
      */
     @Override
     public void clearInstance() {
         super.clearInstance();
-        setTempValueHolder1(null);
     }
-    
-	/**
-	 * @return the tempValueHolder1
-	 */
-	public String getTempValueHolder1() {
-		return tempValueHolder1;
-	}
-
-	/**
-	 * @param tempValueHolder1 the tempValueHolder1 to set
-	 */
-	public void setTempValueHolder1(String tempValueHolder1) {
-		this.tempValueHolder1 = tempValueHolder1;
-	}
 	
+//	/**
+//	 * @see gr.sch.ira.minoas.seam.components.home.MinoasEntityHome#update()
+//	 */
+//	@Transactional
+//	public String insertRankInfo() {
+//		
+//		EmployeeInfo employeeInfo = (EmployeeInfo)super.getInstance();
+//		RankInfo newRankInfo = new RankInfo(employeeInfo.getRankInfo());
+//		
+//		employeeInfo.setRankInfo(newRankInfo);
+//	
+//		return update();
+//	}
 
 
 }

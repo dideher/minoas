@@ -133,11 +133,28 @@
 				
 				<rich:menuGroup value="Διαχείριση Προϋπηρεσίας">
 					<rich:menuItem submitMode="none"
-						rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_LEAVE'))}">
+						rendered="#{(s:hasRole('ADMIN')
+							or s:hasRole('MODIFY_WORKEXPERIENCE') 
+							or s:hasRole('DELETE_WORKEXPERIENCE') 
+							or s:hasRole('ADD_WORKEXPERIENCE'))}">
 						<s:link value="Διαχείριση Προϋπηρεσίας Εκπαιδευτικού" 
 							view="/employee/select-employee.xhtml">
 							<f:param name="from" value="/home" />
 							<f:param name="to" value="/workExperience/work-experience-management" />
+						</s:link>
+					</rich:menuItem>
+				</rich:menuGroup>
+				
+				<rich:menuGroup value="Διαχείριση Αξιολογήσεων">
+					<rich:menuItem submitMode="none"
+						rendered="#{(s:hasRole('ADMIN')
+							or s:hasRole('MODIFY_WORKEXPERIENCE') 
+							or s:hasRole('DELETE_WORKEXPERIENCE') 
+							or s:hasRole('ADD_WORKEXPERIENCE'))}">
+						<s:link value="Διαχείριση Αξιολογήσεων Εκπαιδευτικού" 
+							view="/employee/select-employee.xhtml">
+							<f:param name="from" value="/home" />
+							<f:param name="to" value="/evaluation/evaluation-management" />
 						</s:link>
 					</rich:menuItem>
 				</rich:menuGroup>

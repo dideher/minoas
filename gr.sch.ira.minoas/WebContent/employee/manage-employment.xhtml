@@ -14,7 +14,7 @@
 	<ui:define name="body">
 		<rich:panel>
 			<f:facet name="header">
-				<h:outputText value="Διαχείρηση Σχέσεις Εργασίας Εκπαιδευτικού" />
+				<h:outputText value="Διαχείρηση Σχέσεων Εργασίας Εκπαιδευτικού" />
 			</f:facet>
 
 			<ui:include src="/components/messages-component.xhtml" />
@@ -79,7 +79,7 @@
 
 										<rich:column>
 											<f:facet name="header">
-												<h:outputText value="Εώς" />
+												<h:outputText value="Έως" />
 											</f:facet>
 											<h:outputText value="${_deputyEmploymentItem.terminated}">
 												<f:convertDateTime pattern="dd-MM-yyyy" />
@@ -193,7 +193,7 @@
 
 										<rich:column>
 											<f:facet name="header">
-												<h:outputText value="Εώς" />
+												<h:outputText value="Έως" />
 											</f:facet>
 											<h:outputText value="${_deputyEmploymentItem.terminated}">
 												<f:convertDateTime pattern="dd-MM-yyyy" />
@@ -226,7 +226,7 @@
 										var="_deputyEmploymentItem">
 										<f:facet name="header">
 											<h:outputText
-												value="Τοποθετήσεις Αναπληρωτή - Τρέχουσα Σχολική Χρονία" />
+												value="Τοποθετήσεις Αναπληρωτή - Τρέχουσα Σχολική Χρονιά" />
 
 										</f:facet>
 										<rich:column>
@@ -258,7 +258,7 @@
 
 										<rich:column>
 											<f:facet name="header">
-												<h:outputText value="Εώς" />
+												<h:outputText value="Έως" />
 											</f:facet>
 											<h:outputText value="${_deputyEmploymentItem.terminated}">
 												<f:convertDateTime pattern="dd-MM-yyyy" />
@@ -400,7 +400,7 @@
 										var="_hourlyBasedEmploymentItem">
 										<f:facet name="header">
 											<h:outputText
-												value="Τοποθετήσεις Ωρομίσθιου - Τρέχουσα Σχολική Χρονία" />
+												value="Τοποθετήσεις Ωρομίσθιου - Τρέχουσα Σχολική Χρονιά" />
 
 										</f:facet>
 										<rich:column>
@@ -434,7 +434,7 @@
 
 										<rich:column>
 											<f:facet name="header">
-												<h:outputText value="Εώς" />
+												<h:outputText value="Έως" />
 											</f:facet>
 											<h:outputText
 												value="${_hourlyBasedEmploymentItem.terminated}">
@@ -444,7 +444,7 @@
 
 										<rich:column>
 											<f:facet name="header">
-												<h:outputText value="Κατοίκον ;" />
+												<h:outputText value="Κατοίκον;" />
 											</f:facet>
 											<h:outputText value="Ναι"
 												rendered="#{_hourlyBasedEmploymentItem.homeBased}" />
@@ -542,7 +542,7 @@
 
 										<rich:column>
 											<f:facet name="header">
-												<h:outputText value="Εώς" />
+												<h:outputText value="Έως" />
 											</f:facet>
 											<h:outputText
 												value="${_hourlyBasedEmploymentItem.terminated}">
@@ -552,7 +552,7 @@
 
 										<rich:column>
 											<f:facet name="header">
-												<h:outputText value="Κατοίκον ;" />
+												<h:outputText value="Κατοίκον;" />
 											</f:facet>
 											<h:outputText value="Ναι"
 												rendered="#{_hourlyBasedEmploymentItem.homeBased}" />

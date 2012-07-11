@@ -3,35 +3,37 @@
  */
 package gr.sch.ira.minoas.seam.components.home;
 
-import gr.sch.ira.minoas.model.employement.WorkExperience;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
 
+import gr.sch.ira.minoas.model.employee.Evaluation;
+
+import org.apache.commons.lang.time.DateUtils;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
+import org.jboss.seam.international.StatusMessage.Severity;
 
 /**
  * @author <a href="mailto:gand@sch.gr">Yorgos Andreadakis</a>
  * @version $Id$
  */
-@Name(value = "workExperienceHome")
-public class WorkExperienceHome extends MinoasEntityHome<WorkExperience> {
+@Name(value = "evaluationHome")
+public class EvaluationHome extends MinoasEntityHome<Evaluation> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	/* used as a holder value in forms */ 
-	protected String tempValueHolder1; 
 
 	/**
 	 * @see org.jboss.seam.framework.Home#createInstance()
 	 */
 	@Override
-	protected WorkExperience createInstance() {
-		WorkExperience instance = new WorkExperience();
-		instance.setActive(Boolean.TRUE);
+	protected Evaluation createInstance() {
+		Evaluation instance = new Evaluation();
 		
 		return instance;
 	}
@@ -40,10 +42,10 @@ public class WorkExperienceHome extends MinoasEntityHome<WorkExperience> {
 	 * @see org.jboss.seam.framework.Home#getInstance()
 	 */
 	@Override
-	@Factory(value = "workExperience", scope = ScopeType.PAGE)
-	public WorkExperience getInstance() {
+	@Factory(value = "evaluation", scope = ScopeType.PAGE)
+	public Evaluation getInstance() {
 		// TODO Auto-generated method stub
-		return (WorkExperience) super.getInstance();
+		return (Evaluation) super.getInstance();
 	}
 
 	/**
@@ -78,30 +80,5 @@ public class WorkExperienceHome extends MinoasEntityHome<WorkExperience> {
 	public String update() {
 		return super.update();
 	}
-
-    /**
-     * @see gr.sch.ira.minoas.seam.components.home.MinoasEntityHome#clearInstance()
-     */
-    @Override
-    public void clearInstance() {
-        super.clearInstance();
-        setTempValueHolder1(null);
-    }
-    
-	/**
-	 * @return the tempValueHolder1
-	 */
-	public String getTempValueHolder1() {
-		return tempValueHolder1;
-	}
-
-	/**
-	 * @param tempValueHolder1 the tempValueHolder1 to set
-	 */
-	public void setTempValueHolder1(String tempValueHolder1) {
-		this.tempValueHolder1 = tempValueHolder1;
-	}
 	
-
-
 }

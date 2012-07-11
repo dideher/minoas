@@ -26,7 +26,7 @@ public class WorkExperienceTypesExtendedSuggester extends BaseSuggester {
     @SuppressWarnings("unchecked")
     @Transactional
     public Collection<WorkExperienceType> suggest(Object work_experience_type_search_pattern) {
-        System.err.println(work_experience_type_search_pattern);
+        //System.err.println(work_experience_type_search_pattern);
         Integer workExId = null;
         try {
             workExId = new Integer(String.valueOf(work_experience_type_search_pattern));
