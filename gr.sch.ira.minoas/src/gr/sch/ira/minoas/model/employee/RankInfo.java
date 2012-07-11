@@ -469,19 +469,38 @@ public class RankInfo extends BaseIDModel {
 		return null;
 	}
 
+
+	/**
+	 * Reset Rank (Βαθμός) to ΣΤ along with the Salary Grade to 0
+	 * 
+	 */
+	public void resetRankInfo() {
+		setRank(RankType.RANK_ST);
+		setLastRankDate(new Date());
+		setSalaryGrade(0);
+		setLastSalaryGradeDate(new Date());
+		setEducationalLevel(null);
+		setSurplusTimeInRank(0);
+		setSurplusTimeInSalaryGrade(0);
+	}
+	
+	
 	/**
 	 * Reset Rank (Βαθμός) to ΣΤ along with the Salary Grade to 0
 	 */
 	public void resetRank() {
-		this.rank = RankType.RANK_ST;
-		salaryGrade = 0;
+		setRank(RankType.RANK_ST);
+		setLastRankDate(new Date());
+		setSalaryGrade(0);
+		setLastSalaryGradeDate(new Date());
+		
 	}
 	
 	/**
 	 * Reset Salary Grade (Μισθολογικό Κλιμάκιο) to 0
 	 */
 	public void resetSalaryGrade() {
-		salaryGrade = 0;
+		setSalaryGrade(0);
 	}
 	
 	/**
@@ -570,9 +589,7 @@ public class RankInfo extends BaseIDModel {
 	}
 
 
-	public String toString() {
-		return "Βαθμός(Μ.Κ.): "+rank+"("+salaryGrade+")";
-	}
+
 
 
 	/**
@@ -598,6 +615,13 @@ public class RankInfo extends BaseIDModel {
 	}
 
 	/**
+	 * @return the surplusTimeInRank in Year_Month_Day formated string 
+	 */
+	public String getSurplusTimeInRankYear_Month_Day() {
+		return Year_Month_Day(surplusTimeInRank) ;
+	}
+	
+	/**
 	 * @param surplusTimeInRank the surplusTimeInRank to set
 	 */
 	public void setSurplusTimeInRank(Integer surplusTimeInRank) {
@@ -611,6 +635,13 @@ public class RankInfo extends BaseIDModel {
 		return surplusTimeInSalaryGrade;
 	}
 
+	/**
+	 * @return the surplusTimeInSalaryGrade in Year_Month_Day formated string 
+	 */
+	public String getSurplusTimeInSalaryGradeYear_Month_Day() {
+		return Year_Month_Day(surplusTimeInSalaryGrade) ;
+	}
+	
 	/**
 	 * @param surplusTimeInSalaryGrade the surplusTimeInSalaryGrade to set
 	 */
@@ -1173,9 +1204,65 @@ public class RankInfo extends BaseIDModel {
 			return "";
 	}
 
+//	public String toString() {
+//		return "Βαθμός(Μ.Κ.): "+rank+"("+salaryGrade+")";
+//	}
 
+	/**
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("RankInfo [");
+		if (employeeInfo != null) {
+			builder.append("employee=");
+			builder.append(employeeInfo.getEmployee());
+			builder.append(", ");
+		}
+		
+		if (rank != null) {
+			builder.append("rank=");
+			builder.append(rank);
+			builder.append(", ");
+		}
 
-
+		if (lastRankDate != null) {
+			builder.append("lastRankDate=");
+			builder.append(lastRankDate);
+			builder.append(", ");
+		}
+		
+		builder.append("salary grade=");
+		builder.append(salaryGrade);
+		builder.append(", ");
+		
+		if (lastSalaryGradeDate != null) {
+			builder.append("lastSalaryGradeDate=");
+			builder.append(lastSalaryGradeDate);
+			builder.append(", ");
+		}
+		
+		if (educationalLevel != null) {
+			builder.append("educationalLevel=");
+			builder.append(educationalLevel);
+			builder.append(", ");
+		}
+		
+		if (surplusTimeInRank != null) {
+			builder.append("surplusTimeInRank=");
+			builder.append(surplusTimeInRank);
+			builder.append(", ");
+		}
+		
+		if (surplusTimeInSalaryGrade != null) {
+			builder.append("surplusTimeInSalaryGrade=");
+			builder.append(surplusTimeInSalaryGrade);
+			builder.append(", ");
+		}
+		builder.append("]");
+		return builder.toString();
+	}
 
 
 }

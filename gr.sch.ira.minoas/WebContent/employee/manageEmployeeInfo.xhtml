@@ -75,30 +75,30 @@
 								
 								<h:outputLabel styleClass="fieldValueLabel" value="Μεταπυχιακό (MSc): " />
 								<h:selectBooleanCheckbox disabled="true" value="#{employee.employeeInfo.hasAMasterDegree}" />
-								<h:outputLabel styleClass="fieldValueLabel" value="Ημ/νία Μεταπτυχιακού: " />
+								<h:outputLabel styleClass="fieldValueLabel" value="* Ημ/νία Μεταπτυχιακού: " />
 								<h:outputText styleClass="fieldValueText" value="#{employee.employeeInfo.mscDate}">
 										<s:convertDateTime type="date" pattern="dd-MM-yyyy" />
 								</h:outputText>
 								<h:outputLabel value=""/>
-								<h:outputText value="" />
+								<h:outputText styleClass="hintText" value="* ημερομηνίες πριν την 1-11-2011 αναφέρονται στην ημερομηνία κατάθεσης του σχετικού τίτλου από την οποία λάμβανε" />
 								
 								<h:outputLabel styleClass="fieldValueLabel" value="Ανώτ.Σχολ.Δημ.Διοίκ.: " />
 								<h:selectBooleanCheckbox disabled="true" value="#{employee.employeeInfo.isANatSchPubAdminGraduate}" />
-								<h:outputLabel styleClass="fieldValueLabel" value="Ημ/νία Ανώτ.Σχολ.Δημ.Διοίκ.: " />
+								<h:outputLabel styleClass="fieldValueLabel" value="* Ημ/νία Ανώτ. Σχολ. Δημ. Διοίκ.: " />
 								<h:outputText styleClass="fieldValueText" value="#{employee.employeeInfo.natSchPubAdminDate}">
 										<s:convertDateTime type="date" pattern="dd-MM-yyyy" />
 								</h:outputText>
 								<h:outputLabel value=""/>
-								<h:outputText value="" />
+								<h:outputText styleClass="hintText" value="και το σχετικό επίδομα, ενώ ημ/νίες μετά την 1-11-2011 αναφέρονται στην ημερομηνία πράξης του ΠΥΣΔΕ" />
 								
 								<h:outputLabel styleClass="fieldValueLabel" value="Διδακτορικό (PhD): " />
 								<h:selectBooleanCheckbox  disabled="true" value="#{employee.employeeInfo.hasAPhD}" />
-								<h:outputLabel styleClass="fieldValueLabel" value="Ημ/νία Διδακτορικού: " />
+								<h:outputLabel styleClass="fieldValueLabel" value="* Ημ/νία Διδακτορικού: " />
 								<h:outputText styleClass="fieldValueText" value="#{employee.employeeInfo.phdDate}">
 										<s:convertDateTime type="date" pattern="dd-MM-yyyy" />
 								</h:outputText>
 								<h:outputLabel value=""/>
-								<h:outputText value="" />
+								<h:outputText styleClass="hintText" value="από την οποία ενσωματώνεται στο βαθμό ο χρόνος που αναλογεί." />
 								
 								<h:outputLabel styleClass="fieldValueLabel" value="Βαθμός: " />
 								<h:outputText styleClass="fieldValueText" value="#{messages[employee.employeeInfo.rankInfo.rank.key]}"/>
@@ -107,7 +107,7 @@
 										<s:convertDateTime type="date" pattern="dd-MM-yyyy" />
 								</h:outputText>
 								<h:outputLabel styleClass="fieldValueLabel" value="Πλεονάζ. Χρόνος στο Βαθμό: " />
-								<h:outputText styleClass="fieldValueText" value="#{employee.employeeInfo.rankInfo.surplusTimeInRank}"/>
+								<h:outputText styleClass="fieldValueText" value="#{employee.employeeInfo.rankInfo.surplusTimeInRankYear_Month_Day} (#{employee.employeeInfo.rankInfo.surplusTimeInRank} ημ.)"/>
 								
 								<h:outputLabel styleClass="fieldValueLabel" value="Μισθ. Κλιμάκιο: " />
 								<h:outputText styleClass="fieldValueText" value="#{employee.employeeInfo.rankInfo.salaryGrade}"/>
@@ -116,7 +116,7 @@
 										<s:convertDateTime type="date" pattern="dd-MM-yyyy" />
 								</h:outputText>
 								<h:outputLabel styleClass="fieldValueLabel" value="Πλεονάζ. Χρόνος στο Μ.Κ.: " />
-								<h:outputText styleClass="fieldValueText" value="#{employee.employeeInfo.rankInfo.surplusTimeInSalaryGrade}"/>
+								<h:outputText styleClass="fieldValueText" value="#{employee.employeeInfo.rankInfo.surplusTimeInSalaryGradeYear_Month_Day} (#{employee.employeeInfo.rankInfo.surplusTimeInSalaryGrade} ημ.)"/>
 								
 								
 								<h:outputLabel value=""/>
@@ -138,27 +138,16 @@
  
 								<a4j:commandLink id="insertlink"
 									rendered="#{(s:hasRole('ADMIN') or s:hasRole('MODIFY_EMPLOYEE_INFO'))}"
-									action="#{employeeInfoHome.rankInfo.clearInstance()}"
-									reRender="insertRankInfoModalPanel"
-									oncomplete="#{rich:component('insertRankInfoModalPanel')}.show()"
-									value="Εισαγωγή RankInfo"  styleClass="rich-toolbar-item">
+									action="#{employeeInfoManagement.prepeareNewRankInfo()}"
+									reRender="insertRankInfoOutputPanel" immediate="true"
+									oncomplete="#{rich:component('insertRankInfoModalPanel')}.show()" 
+									value="Εισαγωγή Βαθμού/ΜΚ"  styleClass="rich-toolbar-item">
 									<h:graphicImage value="/img/icons/edit.png" width="12"
 										height="12" style="border:0" />
 									<f:setPropertyActionListener value="#{employee.employeeInfo.id}"
 										target="#{employeeInfoHome.id}" />
 								</a4j:commandLink>								
  	
-
-								<a4j:commandButton id="createButton"
-									disabled="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_WORKEXPERIENCE'))}"
-									action="#{workExperienceHome.clearInstance()}"
-									reRender="createWorkExperienceModalPanel" immediate="true"
-									oncomplete="#{rich:component('createWorkExperienceModalPanel')}.show()"
-									value="Καταχώρηση Νέας Προϋπηρεσίας">
-								</a4j:commandButton>
-	
-	
-	
 							</h:panelGrid>					
 						</rich:panel>
 					</h:panelGrid>
@@ -176,7 +165,7 @@
 								<h:form id="rankInfoHistoryForm">
 									<rich:dataTable id="rankInfoList"
 										value="#{rankInfoHistory}"
-										var="_rankInfo" rows="10" border="0"
+										var="_rankInfo" rows="10" border="0" 
 										onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
 										onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
 										width="100%">
@@ -202,7 +191,7 @@
 											<f:facet name="header">
 												<h:outputText value="Πλεονάζων Χρόνος στο Βαθμό" />
 											</f:facet>
-											<h:outputText value="#{_rankInfo.surplusTimeInRank}" />
+											<h:outputText value="#{_rankInfo.surplusTimeInRankYear_Month_Day} (#{_rankInfo.surplusTimeInRank} ημ.)" />
 										</rich:column>
 										<rich:column>
 											<f:facet name="header">
@@ -222,7 +211,7 @@
 											<f:facet name="header">
 												<h:outputText value="Πλεονάζων Χρόνος στο Μ.Κ." />
 											</f:facet>
-											<h:outputText value="#{_rankInfo.surplusTimeInSalaryGrade}" />
+											<h:outputText value="#{_rankInfo.surplusTimeInSalaryGradeYear_Month_Day} (#{_rankInfo.surplusTimeInSalaryGrade} ημ.)" />
 										</rich:column>
 										<rich:column>
 											<f:facet name="header">
@@ -372,6 +361,27 @@
 									<h:outputLabel value=""/>
 									<h:outputText value="" />
 								</s:decorate>
+								
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText styleClass="fieldValueLabel" value="Επίπεδο Εκπ/σης: " />
+									</ui:define>
+									<h:selectOneMenu id="Rank" value="#{employee.employeeInfo.rankInfo.educationalLevel}" required="true">
+										<s:selectItems hideNoSelectionLabel="false"
+											var="_educationalLevel"
+											value="#{educationalLevelTypes}"
+											label="#{messages[_educationalLevel.key]}" />
+										<s:convertEnum />
+									</h:selectOneMenu>
+								</s:decorate>								
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<h:outputLabel value=""/>
+									<h:outputText value="" />
+								</s:decorate>
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<h:outputLabel value=""/>
+									<h:outputText value="" />
+								</s:decorate>
 							
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
 									<ui:define name="label">
@@ -498,9 +508,24 @@
 							
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
 									<ui:define name="label">
+										<h:outputText styleClass="fieldValueLabel" value="Επίπεδο Εκπ/σης: " />
+									</ui:define>
+									<h:selectOneMenu id="Rank" value="#{employeeInfoHome.getInstance().rankInfo.educationalLevel}" required="true">
+										<s:selectItems hideNoSelectionLabel="false"
+											var="_educationalLevel"
+											value="#{educationalLevelTypes}"
+											label="#{messages[_educationalLevel.key]}" />
+										<s:convertEnum />
+									</h:selectOneMenu>
+								</s:decorate>								
+								<h:outputLabel value=""/>
+								<h:outputLabel value=""/>
+								
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
 										<h:outputText styleClass="fieldValueLabel" value="Βαθμός: " />
 									</ui:define>
-									<h:selectOneMenu id="Rank" value="#{employee.employeeInfo.rankInfo.rank}" required="true">
+									<h:selectOneMenu id="Rank" value="#{employeeInfoHome.getInstance().rankInfo.rank}" required="true">
 										<s:selectItems hideNoSelectionLabel="false"
 											var="_rankType"
 											value="#{rankTypes}"
@@ -516,7 +541,7 @@
 									<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
 										style="width:50px" enableManualInput="true"
 										styleClass="fieldValueText" required="true"
-										value="#{employee.employeeInfo.rankInfo.lastRankDate}">
+										value="#{employeeInfoHome.getInstance().rankInfo.lastRankDate}">
 									</rich:calendar>
 								</s:decorate>
 							
@@ -524,7 +549,7 @@
 									<ui:define name="label">
 										<h:outputText styleClass="fieldValueLabel" value="Πλεονάζων Χρόνος στο Βαθμό: " />
 									</ui:define>
-									<h:inputText id="salaryGradeFilter" required="true" value="#{employee.employeeInfo.rankInfo.surplusTimeInRank}" ></h:inputText>
+									<h:inputText id="salaryGradeFilter" required="true" value="#{employeeInfoHome.getInstance().rankInfo.surplusTimeInRank}" ></h:inputText>
 								</s:decorate>
 							
 							
@@ -533,7 +558,7 @@
 									<ui:define name="label">
 										<h:outputText styleClass="fieldValueLabel" value="Μισθ. Κλιμάκιο: " />
 									</ui:define>
-									<h:inputText id="salaryGradeFilter" required="true" value="#{employee.employeeInfo.rankInfo.salaryGrade}" size="1"></h:inputText>
+									<h:inputText id="salaryGradeFilter" required="true" value="#{employeeInfoHome.getInstance().rankInfo.salaryGrade}" size="1"></h:inputText>
 								</s:decorate>
 							
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
@@ -543,7 +568,7 @@
 									<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
 										style="width:50px" enableManualInput="true"
 										styleClass="fieldValueText" required="true"
-										value="#{employee.employeeInfo.rankInfo.lastSalaryGradeDate}">
+										value="#{employeeInfoHome.getInstance().rankInfo.lastSalaryGradeDate}">
 									</rich:calendar>
 								</s:decorate>
 
@@ -551,17 +576,9 @@
 									<ui:define name="label">
 										<h:outputText styleClass="fieldValueLabel" value="Πλεονάζων Χρόνος στο Μ.Κ.: " />
 									</ui:define>
-									<h:inputText id="salaryGradeFilter" required="true" value="#{employee.employeeInfo.rankInfo.surplusTimeInSalaryGrade}" ></h:inputText>
+									<h:inputText id="salaryGradeFilter" required="true" value="#{employeeInfoHome.getInstance().rankInfo.surplusTimeInSalaryGrade}" ></h:inputText>
 								</s:decorate>
-							
-							
-							
-							
 							</h:panelGrid>
-							
-							
-						
-
 						</a4j:outputPanel>
 
 						<h:panelGrid columns="2">
@@ -575,18 +592,12 @@
 								reRender="employeeInfoOutputPanel"
 								oncomplete="#{rich:component('insertRankInfoModalPanel')}.hide();" />
 						</h:panelGrid>
-					
-					
-					
+
 					</h:form>
 				</h:panelGrid>
 			</a4j:region>
 		</rich:modalPanel>
 		</a4j:region>
-
-
-
-
 
 		</ui:define>
 	</ui:composition>

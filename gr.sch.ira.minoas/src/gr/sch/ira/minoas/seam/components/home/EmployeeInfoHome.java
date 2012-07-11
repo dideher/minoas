@@ -7,6 +7,7 @@ import gr.sch.ira.minoas.model.employee.EmployeeInfo;
 import gr.sch.ira.minoas.model.employee.RankInfo;
 
 import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.AutoCreate;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
@@ -16,6 +17,7 @@ import org.jboss.seam.annotations.Transactional;
  * @version $Id$
  */
 @Name(value = "employeeInfoHome")
+@AutoCreate
 public class EmployeeInfoHome extends MinoasEntityHome<EmployeeInfo> {
 
 	/**
@@ -78,19 +80,28 @@ public class EmployeeInfoHome extends MinoasEntityHome<EmployeeInfo> {
 	}
 
 	
-	/**
-	 * @see gr.sch.ira.minoas.seam.components.home.MinoasEntityHome#update()
-	 */
-	@Transactional
-	public String insertRankInfo() {
-		
-		EmployeeInfo employeeInfo = (EmployeeInfo)super.getInstance();
-		RankInfo newRankInfo = new RankInfo(employeeInfo.getRankInfo());
-		
-		employeeInfo.setRankInfo(newRankInfo);
 	
-		return update();
-	}
+    /**
+     * @see gr.sch.ira.minoas.seam.components.home.MinoasEntityHome#clearInstance()
+     */
+    @Override
+    public void clearInstance() {
+        super.clearInstance();
+    }
+	
+//	/**
+//	 * @see gr.sch.ira.minoas.seam.components.home.MinoasEntityHome#update()
+//	 */
+//	@Transactional
+//	public String insertRankInfo() {
+//		
+//		EmployeeInfo employeeInfo = (EmployeeInfo)super.getInstance();
+//		RankInfo newRankInfo = new RankInfo(employeeInfo.getRankInfo());
+//		
+//		employeeInfo.setRankInfo(newRankInfo);
+//	
+//		return update();
+//	}
 
 
 }

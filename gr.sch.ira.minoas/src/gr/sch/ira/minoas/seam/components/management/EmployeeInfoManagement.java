@@ -1,19 +1,26 @@
 package gr.sch.ira.minoas.seam.components.management;
 
 import java.util.Collection;
+import java.util.Date;
 
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.RankInfo;
+import gr.sch.ira.minoas.model.employement.EmployeeLeave;
+import gr.sch.ira.minoas.model.employement.Employment;
+import gr.sch.ira.minoas.model.employement.EmploymentType;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.CoreSearching;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
 import gr.sch.ira.minoas.seam.components.home.EmployeeInfoHome;
+import gr.sch.ira.minoas.seam.components.home.EmployeeLeaveHome;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.RaiseEvent;
 import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.annotations.datamodel.DataModel;
 import org.jboss.seam.international.StatusMessage.Severity;
 
@@ -33,10 +40,10 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 	@In(required = true)
 	private CoreSearching coreSearching;
 
-	@In(required = true, create = true)
+	@In(required = true)
 	EmployeeHome employeeHome;
 	
-	@In(required = false)
+	@In(required = true)
 	EmployeeInfoHome employeeInfoHome;
 
 	/**
@@ -124,18 +131,48 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
         }
     }
 	
-	public String insertRankInfo() {
-        if(employeeInfoHome != null && employeeInfoHome.isManaged()) {
-            info("trying to insert a rank info for employee info #0", employeeInfoHome);
-                employeeInfoHome.insertRankInfo();
-                info("employee's #0 Rank Info #1 has been updated!", employeeInfoHome.getInstance().getEmployee(), employeeInfoHome.getInstance().getRankInfo());
-                return ACTION_OUTCOME_SUCCESS;
+//	public String insertRankInfo() {
+//        if(employeeInfoHome != null && employeeInfoHome.isManaged()) {
+//            info("trying to insert a rank info for employee info #0", employeeInfoHome);
+//                employeeInfoHome.insertRankInfo();
+//                info("employee's #0 Rank Info #1 has been updated!", employeeInfoHome.getInstance().getEmployee(), employeeInfoHome.getInstance().getRankInfo());
+//                return ACTION_OUTCOME_SUCCESS;
+//
+//        } else {
+//            facesMessages.add(Severity.ERROR, "employeeInfo home #0 is not managed, thus #1 can't be inserted.", employeeInfoHome, employeeInfoHome.getInstance().getRankInfo());
+//            return ACTION_OUTCOME_FAILURE;
+//        }
+//    }
+	
+	
+	@Transactional
+    public String insertRankInfo() {
+        if (employeeHome.isManaged()) {
+        	RankInfo rinfo = employeeInfoHome.getInstance().getRankInfo();
+        	
+            //rinfo.setEmployeeInfo(employeeInfoHome.getInstance().getEmployee().getEmployeeInfo());
+            rinfo.setInsertedBy(getPrincipal());
+            rinfo.setInsertedOn(new Date());
+        	
+        	
+        	getEntityManager().persist(rinfo);
+        	employeeInfoHome.getInstance().setRankInfo(rinfo);
+        	
+            Employee employee = getEntityManager().merge(employeeHome.getInstance());
+
+                
+            //employeeInfoHome.persist();
+            getEntityManager().flush();
+            setRankInfoHistory(getCoreSearching().getRankInfoHistory(employee));
+            info("Rank Info #0 for employee #1 has been created", rinfo, employee);
+            return ACTION_OUTCOME_SUCCESS;
 
         } else {
-            facesMessages.add(Severity.ERROR, "employeeInfo home #0 is not managed, thus #1 can't be inserted.", employeeInfoHome, employeeInfoHome.getInstance().getRankInfo());
+            facesMessages.add(Severity.ERROR, "employee home #0 is not managed.", employeeHome);
             return ACTION_OUTCOME_FAILURE;
         }
     }
+	
 	
 	@Factory(value="rankInfoHistory",autoCreate=true)
 	public void constructRankInfoHistory() {
@@ -143,4 +180,19 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 	    info("constructing evaluation history for employee #0", employee);
 	    setRankInfoHistory(coreSearching.getRankInfoHistory(employee));
 	}
+	
+	
+	
+    /* this method is called when the user clicks the "add new rank info" */
+    public void prepeareNewRankInfo() {
+        //employeeInfoHome.clearInstance();
+        RankInfo rinfo = new RankInfo();
+        rinfo.resetRankInfo();
+        rinfo.setEmployeeInfo(employeeInfoHome.getInstance());
+        
+        employeeInfoHome.getInstance().setRankInfo(rinfo);
+
+    }
+
+    
 }

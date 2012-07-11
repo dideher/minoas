@@ -164,6 +164,13 @@ a.menu_link:hover {
 	float: right;
 }
 
+.hintText {
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-size: 9px;
+	color: black;
+	text-align: justify;
+}
+
 .vertTop {
         vertical-align:top;
 }
