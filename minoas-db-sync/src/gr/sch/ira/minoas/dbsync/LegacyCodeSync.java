@@ -23,7 +23,7 @@ public class LegacyCodeSync {
         List<EmployeeSignature> returnValue = new ArrayList<EmployeeSignature>(100);
         try {
             st = dbConnection
-                    .prepareStatement("SELECT b.KVD, b.ONOMA, b.EPIUETO, b.PATERAS, b.EIDKLAD, b FROM mkdb..basiko b");
+                    .prepareStatement("SELECT b.KVD, b.ONOMA, b.EPIUETO, b.PATERAS, b.EIDKLAD, b.OKVD FROM mkdb..basiko b");
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
                 EmployeeSignature e = new EmployeeSignature();
@@ -32,7 +32,8 @@ public class LegacyCodeSync {
                 String surname = String.valueOf(rs.getString("EPIUETO")).trim();
                 String fatherName = String.valueOf(rs.getString("PATERAS")).trim();
                 String specializationID = String.valueOf(rs.getString("EIDKLAD")).trim();
-                String signature = String.format("%s-%s-%s-%s", surname, name, fatherName, specializationID);
+                String schoolID = String.valueOf(rs.getString("OKVD")).trim();
+                String signature = String.format("%s-%s-%s-%s-%s", surname, name, fatherName, specializationID, schoolID);
                 e.setSignature(signature);
                 returnValue.add(e);
             }
@@ -53,7 +54,7 @@ public class LegacyCodeSync {
 //            if(le.getSignature().equals(minoasEmployee.getSignature())) {
 //                candidates.add(le);
 //            }
-            if(stringDistance<3) {
+            if(stringDistance<9) {
                 le.setMinoasEmployeeId(minoasEmployee.getMinoasEmployeeId());
                 candidates.add(le);
                 System.err.println(String.format("distance = %d -> '%s' and '%s'", stringDistance, le.getSignature(), minoasEmployee.getSignature()));
@@ -69,7 +70,7 @@ public class LegacyCodeSync {
         List<EmployeeSignature> returnValue = new ArrayList<EmployeeSignature>(100);
         try {
             st = dbConnection
-                    .prepareStatement("SELECT e.ID, e.FIRST_NAME, e.LAST_NAME, e.FATHER_NAME, s.SPECIALIZATION_ID FROM minoas..EMPLOYEE AS e INNER JOIN SPECIALIZATION s ON s.SPECIALIZATION_ID=e.LAST_SPECIALIZATION_ID INNER JOIN EMPLOYMENT em ON e.CURRENT_EMPLOYMENT_ID=em.ID WHERE e.LEGACY_CODE IS NULL AND e.EMPLOYEE_TYPE='REGULAR'");
+                    .prepareStatement("SELECT e.ID, e.FIRST_NAME, e.LAST_NAME, e.FATHER_NAME, s.SPECIALIZATION_ID, em.SCHOOL_ID FROM minoas..EMPLOYEE AS e INNER JOIN SPECIALIZATION s ON s.SPECIALIZATION_ID=e.LAST_SPECIALIZATION_ID INNER JOIN EMPLOYMENT em ON e.CURRENT_EMPLOYMENT_ID=em.ID WHERE e.LEGACY_CODE IS NULL AND e.EMPLOYEE_TYPE='REGULAR'");
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
                 EmployeeSignature e = new EmployeeSignature();
@@ -78,7 +79,8 @@ public class LegacyCodeSync {
                 String surname = String.valueOf(rs.getString("LAST_NAME")).trim();
                 String fatherName = String.valueOf(rs.getString("FATHER_NAME")).trim();
                 String specializationID = String.valueOf(rs.getString("SPECIALIZATION_ID")).trim();
-                String signature = String.format("%s-%s-%s-%s", surname, name, fatherName, specializationID);
+                String schoolID = String.valueOf(rs.getString("SCHOOL_ID")).trim();
+                String signature = String.format("%s-%s-%s-%s-%s", surname, name, fatherName, specializationID, schoolID);
                 e.setSignature(signature);
                 returnValue.add(e);
             }
@@ -106,23 +108,23 @@ public class LegacyCodeSync {
             System.out.println(String.format("fetched totally %d employee(s) from legacy db.", employees.size()));
             int foundCandidates = 0;
             for(EmployeeSignature e : minoasEmployees) {
-                System.out.println("*******************************************************");
-                System.out.println(String.format("Candidates for '%s' minoas emloyee: ", e.getSignature()));
-                System.out.println("*******************************************************");
+//                System.out.println("*******************************************************");
+  //              System.out.println(String.format("Candidates for '%s' minoas emloyee: ", e.getSignature()));
+ //               System.out.println("*******************************************************");
                 List<EmployeeSignature> candidates = findCandidatesForMinoasEmployee(e, employees);
                 int i = 1;
                 if(candidates.size() > 0) {
                     for(EmployeeSignature c : candidates) {
-                        System.out.println(String.format("***** #%d : found candidate '%s'", i, c.getSignature()));
-                        System.out.println(String.format("SELECT b.KVD, b.ONOMA, b.EPIUETO, b.PATERAS, b.EIDKLAD, b.OKVD FROM mkdb..basiko b WHERE b.KVD = '%s'", c.getLegacyCode()));
-                        System.out.println(String.format("SELECT e.ID, e.FIRST_NAME, e.LAST_NAME, e.FATHER_NAME, s.SPECIALIZATION_ID, em.SCHOOL_ID FROM minoas..EMPLOYEE AS e INNER JOIN minoas..SPECIALIZATION s ON s.SPECIALIZATION_ID=e.LAST_SPECIALIZATION_ID INNER JOIN minoas..EMPLOYMENT em ON e.CURRENT_EMPLOYMENT_ID=em.ID WHERE e.ID=%s", c.getMinoasEmployeeId().toString()));
-                        System.out.println("//======== UPDATE SQL ========");
+   //                     System.out.println(String.format("***** #%d : found candidate '%s'", i, c.getSignature()));
+     //                   System.out.println(String.format("SELECT b.KVD, b.ONOMA, b.EPIUETO, b.PATERAS, b.EIDKLAD, b.OKVD FROM mkdb..basiko b WHERE b.KVD = '%s'", c.getLegacyCode()));
+         //               System.out.println(String.format("SELECT e.ID, e.FIRST_NAME, e.LAST_NAME, e.FATHER_NAME, s.SPECIALIZATION_ID, em.SCHOOL_ID FROM minoas..EMPLOYEE AS e INNER JOIN minoas..SPECIALIZATION s ON s.SPECIALIZATION_ID=e.LAST_SPECIALIZATION_ID INNER JOIN minoas..EMPLOYMENT em ON e.CURRENT_EMPLOYMENT_ID=em.ID WHERE e.ID=%s", c.getMinoasEmployeeId().toString()));
+       //                 System.out.println("//======== UPDATE SQL ========");
                         System.out.println(String.format("// UPDATE minoas..EMPLOYEE SET LEGACY_CODE='%s' WHERE ID=%s", c.getLegacyCode(), c.getMinoasEmployeeId().toString())); 
                         
                     }
                     foundCandidates++;
                 }
-                System.out.println("======================================================");
+               // System.out.println("======================================================");
             }
             System.out.println("");
             System.out.println("");
