@@ -84,18 +84,26 @@
 	<title>
 		<band height="802" splitType="Stretch">
 			<staticText>
-				<reportElement style="headlineText" x="8" y="69" width="171" height="15"/>
-				<textElement textAlignment="Center"/>
-				<text><![CDATA[ΥΠΟΥΡΓΕΙΟ ΠΑΙΔΕΙΑΣ
-]]></text>
-			</staticText>
-			<staticText>
-				<reportElement style="bigHeadlineText" x="1" y="52" width="185" height="17"/>
-				<textElement/>
+				<reportElement style="bigHeadlineText" x="1" y="52" width="262" height="17"/>
+				<textElement textAlignment="Center">
+					<font size="11"/>
+				</textElement>
 				<text><![CDATA[ΕΛΛΗΝΙΚΗ ΔΗΜΟΚΡΑΤΙΑ]]></text>
 			</staticText>
+			<staticText>
+				<reportElement style="headlineText" x="1" y="69" width="262" height="15"/>
+				<textElement textAlignment="Center">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[ΥΠΟΥΡΓΕΙΟ ΠΑΙΔΕΙΑΣ ΚΑΙ ΘΡΗΣΚΕΥΜΑΤΩΝ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="boldText" x="1" y="83" width="262" height="26"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[ΠΟΛΙΤΙΣΜΟΥ ΚΑΙ ΑΘΛΗΤΙΣΜΟΥ]]></text>
+			</staticText>
 			<image hAlign="Center" vAlign="Middle">
-				<reportElement x="69" y="1" width="48" height="48"/>
+				<reportElement x="108" y="0" width="48" height="48"/>
 				<imageExpression><![CDATA["/home/fsla/work/git-repositories/minoas/gr.sch.ira.minoas/src/reports/greekflagsima.jpg"]]></imageExpression>
 			</image>
 			<staticText>
@@ -142,12 +150,6 @@
 				<text><![CDATA[ΠΕΡΙΦΕΡΕΙΑΚΗ Δ/ΝΣΗ Π/ΘΜΙΑΣ
 ΚΑΙ Δ/ΘΜΙΑΣ ΕΚΠ/ΣΗΣ ΚΡΗΤΗΣ
 Δ/ΝΣΗ ΔΕΥΤ/ΘΜΙΑΣ ΕΚΠ/ΣΗΣ Ν.ΗΡΑΚΛΕΙΟΥ]]></text>
-			</staticText>
-			<staticText>
-				<reportElement style="boldText" x="28" y="83" width="131" height="26"/>
-				<textElement textAlignment="Center"/>
-				<text><![CDATA[ΔΙΑ ΒΙΟΥ ΜΑΘΗΣΗΣ
-ΚΑΙ ΘΡΗΣΚΕΥΜΑΤΩΝ]]></text>
 			</staticText>
 			<staticText>
 				<reportElement style="normalText" x="2" y="154" width="330" height="15"/>
