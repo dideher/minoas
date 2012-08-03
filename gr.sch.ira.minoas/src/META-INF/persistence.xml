@@ -59,6 +59,7 @@
     <class>gr.sch.ira.minoas.model.printout.PrintoutHistory</class>
     <class>gr.sch.ira.minoas.model.employement.EmployeeLeave</class>
     <class>gr.sch.ira.minoas.model.employement.Salary</class>
+    <class>gr.sch.ira.minoas.model.employee.RankInfo</class>
     <properties>
       <!--
         <property name="hibernate.dialect"
