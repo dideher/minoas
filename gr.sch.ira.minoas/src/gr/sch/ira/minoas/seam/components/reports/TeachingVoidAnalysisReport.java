@@ -73,7 +73,7 @@ public class TeachingVoidAnalysisReport extends BaseReport {
         constructAvailableSpecializationGroupList();
     }
     public void generateReport() {
-
+    
         try {
             long started = System.currentTimeMillis(), finished;
             
@@ -91,10 +91,10 @@ public class TeachingVoidAnalysisReport extends BaseReport {
             List<Map<String, Object>> tempReportData = new ArrayList<Map<String,Object>>();
             
             info("generating report ");
-
+    
             /* get the active school year */
             SchoolYear activeSchoolYear = getCoreSearching().getActiveSchoolYear(getEntityManager());
-
+    
             /* According to the user's request, construct an array of all specialization groups
              * that need to appear in the report
              */
@@ -144,7 +144,7 @@ public class TeachingVoidAnalysisReport extends BaseReport {
             }
             
             /* Determine on which schools the report should be applied */
-
+    
             Collection<School> schools = null;
             
             if (school != null) {
@@ -153,7 +153,7 @@ public class TeachingVoidAnalysisReport extends BaseReport {
             } else {
                 schools = getCoreSearching().getSchools(getEntityManager(), region);
             }
-
+    
             /* do the report */
                         
             
@@ -179,21 +179,18 @@ public class TeachingVoidAnalysisReport extends BaseReport {
                     declaredRequiredHoursMap.put((String)oo[0], (Long)oo[1]);
                 }
                 
-                /* fetch the cdrs for for the report schools and the desired specialization groups */
-                String query2 = "SELECT t.unit.id, SUM(t.hours), MAX(t.unit.title) FROM TeachingHourCDR t " +
-                "WHERE t.schoolYear=:schoolYear " +
-                "AND t.unit IN (:reportSchools) " +
-                "AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g IN (:reportSpecializationGroups) AND g.schoolYear=:schoolYear AND t.specialization MEMBER OF g.specializations) " +
-                "GROUP BY (t.unit.id)";
                 
-               
-                
-                Collection<Object[]> o2  = (Collection<Object[]>)getEntityManager().createQuery(query2).setParameter("schoolYear", activeSchoolYear).setParameter("reportSpecializationGroups", effectiveGroup).setParameter("reportSchools", schools).getResultList();
-                List<Map<String, Object>> data = new ArrayList<Map<String,Object>>();
-                for(Object[] oo : o2) {
+                /* 
+                 * since we have the required hours for the reports schools, initialize the main data structure with the required hours If we don't 
+                 * do so here and wait the second pass, we will lose info about schools, with teaching requirmenets, but no CDRs
+                 * 
+                 */
+                List<Map<String, Object>> data = new ArrayList<Map<String,Object>>(schools != null ? schools.size() : 0);
+                Map<String, Map<String, Object>> structureCacheMap = new HashMap<String, Map<String,Object>>();
+                for(String schoolID : declaredRequiredHoursMap.keySet()) {
                     Map<String, Object> d = new HashMap<String, Object>();
-                    Long unitAvailableHours = (Long)oo[1];
-                    Long unitRequiredHours = declaredRequiredHoursMap.containsKey(oo[0]) ?  declaredRequiredHoursMap.get(oo[0]) : new Long(0);
+                    Long unitAvailableHours = new Long(0);
+                    Long unitRequiredHours = declaredRequiredHoursMap.containsKey(schoolID) ?  declaredRequiredHoursMap.get(schoolID) : new Long(0);
                     Long unitMissingHours = new Long(unitRequiredHours.longValue()-unitAvailableHours.longValue());
                     Long unitMissingRegularEmployees = new Long(0);
                     Double unitMissingRegularEmployeesDouble = new Double(0);
@@ -203,10 +200,10 @@ public class TeachingVoidAnalysisReport extends BaseReport {
                     } 
                     
                     d.put("unitAvailableHours", unitAvailableHours);
-                    d.put("school", getEntityManager().find(Unit.class, oo[0]));
+                    d.put("school", getEntityManager().find(Unit.class, schoolID));
                     /* at this point we should find the required hours for the given school */
                     
-                    data.add(d);
+                    
                     availableHours+=unitAvailableHours.longValue();
                     requiredHours+=unitRequiredHours.longValue();
                     totalMissingRegularEmployees+=unitMissingRegularEmployees.longValue();
@@ -246,7 +243,94 @@ public class TeachingVoidAnalysisReport extends BaseReport {
                     } else if(tempDouble < 0) {
                         d.put("unitMissingProcessedFlag", "+");
                     } else d.put("unitMissingProcessedFlag", "=");
+                    
+                    data.add(d);
+                    structureCacheMap.put(schoolID, d); // update the cache - we will need it in the next loop
                 }
+                
+                /* fetch the cdrs for for the report schools and the desired specialization groups */
+                
+                String query2 = "SELECT t.unit.id, SUM(t.hours), MAX(t.unit.title) FROM TeachingHourCDR t " +
+                "WHERE t.schoolYear=:schoolYear " +
+                "AND t.unit IN (:reportSchools) " +
+                "AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g IN (:reportSpecializationGroups) AND g.schoolYear=:schoolYear AND t.specialization MEMBER OF g.specializations) " +
+                "GROUP BY (t.unit.id)";
+                
+                Collection<Object[]> o2  = (Collection<Object[]>)getEntityManager().createQuery(query2).setParameter("schoolYear", activeSchoolYear).setParameter("reportSpecializationGroups", effectiveGroup).setParameter("reportSchools", schools).getResultList();
+                
+                
+                for(Object[] oo : o2) {
+                    Map<String, Object> d = new HashMap<String, Object>(); // use the cached structure from the previous loop
+                    Long unitAvailableHours = (Long)oo[1];
+                    Long unitRequiredHours = declaredRequiredHoursMap.containsKey(oo[0]) ?  declaredRequiredHoursMap.get(oo[0]) : new Long(0);
+                    Long unitMissingHours = new Long(unitRequiredHours.longValue()-unitAvailableHours.longValue());
+                    Long unitMissingRegularEmployees = new Long(0);
+                    Double unitMissingRegularEmployeesDouble = new Double(0);
+                    if((unitMissingHours > HOURS_FOR_REGULAR_POSITION) || (unitMissingHours < HOURS_FOR_REGULAR_POSITION) ) {
+                        unitMissingRegularEmployees = new Long(unitMissingHours.longValue() / HOURS_FOR_REGULAR_POSITION); 
+                        unitMissingRegularEmployeesDouble = new Double(unitMissingHours.floatValue() / HOURS_FOR_REGULAR_POSITION);
+                    } 
+                    
+                    d.put("unitAvailableHours", unitAvailableHours);
+                    d.put("school", getEntityManager().find(Unit.class, oo[0]));
+                    /* at this point we should find the required hours for the given school */
+                    
+                    availableHours+=unitAvailableHours.longValue();
+                    requiredHours+=unitRequiredHours.longValue();
+                    totalMissingRegularEmployees+=unitMissingRegularEmployees.longValue();
+                    totalMissingRegularEmployeesDouble+=unitMissingRegularEmployees.doubleValue();
+                    d.put("unitRequiredHours", unitRequiredHours);
+                    d.put("unitMissingHours", unitMissingHours);
+                    d.put("unitMissingHoursNeg", unitMissingHours*(-1));
+                    d.put("unitMissingRegularEmployees", unitMissingRegularEmployees);
+                    d.put("unitMissingRegularEmployeesNeg", unitMissingRegularEmployees*(-1));
+                    d.put("unitMissingRegularEmployeesDouble", unitMissingRegularEmployeesDouble);
+                    d.put("unitMissingRegularEmployeesDoubleNeg", unitMissingRegularEmployeesDouble*(-1));
+                    double dd[] = getFractionalPartOfDouble(unitMissingRegularEmployeesDouble);
+                    double ddd = 0.0;
+                    double absoluteFraction = Math.abs(dd[1]);
+                    if(absoluteFraction < 0.39 ) {
+                        ddd = 0;
+                    } else if(absoluteFraction >= 0.4 && absoluteFraction <= 0.7) {
+                        ddd = 0.5;
+                    } else if(absoluteFraction >= 0.71) {
+                        ddd = 1.0;
+                    }
+                    if(dd[1] < 0) 
+                        ddd = ddd * (-1.0);
+                    double tempDouble = dd[0]+ddd; 
+                    d.put("unitMissingRegularProcessedEmployeesDouble", new Double(tempDouble));
+                    d.put("unitMissingRegularProcessedEmployeesDoubleNeg", new Double(tempDouble*(-1)));
+                    totalMissingRegularProcessedEmployeesDouble+=tempDouble;
+                    
+                    if(unitMissingRegularEmployeesDouble.doubleValue() > 0 ) {
+                        d.put("unitMissingFlag", "-");
+                    } else if(unitMissingRegularEmployeesDouble.doubleValue() < 0) {
+                        d.put("unitMissingFlag", "+");
+                    } else d.put("unitMissingFlag", "=");
+                    
+                    if(tempDouble > 0 ) {
+                        d.put("unitMissingProcessedFlag", "-");
+                    } else if(tempDouble < 0) {
+                        d.put("unitMissingProcessedFlag", "+");
+                    } else d.put("unitMissingProcessedFlag", "=");
+                    
+                    /* check if the current element has been already added to the list
+                     * from the previous loop. If so, then remove the empty element 
+                     * before adding the new one.
+                     */
+                    if(structureCacheMap.containsKey(oo[0])) {
+                        int size = data.size();
+                        data.remove(structureCacheMap.get(oo[0]));
+                        size = data.size();
+                        structureCacheMap.remove(oo[0]);
+                    }
+                    data.add(d);
+                    
+                
+                }
+                
+                
                 reportItem.put("data", data);
                 reportItem.put("totalRequiredHours", new Long(requiredHours));
                 reportItem.put("totalAvailableHours", new Long(availableHours));
@@ -269,7 +353,7 @@ public class TeachingVoidAnalysisReport extends BaseReport {
             ex.printStackTrace(System.err);
             throw new RuntimeException(ex);
         }
-
+    
     }
 
     protected double[] getFractionalPartOfDouble(double aDouble) {
