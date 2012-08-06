@@ -8,6 +8,8 @@ import gr.sch.ira.minoas.seam.components.criteria.SpecializationGroupSearchType;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -250,11 +252,11 @@ public class TeachingVoidAnalysisReport extends BaseReport {
                 
                 /* fetch the cdrs for for the report schools and the desired specialization groups */
                 
-                String query2 = "SELECT t.unit.id, SUM(t.hours), MAX(t.unit.title) FROM TeachingHourCDR t " +
+                String query2 = "SELECT t.unit.id, SUM(t.hours) FROM TeachingHourCDR t " +
                 "WHERE t.schoolYear=:schoolYear " +
                 "AND t.unit IN (:reportSchools) " +
                 "AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g IN (:reportSpecializationGroups) AND g.schoolYear=:schoolYear AND t.specialization MEMBER OF g.specializations) " +
-                "GROUP BY (t.unit.id)";
+                "GROUP BY (t.unit.id) ORDER BY (t.unit.id)";
                 
                 Collection<Object[]> o2  = (Collection<Object[]>)getEntityManager().createQuery(query2).setParameter("schoolYear", activeSchoolYear).setParameter("reportSpecializationGroups", effectiveGroup).setParameter("reportSchools", schools).getResultList();
                 
@@ -329,6 +331,15 @@ public class TeachingVoidAnalysisReport extends BaseReport {
                     
                 
                 }
+                
+                /* sort the report */
+                Collections.sort(data, new Comparator<Map<String, Object>>() {
+                    public int compare(Map<String, Object> o1, Map<String, Object> o2) {
+                        Unit unit1 = (Unit)o1.get("school");
+                        Unit unit2 = (Unit)o2.get("school");
+                        return unit1.compareTo(unit2);
+                    }
+                });
                 
                 
                 reportItem.put("data", data);
