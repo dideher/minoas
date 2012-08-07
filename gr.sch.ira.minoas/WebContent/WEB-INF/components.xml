@@ -32,10 +32,19 @@
 
    <persistence:entity-manager-factory
     name="entityManagerFactory" persistence-unit-name="minoas" />
-
+  
+   
   <persistence:managed-persistence-context
     name="entityManager" auto-create="true" entity-manager-factory="#{entityManagerFactory}" 
     persistence-unit-jndi-name="java:/minoasEntityManagerFactory" />
+  
+   <persistence:entity-manager-factory 
+      name="spanoudakisEntityManagerFactory" 
+      persistence-unit-name="spanoudakisDB" />
+  
+  <persistence:managed-persistence-context
+    name="spanoudakisEntityManager" auto-create="true" entity-manager-factory="#{spanoudakisEntityManagerFactory}" 
+    persistence-unit-jndi-name="java:/spanoudakisEntityManagerFactory" />
   
   
   <transaction:entity-transaction entity-manager="#{entityManager}" />
