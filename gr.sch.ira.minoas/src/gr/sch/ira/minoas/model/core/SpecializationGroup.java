@@ -45,6 +45,14 @@ public class SpecializationGroup extends BaseIDModel implements Comparable<Speci
 	@Basic
 	@Column(name = "TITLE", length = 128, nullable = false)
 	private String title;
+	
+	/**
+	 * If set, then this specialization group is ment to be virtual. 
+	 * gh-54
+	 */
+	@Basic
+	@Column(name="IS_VIRTUAL_GROUP", nullable=true)
+	private Boolean isVirtualGroup = Boolean.FALSE;
 
 	/**
 	 * 
@@ -112,5 +120,19 @@ public class SpecializationGroup extends BaseIDModel implements Comparable<Speci
 		builder.append("]");
 		return builder.toString();
 	}
+
+    /**
+     * @return the isVirtualGroup
+     */
+    public Boolean getIsVirtualGroup() {
+        return isVirtualGroup;
+    }
+
+    /**
+     * @param isVirtualGroup the isVirtualGroup to set
+     */
+    public void setIsVirtualGroup(Boolean isVirtualGroup) {
+        this.isVirtualGroup = isVirtualGroup;
+    }
 
 }
