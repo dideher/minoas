@@ -30,6 +30,7 @@ import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.SecondmentType;
 import gr.sch.ira.minoas.model.employement.ServiceAllocation;
 import gr.sch.ira.minoas.model.employement.ServiceAllocationType;
+import gr.sch.ira.minoas.model.employement.SpecialAssigment;
 import gr.sch.ira.minoas.model.employement.TeachingHourCDR;
 import gr.sch.ira.minoas.model.employement.TeachingHourCDRType;
 import gr.sch.ira.minoas.model.employement.WorkExperience;
@@ -1406,6 +1407,15 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
             .setParameter("employeeInfo", employee.getEmployeeInfo()).getResultList();
         info("found totally '#0' rank transitions in employee's '#1' history.", result.size(), employee);
         return result;
+    }
+    
+    @SuppressWarnings("unchecked")
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public Collection<SpecialAssigment> getEmployeeSpecialAssigments(EntityManager entityManager, Employee employee) {
+        List<SpecialAssigment> return_value = entityManager.createQuery(
+                "SELECT w FROM SpecialAssigment w WHERE w.employee=:employee AND w.active IS TRUE")
+                .setParameter("employee", employee).getResultList();
+        return return_value;
     }
 
     @Factory(value = "rankTypes")

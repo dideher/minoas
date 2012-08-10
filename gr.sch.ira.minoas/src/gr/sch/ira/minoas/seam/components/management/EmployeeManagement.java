@@ -7,6 +7,7 @@ import gr.sch.ira.minoas.model.employee.EmployeeExclusion;
 import gr.sch.ira.minoas.model.employee.RegularEmployeeInfo;
 import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 import gr.sch.ira.minoas.model.employement.Employment;
+import gr.sch.ira.minoas.model.employement.SpecialAssigment;
 import gr.sch.ira.minoas.model.employement.TeachingHourCDR;
 import gr.sch.ira.minoas.model.employement.TeachingHourCDRType;
 import gr.sch.ira.minoas.model.employement.WorkExperience;
@@ -15,8 +16,10 @@ import gr.sch.ira.minoas.seam.components.EmployeeMergeRequest;
 import gr.sch.ira.minoas.seam.components.home.EmployeeExclusionHome;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
 import gr.sch.ira.minoas.seam.components.home.RegularEmployeeInfoHome;
+import gr.sch.ira.minoas.seam.components.home.SpecialAssigmentHome;
 import gr.sch.ira.minoas.seam.components.reports.resource.EmployeeWorkExperienceItem;
 import gr.sch.ira.minoas.seam.components.reports.resource.LeaveReportItem;
+import gr.sch.ira.minoas.seam.components.reports.resource.SpecialAssigmentReportItem;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -195,6 +198,9 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
 	private EmployeeHome employeeHome;
 	
 	@In(required = true, create = true)
+	private SpecialAssigmentHome specialAssigmentHome;
+	
+	@In(required = true, create = true)
 	private RegularEmployeeInfoHome regularEmployeeInfoHome;
 
 	@In(required = true, create = true)
@@ -214,6 +220,9 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
 	
 	@DataModel(value="employeeLeaveItems")
 	private Collection<LeaveReportItem> employeeLeaveItems;
+	
+	@DataModel(value="employeeSpecialAssigmentItems")
+    private Collection<SpecialAssigmentReportItem> employeeSpecialAssigmentItems;
 	
 	/**
 	 * @return the employeeWorkExperienceItems
@@ -324,6 +333,8 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
         return return_value;
     }
 	
+	
+	
 	@Factory(value="employeeWorkExperienceItems")
 	public void constructEmployeeWorkExperienceHistory() {
 		Employee employee = getEmployeeHome().getInstance();
@@ -332,6 +343,16 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
 	    for(WorkExperience experience : employeeExperience) {
 	    	employeeWorkExperienceItems.add(new EmployeeWorkExperienceItem(experience));
 	    }
+	}
+	
+	@Factory(value="employeeSpecialAssigmentItems")
+	public void constructSpecialAssigmentItems() {
+	    Employee employee = getEmployeeHome().getInstance();
+        Collection<SpecialAssigment> employeeSpecialAssigments = getCoreSearching().getEmployeeSpecialAssigments(getEntityManager(), employee);
+        employeeSpecialAssigmentItems  = new ArrayList<SpecialAssigmentReportItem>(employeeSpecialAssigments.size());
+        for(SpecialAssigment specialAssigment : employeeSpecialAssigments) {
+            employeeSpecialAssigmentItems.add(new SpecialAssigmentReportItem(specialAssigment));
+        }
 	}
 	
 	@Transactional(TransactionPropagationType.REQUIRED)
@@ -367,10 +388,35 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
 			getEmployeeHome().update();
 			return ACTION_OUTCOME_SUCCESS;
 		} else {
-			facesMessages.add(Severity.ERROR, "Employee #0 is not managed.");
+			facesMessages.add(Severity.ERROR, "Employee #0 is not managed.", getEmployeeHome());
 			return ACTION_OUTCOME_FAILURE;
 		}
-
+	}
+	
+	/* this method is called when the user clicks the "add new employee special assigment" */
+    public void prepareForNewSpecialAssigment() {
+        specialAssigmentHome.clearInstance();
+    }
+	
+	@Transactional(TransactionPropagationType.REQUIRED)
+    public String addEmployeeSpecialAssigment() {
+	    if (getEmployeeHome().isManaged() && !getSpecialAssigmentHome().isManaged()) {
+	        Employee employee = getEmployeeHome().getInstance();
+	        SpecialAssigment sa = getSpecialAssigmentHome().getInstance();
+	        sa.setInsertedBy(getPrincipal());
+	        sa.setInsertedOn(new Date());
+	        sa.setEmployee(employee);
+	        sa.setSchoolYear(getCoreSearching().getActiveSchoolYear(getEntityManager()));
+	        sa.setActive(Boolean.TRUE);
+	        getSpecialAssigmentHome().persist();
+	        getEntityManager().flush();
+	        constructSpecialAssigmentItems(); /* update the list */
+	        info("added new special assigment #0 for employee #1", sa, employee);
+	        return ACTION_OUTCOME_SUCCESS;
+	    } else {
+            facesMessages.add(Severity.ERROR, "Employee #0 or is not managed or Special Assigment #1 IS managed.",getEmployeeHome());
+            return ACTION_OUTCOME_FAILURE;
+        }
 	}
 	
 	@Transactional
@@ -553,6 +599,34 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
      */
     public void setRegularEmployeeInfoHome(RegularEmployeeInfoHome regularEmployeeInfoHome) {
         this.regularEmployeeInfoHome = regularEmployeeInfoHome;
+    }
+
+    /**
+     * @return the specialAssigmentHome
+     */
+    public SpecialAssigmentHome getSpecialAssigmentHome() {
+        return specialAssigmentHome;
+    }
+
+    /**
+     * @param specialAssigmentHome the specialAssigmentHome to set
+     */
+    public void setSpecialAssigmentHome(SpecialAssigmentHome specialAssigmentHome) {
+        this.specialAssigmentHome = specialAssigmentHome;
+    }
+
+    /**
+     * @return the employeeSpecialAssigmentItems
+     */
+    public Collection<SpecialAssigmentReportItem> getEmployeeSpecialAssigmentItems() {
+        return employeeSpecialAssigmentItems;
+    }
+
+    /**
+     * @param employeeSpecialAssigmentItems the employeeSpecialAssigmentItems to set
+     */
+    public void setEmployeeSpecialAssigmentItems(Collection<SpecialAssigmentReportItem> employeeSpecialAssigmentItems) {
+        this.employeeSpecialAssigmentItems = employeeSpecialAssigmentItems;
     }
 
 }

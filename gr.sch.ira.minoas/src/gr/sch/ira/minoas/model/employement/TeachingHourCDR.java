@@ -89,6 +89,10 @@ public class TeachingHourCDR extends BaseIDModel {
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="DISPOSAL_ID", nullable=true)
     private Disposal disposal;
+    
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="SPECIAL_ASSIGMENT_ID", nullable=true)
+    private SpecialAssigment specialAssigment;
 
     /**
      * @return the schoolYear
@@ -292,5 +296,19 @@ public class TeachingHourCDR extends BaseIDModel {
      */
     public void setLogisticCDR(Boolean logisticCDR) {
         this.logisticCDR = logisticCDR;
+    }
+
+    /**
+     * @return the specialAssigment
+     */
+    public SpecialAssigment getSpecialAssigment() {
+        return specialAssigment;
+    }
+
+    /**
+     * @param specialAssigment the specialAssigment to set
+     */
+    public void setSpecialAssigment(SpecialAssigment specialAssigment) {
+        this.specialAssigment = specialAssigment;
     }
 }
