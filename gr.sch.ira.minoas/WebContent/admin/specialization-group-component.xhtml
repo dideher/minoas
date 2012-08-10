@@ -7,27 +7,47 @@
 
 <ui:component>
 	<h:panelGrid columns="1">
-					<s:decorate template="/layout/doubleLineEdit.xhtml">
-						<ui:define name="label">
-							<h:outputText value="Όνομα Ειδικότητας : " />
-						</ui:define>
-						<h:inputText id="specializationFilter"
-							value="${specializationGroup.title}" required="true" size="24"
-							maxlength="128" styleClass="fieldValueText" />
+		<h:panelGrid columns="2">
+			<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+				<ui:define name="label">
+					<h:outputText value="Όνομα Ειδικότητας : " />
+				</ui:define>
+				<h:inputText id="specializationFilter"
+					value="${specializationGroup.title}" required="true" size="24"
+					maxlength="128" styleClass="fieldValueText" />
 
-					</s:decorate>
+			</s:decorate>
 
-					<s:decorate template="/layout/doubleLineEdit.xhtml">
-						<ui:define name="label">
-							<h:outputText value="Ειδικότητες Ομάδας" />
-						</ui:define>
-						<rich:pickList value="${specializationGroup.specializations}" sourceListWidth="240" targetListWidth="240">
-							<s:selectItems var="item" value="#{specializationsListQuery.resultList}" label="#{item.id} - #{item.title}">
-								
-							</s:selectItems>
-							<s:convertEntity></s:convertEntity>
-						</rich:pickList>
-					</s:decorate>
-				</h:panelGrid>
+			<h:panelGroup>
+				<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+					<ui:define name="label">
+						<h:outputText value="Εικονική Ειδικότητα : " />
+					</ui:define>
+					<h:selectBooleanCheckbox
+						value="#{specializationGroup.isVirtualGroup}" />
+				</s:decorate>
+				
+
+			</h:panelGroup>
+		</h:panelGrid>
+
+		<h:outputText style="font-style:italic; font-size:12px;"
+					value="(Οι εικονικές ειδικότητες χρησιμοποιούνται για τις περιπτώσεις των Projects, της Τεχνολογίας, κλπ)" />
+					
+		<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+			<ui:define name="label">
+				<h:outputText value="Ειδικότητες Ομάδας" />
+			</ui:define>
+			<rich:pickList value="${specializationGroup.specializations}"
+				sourceListWidth="240" targetListWidth="240">
+				<s:selectItems var="item"
+					value="#{specializationsListQuery.resultList}"
+					label="#{item.id} - #{item.title}">
+
+				</s:selectItems>
+				<s:convertEntity></s:convertEntity>
+			</rich:pickList>
+		</s:decorate>
+	</h:panelGrid>
 </ui:component>
 </html>
