@@ -2,10 +2,10 @@ package gr.sch.ira.minoas.seam.components.management;
 
 import gr.sch.ira.minoas.model.core.SpecializationGroup;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
-import gr.sch.ira.minoas.seam.components.CoreSearching;
 import gr.sch.ira.minoas.seam.components.home.SpecializationGroupHome;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -15,7 +15,6 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.RaiseEvent;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
@@ -44,46 +43,45 @@ public class SpecializationGroupManagement extends BaseDatabaseAwareSeamComponen
         this.availableSpecializationGroups = new ArrayList<SpecializationGroup>(getCoreSearching().getSpecializationGroups(getCoreSearching().getActiveSchoolYear(em), em));
     }
     
-//    @Transactional
-//    @RaiseEvent("leaveCreated")
-//    public String addEmployeeLeaveAction() {
-//        if (employeeHome.isManaged() && !(employeeLeaveHome.isManaged())) {
-//            Employee employee = getEntityManager().merge(employeeHome.getInstance());
-//            EmployeeLeave newLeave = employeeLeaveHome.getInstance();
-//            newLeave.setEmployee(employee);
-//            newLeave.setInsertedBy(getPrincipal());
-//            newLeave.setInsertedOn(new Date());
-//            newLeave.setActive(leaveShouldBeActivated(newLeave, new Date()));
-//            /* check if the employee has a current regular employment */
-//            Employment employment = employee.getCurrentEmployment();
-//            if (employment != null && employment.getType() == EmploymentType.REGULAR) {
-//                newLeave.setRegularSchool(employment.getSchool());
-//            }
-//
-//            if (validateLeave(newLeave, true)) {
-//                newLeave.setNumberOfDays(computeLeaveDuration(newLeave.getEstablished(), newLeave.getDueTo()));
-//                employeeLeaveHome.persist();
-//                setLeaveDurarionInDaysHelper(0);
-//                setLeaveDurationInDaysWithoutWeekends(0);
-//                getEntityManager().flush();
-//                info("leave #0 for employee #1 has been created", newLeave, employee);
-//                return ACTION_OUTCOME_SUCCESS;
-//            } else {
-//                return ACTION_OUTCOME_FAILURE;
-//            }
-//        } else {
-//            facesMessages.add(Severity.ERROR, "employee home #0 is not managed.", employeeHome);
-//            return ACTION_OUTCOME_FAILURE;
-//        }
-//    }
-//    
-//    @Transactional
-//    @RaiseEvent("leaveCreated")
-//    public String triggerLeaveAddedAction() {
-//        info("triggered!");
-//        return ACTION_OUTCOME_SUCCESS;
-//    }
-//
+    @Transactional
+    public String addSpecializationGroupAction() {
+        if (!specializationGroupHome.isManaged()) {
+            SpecializationGroup newSpecializationGroup = specializationGroupHome.getInstance();
+            /* we are allowed to have a specialization group with no 
+             * specializations inside only and only if the 
+             * isVirtualSpecialization flag is set
+             */
+            if(!newSpecializationGroup.getIsVirtualGroup()) {
+                /* is virtual group is not specified,
+                 * check if the user has enter specialization at all
+                 */
+                if(newSpecializationGroup.getSpecializations().size() == 0) {
+                    /* ops ! */
+                    info("specialization group #0 creation failed because the group is not virtual and no specialization has been specified.", specializationGroupHome);
+                    facesMessages.add(Severity.ERROR, "Πρέπει να ορίσετε τουλάχιστον μια ειδικότητα όταν η ομάδα δεν είναι εικονική.");
+                    return ACTION_OUTCOME_FAILURE;
+                }
+            }
+            newSpecializationGroup.setInsertedBy(getPrincipal());
+            newSpecializationGroup.setInsertedOn(new Date());
+            newSpecializationGroup.setSchoolYear(getCoreSearching().getActiveSchoolYear(getEntityManager()));
+            specializationGroupHome.persist();
+            getEntityManager().flush();
+            info("specialization group #0 has been created", newSpecializationGroup);
+            return ACTION_OUTCOME_SUCCESS;
+        } else {
+            facesMessages.add(Severity.ERROR, "specialization group home #0 is managed.", specializationGroupHome);
+            return ACTION_OUTCOME_FAILURE;
+        }
+    }
+    
+    @Transactional
+    @RaiseEvent("leaveCreated")
+    public String triggerLeaveAddedAction() {
+        info("triggered!");
+        return ACTION_OUTCOME_SUCCESS;
+    }
+
     @Transactional
     public String deleteSpecializagtionGroupAction() {
         if (specializationGroupHome.isManaged()) {
@@ -120,11 +118,9 @@ public class SpecializationGroupManagement extends BaseDatabaseAwareSeamComponen
 
     /* this method is called when the user clicks the "add new specialization group" */
     public void prepeareNewSpecializationGroup() {
-//        employeeLeaveHome.clearInstance();
-//        EmployeeLeave leave = employeeLeaveHome.getInstance();
-//        leave.setEstablished(new Date());
-//        leave.setDueTo(new Date());
-//        leave.setEmployee(employeeHome.getInstance());
+        specializationGroupHome.clearInstance();
+        SpecializationGroup group = specializationGroupHome.getInstance();
+        group.setIsVirtualGroup(Boolean.FALSE);
     }
 
     /**

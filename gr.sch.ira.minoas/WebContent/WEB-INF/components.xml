@@ -361,10 +361,6 @@
       <action execute="#{employeeCurrentDisposalsListQuery.refresh}" />
    </event>
    
-   <event type="org.jboss.seam.afterTransactionSuccess.SpecializationGroup">
-      <action execute="#{specializationGroupsListQuery.refresh}" />
-   </event>
-   
    <event type="org.jboss.seam.afterTransactionSuccess.Secondment">
       <action execute="#{employeeSecondmentsListQuery.refresh}" />
       <action execute="#{employeeActiveSecondmentListQuery.refresh}" />
