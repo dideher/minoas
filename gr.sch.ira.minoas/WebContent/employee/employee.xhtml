@@ -65,36 +65,74 @@
 								</rich:panel>
 
 								<h:panelGrid columns="1" width="100%">
+									<a4j:outputPanel id="employeeSpecialAssigmentOutputPanel">
+										<h:form id="employeeSpecialAssigmentTableForm">
+											<rich:dataTable id="employeeSpecialAssigmentTable"
+												rendered="#{employeeSpecialAssigmentItems.rowCount > 0}"
+												value="#{employeeSpecialAssigmentItems}" var="_item"
+												rows="15" border="0"
+												onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+												onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+												width="100%">
+												<f:facet name="header">
+													<h:outputLabel value="Ειδικές Ασχολίες Εκπαιδευτικού" />
+												</f:facet>
+												<rich:column>
+													<f:facet name="header">
+														<h:outputText value="Ειδ. Ασχολία" />
+													</f:facet>
+													<h:outputText value="#{_item.specializationGroupTitle}" />
+												</rich:column>
+												<rich:column>
+													<f:facet name="header">
+														<h:outputText value="Μονάδα" />
+													</f:facet>
+													<h:outputText value="#{_item.unitTitle}" />
+												</rich:column>
+												<rich:column>
+													<f:facet name="header">
+														<h:outputText value="Ώρες" />
+													</f:facet>
+													<h:outputText value="#{_item.finalWorkingHours}" />
+												</rich:column>
 
-									<rich:dataTable id="employeeSpecialAssigmentTable"
-										value="#{employeeSpecialAssigmentItems}" var="_item" rows="15"
-										border="0"
-										onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
-										onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
-										width="100%">
-										<f:facet name="header">
-											<h:outputLabel value="Ειδικές Ασχολίες Εκπαιδευτικού" />
-										</f:facet>
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Ειδ. Ασχολία" />
-											</f:facet>
-											<h:outputText value="#{_item.specializationGroupTitle}" />
-										</rich:column>
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Μονάδα" />
-											</f:facet>
-											<h:outputText value="#{_item.unitTitle}" />
-										</rich:column>
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Ώρες" />
-											</f:facet>
-											<h:outputText value="#{_item.finalWorkingHours}" />
-										</rich:column>
-									</rich:dataTable>
+												<a4j:support event="onRowClick" reRender="menuOutputPanel"
+													limitToList="true"
+													oncomplete="#{rich:component('menu')}.show(event, {})">
+													<a4j:actionparam name="specialAssigmentId"
+														value="#{_item.id}" assignTo="#{specialAssigmentHome.id}"
+														converter="javax.faces.Integer" />
+												</a4j:support>
 
+											</rich:dataTable>
+
+											<a4j:outputPanel id="menuOutputPanel">
+												<rich:contextMenu styleClass="normal" attached="false"
+													id="menu" submitMode="none">
+													<rich:menuItem icon="/img/icons/edit.png" immediate="true"
+														disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE'))}"
+														submitMode="ajax"
+														reRender="updateSpecialAssigmentModalPanel"
+														value="Επεξεργασία"
+														oncomplete="#{rich:component('updateModalPanel')}.show()">
+													</rich:menuItem>
+
+
+
+													<rich:menuSeparator />
+													<rich:menuItem icon="/img/icons/delete.png"
+														immediate="true"
+														disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE'))}"
+														submitMode="ajax" value="Διαγραφή"
+														reRender="employeeSpecialAssigmentOutputPanel"
+														limitToList="true"
+														onclick="if(!confirm('Θα διαγράψετε την ειδική ασχολία. Είστε σίγουρος ;')) {form.reset(); return false;}"
+														action="#{employeeManagement.removeEmployeeSpecialAssigment()}">
+													</rich:menuItem>
+												</rich:contextMenu>
+											</a4j:outputPanel>
+										</h:form>
+									</a4j:outputPanel>
 
 
 								</h:panelGrid>
@@ -219,7 +257,7 @@
 								action="#{employeeManagement.prepareForNewSpecialAssigment()}"
 								rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE'))}"
 								oncomplete="#{rich:component('addSpecialAssigmentModalPanel')}.show()"
-								value="Εισαγωγή Ειδικής Ασχολίας Εκπαιδευτικού">
+								value="Εισαγωγή Ειδικής Ασχολίας">
 								<h:graphicImage value="/img/icons/edit.png" width="12"
 									height="12" style="border:0" />
 								<f:setPropertyActionListener
@@ -1214,7 +1252,8 @@
 												<h:outputText value="Μονάδα Ασχολίας" />
 											</ui:define>
 
-											<h:inputText id="specialAssigmentUnitTarget" value="#{specialAssigmentHome.instance.unit.title}"
+											<h:inputText id="specialAssigmentUnitTarget"
+												value="#{specialAssigmentHome.instance.unit.title}"
 												styleClass="fieldValueText" required="true">
 
 												<rich:suggestionbox for="specialAssigmentUnitTarget"
@@ -1238,7 +1277,8 @@
 											<ui:define name="label">
 												<h:outputText value="Ειδική Ασχολία" />
 											</ui:define>
-											<h:inputText id="specializationFilterVirtual" required="true" value="#{specialAssigmentHome.instance.specializationGroup.title}"
+											<h:inputText id="specializationFilterVirtual" required="true"
+												value="#{specialAssigmentHome.instance.specializationGroup.title}"
 												styleClass="fieldValueText" size="17" maxlength="17">
 												<rich:suggestionbox height="100" width="250"
 													for="specializationFilterVirtual" var="a_spec"
@@ -1291,9 +1331,9 @@
 								limitToList="true"
 								data="#{facesContext.maximumSeverity.ordinal ge 2}"
 								oncomplete="if(data == false) Richfaces.hideModalPanel('addSpecialAssigmentModalPanel');"
-								reRender="employeeSpecialAssigmentTable" />
+								reRender="employeeSpecialAssigmentOutputPanel" />
 							<a4j:commandButton value="Επιστροφή .."
-								reRender="basicEmployeeInfoPanel,"
+								reRender="employeeSpecialAssigmentOutputPanel"
 								oncomplete="#{rich:component('addSpecialAssigmentModalPanel')}.hide();" />
 						</h:panelGrid>
 					</h:form>

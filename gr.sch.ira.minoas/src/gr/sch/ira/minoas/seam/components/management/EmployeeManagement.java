@@ -419,6 +419,36 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
         }
 	}
 	
+	@Transactional(TransactionPropagationType.REQUIRED)
+    public String removeEmployeeSpecialAssigment() {
+	    if (getEmployeeHome().isManaged() && getSpecialAssigmentHome().isManaged()) {
+            SpecialAssigment sa = getSpecialAssigmentHome().getInstance();
+            sa.setActive(Boolean.FALSE);
+            sa.setDeleted(Boolean.TRUE);
+            sa.setDeletedBy(getPrincipal());
+            sa.setDeletedOn(new Date());
+            
+            // delete all CDRs associated with the given special assigment */
+            for(TeachingHourCDR cdr : sa.getSpecialAssigmentCDRs()) {
+                cdr.setSpecialAssigment(null);
+                getEntityManager().remove(cdr);
+            }
+            sa.getSpecialAssigmentCDRs().clear();
+            getEntityManager().flush();
+            constructSpecialAssigmentItems();
+            info("removed special assigment #0 for employee #1", specialAssigmentHome.getInstance(), employeeHome.getInstance());
+            return ACTION_OUTCOME_FAILURE;
+        } else {
+            facesMessages.add(Severity.ERROR, "Employee #0 or special assigment #1 is not managed.",employeeHome, specialAssigmentHome);
+            return ACTION_OUTCOME_FAILURE;
+        }
+	}
+	
+	@Transactional(TransactionPropagationType.REQUIRED)
+    public String updateEmployeeSpecialAssigment() {
+	    return ACTION_OUTCOME_FAILURE;
+    }
+	
 	@Transactional
 	public String transferEmployee() {
 		Employment newEmployment = new Employment();

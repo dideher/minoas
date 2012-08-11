@@ -11,6 +11,8 @@ import java.util.Date;
  * @version $Id$
  */
 public class SpecialAssigmentReportItem extends BaseIDReportItem {
+    
+    private Integer id;
 
     private Integer employeeID;
 
@@ -67,6 +69,7 @@ public class SpecialAssigmentReportItem extends BaseIDReportItem {
 
     public SpecialAssigmentReportItem(SpecialAssigment specialAssigment) {
         super(specialAssigment);
+        id = specialAssigment.getId();
         comment = specialAssigment.getComment();
         specializationGroupID = specialAssigment.getSpecializationGroup().getId();
         specializationGroupTitle = specialAssigment.getSpecializationGroup().getTitle();
@@ -422,6 +425,20 @@ public class SpecialAssigmentReportItem extends BaseIDReportItem {
      */
     public void setFinalWorkingHours(Integer finalWorkingHours) {
         this.finalWorkingHours = finalWorkingHours;
+    }
+
+    /**
+     * @return the id
+     */
+    public Integer getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(Integer id) {
+        this.id = id;
     }
 
 }
