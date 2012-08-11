@@ -1417,6 +1417,12 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
                 .setParameter("employee", employee).getResultList();
         return return_value;
     }
+    
+    @Transactional(TransactionPropagationType.REQUIRED)
+    @SuppressWarnings("unchecked")
+    public Collection<SpecialAssigment> getActiveSpecialAssigments(EntityManager em) {
+        return getEntityManager(em).createQuery("SELECT s FROM SpecialAssigment s WHERE s.active IS TRUE").getResultList();
+    }
 
     @Factory(value = "rankTypes")
     public RankType[] getRankTypes() {

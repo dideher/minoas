@@ -2,6 +2,7 @@ package gr.sch.ira.minoas.seam.components.management;
 
 import gr.sch.ira.minoas.core.CoreUtils;
 import gr.sch.ira.minoas.model.core.SchoolYear;
+import gr.sch.ira.minoas.model.core.Specialization;
 import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employement.Disposal;
@@ -10,6 +11,7 @@ import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.ServiceAllocation;
+import gr.sch.ira.minoas.model.employement.SpecialAssigment;
 import gr.sch.ira.minoas.model.employement.TeachingHourCDR;
 import gr.sch.ira.minoas.model.employement.TeachingHourCDRType;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
@@ -71,13 +73,8 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
         for (Employment employment : regularEmployments) {
             TeachingHourCDR cdr = new TeachingHourCDR();
             cdr.setCdrType(TeachingHourCDRType.EMPLOYMENT);
-            StringBuffer sb = new StringBuffer();
-            sb.append("Οργανική θέση στην μονάδα απο τις ");
-            sb.append(df.format(employment.getEstablished()));
-            sb.append(" με υποχρεωτικό ωράριο ");
-            sb.append(employment.getFinalWorkingHours());
-            sb.append(" ώρες.");
-            cdr.setComment(sb.toString());
+            String msg = String.format("Οργανική θέση στην μονάδα απο τις '%s' με υποχρεωτικό ωράριο '%d' ώρες",df.format(employment.getEstablished()), employment.getFinalWorkingHours());
+            cdr.setComment(msg);
             cdr.setSpecialization(employment.getSpecialization());
             cdr.setEmployee(employment.getEmployee());
             cdr.setEmployment(employment);
@@ -427,6 +424,54 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
 
         }
 
+        em.flush(); /* flush */
+        
+        /* handle special assigments */
+        Collection<SpecialAssigment> activeSpecialAssigments = coreSearching.getActiveSpecialAssigments(getEntityManager());
+        info("found #0 totally active special assigments", activeSpecialAssigments.size());
+        for (SpecialAssigment specialAssigment : activeSpecialAssigments) {
+            
+            /* deduct the special assigments hours from the employee's original specialization.
+             * We are deducting, because the employee will not provide all his hours for his
+             * primary specialization
+             */
+            
+            TeachingHourCDR cdr = new TeachingHourCDR();
+            cdr.setCdrType(TeachingHourCDRType.SPECIAL_ASSIGMENT);
+            String msg = String.format("Αντιλογισμός διδακτικών ωρών κύριας ειδικότητας, απο την μονάδα '%s', λόγο ειδικης ασχολίας τύπου '%s' για συνολικά '%d' ώρες.", 
+                    specialAssigment.getUnit().getTitle(), 
+                    specialAssigment.getSpecializationGroup().getTitle(),
+                    specialAssigment.getFinalWorkingHours());
+            cdr.setComment(msg);
+            cdr.setSpecialization(specialAssigment.getEmployee().getLastSpecialization());
+            cdr.setEmployee(specialAssigment.getEmployee());
+            cdr.setSpecialAssigment(specialAssigment);
+            cdr.setHours(-1 * specialAssigment.getFinalWorkingHours());
+            cdr.setUnit(specialAssigment.getUnit());
+            cdr.setSchoolYear(currentSchoolYear);
+            cdr.setLogisticCDR(Boolean.TRUE);
+            entityManager.persist(cdr);
+            if (((totalCDRsCreated++) % BatchSize) == 0)
+                em.flush();
+            
+            /* apply on target unit */
+            cdr = new TeachingHourCDR();
+            cdr.setCdrType(TeachingHourCDRType.SPECIAL_ASSIGMENT);
+            msg = String.format("Ειδική ασχολία στην μονάδα '%s' τύπου '%s' για συνολικά '%d' ώρες.", 
+                    specialAssigment.getUnit().getTitle(), 
+                    specialAssigment.getSpecializationGroup().getTitle(),
+                    specialAssigment.getFinalWorkingHours());
+            cdr.setComment(msg);
+            cdr.setSpecialization(specialAssigment.getSpecializationGroup().getVirtualSpecialization());
+            cdr.setEmployee(specialAssigment.getEmployee());
+            cdr.setSpecialAssigment(specialAssigment);
+            cdr.setHours(specialAssigment.getFinalWorkingHours());
+            cdr.setUnit(specialAssigment.getUnit());
+            cdr.setSchoolYear(currentSchoolYear);
+            entityManager.persist(cdr);
+            if (((totalCDRsCreated++) % BatchSize) == 0)
+                em.flush();
+        }
         em.flush(); /* flush */
 
         /* WE NEED TO ADD LEAVES */
