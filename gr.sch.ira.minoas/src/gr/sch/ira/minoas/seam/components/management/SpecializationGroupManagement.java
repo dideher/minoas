@@ -1,5 +1,6 @@
 package gr.sch.ira.minoas.seam.components.management;
 
+import gr.sch.ira.minoas.model.core.Specialization;
 import gr.sch.ira.minoas.model.core.SpecializationGroup;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.home.SpecializationGroupHome;
@@ -62,11 +63,25 @@ public class SpecializationGroupManagement extends BaseDatabaseAwareSeamComponen
                     return ACTION_OUTCOME_FAILURE;
                 }
             }
+            
             newSpecializationGroup.setInsertedBy(getPrincipal());
             newSpecializationGroup.setInsertedOn(new Date());
             newSpecializationGroup.setSchoolYear(getCoreSearching().getActiveSchoolYear(getEntityManager()));
             specializationGroupHome.persist();
             getEntityManager().flush();
+            if(newSpecializationGroup.getIsVirtualGroup()) {
+                /* this is a virtual group, create a virtual specialization as well */
+                Specialization virtualSpecialization = new Specialization();
+                String _id = String.format("V%d", newSpecializationGroup.getId());
+                if(_id.length()>6)
+                    _id = _id.substring(0,6);
+                virtualSpecialization.setId(_id);
+                virtualSpecialization.setIsVirtual(Boolean.TRUE);
+                virtualSpecialization.setTitle(String.format("%s (%s)", newSpecializationGroup.getTitle(), newSpecializationGroup.getSchoolYear().getTitle()));
+                newSpecializationGroup.setVirtualSpecialization(virtualSpecialization);
+                newSpecializationGroup.getSpecializations().add(virtualSpecialization);
+                getEntityManager().flush();
+            }
             info("specialization group #0 has been created", newSpecializationGroup);
             return ACTION_OUTCOME_SUCCESS;
         } else {
@@ -106,6 +121,10 @@ public class SpecializationGroupManagement extends BaseDatabaseAwareSeamComponen
             info("updating specialization group #0", specializationGroup);
             specializationGroupHome.update();
             getEntityManager().flush();
+            if(specializationGroup.getIsVirtualGroup()) {
+                Specialization virtualSpecialization = specializationGroup.getVirtualSpecialization();
+                virtualSpecialization.setTitle(String.format("%s (%s)", specializationGroup.getTitle(), specializationGroup.getSchoolYear().getTitle()));
+            }
             initializeAvailableSpecializationGroups();
             return ACTION_OUTCOME_SUCCESS;
         } else {
