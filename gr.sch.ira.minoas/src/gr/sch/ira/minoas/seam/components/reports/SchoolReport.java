@@ -557,6 +557,20 @@ public class SchoolReport extends BaseReport {
        
         for (TeachingHourCDR cdr : schoolsCDRS) {
             Employee employee = cdr.getEmployee();
+            /* gh-54 */
+            
+            /* if the cdr is related to a virtual specialization and this specialization is not the same with
+             * the employees last noted specialization, then please ignore the CDR.
+             * 
+             * Case Example : Special Assigment where there are two CDRs in the same school, one with
+             * the specialization of the employee with negative hours and one with the virtual specialization 
+             * which adds hours.
+             */
+            if((!employee.getLastSpecialization().getId().equals(cdr.getSpecialization().getId())) &&  cdr.getSpecialization().getIsVirtual()) {
+                info("special case for employee #0 and cdr #1", employee, cdr);
+                continue;
+            }
+            /* gh-54 */
             SpecializationGroup sgroup = specializationGroupCache.get(employee.getLastSpecialization());
             /* if the employee's specialization does not map to a concrete specialization group, then
              * just use the specialization title as group title.
