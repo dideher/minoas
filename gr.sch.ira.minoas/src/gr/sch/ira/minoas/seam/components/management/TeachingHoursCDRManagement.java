@@ -33,6 +33,9 @@ import org.jboss.seam.annotations.Transactional;
 @Name(value = "teachingHoursCDRManagement")
 @Scope(ScopeType.APPLICATION)
 public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
+    
+    
+    public static final int LEAVE_DAYS_THREASHOLD = 20;
 
     /**
      * Comment for <code>serialVersionUID</code>
@@ -439,7 +442,7 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
         info("found #0 totally active leaves.", activeLeaves.size());
         for (EmployeeLeave activeLeave : activeLeaves) {
             Boolean generatesCDR = activeLeave.getGeneratesCDRs();
-            if (activeLeave.getEffectiveNumberOfDays() !=null && activeLeave.getEffectiveNumberOfDays() > 60){
+            if (activeLeave.getEffectiveNumberOfDays() !=null && activeLeave.getEffectiveNumberOfDays() > LEAVE_DAYS_THREASHOLD ){
                 Employee employeeWithLeave = activeLeave.getEmployee();
                 /* fix the common leave message */
                 StringBuffer sb = new StringBuffer();
@@ -476,7 +479,7 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
                     }
                 }
             } else {
-                info("ingoring leave #0 because it's duration does not exceeds 60 days", activeLeave);
+                info("ingoring leave #0 because it's duration does not exceeds #1 days", activeLeave, LEAVE_DAYS_THREASHOLD);
             }
         }
 
