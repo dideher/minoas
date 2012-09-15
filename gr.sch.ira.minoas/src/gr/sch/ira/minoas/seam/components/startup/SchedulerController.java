@@ -5,6 +5,7 @@ import gr.sch.ira.minoas.seam.components.async.DisposalCleanupProcessor;
 import gr.sch.ira.minoas.seam.components.async.LeaveActivactionProcessor;
 import gr.sch.ira.minoas.seam.components.async.LeaveCleanupProcessor;
 import gr.sch.ira.minoas.seam.components.async.PensionsScannerProcessor;
+import gr.sch.ira.minoas.seam.components.async.SecondmentActivactionProcessor;
 import gr.sch.ira.minoas.seam.components.async.SecondmentCleanupProcessor;
 import gr.sch.ira.minoas.seam.components.async.ServiceAllocationCleanupProcessor;
 import gr.sch.ira.minoas.seam.components.reports.BasicUsageReport;
@@ -32,11 +33,11 @@ public class SchedulerController extends BaseDatabaseAwareSeamComponent {
     
     private static final long DISPOSAL_CLEANUP_INTERVAL = 1200000;
     
-    private static final long LEAVE_ACTIVATION_INTERVAL = 1200000;
-    
     private static final long BASIC_USAGE_REPORT_INTERVAL = 2400000;
     
     private static final long PENSION_SYNC_INTERVAL = 8400000;
+    
+    private static final long ACTIVATION_TASK_INTERVAL = 1200000;
     
     
     @In(create=true, value="secondmentCleanupProcessor")
@@ -51,6 +52,9 @@ public class SchedulerController extends BaseDatabaseAwareSeamComponent {
     
     @In(create=true, value="leaveActivationProcessor")
     private LeaveActivactionProcessor leaveActivationProcessor;
+    
+    @In(create=true, value="secondmentActivationProcessor")
+    private SecondmentActivactionProcessor secondmentActivationProcessor;
     
     @In(create=true, value="serviceAllocationCleanupProcessor")
     private ServiceAllocationCleanupProcessor serviceAllocationCleanupProcessor;
@@ -67,8 +71,10 @@ public class SchedulerController extends BaseDatabaseAwareSeamComponent {
     private QuartzTriggerHandle disposalCleanupProcessorHandler;
     private QuartzTriggerHandle serviceAllocationCleanupProcessorHandler;
     private QuartzTriggerHandle leaveActivationProcessorHandler;
+    private QuartzTriggerHandle secondmentActivationProcessorHandler;
     private QuartzTriggerHandle basicUsageReportProcessorHandler;
     private QuartzTriggerHandle pensionsScannerProcessorHandler;
+    
 	/**
      * Comment for <code>serialVersionUID</code>
      */
@@ -91,14 +97,20 @@ public class SchedulerController extends BaseDatabaseAwareSeamComponent {
             disposalCleanupProcessorHandler = disposalCleanupProcessor.scheduleSecondmentCleanup(new Date(), DISPOSAL_CLEANUP_INTERVAL, null);
             info("scheduled #0", disposalCleanupProcessorHandler.getTrigger().getFullName());
         }
+        
         if(serviceAllocationCleanupProcessor!=null) {
             serviceAllocationCleanupProcessorHandler = serviceAllocationCleanupProcessor.scheduleSecondmentCleanup(new Date(), SERVICE_ALLOCATION_CLEANUP_INTERVAL, null);
             info("scheduled #0", serviceAllocationCleanupProcessorHandler.getTrigger().getFullName());
         }
         
         if(leaveActivationProcessor!=null) {
-            leaveActivationProcessorHandler = leaveActivationProcessor.scheduleSecondmentCleanup(new Date(), LEAVE_ACTIVATION_INTERVAL, null);
+            leaveActivationProcessorHandler = leaveActivationProcessor.scheduleSecondmentCleanup(new Date(), ACTIVATION_TASK_INTERVAL, null);
             info("scheduled #0", leaveActivationProcessorHandler.getTrigger().getFullName());
+        }
+        
+        if(secondmentActivationProcessor!=null) {
+            secondmentActivationProcessorHandler = secondmentActivationProcessor.scheduleSecondmentActivation(new Date(), ACTIVATION_TASK_INTERVAL, null);
+            info("scheduled #0", secondmentActivationProcessorHandler.getTrigger().getFullName());
         }
         
         if(basicUsageReportProcessor!=null) {
