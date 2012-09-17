@@ -53,7 +53,7 @@ public class SecondmentActivactionProcessor extends BaseDatabaseAwareSeamCompone
 	@SuppressWarnings("unchecked")
     @Transactional(TransactionPropagationType.REQUIRED)
     public Collection<Secondment> getSecondmentThatShouldBeActivated(EntityManager em, Date today) {
-        return em.createQuery("SELECT s from Secondment s WHERE s.active IS FALSE AND (s.deleted IS FALSE OR s.deleted IS NULL) AND :onDate  BETWEEN s.established AND s.dueTo ORDER BY s.established").setParameter("onDate", today).getResultList();
+        return em.createQuery("SELECT s from Secondment s WHERE s.active IS FALSE AND (s.deleted IS FALSE OR s.deleted IS NULL) AND (s.autoCanceled IS FALSE OR s.autoCanceled IS NULL) AND :onDate  BETWEEN s.established AND s.dueTo ORDER BY s.established").setParameter("onDate", today).getResultList();
     }
 	
 	@Asynchronous
