@@ -56,6 +56,13 @@ public class SchedulerController extends BaseDatabaseAwareSeamComponent {
     @In(create=true, value="secondmentActivationProcessor")
     private SecondmentActivactionProcessor secondmentActivationProcessor;
     
+//    @In(create=true, value="serviceAllocationActivationProcessor")
+//    private ServiceAllocationActivactionProcessor serviceAllocationActivationProcessor;
+    
+//    @In(create=true, value="disposalActivationProcessor")
+//    private DisposalActivactionProcessor disposalActivationProcessor;
+    
+    
     @In(create=true, value="serviceAllocationCleanupProcessor")
     private ServiceAllocationCleanupProcessor serviceAllocationCleanupProcessor;
     
@@ -72,6 +79,8 @@ public class SchedulerController extends BaseDatabaseAwareSeamComponent {
     private QuartzTriggerHandle serviceAllocationCleanupProcessorHandler;
     private QuartzTriggerHandle leaveActivationProcessorHandler;
     private QuartzTriggerHandle secondmentActivationProcessorHandler;
+    //private QuartzTriggerHandle serviceAllocationActivationProcessorHandler;
+    //private QuartzTriggerHandle disposalActivationProcessorHandler;
     private QuartzTriggerHandle basicUsageReportProcessorHandler;
     private QuartzTriggerHandle pensionsScannerProcessorHandler;
     
@@ -112,6 +121,16 @@ public class SchedulerController extends BaseDatabaseAwareSeamComponent {
             secondmentActivationProcessorHandler = secondmentActivationProcessor.scheduleSecondmentActivation(new Date(), ACTIVATION_TASK_INTERVAL, null);
             info("scheduled #0", secondmentActivationProcessorHandler.getTrigger().getFullName());
         }
+        
+//        if(serviceAllocationActivationProcessor!=null) {
+//            serviceAllocationActivationProcessorHandler = serviceAllocationActivationProcessor.scheduleServiceAllocationActivation(new Date(), ACTIVATION_TASK_INTERVAL, null);
+//            info("scheduled #0", serviceAllocationActivationProcessorHandler.getTrigger().getFullName());
+//        }
+//        
+//        if(disposalActivationProcessor!=null) {
+//            disposalActivationProcessorHandler = disposalActivationProcessor.scheduleDisposalActivation(new Date(), ACTIVATION_TASK_INTERVAL, null);
+//            info("scheduled #0", disposalActivationProcessorHandler.getTrigger().getFullName());
+//        }
         
         if(basicUsageReportProcessor!=null) {
             basicUsageReportProcessorHandler = basicUsageReportProcessor.scheduleReportGeneration(new Date(), BASIC_USAGE_REPORT_INTERVAL, null);
