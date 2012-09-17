@@ -46,6 +46,7 @@ import gr.sch.ira.minoas.seam.components.criteria.SpecializationGroupSearchType;
 import gr.sch.ira.minoas.seam.components.criteria.SpecializationSearchType;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -53,6 +54,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.AutoCreate;
 import org.jboss.seam.annotations.Factory;
@@ -156,6 +158,26 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     @SuppressWarnings("unchecked")
     public Collection<EmployeeLeave> getActiveLeaves(EntityManager em) {
         return getEntityManager(em).createQuery("SELECT l FROM EmployeeLeave l WHERE l.active IS TRUE").getResultList();
+    }
+    
+    @Transactional(TransactionPropagationType.REQUIRED)
+    @SuppressWarnings("unchecked")
+    public Collection<EmployeeLeave> getFutureLeavesThatWillBeActivated(EntityManager em, Date referenceDay, Integer dayThreshold) {
+        Calendar establishedFrom = Calendar.getInstance();
+        establishedFrom.setTime(referenceDay);
+        DateUtils.truncate(establishedFrom, Calendar.DAY_OF_MONTH);
+        
+        Calendar establishedTo = (Calendar)establishedFrom.clone();
+        establishedTo.add(Calendar.DAY_OF_MONTH, dayThreshold);
+        
+//        Calendar dueToFrom = Calendar.getInstance();
+//        dueToFrom.setTime(referenceDay);
+//        DateUtils.truncate(dueToFrom, Calendar.DAY_OF_MONTH);
+//        
+//        Calendar dueToTo = (Calendar)dueToFrom.clone();
+//        dueToTo.add(Calendar.DAY_OF_MONTH, dayThreshold);
+        
+        return getEntityManager(em).createQuery("SELECT l FROM EmployeeLeave l WHERE l.active IS FALSE AND (l.deleted IS FALSE OR l.deleted IS NULL) AND l.established BETWEEN :establishedFrom AND :establishedTo").setParameter("establishedFrom",  establishedFrom.getTime()).setParameter("establishedTo",  establishedTo.getTime()).getResultList();
     }
     
      /**

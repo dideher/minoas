@@ -17,7 +17,11 @@ import gr.sch.ira.minoas.seam.components.CoreSearching;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -437,22 +441,72 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
         /* Leaves are a special case. For each employee with a leave we will compute his hours distribution in all units. For each 
          * unit for which the employee has teaching hours > 0 we will add a LEAVE CDR with negative hours
          */
-
+        
+        /* found active leaves */
+        
         Collection<EmployeeLeave> activeLeaves = coreSearching.getActiveLeaves(em);
         info("found #0 totally active leaves.", activeLeaves.size());
+        
+        /* found future leaves */
+        Collection<EmployeeLeave> futureLeaves = coreSearching.getFutureLeavesThatWillBeActivated(em, new Date(), 20);
+        info("found #0 totally future leaves.", futureLeaves.size());
+        
+        Map<Integer, Employee> employeeWithAccountedLeaves = new HashMap<Integer, Employee>(activeLeaves.size());
+        
+        /* create the final array of all leaves that we should process */
+        Collection<EmployeeLeave> leavesToProcess = new ArrayList<EmployeeLeave>();
+        
+        /* first check the active Leaves */
         for (EmployeeLeave activeLeave : activeLeaves) {
-            Boolean generatesCDR = activeLeave.getGeneratesCDRs();
-            if (activeLeave.getEffectiveNumberOfDays() !=null && activeLeave.getEffectiveNumberOfDays() > LEAVE_DAYS_THREASHOLD ){
+            if (activeLeave.getEffectiveNumberOfDays() !=null && activeLeave.getEffectiveNumberOfDays() > LEAVE_DAYS_THREASHOLD ) {
                 Employee employeeWithLeave = activeLeave.getEmployee();
+                employeeWithAccountedLeaves.put(employeeWithLeave.getId(), employeeWithLeave);
+                leavesToProcess.add(activeLeave);
+            } else {
+                info("ignoring leave #0 because it's duration does not exceeds #1 days", activeLeave, LEAVE_DAYS_THREASHOLD);
+            }
+        }
+        
+        /* now check all future leaves */
+        Map<Integer, EmployeeLeave> futureLeavesIndex = new HashMap<Integer, EmployeeLeave>();
+        for (EmployeeLeave futureLeave : futureLeaves) {
+            if (futureLeave.getEffectiveNumberOfDays() !=null && futureLeave.getEffectiveNumberOfDays() > LEAVE_DAYS_THREASHOLD ) {
+                Employee employeeWithLeave = futureLeave.getEmployee();
+                if(employeeWithAccountedLeaves.containsKey(employeeWithLeave.getId())) {
+                    info("ignoring future leave #0 because for the employee #1 we have already an accounted leave", futureLeave, employeeWithLeave);
+                } else {
+                    /* future leave is exceeded required duration and it affects an employee for which we have not
+                     * accounted a leave so far
+                     */
+                    leavesToProcess.add(futureLeave);
+                    futureLeavesIndex.put(futureLeave.getId(), futureLeave);
+                }
+            } else {
+                info("ignoring future leave #0 because it's duration does not exceeds #1 days", futureLeave, LEAVE_DAYS_THREASHOLD);
+            }
+        }
+        
+        /* no process the leaves */
+        
+        for (EmployeeLeave leave : leavesToProcess) {
+            Boolean generatesCDR = leave.getGeneratesCDRs();
+            boolean isFutureLeave = (futureLeavesIndex.containsKey(leave.getId()));
+            if (leave.getEffectiveNumberOfDays() !=null && leave.getEffectiveNumberOfDays() > LEAVE_DAYS_THREASHOLD ){
+                Employee employeeWithLeave = leave.getEmployee();
+                /* since we are about to include these leave in our computation, add it to the index for future reference */
+                employeeWithAccountedLeaves.put(employeeWithLeave.getId(), employeeWithLeave);
                 /* fix the common leave message */
                 StringBuffer sb = new StringBuffer();
-                sb.append("Άδεια τύπου  ");
-                sb.append(activeLeave.getEmployeeLeaveType().getDescription());
+                sb.append("Άδεια τύπου ");
+                sb.append(leave.getEmployeeLeaveType().getDescription());
                 sb.append(" απο τις ");
-                sb.append(df.format(activeLeave.getEstablished()));
+                sb.append(df.format(leave.getEstablished()));
                 sb.append(" μέχρι και  ");
-                sb.append(df.format(activeLeave.getDueTo()));
-
+                sb.append(df.format(leave.getDueTo()));
+                sb.append(".");
+                if(isFutureLeave) {
+                    sb.append(" Προσοχή, η άδεια είναι μελλοντική με έναρξη εντός εικοσαημέρου.");
+                }
                 Collection<Object[]> o = getEntityManager()
                         .createQuery(
                                 "SELECT t.unit.id, SUM(t.hours) FROM TeachingHourCDR t WHERE t.schoolYear=:schoolYear AND t.employee=:employee GROUP BY (t.unit)")
@@ -463,6 +517,7 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
                     if (hours.longValue() > 0) {
                         TeachingHourCDR cdr = new TeachingHourCDR();
                         cdr.setCdrType(TeachingHourCDRType.LEAVE);
+                        cdr.setFutureCDR(isFutureLeave);
                         cdr.setComment(sb.toString());
                         cdr.setSpecialization(employeeWithLeave.getLastSpecialization());
                         cdr.setEmployee(employeeWithLeave);
@@ -471,7 +526,7 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
                         cdr.setLogisticCDR(Boolean.TRUE); /* this is a logistic CDR */
                         cdr.setSchoolYear(currentSchoolYear);
                         cdr.setUnit(getEntityManager().find(Unit.class, r[0]));
-                        cdr.setLeave(activeLeave);
+                        cdr.setLeave(leave);
                         entityManager.persist(cdr);
                         if (((totalCDRsCreated++) % BatchSize) == 0)
                             em.flush();
@@ -479,10 +534,13 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
                     }
                 }
             } else {
-                info("ingoring leave #0 because it's duration does not exceeds #1 days", activeLeave, LEAVE_DAYS_THREASHOLD);
+                info("ignoring leave #0 because it's duration does not exceeds #1 days", leave, LEAVE_DAYS_THREASHOLD);
             }
         }
 
+        
+        
+        
         em.flush();
         long finished = System.currentTimeMillis();
 
