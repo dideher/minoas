@@ -926,6 +926,15 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
     }
 
     
+    /**
+     * Compute the calendar duration of the leave + one day. We add the extra day
+     * because users tend to add leaves without included the last day - the day the employee
+     * returns to his position.
+     *  
+     * @param fromDate
+     * @param toDate
+     * @return
+     */
     protected int computeLeaveDuration(Date fromDate, Date toDate) {
         if (fromDate != null && toDate != null) {
             long DAY_TIME_IN_MILLIS = 24 * 60 * 60 * 1000;
@@ -933,11 +942,19 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
             long date2DaysMS = toDate.getTime() - (toDate.getTime() % DAY_TIME_IN_MILLIS);
 
             long timeInMillisDiff = (date2DaysMS - date1DaysMS);
-            return (int) (timeInMillisDiff / DAY_TIME_IN_MILLIS);
+            return (int) ((timeInMillisDiff / DAY_TIME_IN_MILLIS) + 1);
         } else
             return 0;
     }
 
+    /**
+     * Compute the calendar duration of the leave + one day without weekends. We add the extra day
+     * because users tend to add leaves without included the last day - the day the employee
+     * returns to his position. 
+     * @param fromDate
+     * @param toDate
+     * @return
+     */
     protected int computeLeaveDurationWithoutWeekend(Date fromDate, Date toDate) {
         if (fromDate != null && toDate != null) {
             int countDays = 0;
@@ -952,7 +969,7 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
                 else
                     countDays++;
             }
-            return countDays;
+            return (countDays+1);
         } else
             return 0;
     }
