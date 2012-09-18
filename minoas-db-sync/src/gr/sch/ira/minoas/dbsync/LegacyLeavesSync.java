@@ -129,7 +129,8 @@ public class LegacyLeavesSync {
 
             PreparedStatement insertStatement = dbConnection
                     .prepareStatement("INSERT INTO minoas..EMPLOYEE_LEAVES(VERSION, IS_ACTIVE, COMMENT, DUE_TO, ESTABLISHED, EFFECTIVE_DAYS_COUNT, EMPLOYEE_LEAVE_TYPE_ID, EMPLOYEE_ID, GENERATES_CDRS) VALUES(0, 0, ?, ?, ?, ?, ?, ?, 1)");
-
+            int count = 0;
+            dbConnection.setAutoCommit(true);
             for (Map legacyLeave : legacyLeaves) {
                 if (legacyLeaveMapping.containsKey(legacyLeave.get(LEGACY_LEAVE_CODE))) {
                     Integer minoasLeaveCode = legacyLeaveMapping.get(legacyLeave.get(LEGACY_LEAVE_CODE));
@@ -144,6 +145,8 @@ public class LegacyLeavesSync {
                         insertStatement.setInt(4, ((Integer) legacyLeave.get(LEGACY_LEAVE_DURATION)).intValue());
                         insertStatement.setInt(5, minoasLeaveCode);
                         insertStatement.setInt(6, minoasEmployeeCode);
+                        if(insertStatement.execute())
+                            count++;
                     } else {
                         System.out.println(String.format("could not map legacy employee '%s' to the corresponding minoas employee", legacyLeave
                             .get(LEGACY_LEAVE_EMPLOYEE_LEGACY_CODE)));
@@ -153,7 +156,7 @@ public class LegacyLeavesSync {
                     continue;
                 }
             }
-
+            System.out.println(String.format("Totally created %d leaves", count));
             System.exit(1);
 
         } catch (Exception ex) {
