@@ -52,7 +52,7 @@ public class LeaveActivactionProcessor extends BaseDatabaseAwareSeamComponent {
 	@SuppressWarnings("unchecked")
     @Transactional(TransactionPropagationType.REQUIRED)
     public Collection<EmployeeLeave> getActiveLeaveThatSouldBeSetCurrent(EntityManager em, Date today) {
-        return em.createQuery("SELECT s from EmployeeLeave s WHERE s.active IS FALSE AND (s.autoCanceled IS FALSE OR s.autoCanceled IS NULL) AND (s.deleted IS FALSE OR s.deleted IS NULL) AND :onDate  BETWEEN s.established AND s.dueTo ORDER BY s.established").setParameter("onDate", today).getResultList();
+        return em.createQuery("SELECT s from EmployeeLeave s WHERE s.employee.active IS TRUE AND s.active IS FALSE AND (s.autoCanceled IS FALSE OR s.autoCanceled IS NULL) AND (s.deleted IS FALSE OR s.deleted IS NULL) AND :onDate  BETWEEN s.established AND s.dueTo ORDER BY s.established").setParameter("onDate", today).getResultList();
     }
 	
 	@Asynchronous
