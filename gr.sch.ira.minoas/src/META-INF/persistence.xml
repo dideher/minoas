@@ -79,11 +79,11 @@
       <property name="hibernate.format_sql" value="true" />
 
       <!-- simple caching settings -->
-      <property name="hibernate.cache.provider_class" value="net.sf.ehcache.hibernate.SingletonEhCacheProvider" />
+      <!-- <property name="hibernate.cache.provider_class" value="net.sf.ehcache.hibernate.SingletonEhCacheProvider" /> -->
       <!-- caching settings -->
-      <property name="hibernate.cache.use_second_level_cache" value="true" />
-      <property name="hibernate.cache.use_query_cache" value="true" />
-      <property name="hibernate.generate_statistics" value="true" />
+      <property name="hibernate.cache.use_second_level_cache" value="false" />
+      <property name="hibernate.cache.use_query_cache" value="false" />
+      <property name="hibernate.generate_statistics" value="false" />
       <!--
         <property name="hibernate.cache.use_second_level_cache" value="true" />
         <property name="hibernate.cache.use_query_cache" value="true" />
