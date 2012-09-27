@@ -3,14 +3,18 @@ package gr.sch.ira.minoas.model.employee;
 import gr.sch.ira.minoas.model.BaseIDModel;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Entity;
@@ -18,7 +22,9 @@ import javax.persistence.Entity;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import gr.sch.ira.minoas.model.classrooms.CourseType;
 import gr.sch.ira.minoas.model.employee.SectorType;
+import gr.sch.ira.minoas.model.employement.Employment;
 
 /**
  * @author <a href="mailto:gand@sch.gr">Yorgos Andreadakis</a>
@@ -119,6 +125,7 @@ public class EmployeeInfo extends BaseIDModel {
 	@Column(name = "IS_A_NAT_SCH_PUB_ADMIN_GRADUATE")
 	private Boolean isANatSchPubAdminGraduate;
 	
+
 	/**
 	 * National School for Public Administration Degree Date (Ημερομηνία Σχολής Δημόσιας Διοίκησης)
 	 */
@@ -137,8 +144,17 @@ public class EmployeeInfo extends BaseIDModel {
 	/**
 	 * Rank Information (Στοιχεία Βαθμού και Μισθολογικού Κλιμακίου)
 	 */
-	@OneToOne(mappedBy="employeeInfo")
-	private RankInfo rankInfo;
+	@OneToMany(mappedBy="employeeInfo")
+	//private RankInfo rankInfo;
+	private Collection<RankInfo> rankInfos = new ArrayList<RankInfo>();
+	
+	
+	/**
+	 * Current Rank Information (Στοιχεία Τρέχοντος Βαθμού και Μισθολογικού Κλιμακίου)
+	 */
+	@OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
+	@JoinColumn(name = "CURRENT_RANK_INFO_ID", nullable = true)
+	private RankInfo currentRankInfo;
 	
 	
 	/**
@@ -257,17 +273,31 @@ public class EmployeeInfo extends BaseIDModel {
 	}
 
 	/**
-	 * @return the rankInfo
+	 * @return the rankInfos
 	 */
-	public RankInfo getRankInfo() {
-		return rankInfo;
+	public Collection<RankInfo> getRankInfos() {
+		return rankInfos;
 	}
 
 	/**
-	 * @param rankInfo the rankInfo to set
+	 * @param rankInfo the rankInfos to set
 	 */
-	public void setRankInfo(RankInfo rankInfo) {
-		this.rankInfo = rankInfo;
+	public void setRankInfos(Collection<RankInfo> rankInfos) {
+		this.rankInfos = rankInfos;
+	}
+
+	/**
+	 * @return the currentRankInfo
+	 */
+	public RankInfo getCurrentRankInfo() {
+		return currentRankInfo;
+	}
+
+	/**
+	 * @param currentRankInfo the currentRankInfo to set
+	 */
+	public void setCurrentRankInfo(RankInfo currentRankInfo) {
+		this.currentRankInfo = currentRankInfo;
 	}
 
 	/**
