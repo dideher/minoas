@@ -43,7 +43,8 @@ public class EmployeeInfoHome extends MinoasEntityHome<EmployeeInfo> {
 	@Factory(value = "employeeInfo", scope = ScopeType.PAGE)
 	public EmployeeInfo getInstance() {
 		// TODO Auto-generated method stub
-		return (EmployeeInfo) super.getInstance();
+		EmployeeInfo epInfo = (EmployeeInfo) super.getInstance();
+		return epInfo;
 	}
 
 	/**

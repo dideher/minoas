@@ -101,22 +101,22 @@
 								<h:outputText styleClass="hintText" value="από την οποία ενσωματώνεται στο βαθμό ο χρόνος που αναλογεί." />
 								
 								<h:outputLabel styleClass="fieldValueLabel" value="Βαθμός: " />
-								<h:outputText styleClass="fieldValueText" value="#{messages[employee.employeeInfo.rankInfo.rank.key]}"/>
+								<h:outputText styleClass="fieldValueText" value="#{messages[employee.employeeInfo.currentRankInfo.rank.key]}"/>
 								<h:outputLabel styleClass="fieldValueLabel" value="Ημ/νία Απόδοσης Βαθμού: " />
-								<h:outputText styleClass="fieldValueText" value="#{employee.employeeInfo.rankInfo.lastRankDate}">
+								<h:outputText styleClass="fieldValueText" value="#{employee.employeeInfo.currentRankInfo.lastRankDate}">
 										<s:convertDateTime type="date" pattern="dd-MM-yyyy" />
 								</h:outputText>
 								<h:outputLabel styleClass="fieldValueLabel" value="Πλεονάζ. Χρόνος στο Βαθμό: " />
-								<h:outputText styleClass="fieldValueText" value="#{employee.employeeInfo.rankInfo.surplusTimeInRankYear_Month_Day} (#{employee.employeeInfo.rankInfo.surplusTimeInRank} ημ.)"/>
+								<h:outputText styleClass="fieldValueText" value="#{employee.employeeInfo.currentRankInfo.surplusTimeInRankYear_Month_Day} (#{employee.employeeInfo.currentRankInfo.surplusTimeInRank} ημ.)"/>
 								
 								<h:outputLabel styleClass="fieldValueLabel" value="Μισθ. Κλιμάκιο: " />
-								<h:outputText styleClass="fieldValueText" value="#{employee.employeeInfo.rankInfo.salaryGrade}"/>
+								<h:outputText styleClass="fieldValueText" value="#{employee.employeeInfo.currentRankInfo.salaryGrade}"/>
 								<h:outputLabel styleClass="fieldValueLabel" value="Ημ/νία Απόδοσης Μ.Κ. " />
-								<h:outputText styleClass="fieldValueText" value="#{employee.employeeInfo.rankInfo.lastSalaryGradeDate}">
+								<h:outputText styleClass="fieldValueText" value="#{employee.employeeInfo.currentRankInfo.lastSalaryGradeDate}">
 										<s:convertDateTime type="date" pattern="dd-MM-yyyy" />
 								</h:outputText>
 								<h:outputLabel styleClass="fieldValueLabel" value="Πλεονάζ. Χρόνος στο Μ.Κ.: " />
-								<h:outputText styleClass="fieldValueText" value="#{employee.employeeInfo.rankInfo.surplusTimeInSalaryGradeYear_Month_Day} (#{employee.employeeInfo.rankInfo.surplusTimeInSalaryGrade} ημ.)"/>
+								<h:outputText styleClass="fieldValueText" value="#{employee.employeeInfo.currentRankInfo.surplusTimeInSalaryGradeYear_Month_Day} (#{employee.employeeInfo.currentRankInfo.surplusTimeInSalaryGrade} ημ.)"/>
 								
 								
 								<h:outputLabel value=""/>
@@ -366,7 +366,7 @@
 									<ui:define name="label">
 										<h:outputText styleClass="fieldValueLabel" value="Επίπεδο Εκπ/σης: " />
 									</ui:define>
-									<h:selectOneMenu id="Rank" value="#{employee.employeeInfo.rankInfo.educationalLevel}" required="true">
+									<h:selectOneMenu id="Rank" value="#{employee.employeeInfo.currentRankInfo.educationalLevel}" required="true">
 										<s:selectItems hideNoSelectionLabel="false"
 											var="_educationalLevel"
 											value="#{educationalLevelTypes}"
@@ -387,7 +387,7 @@
 									<ui:define name="label">
 										<h:outputText styleClass="fieldValueLabel" value="Βαθμός: " />
 									</ui:define>
-									<h:selectOneMenu id="Rank" value="#{employee.employeeInfo.rankInfo.rank}" required="true">
+									<h:selectOneMenu id="Rank" value="#{employee.employeeInfo.currentRankInfo.rank}" required="true">
 										<s:selectItems hideNoSelectionLabel="false"
 											var="_rankType"
 											value="#{rankTypes}"
@@ -403,7 +403,7 @@
 									<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
 										style="width:50px" enableManualInput="true"
 										styleClass="fieldValueText" required="true"
-										value="#{employee.employeeInfo.rankInfo.lastRankDate}">
+										value="#{employee.employeeInfo.currentRankInfo.lastRankDate}">
 									</rich:calendar>
 								</s:decorate>
 							
@@ -411,7 +411,7 @@
 									<ui:define name="label">
 										<h:outputText styleClass="fieldValueLabel" value="Πλεονάζων Χρόνος στο Βαθμό: " />
 									</ui:define>
-									<h:inputText id="salaryGradeFilter" required="true" value="#{employee.employeeInfo.rankInfo.surplusTimeInRank}" ></h:inputText>
+									<h:inputText id="salaryGradeFilter" required="true" value="#{employee.employeeInfo.currentRankInfo.surplusTimeInRank}" ></h:inputText>
 								</s:decorate>
 							
 							
@@ -420,7 +420,7 @@
 									<ui:define name="label">
 										<h:outputText styleClass="fieldValueLabel" value="Μισθ. Κλιμάκιο: " />
 									</ui:define>
-									<h:inputText id="salaryGradeFilter" required="true" value="#{employee.employeeInfo.rankInfo.salaryGrade}" size="1"></h:inputText>
+									<h:inputText id="salaryGradeFilter" required="true" value="#{employee.employeeInfo.currentRankInfo.salaryGrade}" size="1"></h:inputText>
 								</s:decorate>
 							
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
@@ -430,7 +430,7 @@
 									<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
 										style="width:50px" enableManualInput="true"
 										styleClass="fieldValueText" required="true"
-										value="#{employee.employeeInfo.rankInfo.lastSalaryGradeDate}">
+										value="#{employee.employeeInfo.currentRankInfo.lastSalaryGradeDate}">
 									</rich:calendar>
 								</s:decorate>
 
@@ -438,7 +438,7 @@
 									<ui:define name="label">
 										<h:outputText styleClass="fieldValueLabel" value="Πλεονάζων Χρόνος στο Μ.Κ.: " />
 									</ui:define>
-									<h:inputText id="salaryGradeFilter" required="true" value="#{employee.employeeInfo.rankInfo.surplusTimeInSalaryGrade}" ></h:inputText>
+									<h:inputText id="salaryGradeFilter" required="true" value="#{employee.employeeInfo.currentRankInfo.surplusTimeInSalaryGrade}" ></h:inputText>
 								</s:decorate>
 							
 							
@@ -458,7 +458,6 @@
 								oncomplete="if(data == false) Richfaces.hideModalPanel('updateEmployeeInfoModalPanel');"
 								reRender="employeeInfoOutputPanel" />
 							<a4j:commandButton value="Επιστροφή .."
-								action="#{employeeInfoHome.revert()}"
 								reRender="employeeInfoOutputPanel"
 								oncomplete="#{rich:component('updateEmployeeInfoModalPanel')}.hide();" />
 						</h:panelGrid>
@@ -510,7 +509,7 @@
 									<ui:define name="label">
 										<h:outputText styleClass="fieldValueLabel" value="Επίπεδο Εκπ/σης: " />
 									</ui:define>
-									<h:selectOneMenu id="Rank" value="#{employeeInfoHome.getInstance().rankInfo.educationalLevel}" required="true">
+									<h:selectOneMenu id="Rank" value="#{employeeInfoHome.getInstance().currentRankInfo.educationalLevel}" required="true">
 										<s:selectItems hideNoSelectionLabel="false"
 											var="_educationalLevel"
 											value="#{educationalLevelTypes}"
@@ -525,7 +524,7 @@
 									<ui:define name="label">
 										<h:outputText styleClass="fieldValueLabel" value="Βαθμός: " />
 									</ui:define>
-									<h:selectOneMenu id="Rank" value="#{employeeInfoHome.getInstance().rankInfo.rank}" required="true">
+									<h:selectOneMenu id="Rank" value="#{employeeInfoHome.getInstance().currentRankInfo.rank}" required="true">
 										<s:selectItems hideNoSelectionLabel="false"
 											var="_rankType"
 											value="#{rankTypes}"
@@ -541,7 +540,7 @@
 									<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
 										style="width:50px" enableManualInput="true"
 										styleClass="fieldValueText" required="true"
-										value="#{employeeInfoHome.getInstance().rankInfo.lastRankDate}">
+										value="#{employeeInfoHome.getInstance().currentRankInfo.lastRankDate}">
 									</rich:calendar>
 								</s:decorate>
 							
@@ -549,7 +548,7 @@
 									<ui:define name="label">
 										<h:outputText styleClass="fieldValueLabel" value="Πλεονάζων Χρόνος στο Βαθμό: " />
 									</ui:define>
-									<h:inputText id="salaryGradeFilter" required="true" value="#{employeeInfoHome.getInstance().rankInfo.surplusTimeInRank}" ></h:inputText>
+									<h:inputText id="salaryGradeFilter" required="true" value="#{employeeInfoHome.getInstance().currentRankInfo.surplusTimeInRank}" ></h:inputText>
 								</s:decorate>
 							
 							
@@ -558,7 +557,7 @@
 									<ui:define name="label">
 										<h:outputText styleClass="fieldValueLabel" value="Μισθ. Κλιμάκιο: " />
 									</ui:define>
-									<h:inputText id="salaryGradeFilter" required="true" value="#{employeeInfoHome.getInstance().rankInfo.salaryGrade}" size="1"></h:inputText>
+									<h:inputText id="salaryGradeFilter" required="true" value="#{employeeInfoHome.getInstance().currentRankInfo.salaryGrade}" size="1"></h:inputText>
 								</s:decorate>
 							
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
@@ -568,7 +567,7 @@
 									<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
 										style="width:50px" enableManualInput="true"
 										styleClass="fieldValueText" required="true"
-										value="#{employeeInfoHome.getInstance().rankInfo.lastSalaryGradeDate}">
+										value="#{employeeInfoHome.getInstance().currentRankInfo.lastSalaryGradeDate}">
 									</rich:calendar>
 								</s:decorate>
 
@@ -576,7 +575,7 @@
 									<ui:define name="label">
 										<h:outputText styleClass="fieldValueLabel" value="Πλεονάζων Χρόνος στο Μ.Κ.: " />
 									</ui:define>
-									<h:inputText id="salaryGradeFilter" required="true" value="#{employeeInfoHome.getInstance().rankInfo.surplusTimeInSalaryGrade}" ></h:inputText>
+									<h:inputText id="salaryGradeFilter" required="true" value="#{employeeInfoHome.getInstance().currentRankInfo.surplusTimeInSalaryGrade}" ></h:inputText>
 								</s:decorate>
 							</h:panelGrid>
 						</a4j:outputPanel>
@@ -588,7 +587,6 @@
 								oncomplete="if(data == false) Richfaces.hideModalPanel('insertRankInfoModalPanel');"
 								reRender="employeeInfoOutputPanel" />
 							<a4j:commandButton value="Επιστροφή .."
-								action="#{employeeInfoHome.revert()}"
 								reRender="employeeInfoOutputPanel"
 								oncomplete="#{rich:component('insertRankInfoModalPanel')}.hide();" />
 						</h:panelGrid>

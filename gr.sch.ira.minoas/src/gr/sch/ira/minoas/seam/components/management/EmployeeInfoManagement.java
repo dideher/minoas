@@ -148,7 +148,7 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 	@Transactional
     public String insertRankInfo() {
         if (employeeHome.isManaged()) {
-        	RankInfo rinfo = employeeInfoHome.getInstance().getRankInfo();
+        	RankInfo rinfo = employeeInfoHome.getInstance().getCurrentRankInfo();
         	
             //rinfo.setEmployeeInfo(employeeInfoHome.getInstance().getEmployee().getEmployeeInfo());
             rinfo.setInsertedBy(getPrincipal());
@@ -156,7 +156,7 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
         	
         	
         	getEntityManager().persist(rinfo);
-        	employeeInfoHome.getInstance().setRankInfo(rinfo);
+        	employeeInfoHome.getInstance().setCurrentRankInfo(rinfo);
         	
             Employee employee = getEntityManager().merge(employeeHome.getInstance());
 
@@ -190,7 +190,7 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
         rinfo.resetRankInfo();
         rinfo.setEmployeeInfo(employeeInfoHome.getInstance());
         
-        employeeInfoHome.getInstance().setRankInfo(rinfo);
+        employeeInfoHome.getInstance().setCurrentRankInfo(rinfo);
 
     }
 
