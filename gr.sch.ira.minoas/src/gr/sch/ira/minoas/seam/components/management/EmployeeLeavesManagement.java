@@ -642,47 +642,6 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
                 parameters.put("signatureTitle", leavePrintoutSignature.getSignatureTitle());
                 parameters.put("signatureName", leavePrintoutSignature.getSignatureName());
                 
-                /* according to the leave type, populate the parameters map accordinally */
-                
-                if(leave.getEmployeeLeaveType().getLegacyCode().equals("33")) {
-                    parameters.put("numberOfBirthCertificate", printHelper.getFieldText1());
-                    parameters.put("numberOfCertificateFamilyStatus", printHelper.getFieldText2());
-                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("34")) {
-                    parameters.put("numberOfBirthCertificate", printHelper.getFieldText1());
-                }  else if(leave.getEmployeeLeaveType().getLegacyCode().equals("35")) {
-                    parameters.put("doctorOpinionDate", printHelper.getFieldDate1());
-                    parameters.put("doctorName", printHelper.getFieldText1());
-                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("36")) {
-                    parameters.put("leaveReason", printHelper.getFieldText1());
-                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("37")) {
-                    parameters.put("externalDecisionNumber", printHelper.getFieldText1());
-                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("38")) {
-                    parameters.put("externalDecisionNumber", printHelper.getFieldText1());
-                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("41")) {
-                    parameters.put("externalDecisionNumber", printHelper.getFieldText1());
-                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("42")) {
-                    parameters.put("externalDecisionDate", printHelper.getFieldDate1());
-                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("45")) {
-                    parameters.put("doctorOpinionDate", printHelper.getFieldDate1());
-                    parameters.put("doctorName", printHelper.getFieldText1());
-                    parameters.put("externalDecisionDate", printHelper.getFieldDate2());
-                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("46")) {
-                    parameters.put("doctorOpinionDate", printHelper.getFieldDate1());
-                    parameters.put("doctorName", printHelper.getFieldText1());
-                    parameters.put("externalDecisionDate", printHelper.getFieldDate2());
-                    parameters.put("textField2", printHelper.getFieldText2());
-                    parameters.put("numberOfBirthCertificate", printHelper.getFieldText3());
-                    parameters.put("textField1", printHelper.getFieldText4());
-                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("47")) {
-                    parameters.put("doctorOpinionDate", printHelper.getFieldDate1());
-                    parameters.put("doctorName", printHelper.getFieldText1());
-                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("55")) {
-                    parameters.put("externalDecisionNumber", printHelper.getFieldText1());
-                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("52")) {
-                    parameters.put("textField2", printHelper.getFieldText2());
-                    parameters.put("textField3", printHelper.getFieldText3());
-                }
-                
                /* compute a SHA-1 digest */
                 MessageDigest digest = MessageDigest.getInstance("SHA");
                 digest.update(String.format("%s-%d-%d", parameters.toString(), System.currentTimeMillis(),
@@ -724,7 +683,9 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
                 if(leave.getEmployeeLeaveType().getLegacyCode().equals("33")) {
                     parameters.put("numberOfBirthCertificate", printHelper.getFieldText1());
                     parameters.put("numberOfCertificateFamilyStatus", printHelper.getFieldText2());
-                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("35")) {
+                } if(leave.getEmployeeLeaveType().getLegacyCode().equals("34")) {
+                    parameters.put("numberOfBirthCertificate", printHelper.getFieldText1());
+                }  else if(leave.getEmployeeLeaveType().getLegacyCode().equals("35")) {
                     parameters.put("doctorOpinionDate", printHelper.getFieldDate1());
                     parameters.put("doctorName", printHelper.getFieldText1());
                 } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("36")) {
@@ -751,9 +712,14 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
                 } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("47")) {
                     parameters.put("doctorOpinionDate", printHelper.getFieldDate1());
                     parameters.put("doctorName", printHelper.getFieldText1());
+                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("52")) {
+                    parameters.put("textField2", printHelper.getFieldText2());
+                    parameters.put("textField3", printHelper.getFieldText3());
                 } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("53")) {
                     parameters.put("textField2", printHelper.getFieldText1());
                     parameters.put("dateField1", printHelper.getFieldDate1());
+                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("55")) {
+                    parameters.put("externalDecisionNumber", printHelper.getFieldText1());
                 }
                        
             return parameters;
