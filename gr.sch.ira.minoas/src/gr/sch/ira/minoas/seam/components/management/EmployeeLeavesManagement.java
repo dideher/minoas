@@ -694,6 +694,10 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
                     parameters.put("externalDecisionNumber", printHelper.getFieldText1());
                 } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("38")) {
                     parameters.put("externalDecisionNumber", printHelper.getFieldText1());
+                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("40")) {
+                    parameters.put("textField1", printHelper.getFieldText1());
+                    parameters.put("textField2", printHelper.getFieldText2());
+                    parameters.put("textField3", printHelper.getFieldText3());
                 } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("41")) {
                     parameters.put("externalDecisionNumber", printHelper.getFieldText1());
                 } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("42")) {
