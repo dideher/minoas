@@ -520,7 +520,7 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
             }
 
             if (validateLeave(newLeave, true)) {
-                newLeave.setNumberOfDays(computeLeaveDuration(newLeave.getEstablished(), newLeave.getDueTo()));
+                newLeave.setNumberOfDays(CoreUtils.getDatesDifference(newLeave.getEstablished(), newLeave.getDueTo()));
                 employeeLeaveHome.persist();
                 setLeaveDurarionInDaysHelper(0);
                 setLeaveDurationInDaysWithoutWeekends(0);
@@ -582,7 +582,7 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
             EmployeeLeave newLeave = employeeLeaveHome.getInstance();
             if (validateLeave(newLeave, true)) {
                 newLeave.setActive(leaveShouldBeActivated(newLeave, new Date()));
-                newLeave.setNumberOfDays(computeLeaveDuration(newLeave.getEstablished(), newLeave.getDueTo()));
+                newLeave.setNumberOfDays(CoreUtils.getDatesDifference(newLeave.getEstablished(), newLeave.getDueTo()));
                 employeeLeaveHome.update();
                 getEntityManager().flush();
                 info("leave #0 for employee #1 has been modified", newLeave, employee);
@@ -902,54 +902,6 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
     }
 
     
-    /**
-     * Compute the calendar duration of the leave + one day. We add the extra day
-     * because users tend to add leaves without included the last day - the day the employee
-     * returns to his position.
-     *  
-     * @param fromDate
-     * @param toDate
-     * @return
-     */
-    protected int computeLeaveDuration(Date fromDate, Date toDate) {
-        if (fromDate != null && toDate != null) {
-            long DAY_TIME_IN_MILLIS = 24 * 60 * 60 * 1000;
-            long date1DaysMS = fromDate.getTime() - (fromDate.getTime() % DAY_TIME_IN_MILLIS);
-            long date2DaysMS = toDate.getTime() - (toDate.getTime() % DAY_TIME_IN_MILLIS);
-
-            long timeInMillisDiff = (date2DaysMS - date1DaysMS);
-            return (int) ((timeInMillisDiff / DAY_TIME_IN_MILLIS) + 1);
-        } else
-            return 0;
-    }
-
-    /**
-     * Compute the calendar duration of the leave + one day without weekends. We add the extra day
-     * because users tend to add leaves without included the last day - the day the employee
-     * returns to his position. 
-     * @param fromDate
-     * @param toDate
-     * @return
-     */
-    protected int computeLeaveDurationWithoutWeekend(Date fromDate, Date toDate) {
-        if (fromDate != null && toDate != null) {
-            int countDays = 0;
-            Calendar fromCal = Calendar.getInstance();
-            fromCal.setTime(fromDate);
-            while (!(DateUtils.isSameDay(fromDate, toDate))) {
-                int dayOfWeek = fromCal.get(Calendar.DAY_OF_WEEK);
-                fromCal.add(Calendar.DAY_OF_YEAR, 1);
-                fromDate = fromCal.getTime();
-                if (dayOfWeek == Calendar.SATURDAY || dayOfWeek == Calendar.SUNDAY)
-                    continue; // don't count sundays and saturdays
-                else
-                    countDays++;
-            }
-            return (countDays+1);
-        } else
-            return 0;
-    }
-    
     
     public void silentlyComputeLeaveDuration() {
         EmployeeLeave leave = employeeLeaveHome.getInstance();
@@ -957,8 +909,8 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
                 Calendar.DAY_OF_MONTH) : null;
         Date dueTo = leave.getDueTo() != null ? DateUtils.truncate(leave.getDueTo(), Calendar.DAY_OF_MONTH) : null;
         if( established!=null && dueTo !=null &&  established.before(dueTo) ) {
-            setLeaveDurarionInDaysHelper(computeLeaveDuration(established, dueTo));
-            setLeaveDurationInDaysWithoutWeekends(computeLeaveDurationWithoutWeekend(established, dueTo));
+            setLeaveDurarionInDaysHelper(CoreUtils.getDatesDifference(established, dueTo));
+            setLeaveDurationInDaysWithoutWeekends(CoreUtils.getDatesDifferenceWithoutWeekend(established, dueTo));
         } else {
             setLeaveDurarionInDaysHelper(new Integer(0));
             setLeaveDurationInDaysWithoutWeekends(new Integer(0));
@@ -990,8 +942,8 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
                             "H ημ/νία έναρξης είναι μεταγενέστερη της ημ/νιας λήξης της άδειας. Μάλλον πρέπει να κάνεις ενα διάλειμα.");
             return;
         }
-        setLeaveDurarionInDaysHelper(computeLeaveDuration(established, dueTo));
-        setLeaveDurationInDaysWithoutWeekends(computeLeaveDurationWithoutWeekend(established, dueTo));
+        setLeaveDurarionInDaysHelper(CoreUtils.getDatesDifference(established, dueTo));
+        setLeaveDurationInDaysWithoutWeekends(CoreUtils.getDatesDifferenceWithoutWeekend(established, dueTo));
     }
 
     /**
