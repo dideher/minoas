@@ -56,7 +56,8 @@ public abstract class MinoasEntityHome<E> extends EntityHome<BaseModel> {
 	/**
 	 * @see org.jboss.seam.framework.EntityHome#create()
 	 */
-	@Override
+	@SuppressWarnings("unchecked")
+    @Override
 	public void create() {
 		super.create();
 		persistentClass = (Class<E>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
@@ -75,8 +76,10 @@ public abstract class MinoasEntityHome<E> extends EntityHome<BaseModel> {
 
 	/**
 	 * @return the facesMessages
+	 * @deprecated
 	 */
-	public FacesMessages getFacesMessages() {
+	@Deprecated
+    public FacesMessages getFacesMessages() {
 		return facesMessages;
 	}
 

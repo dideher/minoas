@@ -39,7 +39,6 @@ public abstract class BaseModel implements Serializable {
 	@Column(name = "INSERTED_ON", length = 128, nullable = true, updatable = false)
 	private Date insertedOn;
 
-	@SuppressWarnings("unused")
 	@Column(name = "VERSION")
 	@Version
 	private Long version;

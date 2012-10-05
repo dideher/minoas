@@ -441,7 +441,6 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
         Collection<EmployeeLeave> activeLeaves = coreSearching.getActiveLeaves(em);
         info("found #0 totally active leaves.", activeLeaves.size());
         for (EmployeeLeave activeLeave : activeLeaves) {
-            Boolean generatesCDR = activeLeave.getGeneratesCDRs();
             if (activeLeave.getEffectiveNumberOfDays() !=null && activeLeave.getEffectiveNumberOfDays() > LEAVE_DAYS_THREASHOLD ){
                 Employee employeeWithLeave = activeLeave.getEmployee();
                 /* fix the common leave message */
@@ -453,6 +452,7 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
                 sb.append(" μέχρι και  ");
                 sb.append(df.format(activeLeave.getDueTo()));
 
+                @SuppressWarnings("unchecked")
                 Collection<Object[]> o = getEntityManager()
                         .createQuery(
                                 "SELECT t.unit.id, SUM(t.hours) FROM TeachingHourCDR t WHERE t.schoolYear=:schoolYear AND t.employee=:employee GROUP BY (t.unit)")

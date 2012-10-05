@@ -110,7 +110,6 @@ public class EmployeeLeavesReport extends BaseReport {
         Character region = getEmployeeLeaveCriteria().getRegion();
         School school = getEmployeeLeaveCriteria().getSchoolOfIntereset();
         SpecializationGroup specializationGroup = getEmployeeLeaveCriteria().getSpecializationGroup();
-        DateSearchType dateSearchType = getEmployeeLeaveCriteria().getDateSearchType();
         EmployeeLeaveType employeeLeaveType = getEmployeeLeaveCriteria().getEmployeeLeaveType();
         Date effectiveDateUntil = getEmployeeLeaveCriteria().getEffectiveDateUntil();
 

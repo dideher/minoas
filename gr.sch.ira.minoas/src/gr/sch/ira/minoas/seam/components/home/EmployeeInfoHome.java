@@ -4,7 +4,6 @@
 package gr.sch.ira.minoas.seam.components.home;
 
 import gr.sch.ira.minoas.model.employee.EmployeeInfo;
-import gr.sch.ira.minoas.model.employee.RankInfo;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.AutoCreate;

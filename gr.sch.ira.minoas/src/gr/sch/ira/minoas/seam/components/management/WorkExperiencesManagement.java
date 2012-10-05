@@ -1,7 +1,6 @@
 package gr.sch.ira.minoas.seam.components.management;
 
 import gr.sch.ira.minoas.model.employee.Employee;
-import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 import gr.sch.ira.minoas.model.employement.WorkExperience;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.CoreSearching;

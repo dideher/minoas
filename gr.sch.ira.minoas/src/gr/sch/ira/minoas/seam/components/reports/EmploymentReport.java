@@ -243,7 +243,8 @@ public class EmploymentReport extends BaseReport {
 			q.setParameter("schoolType", schoolType);
 		}
 
-		Collection<Employment> employments = q.getResultList();
+		@SuppressWarnings("unchecked")
+        Collection<Employment> employments = q.getResultList();
 		info("found totally #0 employments matching criteria", employments.size());
 		reportData = new ArrayList<EmploymentReportItem>(employments.size());
 		for (Employment employment : employments) {

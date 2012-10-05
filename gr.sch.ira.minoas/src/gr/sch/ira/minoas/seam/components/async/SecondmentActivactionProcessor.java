@@ -1,8 +1,6 @@
 package gr.sch.ira.minoas.seam.components.async;
 
 import gr.sch.ira.minoas.model.employee.Employee;
-import gr.sch.ira.minoas.model.employement.EmployeeLeave;
-import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 

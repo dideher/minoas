@@ -672,7 +672,6 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
     protected Map<String, Object> prepareSpecialParametersForLeavePrintout() throws NoSuchAlgorithmException, UnsupportedEncodingException {
 
         if (employeeLeaveHome.isManaged()) {
-            Employee employee = getEntityManager().merge(employeeHome.getInstance());
             EmployeeLeave leave = employeeLeaveHome.getInstance();
             
                 Map<String, Object> parameters = new HashMap<String, Object>();
