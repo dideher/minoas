@@ -1234,6 +1234,14 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     }
 
     @SuppressWarnings("unchecked")
+    public Collection<TeachingHourCDR> getTeachingHoursCDRsRelatedToEmployment(EntityManager entityManager, Employment employment) {
+        List<TeachingHourCDR> return_value = getEntityManager(entityManager)
+                .createQuery("SELECT t FROM TeachingHourCDR t WHERE t.employment=:employment")
+                .setParameter("employment", employment).getResultList();
+        return return_value;
+    }
+    
+    @SuppressWarnings("unchecked")
     public Collection<TeachingHourCDR> getEmployeeTeachingHoursCDRs(EntityManager entityManager, SchoolYear schoolYear,
             Employee employee) {
         List<TeachingHourCDR> return_value = getEntityManager(entityManager)
