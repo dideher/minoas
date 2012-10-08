@@ -308,7 +308,7 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
 
                 Employment relatedEmployment = serviceAllocation.getAffectedEmployment();
                 if (relatedEmployment != null) {
-                    Collection<TeachingHourCDR> employmentsCDRs = getCoreSearching().getTeachingHoursCDRsRelatedToEmployment(getEntityManager(), relatedEmployment);
+                    Collection<TeachingHourCDR> employmentsCDRs = getCoreSearching().getTeachingHoursCDRsRelatedToEmployment(getEntityManager(), relatedEmployment, currentSchoolYear);
                     /* Employment should have one only one CDR */
                     if (employmentsCDRs.size() > 1) {
                         /* this should never happen */
