@@ -89,6 +89,10 @@ public class TeachingHourCDR extends BaseIDModel {
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="DISPOSAL_ID", nullable=true)
     private Disposal disposal;
+    
+    @Basic
+    @Column(name="IS_FUTURE_CDR")
+    private Boolean futureCDR = Boolean.FALSE;
 
     /**
      * @return the schoolYear
@@ -292,5 +296,19 @@ public class TeachingHourCDR extends BaseIDModel {
      */
     public void setLogisticCDR(Boolean logisticCDR) {
         this.logisticCDR = logisticCDR;
+    }
+
+    /**
+     * @return the futureCDR
+     */
+    public Boolean getFutureCDR() {
+        return futureCDR;
+    }
+
+    /**
+     * @param futureCDR the futureCDR to set
+     */
+    public void setFutureCDR(Boolean futureCDR) {
+        this.futureCDR = futureCDR;
     }
 }
