@@ -61,7 +61,7 @@ public class Employment extends BaseIDDeleteAwareModel {
 	@JoinColumn(name = "DEPUTY_EMPLOYMENT_INFO_ID", nullable = true)
 	private DeputyEmploymentInfo deputyEmploymentInfo;
 
-	@ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
+	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
 	@JoinColumn(name = "EMPLOYEE_ID", nullable = false)
 	private Employee employee;
 
@@ -78,11 +78,11 @@ public class Employment extends BaseIDDeleteAwareModel {
 	@Column(name = "MANDATORY_WORK_HRS", nullable = false)
 	private Integer mandatoryWorkingHours;
 
-	@OneToOne
+	@OneToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name = "SCHOOL_ID", nullable = false)
 	private School school;
 
-	@ManyToOne(optional = false, fetch = FetchType.EAGER)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	@JoinColumn(name = "SCHOOL_YEAR_ID", nullable = false)
 	private SchoolYear schoolYear;
 
@@ -101,7 +101,7 @@ public class Employment extends BaseIDDeleteAwareModel {
 	/**
 	 * An employment may be superseded by another employment
 	 */
-	@OneToOne
+	@OneToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name = "SUPERSEDED_BY_ID", nullable = true)
 	private Employment supersededBy;
 
