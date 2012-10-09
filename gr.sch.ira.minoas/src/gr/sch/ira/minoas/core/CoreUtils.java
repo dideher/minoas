@@ -47,7 +47,7 @@ public abstract class CoreUtils {
             long date2DaysMS = toDate.getTime() - (toDate.getTime() % DAY_TIME_IN_MILLIS);
 
             long timeInMillisDiff = (date2DaysMS - date1DaysMS);
-            return (int) (timeInMillisDiff / DAY_TIME_IN_MILLIS);
+            return (int) ((timeInMillisDiff / DAY_TIME_IN_MILLIS) + 1);
         } else
             return 0;
     }
@@ -66,7 +66,7 @@ public abstract class CoreUtils {
                 else
                     countDays++;
             }
-            return countDays;
+            return (countDays+1);
         } else
             return 0;
     }
