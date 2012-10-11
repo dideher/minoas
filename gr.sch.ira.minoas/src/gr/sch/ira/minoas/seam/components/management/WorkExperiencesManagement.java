@@ -1,6 +1,8 @@
 package gr.sch.ira.minoas.seam.components.management;
 
+import gr.sch.ira.minoas.core.CoreUtils;
 import gr.sch.ira.minoas.model.employee.Employee;
+import gr.sch.ira.minoas.model.employee.EmployeeType;
 import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 import gr.sch.ira.minoas.model.employement.WorkExperience;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
@@ -8,9 +10,14 @@ import gr.sch.ira.minoas.seam.components.CoreSearching;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
 import gr.sch.ira.minoas.seam.components.home.WorkExperienceHome;
 
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
+import org.apache.commons.lang.time.DateUtils;
+import org.apache.poi.hssf.record.formula.functions.Days360;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
@@ -35,9 +42,11 @@ public class WorkExperiencesManagement extends BaseDatabaseAwareSeamComponent {
 	@In(required = true, create = true)
 	private EmployeeHome employeeHome;
 	
-	
 	@In(required=false)
 	private WorkExperienceHome workExperienceHome;
+	
+	private EmployeeType fooEmployeeType;
+	
 	
 	/**
 	 * Employees current leave history
@@ -83,7 +92,25 @@ public class WorkExperiencesManagement extends BaseDatabaseAwareSeamComponent {
     }
 
 
-    public String modifyWorkExperience() {
+	/**
+	 * @return the fooEmployeeType
+	 */
+	public EmployeeType getFooEmployeeType() {
+		return fooEmployeeType;
+	}
+
+
+
+	/**
+	 * @param fooEmployeeType the fooEmployeeType to set
+	 */
+	public void setFooEmployeeType(EmployeeType fooEmployeeType) {
+		this.fooEmployeeType = fooEmployeeType;
+	}
+
+
+
+	public String modifyWorkExperience() {
         if(workExperienceHome != null && workExperienceHome.isManaged()) {
             info("trying to modify work experience #0", workExperienceHome);
             /* check if the work experience dates are allowed. */
@@ -139,7 +166,22 @@ public class WorkExperiencesManagement extends BaseDatabaseAwareSeamComponent {
                 workExp.setEmployee(getEmployeeHome().getInstance());
                 workExp.setInsertedBy(getPrincipal());
                 workExp.setInsertedOn(new Date());
-                workExp.setCalendarExperienceDays(1000); /* we need to compute this correctly */
+                
+                workExp.setCalendarExperienceDays(CoreUtils.getDatesDifference(workExp.getFromDate(), workExp.getToDate()));
+
+                
+//                if(workExp.getType().getId() == 4 || workExp.getType().getId() == 5) {
+//                	
+//                } else {
+//                	
+//                }
+//                
+//                //	If Employee is HOURLY_PAID, calculate his actual work experience in days based on his mandatoryHours and his hours worked.
+//                if((workExp.getActualDays() == null || workExp.getActualDays() == 0) && 
+//                		(workExp.getNumberOfWorkExperienceHours() !=null && workExp.getNumberOfWorkExperienceHours() != 0) && 
+//                		(workExp.getMandatoryHours() !=null) && workExp.getMandatoryHours() != 0) {
+//                	workExp.setActualDays((int)Math.ceil((((float)(workExp.getNumberOfWorkExperienceHours()*6)/workExp.getMandatoryHours())*30)/25));
+//                }
                 workExperienceHome.persist();
                 constructWorkExperienceHistory();
                 
@@ -152,6 +194,30 @@ public class WorkExperiencesManagement extends BaseDatabaseAwareSeamComponent {
             return ACTION_OUTCOME_FAILURE;
         }
     }
+    
+    
+    
+    public void reCalculateActualDays() {
+    	
+    	WorkExperience workExp = workExperienceHome.getInstance();
+    	if(workExp.getType().getId() == 3 || workExp.getType().getId() == 5) {	// Άν Ωρομίσθιος ή ΝΠΔΔ
+    		if(workExp.getType().getId() == 5 && workExp.getNumberOfWorkExperienceHours() > 0) {			//	Αν ΝΠΔΔ και έχει ώρες ωρομισθίας
+    			workExp.setActualDays((int)Math.round((((float)(workExp.getNumberOfWorkExperienceHours()*6)/workExp.getMandatoryHours())*30)/25));
+    		} else if(workExp.getType().getId() == 5 && workExp.getNumberOfWorkExperienceHours() == 0) {	//	Αν ΝΠΔΔ και ΔΕΝ έχει ώρες ωρομισθίας
+    			Date dateFrom = workExp.getFromDate() != null ? DateUtils.truncate(workExp.getFromDate(), Calendar.DAY_OF_MONTH) : null;
+    	        Date dateTo = workExp.getToDate() != null ? DateUtils.truncate(workExp.getToDate(), Calendar.DAY_OF_MONTH) : null;
+    			workExp.setActualDays((CoreUtils.DatesDifferenceIn360DaysYear(dateFrom, dateTo)*workExp.getFinalWorkingHours())/workExp.getMandatoryHours());
+    		} else {	//	Αν Ωρομίσθιος
+    			workExp.setActualDays((int)Math.ceil((((float)(workExp.getNumberOfWorkExperienceHours()*6)/workExp.getMandatoryHours())*30)/25));
+    		}
+        } else { //	Όλοι οι υπόλοιποι τύποι εκπαιδευτικού
+        	Date dateFrom = workExp.getFromDate() != null ? DateUtils.truncate(workExp.getFromDate(), Calendar.DAY_OF_MONTH) : null;
+	        Date dateTo = workExp.getToDate() != null ? DateUtils.truncate(workExp.getToDate(), Calendar.DAY_OF_MONTH) : null;
+			workExp.setActualDays((CoreUtils.DatesDifferenceIn360DaysYear(dateFrom, dateTo)*workExp.getFinalWorkingHours())/workExp.getMandatoryHours());
+        }
+    }
+
+    
 
     /* this method is called when the user clicks the "add new leave" */
     public void prepareNewWorkExperience() {
@@ -161,7 +227,37 @@ public class WorkExperiencesManagement extends BaseDatabaseAwareSeamComponent {
     	workExp.setToDate(new Date());
     	workExp.setComment(null);
     	workExp.setEmployee(employeeHome.getInstance());
+    	
+    	workExp.setActualDays(new Integer(0));
+    	workExp.setNumberOfWorkExperienceHours(new Integer(0));
+    	workExp.setMandatoryHours(new Integer(21));
+    	workExp.setFinalWorkingHours(new Integer(21));
+    }
+    
+    public void changedEmployeeType () {
+    	WorkExperience workExp = workExperienceHome.getInstance();
+    	
+    	workExp.setNumberOfWorkExperienceHours(new Integer(0));
+    	workExp.setCalendarExperienceDays(new Integer(0));
+    	workExp.setActualDays(new Integer(0));
+    	workExp.setMandatoryHours(new Integer(21));
+    	workExp.setFinalWorkingHours(new Integer(21));
+    }
+    
+    public void silentlyComputeDateDifference() {
+    	WorkExperience workExp = workExperienceHome.getInstance();
+    	Date dateFrom = workExp.getFromDate() != null ? DateUtils.truncate(workExp.getFromDate(), Calendar.DAY_OF_MONTH) : null;
+        Date dateTo = workExp.getToDate() != null ? DateUtils.truncate(workExp.getToDate(), Calendar.DAY_OF_MONTH) : null;
+        if( dateFrom!=null && dateTo !=null ) {
+        	workExp.setCalendarExperienceDays(CoreUtils.getDatesDifference(dateFrom, dateTo));
+        	workExp.setActualDays(CoreUtils.DatesDifferenceIn360DaysYear(dateFrom, dateTo));
+        } else {
+        	workExp.setCalendarExperienceDays(new Integer(0));
+        	workExp.setActualDays(new Integer(0));
+        }
 
     }
 
+
+    
 }

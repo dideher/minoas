@@ -59,15 +59,36 @@ public class WorkExperience extends BaseIDDeleteAwareModel {
 	@Column(name = "CALENDAR_EXPERIENCE_DAYS", nullable = false)
 	private Integer calendarExperienceDays;
 	
-	@ManyToOne()
-	@JoinColumn(name = "EXPERIENCE_UNIT", nullable = true)
-	private Unit experienceUnit;
+	@Column(name = "ACTUAL_DAYS", nullable = false)
+	private Integer actualDays;
+
+	@Column(name = "NUMBER_OF_WORK_EXPERIENCE_HOURS", nullable = true)
+	private Integer numberOfWorkExperienceHours;
+	
+	@Column(name = "MANDATORY_HOURS", nullable = true)
+	private Integer mandatoryHours;
+	
+	@Column(name = "FINAL_WORKING_HOURS", nullable = true)
+	private Integer finalWorkingHours;
 	
 	@Column(name="COMMENT", nullable = true)
 	private String comment;
 	
+
 	
-	
+	/**
+	 * @return the actualDays
+	 */
+	public Integer getActualDays() {
+		return actualDays;
+	}
+
+	/**
+	 * @param actualDays the actualDays to set
+	 */
+	public void setActualDays(Integer actualDays) {
+		this.actualDays = actualDays;
+	}
 
 	/**
 	 * @return the type
@@ -142,20 +163,6 @@ public class WorkExperience extends BaseIDDeleteAwareModel {
 	}
 
 	/**
-	 * @return the experienceUnit
-	 */
-	public Unit getExperienceUnit() {
-		return experienceUnit;
-	}
-
-	/**
-	 * @param experienceUnit the experienceUnit to set
-	 */
-	public void setExperienceUnit(Unit experienceUnit) {
-		this.experienceUnit = experienceUnit;
-	}
-
-	/**
 	 * @return the active
 	 */
 	public Boolean getActive() {
@@ -197,4 +204,47 @@ public class WorkExperience extends BaseIDDeleteAwareModel {
         this.legacyCode = legacyCode;
     }
 
+	/**
+	 * @return the mandatoryHours
+	 */
+	public Integer getMandatoryHours() {
+		return mandatoryHours;
+	}
+
+	/**
+	 * @param mandatoryHours the mandatoryHours to set
+	 */
+	public void setMandatoryHours(Integer mandatoryHours) {
+		this.mandatoryHours = mandatoryHours;
+	}
+
+	/**
+	 * @return the finalWorkingHours
+	 */
+	public Integer getFinalWorkingHours() {
+		return finalWorkingHours;
+	}
+
+	/**
+	 * @param finalWorkingHours the finalWorkingHours to set
+	 */
+	public void setFinalWorkingHours(Integer finalWorkingHours) {
+		this.finalWorkingHours = finalWorkingHours;
+	}
+
+	/**
+	 * @return the numberOfWorkExperienceHours
+	 */
+	public Integer getNumberOfWorkExperienceHours() {
+		return numberOfWorkExperienceHours;
+	}
+
+	/**
+	 * @param numberOfWorkExperienceHours the numberOfWorkExperienceHours to set
+	 */
+	public void setNumberOfWorkExperienceHours(Integer numberOfWorkExperienceHours) {
+		this.numberOfWorkExperienceHours = numberOfWorkExperienceHours;
+	}
+
+    
 }
