@@ -117,7 +117,7 @@ BEGIN
 					HAS_A_MASTER_DEGREE, HAS_A_PHD_DEGREE, IS_A_NAT_SCH_PUB_ADMIN_GRADUATE,
 					MSC_DATE, PHD_DATE, NAT_SCH_PUB_ADMIN_DATE, 
 					PERMANENT_EMPLOYEE_ACT, PERMANENT_EMPLOYEE_ACT_DATE, 
-					IS_RECENTLY_HIRED, EMPLOYEE_ID, RANK_INFO_ID, SECTOR)
+					IS_RECENTLY_HIRED, EMPLOYEE_ID, CURRENT_RANK_INFO_ID, SECTOR)
 				VALUES(CURRENT_TIMESTAMP, 0,
 					@GOG_APPOINTMENT_NO, @GOG_APPOINTMENT_DATE,
 					@ENTRY_INTO_SERVICE_ACT, @ENTRY_INTO_SERVICE_DATE,
@@ -161,10 +161,6 @@ exec minoas..importEmployeeInfoAndRankInfo
 
 
 
-	DELETE slavikos.EVOLUTION_CDR
-	DELETE slavikos.EVALUATION
-
-
 
 use mkdb
 select * from Katataxi_Import where AM in (
@@ -203,16 +199,6 @@ output inserted.ID
 values (@testValue, @testName)
 
 
-
-INSERT INTO minoas.slavikos.RANK_INFO(INSERTED_ON, VERSION, 
-		RANK, SALARY_GRADE, LAST_RANK_DATE, LAST_SALARY_GRADE_DATE, 
-		EDUCATIONAL_LEVEL, EMPLOYEE_INFO_ID, 
-		SURPLUS_TIME_IN_RANK, SURPLUS_TIME_IN_SALARY_GRADE)
-VALUES(CURRENT_TIMESTAMP, 0, 'RANK_D', 9, '20111101', CURRENT_TIMESTAMP, 'UNIVERSITY_EDUCATION_LEVEL', 1, 68, 69)
-
-SELECT * from minoas.slavikos.RANK_INFO where ID = SCOPE_IDENTITY()
-
-OUTPUT INSERTED.ID
 
 use minoas
 SELECT REGISTRY_ID, count(REGISTRY_ID) FROM minoas.slavikos.REGULAR_EMPLOYEE_INFO 
@@ -281,3 +267,11 @@ select
 select * from minoas.slavikos.EMPLOYEE where ID=8879
 select * from minoas.slavikos.EMPLOYEE_INFO where EMPLOYEE_ID=8879
 select * from minoas.slavikos.RANK_INFO where EMPLOYEE_INFO_ID=8510
+
+update minoas.slavikos.EMPLOYEE_INFO set CURRENT_RANK_INFO_ID = 8516 where ID = 8510
+delete minoas.slavikos.RANK_INFO where id=9417
+                          
+
+select * from minoas.slavikos.EMPLOYEE where ID=6413
+select * from minoas.slavikos.EMPLOYEE_INFO where ID=7058
+select * from minoas.slavikos.RANK_INFO where ID=7064
