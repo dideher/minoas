@@ -159,5 +159,10 @@ public class SecurityStartup extends BaseDatabaseAwareSeamComponent {
 		/* Employee Info */
 		createRole("MODIFY_EMPLOYEE_INFO", "Modify an Employee's Info Data", admin);
 		
+		/* Part-time Employment - Διαχείριση Μειωμένων Ωραρίων */
+		createRole("MODIFY_PART_TIME_EMPLOYMENT", "Modify a Part-time Employment", admin);
+		createRole("DELETE_PART_TIME_EMPLOYMENT", "Delete a Part-time Employment", admin);
+		createRole("ADD_PART_TIME_EMPLOYMENT", "Add a Part-time Employment", admin);
+		
 	}
 }

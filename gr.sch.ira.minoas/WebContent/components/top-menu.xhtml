@@ -148,13 +148,27 @@
 				<rich:menuGroup value="Διαχείριση Αξιολογήσεων">
 					<rich:menuItem submitMode="none"
 						rendered="#{(s:hasRole('ADMIN')
-							or s:hasRole('MODIFY_WORKEXPERIENCE') 
-							or s:hasRole('DELETE_WORKEXPERIENCE') 
-							or s:hasRole('ADD_WORKEXPERIENCE'))}">
+							or s:hasRole('MODIFY_VALIDATION') 
+							or s:hasRole('DELETE_VALIDATION') 
+							or s:hasRole('ADD_VALIDATION'))}">
 						<s:link value="Διαχείριση Αξιολογήσεων Εκπαιδευτικού" 
 							view="/employee/select-employee.xhtml">
 							<f:param name="from" value="/home" />
 							<f:param name="to" value="/evaluation/evaluation-management" />
+						</s:link>
+					</rich:menuItem>
+				</rich:menuGroup>
+				
+				<rich:menuGroup value="Διαχείριση Μειωμένων Ωραρίων">
+					<rich:menuItem submitMode="none"
+						rendered="#{(s:hasRole('ADMIN')
+							or s:hasRole('MODIFY_PART_TIME_EMPLOYMENT') 
+							or s:hasRole('DELETE_PART_TIME_EMPLOYMENT') 
+							or s:hasRole('ADD_PART_TIME_EMPLOYMENT'))}">
+						<s:link value="Διαχείριση Μειωμένου Ωραρίου Εκπαιδευτικού" 
+							view="/employee/select-employee.xhtml">
+							<f:param name="from" value="/home" />
+							<f:param name="to" value="/partTimeEmployment/partTimeEmployment-management" />
 						</s:link>
 					</rich:menuItem>
 				</rich:menuGroup>

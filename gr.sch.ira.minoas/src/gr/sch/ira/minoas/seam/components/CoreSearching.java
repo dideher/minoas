@@ -15,6 +15,7 @@ import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
 import gr.sch.ira.minoas.model.employee.Evaluation;
+import gr.sch.ira.minoas.model.employee.PartTimeEmployment;
 import gr.sch.ira.minoas.model.employee.Person;
 import gr.sch.ira.minoas.model.employee.RankInfo;
 import gr.sch.ira.minoas.model.employee.RankType;
@@ -1395,6 +1396,17 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         return result;
     }
    
+    @SuppressWarnings("unchecked")
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public Collection<PartTimeEmployment> getPartTimeEmploymentHistory(Employee employee) {
+        Collection<PartTimeEmployment> result = null;
+        info("searching employee's '#0' part-time employments.", employee);
+        result = entityManager.createQuery(
+            "SELECT s from PartTimeEmployment s WHERE s.employee=:employee AND (s.deleted IS FALSE OR s.deleted is NULL) ORDER BY s.startDate")
+            .setParameter("employee", employee).getResultList();
+        info("found totally '#0' part-time employment(s) in employee's '#1' history.", result.size(), employee);
+        return result;
+    }
     
 /*
  * 	Deprecated because RankInfos are now available in employeeInfo.getRankInfos() collection
