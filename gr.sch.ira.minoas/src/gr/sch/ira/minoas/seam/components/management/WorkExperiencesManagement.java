@@ -242,6 +242,23 @@ public class WorkExperiencesManagement extends BaseDatabaseAwareSeamComponent {
     	workExp.setActualDays(new Integer(0));
     	workExp.setMandatoryHours(new Integer(21));
     	workExp.setFinalWorkingHours(new Integer(21));
+    	
+    	
+    	//
+    	//	Depending of work experience type set educational (Εκπαιδευτική) and teaching(διδακτική) as true
+    	//	in the cases of Ωρομίσθιος & Αναπληρωτής
+    	//
+    	switch (workExp.getType().getId()) {
+			case 3: case 4:
+				workExp.setEducational(true);
+				workExp.setTeaching(true);
+				break;
+	
+			default:
+				workExp.setEducational(false);
+				workExp.setTeaching(false);
+				break;
+		}
     }
     
     public void silentlyComputeDateDifference() {
@@ -255,9 +272,6 @@ public class WorkExperiencesManagement extends BaseDatabaseAwareSeamComponent {
         	workExp.setCalendarExperienceDays(new Integer(0));
         	workExp.setActualDays(new Integer(0));
         }
-
     }
-
-
     
 }

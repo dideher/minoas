@@ -74,6 +74,15 @@ public class WorkExperience extends BaseIDDeleteAwareModel {
 	@Column(name="COMMENT", nullable = true)
 	private String comment;
 	
+	//	Εκπαιδευτική Προϋπηρεσία
+	@Basic
+	@Column(name = "EDUCATIONAL", nullable = false)
+	private Boolean educational;
+	
+	//	Εκπαιδευτική Προϋπηρεσία
+	@Basic
+	@Column(name = "TEACHING", nullable = false)
+	private Boolean teaching;
 
 	
 	/**
@@ -244,6 +253,34 @@ public class WorkExperience extends BaseIDDeleteAwareModel {
 	 */
 	public void setNumberOfWorkExperienceHours(Integer numberOfWorkExperienceHours) {
 		this.numberOfWorkExperienceHours = numberOfWorkExperienceHours;
+	}
+
+	/**
+	 * @return the educational
+	 */
+	public Boolean getEducational() {
+		return educational;
+	}
+
+	/**
+	 * @param educational the educational to set
+	 */
+	public void setEducational(Boolean educational) {
+		this.educational = educational;
+	}
+
+	/**
+	 * @return the teaching
+	 */
+	public Boolean getTeaching() {
+		return teaching;
+	}
+
+	/**
+	 * @param teaching the teaching to set
+	 */
+	public void setTeaching(Boolean teaching) {
+		this.teaching = teaching;
 	}
 
     
