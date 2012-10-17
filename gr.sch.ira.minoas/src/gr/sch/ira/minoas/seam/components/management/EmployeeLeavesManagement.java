@@ -901,7 +901,6 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
     }
 
     
-    
     public void silentlyComputeLeaveDuration() {
         EmployeeLeave leave = employeeLeaveHome.getInstance();
         Date established = leave.getEstablished() != null ? DateUtils.truncate(leave.getEstablished(),

@@ -6,6 +6,7 @@ package gr.sch.ira.minoas.core;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.ResourceBundle;
+import java.util.GregorianCalendar;
 
 import javax.faces.context.FacesContext;
 
@@ -36,7 +37,6 @@ public abstract class CoreUtils {
         return SeamResourceBundle.getBundle(SEAM_MESSAGES_RESOURCE_BUNDLE_NAME, getFacesContext()
     			.getViewRoot().getLocale());
     }
-	
 	
     
     
@@ -69,6 +69,62 @@ public abstract class CoreUtils {
             return (countDays+1);
         } else
             return 0;
+    }
+    
+      //	Return the days difference between two dates in a 360 days year (12 * 30 days)
+    public static int DatesDifferenceIn360DaysYear(Date dateFrom, Date dateTo) {
+    	if(dateFrom.after(dateTo))
+    		return 0;
+        Calendar startingDate = getStartingDate(dateFrom);
+        Calendar endingDate = getEndingDateAccordingToStartingDate(dateTo, startingDate);
+        long startingDay = startingDate.get(Calendar.MONTH) * 30 + startingDate.get(Calendar.DAY_OF_MONTH);
+        long endingDay = (endingDate.get(Calendar.YEAR) - startingDate.get(Calendar.YEAR)) * 360
+                + endingDate.get(Calendar.MONTH) * 30 + endingDate.get(Calendar.DAY_OF_MONTH);
+        return ((int)(endingDay - startingDay))+1;
+    }
+
+    private static Calendar getCalendar(Date date) {
+        Calendar processedDate = new GregorianCalendar();
+        processedDate.setTime(date);
+        return processedDate;
+    }
+
+    private static Calendar getStartingDate(Date date) {
+        Calendar startingDate = getCalendar(date);
+        if (isLastDayOfMonth(startingDate)) {
+            startingDate.set(Calendar.DAY_OF_MONTH, 30);
+        }
+        return startingDate;
+    }
+
+    private static Calendar getEndingDateAccordingToStartingDate(Date date, Calendar startingDate) {
+        Calendar endingDate = getCalendar(date);
+        if (isLastDayOfMonth(endingDate)) {
+            if (startingDate.get(Calendar.DATE) < 30) {
+                endingDate = getFirstDayOfNextMonth(endingDate);
+            }
+        }
+        return endingDate;
+    }
+
+    private static boolean isLastDayOfMonth(Calendar date) {
+        Calendar clone = (Calendar) date.clone();
+        clone.add(java.util.Calendar.MONTH, 1);
+        clone.add(java.util.Calendar.DAY_OF_MONTH, -1);
+        int lastDayOfMonth = clone.get(Calendar.DAY_OF_MONTH);
+        return date.get(Calendar.DAY_OF_MONTH) == lastDayOfMonth;
+    }
+
+    private static Calendar getFirstDayOfNextMonth(Calendar date) {
+        Calendar newDate = (Calendar) date.clone();
+        if (date.get(Calendar.MONTH) < Calendar.DECEMBER) {
+            newDate.set(Calendar.MONTH, date.get(Calendar.MONTH) + 1);
+        } else {
+            newDate.set(Calendar.MONTH, 1);
+            newDate.set(Calendar.YEAR, date.get(Calendar.YEAR) + 1);
+        }
+        newDate.set(Calendar.DATE, 1);
+        return newDate;
     }
 
 }

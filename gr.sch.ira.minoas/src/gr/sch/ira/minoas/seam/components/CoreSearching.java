@@ -1402,7 +1402,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         info("searching employee's '#0' work experiences.", employee);
         result = entityManager
                 .createQuery(
-                        "SELECT s from WorkExperience s WHERE s.active IS TRUE AND s.employee=:employee ORDER BY s.fromDate")
+                        "SELECT s from WorkExperience s WHERE s.active IS TRUE AND (s.deleted IS FALSE OR s.deleted is NULL) AND s.employee=:employee ORDER BY s.fromDate")
                 .setParameter("employee", employee).getResultList();
 //        result = entityManager.createQuery(
 //	        "SELECT s from Leave s WHERE s.active IS FALSE AND s.employee=:employee ORDER BY s.established")
@@ -1419,14 +1419,17 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         Collection<Evaluation> result = null;
         info("searching employee's '#0' evaluations.", employee);
         result = entityManager.createQuery(
-            "SELECT s from Evaluation s WHERE s.employee=:employee AND s.deleted IS FALSE ORDER BY s.evaluationDate")
+            "SELECT s from Evaluation s WHERE s.employee=:employee AND (s.deleted IS FALSE OR s.deleted is NULL) ORDER BY s.evaluationDate")
             .setParameter("employee", employee).getResultList();
         info("found totally '#0' evaluation(s) in employee's '#1' history.", result.size(), employee);
         return result;
     }
    
     
-    @SuppressWarnings("unchecked")
+/*
+ * 	Deprecated because RankInfos are now available in employeeInfo.getRankInfos() collection
+ * 
+ *  @SuppressWarnings("unchecked")
     @Transactional(TransactionPropagationType.REQUIRED)
     public Collection<RankInfo> getRankInfoHistory(Employee employee) {
         Collection<RankInfo> result = null;
@@ -1436,7 +1439,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
             .setParameter("employeeInfo", employee.getEmployeeInfo()).getResultList();
         info("found totally '#0' rank transitions in employee's '#1' history.", result.size(), employee);
         return result;
-    }
+    }*/
 
     @Factory(value = "rankTypes")
     public RankType[] getRankTypes() {
@@ -1448,4 +1451,14 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         return EducationalLevelType.values();
     }
  
+    public Integer getSummedWorkExperience(Employee employee) {
+        Object sum = null;
+        info("retrieving employee's '#0' summed work experience.", employee);
+        sum = entityManager.createQuery(
+        	"select sum(ACTUAL_DAYS) from minoas.slavikos.WORK_EXPERIENCE where IS_ACTIVE=1 and EDUCATIONAL=1")
+            .setParameter("employeeInfo", employee.getEmployeeInfo()).getSingleResult();
+        info("found totally '#0' days of work experience for employee '#1'.", (Integer)sum, employee);
+        return (Integer)sum;
+    }
+
 }

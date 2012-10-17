@@ -1,6 +1,7 @@
 package gr.sch.ira.minoas.seam.components.management;
 
 import gr.sch.ira.minoas.model.employee.Employee;
+import gr.sch.ira.minoas.model.employee.EmployeeInfo;
 import gr.sch.ira.minoas.model.employee.RankInfo;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.CoreSearching;
@@ -41,11 +42,11 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 	@In(required = true)
 	EmployeeInfoHome employeeInfoHome;
 
-	/**
-	 * Employee's rank transitions history
-	 */
-	@DataModel(scope=ScopeType.PAGE, value="rankInfoHistory")
-	private Collection<RankInfo> rankInfoHistory = null;
+//	/**
+//	 * Employee's rank transitions history
+//	 */
+//	@DataModel(scope=ScopeType.PAGE, value="rankInfoHistory")
+//	private Collection<RankInfo> rankInfoHistory = null;
 
 	/**
 	 * @return the employeeHome
@@ -93,33 +94,45 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 
 	
 	
-	/**
-	 * @return the rankInfoHistory
-	 */
-	public Collection<RankInfo> getRankInfoHistory() {
-		return rankInfoHistory;
-	}
-
-	/**
-	 * @param rankInfoHistory the rankInfoHistory to set
-	 */
-	public void setRankInfoHistory(Collection<RankInfo> rankInfoHistory) {
-		this.rankInfoHistory = rankInfoHistory;
-	}
+//	/**
+//	 * @return the rankInfoHistory
+//	 */
+//	public Collection<RankInfo> getRankInfoHistory() {
+//		return rankInfoHistory;
+//	}
+//
+//	/**
+//	 * @param rankInfoHistory the rankInfoHistory to set
+//	 */
+//	public void setRankInfoHistory(Collection<RankInfo> rankInfoHistory) {
+//		this.rankInfoHistory = rankInfoHistory;
+//	}
 
 	public String modifyEmployeeInfo() {
         if(employeeInfoHome != null && employeeInfoHome.isManaged()) {
             info("trying to modify employee info #0", employeeInfoHome);
             /* check if the work experience dates are allowed. */
-//            EmployeeInfo employeeInfo = employeeInfoHome.getInstance();
-//            if(workExp.getToDate().compareTo(workExp.getFromDate()) <= 0 ) {
-//            	facesMessages.add(Severity.ERROR, "Οι ημ/νιες έναρξης και λήξης της προϋπηρεσίας, έτσι όπως τις τροποποιήσατε, είναι μή αποδεκτές.");
-//                return ACTION_OUTCOME_FAILURE;
-//            } else {
+            
+            EmployeeInfo employeeInfo = employeeInfoHome.getInstance();
+            
+            if(!employeeInfo.getHasAMasterDegree()) employeeInfo.setMscDate(null);
+            if(!employeeInfo.getHasAPhD()) employeeInfo.setPhdDate(null);
+            if(!employeeInfo.getIsANatSchPubAdminGraduate()) employeeInfo.setNatSchPubAdminDate(null);
+            
+            if(employeeInfo.getHasAMasterDegree() && employeeInfo.getMscDate() == null) { 
+            	facesMessages.add(Severity.ERROR, "Δεν ορίσατε την ημερομηνία Μεταπτυχιακού.");
+                return ACTION_OUTCOME_FAILURE;
+            } else if(employeeInfo.getHasAPhD() && employeeInfo.getPhdDate() == null) { 
+            	facesMessages.add(Severity.ERROR, "Δεν ορίσατε την ημερομηνία Διδακτορικού.");
+                return ACTION_OUTCOME_FAILURE;
+            } else if(employeeInfo.getIsANatSchPubAdminGraduate() && employeeInfo.getNatSchPubAdminDate() == null) { 
+            	facesMessages.add(Severity.ERROR, "Δεν ορίσατε την ημερομηνία Ανώτ. Σχολ. Δημ. Διοίκ.");
+                return ACTION_OUTCOME_FAILURE;
+            } else {
                 employeeInfoHome.update();
                 info("employee's #0 employee info #1 has been updated!", employeeInfoHome.getInstance().getEmployee(), employeeInfoHome.getInstance());
                 return ACTION_OUTCOME_SUCCESS;
-//            }
+            }
         } else {
             facesMessages.add(Severity.ERROR, "employeeInfo home #0 is not managed, thus #1 can't be modified.", employeeInfoHome, employeeInfoHome.getInstance());
             return ACTION_OUTCOME_FAILURE;
@@ -158,7 +171,11 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
                 
             //employeeInfoHome.persist();
             getEntityManager().flush();
-            setRankInfoHistory(getCoreSearching().getRankInfoHistory(employee));
+            
+            employeeInfoHome.getInstance().getRankInfos().add(rinfo);
+           
+//    	    setRankInfoHistory(coreSearching.getRankInfoHistory(employee));		// coreSearching.getRankInfoHistory() is now deprecated.
+            //setRankInfoHistory(employee.getEmployeeInfo().getRankInfos());
             info("Rank Info #0 for employee #1 has been created", rinfo, employee);
             return ACTION_OUTCOME_SUCCESS;
 
@@ -173,7 +190,8 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 	public void constructRankInfoHistory() {
 	    Employee employee = getEmployeeHome().getInstance();
 	    info("constructing evaluation history for employee #0", employee);
-	    setRankInfoHistory(coreSearching.getRankInfoHistory(employee));
+//	    setRankInfoHistory(coreSearching.getRankInfoHistory(employee));		// coreSearching.getRankInfoHistory() is now deprecated.	
+	    //setRankInfoHistory(employee.getEmployeeInfo().getRankInfos());
 	}
 	
 	

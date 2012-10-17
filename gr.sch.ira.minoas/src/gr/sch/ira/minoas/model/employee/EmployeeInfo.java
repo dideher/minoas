@@ -10,7 +10,6 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
@@ -18,9 +17,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Entity;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import gr.sch.ira.minoas.model.classrooms.CourseType;
+import gr.sch.ira.minoas.model.employee.SectorType;
+import gr.sch.ira.minoas.model.employement.Employment;
 
 /**
  * @author <a href="mailto:gand@sch.gr">Yorgos Andreadakis</a>
@@ -160,6 +164,35 @@ public class EmployeeInfo extends BaseIDModel {
 	@Column(name = "SECTOR", nullable = false, updatable = false)
 	private SectorType sector;
 
+	
+	/**
+	 * Sum of Educational Experience (Άθροισμα Εκπαιδευτικής Προϋπηρεσίας)
+	 */
+	@Basic
+	@Column(name = "SUM_OF_EDUCATIONAL_EXPERIENCE")
+	private Integer sumOfEducationalExperience;
+	
+	/**
+	 * Sum of Teaching Experience (Άθροισμα Διδακτικής Προϋπηρεσίας)
+	 */
+	@Basic
+	@Column(name = "SUM_OF_TEACHING_EXPERIENCE")
+	private Integer sumOfTeachingExperience;
+	
+	/**
+	 * Sum of Any Type Of Working Experience (Άθροισμα Προϋπηρεσίας Οποιουδήποτε Τύπου)
+	 */
+	@Basic
+	@Column(name = "SUM_OF_EXPERIENCE")
+	private Integer sumOfExperience;
+
+	/**
+	 * Total Work Service in days (Does NOT include prior work experience)
+	 * Συνολική Υπηρεσία από την ημ/νία διορισμού έως σήμερα (δεν συμπεριλαμβάνει προϋπηρεσίες)
+	 */
+	@Basic
+	@Column(name = "TOTAL_WORK_SERVICE")
+	private Integer totalWorkService;
 	
 	
 	/**
@@ -400,6 +433,62 @@ public class EmployeeInfo extends BaseIDModel {
 
 	public SectorType getSector() {
 		return sector;
+	}
+
+	/**
+	 * @return the sumOfEducationalExperience
+	 */
+	public Integer getSumOfEducationalExperience() {
+		return sumOfEducationalExperience;
+	}
+
+	/**
+	 * @param sumOfEducationalExperience the sumOfEducationalExperience to set
+	 */
+	public void setSumOfEducationalExperience(Integer sumOfEducationalExperience) {
+		this.sumOfEducationalExperience = sumOfEducationalExperience;
+	}
+
+	/**
+	 * @return the sumOfTeachingExperience
+	 */
+	public Integer getSumOfTeachingExperience() {
+		return sumOfTeachingExperience;
+	}
+
+	/**
+	 * @param sumOfTeachingExperience the sumOfTeachingExperience to set
+	 */
+	public void setSumOfTeachingExperience(Integer sumOfTeachingExperience) {
+		this.sumOfTeachingExperience = sumOfTeachingExperience;
+	}
+
+	/**
+	 * @return the sumOfExperience
+	 */
+	public Integer getSumOfExperience() {
+		return sumOfExperience;
+	}
+
+	/**
+	 * @param sumOfExperience the sumOfExperience to set
+	 */
+	public void setSumOfExperience(Integer sumOfExperience) {
+		this.sumOfExperience = sumOfExperience;
+	}
+
+	/**
+	 * @return the totalWorkService
+	 */
+	public Integer getTotalWorkService() {
+		return totalWorkService;
+	}
+
+	/**
+	 * @param totalWorkService the totalWorkService to set
+	 */
+	public void setTotalWorkService(Integer totalWorkService) {
+		this.totalWorkService = totalWorkService;
 	}
 	
 	
