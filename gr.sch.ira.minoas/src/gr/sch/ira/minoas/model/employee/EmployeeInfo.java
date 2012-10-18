@@ -161,7 +161,7 @@ public class EmployeeInfo extends BaseIDModel {
 	 * Public/Private Sector (Δημόσιος/Ιδιωτικός Τομέας)
 	 */
 	@Enumerated(EnumType.STRING)
-	@Column(name = "SECTOR", nullable = false, updatable = false)
+	@Column(name = "SECTOR", nullable = false, updatable = true)
 	private SectorType sector;
 
 	
@@ -489,6 +489,29 @@ public class EmployeeInfo extends BaseIDModel {
 	 */
 	public void setTotalWorkService(Integer totalWorkService) {
 		this.totalWorkService = totalWorkService;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "EmployeeInfo [gogAppointmentNo=" + gogAppointmentNo
+				+ ", gogAppointmentDate=" + gogAppointmentDate
+				+ ", entryIntoServiceAct=" + entryIntoServiceAct
+				+ ", entryIntoServiceDate=" + entryIntoServiceDate
+				+ ", permanentEmployeeAct=" + permanentEmployeeAct
+				+ ", permanentEmployeeActDate=" + permanentEmployeeActDate
+				+ ", hasAMasterDegree=" + hasAMasterDegree + ", mscDate="
+				+ mscDate + ", hasAPhD=" + hasAPhD + ", phdDate=" + phdDate
+				+ ", isANatSchPubAdminGraduate=" + isANatSchPubAdminGraduate
+				+ ", natSchPubAdminDate=" + natSchPubAdminDate
+				+ ", isRecentlyHired=" + isRecentlyHired + ", currentRankInfo="
+				+ currentRankInfo + ", sector=" + sector
+				+ ", sumOfEducationalExperience=" + sumOfEducationalExperience
+				+ ", sumOfTeachingExperience=" + sumOfTeachingExperience
+				+ ", sumOfExperience=" + sumOfExperience
+				+ ", totalWorkService=" + totalWorkService + "]";
 	}
 	
 	
