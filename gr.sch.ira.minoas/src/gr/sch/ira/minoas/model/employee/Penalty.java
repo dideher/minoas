@@ -15,6 +15,7 @@ import javax.persistence.Entity;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import gr.sch.ira.minoas.model.BaseIDDeleteAwareModel;
 import gr.sch.ira.minoas.model.BaseIDModel;
 
 /**
@@ -23,7 +24,7 @@ import gr.sch.ira.minoas.model.BaseIDModel;
 @Entity
 @Table(name = "PENALTY")
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
-public class Penalty extends BaseIDModel {
+public class Penalty extends BaseIDDeleteAwareModel {
 
 	/**
 	 * Comment for <code>serialVersionUID</code>
@@ -41,7 +42,7 @@ public class Penalty extends BaseIDModel {
 	 * Penalty Type (Τύπος Ποινής)
 	 */
 	@Enumerated(EnumType.STRING)
-	@Column(name = "PENALTY_TYPE", nullable = false, updatable = false)
+	@Column(name = "PENALTY_TYPE", nullable = false, updatable = true)
 	private PenaltyType type;
 	
 	/**
@@ -175,6 +176,17 @@ public class Penalty extends BaseIDModel {
 	 */
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Penalty [type=" + type + ", penaltyAwardDate="
+				+ penaltyAwardDate + ", penaltyStartDate=" + penaltyStartDate
+				+ ", penaltyEndDate=" + penaltyEndDate + ", fine=" + fine
+				+ ", comment=" + comment + "]";
 	}
 	
 }

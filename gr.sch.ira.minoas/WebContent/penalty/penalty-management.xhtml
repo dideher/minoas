@@ -1,0 +1,456 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<ui:composition template="/layout/simple-beauty-template.xhtml">
+	<ui:define name="body">
+		<a4j:region>
+			<rich:panel>
+				<f:facet name="header">
+					<h:outputText
+						value="Διαχείρηση Ποινών του/της #{employeeUtil.prettyFormat(employee)}" />
+				</f:facet>
+
+
+				<ui:include src="/components/messages-component.xhtml" />
+
+				<h:form>
+					<h:panelGrid columns="1">
+						<rich:panel>
+							<f:facet name="header">
+								<h:outputText value="Ιστορικό Ποινών Εκπαιδευτικού" />
+							</f:facet>
+
+							<a4j:outputPanel id="penaltyOutputPanel">
+
+								<h:panelGroup rendered="#{penaltyHistory.rowCount==0}">
+									<h:outputText
+										value="Δεν βρέθηκαν ποινές για τον εκπαιδευτικό." />
+								</h:panelGroup>
+								<h:panelGrid columns="1" width="100%"
+									rendered="#{penaltyHistory.rowCount gt 0}">
+									<h:outputText
+										value="Στον παρακάτω πίνακα εμφανίζεται το ιστορικό όλων των ποινών του εκπαιδευτικού." />
+
+									<rich:dataTable id="employeePenaltyList"
+										value="#{penaltyHistory}" var="_penalty"
+										rows="20" border="0"
+										onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+										onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+										width="100%">
+										<f:facet name="header">
+											<h:outputLabel value="Ιστορικό Ποινών Εκπαιδευτικού" />
+										</f:facet>
+										
+										
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Τύπος Ποινής" />
+											</f:facet>
+											<h:outputText value="#{messages[_penalty.type.key]}" />
+										</rich:column>
+										
+										
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Ημ/νία Απόδοσης Ποινής" />
+											</f:facet>
+											<h:outputText value="#{_penalty.penaltyAwardDate}">
+												<s:convertDateTime pattern="dd/MM/yyyy" />
+											</h:outputText>
+										</rich:column>
+
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Από" />
+											</f:facet>
+											<h:outputText value="#{_penalty.penaltyStartDate}">
+												<s:convertDateTime pattern="dd/MM/yyyy" />
+											</h:outputText>
+										</rich:column>										
+										
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Έως" />
+											</f:facet>
+											<h:outputText value="#{_penalty.penaltyEndDate}">
+												<s:convertDateTime pattern="dd/MM/yyyy" />
+											</h:outputText>
+										</rich:column>
+
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Πρόστιμο" />
+											</f:facet>
+											<h:outputText value="#{_penalty.fine}" />
+										</rich:column>
+										
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Σχόλιο" />
+											</f:facet>
+											<h:outputText value="#{_penalty.comment}" />
+										</rich:column>
+										
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Ενέργεια" />
+											</f:facet>
+											<rich:toolBar itemSeparator="line">
+												<a4j:commandLink id="updatelink"
+													rendered="#{(s:hasRole('ADMIN') or s:hasRole('MODIFY_PENALTY'))}"
+													reRender="updatePenaltyModalPanel"
+													oncomplete="#{rich:component('updatePenaltyModalPanel')}.show()"
+													value="Τροποποίηση">
+													<h:graphicImage value="/img/icons/edit.png" width="12"
+														height="12" style="border:0" />
+													<f:setPropertyActionListener value="#{_penalty.id}"
+														target="#{penaltyHome.id}" />
+												</a4j:commandLink>
+							
+																								
+												<a4j:commandLink id="deletelink"
+													rendered="#{(s:hasRole('ADMIN') or s:hasRole('DELETE_PENALTY'))}"
+													reRender="deletePenaltyModalPanel"
+													oncomplete="#{rich:component('deletePenaltyModalPanel')}.show()"
+													value="Διαγραφή">
+													<h:graphicImage value="/img/icons/delete.png" width="12"
+														height="12" style="border:0" />
+													<f:setPropertyActionListener value="#{_penalty.id}"
+														target="#{penaltyHome.id}" />
+												</a4j:commandLink>
+
+											</rich:toolBar>
+										</rich:column>
+
+										<f:facet name="footer">
+											<rich:datascroller for="employeePenaltyList">
+												<f:facet name="first">
+													<h:outputText value="Πρώτη" />
+												</f:facet>
+												<f:facet name="last">
+													<h:outputText value="Τελευταία" />
+												</f:facet>
+											</rich:datascroller>
+
+										</f:facet>
+
+									</rich:dataTable>
+								</h:panelGrid>
+							</a4j:outputPanel>
+						</rich:panel>
+						<rich:panel>
+							<s:div styleClass="actionButtons">
+								<s:button action="backButton" value="Επιστροφή" />
+								<s:button action="endButton" value="Τέλος Ενέργειας" />
+								<a4j:commandButton id="createButton"
+									disabled="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_PENALTY'))}"
+									action="#{penaltyHome.clearInstance()}"
+									reRender="createPenaltyModalPanel" immediate="true"
+									oncomplete="#{rich:component('createPenaltyModalPanel')}.show()"
+									value="Καταχώρηση Νέας Ποινής">
+								</a4j:commandButton>
+							</s:div>
+						</rich:panel>
+					</h:panelGrid>
+				</h:form>
+
+
+			</rich:panel>
+		</a4j:region>
+
+
+		<a4j:region>
+		<rich:modalPanel id="updatePenaltyModalPanel" autosized="true"
+			width="450">
+			<f:facet name="header">
+				<h:outputText value="Τροποποίηση Ποινής"
+					style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<h:graphicImage value="/img/modal/close.png" styleClass="hidelink"
+						width="18" height="18" id="hidelink_historypenalty" />
+					<rich:componentControl for="updateΠenaltyModalPanel"
+						attachTo="hidelink_historypenalty" operation="hide"
+						event="onclick" />
+				</h:panelGroup>
+			</f:facet>
+			
+			<a4j:region>
+				<h:panelGrid columns="1">
+					<h:form>
+						<a4j:outputPanel id="updatePenaltyModalPanelContent"
+							layout="inline">
+							<h:outputText
+								value="Με την παρακάτω φόρμα, μπορείτε να τροποποίησετε την ποινή του/της εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}." />
+							<rich:messages style="color:red;"></rich:messages>
+							<h:panelGrid columns="2">
+							
+							
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText styleClass="fieldValueLabel" value="Τύπος Ποινής: " />
+									</ui:define>
+									<h:selectOneMenu id="Rank"
+										value="#{penaltyHome.instance.type}"
+										required="true">
+										<s:selectItems hideNoSelectionLabel="false" var="_penaltyType"
+											value="#{penaltyTypes}" label="#{messages[_penaltyType.key]}" />
+										<s:convertEnum />
+									</h:selectOneMenu>
+								</s:decorate>
+							
+
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Ημ/νία Απόδοσης Ποινής : " />
+									</ui:define>
+									<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
+										style="width:50px" enableManualInput="true"
+										styleClass="fieldValueText" required="true"
+										value="#{penaltyHome.instance.penaltyAwardDate}">
+									</rich:calendar>
+								</s:decorate>
+
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Ημ/νία Έναρξης : " />
+									</ui:define>
+									<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
+										style="width:50px" enableManualInput="true"
+										styleClass="fieldValueText" required="true"
+										value="#{penaltyHome.instance.penaltyStartDate}">
+									</rich:calendar>
+								</s:decorate>
+
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Έως : " />
+									</ui:define>
+									<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
+										style="width:50px" enableManualInput="true"
+										styleClass="fieldValueText" required="true"
+										value="#{penaltyHome.instance.penaltyEndDate}">
+									</rich:calendar>
+								</s:decorate>
+								
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Πρόστιμο" />
+									</ui:define>
+									<h:inputText required="true" size="3"
+										value="#{penaltyHome.instance.fine}" />
+								</s:decorate>
+							</h:panelGrid>
+
+							<s:decorate template="/layout/doubleLineEdit.xhtml" >
+								<ui:define name="label">
+									<h:outputText value="Σχόλιο" />
+								</ui:define>
+								<h:inputTextarea value="#{penaltyHome.instance.comment}"  rows="6" cols="40" />
+							</s:decorate>
+						</a4j:outputPanel>
+
+						<h:panelGrid columns="2">
+
+							<a4j:commandButton value="Τροποποίηση Ποινής !"
+								action="#{penaltyManagement.modifyPenalty()}"
+								data="#{facesContext.maximumSeverity.ordinal ge 2}"
+								oncomplete="if(data == false) Richfaces.hideModalPanel('updatePenaltyModalPanel');"
+								reRender="penaltyOutputPanel" />
+							<a4j:commandButton value="Επιστροφή .."
+								action="#{penaltyHome.revert()}"
+								reRender="penaltyOutputPanel"
+								oncomplete="#{rich:component('updatePenaltyModalPanel')}.hide();" />
+						</h:panelGrid>
+					</h:form>
+				</h:panelGrid>
+			</a4j:region>
+		</rich:modalPanel>
+		</a4j:region>
+		
+		<a4j:region>
+		<rich:modalPanel id="deletePenaltyModalPanel" autosized="true"
+			width="450">
+			<f:facet name="header">
+				<h:outputText value="Διαγραφή Ποινής"
+					style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<h:graphicImage value="/img/modal/close.png" styleClass="hidelink"
+						width="18" height="18" id="hidelink_deletepenalty" />
+					<rich:componentControl for="deletePenaltyModalPanel"
+						attachTo="hidelink_deletepenalty" operation="hide"
+						event="onclick" />
+				</h:panelGroup>
+			</f:facet>
+			
+				<h:panelGrid columns="1">
+					<h:form>
+						<a4j:outputPanel id="deletePenaltyModalPanelContent"
+							layout="inline">
+							<h:outputText
+								value="Με
+								 την παρακάτω φόρμα, μπορείτε να διαγράψετε την ποινή του/της εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}. Εξήγηστε τον λόγο της διαγραφής στο σχετικό πλαίσιο κειμένου." />
+							<rich:messages style="color:red;"></rich:messages>
+							<h:panelGrid columns="4">
+
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Λόγος / Επεξήγηση Διαγραφής Ποινής" />
+									</ui:define>
+									<h:inputTextarea value="#{penaltyHome.instance.deletedComment}" required="true" rows="2" cols="40"></h:inputTextarea>
+									</s:decorate>
+							</h:panelGrid>
+						</a4j:outputPanel>
+
+						<h:panelGrid columns="2">
+
+							<a4j:commandButton value="Διαγραφή Ποινής !"
+								action="#{penaltyManagement.deletePenalty()}"
+								data="#{facesContext.maximumSeverity.ordinal ge 2}"
+								oncomplete="if(data == false) Richfaces.hideModalPanel('deletePenaltyModalPanel');"
+								reRender="penaltyOutputPanel" />
+							<a4j:commandButton value="Επιστροφή .."
+								action="#{evaluationHome.revert()}"
+								reRender="penaltyOutputPanel"
+								oncomplete="#{rich:component('deletePenaltyModalPanel')}.hide();" />
+						</h:panelGrid>
+					</h:form>
+				</h:panelGrid>
+			
+		</rich:modalPanel>
+		</a4j:region>
+
+
+
+
+		<!-- *********************************************** -->
+		<!-- ** create modal panel -->
+		<!-- *********************************************** -->
+		<rich:modalPanel id="createPenaltyModalPanel" autosized="true"
+			width="450">
+			<f:facet name="header">
+				<h:outputText
+					value="Καταχώρηση Νέας Ποινής Προσωπικού #{employeeUtil.prettyFormat(employeeHome.instance)}"
+					style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<h:graphicImage value="/img/modal/close.png" styleClass="hidelink"
+						width="18" height="18" id="hidelink4" />
+					<rich:componentControl for="createΠenaltyModalPanel"
+						attachTo="hidelink4" operation="hide" event="onclick" />
+				</h:panelGroup>
+			</f:facet>
+
+			<h:panelGrid columns="1">
+				<rich:messages style="color:red;"></rich:messages>
+
+				<h:form>
+					<a4j:region>
+						<a4j:outputPanel id="createPenaltyModalPanelContent"
+							layout="inline">
+							<h:outputText
+								value="Συμπληρώστε τα στοιχεία της παρακάτω φόρμας για να εισάγετε νέα ποινή για τον εκπαιδευτικό." />
+
+
+							<h:panelGrid columns="2">
+							
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText styleClass="fieldValueLabel" value="Τύπος Ποινής: " />
+									</ui:define>
+									<h:selectOneMenu id="Rank"
+										value="#{penaltyHome.instance.type}"
+										required="true">
+										<s:selectItems hideNoSelectionLabel="false" var="_penaltyType"
+											value="#{penaltyTypes}" label="#{messages[_penaltyType.key]}" />
+										<s:convertEnum />
+									</h:selectOneMenu>
+								</s:decorate>
+
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Ημ/νία Απόδοσης Ποινής : " />
+									</ui:define>
+									<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
+										style="width:50px" enableManualInput="true"
+										styleClass="fieldValueText" required="true"
+										value="#{penaltyHome.instance.penaltyAwardDate}">
+									</rich:calendar>
+								</s:decorate>
+
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Ημ/νία Έναρξης : " />
+									</ui:define>
+									<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
+										style="width:50px" enableManualInput="true"
+										styleClass="fieldValueText" required="true"
+										value="#{penaltyHome.instance.penaltyStartDate}">
+									</rich:calendar>
+								</s:decorate>
+
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Έως : " />
+									</ui:define>
+									<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
+										style="width:50px" enableManualInput="true"
+										styleClass="fieldValueText" required="true"
+										value="#{penaltyHome.instance.penaltyEndDate}">
+									</rich:calendar>
+								</s:decorate>
+								
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Πρόστιμο" />
+									</ui:define>
+									<h:inputText required="true" size="3"
+										value="#{penaltyHome.instance.fine}" />
+								</s:decorate>
+							</h:panelGrid>
+							
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Σχόλιο" />
+								</ui:define>
+								<h:inputTextarea value="#{penaltyHome.instance.comment}"  rows="6" cols="40"/>
+							</s:decorate>
+							
+							<h:panelGrid columns="2">
+
+								<a4j:commandButton value="Καταχώρηση Ποινής !"
+									action="#{penaltyManagement.createPenalty()}"
+									data="#{facesContext.maximumSeverity.ordinal ge 2}"
+									oncomplete="if(data == false) Richfaces.hideModalPanel('createPenaltyModalPanel');"
+									reRender="penaltyOutputPanel" />
+								<a4j:commandButton value="Επιστροφή .."
+									action="#{penaltyHome.revert()}"
+									reRender="penaltyOutputPanel"
+									onclick="#{rich:component('createPenaltyModalPanel')}.hide();" />
+							</h:panelGrid>
+
+						</a4j:outputPanel>
+					</a4j:region>
+				</h:form>
+			</h:panelGrid>
+
+		</rich:modalPanel>
+
+		<ui:include src="/components/wait-modal-panel.xhtml" />
+
+	</ui:define>
+</ui:composition>
+</html>

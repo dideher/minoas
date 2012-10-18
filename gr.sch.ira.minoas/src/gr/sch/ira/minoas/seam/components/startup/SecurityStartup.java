@@ -155,6 +155,11 @@ public class SecurityStartup extends BaseDatabaseAwareSeamComponent {
 		createRole("MODIFY_EVALUATION", "Modify an Evaluation", admin);
 		createRole("DELETE_EVALUATION", "Delete an Evaluation", admin);
 		createRole("ADD_EVALUATION", "Add an Evaluation", admin);
+
+		/* Penalties - Ποινές Εκπαιδευτικού */
+		createRole("MODIFY_PENALTY", "Modify a Penalty", admin);
+		createRole("DELETE_PENALTY", "Delete a Penalty", admin);
+		createRole("ADD_PENALTY", "Add a Penalty", admin);
 		
 		/* Employee Info */
 		createRole("MODIFY_EMPLOYEE_INFO", "Modify an Employee's Info Data", admin);

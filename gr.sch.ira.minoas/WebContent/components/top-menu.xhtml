@@ -158,6 +158,20 @@
 						</s:link>
 					</rich:menuItem>
 				</rich:menuGroup>
+
+				<rich:menuGroup value="Διαχείριση Ποινών">
+					<rich:menuItem submitMode="none"
+						rendered="#{(s:hasRole('ADMIN')
+							or s:hasRole('MODIFY_PENALTY') 
+							or s:hasRole('DELETE_PENALTY') 
+							or s:hasRole('ADD_PENALTY'))}">
+						<s:link value="Διαχείριση Ποινών Εκπαιδευτικού" 
+							view="/employee/select-employee.xhtml">
+							<f:param name="from" value="/home" />
+							<f:param name="to" value="/penalty/penalty-management" />
+						</s:link>
+					</rich:menuItem>
+				</rich:menuGroup>
 				
 				<rich:menuGroup value="Διαχείριση Μειωμένων Ωραρίων">
 					<rich:menuItem submitMode="none"
