@@ -133,5 +133,15 @@ public class EvolutionCDR extends BaseIDModel {
 	public void setAchievedPromotionQuota(Boolean achievedPromotionQuota) {
 		this.achievedPromotionQuota = achievedPromotionQuota;
 	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "EvolutionCDR [startDate=" + startDate + ", endDate=" + endDate
+				+ ", rankInfo=" + rankInfo + ", achievedPromotionQuota="
+				+ achievedPromotionQuota + "]";
+	}
 	
 }

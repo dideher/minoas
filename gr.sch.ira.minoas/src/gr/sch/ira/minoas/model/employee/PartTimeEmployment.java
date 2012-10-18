@@ -129,5 +129,15 @@ public class PartTimeEmployment extends BaseIDDeleteAwareModel {
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "PartTimeEmployment [hoursPerWeek=" + hoursPerWeek
+				+ ", startDate=" + startDate + ", endDate=" + endDate
+				+ ", comment=" + comment + "]";
+	}
 	
 }

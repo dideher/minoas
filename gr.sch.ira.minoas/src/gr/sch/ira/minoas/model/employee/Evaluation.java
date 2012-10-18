@@ -150,5 +150,17 @@ public class Evaluation extends BaseIDDeleteAwareModel {
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Evaluation [evaluationDate=" + evaluationDate
+				+ ", evaluationGrade=" + evaluationGrade
+				+ ", evaluationStartDate=" + evaluationStartDate
+				+ ", evaluationEndDate=" + evaluationEndDate + ", comment="
+				+ comment + "]";
+	}
 	
 }
