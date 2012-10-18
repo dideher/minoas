@@ -142,7 +142,7 @@ public class RankInfo extends BaseIDModel {
 	 * Rank (Βαθμός)
 	 */
 	@Enumerated(EnumType.STRING)
-	@Column(name = "RANK", nullable = false, updatable = false)
+	@Column(name = "RANK", nullable = false, updatable = true)
 	private RankType rank;
 
 	/**
@@ -185,7 +185,7 @@ public class RankInfo extends BaseIDModel {
 	 * Educational Level (Βαθμός Εκπαίδευσης)
 	 */
 	@Enumerated(EnumType.STRING)
-	@Column(name = "EDUCATIONAL_LEVEL", nullable = false, updatable = false)
+	@Column(name = "EDUCATIONAL_LEVEL", nullable = false, updatable = true)
 	private EducationalLevelType educationalLevel;
 
 	/**
