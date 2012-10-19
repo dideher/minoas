@@ -1,5 +1,6 @@
 package gr.sch.ira.minoas.model.employee;
 
+import gr.sch.ira.minoas.core.CoreUtils;
 import gr.sch.ira.minoas.model.BaseIDModel;
 
 import java.text.DateFormat;
@@ -443,6 +444,13 @@ public class EmployeeInfo extends BaseIDModel {
 	}
 
 	/**
+	 * @return the sumOfEducationalExperience as a Year_Month_Day string
+	 */
+	public String getSumOfEducationalExperienceYear_Month_Day() {
+		return CoreUtils.Year_Month_Day(sumOfEducationalExperience);
+	}
+	
+	/**
 	 * @param sumOfEducationalExperience the sumOfEducationalExperience to set
 	 */
 	public void setSumOfEducationalExperience(Integer sumOfEducationalExperience) {
@@ -456,6 +464,13 @@ public class EmployeeInfo extends BaseIDModel {
 		return sumOfTeachingExperience;
 	}
 
+	/**
+	 * @return the sumOfTeachingExperience as a Year_Month_Day string
+	 */
+	public String getSumOfTeachingExperienceYear_Month_Day() {
+		return CoreUtils.Year_Month_Day(sumOfTeachingExperience);
+	}
+	
 	/**
 	 * @param sumOfTeachingExperience the sumOfTeachingExperience to set
 	 */
@@ -471,6 +486,13 @@ public class EmployeeInfo extends BaseIDModel {
 	}
 
 	/**
+	 * @return the sumOfExperience as a Year_Month_Day string
+	 */
+	public String getSumOfExperienceYear_Month_Day() {
+		return CoreUtils.Year_Month_Day(sumOfExperience);
+	}
+	
+	/**
 	 * @param sumOfExperience the sumOfExperience to set
 	 */
 	public void setSumOfExperience(Integer sumOfExperience) {
@@ -484,6 +506,13 @@ public class EmployeeInfo extends BaseIDModel {
 		return totalWorkService;
 	}
 
+	/**
+	 * @return the totalWorkService as a Year_Month_Day string
+	 */
+	public String getTotalWorkServiceYear_Month_Day() {
+		return CoreUtils.Year_Month_Day(totalWorkService);
+	}
+	
 	/**
 	 * @param totalWorkService the totalWorkService to set
 	 */

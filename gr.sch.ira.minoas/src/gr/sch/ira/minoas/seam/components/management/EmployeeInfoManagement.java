@@ -46,12 +46,24 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 	
 	@In(required = true)
 	EmployeeInfoHome employeeInfoHome;
+	
+	private Date totalWorkServiceCalculationDate;
+	
 
 //	/**
 //	 * Employee's rank transitions history
 //	 */
 //	@DataModel(scope=ScopeType.PAGE, value="rankInfoHistory")
 //	private Collection<RankInfo> rankInfoHistory = null;
+
+	public void setTotalWorkServiceCalculationDate(
+			Date totalWorkServiceCalculationDate) {
+		this.totalWorkServiceCalculationDate = totalWorkServiceCalculationDate;
+	}
+
+	public Date getTotalWorkServiceCalculationDate() {
+		return totalWorkServiceCalculationDate;
+	}
 
 	/**
 	 * @return the employeeHome
