@@ -127,5 +127,27 @@ public abstract class CoreUtils {
         return newDate;
     }
 
+	/**
+	 * Μετατροπή Αριθμού Ημερών σε -> Έτη - Μήνες - Ημέρες
+	 * 
+	 * @param noOfDays
+	 *            The number of days we wish to convers to Years - Months - Days
+	 * 
+	 * @return Returns a string of the form: 3 έτη 11 μήνες 24 ημέρες
+	 */
+	public static String Year_Month_Day(Integer noOfDays) {
+		// **********************************
+		// Μετατροπή Ημερών σε -> ετη - μηνες - ημέρες
+		if (noOfDays != null) {
+			int years, months, days;
+
+			years = noOfDays / 360;
+			months = (noOfDays - years * 360) / 30;
+			days = noOfDays - (years * 360) - (months * 30);
+
+			return years + " έτη " + months + " μήνες " + days + " ημέρες";
+		} else
+			return "";
+	}
 
 }

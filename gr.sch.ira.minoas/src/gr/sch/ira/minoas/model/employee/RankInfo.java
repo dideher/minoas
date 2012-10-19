@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import gr.sch.ira.minoas.core.CoreUtils;
 import gr.sch.ira.minoas.model.BaseIDModel;
 import gr.sch.ira.minoas.model.employement.EducationalLevelType;
 
@@ -984,7 +985,7 @@ public class RankInfo extends BaseIDModel {
 	 * @return the surplusTimeInRank in Year_Month_Day formated string
 	 */
 	public String getSurplusTimeInRankYear_Month_Day() {
-		return Year_Month_Day(surplusTimeInRank);
+		return CoreUtils.Year_Month_Day(surplusTimeInRank);
 	}
 
 	/**
@@ -1006,7 +1007,7 @@ public class RankInfo extends BaseIDModel {
 	 * @return the surplusTimeInSalaryGrade in Year_Month_Day formated string
 	 */
 	public String getSurplusTimeInSalaryGradeYear_Month_Day() {
-		return Year_Month_Day(surplusTimeInSalaryGrade);
+		return CoreUtils.Year_Month_Day(surplusTimeInSalaryGrade);
 	}
 
 	/**
@@ -1646,28 +1647,7 @@ public class RankInfo extends BaseIDModel {
 		}
 	}
 
-	/**
-	 * Μετατροπή Αριθμού Ημερών σε -> Έτη - Μήνες - Ημέρες
-	 * 
-	 * @param noOfDays
-	 *            The number of days we wish to convers to Years - Months - Days
-	 * 
-	 * @return Returns a string of the form: 3 έτη 11 μήνες 24 ημέρες
-	 */
-	public static String Year_Month_Day(Integer noOfDays) {
-		// **********************************
-		// Μετατροπή Ημερών σε -> ετη - μηνες - ημέρες
-		if (noOfDays != null) {
-			int years, months, days;
 
-			years = noOfDays / 360;
-			months = (noOfDays - years * 360) / 30;
-			days = noOfDays - (years * 360) - (months * 30);
-
-			return years + " έτη " + months + " μήνες " + days + " ημέρες";
-		} else
-			return "";
-	}
 
 	// public String toString() {
 	// return "Βαθμός(Μ.Κ.): "+rank+"("+salaryGrade+")";
