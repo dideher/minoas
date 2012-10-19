@@ -424,6 +424,7 @@
 								<h:outputText
 									value="Με την παρακάτω φόρμα, μπορείτε να διαγράψετε την προϋπηρεσία του/της εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}. Εξήγηστε τον λόγο της διαγραφής στο σχετικό πλαίσιο κειμένου." />
 								<rich:messages style="color:red;"></rich:messages>
+								
 								<h:panelGrid columns="4">
 									<s:decorate template="/layout/doubleLineEdit.xhtml">
 										<ui:define name="label">
@@ -478,6 +479,7 @@
 						<a4j:outputPanel id="createWorkExperienceModalPanelContent"
 							layout="inline">
 							<h:outputText value="Συμπληρώστε τα στοιχεία της παρακάτω φόρμας για να εισάγετε νέα προϋπηρεσία για τον/την εκπαιδευτικό: #{employeeUtil.prettyFormat(employee)}." />
+							<rich:messages style="color:red;"></rich:messages>
 
 							<h:panelGrid columns="3">
 
