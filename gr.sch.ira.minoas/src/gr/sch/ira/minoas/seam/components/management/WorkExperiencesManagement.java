@@ -129,8 +129,9 @@ public class WorkExperiencesManagement extends BaseDatabaseAwareSeamComponent {
             	if(workExp.getTeaching())
             		workExp.setEducational(true);
             	
-                info("employee's #0 work experience #1 has been updated!", workExperienceHome.getInstance().getEmployee(), workExperienceHome.getInstance());
                 workExperienceHome.update();
+                workExperienceCalculation.updateEmployeeExperience(getEmployeeHome().getInstance());
+                info("employee's #0 work experience #1 has been updated!", workExperienceHome.getInstance().getEmployee(), workExperienceHome.getInstance());
                 return ACTION_OUTCOME_SUCCESS;
             }
             
@@ -152,6 +153,7 @@ public class WorkExperiencesManagement extends BaseDatabaseAwareSeamComponent {
             workExp.setDeletedOn(new Date());
             workExp.setDeletedBy(getPrincipal());
             workExperienceHome.update();
+            workExperienceCalculation.updateEmployeeExperience(getEmployeeHome().getInstance());
             constructWorkExperienceHistory();
             return ACTION_OUTCOME_SUCCESS;
         } else {
@@ -196,6 +198,7 @@ public class WorkExperiencesManagement extends BaseDatabaseAwareSeamComponent {
 //                	workExp.setActualDays((int)Math.ceil((((float)(workExp.getNumberOfWorkExperienceHours()*6)/workExp.getMandatoryHours())*30)/25));
 //                }
                 workExperienceHome.persist();
+                workExperienceCalculation.updateEmployeeExperience(getEmployeeHome().getInstance());
                 constructWorkExperienceHistory();
                 
                 return ACTION_OUTCOME_SUCCESS;
@@ -288,24 +291,18 @@ public class WorkExperiencesManagement extends BaseDatabaseAwareSeamComponent {
     }
     
     public String computeEmployeeWorkExperience() {
-        if(employeeHome.isManaged()) {
-            Employee employee = employeeHome.getInstance();
-            Date currentDate = DateUtils.truncate(new Date(System.currentTimeMillis()), Calendar.DAY_OF_MONTH);
-            Date fromDate = workExperienceCalculation.computeEmployeeFirstDayOfRegularWork(employee);
-            EmployeeInfo employeeInfo = employee.getEmployeeInfo();
-            WorkExperienceCalculation.EmployeeWorkExperienceHelper exp = workExperienceCalculation.calculateEmployeeWorkExperience(employee);
-            WorkExperienceCalculation.EmployeeServiceHelper serviceHelper = workExperienceCalculation.calculateRegularEmployeeService(employee, fromDate, currentDate);
-            
-            employeeInfo.setSumOfEducationalExperience(new Integer(exp.getEducationalTotal().intValue()));
-            employeeInfo.setSumOfTeachingExperience(new Integer(exp.getTeachingTotal().intValue()));
-            employeeInfo.setSumOfExperience(new Integer(exp.getTotal().intValue()));
-            employeeInfo.setTotalWorkService(new Integer(serviceHelper.getTotalServiceInDays().intValue()));
-            
-            info("computed and updated successfully work experience '#0' and service '#1' for employee '#2'.", exp, serviceHelper, employee);
-            getEntityManager().flush();
-            return ACTION_OUTCOME_SUCCESS;
-        } else {
-            facesMessages.add(Severity.ERROR, "employeehome is not managed.");
+        try {
+            if (employeeHome.isManaged()) {
+                Employee employee = employeeHome.getInstance();
+                workExperienceCalculation.updateEmployeeExperience(employee);
+                return ACTION_OUTCOME_SUCCESS;
+            } else {
+                facesMessages.add(Severity.ERROR, "employeehome is not managed.");
+                return ACTION_OUTCOME_FAILURE;
+            }
+        } catch (Exception ex) {
+            error(ex);
+            facesMessages.add(Severity.ERROR, String.format("Αποτυχιά ενημέρωσεις, λόγω '%s'", ex.getMessage()));
             return ACTION_OUTCOME_FAILURE;
         }
     }

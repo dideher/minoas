@@ -1,5 +1,6 @@
 package gr.sch.ira.minoas.seam.components;
 
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 
@@ -8,6 +9,7 @@ import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeInfo;
 import gr.sch.ira.minoas.model.employee.Penalty;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.AutoCreate;
 import org.jboss.seam.annotations.In;
@@ -21,7 +23,7 @@ import org.jboss.seam.annotations.Transactional;
  * @version $Id$
  */
 @Name("workExperienceCalculation")
-@Scope(ScopeType.EVENT)
+@Scope(ScopeType.PAGE)
 @AutoCreate
 public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
     
@@ -244,6 +246,23 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
         returnValue.setTotalServiceInDaysRaw(new Long(totalServiceRaw));
         returnValue.setTotalPenaltyDays(new Long(totalPenaltyDays));
         return returnValue;
+    }
+    
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public void updateEmployeeExperience(Employee employee) {
+        Date currentDate = DateUtils.truncate(new Date(System.currentTimeMillis()), Calendar.DAY_OF_MONTH);
+        Date fromDate = computeEmployeeFirstDayOfRegularWork(employee);
+        EmployeeInfo employeeInfo = employee.getEmployeeInfo();
+        WorkExperienceCalculation.EmployeeWorkExperienceHelper exp = calculateEmployeeWorkExperience(employee);
+        WorkExperienceCalculation.EmployeeServiceHelper serviceHelper = calculateRegularEmployeeService(employee, fromDate, currentDate);
+        
+        employeeInfo.setSumOfEducationalExperience(new Integer(exp.getEducationalTotal().intValue()));
+        employeeInfo.setSumOfTeachingExperience(new Integer(exp.getTeachingTotal().intValue()));
+        employeeInfo.setSumOfExperience(new Integer(exp.getTotal().intValue()));
+        employeeInfo.setTotalWorkService(new Integer(serviceHelper.getTotalServiceInDays().intValue()));
+        
+        info("computed and updated successfully work experience '#0' and service '#1' for employee '#2'.", exp, serviceHelper, employee);
+        getEntityManager().flush();
     }
     
     
