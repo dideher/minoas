@@ -1451,14 +1451,30 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         return EducationalLevelType.values();
     }
  
-    public Integer getSummedWorkExperience(Employee employee) {
-        Object sum = null;
-        info("retrieving employee's '#0' summed work experience.", employee);
-        sum = entityManager.createQuery(
-        	"select sum(ACTUAL_DAYS) from minoas.slavikos.WORK_EXPERIENCE where IS_ACTIVE=1 and EDUCATIONAL=1")
-            .setParameter("employeeInfo", employee.getEmployeeInfo()).getSingleResult();
-        info("found totally '#0' days of work experience for employee '#1'.", (Integer)sum, employee);
-        return (Integer)sum;
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public Long getSummedEducationalWorkExperience(Employee employee) {
+        return (Long) entityManager
+                .createQuery(
+                        "SELECT SUM(actualDays) FROM WorkExperience w WHERE w.active IS TRUE AND w.educational IS TRUE AND (w.deleted IS FALSE OR w.deleted IS NULL) AND w.employee=:employee")
+                .setParameter("employee", employee).getSingleResult();
     }
+    
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public Long getSummedTeachingWorkExperience(Employee employee) {
+        return (Long) entityManager
+                .createQuery(
+                        "SELECT SUM(actualDays) FROM WorkExperience w WHERE w.active IS TRUE AND w.teaching IS TRUE AND (w.deleted IS FALSE OR w.deleted IS NULL) AND w.employee=:employee")
+                .setParameter("employee", employee).getSingleResult();
+    }
+    
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public Long getSummedWorkExperience(Employee employee) {
+        return (Long) entityManager
+                .createQuery(
+                        "SELECT SUM(actualDays) FROM WorkExperience w WHERE w.active IS TRUE AND (w.deleted IS FALSE OR w.deleted IS NULL) AND w.employee=:employee")
+                .setParameter("employee", employee).getSingleResult();
+    } 
+    
+    
 
 }
