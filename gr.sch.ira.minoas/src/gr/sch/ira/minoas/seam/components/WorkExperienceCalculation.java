@@ -23,7 +23,7 @@ import org.jboss.seam.annotations.Transactional;
  * @version $Id$
  */
 @Name("workExperienceCalculation")
-@Scope(ScopeType.PAGE)
+@Scope(ScopeType.APPLICATION)
 @AutoCreate
 public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
     

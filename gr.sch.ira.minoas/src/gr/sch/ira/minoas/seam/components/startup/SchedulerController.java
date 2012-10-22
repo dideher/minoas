@@ -5,6 +5,7 @@ import gr.sch.ira.minoas.seam.components.async.DisposalCleanupProcessor;
 import gr.sch.ira.minoas.seam.components.async.LeaveActivactionProcessor;
 import gr.sch.ira.minoas.seam.components.async.LeaveCleanupProcessor;
 import gr.sch.ira.minoas.seam.components.async.PensionsScannerProcessor;
+import gr.sch.ira.minoas.seam.components.async.RegularEmployeeServiceUpdaterProcessor;
 import gr.sch.ira.minoas.seam.components.async.SecondmentActivactionProcessor;
 import gr.sch.ira.minoas.seam.components.async.SecondmentCleanupProcessor;
 import gr.sch.ira.minoas.seam.components.async.ServiceAllocationCleanupProcessor;
@@ -37,7 +38,11 @@ public class SchedulerController extends BaseDatabaseAwareSeamComponent {
     
     private static final long PENSION_SYNC_INTERVAL = 8400000;
     
+    private static final long REGULAR_EMPLOYEE_SERVICE_SYNC_INTERVAL = 60000;
+    
     private static final long ACTIVATION_TASK_INTERVAL = 1200000;
+    
+    
     
     
     @In(create=true, value="secondmentCleanupProcessor")
@@ -69,6 +74,9 @@ public class SchedulerController extends BaseDatabaseAwareSeamComponent {
     @In(create=true, value="pensionsScannerProcessor")
     private PensionsScannerProcessor pensionsScannerProcessor;
     
+    @In(create=true, value="regularEmployeeServiceUpdaterProcessor")
+    private RegularEmployeeServiceUpdaterProcessor regularEmployeeServiceUpdaterProcessor;
+    
     
     @In(create=true, value="basicUsageReport")
     private BasicUsageReport basicUsageReportProcessor;
@@ -81,6 +89,7 @@ public class SchedulerController extends BaseDatabaseAwareSeamComponent {
     private QuartzTriggerHandle secondmentActivationProcessorHandler;
     //private QuartzTriggerHandle serviceAllocationActivationProcessorHandler;
     //private QuartzTriggerHandle disposalActivationProcessorHandler;
+    private QuartzTriggerHandle regularEmployeeServiceUpdaterProcessorHandler;
     private QuartzTriggerHandle basicUsageReportProcessorHandler;
     private QuartzTriggerHandle pensionsScannerProcessorHandler;
     
@@ -140,6 +149,11 @@ public class SchedulerController extends BaseDatabaseAwareSeamComponent {
         if(pensionsScannerProcessor!=null) {
             pensionsScannerProcessorHandler = pensionsScannerProcessor.schedulePensionsCleanup(new Date(), PENSION_SYNC_INTERVAL, null);
             info("scheduled #0", pensionsScannerProcessorHandler.getTrigger().getFullName());
+        }
+        
+        if(regularEmployeeServiceUpdaterProcessor!=null) {
+            regularEmployeeServiceUpdaterProcessorHandler = regularEmployeeServiceUpdaterProcessor.schedule(new Date(), REGULAR_EMPLOYEE_SERVICE_SYNC_INTERVAL, null);
+            info("scheduled #0", regularEmployeeServiceUpdaterProcessorHandler.getTrigger().getFullName());
         }
         
         } catch(Exception ex) {

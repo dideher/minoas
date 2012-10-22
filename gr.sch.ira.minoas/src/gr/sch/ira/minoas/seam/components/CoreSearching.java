@@ -545,6 +545,15 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
             return null;
         }
     }
+    
+    @SuppressWarnings("unchecked")
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public Collection<Employee> getActiveEmployeesOfType(EntityManager entityManager, EmployeeType employeeType) {
+        EntityManager em = getEntityManager(entityManager);
+        return em.createQuery("SELECT e FROM Employee e WHERE e.type=:employeeType AND e.active IS TRUE")
+                .setParameter("employeeType", employeeType).getResultList();
+
+    }
 
     @SuppressWarnings("unchecked")
     public Collection<Secondment> getEmployeeSecondments(Person employee) {
