@@ -2,11 +2,14 @@ package gr.sch.ira.minoas.seam.components.management;
 
 import gr.sch.ira.minoas.core.CoreUtils;
 import gr.sch.ira.minoas.model.employee.Employee;
+import gr.sch.ira.minoas.model.employee.EmployeeInfo;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
 import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 import gr.sch.ira.minoas.model.employement.WorkExperience;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.CoreSearching;
+import gr.sch.ira.minoas.seam.components.WorkExperienceCalculation;
+import gr.sch.ira.minoas.seam.components.WorkExperienceCalculation.EmployeeWorkExperienceHelper;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
 import gr.sch.ira.minoas.seam.components.home.WorkExperienceHome;
 
@@ -46,6 +49,9 @@ public class WorkExperiencesManagement extends BaseDatabaseAwareSeamComponent {
 	private WorkExperienceHome workExperienceHome;
 	
 	private EmployeeType fooEmployeeType;
+	
+	@In(required=true, create=true)
+	private WorkExperienceCalculation workExperienceCalculation;
 	
 	
 	/**
@@ -278,6 +284,29 @@ public class WorkExperiencesManagement extends BaseDatabaseAwareSeamComponent {
         } else {
         	workExp.setCalendarExperienceDays(new Integer(0));
         	workExp.setActualDays(new Integer(0));
+        }
+    }
+    
+    public String computeEmployeeWorkExperience() {
+        if(employeeHome.isManaged()) {
+            Employee employee = employeeHome.getInstance();
+            Date currentDate = DateUtils.truncate(new Date(System.currentTimeMillis()), Calendar.DAY_OF_MONTH);
+            Date fromDate = workExperienceCalculation.computeEmployeeFirstDayOfRegularWork(employee);
+            EmployeeInfo employeeInfo = employee.getEmployeeInfo();
+            WorkExperienceCalculation.EmployeeWorkExperienceHelper exp = workExperienceCalculation.calculateEmployeeWorkExperience(employee);
+            WorkExperienceCalculation.EmployeeServiceHelper serviceHelper = workExperienceCalculation.calculateRegularEmployeeService(employee, fromDate, currentDate);
+            
+            employeeInfo.setSumOfEducationalExperience(new Integer(exp.getEducationalTotal().intValue()));
+            employeeInfo.setSumOfTeachingExperience(new Integer(exp.getTeachingTotal().intValue()));
+            employeeInfo.setSumOfExperience(new Integer(exp.getTotal().intValue()));
+            employeeInfo.setTotalWorkService(new Integer(serviceHelper.getTotalServiceInDays().intValue()));
+            
+            info("computed and updated successfully work experience '#0' and service '#1' for employee '#2'.", exp, serviceHelper, employee);
+            getEntityManager().flush();
+            return ACTION_OUTCOME_SUCCESS;
+        } else {
+            facesMessages.add(Severity.ERROR, "employeehome is not managed.");
+            return ACTION_OUTCOME_FAILURE;
         }
     }
     

@@ -66,6 +66,8 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.TransactionPropagationType;
 import org.jboss.seam.annotations.Transactional;
 
+import sun.net.idn.Punycode;
+
 /**
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * @version $Id$
@@ -1485,26 +1487,29 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 
     @Transactional(TransactionPropagationType.REQUIRED)
     public Long getSummedEducationalWorkExperience(Employee employee) {
-        return (Long) entityManager
+        Long returnValue = (Long) entityManager
                 .createQuery(
                         "SELECT SUM(actualDays) FROM WorkExperience w WHERE w.active IS TRUE AND w.educational IS TRUE AND (w.deleted IS FALSE OR w.deleted IS NULL) AND w.employee=:employee")
                 .setParameter("employee", employee).getSingleResult();
+        return returnValue != null ? returnValue : new Long(0);
     }
     
     @Transactional(TransactionPropagationType.REQUIRED)
     public Long getSummedTeachingWorkExperience(Employee employee) {
-        return (Long) entityManager
+        Long returnValue = (Long) entityManager
                 .createQuery(
                         "SELECT SUM(actualDays) FROM WorkExperience w WHERE w.active IS TRUE AND w.teaching IS TRUE AND (w.deleted IS FALSE OR w.deleted IS NULL) AND w.employee=:employee")
                 .setParameter("employee", employee).getSingleResult();
+        return returnValue != null ? returnValue : new Long(0);
     }
     
     @Transactional(TransactionPropagationType.REQUIRED)
     public Long getSummedWorkExperience(Employee employee) {
-        return (Long) entityManager
+        Long returnValue = (Long) entityManager
                 .createQuery(
                         "SELECT SUM(actualDays) FROM WorkExperience w WHERE w.active IS TRUE AND (w.deleted IS FALSE OR w.deleted IS NULL) AND w.employee=:employee")
                 .setParameter("employee", employee).getSingleResult();
+        return returnValue != null ? returnValue : new Long(0);
     } 
     
     
