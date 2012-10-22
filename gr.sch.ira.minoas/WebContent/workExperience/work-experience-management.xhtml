@@ -157,6 +157,13 @@
 									oncomplete="#{rich:component('createWorkExperienceModalPanel')}.show()"
 									value="Εισαγωγή Νέας Προϋπηρεσίας">
 								</a4j:commandButton>
+								
+								
+								<a4j:commandButton id="computeWorkExp"
+									disabled="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_WORKEXPERIENCE'))}"
+									action="#{workExperiencesManagement.computeEmployeeWorkExperience()}"
+									immediate="true" value="Υπολογισμός (θα φύγει)">
+								</a4j:commandButton>
 							</s:div>
 						</rich:panel>
 					</h:panelGrid>
