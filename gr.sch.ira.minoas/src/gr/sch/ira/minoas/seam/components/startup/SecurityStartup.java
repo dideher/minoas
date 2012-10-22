@@ -150,6 +150,7 @@ public class SecurityStartup extends BaseDatabaseAwareSeamComponent {
 		createRole("MODIFY_WORKEXPERIENCE", "Modify a Work Experience", admin);
 		createRole("DELETE_WORKEXPERIENCE", "Delete a Work Experience", admin);
 		createRole("ADD_WORKEXPERIENCE", "Add a Work Experience", admin);
+		createRole("MANUAL_EXPERIENCE_CALCULATION", "Manually compute employee's exprience", admin);
 		
 		/* Evaluations - Αξιολογήσεις Εκπαιδευτικού */
 		createRole("MODIFY_EVALUATION", "Modify an Evaluation", admin);

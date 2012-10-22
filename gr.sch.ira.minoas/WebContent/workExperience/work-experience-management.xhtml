@@ -160,9 +160,9 @@
 								
 								
 								<a4j:commandButton id="computeWorkExp"
-									disabled="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_WORKEXPERIENCE'))}"
+									disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MANUAL_EXPERIENCE_CALCULATION'))}"
 									action="#{workExperiencesManagement.computeEmployeeWorkExperience()}"
-									immediate="true" value="Υπολογισμός (θα φύγει)">
+									immediate="true" value="Επικαιροποιήση Υπηρεσίας">
 								</a4j:commandButton>
 							</s:div>
 						</rich:panel>
