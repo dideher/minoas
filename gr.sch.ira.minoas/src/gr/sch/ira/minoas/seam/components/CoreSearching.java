@@ -15,6 +15,9 @@ import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
 import gr.sch.ira.minoas.model.employee.Evaluation;
+import gr.sch.ira.minoas.model.employee.PartTimeEmployment;
+import gr.sch.ira.minoas.model.employee.Penalty;
+import gr.sch.ira.minoas.model.employee.PenaltyType;
 import gr.sch.ira.minoas.model.employee.Person;
 import gr.sch.ira.minoas.model.employee.RankInfo;
 import gr.sch.ira.minoas.model.employee.RankType;
@@ -1425,6 +1428,30 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         return result;
     }
    
+    @SuppressWarnings("unchecked")
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public Collection<PartTimeEmployment> getPartTimeEmploymentHistory(Employee employee) {
+        Collection<PartTimeEmployment> result = null;
+        info("searching employee's '#0' part-time employments.", employee);
+        result = entityManager.createQuery(
+            "SELECT s from PartTimeEmployment s WHERE s.employee=:employee AND (s.deleted IS FALSE OR s.deleted is NULL) ORDER BY s.startDate")
+            .setParameter("employee", employee).getResultList();
+        info("found totally '#0' part-time employment(s) in employee's '#1' history.", result.size(), employee);
+        return result;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public Collection<Penalty> getPenaltyHistory(Employee employee) {
+        Collection<Penalty> result = null;
+        info("searching employee's '#0' penalties.", employee);
+        result = entityManager.createQuery(
+            "SELECT s from Penalty s WHERE s.employee=:employee AND (s.deleted IS FALSE OR s.deleted is NULL) ORDER BY s.penaltyAwardDate")
+            .setParameter("employee", employee).getResultList();
+        info("found totally '#0' penalties in employee's '#1' history.", result.size(), employee);
+        return result;
+    }
+    
     
 /*
  * 	Deprecated because RankInfos are now available in employeeInfo.getRankInfos() collection
@@ -1450,7 +1477,12 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     public EducationalLevelType[] getEducationalLevelTypes() {
         return EducationalLevelType.values();
     }
- 
+
+    @Factory(value = "penaltyTypes")
+    public PenaltyType[] getPenaltyTypes() {
+        return PenaltyType.values();
+    }
+
     @Transactional(TransactionPropagationType.REQUIRED)
     public Long getSummedEducationalWorkExperience(Employee employee) {
         return (Long) entityManager

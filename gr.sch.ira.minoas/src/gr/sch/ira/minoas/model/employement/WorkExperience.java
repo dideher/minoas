@@ -283,5 +283,21 @@ public class WorkExperience extends BaseIDDeleteAwareModel {
 		this.teaching = teaching;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "WorkExperience [legacyCode=" + legacyCode + ", active="
+				+ active + ", type=" + type + ", fromDate=" + fromDate
+				+ ", toDate=" + toDate + ", calendarExperienceDays="
+				+ calendarExperienceDays + ", actualDays=" + actualDays
+				+ ", numberOfWorkExperienceHours="
+				+ numberOfWorkExperienceHours + ", mandatoryHours="
+				+ mandatoryHours + ", finalWorkingHours=" + finalWorkingHours
+				+ ", comment=" + comment + ", educational=" + educational
+				+ ", teaching=" + teaching + "]";
+	}
+
     
 }

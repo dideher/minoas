@@ -198,8 +198,9 @@
 					<!-- *********************************************** -->
 					<!-- **   Ιστορικό Βαθμολογικής Εξέλιξης panel    ** -->
 					<!-- *********************************************** -->
+
 					<rich:tabPanel mode="Ajax">
-						<rich:tab>
+						<rich:tab id="tab1">
 							<f:facet name="label">
 								<h:outputText value="Ιστορικό Βαθμολογικής Εξέλιξης" />
 							</f:facet>
@@ -279,42 +280,43 @@
 							</h:panelGrid>
 						</rich:tab>
 						
-						
-						
-						<rich:tab>
+
+						<rich:tab id="tab2">
 							<f:facet name="label">
 								<h:outputText value="Προ-Υπηρεσία" />
 							</f:facet>
-							<h:panelGrid columns="1" width="100%">
+							<rich:panel>
 								<h:outputText value="Παρακάτω εμφανίζεται η προυπηρεσία και συνολική υπηρεσία του/της εκπαιδευτικού." />
 								
-								<h:panelGrid columns="4" width="100%">
+								<h:panelGrid columns="3" width="100%">
 										
-											<h:outputText value="Συνολική Προϋπηρεσία" />
-										
-										<h:outputText value="test1" />
+										<h:outputLabel styleClass="fieldValueLabel" value="Εκπαιδευτική Προϋπηρεσία :"/>
+										<h:outputText styleClass="fieldValueText"
+											value="#{employee.employeeInfo.sumOfEducationalExperienceYear_Month_Day} (#{employee.employeeInfo.sumOfEducationalExperience} ημ.)" />
+										<h:outputLabel value="" />
 		
+										<h:outputLabel styleClass="fieldValueLabel" value="Διδακτική Προϋπηρεσία :" />
+										<h:outputText styleClass="fieldValueText"
+											value="#{employee.employeeInfo.sumOfTeachingExperienceYear_Month_Day} (#{employee.employeeInfo.sumOfTeachingExperience} ημ.)" />
+										<h:outputLabel value="" />
 										
-											<h:outputText value="Υπηρεσία" />
-										
-										<h:outputText value	="foo1" />
-										
-										
-										
-										
-											<h:outputText value="Συνολική Υπηρεσία μέχρι την:]" />
-										
-										
+										<h:outputLabel styleClass="fieldValueLabel" value="Συνολική Προϋπηρεσία :" />
+										<h:outputText styleClass="fieldValueText"
+											value="#{employee.employeeInfo.sumOfExperienceYear_Month_Day} (#{employee.employeeInfo.sumOfExperience} ημ.)" />
+										<h:outputLabel value="" />
+
+										<h:outputLabel styleClass="fieldValueLabel" value="Συνολική Υπηρεσία μέχρι την :" />
 										<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
 											style="width:50px" enableManualInput="true"
-											styleClass="fieldValueText" required="true"
-											value="">
+											styleClass="fieldValueText" 
+											value="#{employeeInfoManagement.totalWorkServiceCalculationDate}">
 										</rich:calendar>
-										<h:outputText value="foo3" />
+										<h:outputText styleClass="fieldValueText"
+											value="#{employee.employeeInfo.totalWorkServiceYear_Month_Day} (#{employee.employeeInfo.totalWorkService} ημ.)" />
 										
 										
 								</h:panelGrid>
-							</h:panelGrid>	
+							</rich:panel>
 						</rich:tab>
 					</rich:tabPanel>
 

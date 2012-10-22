@@ -119,6 +119,10 @@ public class WorkExperiencesManagement extends BaseDatabaseAwareSeamComponent {
             	facesMessages.add(Severity.ERROR, "Οι ημ/νιες έναρξης και λήξης της προϋπηρεσίας, έτσι όπως τις τροποποιήσατε, είναι μή αποδεκτές.");
                 return ACTION_OUTCOME_FAILURE;
             } else {
+                //	Αν η προϋπηρεσία είναι Διδακτική τότε θα είναι και Εκπαιδευτική
+            	if(workExp.getTeaching())
+            		workExp.setEducational(true);
+            	
                 info("employee's #0 work experience #1 has been updated!", workExperienceHome.getInstance().getEmployee(), workExperienceHome.getInstance());
                 workExperienceHome.update();
                 return ACTION_OUTCOME_SUCCESS;
@@ -168,7 +172,10 @@ public class WorkExperiencesManagement extends BaseDatabaseAwareSeamComponent {
                 workExp.setInsertedOn(new Date());
                 
                 workExp.setCalendarExperienceDays(CoreUtils.getDatesDifference(workExp.getFromDate(), workExp.getToDate()));
-
+                
+                //	Αν η νέα προϋπηρεσία είναι Διδακτική τότε θα είναι και Εκπαιδευτική
+                if(workExp.getTeaching())
+            		workExp.setEducational(true);
                 
 //                if(workExp.getType().getId() == 4 || workExp.getType().getId() == 5) {
 //                	

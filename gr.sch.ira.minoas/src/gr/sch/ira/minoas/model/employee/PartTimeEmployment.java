@@ -1,68 +1,64 @@
 package gr.sch.ira.minoas.model.employee;
 
-import gr.sch.ira.minoas.model.BaseIDModel;
-
 import java.util.Date;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Entity;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import gr.sch.ira.minoas.model.BaseIDDeleteAwareModel;
+
+
 /**
- * @author <a href="mailto:gand@sch.gr">Yorgos Adreadakis</a>
- *
+ * @author <a href="mailto:gand@sch.gr">Yorgos Andreadakis</a>
  */
 @Entity
-@Table(name = "EVOLUTION_CDR")
+@Table(name = "PART_TIME_EMPLOYMENT")
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
-public class EvolutionCDR extends BaseIDModel {
+public class PartTimeEmployment extends BaseIDDeleteAwareModel {
+
 	/**
 	 * Comment for <code>serialVersionUID</code>
 	 */
 	private static final long serialVersionUID = 1L;
 	
 	/**
-	 * Join EvolutionCDR with its respective Employee
+	 * Join Evaluation with its respective Employee
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "EMPLOYEE_ID", nullable = false)
 	private Employee employee;
 	
 	/**
-	 * Start Date (Ημερομηνία Έναρξης της περιόδου)
+	 * Working Hurs per Week (Εβδομαδιαίες ώρες εργασίας)
+	 */
+	@Basic
+	@Column(name = "HOURS_PER_WEEK")
+	private Byte hoursPerWeek;
+	
+	/**
+	 * Start Date (Ημερομηνία Έναρξης)
 	 */
 	@Basic
 	@Column(name = "START_DATE")
 	private Date startDate;
 	
 	/**
-	 * End Date (Ημερομηνία Λήξης της περιόδου)
+	 * End Date (Ημερομηνία Λήξης)
 	 */
 	@Basic
 	@Column(name = "END_DATE")
 	private Date endDate;
 	
-	/**
-	 * Rank Information (Στοιχεία Βαθμού και Μισθολογικού Κλιμακίου)
-	 */
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "RANK_INFO_ID", nullable = false)
-	private RankInfo rankInfo;
-	
-	/**
-	 * Achieved the Promotion Quota (Περιελήφθη στην ποσόστωση των προακτέων)
-	 */
-	@Basic
-	@Column(name = "ACHIEVED_PROMOTION_QUOTA")
-	private Boolean achievedPromotionQuota;
+	@Column(name="COMMENT", nullable = true)
+	private String comment;
 
 	/**
 	 * @return the employee
@@ -76,6 +72,20 @@ public class EvolutionCDR extends BaseIDModel {
 	 */
 	public void setEmployee(Employee employee) {
 		this.employee = employee;
+	}
+
+	/**
+	 * @return the hoursPerWeek
+	 */
+	public Byte getHoursPerWeek() {
+		return hoursPerWeek;
+	}
+
+	/**
+	 * @param hoursPerWeek the hoursPerWeek to set
+	 */
+	public void setHoursPerWeek(Byte hoursPerWeek) {
+		this.hoursPerWeek = hoursPerWeek;
 	}
 
 	/**
@@ -107,31 +117,17 @@ public class EvolutionCDR extends BaseIDModel {
 	}
 
 	/**
-	 * @return the rankInfo
+	 * @return the comment
 	 */
-	public RankInfo getRankInfo() {
-		return rankInfo;
+	public String getComment() {
+		return comment;
 	}
 
 	/**
-	 * @param rankInfo the rankInfo to set
+	 * @param comment the comment to set
 	 */
-	public void setRankInfo(RankInfo rankInfo) {
-		this.rankInfo = rankInfo;
-	}
-
-	/**
-	 * @return the achievedPromotionQuota
-	 */
-	public Boolean getAchievedPromotionQuota() {
-		return achievedPromotionQuota;
-	}
-
-	/**
-	 * @param achievedPromotionQuota the achievedPromotionQuota to set
-	 */
-	public void setAchievedPromotionQuota(Boolean achievedPromotionQuota) {
-		this.achievedPromotionQuota = achievedPromotionQuota;
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 
 	/* (non-Javadoc)
@@ -139,9 +135,9 @@ public class EvolutionCDR extends BaseIDModel {
 	 */
 	@Override
 	public String toString() {
-		return "EvolutionCDR [startDate=" + startDate + ", endDate=" + endDate
-				+ ", rankInfo=" + rankInfo + ", achievedPromotionQuota="
-				+ achievedPromotionQuota + "]";
+		return "PartTimeEmployment [hoursPerWeek=" + hoursPerWeek
+				+ ", startDate=" + startDate + ", endDate=" + endDate
+				+ ", comment=" + comment + "]";
 	}
 	
 }
