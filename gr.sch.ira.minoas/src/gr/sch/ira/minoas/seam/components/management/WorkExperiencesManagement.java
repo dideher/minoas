@@ -213,14 +213,14 @@ public class WorkExperiencesManagement extends BaseDatabaseAwareSeamComponent {
     		} else if(workExp.getType().getId() == 5 && workExp.getNumberOfWorkExperienceHours() == 0) {	//	Αν ΝΠΔΔ και ΔΕΝ έχει ώρες ωρομισθίας
     			Date dateFrom = workExp.getFromDate() != null ? DateUtils.truncate(workExp.getFromDate(), Calendar.DAY_OF_MONTH) : null;
     	        Date dateTo = workExp.getToDate() != null ? DateUtils.truncate(workExp.getToDate(), Calendar.DAY_OF_MONTH) : null;
-    			workExp.setActualDays((CoreUtils.DatesDifferenceIn360DaysYear(dateFrom, dateTo)*workExp.getFinalWorkingHours())/workExp.getMandatoryHours());
+    			workExp.setActualDays((CoreUtils.datesDifferenceIn360DaysYear(dateFrom, dateTo)*workExp.getFinalWorkingHours())/workExp.getMandatoryHours());
     		} else {	//	Αν Ωρομίσθιος
     			workExp.setActualDays((int)Math.ceil((((float)(workExp.getNumberOfWorkExperienceHours()*6)/workExp.getMandatoryHours())*30)/25));
     		}
         } else { //	Όλοι οι υπόλοιποι τύποι εκπαιδευτικού
         	Date dateFrom = workExp.getFromDate() != null ? DateUtils.truncate(workExp.getFromDate(), Calendar.DAY_OF_MONTH) : null;
 	        Date dateTo = workExp.getToDate() != null ? DateUtils.truncate(workExp.getToDate(), Calendar.DAY_OF_MONTH) : null;
-			workExp.setActualDays((CoreUtils.DatesDifferenceIn360DaysYear(dateFrom, dateTo)*workExp.getFinalWorkingHours())/workExp.getMandatoryHours());
+			workExp.setActualDays((CoreUtils.datesDifferenceIn360DaysYear(dateFrom, dateTo)*workExp.getFinalWorkingHours())/workExp.getMandatoryHours());
         }
     }
 
@@ -253,10 +253,10 @@ public class WorkExperiencesManagement extends BaseDatabaseAwareSeamComponent {
     	
     	//
     	//	Depending of work experience type set educational (Εκπαιδευτική) and teaching(διδακτική) as true
-    	//	in the cases of Ωρομίσθιος & Αναπληρωτής
+    	//	in the cases of Ωρομίσθιος, Αναπληρωτής & Ιδιωτική Εκπαίδευση
     	//
     	switch (workExp.getType().getId()) {
-			case 3: case 4:
+			case 3: case 4: case 8:
 				workExp.setEducational(true);
 				workExp.setTeaching(true);
 				break;
@@ -274,7 +274,7 @@ public class WorkExperiencesManagement extends BaseDatabaseAwareSeamComponent {
         Date dateTo = workExp.getToDate() != null ? DateUtils.truncate(workExp.getToDate(), Calendar.DAY_OF_MONTH) : null;
         if( dateFrom!=null && dateTo !=null ) {
         	workExp.setCalendarExperienceDays(CoreUtils.getDatesDifference(dateFrom, dateTo));
-        	workExp.setActualDays(CoreUtils.DatesDifferenceIn360DaysYear(dateFrom, dateTo));
+        	workExp.setActualDays(CoreUtils.datesDifferenceIn360DaysYear(dateFrom, dateTo));
         } else {
         	workExp.setCalendarExperienceDays(new Integer(0));
         	workExp.setActualDays(new Integer(0));
