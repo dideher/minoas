@@ -6,8 +6,10 @@ import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.WorkExperienceCalculation;
 
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 
@@ -48,14 +50,6 @@ public class RegularEmployeeServiceUpdaterProcessor extends BaseDatabaseAwareSea
 	public RegularEmployeeServiceUpdaterProcessor() {
 	}
 
-	
-	
-	@SuppressWarnings("unchecked")
-    @Transactional(TransactionPropagationType.REQUIRED)
-    public Collection<EmployeeLeave> getActiveLeaveThatSouldBeAutoCanceled(EntityManager em, Date today) {
-        return em.createQuery("SELECT s from EmployeeLeave s WHERE s.active IS TRUE AND :onDate > s.dueTo ORDER BY s.established").setParameter("onDate", today).getResultList();
-    }
-	
 	@Asynchronous
 	@Transactional(TransactionPropagationType.REQUIRED)
 	public QuartzTriggerHandle schedule(@Expiration Date when, 
@@ -63,13 +57,30 @@ public class RegularEmployeeServiceUpdaterProcessor extends BaseDatabaseAwareSea
             @FinalExpiration Date endDate) {
 	    Date today = new Date();
 	    info("We will update regular employee's service as of today (#0)", today);
-	    Collection<Employee> employees = getCoreSearching().getActiveEmployeesOfType(entityManager, EmployeeType.REGULAR);
-	    info("found totally '#0' active regular employees. We will update each one of them.", employees.size());
-	    for(Employee employee : employees) {
-	        workExperienceCalculation.updateEmployeeExperience(employee);
-	        getEntityManager().flush();
+	    int count = 0;
+	    Calendar cal = Calendar.getInstance();
+	    cal.add(Calendar.DAY_OF_MONTH, -1);
+	    
+	    List<Integer> employeeIDs = getEntityManager().createQuery("SELECT e.id FROM Employee e INNER JOIN e.employeeInfo WHERE e.type=:employeeType AND e.active IS TRUE AND (e.serviceLastUpdated IS NULL or e.serviceLastUpdated<:lastUpdated)")
+                .setParameter("employeeType", EmployeeType.REGULAR).setParameter("lastUpdated", cal.getTime()).getResultList();
+	    
+	   info("found totally '#0' active regular employees that we will update.", employeeIDs.size());
+	    for(Integer employeeID : employeeIDs) {
+	        Employee employee = getEntityManager().find(Employee.class, employeeID);
+	        try {
+	            workExperienceCalculation.updateEmployeeExperience(getEntityManager().find(Employee.class, employeeID));
+	            employee.setServiceLastUpdated(new Date());
+	            if(count++>50) {
+	                info("updated totally #0 employees, bailing out.", count);
+	                break;
+	            }
+	        } catch(Exception ex) {
+	            error(String.format("failed to update regular employee '%s' service due to an exception.", employee), ex);
+	        }
+	        
 	    }
-	    info("updated !");
+	    getEntityManager().flush();
+	    info("finished !");
 	    return null;
 	}
 }

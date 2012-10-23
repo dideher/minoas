@@ -294,8 +294,16 @@ public class WorkExperiencesManagement extends BaseDatabaseAwareSeamComponent {
         try {
             if (employeeHome.isManaged()) {
                 Employee employee = employeeHome.getInstance();
-                workExperienceCalculation.updateEmployeeExperience(employee);
-                return ACTION_OUTCOME_SUCCESS;
+                EmployeeInfo employeeInfo = employee.getEmployeeInfo();
+                if(employeeInfo!=null) {
+                    workExperienceCalculation.updateEmployeeExperience(employee);
+                    info("updated employee #0 experience values [educational : #1, teaching : #2, total #3] and total service #4.", employee,employeeInfo.getSumOfEducationalExperience(), employeeInfo.getSumOfTeachingExperience(), employeeInfo.getSumOfExperience(), employeeInfo.getTotalWorkService());
+                    getEntityManager().flush();
+                    return ACTION_OUTCOME_SUCCESS;
+                } else {
+                    facesMessages.add(Severity.ERROR, "Ο υπάλληλος δεν έχει EMPLOYEE_INFO");
+                    return ACTION_OUTCOME_FAILURE;
+                }
             } else {
                 facesMessages.add(Severity.ERROR, "employeehome is not managed.");
                 return ACTION_OUTCOME_FAILURE;

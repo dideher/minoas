@@ -1455,11 +1455,9 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     @Transactional(TransactionPropagationType.REQUIRED)
     public Collection<Penalty> getPenaltyHistory(Employee employee) {
         Collection<Penalty> result = null;
-        info("searching employee's '#0' penalties.", employee);
         result = entityManager.createQuery(
             "SELECT s from Penalty s WHERE s.employee=:employee AND (s.deleted IS FALSE OR s.deleted is NULL) ORDER BY s.penaltyAwardDate")
             .setParameter("employee", employee).getResultList();
-        info("found totally '#0' penalties in employee's '#1' history.", result.size(), employee);
         return result;
     }
     

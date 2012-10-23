@@ -7,7 +7,9 @@ import java.util.Date;
 import gr.sch.ira.minoas.core.CoreUtils;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeInfo;
+import gr.sch.ira.minoas.model.employee.EmployeeType;
 import gr.sch.ira.minoas.model.employee.Penalty;
+import gr.sch.ira.minoas.model.employement.Employment;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.jboss.seam.ScopeType;
@@ -219,10 +221,14 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
      * @return
      */
     public Date computeEmployeeFirstDayOfRegularWork(Employee employee) {
-        EmployeeInfo einfo = employee.getEmployeeInfo();
-        Date gofDate = einfo.getGogAppointmentDate();
-        Date entryIntoServiceDate = einfo.getEntryIntoServiceDate();
-        return CoreUtils.DatesDifferenceIn360DaysYear(gofDate, entryIntoServiceDate) > 30 ? entryIntoServiceDate : gofDate;
+        if (employee != null && employee.getEmployeeInfo() != null) {
+            EmployeeInfo einfo = employee.getEmployeeInfo();
+            Date gofDate = einfo.getGogAppointmentDate();
+            Date entryIntoServiceDate = einfo.getEntryIntoServiceDate();
+            return CoreUtils.DatesDifferenceIn360DaysYear(gofDate, entryIntoServiceDate) > 30 ? entryIntoServiceDate
+                    : gofDate;
+        } else
+            return null;
     }
     
     @Transactional(TransactionPropagationType.REQUIRED)
@@ -261,8 +267,43 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
         employeeInfo.setSumOfExperience(new Integer(exp.getTotal().intValue()));
         employeeInfo.setTotalWorkService(new Integer(serviceHelper.getTotalServiceInDays().intValue()));
         
-        info("computed and updated successfully work experience '#0' and service '#1' for employee '#2'.", exp, serviceHelper, employee);
-        getEntityManager().flush();
+        /* handle working hours */
+        Employment currentEmployment = employee.getCurrentEmployment();
+        if(currentEmployment !=null) {
+            int currentMandatoryWorkHours = currentEmployment.getMandatoryWorkingHours();
+            int totalWorkServicePlusExperience = serviceHelper.getTotalServiceInDays().intValue() + exp.getEducationalTotal().intValue();
+            int mandatoryWorkingHours = calculateEmployeeMandatoryHours(totalWorkServicePlusExperience, EmployeeType.REGULAR);
+            if(currentMandatoryWorkHours!=mandatoryWorkingHours) {
+                /* we have a mandatory work hour mismatch ! */
+                info("Εmployee's '#0' working hours will be updated from '#1' to '#2", employee, currentMandatoryWorkHours, mandatoryWorkingHours);
+                currentEmployment.setMandatoryWorkingHours(mandatoryWorkingHours);
+                currentEmployment.setFinalWorkingHours(mandatoryWorkingHours);
+            }
+                    
+        }
+    }
+    
+    
+    
+    
+    public Integer calculateEmployeeMandatoryHours(Integer totalExperienceInDays, EmployeeType employeeType) {
+        int years = totalExperienceInDays / 360; // in question
+        /* computation logic from :
+         * http://edu.klimaka.gr/leitoyrgia-sxoleivn/anakoinvseis/539-school-diafora-vrario-ergasia-symplhrvsh-orariou.html
+         */
+        if (years > 0 && years <= 6)
+            return 21;
+        else if (years >= 7 && years <= 12)
+            return 19;
+        else if (years >= 13 && years <= 20)
+            return 18;
+        else if (years >= 20)
+            return 16;
+        else
+            throw new RuntimeException(String.format(
+                    "failed to compute mandatory work hours for experience '%d' and type '%s'",
+                    totalExperienceInDays.intValue(), employeeType.toString()));
+
     }
     
     
