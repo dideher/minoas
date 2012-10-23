@@ -1,0 +1,40 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:rich="http://richfaces.org/rich">
+
+	<ui:component>
+		<h:panelGrid columns="3" width="100%">
+			<h:outputLabel styleClass="fieldValueLabel"
+				value="Εκπαιδευτική Υπηρεσία μέχρι σήμερα:" />
+			<h:outputText styleClass="fieldValueText"
+				value="#{employeeInfoManagement.getEducationalServiceYear_Month_Day()} (#{employeeInfoManagement.getEducationalService()} ημ.)" />
+			<h:outputLabel value="" />
+		
+			<h:outputLabel styleClass="fieldValueLabel"
+				value="Διδακτική Υπηρεσία μέχρι σήμερα:" />
+			<h:outputText styleClass="fieldValueText"
+				value="#{employeeInfoManagement.getTeachingServiceYear_Month_Day()} (#{employeeInfoManagement.getTeachingService()} ημ.)" />
+			<h:outputLabel value="" />
+		
+			<h:outputLabel styleClass="fieldValueLabel"
+				value="Συνολική Προϋπηρεσία μέχρι τον διορισμό:" />
+			<h:outputText styleClass="fieldValueText"
+				value="#{employeeInfoManagement.getSumOfExperienceYear_Month_Day()} (#{employeeInfoManagement.getSumOfExperience()} ημ.)" />
+			<h:outputLabel value="" />
+		
+			<h:outputLabel styleClass="fieldValueLabel"
+				value="Συνολική Υπηρεσία μέχρι σήμερα:" />
+			<h:outputText styleClass="fieldValueText"
+				value="#{employeeInfoManagement.getTotalServiceIncludingWorkExperienceYear_Month_Day()} (#{employeeInfoManagement.getTotalServiceIncludingWorkExperience()} ημ.)" />
+			<h:outputLabel value="" />
+		
+		</h:panelGrid>
+	
+	
+	</ui:component>
+
+
+</html>
