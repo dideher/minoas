@@ -447,7 +447,7 @@ public class EmployeeInfo extends BaseIDModel {
 	 * @return the sumOfEducationalExperience as a Year_Month_Day string
 	 */
 	public String getSumOfEducationalExperienceYear_Month_Day() {
-		return CoreUtils.Year_Month_Day(sumOfEducationalExperience);
+		return CoreUtils.getNoOfDaysInYear_Month_DayFormat(sumOfEducationalExperience);
 	}
 	
 	/**
@@ -468,7 +468,7 @@ public class EmployeeInfo extends BaseIDModel {
 	 * @return the sumOfTeachingExperience as a Year_Month_Day string
 	 */
 	public String getSumOfTeachingExperienceYear_Month_Day() {
-		return CoreUtils.Year_Month_Day(sumOfTeachingExperience);
+		return CoreUtils.getNoOfDaysInYear_Month_DayFormat(sumOfTeachingExperience);
 	}
 	
 	/**
@@ -489,7 +489,7 @@ public class EmployeeInfo extends BaseIDModel {
 	 * @return the sumOfExperience as a Year_Month_Day string
 	 */
 	public String getSumOfExperienceYear_Month_Day() {
-		return CoreUtils.Year_Month_Day(sumOfExperience);
+		return CoreUtils.getNoOfDaysInYear_Month_DayFormat(sumOfExperience);
 	}
 	
 	/**
@@ -510,7 +510,7 @@ public class EmployeeInfo extends BaseIDModel {
 	 * @return the totalWorkService as a Year_Month_Day string
 	 */
 	public String getTotalWorkServiceYear_Month_Day() {
-		return CoreUtils.Year_Month_Day(totalWorkService);
+		return CoreUtils.getNoOfDaysInYear_Month_DayFormat(totalWorkService);
 	}
 	
 	/**

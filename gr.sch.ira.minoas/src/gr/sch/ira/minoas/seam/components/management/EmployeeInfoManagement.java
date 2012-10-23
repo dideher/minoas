@@ -3,6 +3,7 @@ package gr.sch.ira.minoas.seam.components.management;
 import java.util.Collection;
 import java.util.Date;
 
+import gr.sch.ira.minoas.core.CoreUtils;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeInfo;
 import gr.sch.ira.minoas.model.employee.RankInfo;
@@ -48,6 +49,7 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 	EmployeeInfoHome employeeInfoHome;
 	
 	private Date totalWorkServiceCalculationDate;
+	private int totalCalculatedServiceInDays;
 	
 
 //	/**
@@ -64,6 +66,29 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 	public Date getTotalWorkServiceCalculationDate() {
 		return totalWorkServiceCalculationDate;
 	}
+	
+	/**
+	 * @return the totalCalculatedServiceInDays
+	 */
+	public int getTotalCalculatedServiceInDays() {
+		return totalCalculatedServiceInDays;
+	}
+
+	/**
+	 * @param totalCalculatedServiceInDays the totalCalculatedServiceInDays to set
+	 */
+	public void setTotalCalculatedServiceInDays(int totalCalculatedServiceInDays) {
+		this.totalCalculatedServiceInDays = totalCalculatedServiceInDays;
+	}
+	
+	
+	/**
+	 * @return the totalWorkService as a Year_Month_Day string
+	 */
+	public String getTotalCalculatedServiceInDaysYear_Month_Day() {
+		return CoreUtils.getNoOfDaysInYear_Month_DayFormat(totalCalculatedServiceInDays);
+	}
+	
 
 	/**
 	 * @return the employeeHome
@@ -223,6 +248,50 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
         employeeInfoHome.getInstance().setCurrentRankInfo(rinfo);
 
     }
+    
+    public void recalculateTotalWorkService() {
+    	EmployeeInfo employeeInfo = employeeHome.getInstance().getEmployeeInfo();
+    	int totalWorkService = 0;
+    	if(totalWorkServiceCalculationDate != null && employeeInfo.getGogAppointmentDate()!=null)
+    		totalWorkService = CoreUtils.datesDifferenceIn360DaysYear(employeeInfo.getEntryIntoServiceDate(), totalWorkServiceCalculationDate);
+    	if(totalWorkService != 0)
+    		setTotalCalculatedServiceInDays(totalWorkService);
+    }
+    
+    public Integer getEducationalService() {
+    	EmployeeInfo employeeInfo = employeeHome.getInstance().getEmployeeInfo();
+    	return employeeInfo.getSumOfEducationalExperience() + employeeInfo.getTotalWorkService();
+    }
+    
+    public String getEducationalServiceYear_Month_Day() {
+    	return CoreUtils.getNoOfDaysInYear_Month_DayFormat(getEducationalService());
+    }
+    
+    public Integer getTeachingService() {
+    	EmployeeInfo employeeInfo = employeeHome.getInstance().getEmployeeInfo();
+    	return employeeInfo.getSumOfTeachingExperience() + employeeInfo.getTotalWorkService();
+    }
+    
+    public String getTeachingServiceYear_Month_Day() {
+    	return CoreUtils.getNoOfDaysInYear_Month_DayFormat(getTeachingService());
+    }
 
+    public Integer getSumOfExperience() {
+    	EmployeeInfo employeeInfo = employeeHome.getInstance().getEmployeeInfo();
+    	return employeeInfo.getSumOfExperience();
+    }
+    
+    public String getSumOfExperienceYear_Month_Day() {
+    	return CoreUtils.getNoOfDaysInYear_Month_DayFormat(getSumOfExperience());
+    }
+    
+    public Integer getTotalServiceIncludingWorkExperience() {
+    	EmployeeInfo employeeInfo = employeeHome.getInstance().getEmployeeInfo();
+    	return employeeInfo.getTotalWorkService() + employeeInfo.getSumOfExperience();
+    }
+    
+    public String getTotalServiceIncludingWorkExperienceYear_Month_Day() {
+    	return CoreUtils.getNoOfDaysInYear_Month_DayFormat(getTotalServiceIncludingWorkExperience());
+    }
     
 }
