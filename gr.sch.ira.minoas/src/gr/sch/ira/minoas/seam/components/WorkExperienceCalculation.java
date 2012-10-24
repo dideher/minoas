@@ -205,6 +205,11 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
     protected CoreSearching coreSearching;
 
    
+    /**
+     * Calculates the sums of an employee's work experience
+     * @param employee
+     * @return
+     */
     @Transactional(TransactionPropagationType.REQUIRED)
     public EmployeeWorkExperienceHelper calculateEmployeeWorkExperience(Employee employee) {
         Long educational = coreSearching.getSummedEducationalWorkExperience(employee);
@@ -231,6 +236,13 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
             return null;
     }
     
+    /**
+     * Calculates an employee's regular service
+     * @param employee
+     * @param dateFrom
+     * @param dateTo
+     * @return
+     */
     @Transactional(TransactionPropagationType.REQUIRED)
     public EmployeeServiceHelper calculateRegularEmployeeService(Employee employee, Date dateFrom, Date dateTo) {
         
@@ -286,6 +298,12 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
     
     
     
+    /**
+     * Calculates the mandatory working hours for a employee based on the employee type and his service expressed in days
+     * @param totalExperienceInDays
+     * @param employeeType
+     * @return
+     */
     public Integer calculateEmployeeMandatoryHours(Integer totalExperienceInDays, EmployeeType employeeType) {
         int years = totalExperienceInDays / 360; // in question
         /* computation logic from :
