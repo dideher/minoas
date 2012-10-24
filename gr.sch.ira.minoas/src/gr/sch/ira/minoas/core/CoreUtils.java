@@ -71,8 +71,8 @@ public abstract class CoreUtils {
             return 0;
     }
     
-      //	Return the days difference between two dates in a 360 days year (12 * 30 days)
-    public static int DatesDifferenceIn360DaysYear(Date dateFrom, Date dateTo) {
+    //	Return the days difference between two dates in a 360 days year (12 * 30 days)
+    public static int datesDifferenceIn360DaysYear(Date dateFrom, Date dateTo) {
     	if(dateFrom.after(dateTo))
     		return 0;
         Calendar startingDate = getStartingDate(dateFrom);
@@ -135,7 +135,7 @@ public abstract class CoreUtils {
 	 * 
 	 * @return Returns a string of the form: 3 έτη 11 μήνες 24 ημέρες
 	 */
-	public static String Year_Month_Day(Integer noOfDays) {
+	public static String getNoOfDaysInYear_Month_DayFormat(Integer noOfDays) {
 		// **********************************
 		// Μετατροπή Ημερών σε -> ετη - μηνες - ημέρες
 		if (noOfDays != null) {

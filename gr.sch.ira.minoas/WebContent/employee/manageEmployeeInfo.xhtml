@@ -12,321 +12,319 @@
 
 <ui:composition template="/layout/simple-beauty-template.xhtml">
 	<ui:define name="body">
-		<rich:panel>
-			<f:facet name="header">
-				<h:outputText value="Διαχείριση Στοιχείων Μισθοδοσίας" />
-			</f:facet>
+		<a4j:region>
+			<rich:panel>
+				<f:facet name="header">
+					<h:outputText value="Διαχείριση Στοιχείων Μισθοδοσίας" />
+				</f:facet>
 
-			<ui:include src="/components/messages-component.xhtml" />
+				<ui:include src="/components/messages-component.xhtml" />
 
-			<h:form>
-				<h:panelGrid columns="1">
-					<rich:panel>
-						<f:facet name="header">
-							<h:outputText value="Βασικά Στοιχεία" />
-						</f:facet>
-						<ui:include src="/components/employee/basicInfo.xhtml" />
-					</rich:panel>
-				</h:panelGrid>
-
-
-				<a4j:outputPanel id="employeeSpecialityOutputPanel">
+				<h:form>
 					<h:panelGrid columns="1">
 						<rich:panel>
 							<f:facet name="header">
-								<h:outputText value="Στοιχεία Ειδικότητας" />
+								<h:outputText value="Βασικά Στοιχεία" />
 							</f:facet>
-
-							<h:panelGrid columns="4">
-
-								<h:outputLabel styleClass="fieldValueLabel" value="Τύπος: " />
-								<h:outputText styleClass="fieldValueText"
-									value="#{messages[employee.type.key]}" />
-
-								<h:outputLabel styleClass="fieldValueLabel" value="Τομέας: " />
-								<h:outputText styleClass="fieldValueText"
-									value="#{messages[employee.employeeInfo.sector.key]}" />
-
-								<h:outputLabel styleClass="fieldValueLabel" value="Ειδικότητα: " />
-								<h:outputText styleClass="fieldValueText"
-									value="#{messages[employee.lastSpecialization.id]}" />
-
-								<h:outputLabel styleClass="fieldValueLabel"
-									value="Λεκτικό Ειδικότητας: " />
-								<h:outputText styleClass="fieldValueText"
-									value="#{messages[employee.lastSpecialization.title]}" />
-
-							</h:panelGrid>
-						</rich:panel>
-					</h:panelGrid>
-				</a4j:outputPanel>
-
-				
-
-				<a4j:outputPanel id="employeeInfoOutputPanel">
-					<!-- *********************************************** -->
-					<!-- **   Στοιχεία Βαθμού/ΜΚ panel    ** -->
-					<!-- *********************************************** -->				
-					<h:panelGrid columns="1">
-						<rich:panel>
-							<f:facet name="header">
-								<h:outputText value="Στοιχεία Βαθμού/ΜΚ" />
-							</f:facet>
-
-							<h:panelGrid columns="6">
-								<h:outputLabel styleClass="fieldValueLabel"
-									value="ΦΕΚ Διορισμού: " />
-								<h:outputText styleClass="fieldValueText"
-									value="#{employee.employeeInfo.gogAppointmentNo} - #{employee.employeeInfo.getGogAppointmentDateString()}" />
-								<h:outputLabel styleClass="fieldValueLabel"
-									value="Ανάληψη Υπηρεσίας: " />
-								<h:outputText styleClass="fieldValueText"
-									value="#{employee.employeeInfo.entryIntoServiceDate}">
-									<s:convertDateTime type="date" pattern="dd-MM-yyyy" />
-								</h:outputText>
-								<h:outputLabel value="" />
-								<h:outputText value="" />
-
-								<h:outputLabel styleClass="fieldValueLabel"
-									value="Μεταπυχιακό (MSc): " />
-								<h:selectBooleanCheckbox disabled="true"
-									value="#{employee.employeeInfo.hasAMasterDegree}" />
-								<h:outputLabel styleClass="fieldValueLabel"
-									value="* Ημ/νία Μεταπτυχιακού: " />
-								<h:outputText styleClass="fieldValueText"
-									value="#{employee.employeeInfo.mscDate}">
-									<s:convertDateTime type="date" pattern="dd-MM-yyyy" />
-								</h:outputText>
-								<h:outputLabel value="" />
-								<h:outputText styleClass="hintText"
-									value="* ημερομηνίες πριν την 1-11-2011 αναφέρονται στην ημερομηνία κατάθεσης του σχετικού τίτλου από την οποία λάμβανε" />
-
-								<h:outputLabel styleClass="fieldValueLabel"
-									value="Ανώτ.Σχολ.Δημ.Διοίκ.: " />
-								<h:selectBooleanCheckbox disabled="true"
-									value="#{employee.employeeInfo.isANatSchPubAdminGraduate}" />
-								<h:outputLabel styleClass="fieldValueLabel"
-									value="* Ημ/νία Ανώτ. Σχολ. Δημ. Διοίκ.: " />
-								<h:outputText styleClass="fieldValueText"
-									value="#{employee.employeeInfo.natSchPubAdminDate}">
-									<s:convertDateTime type="date" pattern="dd-MM-yyyy" />
-								</h:outputText>
-								<h:outputLabel value="" />
-								<h:outputText styleClass="hintText"
-									value="και το σχετικό επίδομα, ενώ ημ/νίες μετά την 1-11-2011 αναφέρονται στην ημερομηνία πράξης του ΠΥΣΔΕ" />
-
-								<h:outputLabel styleClass="fieldValueLabel"
-									value="Διδακτορικό (PhD): " />
-								<h:selectBooleanCheckbox disabled="true"
-									value="#{employee.employeeInfo.hasAPhD}" />
-								<h:outputLabel styleClass="fieldValueLabel"
-									value="* Ημ/νία Διδακτορικού: " />
-								<h:outputText styleClass="fieldValueText"
-									value="#{employee.employeeInfo.phdDate}">
-									<s:convertDateTime type="date" pattern="dd-MM-yyyy" />
-								</h:outputText>
-								<h:outputLabel value="" />
-								<h:outputText styleClass="hintText"
-									value="από την οποία ενσωματώνεται στο βαθμό ο χρόνος που αναλογεί." />
-
-								<h:outputLabel styleClass="fieldValueLabel" value="Βαθμός: " />
-								<h:outputText styleClass="fieldValueText"
-									value="#{messages[employee.employeeInfo.currentRankInfo.rank.key]}" />
-								<h:outputLabel styleClass="fieldValueLabel"
-									value="Ημ/νία Απόδοσης Βαθμού: " />
-								<h:outputText styleClass="fieldValueText"
-									value="#{employee.employeeInfo.currentRankInfo.lastRankDate}">
-									<s:convertDateTime type="date" pattern="dd-MM-yyyy" />
-								</h:outputText>
-								<h:outputLabel styleClass="fieldValueLabel"
-									value="Πλεονάζ. Χρόνος στο Βαθμό: " />
-								<h:outputText styleClass="fieldValueText"
-									value="#{employee.employeeInfo.currentRankInfo.surplusTimeInRankYear_Month_Day} (#{employee.employeeInfo.currentRankInfo.surplusTimeInRank} ημ.)" />
-
-								<h:outputLabel styleClass="fieldValueLabel"
-									value="Μισθ. Κλιμάκιο: " />
-								<h:outputText styleClass="fieldValueText"
-									value="#{employee.employeeInfo.currentRankInfo.salaryGrade}" />
-								<h:outputLabel styleClass="fieldValueLabel"
-									value="Ημ/νία Απόδοσης Μ.Κ. " />
-								<h:outputText styleClass="fieldValueText"
-									value="#{employee.employeeInfo.currentRankInfo.lastSalaryGradeDate}">
-									<s:convertDateTime type="date" pattern="dd-MM-yyyy" />
-								</h:outputText>
-								<h:outputLabel styleClass="fieldValueLabel"
-									value="Πλεονάζ. Χρόνος στο Μ.Κ.: " />
-								<h:outputText styleClass="fieldValueText"
-									value="#{employee.employeeInfo.currentRankInfo.surplusTimeInSalaryGradeYear_Month_Day} (#{employee.employeeInfo.currentRankInfo.surplusTimeInSalaryGrade} ημ.)" />
-
-
-								<h:outputLabel value="" />
-								<h:outputLabel value="" />
-								<h:outputLabel value="" />
-								<h:outputLabel value="" />
-
-								<a4j:commandLink id="updatelink"
-									rendered="#{(s:hasRole('ADMIN') or s:hasRole('MODIFY_EMPLOYEE_INFO'))}"
-									reRender="updateEmployeeInfoModalPanel"
-									oncomplete="#{rich:component('updateEmployeeInfoModalPanel')}.show()"
-									value="Τροποποίηση" styleClass="rich-toolbar-item">
-									<h:graphicImage value="/img/icons/edit.png" width="12"
-										height="12" style="border:0" />
-									<f:setPropertyActionListener
-										value="#{employee.employeeInfo.id}"
-										target="#{employeeInfoHome.id}" />
-								</a4j:commandLink>
-
-
-								<a4j:commandLink id="insertlink"
-									rendered="#{(s:hasRole('ADMIN') or s:hasRole('MODIFY_EMPLOYEE_INFO'))}"
-									action="#{employeeInfoManagement.prepeareNewRankInfo()}"
-									reRender="insertRankInfoOutputPanel" immediate="true"
-									oncomplete="#{rich:component('insertRankInfoModalPanel')}.show()"
-									value="Εισαγωγή Βαθμού/ΜΚ" styleClass="rich-toolbar-item">
-									<h:graphicImage value="/img/icons/edit.png" width="12"
-										height="12" style="border:0" />
-									<f:setPropertyActionListener
-										value="#{employee.employeeInfo.id}"
-										target="#{employeeInfoHome.id}" />
-								</a4j:commandLink>
-
-							</h:panelGrid>
+							<ui:include src="/components/employee/basicInfo.xhtml" />
 						</rich:panel>
 					</h:panelGrid>
 
 
-					<!-- *********************************************** -->
-					<!-- **   Ιστορικό Βαθμολογικής Εξέλιξης panel    ** -->
-					<!-- *********************************************** -->
-
-					<rich:tabPanel mode="Ajax">
-						<rich:tab id="tab1">
-							<f:facet name="label">
-								<h:outputText value="Ιστορικό Βαθμολογικής Εξέλιξης" />
-							</f:facet>
-
-							<h:panelGrid columns="1" width="100%">
-								<h:outputText
-									value="Στον παρακάτω πίνακα εμφανίζεται η βαθμολογική εξέλιξη του/της εκπαιδευτικού." />
-
-								<h:form id="rankInfoHistoryForm">
-									<rich:dataTable id="rankInfoList"
-										value="#{employee.employeeInfo.rankInfos}" var="_rankInfo"
-										rows="10" border="0"
-										onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
-										onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
-										width="100%">
-										<f:facet name="header">
-											<h:outputLabel
-												value="Ιστορικό βαθμολογικής εξέλιξης Εκπαιδευτικού" />
-										</f:facet>
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Βαθμός" />
-											</f:facet>
-											<h:outputText value="#{messages[_rankInfo.rank.key]}" />
-										</rich:column>
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Ημ/νια Χορήγησης Βαθμού" />
-											</f:facet>
-											<h:outputText value="#{_rankInfo.lastRankDate}">
-												<s:convertDateTime pattern="dd-MM-yyyy" />
-											</h:outputText>
-										</rich:column>
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Πλεονάζων Χρόνος στο Βαθμό" />
-											</f:facet>
-											<h:outputText
-												value="#{_rankInfo.surplusTimeInRankYear_Month_Day} (#{_rankInfo.surplusTimeInRank} ημ.)" />
-										</rich:column>
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Μ.Κ." />
-											</f:facet>
-											<h:outputText value="#{_rankInfo.salaryGrade}" />
-										</rich:column>
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Ημ/νια Χορήγησης Μ.Κ." />
-											</f:facet>
-											<h:outputText value="#{_rankInfo.lastSalaryGradeDate}">
-												<s:convertDateTime pattern="dd-MM-yyyy" />
-											</h:outputText>
-										</rich:column>
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Πλεονάζων Χρόνος στο Μ.Κ." />
-											</f:facet>
-											<h:outputText
-												value="#{_rankInfo.surplusTimeInSalaryGradeYear_Month_Day} (#{_rankInfo.surplusTimeInSalaryGrade} ημ.)" />
-										</rich:column>
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Επίπεδο Εκπαίδευσης" />
-											</f:facet>
-											<h:outputText
-												value="#{messages[_rankInfo.educationalLevel.key]}" />
-										</rich:column>
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Σχόλια" />
-											</f:facet>
-											<h:outputText value="#{_rankInfo.comments}" />
-										</rich:column>
-									</rich:dataTable>
-								</h:form>
-							</h:panelGrid>
-						</rich:tab>
-						
-
-						<rich:tab id="tab2">
-							<f:facet name="label">
-								<h:outputText value="Προ-Υπηρεσία" />
-							</f:facet>
+					<a4j:outputPanel id="employeeSpecialityOutputPanel">
+						<h:panelGrid columns="1">
 							<rich:panel>
-								<h:outputText value="Παρακάτω εμφανίζεται η προυπηρεσία και συνολική υπηρεσία του/της εκπαιδευτικού." />
-								
-								<h:panelGrid columns="3" width="100%">
-										
-										<h:outputLabel styleClass="fieldValueLabel" value="Εκπαιδευτική Προϋπηρεσία :"/>
-										<h:outputText styleClass="fieldValueText"
-											value="#{employee.employeeInfo.sumOfEducationalExperienceYear_Month_Day} (#{employee.employeeInfo.sumOfEducationalExperience} ημ.)" />
-										<h:outputLabel value="" />
-		
-										<h:outputLabel styleClass="fieldValueLabel" value="Διδακτική Προϋπηρεσία :" />
-										<h:outputText styleClass="fieldValueText"
-											value="#{employee.employeeInfo.sumOfTeachingExperienceYear_Month_Day} (#{employee.employeeInfo.sumOfTeachingExperience} ημ.)" />
-										<h:outputLabel value="" />
-										
-										<h:outputLabel styleClass="fieldValueLabel" value="Συνολική Προϋπηρεσία :" />
-										<h:outputText styleClass="fieldValueText"
-											value="#{employee.employeeInfo.sumOfExperienceYear_Month_Day} (#{employee.employeeInfo.sumOfExperience} ημ.)" />
-										<h:outputLabel value="" />
+								<f:facet name="header">
+									<h:outputText value="Στοιχεία Ειδικότητας" />
+								</f:facet>
 
-										<h:outputLabel styleClass="fieldValueLabel" value="Συνολική Υπηρεσία μέχρι την :" />
-										<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
-											style="width:50px" enableManualInput="true"
-											styleClass="fieldValueText" 
-											value="#{employeeInfoManagement.totalWorkServiceCalculationDate}">
-										</rich:calendar>
-										<h:outputText styleClass="fieldValueText"
-											value="#{employee.employeeInfo.totalWorkServiceYear_Month_Day} (#{employee.employeeInfo.totalWorkService} ημ.)" />
-										
-										
+								<h:panelGrid columns="4">
+
+									<h:outputLabel styleClass="fieldValueLabel" value="Τύπος: " />
+									<h:outputText styleClass="fieldValueText"
+										value="#{messages[employee.type.key]}" />
+
+									<h:outputLabel styleClass="fieldValueLabel" value="Τομέας: " />
+									<h:outputText styleClass="fieldValueText"
+										value="#{messages[employee.employeeInfo.sector.key]}" />
+
+									<h:outputLabel styleClass="fieldValueLabel"
+										value="Ειδικότητα: " />
+									<h:outputText styleClass="fieldValueText"
+										value="#{messages[employee.lastSpecialization.id]}" />
+
+									<h:outputLabel styleClass="fieldValueLabel"
+										value="Λεκτικό Ειδικότητας: " />
+									<h:outputText styleClass="fieldValueText"
+										value="#{messages[employee.lastSpecialization.title]}" />
+
 								</h:panelGrid>
 							</rich:panel>
-						</rich:tab>
-					</rich:tabPanel>
-
-				</a4j:outputPanel>
-
-			</h:form>
+						</h:panelGrid>
+					</a4j:outputPanel>
 
 
-		</rich:panel>
 
+					<a4j:outputPanel id="employeeInfoOutputPanel">
+						<!-- *********************************************** -->
+						<!-- **   Στοιχεία Βαθμού/ΜΚ panel    ** -->
+						<!-- *********************************************** -->
+						<h:panelGrid columns="1">
+							<rich:panel>
+								<f:facet name="header">
+									<h:outputText value="Στοιχεία Βαθμού/ΜΚ" />
+								</f:facet>
+
+								<h:panelGrid columns="6">
+									<h:outputLabel styleClass="fieldValueLabel"
+										value="ΦΕΚ Διορισμού: " />
+									<h:outputText styleClass="fieldValueText"
+										value="#{employee.employeeInfo.gogAppointmentNo} - #{employee.employeeInfo.getGogAppointmentDateString()}" />
+									<h:outputLabel styleClass="fieldValueLabel"
+										value="Ανάληψη Υπηρεσίας: " />
+									<h:outputText styleClass="fieldValueText"
+										value="#{employee.employeeInfo.entryIntoServiceDate}">
+										<s:convertDateTime type="date" pattern="dd-MM-yyyy" />
+									</h:outputText>
+									<h:outputLabel value="" />
+									<h:outputText value="" />
+
+									<h:outputLabel styleClass="fieldValueLabel"
+										value="Μεταπυχιακό (MSc): " />
+									<h:selectBooleanCheckbox disabled="true"
+										value="#{employee.employeeInfo.hasAMasterDegree}" />
+									<h:outputLabel styleClass="fieldValueLabel"
+										value="* Ημ/νία Μεταπτυχιακού: " />
+									<h:outputText styleClass="fieldValueText"
+										value="#{employee.employeeInfo.mscDate}">
+										<s:convertDateTime type="date" pattern="dd-MM-yyyy" />
+									</h:outputText>
+									<h:outputLabel value="" />
+									<h:outputText styleClass="hintText"
+										value="* ημερομηνίες πριν την 1-11-2011 αναφέρονται στην ημερομηνία κατάθεσης του σχετικού τίτλου από την οποία λάμβανε" />
+
+									<h:outputLabel styleClass="fieldValueLabel"
+										value="Ανώτ.Σχολ.Δημ.Διοίκ.: " />
+									<h:selectBooleanCheckbox disabled="true"
+										value="#{employee.employeeInfo.isANatSchPubAdminGraduate}" />
+									<h:outputLabel styleClass="fieldValueLabel"
+										value="* Ημ/νία Ανώτ. Σχολ. Δημ. Διοίκ.: " />
+									<h:outputText styleClass="fieldValueText"
+										value="#{employee.employeeInfo.natSchPubAdminDate}">
+										<s:convertDateTime type="date" pattern="dd-MM-yyyy" />
+									</h:outputText>
+									<h:outputLabel value="" />
+									<h:outputText styleClass="hintText"
+										value="και το σχετικό επίδομα, ενώ ημ/νίες μετά την 1-11-2011 αναφέρονται στην ημερομηνία πράξης του ΠΥΣΔΕ" />
+
+									<h:outputLabel styleClass="fieldValueLabel"
+										value="Διδακτορικό (PhD): " />
+									<h:selectBooleanCheckbox disabled="true"
+										value="#{employee.employeeInfo.hasAPhD}" />
+									<h:outputLabel styleClass="fieldValueLabel"
+										value="* Ημ/νία Διδακτορικού: " />
+									<h:outputText styleClass="fieldValueText"
+										value="#{employee.employeeInfo.phdDate}">
+										<s:convertDateTime type="date" pattern="dd-MM-yyyy" />
+									</h:outputText>
+									<h:outputLabel value="" />
+									<h:outputText styleClass="hintText"
+										value="από την οποία ενσωματώνεται στο βαθμό ο χρόνος που αναλογεί." />
+
+									<h:outputLabel styleClass="fieldValueLabel" value="Βαθμός: " />
+									<h:outputText styleClass="fieldValueText"
+										value="#{messages[employee.employeeInfo.currentRankInfo.rank.key]}" />
+									<h:outputLabel styleClass="fieldValueLabel"
+										value="Ημ/νία Απόδοσης Βαθμού: " />
+									<h:outputText styleClass="fieldValueText"
+										value="#{employee.employeeInfo.currentRankInfo.lastRankDate}">
+										<s:convertDateTime type="date" pattern="dd-MM-yyyy" />
+									</h:outputText>
+									<h:outputLabel styleClass="fieldValueLabel"
+										value="Πλεονάζ. Χρόνος στο Βαθμό: " />
+									<h:outputText styleClass="fieldValueText"
+										value="#{employee.employeeInfo.currentRankInfo.surplusTimeInRankYear_Month_Day} (#{employee.employeeInfo.currentRankInfo.surplusTimeInRank} ημ.)" />
+
+									<h:outputLabel styleClass="fieldValueLabel"
+										value="Μισθ. Κλιμάκιο: " />
+									<h:outputText styleClass="fieldValueText"
+										value="#{employee.employeeInfo.currentRankInfo.salaryGrade}" />
+									<h:outputLabel styleClass="fieldValueLabel"
+										value="Ημ/νία Απόδοσης Μ.Κ. " />
+									<h:outputText styleClass="fieldValueText"
+										value="#{employee.employeeInfo.currentRankInfo.lastSalaryGradeDate}">
+										<s:convertDateTime type="date" pattern="dd-MM-yyyy" />
+									</h:outputText>
+									<h:outputLabel styleClass="fieldValueLabel"
+										value="Πλεονάζ. Χρόνος στο Μ.Κ.: " />
+									<h:outputText styleClass="fieldValueText"
+										value="#{employee.employeeInfo.currentRankInfo.surplusTimeInSalaryGradeYear_Month_Day} (#{employee.employeeInfo.currentRankInfo.surplusTimeInSalaryGrade} ημ.)" />
+
+
+									<h:outputLabel value="" />
+									<h:outputLabel value="" />
+									<h:outputLabel value="" />
+									<h:outputLabel value="" />
+
+									<a4j:commandLink id="updatelink"
+										rendered="#{(s:hasRole('ADMIN') or s:hasRole('MODIFY_EMPLOYEE_INFO'))}"
+										reRender="updateEmployeeInfoModalPanel"
+										oncomplete="#{rich:component('updateEmployeeInfoModalPanel')}.show()"
+										value="Τροποποίηση" styleClass="rich-toolbar-item">
+										<h:graphicImage value="/img/icons/edit.png" width="12"
+											height="12" style="border:0" />
+										<f:setPropertyActionListener
+											value="#{employee.employeeInfo.id}"
+											target="#{employeeInfoHome.id}" />
+									</a4j:commandLink>
+
+
+									<a4j:commandLink id="insertlink"
+										rendered="#{(s:hasRole('ADMIN') or s:hasRole('MODIFY_EMPLOYEE_INFO'))}"
+										action="#{employeeInfoManagement.prepeareNewRankInfo()}"
+										reRender="insertRankInfoOutputPanel" immediate="true"
+										oncomplete="#{rich:component('insertRankInfoModalPanel')}.show()"
+										value="Εισαγωγή Βαθμού/ΜΚ" styleClass="rich-toolbar-item">
+										<h:graphicImage value="/img/icons/edit.png" width="12"
+											height="12" style="border:0" />
+										<f:setPropertyActionListener
+											value="#{employee.employeeInfo.id}"
+											target="#{employeeInfoHome.id}" />
+									</a4j:commandLink>
+
+								</h:panelGrid>
+							</rich:panel>
+						</h:panelGrid>
+
+
+						<!-- *********************************************** -->
+						<!-- **   Ιστορικό Βαθμολογικής Εξέλιξης panel    ** -->
+						<!-- *********************************************** -->
+
+						<rich:tabPanel mode="ajax">
+
+							<rich:tab id="tab1">
+								<f:facet name="label">
+									<h:outputText value="Ιστορικό Βαθμολογικής Εξέλιξης" />
+								</f:facet>
+
+								<h:panelGrid columns="1" width="100%">
+									<h:outputText
+										value="Στον παρακάτω πίνακα εμφανίζεται η βαθμολογική εξέλιξη του/της εκπαιδευτικού." />
+
+									<h:form id="rankInfoHistoryForm">
+										<rich:dataTable id="rankInfoList"
+											value="#{employee.employeeInfo.rankInfos}" var="_rankInfo"
+											rows="10" border="0"
+											onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+											onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+											width="100%">
+											<f:facet name="header">
+												<h:outputLabel
+													value="Ιστορικό βαθμολογικής εξέλιξης Εκπαιδευτικού" />
+											</f:facet>
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="Βαθμός" />
+												</f:facet>
+												<h:outputText value="#{messages[_rankInfo.rank.key]}" />
+											</rich:column>
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="Ημ/νια Χορήγησης Βαθμού" />
+												</f:facet>
+												<h:outputText value="#{_rankInfo.lastRankDate}">
+													<s:convertDateTime pattern="dd-MM-yyyy" />
+												</h:outputText>
+											</rich:column>
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="Πλεονάζων Χρόνος στο Βαθμό" />
+												</f:facet>
+												<h:outputText
+													value="#{_rankInfo.surplusTimeInRankYear_Month_Day} (#{_rankInfo.surplusTimeInRank} ημ.)" />
+											</rich:column>
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="Μ.Κ." />
+												</f:facet>
+												<h:outputText value="#{_rankInfo.salaryGrade}" />
+											</rich:column>
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="Ημ/νια Χορήγησης Μ.Κ." />
+												</f:facet>
+												<h:outputText value="#{_rankInfo.lastSalaryGradeDate}">
+													<s:convertDateTime pattern="dd-MM-yyyy" />
+												</h:outputText>
+											</rich:column>
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="Πλεονάζων Χρόνος στο Μ.Κ." />
+												</f:facet>
+												<h:outputText
+													value="#{_rankInfo.surplusTimeInSalaryGradeYear_Month_Day} (#{_rankInfo.surplusTimeInSalaryGrade} ημ.)" />
+											</rich:column>
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="Επίπεδο Εκπαίδευσης" />
+												</f:facet>
+												<h:outputText
+													value="#{messages[_rankInfo.educationalLevel.key]}" />
+											</rich:column>
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="Σχόλια" />
+												</f:facet>
+												<h:outputText value="#{_rankInfo.comments}" />
+											</rich:column>
+										</rich:dataTable>
+									</h:form>
+								</h:panelGrid>
+							</rich:tab>
+
+
+							<rich:tab id="tab2">
+								<f:facet name="label">
+									<h:outputText value="Προ-Υπηρεσία" />
+								</f:facet>
+								<rich:panel>
+									<h:outputText
+										value="Παρακάτω εμφανίζεται η προυπηρεσία και συνολική υπηρεσία του/της εκπαιδευτικού." />
+									
+									<ui:include src="/components/employee/workExperienceAndServiceInfo.xhtml" />
+									
+									<h:panelGrid columns="3" width="100%">
+
+										<h:outputLabel styleClass="fieldValueLabel"
+											value="Συνολική Υπηρεσία μέχρι την :" />
+										<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
+											style="width:50px" enableManualInput="true"
+											styleClass="fieldValueText"
+											value="#{employeeInfoManagement.totalWorkServiceCalculationDate}">
+											<a4j:support event="onchanged" ajaxSingle="true"
+												eventsQueue="lalal"
+												action="#{employeeInfoManagement.recalculateTotalWorkService()}"
+												reRender="employeeInfoOutputPanel" />
+										</rich:calendar>
+										
+										<h:outputText styleClass="fieldValueText"
+											value="#{employeeInfoManagement.totalCalculatedServiceInDaysYear_Month_Day} (#{employeeInfoManagement.totalCalculatedServiceInDays} ημ.)" />
+									</h:panelGrid>
+
+
+								</rich:panel>
+							</rich:tab>
+
+						</rich:tabPanel>
+
+					</a4j:outputPanel>
+
+				</h:form>
+
+
+			</rich:panel>
+		</a4j:region>
 
 
 

@@ -985,7 +985,7 @@ public class RankInfo extends BaseIDModel {
 	 * @return the surplusTimeInRank in Year_Month_Day formated string
 	 */
 	public String getSurplusTimeInRankYear_Month_Day() {
-		return CoreUtils.Year_Month_Day(surplusTimeInRank);
+		return CoreUtils.getNoOfDaysInYear_Month_DayFormat(surplusTimeInRank);
 	}
 
 	/**
@@ -1007,7 +1007,7 @@ public class RankInfo extends BaseIDModel {
 	 * @return the surplusTimeInSalaryGrade in Year_Month_Day formated string
 	 */
 	public String getSurplusTimeInSalaryGradeYear_Month_Day() {
-		return CoreUtils.Year_Month_Day(surplusTimeInSalaryGrade);
+		return CoreUtils.getNoOfDaysInYear_Month_DayFormat(surplusTimeInSalaryGrade);
 	}
 
 	/**
