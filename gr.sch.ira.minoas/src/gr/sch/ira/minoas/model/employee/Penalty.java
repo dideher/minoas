@@ -1,6 +1,6 @@
 package gr.sch.ira.minoas.model.employee;
 
-import gr.sch.ira.minoas.model.BaseIDModel;
+import gr.sch.ira.minoas.model.BaseIDDeleteAwareModel;
 
 import java.util.Date;
 
@@ -16,9 +16,6 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import gr.sch.ira.minoas.model.BaseIDDeleteAwareModel;
-import gr.sch.ira.minoas.model.BaseIDModel;
 
 /**
  * @author <a href="mailto:gand@sch.gr">Yorgos Andreadakis</a>

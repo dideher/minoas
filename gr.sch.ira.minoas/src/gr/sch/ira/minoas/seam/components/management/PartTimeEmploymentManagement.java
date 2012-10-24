@@ -1,12 +1,10 @@
 package gr.sch.ira.minoas.seam.components.management;
 
 import gr.sch.ira.minoas.model.employee.Employee;
-import gr.sch.ira.minoas.model.employee.Evaluation;
 import gr.sch.ira.minoas.model.employee.PartTimeEmployment;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.CoreSearching;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
-import gr.sch.ira.minoas.seam.components.home.EvaluationHome;
 import gr.sch.ira.minoas.seam.components.home.PartTimeEmploymentHome;
 
 import java.util.Calendar;

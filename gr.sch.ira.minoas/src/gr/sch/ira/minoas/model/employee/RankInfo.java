@@ -1,5 +1,9 @@
 package gr.sch.ira.minoas.model.employee;
 
+import gr.sch.ira.minoas.core.CoreUtils;
+import gr.sch.ira.minoas.model.BaseIDModel;
+import gr.sch.ira.minoas.model.employement.EducationalLevelType;
+
 import java.util.Date;
 
 import javax.persistence.Basic;
@@ -10,15 +14,10 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import gr.sch.ira.minoas.core.CoreUtils;
-import gr.sch.ira.minoas.model.BaseIDModel;
-import gr.sch.ira.minoas.model.employement.EducationalLevelType;
 
 @Entity
 @Table(name = "RANK_INFO")

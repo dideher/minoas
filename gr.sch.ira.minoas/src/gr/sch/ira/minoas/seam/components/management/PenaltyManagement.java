@@ -1,12 +1,10 @@
 package gr.sch.ira.minoas.seam.components.management;
 
 import gr.sch.ira.minoas.model.employee.Employee;
-import gr.sch.ira.minoas.model.employee.Evaluation;
 import gr.sch.ira.minoas.model.employee.Penalty;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.CoreSearching;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
-import gr.sch.ira.minoas.seam.components.home.EvaluationHome;
 import gr.sch.ira.minoas.seam.components.home.PenaltyHome;
 
 import java.util.Calendar;

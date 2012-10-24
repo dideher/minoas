@@ -1,8 +1,5 @@
 package gr.sch.ira.minoas.seam.components.management;
 
-import java.util.Collection;
-import java.util.Date;
-
 import gr.sch.ira.minoas.core.CoreUtils;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeInfo;
@@ -12,7 +9,6 @@ import gr.sch.ira.minoas.seam.components.CoreSearching;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
 import gr.sch.ira.minoas.seam.components.home.EmployeeInfoHome;
 
-import java.util.Collection;
 import java.util.Date;
 
 import org.jboss.seam.ScopeType;
@@ -21,7 +17,6 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
-import org.jboss.seam.annotations.datamodel.DataModel;
 import org.jboss.seam.international.StatusMessage.Severity;
 
 /**

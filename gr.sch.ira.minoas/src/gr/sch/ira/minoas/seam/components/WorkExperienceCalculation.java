@@ -1,15 +1,15 @@
 package gr.sch.ira.minoas.seam.components;
 
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-
 import gr.sch.ira.minoas.core.CoreUtils;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeInfo;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
 import gr.sch.ira.minoas.model.employee.Penalty;
 import gr.sch.ira.minoas.model.employement.Employment;
+
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.jboss.seam.ScopeType;
