@@ -225,7 +225,7 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
             EmployeeInfo einfo = employee.getEmployeeInfo();
             Date gofDate = einfo.getGogAppointmentDate();
             Date entryIntoServiceDate = einfo.getEntryIntoServiceDate();
-            return CoreUtils.DatesDifferenceIn360DaysYear(gofDate, entryIntoServiceDate) > 30 ? entryIntoServiceDate
+            return CoreUtils.datesDifferenceIn360DaysYear(gofDate, entryIntoServiceDate) > 30 ? entryIntoServiceDate
                     : gofDate;
         } else
             return null;
@@ -235,13 +235,13 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
     public EmployeeServiceHelper calculateRegularEmployeeService(Employee employee, Date dateFrom, Date dateTo) {
         
         /* determine employee's total service */
-        int totalServiceRaw = CoreUtils.DatesDifferenceIn360DaysYear(dateFrom, dateTo);
+        int totalServiceRaw = CoreUtils.datesDifferenceIn360DaysYear(dateFrom, dateTo);
         
         /* handle employee penalties */
         Collection<Penalty> penalties = coreSearching.getPenaltyHistory(employee);
         int totalPenaltyDays = 0;
         for(Penalty p : penalties) {
-            totalPenaltyDays+=CoreUtils.DatesDifferenceIn360DaysYear(p.getPenaltyStartDate(), p.getPenaltyEndDate());
+            totalPenaltyDays+=CoreUtils.datesDifferenceIn360DaysYear(p.getPenaltyStartDate(), p.getPenaltyEndDate());
         }
         
         /* prepare the return value */
