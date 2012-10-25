@@ -324,8 +324,5 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
 
     }
     
-    
-
-    
 
 }
