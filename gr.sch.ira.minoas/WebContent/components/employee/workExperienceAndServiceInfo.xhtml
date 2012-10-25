@@ -6,31 +6,46 @@
       xmlns:rich="http://richfaces.org/rich">
 
 	<ui:component>
-		<h:panelGrid columns="3" width="100%">
+		<h:panelGrid columns="2" width="100%">
 			<h:outputLabel styleClass="fieldValueLabel"
 				value="Εκπαιδευτική Υπηρεσία μέχρι σήμερα:" />
-			<h:outputText styleClass="fieldValueText"
-				value="#{employeeInfoManagement.getEducationalServiceYear_Month_Day()} (#{employeeInfoManagement.getEducationalService()} ημ.)" />
-			<h:outputLabel value="" />
-		
+			<h:panelGroup>
+				<h:outputText styleClass="fieldValueText"  
+					value="#{employeeEducationalService}" 
+					converter="#{workExperienceConverter}" />
+				<h:outputText styleClass="fieldValueText"  
+					value=" (#{employeeEducationalService} ημ.)" />
+			</h:panelGroup>
+			
 			<h:outputLabel styleClass="fieldValueLabel"
 				value="Διδακτική Υπηρεσία μέχρι σήμερα:" />
-			<h:outputText styleClass="fieldValueText"
-				value="#{employeeInfoManagement.getTeachingServiceYear_Month_Day()} (#{employeeInfoManagement.getTeachingService()} ημ.)" />
-			<h:outputLabel value="" />
-		
+			<h:panelGroup>
+				<h:outputText styleClass="fieldValueText" 
+					value="#{employeeTeachingService}" 
+					converter="#{workExperienceConverter}" />	
+				<h:outputText styleClass="fieldValueText" 
+					value=" (#{employeeTeachingService} ημ.)"/>	
+			</h:panelGroup>
+			
 			<h:outputLabel styleClass="fieldValueLabel"
 				value="Συνολική Προϋπηρεσία μέχρι τον διορισμό:" />
-			<h:outputText styleClass="fieldValueText"
-				value="#{employeeInfoManagement.getSumOfExperienceYear_Month_Day()} (#{employeeInfoManagement.getSumOfExperience()} ημ.)" />
-			<h:outputLabel value="" />
-		
+			<h:panelGroup>
+				<h:outputText styleClass="fieldValueText"  
+					value="#{employeeSumOfExperience}" 
+					converter="#{workExperienceConverter}" />
+				<h:outputText styleClass="fieldValueText"  
+					value=" (#{employeeSumOfExperience} ημ.)" />
+			</h:panelGroup>
+			
 			<h:outputLabel styleClass="fieldValueLabel"
 				value="Συνολική Υπηρεσία μέχρι σήμερα:" />
+			<h:panelGroup>
 			<h:outputText styleClass="fieldValueText"
-				value="#{employeeInfoManagement.getTotalServiceIncludingWorkExperienceYear_Month_Day()} (#{employeeInfoManagement.getTotalServiceIncludingWorkExperience()} ημ.)" />
-			<h:outputLabel value="" />
-		
+				value="#{employeeTotalServiceIncludingWorkExperience}" 
+				converter="#{workExperienceConverter}" />
+				<h:outputText styleClass="fieldValueText"
+				value=" (#{employeeTotalServiceIncludingWorkExperience} ημ.)" />
+			</h:panelGroup>
 		</h:panelGrid>
 	
 	
