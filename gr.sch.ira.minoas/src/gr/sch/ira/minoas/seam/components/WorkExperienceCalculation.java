@@ -40,61 +40,73 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
         /**
          * Συνολική υπηρεσία (χωρίς προϋπηρεσία) αφού έχουν αφαιρεθεί ποινές, μειωμένα ωράρια, κτλ.
          */
-        Long totalServiceInDays;
+        Integer totalServiceInDays;
         
         /**
          * Συνολική υπηρεσία (χωρίς προϋπηρεσία).
          */
-        Long totalServiceInDaysRaw;
+        Integer totalServiceInDaysRaw;
         
         /**
          * Συνολικός αριθμός ημερών με ποινές
          */
-        Long totalPenaltyDays;
+        Integer totalPenaltyDays;
 
         /**
-         * @return the totalServiceInDays
-         */
-        public Long getTotalServiceInDays() {
-            return totalServiceInDays;
-        }
+		 * @return the totalServiceInDays
+		 */
+		public Integer getTotalServiceInDays() {
+			return totalServiceInDays;
+		}
 
-        /**
-         * @param totalServiceInDays the totalServiceInDays to set
-         */
-        public void setTotalServiceInDays(Long totalServiceInDays) {
-            this.totalServiceInDays = totalServiceInDays;
-        }
 
-        /**
-         * @return the totalServiceInDaysRaw
-         */
-        public Long getTotalServiceInDaysRaw() {
-            return totalServiceInDaysRaw;
-        }
 
-        /**
-         * @param totalServiceInDaysRaw the totalServiceInDaysRaw to set
-         */
-        public void setTotalServiceInDaysRaw(Long totalServiceInDaysRaw) {
-            this.totalServiceInDaysRaw = totalServiceInDaysRaw;
-        }
+		/**
+		 * @param totalServiceInDays the totalServiceInDays to set
+		 */
+		public void setTotalServiceInDays(Integer totalServiceInDays) {
+			this.totalServiceInDays = totalServiceInDays;
+		}
 
-        /**
-         * @return the totalPenaltyDays
-         */
-        public Long getTotalPenaltyDays() {
-            return totalPenaltyDays;
-        }
 
-        /**
-         * @param totalPenaltyDays the totalPenaltyDays to set
-         */
-        public void setTotalPenaltyDays(Long totalPenaltyDays) {
-            this.totalPenaltyDays = totalPenaltyDays;
-        }
 
-        /**
+		/**
+		 * @return the totalServiceInDaysRaw
+		 */
+		public Integer getTotalServiceInDaysRaw() {
+			return totalServiceInDaysRaw;
+		}
+
+
+
+		/**
+		 * @param totalServiceInDaysRaw the totalServiceInDaysRaw to set
+		 */
+		public void setTotalServiceInDaysRaw(Integer totalServiceInDaysRaw) {
+			this.totalServiceInDaysRaw = totalServiceInDaysRaw;
+		}
+
+
+
+		/**
+		 * @return the totalPenaltyDays
+		 */
+		public Integer getTotalPenaltyDays() {
+			return totalPenaltyDays;
+		}
+
+
+
+		/**
+		 * @param totalPenaltyDays the totalPenaltyDays to set
+		 */
+		public void setTotalPenaltyDays(Integer totalPenaltyDays) {
+			this.totalPenaltyDays = totalPenaltyDays;
+		}
+
+
+
+		/**
          * @see java.lang.Object#toString()
          */
         @Override
@@ -118,18 +130,18 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
      */
     public class EmployeeWorkExperienceHelper {
         
-        Long educationalTotal;
+        Integer educationalTotal;
         
-        Long teachingTotal;
+        Integer teachingTotal;
         
-        Long total;
+        Integer total;
         
         /**
          * @param educationalTotal
          * @param teachingTotal
          * @param total
          */
-        public EmployeeWorkExperienceHelper(Long educationalTotal, Long teachingTotal, Long total) {
+        public EmployeeWorkExperienceHelper(Integer educationalTotal, Integer teachingTotal, Integer total) {
             super();
             this.educationalTotal = educationalTotal;
             this.teachingTotal = teachingTotal;
@@ -137,48 +149,60 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
         }
 
         /**
-         * @return the educationalTotal
-         */
-        public Long getEducationalTotal() {
-            return educationalTotal;
-        }
+		 * @return the educationalTotal
+		 */
+		public Integer getEducationalTotal() {
+			return educationalTotal;
+		}
 
-        /**
-         * @return the teachingTotal
-         */
-        public Long getTeachingTotal() {
-            return teachingTotal;
-        }
 
-        /**
-         * @return the total
-         */
-        public Long getTotal() {
-            return total;
-        }
 
-        /**
-         * @param educationalTotal the educationalTotal to set
-         */
-        public void setEducationalTotal(Long educationalTotal) {
-            this.educationalTotal = educationalTotal;
-        }
+		/**
+		 * @param educationalTotal the educationalTotal to set
+		 */
+		public void setEducationalTotal(Integer educationalTotal) {
+			this.educationalTotal = educationalTotal;
+		}
 
-        /**
-         * @param teachingTotal the teachingTotal to set
-         */
-        public void setTeachingTotal(Long teachingTotal) {
-            this.teachingTotal = teachingTotal;
-        }
 
-        /**
-         * @param total the total to set
-         */
-        public void setTotal(Long total) {
-            this.total = total;
-        }
 
-        /**
+		/**
+		 * @return the teachingTotal
+		 */
+		public Integer getTeachingTotal() {
+			return teachingTotal;
+		}
+
+
+
+		/**
+		 * @param teachingTotal the teachingTotal to set
+		 */
+		public void setTeachingTotal(Integer teachingTotal) {
+			this.teachingTotal = teachingTotal;
+		}
+
+
+
+		/**
+		 * @return the total
+		 */
+		public Integer getTotal() {
+			return total;
+		}
+
+
+
+		/**
+		 * @param total the total to set
+		 */
+		public void setTotal(Integer total) {
+			this.total = total;
+		}
+
+
+
+		/**
          * @see java.lang.Object#toString()
          */
         @Override
@@ -212,9 +236,9 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
      */
     @Transactional(TransactionPropagationType.REQUIRED)
     public EmployeeWorkExperienceHelper calculateEmployeeWorkExperience(Employee employee) {
-        Long educational = coreSearching.getSummedEducationalWorkExperience(employee);
-        Long teaching = coreSearching.getSummedTeachingWorkExperience(employee);
-        Long all = coreSearching.getSummedWorkExperience(employee);
+        Integer educational = coreSearching.getSummedEducationalWorkExperience(employee).intValue();
+        Integer teaching = coreSearching.getSummedTeachingWorkExperience(employee).intValue();
+        Integer all = coreSearching.getSummedWorkExperience(employee).intValue();
         return new EmployeeWorkExperienceHelper(educational, teaching, all);
     }
     
@@ -260,9 +284,9 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
         int totalServiceInDays = totalServiceRaw - totalPenaltyDays;
         
         EmployeeServiceHelper returnValue = new EmployeeServiceHelper();
-        returnValue.setTotalServiceInDays(new Long(totalServiceInDays));
-        returnValue.setTotalServiceInDaysRaw(new Long(totalServiceRaw));
-        returnValue.setTotalPenaltyDays(new Long(totalPenaltyDays));
+        returnValue.setTotalServiceInDays(totalServiceInDays);
+        returnValue.setTotalServiceInDaysRaw(totalServiceRaw);
+        returnValue.setTotalPenaltyDays(totalPenaltyDays);
         return returnValue;
     }
     
@@ -274,10 +298,10 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
         WorkExperienceCalculation.EmployeeWorkExperienceHelper exp = calculateEmployeeWorkExperience(employee);
         WorkExperienceCalculation.EmployeeServiceHelper serviceHelper = calculateRegularEmployeeService(employee, fromDate, currentDate);
         
-        employeeInfo.setSumOfEducationalExperience(new Integer(exp.getEducationalTotal().intValue()));
-        employeeInfo.setSumOfTeachingExperience(new Integer(exp.getTeachingTotal().intValue()));
-        employeeInfo.setSumOfExperience(new Integer(exp.getTotal().intValue()));
-        employeeInfo.setTotalWorkService(new Integer(serviceHelper.getTotalServiceInDays().intValue()));
+        employeeInfo.setSumOfEducationalExperience(exp.getEducationalTotal());
+        employeeInfo.setSumOfTeachingExperience(exp.getTeachingTotal());
+        employeeInfo.setSumOfExperience(exp.getTotal());
+        employeeInfo.setTotalWorkService(serviceHelper.getTotalServiceInDays());
         
         /* handle working hours */
         Employment currentEmployment = employee.getCurrentEmployment();
