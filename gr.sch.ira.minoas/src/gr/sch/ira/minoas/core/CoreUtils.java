@@ -144,7 +144,7 @@ public abstract class CoreUtils {
 			years = noOfDays / 360;
 			months = (noOfDays - years * 360) / 30;
 			days = noOfDays - (years * 360) - (months * 30);
-			return String.format("%d έτη %d μήνες %d ημέρες", years, months, days);
+			return String.format("%d έτη %d μην. %d ημ.", years, months, days);
 		} else
 			return "";
 	}
