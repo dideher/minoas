@@ -3,18 +3,12 @@
  */
 package gr.sch.ira.minoas.seam.components.home;
 
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-
 import gr.sch.ira.minoas.model.employee.Evaluation;
 
-import org.apache.commons.lang.time.DateUtils;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
-import org.jboss.seam.international.StatusMessage.Severity;
 
 /**
  * @author <a href="mailto:gand@sch.gr">Yorgos Andreadakis</a>

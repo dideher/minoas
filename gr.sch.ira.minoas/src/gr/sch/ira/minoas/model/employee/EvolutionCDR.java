@@ -1,20 +1,20 @@
 package gr.sch.ira.minoas.model.employee;
 
+import gr.sch.ira.minoas.model.BaseIDModel;
+
 import java.util.Date;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Entity;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import gr.sch.ira.minoas.model.BaseIDModel;
 
 /**
  * @author <a href="mailto:gand@sch.gr">Yorgos Adreadakis</a>
@@ -132,6 +132,16 @@ public class EvolutionCDR extends BaseIDModel {
 	 */
 	public void setAchievedPromotionQuota(Boolean achievedPromotionQuota) {
 		this.achievedPromotionQuota = achievedPromotionQuota;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "EvolutionCDR [startDate=" + startDate + ", endDate=" + endDate
+				+ ", rankInfo=" + rankInfo + ", achievedPromotionQuota="
+				+ achievedPromotionQuota + "]";
 	}
 	
 }

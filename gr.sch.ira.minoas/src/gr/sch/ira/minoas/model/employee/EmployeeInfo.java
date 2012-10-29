@@ -1,24 +1,27 @@
 package gr.sch.ira.minoas.model.employee;
 
+import gr.sch.ira.minoas.core.CoreUtils;
 import gr.sch.ira.minoas.model.BaseIDModel;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Entity;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import gr.sch.ira.minoas.model.employee.SectorType;
 
 /**
  * @author <a href="mailto:gand@sch.gr">Yorgos Andreadakis</a>
@@ -119,6 +122,7 @@ public class EmployeeInfo extends BaseIDModel {
 	@Column(name = "IS_A_NAT_SCH_PUB_ADMIN_GRADUATE")
 	private Boolean isANatSchPubAdminGraduate;
 	
+
 	/**
 	 * National School for Public Administration Degree Date (Ημερομηνία Σχολής Δημόσιας Διοίκησης)
 	 */
@@ -137,17 +141,55 @@ public class EmployeeInfo extends BaseIDModel {
 	/**
 	 * Rank Information (Στοιχεία Βαθμού και Μισθολογικού Κλιμακίου)
 	 */
-	@OneToOne(mappedBy="employeeInfo")
-	private RankInfo rankInfo;
+	@OneToMany(mappedBy="employeeInfo")
+	//private RankInfo rankInfo;
+	private Collection<RankInfo> rankInfos = new ArrayList<RankInfo>();
+	
+	
+	/**
+	 * Current Rank Information (Στοιχεία Τρέχοντος Βαθμού και Μισθολογικού Κλιμακίου)
+	 */
+	@OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
+	@JoinColumn(name = "CURRENT_RANK_INFO_ID", nullable = true)
+	private RankInfo currentRankInfo;
 	
 	
 	/**
 	 * Public/Private Sector (Δημόσιος/Ιδιωτικός Τομέας)
 	 */
 	@Enumerated(EnumType.STRING)
-	@Column(name = "SECTOR", nullable = false, updatable = false)
+	@Column(name = "SECTOR", nullable = false, updatable = true)
 	private SectorType sector;
 
+	
+	/**
+	 * Sum of Educational Experience (Άθροισμα Εκπαιδευτικής Προϋπηρεσίας)
+	 */
+	@Basic
+	@Column(name = "SUM_OF_EDUCATIONAL_EXPERIENCE")
+	private Integer sumOfEducationalExperience;
+	
+	/**
+	 * Sum of Teaching Experience (Άθροισμα Διδακτικής Προϋπηρεσίας)
+	 */
+	@Basic
+	@Column(name = "SUM_OF_TEACHING_EXPERIENCE")
+	private Integer sumOfTeachingExperience;
+	
+	/**
+	 * Sum of Any Type Of Working Experience (Άθροισμα Προϋπηρεσίας Οποιουδήποτε Τύπου)
+	 */
+	@Basic
+	@Column(name = "SUM_OF_EXPERIENCE")
+	private Integer sumOfExperience;
+
+	/**
+	 * Total Work Service in days (Does NOT include prior work experience)
+	 * Συνολική Υπηρεσία από την ημ/νία διορισμού έως σήμερα (δεν συμπεριλαμβάνει προϋπηρεσίες)
+	 */
+	@Basic
+	@Column(name = "TOTAL_WORK_SERVICE")
+	private Integer totalWorkService;
 	
 	
 	/**
@@ -257,17 +299,31 @@ public class EmployeeInfo extends BaseIDModel {
 	}
 
 	/**
-	 * @return the rankInfo
+	 * @return the rankInfos
 	 */
-	public RankInfo getRankInfo() {
-		return rankInfo;
+	public Collection<RankInfo> getRankInfos() {
+		return rankInfos;
 	}
 
 	/**
-	 * @param rankInfo the rankInfo to set
+	 * @param rankInfo the rankInfos to set
 	 */
-	public void setRankInfo(RankInfo rankInfo) {
-		this.rankInfo = rankInfo;
+	public void setRankInfos(Collection<RankInfo> rankInfos) {
+		this.rankInfos = rankInfos;
+	}
+
+	/**
+	 * @return the currentRankInfo
+	 */
+	public RankInfo getCurrentRankInfo() {
+		return currentRankInfo;
+	}
+
+	/**
+	 * @param currentRankInfo the currentRankInfo to set
+	 */
+	public void setCurrentRankInfo(RankInfo currentRankInfo) {
+		this.currentRankInfo = currentRankInfo;
 	}
 
 	/**
@@ -374,6 +430,113 @@ public class EmployeeInfo extends BaseIDModel {
 
 	public SectorType getSector() {
 		return sector;
+	}
+
+	/**
+	 * @return the sumOfEducationalExperience
+	 */
+	public Integer getSumOfEducationalExperience() {
+		return sumOfEducationalExperience;
+	}
+
+	/**
+	 * @return the sumOfEducationalExperience as a Year_Month_Day string
+	 */
+	public String getSumOfEducationalExperienceYear_Month_Day() {
+		return CoreUtils.getNoOfDaysInYear_Month_DayFormat(sumOfEducationalExperience);
+	}
+	
+	/**
+	 * @param sumOfEducationalExperience the sumOfEducationalExperience to set
+	 */
+	public void setSumOfEducationalExperience(Integer sumOfEducationalExperience) {
+		this.sumOfEducationalExperience = sumOfEducationalExperience;
+	}
+
+	/**
+	 * @return the sumOfTeachingExperience
+	 */
+	public Integer getSumOfTeachingExperience() {
+		return sumOfTeachingExperience;
+	}
+
+	/**
+	 * @return the sumOfTeachingExperience as a Year_Month_Day string
+	 */
+	public String getSumOfTeachingExperienceYear_Month_Day() {
+		return CoreUtils.getNoOfDaysInYear_Month_DayFormat(sumOfTeachingExperience);
+	}
+	
+	/**
+	 * @param sumOfTeachingExperience the sumOfTeachingExperience to set
+	 */
+	public void setSumOfTeachingExperience(Integer sumOfTeachingExperience) {
+		this.sumOfTeachingExperience = sumOfTeachingExperience;
+	}
+
+	/**
+	 * @return the sumOfExperience
+	 */
+	public Integer getSumOfExperience() {
+		return sumOfExperience;
+	}
+
+	/**
+	 * @return the sumOfExperience as a Year_Month_Day string
+	 */
+	public String getSumOfExperienceYear_Month_Day() {
+		return CoreUtils.getNoOfDaysInYear_Month_DayFormat(sumOfExperience);
+	}
+	
+	/**
+	 * @param sumOfExperience the sumOfExperience to set
+	 */
+	public void setSumOfExperience(Integer sumOfExperience) {
+		this.sumOfExperience = sumOfExperience;
+	}
+
+	/**
+	 * @return the totalWorkService
+	 */
+	public Integer getTotalWorkService() {
+		return totalWorkService;
+	}
+
+	/**
+	 * @return the totalWorkService as a Year_Month_Day string
+	 */
+	public String getTotalWorkServiceYear_Month_Day() {
+		return CoreUtils.getNoOfDaysInYear_Month_DayFormat(totalWorkService);
+	}
+	
+	/**
+	 * @param totalWorkService the totalWorkService to set
+	 */
+	public void setTotalWorkService(Integer totalWorkService) {
+		this.totalWorkService = totalWorkService;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "EmployeeInfo [gogAppointmentNo=" + gogAppointmentNo
+				+ ", gogAppointmentDate=" + gogAppointmentDate
+				+ ", entryIntoServiceAct=" + entryIntoServiceAct
+				+ ", entryIntoServiceDate=" + entryIntoServiceDate
+				+ ", permanentEmployeeAct=" + permanentEmployeeAct
+				+ ", permanentEmployeeActDate=" + permanentEmployeeActDate
+				+ ", hasAMasterDegree=" + hasAMasterDegree + ", mscDate="
+				+ mscDate + ", hasAPhD=" + hasAPhD + ", phdDate=" + phdDate
+				+ ", isANatSchPubAdminGraduate=" + isANatSchPubAdminGraduate
+				+ ", natSchPubAdminDate=" + natSchPubAdminDate
+				+ ", isRecentlyHired=" + isRecentlyHired + ", currentRankInfo="
+				+ currentRankInfo + ", sector=" + sector
+				+ ", sumOfEducationalExperience=" + sumOfEducationalExperience
+				+ ", sumOfTeachingExperience=" + sumOfTeachingExperience
+				+ ", sumOfExperience=" + sumOfExperience
+				+ ", totalWorkService=" + totalWorkService + "]";
 	}
 	
 	

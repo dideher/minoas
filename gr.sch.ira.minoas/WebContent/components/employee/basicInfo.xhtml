@@ -7,22 +7,22 @@
 
 <ui:component>
 	<h:panelGrid columns="6" cellspacing="8">
-		<h:outputLabel styleClass="fieldValueLabel" value="Επώνυμο" for="" />
+		<h:outputLabel styleClass="fieldValueLabel" value="Επώνυμο" />
 		<h:outputText styleClass="fieldValueText" value="#{employee.lastName}"/>
-		<h:outputLabel styleClass="fieldValueLabel" value="Όνομα" for="" />
+		<h:outputLabel styleClass="fieldValueLabel" value="Όνομα" />
 		<h:outputText styleClass="fieldValueText" value="#{employee.firstName}" />
-		<h:outputLabel styleClass="fieldValueLabel" value="Όνομα Πατρός" for="" />
+		<h:outputLabel styleClass="fieldValueLabel" value="Όνομα Πατρός" />
 		<h:outputText styleClass="fieldValueText" value="#{employee.fatherName}" />
-		<h:outputLabel styleClass="fieldValueLabel" value="Όνομα Μητρος" for="" />
+		<h:outputLabel styleClass="fieldValueLabel" value="Όνομα Μητρος" />
 		<h:outputText styleClass="fieldValueText" value="#{employee.motherName}" />
-		<h:outputLabel styleClass="fieldValueLabel" value="ΑΦΜ" for="" />
+		<h:outputLabel styleClass="fieldValueLabel" value="ΑΦΜ" />
 		<h:outputText styleClass="fieldValueText" value="#{employee.vatNumber}" />
-		<h:outputLabel styleClass="fieldValueLabel" value="ΑΜ" for="" />
+		<h:outputLabel styleClass="fieldValueLabel" value="ΑΜ" />
 		<h:outputText styleClass="fieldValueText" value="#{employeeUtil.getRegistryID(employee)}" />
-		<h:outputLabel styleClass="fieldValueLabel" value="Τύπος" for="" />
+		<h:outputLabel styleClass="fieldValueLabel" value="Τύπος" />
 		<h:outputText styleClass="fieldValueText" value="#{messages[employee.type.key]}" />
 		
-		<h:outputLabel styleClass="fieldValueLabel" value="Ημ/νια Γεννήσεως" for="" />
+		<h:outputLabel styleClass="fieldValueLabel" value="Ημ/νια Γεννήσεως" />
 		<h:outputText styleClass="fieldValueText" value="#{employee.dateOfBirth}">
 			<s:convertDateTime type="date" pattern="dd-MM-yyyy" />
 		</h:outputText>

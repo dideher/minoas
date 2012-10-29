@@ -39,235 +39,125 @@
 				</a4j:region>
 			</h:form>
 			<h:panelGrid columns="1" width="100%">
-
 				<h:panelGroup>
+					<h:panelGrid columns="2">
+						<rich:panel id="basicEmployeeInfoPanel">
+							<f:facet name="header">
+								<h:outputText value="Βασικά Στοιχεία" />
+							</f:facet>
 
-					<h:panelGrid columns="4">
-						<!-- left pane of outer grid -->
+							<h:panelGrid>
+							<ui:include src="/employee/basic-info.xhtml">
+								<ui:param name="employee" value="#{employee}" />
+							</ui:include>
+								<h:form id="updateEmployeeForm">
+								<rich:toolBar itemSeparator="line">
+									<a4j:commandLink id="updateBasicInfolink" 
+										reRender="updateBasicInfoModalPanelContent" rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE_BASIC_INFO'))}"
+										oncomplete="#{rich:component('updateBasicInfoModalPanel')}.show()"
+										value="Τροποποίηση Στοιχείων">
+										<h:graphicImage value="/img/icons/edit.png" width="12"
+											height="12" style="border:0" />
+									</a4j:commandLink>
+									<a4j:commandLink id="updateSpecializationLink"
+										reRender="updateSpecializationModalPanelContent" rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE_SPECIALIZATION'))}"
+										oncomplete="#{rich:component('updateSpecializationModalPanel')}.show()"
+										value="Αλλαγή Ειδικότητας">
+										<h:graphicImage value="/img/icons/edit.png" width="12"
+											height="12" style="border:0" />
+									</a4j:commandLink>
+									<a4j:commandLink id="updateRegistryLink"
+										reRender="updateRegularRegistryIDModalPanelContent" rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE_REGULAR_REGISTRY')) and (employeeHome.instance.type eq 'REGULAR')}"
+										oncomplete="#{rich:component('updateRegularRegistryIDModalPanel')}.show()" 
+										value="Ενημέρωση ΑΜ">
+										<h:graphicImage value="/img/icons/edit.png" width="12"
+											height="12" style="border:0" />
+										<f:setPropertyActionListener value="#{employeeHome.instance.regularDetail.id}"
+											target="#{regularEmployeeInfoHome.id}" />
+									</a4j:commandLink>
+								</rich:toolBar>
+								</h:form>
+							</h:panelGrid>
+							
+						</rich:panel>
 
 						<h:panelGroup>
-
 							<h:panelGrid columns="1">
-
-								<rich:panel id="basicEmployeeInfoPanel">
+							<rich:dataTable id="employeeCurrentStatusTable"
+								value="#{employeeCurrentStatusItems}" var="_item" rows="15"
+								border="0" onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+								onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+								width="100%">
+								<f:facet name="header">
+									<h:outputLabel value="Τρέχουσα Κατάσταση Εκπαιδευτικού" />
+								</f:facet>
+								
+								<rich:column>
 									<f:facet name="header">
-										<h:outputText value="Βασικά Στοιχεία" />
+										<h:outputText value="Σχολική Μονάδα" />
 									</f:facet>
-
-									<h:panelGrid columns="1">
-
-										<ui:include src="/employee/basic-info.xhtml">
-											<ui:param name="employee" value="#{employee}" />
-										</ui:include>
-
-									</h:panelGrid>
-
-								</rich:panel>
-
-								<h:panelGrid columns="1" width="100%">
-									<a4j:outputPanel id="employeeSpecialAssigmentOutputPanel">
-										<h:form id="employeeSpecialAssigmentTableForm">
-											<rich:dataTable id="employeeSpecialAssigmentTable"
-												rendered="#{employeeSpecialAssigmentItems.rowCount > 0}"
-												value="#{employeeSpecialAssigmentItems}" var="_item"
-												rows="15" border="0"
-												onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
-												onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
-												width="100%">
-												<f:facet name="header">
-													<h:outputLabel value="Ειδικές Ασχολίες Εκπαιδευτικού" />
-												</f:facet>
-												<rich:column>
-													<f:facet name="header">
-														<h:outputText value="Ειδ. Ασχολία" />
-													</f:facet>
-													<h:outputText value="#{_item.specializationGroupTitle}" />
-												</rich:column>
-												<rich:column>
-													<f:facet name="header">
-														<h:outputText value="Μονάδα" />
-													</f:facet>
-													<h:outputText value="#{_item.unitTitle}" />
-												</rich:column>
-												<rich:column>
-													<f:facet name="header">
-														<h:outputText value="Ώρες" />
-													</f:facet>
-													<h:outputText value="#{_item.finalWorkingHours}" />
-												</rich:column>
-
-												<a4j:support event="onRowClick" reRender="menuOutputPanel"
-													limitToList="true"
-													oncomplete="#{rich:component('menu')}.show(event, {})">
-													<a4j:actionparam name="specialAssigmentId"
-														value="#{_item.id}" assignTo="#{specialAssigmentHome.id}"
-														converter="javax.faces.Integer" />
-												</a4j:support>
-
-											</rich:dataTable>
-
-											<a4j:outputPanel id="menuOutputPanel">
-												<rich:contextMenu styleClass="normal" attached="false"
-													id="menu" submitMode="none">
-													<rich:menuItem icon="/img/icons/edit.png" immediate="true"
-														disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE'))}"
-														submitMode="ajax"
-														reRender="updateSpecialAssigmentModalPanel"
-														value="Επεξεργασία"
-														rendered="false"
-														oncomplete="#{rich:component('updateModalPanel')}.show()">
-													</rich:menuItem>
-
-
-
-													<rich:menuSeparator />
-													<rich:menuItem icon="/img/icons/delete.png"
-														immediate="true"
-														disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE'))}"
-														submitMode="ajax" value="Διαγραφή"
-														reRender="employeeSpecialAssigmentOutputPanel"
-														limitToList="true"
-														onclick="if(!confirm('Θα διαγράψετε την ειδική ασχολία. Είστε σίγουρος ;')) {form.reset(); return false;}"
-														action="#{employeeManagement.removeEmployeeSpecialAssigment()}">
-													</rich:menuItem>
-												</rich:contextMenu>
-											</a4j:outputPanel>
-										</h:form>
-									</a4j:outputPanel>
-
-
-								</h:panelGrid>
+									<h:outputText value="#{_item.schoolUnit}" />
+								</rich:column>
+								
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Τύπος" />
+									</f:facet>
+									<h:outputText value="#{messages[_item.cdrTypeKey]}" />
+								</rich:column>
+								
+								
+								
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Σχόλιο" />
+									</f:facet>
+									<h:outputText value="#{_item.comment}" />
+								</rich:column>
+								
+								
+							</rich:dataTable>
+							
+							<rich:spacer height="15"></rich:spacer>
+							
+							<rich:dataTable id="employeeCurrentHoursDistributionTable"
+								value="#{employeeCurrentHoursDistributionItems}" var="_item" rows="15"
+								border="0" onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+								onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+								width="100%">
+								<f:facet name="header">
+									<h:outputLabel value="Τρέχουσα Κατανομή Διδακτικών Ωρών Εκπαιδευτικού" />
+								</f:facet>
+								
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Σχολική Μονάδα" />
+									</f:facet>
+									<h:outputText value="#{_item.get('school').title}" />
+								</rich:column>
+								
+								
+								<rich:column style="text-align:center">
+									<f:facet name="header">
+										<h:outputText value="Διδακτικές Ώρες" />
+									</f:facet>
+									<h:outputText value="#{_item.get('unitHours')}" style="color:green;font-weight:bold;" />
+								</rich:column>
+								
+								
+							</rich:dataTable>
+							
 							</h:panelGrid>
+							
+							
+
 
 						</h:panelGroup>
-
-
-						<!-- right pane of outer grid -->
-						<h:panelGroup>
-
-							<h:panelGrid columns="1">
-								<rich:dataTable id="employeeCurrentStatusTable"
-									value="#{employeeCurrentStatusItems}" var="_item" rows="15"
-									border="0"
-									onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
-									onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
-									width="100%">
-									<f:facet name="header">
-										<h:outputLabel value="Τρέχουσα Κατάσταση Εκπαιδευτικού" />
-									</f:facet>
-
-									<rich:column>
-										<f:facet name="header">
-											<h:outputText value="Σχολική Μονάδα" />
-										</f:facet>
-										<h:outputText value="#{_item.schoolUnit}" />
-									</rich:column>
-
-									<rich:column>
-										<f:facet name="header">
-											<h:outputText value="Τύπος" />
-										</f:facet>
-										<h:outputText value="#{messages[_item.cdrTypeKey]}" />
-									</rich:column>
-
-
-
-									<rich:column>
-										<f:facet name="header">
-											<h:outputText value="Σχόλιο" />
-										</f:facet>
-										<h:outputText value="#{_item.comment}" />
-									</rich:column>
-
-
-								</rich:dataTable>
-
-								<rich:spacer height="15"></rich:spacer>
-
-								<rich:dataTable id="employeeCurrentHoursDistributionTable"
-									value="#{employeeCurrentHoursDistributionItems}" var="_item"
-									rows="15" border="0"
-									onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
-									onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
-									width="100%">
-									<f:facet name="header">
-										<h:outputLabel
-											value="Τρέχουσα Κατανομή Διδακτικών Ωρών Εκπαιδευτικού" />
-									</f:facet>
-
-									<rich:column>
-										<f:facet name="header">
-											<h:outputText value="Σχολική Μονάδα" />
-										</f:facet>
-										<h:outputText value="#{_item.get('school').title}" />
-									</rich:column>
-
-
-									<rich:column style="text-align:center">
-										<f:facet name="header">
-											<h:outputText value="Διδακτικές Ώρες" />
-										</f:facet>
-										<h:outputText value="#{_item.get('unitHours')}"
-											style="color:green;font-weight:bold;" />
-									</rich:column>
-
-
-								</rich:dataTable>
-
-							</h:panelGrid>
-
-						</h:panelGroup>
-
 					</h:panelGrid>
 
 				</h:panelGroup>
 
 
-				<h:panelGroup>
-					<h:form id="manageEmployeeSpecialAssigmentForm">
-						<rich:toolBar itemSeparator="line">
-							<a4j:commandLink id="updateBasicInfolink"
-								reRender="updateBasicInfoModalPanelContent"
-								rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE_BASIC_INFO'))}"
-								oncomplete="#{rich:component('updateBasicInfoModalPanel')}.show()"
-								value="Τροποποίηση Στοιχείων">
-								<h:graphicImage value="/img/icons/edit.png" width="12"
-									height="12" style="border:0" />
-							</a4j:commandLink>
-							<a4j:commandLink id="updateSpecializationLink"
-								reRender="updateSpecializationModalPanelContent"
-								rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE_SPECIALIZATION'))}"
-								oncomplete="#{rich:component('updateSpecializationModalPanel')}.show()"
-								value="Αλλαγή Ειδικότητας">
-								<h:graphicImage value="/img/icons/edit.png" width="12"
-									height="12" style="border:0" />
-							</a4j:commandLink>
-							<a4j:commandLink id="updateRegistryLink"
-								reRender="updateRegularRegistryIDModalPanelContent"
-								rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE_REGULAR_REGISTRY')) and (employeeHome.instance.type eq 'REGULAR')}"
-								oncomplete="#{rich:component('updateRegularRegistryIDModalPanel')}.show()"
-								value="Ενημέρωση ΑΜ">
-								<h:graphicImage value="/img/icons/edit.png" width="12"
-									height="12" style="border:0" />
-								<f:setPropertyActionListener
-									value="#{employeeHome.instance.regularDetail.id}"
-									target="#{regularEmployeeInfoHome.id}" />
-							</a4j:commandLink>
-							<a4j:commandLink id="addEmployeeSpecialAssigmentLink"
-								reRender="addSpecialAssigmentModalPanelContent"
-								action="#{employeeManagement.prepareForNewSpecialAssigment()}"
-								rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE'))}"
-								oncomplete="#{rich:component('addSpecialAssigmentModalPanel')}.show()"
-								value="Εισαγωγή Ειδικής Ασχολίας">
-								<h:graphicImage value="/img/icons/edit.png" width="12"
-									height="12" style="border:0" />
-								<f:setPropertyActionListener
-									value="#{employeeHome.instance.regularDetail.id}"
-									target="#{regularEmployeeInfoHome.id}" />
-							</a4j:commandLink>
-						</rich:toolBar>
-					</h:form>
-				</h:panelGroup>
 
 				<h:panelGroup>
 					<h:form>
@@ -754,8 +644,7 @@
 
 
 
-							<rich:tab
-								rendered="#{employeeLeaveItems.rowCount gt 0  and (s:hasRole('ADMIN') or s:hasRole('VIEW_LEAVE'))}">
+							<rich:tab rendered="#{employeeLeaveItems.rowCount gt 0  and (s:hasRole('ADMIN') or s:hasRole('VIEW_LEAVE'))}">
 								<f:facet name="label">
 									<h:outputText value="Ιστορικό Αδειών" />
 								</f:facet>
@@ -763,8 +652,8 @@
 									<h:outputText
 										value="Στον παρακάτω πίνακα εμφανίζεται το ιστορικό των αδειών του εκπαιδευτικού." />
 									<rich:dataTable id="employeeLeavesList"
-										value="#{employeeLeaveItems}" var="_leave" rows="15"
-										border="0"
+										value="#{employeeLeaveItems}" var="_leave"
+										rows="15" border="0"
 										onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
 										onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
 										width="100%">
@@ -823,7 +712,7 @@
 									</rich:dataTable>
 								</h:panelGrid>
 							</rich:tab>
-
+							 
 							<rich:tab rendered="#{employeeWorkExperienceItems.rowCount gt 0}">
 								<f:facet name="label">
 									<h:outputText value="Ιστορικό Προϋπηρεσιών" />
@@ -832,8 +721,8 @@
 									<h:outputText
 										value="Στον παρακάτω πίνακα εμφανίζεται το ιστορικό των προϋπηρεσίων του εκπαιδευτικού." />
 									<rich:dataTable id="employeeWorkExpirenceItemsList"
-										value="#{employeeWorkExperienceItems}"
-										var="_workExperienceItem" rows="15" border="0"
+										value="#{employeeWorkExperienceItems}" var="_workExperienceItem"
+										rows="15" border="0"
 										onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
 										onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
 										width="100%">
@@ -862,22 +751,22 @@
 												<s:convertDateTime pattern="dd-MM-yyyy" />
 											</h:outputText>
 										</rich:column>
-
+										
 										<rich:column>
 											<f:facet name="header">
 												<h:outputText value="Σχόλιο" />
 											</f:facet>
 											<h:outputText value="#{_workExperienceItem.comment}" />
 										</rich:column>
-
+										
 									</rich:dataTable>
 								</h:panelGrid>
 							</rich:tab>
-
+							
 						</rich:tabPanel>
-
-
-
+						
+						
+						
 
 					</h:form>
 
@@ -954,12 +843,11 @@
 
 			</h:panelGrid>
 		</rich:panel>
-
+		
 		<!-- **************************  -->
 		<!-- UPDATE BASIC EMPLOYEE INFO -->
 		<!-- **************************  -->
-		<rich:modalPanel id="updateBasicInfoModalPanel" autosized="true"
-			width="400">
+		<rich:modalPanel id="updateBasicInfoModalPanel" autosized="true" width="400">
 			<f:facet name="header">
 				<h:outputText value="Τροποποίηση Βασικών Στοιχείων Εκπαιδευτικού"
 					style="padding-right:15px;" />
@@ -968,56 +856,51 @@
 				<h:panelGroup>
 					<h:graphicImage value="/img/modal/close.png" styleClass="hidelink"
 						width="18" height="18" id="hidelink3" />
-					<rich:componentControl for="updateBasicInfoModalPanel"
-						attachTo="hidelink3" operation="hide" event="onclick" />
+					<rich:componentControl for="updateBasicInfoModalPanel" attachTo="hidelink3"
+						operation="hide" event="onclick" />
 				</h:panelGroup>
 			</f:facet>
 			<a4j:region>
 				<h:panelGrid columns="1">
 					<h:form>
-						<a4j:outputPanel id="updateBasicInfoModalPanelContent"
-							layout="inline">
-
+						<a4j:outputPanel id="updateBasicInfoModalPanelContent" layout="inline">
+						
 							<ui:include src="/components/messages-component.xhtml" />
-
+						
 							<h:outputText
 								value="Με την παρακάτω φόρμα, μπορείται να τροποποίησεται τα βασικά στοιχεία του/της εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}." />
 							<h:panelGrid columns="3">
 
-
+								
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
 									<ui:define name="label">
 										<h:outputText value="Επώνυμο" />
 									</ui:define>
-									<h:inputText value="#{employeeHome.instance.lastName}"
-										required="true" maxlength="35" size="20" />
+									<h:inputText value="#{employeeHome.instance.lastName}" required="true" maxlength="35" size="20" />
 								</s:decorate>
-
+																
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
 									<ui:define name="label">
 										<h:outputText value="Όνομα" />
 									</ui:define>
-									<h:inputText value="#{employeeHome.instance.firstName}"
-										required="true" maxlength="25" size="14" />
+									<h:inputText value="#{employeeHome.instance.firstName}" required="true" maxlength="25" size="14" />
 								</s:decorate>
-
-
+								
+								
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
 									<ui:define name="label">
 										<h:outputText value="Όνομα Πατρός" />
 									</ui:define>
-									<h:inputText value="#{employeeHome.instance.fatherName}"
-										required="true" maxlength="25" size="20" />
+									<h:inputText value="#{employeeHome.instance.fatherName}" required="true" maxlength="25" size="20" />
 								</s:decorate>
-
+								
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
 									<ui:define name="label">
 										<h:outputText value="Όνομα Μητρός" />
 									</ui:define>
-									<h:inputText value="#{employeeHome.instance.motherName}"
-										required="false" maxlength="25" size="20" />
+									<h:inputText value="#{employeeHome.instance.motherName}" required="false" maxlength="25" size="20" />
 								</s:decorate>
-
+								
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
 									<ui:define name="label">
 										<h:outputText value="Ημ/νια Γεννήσεως : " />
@@ -1028,13 +911,12 @@
 										value="#{employeeHome.instance.dateOfBirth}">
 									</rich:calendar>
 								</s:decorate>
-
+								
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
 									<ui:define name="label">
 										<h:outputText value="ΑΦΜ" />
 									</ui:define>
-									<h:inputText value="#{employeeHome.instance.vatNumber}"
-										required="true" maxlength="10" size="10" />
+									<h:inputText value="#{employeeHome.instance.vatNumber}" required="true" maxlength="10" size="10" />
 								</s:decorate>
 
 							</h:panelGrid>
@@ -1043,8 +925,7 @@
 						<h:panelGrid columns="2">
 
 							<a4j:commandButton value="Τροποποίηση Στοιχείων !"
-								action="#{employeeManagement.updateEmployeeBasicInfo()}"
-								limitToList="true"
+								action="#{employeeManagement.updateEmployeeBasicInfo()}" limitToList="true"
 								data="#{facesContext.maximumSeverity.ordinal ge 2}"
 								oncomplete="if(data == false) Richfaces.hideModalPanel('updateBasicInfoModalPanel');"
 								reRender="basicEmployeeInfoPanel, updateBasicInfoModalPanelContent" />
@@ -1057,58 +938,51 @@
 				</h:panelGrid>
 			</a4j:region>
 		</rich:modalPanel>
-
-
+		
+		
 		<!-- ***********************************  -->
 		<!-- UPDATE EMPLOYEE REGULAR REGISTRY ID  -->
 		<!-- ***********************************  -->
-		<rich:modalPanel id="updateRegularRegistryIDModalPanel"
-			autosized="true" width="400">
+		<rich:modalPanel id="updateRegularRegistryIDModalPanel" autosized="true" width="400">
 			<f:facet name="header">
-				<h:outputText
-					value="Τροποποίηση Αριθμού Μητρώου Μόνιμου Εκπαιδευτικού"
+				<h:outputText value="Τροποποίηση Αριθμού Μητρώου Μόνιμου Εκπαιδευτικού"
 					style="padding-right:15px;" />
 			</f:facet>
 			<f:facet name="controls">
 				<h:panelGroup>
 					<h:graphicImage value="/img/modal/close.png" styleClass="hidelink"
 						width="18" height="18" id="hidelink4">
-						<rich:componentControl for="updateRegularRegistryIDModalPanel"
-							attachTo="hidelink4" operation="hide" event="onclick" />
+						<rich:componentControl for="updateRegularRegistryIDModalPanel" attachTo="hidelink4"
+						operation="hide" event="onclick" />
 					</h:graphicImage>
-
+					
 				</h:panelGroup>
 			</f:facet>
 			<a4j:region>
 				<h:panelGrid columns="1">
 					<h:form>
-						<a4j:outputPanel id="updateRegularRegistryIDModalPanelContent"
-							layout="inline">
-
+						<a4j:outputPanel id="updateRegularRegistryIDModalPanelContent" layout="inline">
+						
 							<ui:include src="/components/messages-component.xhtml" />
-
+						
 							<h:outputText
 								value="Με την παρακάτω φόρμα, μπορείται να τροποποίησεται τον αριθμό μητρώου του/της μόνιμου εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}." />
 							<h:panelGrid columns="3">
-
+								
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
 									<ui:define name="label">
 										<h:outputText value="Αριθμός Μητρώου" />
 									</ui:define>
-									<h:inputText
-										value="#{regularEmployeeInfoHome.instance.registryID}"
-										required="true" maxlength="7" size="7"
-										styleClass="fieldValueText" />
+									<h:inputText value="#{regularEmployeeInfoHome.instance.registryID}" required="true" maxlength="7" size="7"  styleClass="fieldValueText" />
 								</s:decorate>
-
+					
 							</h:panelGrid>
 						</a4j:outputPanel>
 
 						<h:panelGrid columns="2">
 
 							<a4j:commandButton value="Ενημέρωση Μητρώου !"
-								action="#{employeeManagement.updateEmployeeRegularRegistry()}"
-								limitToList="true"
+								action="#{employeeManagement.updateEmployeeRegularRegistry()}" limitToList="true"
 								data="#{facesContext.maximumSeverity.ordinal ge 2}"
 								oncomplete="if(data == false) Richfaces.hideModalPanel('updateRegularRegistryIDModalPanel');"
 								reRender="basicEmployeeInfoPanel, updateRegularRegistryIDModalPanelContent" />
@@ -1121,12 +995,11 @@
 				</h:panelGrid>
 			</a4j:region>
 		</rich:modalPanel>
-
+		
 		<!-- ***********************************  -->
 		<!-- UPDATE EMPLOYEE SPECIALIZATION  -->
 		<!-- ***********************************  -->
-		<rich:modalPanel id="updateSpecializationModalPanel" autosized="true"
-			width="400">
+		<rich:modalPanel id="updateSpecializationModalPanel" autosized="true" width="400">
 			<f:facet name="header">
 				<h:outputText value="Τροποποίηση Ειδικότητας Εκπαιδευτικού"
 					style="padding-right:15px;" />
@@ -1135,34 +1008,31 @@
 				<h:panelGroup>
 					<h:graphicImage value="/img/modal/close.png" styleClass="hidelink"
 						width="18" height="18" id="hidelink5">
-						<rich:componentControl for="updateSpecializationModalPanel"
-							attachTo="hidelink5" operation="hide" event="onclick" />
+						<rich:componentControl for="updateSpecializationModalPanel" attachTo="hidelink5"
+						operation="hide" event="onclick" />
 					</h:graphicImage>
-
+					
 				</h:panelGroup>
 			</f:facet>
 			<a4j:region>
 				<h:panelGrid columns="1">
 					<h:form>
-						<a4j:outputPanel id="updateSpecializationModalPanelContent"
-							layout="inline">
-
+						<a4j:outputPanel id="updateSpecializationModalPanelContent" layout="inline">
+						
 							<ui:include src="/components/messages-component.xhtml" />
-
+						
 							<h:outputText
 								value="Με την παρακάτω φόρμα, μπορείται να τροποποίησεται την ειδικότητα του/της  εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}." />
 							<h:panelGrid columns="1">
-
+								
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
 									<ui:define name="label">
 										<h:outputText value="Τρέχουσα Ειδικότητα" />
 									</ui:define>
-									<h:inputText
-										value="#{employeeHome.instance.lastSpecialization.title}"
-										required="true" readonly="true" disabled="true" maxlength="40"
-										size="40" styleClass="fieldValueText" />
+									<h:inputText value="#{employeeHome.instance.lastSpecialization.title}" required="true" 
+									readonly="true" disabled="true" maxlength="40" size="40"  styleClass="fieldValueText" />
 								</s:decorate>
-
+								
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
 									<ui:define name="label">
 										<h:outputText value="Νεα Ειδικότητα : " />
@@ -1188,17 +1058,16 @@
 										</rich:suggestionbox>
 									</h:inputText>
 								</s:decorate>
-
-
-
+								
+								
+					
 							</h:panelGrid>
 						</a4j:outputPanel>
 
 						<h:panelGrid columns="2">
 
 							<a4j:commandButton value="Ενημέρωση Ειδικότητας !"
-								action="#{employeeManagement.updateEmployeeSpecialization()}"
-								limitToList="true"
+								action="#{employeeManagement.updateEmployeeSpecialization()}" limitToList="true"
 								data="#{facesContext.maximumSeverity.ordinal ge 2}"
 								oncomplete="if(data == false) Richfaces.hideModalPanel('updateSpecializationModalPanel');"
 								reRender="basicEmployeeInfoPanel,updateSpecializationModalPanelContent" />
@@ -1211,138 +1080,8 @@
 				</h:panelGrid>
 			</a4j:region>
 		</rich:modalPanel>
-
-
-		<!-- ***********************************  -->
-		<!-- ADD EMPLOYEE SPECIAL ASSIGMENT  -->
-		<!-- ***********************************  -->
-
-
-		<rich:modalPanel id="addSpecialAssigmentModalPanel" autosized="true"
-			width="400">
-			<f:facet name="header">
-				<h:outputText value="Καταχώρηση Ειδικής Ασχολίας Εκπαιδευτικού"
-					style="padding-right:15px;" />
-			</f:facet>
-			<f:facet name="controls">
-				<h:panelGroup>
-					<h:graphicImage value="/img/modal/close.png" styleClass="hidelink"
-						width="18" height="18" id="hidelink6">
-						<rich:componentControl for="addSpecialAssigmentModalPanel"
-							attachTo="hidelink6" operation="hide" event="onclick" />
-					</h:graphicImage>
-
-				</h:panelGroup>
-			</f:facet>
-			<a4j:region>
-				<h:panelGrid columns="1">
-					<h:form>
-						<a4j:outputPanel id="addSpecialAssigmentModalPanelContent"
-							layout="inline">
-
-							<ui:include src="/components/messages-component.xhtml" />
-
-							<h:outputText style="font-style:italic; font-size:12px;"
-								value="Με την παρακάτω φόρμα, μπορείται να εισάγετε ειδική ασχολία του εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}." />
-							<h:panelGrid columns="1" width="100%">
-								<h:panelGroup>
-									<h:panelGrid columns="2">
-
-										<s:decorate template="/layout/newDoubleLineEdit.xhtml">
-											<ui:define name="label">
-												<h:outputText value="Μονάδα Ασχολίας" />
-											</ui:define>
-
-											<h:inputText id="specialAssigmentUnitTarget"
-												value="#{specialAssigmentHome.instance.unit.title}"
-												styleClass="fieldValueText" required="true">
-
-												<rich:suggestionbox for="specialAssigmentUnitTarget"
-													var="_school" height="200" width="300"
-													suggestionAction="#{schoolUnitSuggester.suggest}">
-													<f:facet name="nothingLabel">
-														<h:outputText value="Άγνωστη Μονάδα" />
-													</f:facet>
-													<h:column>
-														<h:outputText value="#{_school.title}" />
-													</h:column>
-													<a4j:support ajaxSingle="true" event="onselect">
-														<f:setPropertyActionListener value="#{_school}"
-															target="#{specialAssigmentHome.instance.unit}" />
-													</a4j:support>
-												</rich:suggestionbox>
-											</h:inputText>
-										</s:decorate>
-
-										<s:decorate template="/layout/newDoubleLineEdit.xhtml">
-											<ui:define name="label">
-												<h:outputText value="Ειδική Ασχολία" />
-											</ui:define>
-											<h:inputText id="specializationFilterVirtual" required="true"
-												value="#{specialAssigmentHome.instance.specializationGroup.title}"
-												styleClass="fieldValueText" size="17" maxlength="17">
-												<rich:suggestionbox height="100" width="250"
-													for="specializationFilterVirtual" var="a_spec"
-													suggestionAction="#{specializationGroupVirtualEditionSuggester.suggest}">
-													<f:facet name="nothingLabel">
-														<h:outputText value="Άγνωστη Ειδική Ασχολία" />
-													</f:facet>
-													<h:column>
-														<h:outputText value="#{a_spec.title}" />
-													</h:column>
-													<a4j:support ajaxSingle="true" event="onselect">
-														<f:setPropertyActionListener value="#{a_spec}"
-															target="#{specialAssigmentHome.instance.specializationGroup}" />
-													</a4j:support>
-												</rich:suggestionbox>
-											</h:inputText>
-
-										</s:decorate>
-
-										<s:decorate template="/layout/newDoubleLineEdit.xhtml">
-											<ui:define name="label">
-												<h:outputText value="Ώρες Εβδομαδιαίως : " />
-											</ui:define>
-											<h:inputText
-												value="#{specialAssigmentHome.instance.finalWorkingHours}"
-												required="true" maxlength="2" size="2"
-												styleClass="fieldValueText" />
-										</s:decorate>
-
-									</h:panelGrid>
-								</h:panelGroup>
-
-								<s:decorate template="/layout/newDoubleLineEdit.xhtml">
-									<ui:define name="label">
-										<h:outputText value="Σχόλιο" />
-									</ui:define>
-									<h:inputTextarea rows="3" cols="40"
-										value="#{specialAssigmentHome.instance.comment}"
-										required="false" styleClass="fieldValueText" />
-								</s:decorate>
-
-
-							</h:panelGrid>
-						</a4j:outputPanel>
-
-						<h:panelGrid columns="2">
-
-							<a4j:commandButton value="Καταχώρηση Ειδικής Ασχολίας !"
-								action="#{employeeManagement.addEmployeeSpecialAssigment()}"
-								limitToList="true"
-								data="#{facesContext.maximumSeverity.ordinal ge 2}"
-								oncomplete="if(data == false) Richfaces.hideModalPanel('addSpecialAssigmentModalPanel');"
-								reRender="employeeSpecialAssigmentOutputPanel" />
-							<a4j:commandButton value="Επιστροφή .."
-								reRender="employeeSpecialAssigmentOutputPanel"
-								oncomplete="#{rich:component('addSpecialAssigmentModalPanel')}.hide();" />
-						</h:panelGrid>
-					</h:form>
-				</h:panelGrid>
-			</a4j:region>
-		</rich:modalPanel>
-
-
+		
+		
 	</ui:define>
 </ui:composition>
 </html>

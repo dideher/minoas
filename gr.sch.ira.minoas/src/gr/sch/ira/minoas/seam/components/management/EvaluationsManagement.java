@@ -41,7 +41,7 @@ public class EvaluationsManagement extends BaseDatabaseAwareSeamComponent {
 	private EvaluationHome evaluationHome;
 	
 	/**
-	 * Employees current leave history
+	 * Employees evaluations history
 	 */
 	@DataModel(scope=ScopeType.PAGE, value="evaluationHistory")
 	private Collection<Evaluation> evaluationHistory = null;
@@ -62,14 +62,14 @@ public class EvaluationsManagement extends BaseDatabaseAwareSeamComponent {
 	}
 	
     /**
-     * @return the workExperienceHistory
+     * @return the evaluationHistory
      */
     public Collection<Evaluation> getEvaluationHistory() {
         return evaluationHistory;
     }
 
     /**
-     * @param workExperienceHistory the workExperienceHistory to set
+     * @param evaluationHistory the evaluationHistory to set
      */
     public void setEvaluationHistory(Collection<Evaluation> evaluationHistory) {
         this.evaluationHistory = evaluationHistory;

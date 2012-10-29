@@ -1,21 +1,21 @@
 package gr.sch.ira.minoas.model.employee;
 
+import gr.sch.ira.minoas.model.BaseIDDeleteAwareModel;
+
 import java.util.Date;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Entity;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import gr.sch.ira.minoas.model.BaseIDModel;
 
 /**
  * @author <a href="mailto:gand@sch.gr">Yorgos Andreadakis</a>
@@ -23,7 +23,7 @@ import gr.sch.ira.minoas.model.BaseIDModel;
 @Entity
 @Table(name = "PENALTY")
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
-public class Penalty extends BaseIDModel {
+public class Penalty extends BaseIDDeleteAwareModel {
 
 	/**
 	 * Comment for <code>serialVersionUID</code>
@@ -41,7 +41,7 @@ public class Penalty extends BaseIDModel {
 	 * Penalty Type (Τύπος Ποινής)
 	 */
 	@Enumerated(EnumType.STRING)
-	@Column(name = "PENALTY_TYPE", nullable = false, updatable = false)
+	@Column(name = "PENALTY_TYPE", nullable = false, updatable = true)
 	private PenaltyType type;
 	
 	/**
@@ -175,6 +175,17 @@ public class Penalty extends BaseIDModel {
 	 */
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Penalty [type=" + type + ", penaltyAwardDate="
+				+ penaltyAwardDate + ", penaltyStartDate=" + penaltyStartDate
+				+ ", penaltyEndDate=" + penaltyEndDate + ", fine=" + fine
+				+ ", comment=" + comment + "]";
 	}
 	
 }

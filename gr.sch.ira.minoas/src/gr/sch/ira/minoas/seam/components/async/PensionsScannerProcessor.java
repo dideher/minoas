@@ -1,12 +1,10 @@
 package gr.sch.ira.minoas.seam.components.async;
 
-import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 
 import java.util.Collection;
 import java.util.Date;
-
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;

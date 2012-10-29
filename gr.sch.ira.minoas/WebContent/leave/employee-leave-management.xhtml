@@ -21,14 +21,21 @@
 						value="Διαχείρηση Αδειών του/της #{employeeUtil.prettyFormat(employee)}" />
 				</f:facet>
 
-
 				<ui:include src="/components/messages-component.xhtml" />
-
-
 
 				<h:panelGrid columns="2" width="100%">
 					<h:panelGroup>
 						<h:panelGrid columns="1" width="100%">
+						
+							<rich:panel id="basicEmployeeInfoPanel">
+								<f:facet name="header">
+									<h:outputText value="Βασικά Στοιχεία" />
+								</f:facet>
+								<ui:include src="/employee/basic-info.xhtml">
+									<ui:param name="employee" value="#{employee}" />
+								</ui:include>
+							</rich:panel>
+							
 							<h:form>
 								<rich:dataTable id="employeeAllLeavesList"
 									value="#{employeeLeaves}"
@@ -210,6 +217,17 @@
 									</h:panelGrid>
 								</h:form>
 							</rich:panel>
+							
+							<rich:panel id="workExperienceInfoPanel">
+									<f:facet name="header">
+										<h:outputText value="Στοιχεία Υπηρεσίας" />
+									</f:facet>
+
+									<ui:include
+										src="/components/employee/workExperienceAndServiceInfo.xhtml">
+										<ui:param name="employee" value="#{employee}" />
+									</ui:include>
+							</rich:panel>
 
 							<!--  the panel with the action buttons -->
 							<rich:panel>
@@ -227,6 +245,8 @@
 									</h:form>
 								</s:div>
 							</rich:panel>
+							
+							
 						</h:panelGrid>
 					</h:panelGroup>
 				</h:panelGrid>
@@ -1136,6 +1156,10 @@
 									<ui:include src="/leave/print-forms/leave_38.xhtml" />
 								</h:panelGroup>
 								<h:panelGroup
+									rendered="${employeeLeaveHome.instance.employeeLeaveType.legacyCode eq 40}">
+									<ui:include src="/leave/print-forms/leave_40.xhtml" />
+								</h:panelGroup>
+								<h:panelGroup
 									rendered="${employeeLeaveHome.instance.employeeLeaveType.legacyCode eq 41}">
 									<ui:include src="/leave/print-forms/leave_41.xhtml" />
 								</h:panelGroup>
@@ -1156,12 +1180,20 @@
 									<ui:include src="/leave/print-forms/leave_47.xhtml" />
 								</h:panelGroup>
 								<h:panelGroup
+									rendered="${employeeLeaveHome.instance.employeeLeaveType.legacyCode eq 48}">
+									<ui:include src="/leave/print-forms/leave_48.xhtml" />
+								</h:panelGroup>
+								<h:panelGroup
 									rendered="${employeeLeaveHome.instance.employeeLeaveType.legacyCode eq 53}">
 									<ui:include src="/leave/print-forms/leave_53.xhtml" />
 								</h:panelGroup>
 								<h:panelGroup
 									rendered="${employeeLeaveHome.instance.employeeLeaveType.legacyCode eq 55}">
 									<ui:include src="/leave/print-forms/leave_55.xhtml" />
+								</h:panelGroup>
+								<h:panelGroup
+									rendered="${employeeLeaveHome.instance.employeeLeaveType.legacyCode eq 52}">
+									<ui:include src="/leave/print-forms/leave_52.xhtml" />
 								</h:panelGroup>
 							</h:panelGrid>
 						</a4j:outputPanel>

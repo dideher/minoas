@@ -166,6 +166,7 @@ public class TeachingVoidAnalysisReport extends BaseReport {
                 double totalMissingRegularEmployeesDouble = (double)0;
                 double totalMissingRegularProcessedEmployeesDouble = (double)0;
                 /* fetch the actual effective SpecializationGroups */
+                @SuppressWarnings("unchecked")
                 List<SpecializationGroup> effectiveGroup = (List<SpecializationGroup>)reportItem.get("groups");
                 
                 /* for the report schools fetch the required hours */
@@ -174,7 +175,7 @@ public class TeachingVoidAnalysisReport extends BaseReport {
                 "AND t.school IN (:reportSchools) " +
                 "AND t.specialization IN (:reportSpecializationGroups) " +
                 "GROUP BY (t.school.id)";
-                
+                @SuppressWarnings("unchecked")
                 Collection<Object[]> declaredRequiredHours  = (Collection<Object[]>)getEntityManager().createQuery(queryRequiredHours).setParameter("schoolYear", activeSchoolYear).setParameter("reportSpecializationGroups", effectiveGroup).setParameter("reportSchools", schools).getResultList();
                 Map<String, Long> declaredRequiredHoursMap = new HashMap<String, Long>(declaredRequiredHours.size());
                 for(Object[] oo : declaredRequiredHours) {
@@ -257,7 +258,7 @@ public class TeachingVoidAnalysisReport extends BaseReport {
                 "AND t.unit IN (:reportSchools) " +
                 "AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g IN (:reportSpecializationGroups) AND g.schoolYear=:schoolYear AND t.specialization MEMBER OF g.specializations) " +
                 "GROUP BY (t.unit.id) ORDER BY (t.unit.id)";
-                
+                @SuppressWarnings("unchecked")
                 Collection<Object[]> o2  = (Collection<Object[]>)getEntityManager().createQuery(query2).setParameter("schoolYear", activeSchoolYear).setParameter("reportSpecializationGroups", effectiveGroup).setParameter("reportSchools", schools).getResultList();
                 
                 
@@ -322,9 +323,7 @@ public class TeachingVoidAnalysisReport extends BaseReport {
                      * before adding the new one.
                      */
                     if(structureCacheMap.containsKey(oo[0])) {
-                        int size = data.size();
                         data.remove(structureCacheMap.get(oo[0]));
-                        size = data.size();
                         structureCacheMap.remove(oo[0]);
                     }
                     data.add(d);

@@ -558,7 +558,7 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
     
     protected boolean isVATValid(String vat) {
         if(vat!=null)
-            return Pattern.matches("\\d{10}", vat);
+            return Pattern.matches("\\d{9}", vat);
         else return false;
     }
     

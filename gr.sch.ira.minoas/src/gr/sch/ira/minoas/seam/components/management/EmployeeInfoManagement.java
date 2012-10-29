@@ -1,27 +1,22 @@
 package gr.sch.ira.minoas.seam.components.management;
 
-import java.util.Collection;
-import java.util.Date;
-
+import gr.sch.ira.minoas.core.CoreUtils;
 import gr.sch.ira.minoas.model.employee.Employee;
+import gr.sch.ira.minoas.model.employee.EmployeeInfo;
 import gr.sch.ira.minoas.model.employee.RankInfo;
-import gr.sch.ira.minoas.model.employement.EmployeeLeave;
-import gr.sch.ira.minoas.model.employement.Employment;
-import gr.sch.ira.minoas.model.employement.EmploymentType;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.CoreSearching;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
 import gr.sch.ira.minoas.seam.components.home.EmployeeInfoHome;
-import gr.sch.ira.minoas.seam.components.home.EmployeeLeaveHome;
+
+import java.util.Date;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.RaiseEvent;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
-import org.jboss.seam.annotations.datamodel.DataModel;
 import org.jboss.seam.international.StatusMessage.Severity;
 
 /**
@@ -45,12 +40,48 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 	
 	@In(required = true)
 	EmployeeInfoHome employeeInfoHome;
+	
+	private Date totalWorkServiceCalculationDate;
+	private int totalCalculatedServiceInDays;
+	
+
+//	/**
+//	 * Employee's rank transitions history
+//	 */
+//	@DataModel(scope=ScopeType.PAGE, value="rankInfoHistory")
+//	private Collection<RankInfo> rankInfoHistory = null;
+
+	public void setTotalWorkServiceCalculationDate(
+			Date totalWorkServiceCalculationDate) {
+		this.totalWorkServiceCalculationDate = totalWorkServiceCalculationDate;
+	}
+
+	public Date getTotalWorkServiceCalculationDate() {
+		return totalWorkServiceCalculationDate;
+	}
+	
+	/**
+	 * @return the totalCalculatedServiceInDays
+	 */
+	public int getTotalCalculatedServiceInDays() {
+		return totalCalculatedServiceInDays;
+	}
 
 	/**
-	 * Employee's rank transitions history
+	 * @param totalCalculatedServiceInDays the totalCalculatedServiceInDays to set
 	 */
-	@DataModel(scope=ScopeType.PAGE, value="rankInfoHistory")
-	private Collection<RankInfo> rankInfoHistory = null;
+	public void setTotalCalculatedServiceInDays(int totalCalculatedServiceInDays) {
+		this.totalCalculatedServiceInDays = totalCalculatedServiceInDays;
+	}
+	
+	
+	/**
+	 * @return the totalWorkService as a Year_Month_Day string
+	 */
+	public String getTotalCalculatedServiceInDaysYear_Month_Day() {
+		return CoreUtils.getNoOfDaysInYear_Month_DayFormat(totalCalculatedServiceInDays);
+	}
+	
 
 	/**
 	 * @return the employeeHome
@@ -98,33 +129,45 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 
 	
 	
-	/**
-	 * @return the rankInfoHistory
-	 */
-	public Collection<RankInfo> getRankInfoHistory() {
-		return rankInfoHistory;
-	}
-
-	/**
-	 * @param rankInfoHistory the rankInfoHistory to set
-	 */
-	public void setRankInfoHistory(Collection<RankInfo> rankInfoHistory) {
-		this.rankInfoHistory = rankInfoHistory;
-	}
+//	/**
+//	 * @return the rankInfoHistory
+//	 */
+//	public Collection<RankInfo> getRankInfoHistory() {
+//		return rankInfoHistory;
+//	}
+//
+//	/**
+//	 * @param rankInfoHistory the rankInfoHistory to set
+//	 */
+//	public void setRankInfoHistory(Collection<RankInfo> rankInfoHistory) {
+//		this.rankInfoHistory = rankInfoHistory;
+//	}
 
 	public String modifyEmployeeInfo() {
         if(employeeInfoHome != null && employeeInfoHome.isManaged()) {
             info("trying to modify employee info #0", employeeInfoHome);
             /* check if the work experience dates are allowed. */
-//            EmployeeInfo employeeInfo = employeeInfoHome.getInstance();
-//            if(workExp.getToDate().compareTo(workExp.getFromDate()) <= 0 ) {
-//            	facesMessages.add(Severity.ERROR, "Οι ημ/νιες έναρξης και λήξης της προϋπηρεσίας, έτσι όπως τις τροποποιήσατε, είναι μή αποδεκτές.");
-//                return ACTION_OUTCOME_FAILURE;
-//            } else {
+            
+            EmployeeInfo employeeInfo = employeeInfoHome.getInstance();
+            
+            if(!employeeInfo.getHasAMasterDegree()) employeeInfo.setMscDate(null);
+            if(!employeeInfo.getHasAPhD()) employeeInfo.setPhdDate(null);
+            if(!employeeInfo.getIsANatSchPubAdminGraduate()) employeeInfo.setNatSchPubAdminDate(null);
+            
+            if(employeeInfo.getHasAMasterDegree() && employeeInfo.getMscDate() == null) { 
+            	facesMessages.add(Severity.ERROR, "Δεν ορίσατε την ημερομηνία Μεταπτυχιακού.");
+                return ACTION_OUTCOME_FAILURE;
+            } else if(employeeInfo.getHasAPhD() && employeeInfo.getPhdDate() == null) { 
+            	facesMessages.add(Severity.ERROR, "Δεν ορίσατε την ημερομηνία Διδακτορικού.");
+                return ACTION_OUTCOME_FAILURE;
+            } else if(employeeInfo.getIsANatSchPubAdminGraduate() && employeeInfo.getNatSchPubAdminDate() == null) { 
+            	facesMessages.add(Severity.ERROR, "Δεν ορίσατε την ημερομηνία Ανώτ. Σχολ. Δημ. Διοίκ.");
+                return ACTION_OUTCOME_FAILURE;
+            } else {
                 employeeInfoHome.update();
                 info("employee's #0 employee info #1 has been updated!", employeeInfoHome.getInstance().getEmployee(), employeeInfoHome.getInstance());
                 return ACTION_OUTCOME_SUCCESS;
-//            }
+            }
         } else {
             facesMessages.add(Severity.ERROR, "employeeInfo home #0 is not managed, thus #1 can't be modified.", employeeInfoHome, employeeInfoHome.getInstance());
             return ACTION_OUTCOME_FAILURE;
@@ -148,7 +191,7 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 	@Transactional
     public String insertRankInfo() {
         if (employeeHome.isManaged()) {
-        	RankInfo rinfo = employeeInfoHome.getInstance().getRankInfo();
+        	RankInfo rinfo = employeeInfoHome.getInstance().getCurrentRankInfo();
         	
             //rinfo.setEmployeeInfo(employeeInfoHome.getInstance().getEmployee().getEmployeeInfo());
             rinfo.setInsertedBy(getPrincipal());
@@ -156,14 +199,18 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
         	
         	
         	getEntityManager().persist(rinfo);
-        	employeeInfoHome.getInstance().setRankInfo(rinfo);
+        	employeeInfoHome.getInstance().setCurrentRankInfo(rinfo);
         	
             Employee employee = getEntityManager().merge(employeeHome.getInstance());
 
                 
             //employeeInfoHome.persist();
             getEntityManager().flush();
-            setRankInfoHistory(getCoreSearching().getRankInfoHistory(employee));
+            
+            employeeInfoHome.getInstance().getRankInfos().add(rinfo);
+           
+//    	    setRankInfoHistory(coreSearching.getRankInfoHistory(employee));		// coreSearching.getRankInfoHistory() is now deprecated.
+            //setRankInfoHistory(employee.getEmployeeInfo().getRankInfos());
             info("Rank Info #0 for employee #1 has been created", rinfo, employee);
             return ACTION_OUTCOME_SUCCESS;
 
@@ -178,7 +225,8 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 	public void constructRankInfoHistory() {
 	    Employee employee = getEmployeeHome().getInstance();
 	    info("constructing evaluation history for employee #0", employee);
-	    setRankInfoHistory(coreSearching.getRankInfoHistory(employee));
+//	    setRankInfoHistory(coreSearching.getRankInfoHistory(employee));		// coreSearching.getRankInfoHistory() is now deprecated.	
+	    //setRankInfoHistory(employee.getEmployeeInfo().getRankInfos());
 	}
 	
 	
@@ -190,9 +238,53 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
         rinfo.resetRankInfo();
         rinfo.setEmployeeInfo(employeeInfoHome.getInstance());
         
-        employeeInfoHome.getInstance().setRankInfo(rinfo);
+        employeeInfoHome.getInstance().setCurrentRankInfo(rinfo);
 
     }
+    
+    public void recalculateTotalWorkService() {
+    	EmployeeInfo employeeInfo = employeeHome.getInstance().getEmployeeInfo();
+    	int totalWorkService = 0;
+    	if(totalWorkServiceCalculationDate != null && employeeInfo.getGogAppointmentDate()!=null)
+    		totalWorkService = CoreUtils.datesDifferenceIn360DaysYear(employeeInfo.getEntryIntoServiceDate(), totalWorkServiceCalculationDate);
+    	if(totalWorkService != 0)
+    		setTotalCalculatedServiceInDays(totalWorkService);
+    }
+    
+    public Integer getEducationalService() {
+    	EmployeeInfo employeeInfo = employeeHome.getInstance().getEmployeeInfo();
+    	return employeeInfo.getSumOfEducationalExperience() + employeeInfo.getTotalWorkService();
+    }
+    
+    public String getEducationalServiceYear_Month_Day() {
+    	return CoreUtils.getNoOfDaysInYear_Month_DayFormat(getEducationalService());
+    }
+    
+    public Integer getTeachingService() {
+    	EmployeeInfo employeeInfo = employeeHome.getInstance().getEmployeeInfo();
+    	return employeeInfo.getSumOfTeachingExperience() + employeeInfo.getTotalWorkService();
+    }
+    
+    public String getTeachingServiceYear_Month_Day() {
+    	return CoreUtils.getNoOfDaysInYear_Month_DayFormat(getTeachingService());
+    }
 
+    public Integer getSumOfExperience() {
+    	EmployeeInfo employeeInfo = employeeHome.getInstance().getEmployeeInfo();
+    	return employeeInfo.getSumOfExperience();
+    }
+    
+    public String getSumOfExperienceYear_Month_Day() {
+    	return CoreUtils.getNoOfDaysInYear_Month_DayFormat(getSumOfExperience());
+    }
+    
+    public Integer getTotalServiceIncludingWorkExperience() {
+    	EmployeeInfo employeeInfo = employeeHome.getInstance().getEmployeeInfo();
+    	return employeeInfo.getTotalWorkService() + employeeInfo.getSumOfExperience();
+    }
+    
+    public String getTotalServiceIncludingWorkExperienceYear_Month_Day() {
+    	return CoreUtils.getNoOfDaysInYear_Month_DayFormat(getTotalServiceIncludingWorkExperience());
+    }
     
 }

@@ -13,6 +13,7 @@ import gr.sch.ira.minoas.model.employement.WorkExperience;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.Basic;
@@ -27,6 +28,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -125,6 +128,15 @@ public class Employee extends Person {
 	
 	@OneToOne(fetch=FetchType.LAZY, cascade={CascadeType.ALL}, mappedBy="employee")
 	private EmployeeExclusion exclusion;
+	
+	/**
+	 * The date at which the system has last time updated the employee's service time (work experience, 
+	 * mandatory work hours, etc)
+	 */
+	@Basic(fetch=FetchType.LAZY)
+	@Column(name="SERVICE_LAST_UPDATED", nullable=true)
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date serviceLastUpdated = null;
 
 	/**
 	 * 
@@ -490,6 +502,20 @@ public class Employee extends Person {
     
     public boolean isHourlyPaidEmployee() {
         return type==EmployeeType.HOURLYPAID;
+    }
+
+    /**
+     * @return the serviceLastUpdated
+     */
+    public Date getServiceLastUpdated() {
+        return serviceLastUpdated;
+    }
+
+    /**
+     * @param serviceLastUpdated the serviceLastUpdated to set
+     */
+    public void setServiceLastUpdated(Date serviceLastUpdated) {
+        this.serviceLastUpdated = serviceLastUpdated;
     }
 	
 

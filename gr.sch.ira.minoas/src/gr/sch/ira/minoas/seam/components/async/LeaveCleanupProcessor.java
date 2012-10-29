@@ -61,7 +61,7 @@ public class LeaveCleanupProcessor extends BaseDatabaseAwareSeamComponent {
 	    info("found totally #0 leaves that should be auto-canceled", activeLeaves.size());
 	    for(EmployeeLeave invalidLeave : activeLeaves) {
 	        info("auto canceling leave #0", invalidLeave);
-	        invalidLeave.setActive(false);
+	        invalidLeave.setActive(Boolean.FALSE);
 	        invalidLeave.setAutoCanceled(Boolean.TRUE);
 	        Employee em = invalidLeave.getEmployee();
 	        em.setLeave(null);

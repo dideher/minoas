@@ -65,6 +65,7 @@ public class OutstandingImprovementsReport extends BaseReport {
 		if (specializationGroup != null) {
 			q.setParameter("specializationGroup", specializationGroup);
 		}
+		@SuppressWarnings("unchecked")
 		Collection<OutstandingImprovement> improvements = q.getResultList();
 		info("found totally #0 outstanding improvement(s) matching criteria", improvements.size());
 		reportData = new ArrayList<OutstandingImprovementItem>(improvements.size());

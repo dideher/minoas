@@ -73,13 +73,25 @@
 										</rich:column>
 										<rich:column>
 											<f:facet name="header">
-												<h:outputText value="Μονάδα Προϋπηρεσίας">
+												<h:outputText value="Ημερολ/κή Διαφορά">
 													<rich:toolTip
-														value="Εμφανίζεται η μονάδα στην οποία υπηρετήθηκε η προϋπηρεσία." />
+														value="Εμφανίζεται η διαφορά (σε ημέρες) από την έναρξη έως την λήξη της προϋπηρεσίας." />
 												</h:outputText>
 											</f:facet>
-											<h:outputText value="#{_workExperience.experienceUnit.title}" />
+											<h:outputText value="#{_workExperience.calendarExperienceDays}" />
 										</rich:column>
+										
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Ημέρες Προϋπηρεσίας">
+													<rich:toolTip
+														value="Οι ημέρες αναγνωρισμένης προϋπηρεσίας." />
+													</h:outputText>
+											</f:facet>
+											<h:outputText value="#{_workExperience.actualDays}" />
+										</rich:column>
+										
+										
 										<rich:column>
 											<f:facet name="header">
 												<h:outputText value="Σχόλιο" />
@@ -140,10 +152,17 @@
 								<s:button action="endButton" value="Τέλος Ενέργειας" />
 								<a4j:commandButton id="createButton"
 									disabled="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_WORKEXPERIENCE'))}"
-									action="#{workExperienceHome.clearInstance()}"
-									reRender="createWorkExperienceModalPanel" immediate="true"
+									action="#{workExperiencesManagement.prepareNewWorkExperience()}"
+									reRender="createWorkExperienceModalPanelContent" immediate="true"
 									oncomplete="#{rich:component('createWorkExperienceModalPanel')}.show()"
-									value="Καταχώρηση Νέας Προϋπηρεσίας">
+									value="Εισαγωγή Νέας Προϋπηρεσίας">
+								</a4j:commandButton>
+								
+								
+								<a4j:commandButton id="computeWorkExp"
+									disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MANUAL_EXPERIENCE_CALCULATION'))}"
+									action="#{workExperiencesManagement.computeEmployeeWorkExperience()}"
+									immediate="true" value="Επικαιροποιήση Υπηρεσίας">
 								</a4j:commandButton>
 							</s:div>
 						</rich:panel>
@@ -155,233 +174,297 @@
 		</a4j:region>
 
 
+		<!-- *********************************************** -->
+		<!-- ** update modal panel -->
+		<!-- *********************************************** -->
 		<a4j:region>
-		<rich:modalPanel id="updateWorkExperienceModalPanel" autosized="true"
-			width="450">
-			<f:facet name="header">
-				<h:outputText value="Τροποποίηση Προϋπηρεσίας"
-					style="padding-right:15px;" />
-			</f:facet>
-			<f:facet name="controls">
-				<h:panelGroup>
-					<h:graphicImage value="/img/modal/close.png" styleClass="hidelink"
-						width="18" height="18" id="hidelink_historyworkexperience" />
-					<rich:componentControl for="updateWorkExperienceModalPanel"
-						attachTo="hidelink_historyworkexperience" operation="hide"
-						event="onclick" />
-				</h:panelGroup>
-			</f:facet>
-			
-			<a4j:region>
-				<h:panelGrid columns="1">
-					<h:form>
-						<a4j:outputPanel id="updateWorkExperienceModalPanelContent"
-							layout="inline">
-							<h:outputText
-								value="Με την παρακάτω φόρμα, μπορείτε να τροποποίησετε την προϋπηρεσία του/της εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}. Μπορείτε να αλλάξετε τις ημ/νιες αλλά δεν μπορείτε να αλλάξετε τον τύπο της προϋπηρεσίας." />
-							<rich:messages style="color:red;"></rich:messages>
-							<h:panelGrid columns="4">
+			<rich:modalPanel id="updateWorkExperienceModalPanel" autosized="true" width="450">
+				<f:facet name="header">
+					<h:outputText 
+						value="Τροποποίηση Προϋπηρεσίας Εκπαιδευτικού #{employeeUtil.prettyFormat(employeeHome.instance)}"
+						style="padding-right:15px;" />
+				</f:facet>
+				<f:facet name="controls">
+					<h:panelGroup>
+						<h:graphicImage value="/img/modal/close.png" styleClass="hidelink" width="18" height="18" id="hidelink_historyworkexperience" />
+						<rich:componentControl for="updateWorkExperienceModalPanel" attachTo="hidelink_historyworkexperience" operation="hide" event="onclick" />
+					</h:panelGroup>
+				</f:facet>
+				
+				<a4j:region>
+					<h:panelGrid columns="1">
+						<h:form>
+							<a4j:outputPanel id="updateWorkExperienceModalPanelContent"
+								layout="inline">
+								<h:outputText value="Με την παρακάτω φόρμα, μπορείτε να τροποποίησετε την προϋπηρεσία του/της εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}." />
+								<rich:messages style="color:red;"></rich:messages>
 
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
-									<ui:define name="label">
-										<h:outputText value="Τύπος Προϋπηρεσίας" />
-									</ui:define>
-									<!-- 
-									<h:selectOneMenu id="WorkExperienceType" readonly="true"
-										value="#{workExperienceHome.instance.type}" required="true">
-										<s:selectItems hideNoSelectionLabel="true" var="_workExperience"
-											value="#{workExperienceTypes}" label="#{messages[_workExperience.title]}" />
-										<s:convertEnum />  
-										<a4j:support event="onblur" ajaxSingle="true" bypassUpdates="true" />
-									</h:selectOneMenu>
--->
-									<h:inputText id="workExperienceFilter"
-										value="#{workExperienceHome.instance.type.title}" size="30">
-
-										<rich:suggestionbox height="200" width="350"
-											for="workExperienceFilter" var="workExpVar"
-											suggestionAction="#{workExperienceTypesSuggester.suggest}">
-											<f:facet name="nothingLabel">
-												<h:outputText value="Άγνωστη Προϋπηρεσία" />
-											</f:facet>
-											<rich:column>
-												<h:outputText value="#{workExpVar.id}" />
-											</rich:column>
-											<h:column>
-												<h:outputText value="#{workExpVar.id}" />
-											</h:column>
-											<h:column>
-												<h:outputText value="#{workExpVar.title}" />
-											</h:column>
-											<h:column>
-												<h:outputText value="#{workExpVar.comment}" />
-											</h:column>
-
-											<a4j:support ajaxSingle="true" event="onselect">
-												<f:setPropertyActionListener value="#{workExpVar}"
-													target="#{workExperienceHome.instance.type}" />
-											</a4j:support>
-
-										</rich:suggestionbox>
-									</h:inputText>
-								</s:decorate>
-
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
-									<ui:define name="label">
-										<h:outputText value="Έναρξη : " />
-									</ui:define>
-									<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
-										style="width:50px" enableManualInput="true"
-										styleClass="fieldValueText" required="true"
-										value="#{workExperienceHome.instance.fromDate}">
-									</rich:calendar>
-								</s:decorate>
-
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
-									<ui:define name="label">
-										<h:outputText value="Λήξη : " />
-									</ui:define>
-									<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
-										style="width:50px" enableManualInput="true"
-										styleClass="fieldValueText" required="true"
-										value="#{workExperienceHome.instance.toDate}">
-									</rich:calendar>
-								</s:decorate>
-
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
-									<ui:define name="label">
-										<h:outputText value="Σχόλιο" />
-									</ui:define>
-									<h:inputTextarea value="#{workExperienceHome.instance.comment}" />
-								</s:decorate>
-
-							</h:panelGrid>
-						</a4j:outputPanel>
-
-						<h:panelGrid columns="2">
-
-							<a4j:commandButton value="Τροποποίηση Προϋπηρεσίας !"
-								action="#{workExperiencesManagement.modifyWorkExperience()}"
-								data="#{facesContext.maximumSeverity.ordinal ge 2}"
-								oncomplete="if(data == false) Richfaces.hideModalPanel('updateWorkExperienceModalPanel');"
-								reRender="workExperiencesOutputPanel,updateWorkExperienceModalPanelContent" />
-							<a4j:commandButton value="Επιστροφή .."
-								action="#{workExperienceHome.revert()}"
-								reRender="workExperiencesOutputPanel"
-								oncomplete="#{rich:component('updateWorkExperienceModalPanel')}.hide();" />
-						</h:panelGrid>
-					</h:form>
-				</h:panelGrid>
-			</a4j:region>
-		</rich:modalPanel>
-		</a4j:region>
-		
-		<a4j:region>
-		<rich:modalPanel id="deleteWorkExperienceModalPanel" autosized="true"
-			width="450">
-			<f:facet name="header">
-				<h:outputText value="Διαγραφή Προϋπηρεσίας"
-					style="padding-right:15px;" />
-			</f:facet>
-			<f:facet name="controls">
-				<h:panelGroup>
-					<h:graphicImage value="/img/modal/close.png" styleClass="hidelink"
-						width="18" height="18" id="hidelink_deleteworkexperience" />
-					<rich:componentControl for="deleteWorkExperienceModalPanel"
-						attachTo="hidelink_deleteworkexperience" operation="hide"
-						event="onclick" />
-				</h:panelGroup>
-			</f:facet>
-			
-				<h:panelGrid columns="1">
-					<h:form>
-						<a4j:outputPanel id="deleteWorkExperienceModalPanelContent"
-							layout="inline">
-							<h:outputText
-								value="Με την παρακάτω φόρμα, μπορείτε να διαγράψετε την προϋπηρεσία του/της εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}. Εξήγηστε τον λόγο της διαγραφής στο σχετικό πλαίσιο κειμένου." />
-							<rich:messages style="color:red;"></rich:messages>
-							<h:panelGrid columns="4">
-
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
-									<ui:define name="label">
-										<h:outputText value="Λόγος / Επεξήγηση Διαγραφής Προϋπηρεσίας" />
-									</ui:define>
-									<h:inputTextarea value="#{workExperienceHome.instance.deletedComment}" required="true" rows="2" cols="40"></h:inputTextarea>
+								<h:panelGrid columns="3">
+	
+									<s:decorate template="/layout/doubleLineEdit.xhtml">
+										<ui:define name="label">
+											<h:outputText value="Τύπος Προϋπηρεσίας" />
+										</ui:define>
+	
+										<h:inputText id="workExperienceId"
+											value="#{workExperienceHome.tempValueHolder1}"
+											styleClass="fieldValueText" size="15">
+	
+											<rich:suggestionbox height="200" width="350" id="workExperienceTypeSuggestionbox"
+												for="workExperienceId" var="workExpVar" ajaxSingle="true"
+												fetchValue="#{workExpVar.id}" 
+												suggestionAction="#{workExperienceTypesExtendedSuggester.suggest}">
+												
+												<f:facet name="nothingLabel">
+													<h:outputText value="Άγνωστος Τύπος Προϋπηρεσίας" />
+												</f:facet>
+												<rich:column>
+													<h:outputText value="#{workExpVar.id}" />
+												</rich:column>
+	
+												<rich:column>
+													<h:outputText value="#{workExpVar.title}" />
+												</rich:column>
+												<rich:column>
+													<h:outputText value="#{workExpVar.comment}" />
+												</rich:column>
+	
+												<a4j:support ajaxSingle="true" event="onselect" action="#{workExperiencesManagement.changedEmployeeType()}"
+													reRender="updateWorkExperienceModalPanelContent" >
+													<f:setPropertyActionListener value="#{workExpVar}"
+														target="#{workExperienceHome.instance.type}" />
+												</a4j:support>
+											</rich:suggestionbox>
+										</h:inputText>
 									</s:decorate>
+	
+									<s:decorate template="/layout/doubleLineEdit.xhtml">
+										<ui:define name="label">
+											<h:outputText value="Τίτλος Προϋπηρεσίας" />
+										</ui:define>
+										<h:inputText id="workExperienceTitle" 
+											value="#{workExperienceHome.instance.type.title}"
+											readonly="true" size="15" />
+									</s:decorate>
+									
+									
+									<s:decorate template="/layout/doubleLineEdit.xhtml">
+										<ui:define name="label">
+											<h:outputText value="" />
+										</ui:define>
+									</s:decorate>
+									
+									<s:decorate template="/layout/doubleLineEdit.xhtml">
+										<ui:define name="label">
+											<h:outputText value="Διδακτική Προϋπηρεσία" />
+										</ui:define>
+										<h:selectBooleanCheckbox value="#{workExperienceHome.instance.teaching}" />
+									</s:decorate>
+									
+									<s:decorate template="/layout/doubleLineEdit.xhtml">
+										<ui:define name="label">
+											<h:outputText value="Εκπ/κή Προϋπηρεσία" />
+										</ui:define>
+										<h:selectBooleanCheckbox value="#{workExperienceHome.instance.educational}" />
+									</s:decorate>
+									
+									<s:decorate template="/layout/doubleLineEdit.xhtml">
+										<ui:define name="label">
+											<h:outputText value="" />
+										</ui:define>
+									</s:decorate>
+									
+									
+									<s:decorate template="/layout/doubleLineEdit.xhtml">
+										<ui:define name="label">
+											<h:outputText value="Έναρξη : " />
+										</ui:define>
+										<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
+											style="width:50px" enableManualInput="true"
+											styleClass="fieldValueText" required="true"
+											value="#{workExperienceHome.instance.fromDate}">
+											<a4j:support event="onchanged" ajaxSingle="true"
+												eventsQueue="lalal"
+												action="#{workExperiencesManagement.silentlyComputeDateDifference()}"
+												reRender="updateWorkExperienceModalPanelContent" />
+										</rich:calendar>
+									</s:decorate>
+	
+									<s:decorate template="/layout/doubleLineEdit.xhtml">
+										<ui:define name="label">
+											<h:outputText value="Λήξη : " />
+										</ui:define>
+										<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
+											style="width:50px" enableManualInput="true"
+											styleClass="fieldValueText" required="true"
+											value="#{workExperienceHome.instance.toDate}">
+											<a4j:support event="onchanged" ajaxSingle="true"
+												eventsQueue="lalal"
+												action="#{workExperiencesManagement.silentlyComputeDateDifference()}"
+												reRender="updateWorkExperienceModalPanelContent" />
+										</rich:calendar>
+									</s:decorate>
+									
+									<s:decorate template="/layout/doubleLineEdit.xhtml">
+										<ui:define name="label">
+											<h:outputText value="Ημερολ/κή Διαφορά: " />
+										</ui:define>
+										<h:inputText readonly="true" value="#{workExperienceHome.instance.calendarExperienceDays}" ></h:inputText>
+									</s:decorate>
+	
+	
+									<s:decorate id="numberOfWorkExperienceHoursPanel" template="/layout/doubleLineEdit.xhtml" rendered="#{workExperienceHome.instance.type.id == '3' or workExperienceHome.instance.type.id == '5'}">
+										<ui:define name="label">
+											<h:outputText value="Ώρες Προϋπηρεσίας: " />
+										</ui:define>
+										<h:inputText value="#{workExperienceHome.instance.numberOfWorkExperienceHours}" ></h:inputText>
+									</s:decorate>
+									<s:decorate template="/layout/doubleLineEdit.xhtml" rendered="#{workExperienceHome.instance.type.id != '3' and workExperienceHome.instance.type.id != '5'}">
+										<ui:define name="label">
+											<h:outputText value="" />
+										</ui:define>
+									</s:decorate>
+									
+									<s:decorate id="mandatoryHoursPanel" template="/layout/doubleLineEdit.xhtml" rendered="#{workExperienceHome.instance.type.id == '3' or workExperienceHome.instance.type.id == '4' or workExperienceHome.instance.type.id == '5' or workExperienceHome.instance.type.id == '6' or workExperienceHome.instance.type.id == '8' or workExperienceHome.instance.type.id == '9'}">
+										<ui:define name="label">
+											<h:outputText value="Υποχρ/κό Ωράριο: " />
+										</ui:define>
+										<h:inputText value="#{workExperienceHome.instance.mandatoryHours}" ></h:inputText>
+									</s:decorate>
+									<s:decorate template="/layout/doubleLineEdit.xhtml" rendered="#{workExperienceHome.instance.type.id != '3' and workExperienceHome.instance.type.id != '4' and workExperienceHome.instance.type.id != '5' and workExperienceHome.instance.type.id != '6' and workExperienceHome.instance.type.id != '8' and workExperienceHome.instance.type.id != '9'}">
+										<ui:define name="label">
+											<h:outputText value="" />
+										</ui:define>
+									</s:decorate>
+									
+									<s:decorate id="finalWorkingHoursPanel" template="/layout/doubleLineEdit.xhtml" rendered="#{workExperienceHome.instance.type.id == '4' or workExperienceHome.instance.type.id == '5' or workExperienceHome.instance.type.id == '6' or workExperienceHome.instance.type.id == '8' or workExperienceHome.instance.type.id == '9'}">
+										<ui:define name="label">
+											<h:outputText value="Ανατεθέν Ωράριο: " />
+										</ui:define>
+										<h:inputText value="#{workExperienceHome.instance.finalWorkingHours}" ></h:inputText>
+									</s:decorate>
+									<s:decorate template="/layout/doubleLineEdit.xhtml" rendered="#{workExperienceHome.instance.type.id != '4' and workExperienceHome.instance.type.id != '5' and workExperienceHome.instance.type.id != '6' and workExperienceHome.instance.type.id != '8' and workExperienceHome.instance.type.id != '9'}">
+										<ui:define name="label">
+											<h:outputText value="" />
+										</ui:define>
+									</s:decorate>
+	
+									
+									<s:decorate template="/layout/doubleLineEdit.xhtml" >
+										<ui:define name="label">
+											<h:outputText value="Ημέρες Πραγμ. Προϋπηρεσίας: " />
+										</ui:define>
+										<h:inputText value="#{workExperienceHome.instance.actualDays}" ></h:inputText>
+									</s:decorate>
+									<s:decorate template="/layout/doubleLineEdit.xhtml" >
+										<ui:define name="label">
+											<h:outputText value="" />
+										</ui:define>
+										<a4j:commandButton value="Επανυπολογισμός"
+										action="#{workExperiencesManagement.reCalculateActualDays()}"
+										limitToList="true"
+										reRender="updateWorkExperienceModalPanelContent" 
+										rendered="#{workExperienceHome.instance.type.id == '3' or workExperienceHome.instance.type.id == '4' or workExperienceHome.instance.type.id == '5' or workExperienceHome.instance.type.id == '6' or workExperienceHome.instance.type.id == '8' or workExperienceHome.instance.type.id == '9'}"
+										/>
+									</s:decorate>
+									
+									<s:decorate template="/layout/doubleLineEdit.xhtml">
+										<ui:define name="label">
+											<h:outputText value="" />
+										</ui:define>
+									</s:decorate>
+	
+								</h:panelGrid>
+
+							</a4j:outputPanel>
+							
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Σχόλιο" />
+								</ui:define>
+								<h:inputTextarea value="#{workExperienceHome.instance.comment}" cols="64" />
+							</s:decorate>
+	
+							<h:panelGrid columns="2">
+								<a4j:commandButton value="Τροποποίηση Προϋπηρεσίας !"
+									action="#{workExperiencesManagement.modifyWorkExperience()}"
+									data="#{facesContext.maximumSeverity.ordinal ge 2}"
+									oncomplete="if(data == false) Richfaces.hideModalPanel('updateWorkExperienceModalPanel');"
+									reRender="workExperiencesOutputPanel,updateWorkExperienceModalPanelContent" />
+								<a4j:commandButton value="Επιστροφή .."
+									action="#{workExperienceHome.revert()}"
+									reRender="workExperiencesOutputPanel"
+									oncomplete="#{rich:component('updateWorkExperienceModalPanel')}.hide();" />
 							</h:panelGrid>
-						</a4j:outputPanel>
-
-						<h:panelGrid columns="2">
-
-							<a4j:commandButton value="Διαγραφή Προϋπηρεσίας !"
-								action="#{workExperiencesManagement.deleteWorkExperience()}"
-								data="#{facesContext.maximumSeverity.ordinal ge 2}"
-								oncomplete="if(data == false) Richfaces.hideModalPanel('deleteWorkExperienceModalPanel');"
-								reRender="workExperiencesOutputPanel" />
-							<a4j:commandButton value="Επιστροφή .."
-								action="#{workExperienceHome.revert()}"
-								reRender="workExperiencesOutputPanel"
-								oncomplete="#{rich:component('deleteWorkExperienceModalPanel')}.hide();" />
-						</h:panelGrid>
-					</h:form>
-				</h:panelGrid>
-			
-		</rich:modalPanel>
+						</h:form>
+					</h:panelGrid>
+				</a4j:region>
+			</rich:modalPanel>
 		</a4j:region>
 
-<!-- 
-		<rich:modalPanel id="cancelModalPanel" autosized="true" width="350">
-			<f:facet name="header">
-				<h:outputText value="Να ακυρωθή η άδεια ?"
-					style="padding-right:15px;" />
-			</f:facet>
-			<f:facet name="controls">
-				<h:panelGroup>
-					<h:graphicImage value="/img/modal/close.png" styleClass="hidelink"
-						width="18" height="18" id="hidelink2" />
-					<rich:componentControl for="cancelModalPanel" attachTo="hidelink2"
-						operation="hide" event="onclick" />
-				</h:panelGroup>
-			</f:facet>
-			<h:form>
-				<h:panelGrid columns="1">
-					<a4j:outputPanel id="cancelModalPanelContent" layout="inline">
-						<h:panelGroup>
-							<h:outputText value="Να ακυρωθή η τρέχουσα ενεργή άδεια " />
-							<h:outputText
-								value="#{messages[leaveHome.instance.leaveType.key]}"
-								styleClass="fieldValueText" />
-							<h:outputText
-								value=" του εκπαιδευτικού #{employeeUtil.prettyFormat(leaveHome.instance.employee)} " />
-							<h:outputText value=" με λήξη την " />
-							<h:outputText value="#{leaveHome.instance.dueTo}"
-								styleClass="fieldValueText">
-								<s:convertDateTime pattern="dd/MM/yyyy" />
-							</h:outputText>
-							<h:outputText value=" ;" />
 
-						</h:panelGroup>
-					</a4j:outputPanel>
 
-					<h:panelGrid columns="2">
-						<a4j:commandButton value="Ακύρωση Άδειας !" ajaxSingle="true"
-							action="#{leaveHome.cancel()}"
-							oncomplete="#{rich:component('cancelModalPanel')}.hide();"
-							reRender="activeLeave,leavesOutputPanel" />
-						<a4j:commandButton value="Επιστροφή .."
-							onclick="#{rich:component('cancelModalPanel')}.hide();return false;" />
+
+		<!-- *********************************************** -->
+		<!-- ** delete modal panel -->
+		<!-- *********************************************** -->
+		<a4j:region>
+			<rich:modalPanel id="deleteWorkExperienceModalPanel" autosized="true"
+				width="450">
+				<f:facet name="header">
+					<h:outputText value="Διαγραφή Προϋπηρεσίας"
+						style="padding-right:15px;" />
+				</f:facet>
+				<f:facet name="controls">
+					<h:panelGroup>
+						<h:graphicImage value="/img/modal/close.png" styleClass="hidelink"
+							width="18" height="18" id="hidelink_deleteworkexperience" />
+						<rich:componentControl for="deleteWorkExperienceModalPanel"
+							attachTo="hidelink_deleteworkexperience" operation="hide"
+							event="onclick" />
+					</h:panelGroup>
+				</f:facet>
+				
+					<h:panelGrid columns="1">
+						<h:form>
+							<a4j:outputPanel id="deleteWorkExperienceModalPanelContent"
+								layout="inline">
+								<h:outputText
+									value="Με την παρακάτω φόρμα, μπορείτε να διαγράψετε την προϋπηρεσία του/της εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}. Εξήγηστε τον λόγο της διαγραφής στο σχετικό πλαίσιο κειμένου." />
+								<rich:messages style="color:red;"></rich:messages>
+								
+								<h:panelGrid columns="4">
+									<s:decorate template="/layout/doubleLineEdit.xhtml">
+										<ui:define name="label">
+											<h:outputText value="Λόγος / Επεξήγηση Διαγραφής Προϋπηρεσίας" />
+										</ui:define>
+										<h:inputTextarea value="#{workExperienceHome.instance.deletedComment}" required="true" rows="2" cols="40"></h:inputTextarea>
+										</s:decorate>
+								</h:panelGrid>
+							</a4j:outputPanel>
+	
+							<h:panelGrid columns="2">
+	
+								<a4j:commandButton value="Διαγραφή Προϋπηρεσίας !"
+									action="#{workExperiencesManagement.deleteWorkExperience()}"
+									data="#{facesContext.maximumSeverity.ordinal ge 2}"
+									oncomplete="if(data == false) Richfaces.hideModalPanel('deleteWorkExperienceModalPanel');"
+									reRender="workExperiencesOutputPanel" />
+								<a4j:commandButton value="Επιστροφή .."
+									action="#{workExperienceHome.revert()}"
+									reRender="workExperiencesOutputPanel"
+									oncomplete="#{rich:component('deleteWorkExperienceModalPanel')}.hide();" />
+							</h:panelGrid>
+						</h:form>
 					</h:panelGrid>
-				</h:panelGrid>
-			</h:form>
-		</rich:modalPanel>
-
- -->
+				
+			</rich:modalPanel>
+		</a4j:region>
 
 		<!-- *********************************************** -->
 		<!-- ** create modal panel -->
 		<!-- *********************************************** -->
-		<rich:modalPanel id="createWorkExperienceModalPanel" autosized="true"
-			width="450">
+		<rich:modalPanel id="createWorkExperienceModalPanel" autosized="true" width="450">
 			<f:facet name="header">
 				<h:outputText
 					value="Καταχώρηση Νεας Προϋπηρεσίας Εκπαιδευτικού #{employeeUtil.prettyFormat(employeeHome.instance)}"
@@ -403,11 +486,10 @@
 					<a4j:region>
 						<a4j:outputPanel id="createWorkExperienceModalPanelContent"
 							layout="inline">
-							<h:outputText
-								value="Συμπληρώστε τα στοιχεία της παρακάτω φόρμας για να εισάγετε νέα προϋπηρεσία για τον εκπαιδευτικό." />
+							<h:outputText value="Συμπληρώστε τα στοιχεία της παρακάτω φόρμας για να εισάγετε νέα προϋπηρεσία για τον/την εκπαιδευτικό: #{employeeUtil.prettyFormat(employee)}." />
+							<rich:messages style="color:red;"></rich:messages>
 
-
-							<h:panelGrid columns="5">
+							<h:panelGrid columns="3">
 
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
 									<ui:define name="label">
@@ -415,12 +497,14 @@
 									</ui:define>
 
 									<h:inputText id="workExperienceId"
-										value="#{workExperienceHome.instance.type.id}" size="4">
+										value="#{workExperienceHome.tempValueHolder1}"
+										styleClass="fieldValueText" size="15">
 
-										<rich:suggestionbox height="200" width="350"
-											for="workExperienceId" var="workExpVar"
-											fetchValue="#{workExpVar.id}"
+										<rich:suggestionbox height="200" width="350" id="workExperienceTypeSuggestionbox"
+											for="workExperienceId" var="workExpVar" ajaxSingle="true"
+											fetchValue="#{workExpVar.id}" 
 											suggestionAction="#{workExperienceTypesExtendedSuggester.suggest}">
+											
 											<f:facet name="nothingLabel">
 												<h:outputText value="Άγνωστος Τύπος Προϋπηρεσίας" />
 											</f:facet>
@@ -435,12 +519,11 @@
 												<h:outputText value="#{workExpVar.comment}" />
 											</rich:column>
 
-											<a4j:support ajaxSingle="true" event="onselect"
-												reRender="workExperienceId, workExperienceTitle">
+											<a4j:support ajaxSingle="true" event="onselect" action="#{workExperiencesManagement.changedEmployeeType()}"
+												reRender="createWorkExperienceModalPanelContent" >
 												<f:setPropertyActionListener value="#{workExpVar}"
 													target="#{workExperienceHome.instance.type}" />
 											</a4j:support>
-
 										</rich:suggestionbox>
 									</h:inputText>
 								</s:decorate>
@@ -449,10 +532,39 @@
 									<ui:define name="label">
 										<h:outputText value="Τίτλος Προϋπηρεσίας" />
 									</ui:define>
-									<h:inputText id="workExperienceTitle"
+									<h:inputText id="workExperienceTitle" 
 										value="#{workExperienceHome.instance.type.title}"
 										readonly="true" size="15" />
 								</s:decorate>
+								
+								
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="" />
+									</ui:define>
+								</s:decorate>
+								
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Διδακτική Προϋπηρεσία" />
+									</ui:define>
+									<h:selectBooleanCheckbox value="#{workExperienceHome.instance.teaching}" />
+								</s:decorate>
+								
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Εκπ/κή Προϋπηρεσία" />
+									</ui:define>
+									<h:selectBooleanCheckbox value="#{workExperienceHome.instance.educational}" />
+								</s:decorate>
+								
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="" />
+									</ui:define>
+								</s:decorate>								
+								
+								
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
 									<ui:define name="label">
 										<h:outputText value="Έναρξη : " />
@@ -461,6 +573,10 @@
 										style="width:50px" enableManualInput="true"
 										styleClass="fieldValueText" required="true"
 										value="#{workExperienceHome.instance.fromDate}">
+										<a4j:support event="onchanged" ajaxSingle="true"
+											eventsQueue="lalal"
+											action="#{workExperiencesManagement.silentlyComputeDateDifference()}"
+											reRender="createWorkExperienceModalPanelContent" />
 									</rich:calendar>
 								</s:decorate>
 
@@ -472,28 +588,102 @@
 										style="width:50px" enableManualInput="true"
 										styleClass="fieldValueText" required="true"
 										value="#{workExperienceHome.instance.toDate}">
+										<a4j:support event="onchanged" ajaxSingle="true"
+											eventsQueue="lalal"
+											action="#{workExperiencesManagement.silentlyComputeDateDifference()}"
+											reRender="createWorkExperienceModalPanelContent" />
 									</rich:calendar>
 								</s:decorate>
-
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
 									<ui:define name="label">
-										<h:outputText value="Σχόλιο" />
+										<h:outputText value="Ημερολ/κή Διαφορά: " />
 									</ui:define>
-									<h:inputTextarea value="#{workExperienceHome.instance.comment}" />
+									<h:inputText readonly="true" value="#{workExperienceHome.instance.calendarExperienceDays}" ></h:inputText>
+								</s:decorate>
+
+
+								<s:decorate id="numberOfWorkExperienceHoursPanel" template="/layout/doubleLineEdit.xhtml" rendered="#{workExperienceHome.instance.type.id == '3' or workExperienceHome.instance.type.id == '5'}">
+									<ui:define name="label">
+										<h:outputText value="Ώρες Προϋπηρεσίας: " />
+									</ui:define>
+									<h:inputText value="#{workExperienceHome.instance.numberOfWorkExperienceHours}" ></h:inputText>
+								</s:decorate>
+								<s:decorate template="/layout/doubleLineEdit.xhtml" rendered="#{workExperienceHome.instance.type.id != '3' and workExperienceHome.instance.type.id != '5'}">
+									<ui:define name="label">
+										<h:outputText value="" />
+									</ui:define>
+								</s:decorate>
+								
+								<s:decorate id="mandatoryHoursPanel" template="/layout/doubleLineEdit.xhtml" rendered="#{workExperienceHome.instance.type.id == '3' or workExperienceHome.instance.type.id == '4' or workExperienceHome.instance.type.id == '5' or workExperienceHome.instance.type.id == '6' or workExperienceHome.instance.type.id == '8' or workExperienceHome.instance.type.id == '9'}">
+									<ui:define name="label">
+										<h:outputText value="Υποχρ/κό Ωράριο: " />
+									</ui:define>
+									<h:inputText value="#{workExperienceHome.instance.mandatoryHours}" ></h:inputText>
+								</s:decorate>
+								<s:decorate template="/layout/doubleLineEdit.xhtml" rendered="#{workExperienceHome.instance.type.id != '3' and workExperienceHome.instance.type.id != '4' and workExperienceHome.instance.type.id != '5' and workExperienceHome.instance.type.id != '6' and workExperienceHome.instance.type.id != '8' and workExperienceHome.instance.type.id != '9'}">
+									<ui:define name="label">
+										<h:outputText value="" />
+									</ui:define>
+								</s:decorate>
+								
+								<s:decorate id="finalWorkingHoursPanel" template="/layout/doubleLineEdit.xhtml" rendered="#{workExperienceHome.instance.type.id == '4' or workExperienceHome.instance.type.id == '5' or workExperienceHome.instance.type.id == '6' or workExperienceHome.instance.type.id == '8' or workExperienceHome.instance.type.id == '9'}">
+									<ui:define name="label">
+										<h:outputText value="Ανατεθέν Ωράριο: " />
+									</ui:define>
+									<h:inputText value="#{workExperienceHome.instance.finalWorkingHours}" ></h:inputText>
+								</s:decorate>
+								<s:decorate template="/layout/doubleLineEdit.xhtml" rendered="#{workExperienceHome.instance.type.id != '4' and workExperienceHome.instance.type.id != '5' and workExperienceHome.instance.type.id != '6' and workExperienceHome.instance.type.id != '8' and workExperienceHome.instance.type.id != '9'}">
+									<ui:define name="label">
+										<h:outputText value="" />
+									</ui:define>
+								</s:decorate>
+
+								
+								<s:decorate template="/layout/doubleLineEdit.xhtml" >
+									<ui:define name="label">
+										<h:outputText value="Ημέρες Πραγμ. Προϋπηρεσίας: " />
+									</ui:define>
+									<h:inputText value="#{workExperienceHome.instance.actualDays}" ></h:inputText>
+								</s:decorate>
+								<s:decorate template="/layout/doubleLineEdit.xhtml" >
+									<ui:define name="label">
+										<h:outputText value="" />
+									</ui:define>
+									<a4j:commandButton value="Επανυπολογισμός"
+									action="#{workExperiencesManagement.reCalculateActualDays()}"
+									limitToList="true"
+									reRender="createWorkExperienceModalPanelContent" 
+									rendered="#{workExperienceHome.instance.type.id == '3' or workExperienceHome.instance.type.id == '4' or workExperienceHome.instance.type.id == '5' or workExperienceHome.instance.type.id == '6' or workExperienceHome.instance.type.id == '8' or workExperienceHome.instance.type.id == '9'}"
+									/>
+								</s:decorate>
+								
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="" />
+									</ui:define>
 								</s:decorate>
 
 							</h:panelGrid>
-							<h:panelGrid columns="2">
 
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Σχόλιο" />
+								</ui:define>
+								<h:inputTextarea value="#{workExperienceHome.instance.comment}" cols="64" />
+							</s:decorate>
+							
+							<h:panelGrid columns="2">
 								<a4j:commandButton value="Καταχώρηση Προϋπηρεσίας !"
 									action="#{workExperiencesManagement.createWorkExperience()}"
-									data="#{facesContext.maximumSeverity.ordinal ge 2}"
+									data="#{facesContext.maximumSeverity.ordinal ge 2}" limitToList="true"
 									oncomplete="if(data == false) Richfaces.hideModalPanel('createWorkExperienceModalPanel');"
-									reRender="workExperiencesOutputPanel" />
-								<a4j:commandButton value="Επιστροφή .."
-									action="#{workExperienceHome.revert()}"
-									onclick="#{rich:component('createWorkExperienceModalPanel')}.hide();" />
+									reRender="workExperiencesOutputPanel,createWorkExperienceModalPanelContent" />
+
+								<a4j:commandButton value="Επιστροφή .." 
+									action="#{workExperienceHome.clearInstance()}" immediate="true"
+									onclick="#{rich:component('createWorkExperienceModalPanel')}.hide();" />								
 							</h:panelGrid>
+
 
 						</a4j:outputPanel>
 					</a4j:region>

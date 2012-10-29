@@ -1,0 +1,55 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:rich="http://richfaces.org/rich">
+
+	<ui:component>
+		<h:panelGrid columns="2" width="100%">
+			<h:outputLabel styleClass="fieldValueLabel"
+				value="Εκπαιδευτική Υπηρεσία μέχρι σήμερα:" />
+			<h:panelGroup>
+				<h:outputText styleClass="fieldValueText"  
+					value="#{employeeEducationalService}" 
+					converter="#{workExperienceConverter}" />
+				<h:outputText styleClass="fieldValueText"  
+					value=" (#{employeeEducationalService} ημ.)" />
+			</h:panelGroup>
+			
+			<h:outputLabel styleClass="fieldValueLabel"
+				value="Διδακτική Υπηρεσία μέχρι σήμερα:" />
+			<h:panelGroup>
+				<h:outputText styleClass="fieldValueText" 
+					value="#{employeeTeachingService}" 
+					converter="#{workExperienceConverter}" />	
+				<h:outputText styleClass="fieldValueText" 
+					value=" (#{employeeTeachingService} ημ.)"/>	
+			</h:panelGroup>
+			
+			<h:outputLabel styleClass="fieldValueLabel"
+				value="Συνολική Προϋπηρεσία μέχρι τον διορισμό:" />
+			<h:panelGroup>
+				<h:outputText styleClass="fieldValueText"  
+					value="#{employeeSumOfExperience}" 
+					converter="#{workExperienceConverter}" />
+				<h:outputText styleClass="fieldValueText"  
+					value=" (#{employeeSumOfExperience} ημ.)" />
+			</h:panelGroup>
+			
+			<h:outputLabel styleClass="fieldValueLabel"
+				value="Συνολική Υπηρεσία μέχρι σήμερα:" />
+			<h:panelGroup>
+			<h:outputText styleClass="fieldValueText"
+				value="#{employeeTotalServiceIncludingWorkExperience}" 
+				converter="#{workExperienceConverter}" />
+				<h:outputText styleClass="fieldValueText"
+				value=" (#{employeeTotalServiceIncludingWorkExperience} ημ.)" />
+			</h:panelGroup>
+		</h:panelGrid>
+	
+	
+	</ui:component>
+
+
+</html>

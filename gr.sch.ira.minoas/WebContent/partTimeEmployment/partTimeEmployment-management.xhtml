@@ -1,0 +1,386 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<ui:composition template="/layout/simple-beauty-template.xhtml">
+	<ui:define name="body">
+		<a4j:region>
+			<rich:panel>
+				<f:facet name="header">
+					<h:outputText
+						value="Διαχείρηση Part-time εργασίας του/της #{employeeUtil.prettyFormat(employee)}" />
+				</f:facet>
+
+
+				<ui:include src="/components/messages-component.xhtml" />
+
+				<h:form>
+					<h:panelGrid columns="1">
+						<rich:panel>
+							<f:facet name="header">
+								<h:outputText value="Ιστορικό Part-time Εργασίας Εκπαιδευτικού" />
+							</f:facet>
+
+							<a4j:outputPanel id="partTimeEmploymentOutputPanel">
+
+								<h:panelGroup rendered="#{partTimeEmploymentHistory.rowCount==0}">
+									<h:outputText
+										value="Δεν βρέθηκαν περίοδοι μειωμένου ωραρίου για τον εκπαιδευτικό." />
+								</h:panelGroup>
+								<h:panelGrid columns="1" width="100%"
+									rendered="#{partTimeEmploymentHistory.rowCount gt 0}">
+									<h:outputText
+										value="Στον παρακάτω πίνακα εμφανίζεται το ιστορικό όλων των περιόδων μειωμένου ωραρίου του/της εκπαιδευτικού." />
+
+									<rich:dataTable id="employeePartTimeEmploymentsList"
+										value="#{partTimeEmploymentHistory}" var="_partTimeEmployment"
+										rows="20" border="0"
+										onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+										onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+										width="100%">
+										<f:facet name="header">
+											<h:outputLabel value="Ιστορικό Περιόδων Μειωμένου Ωραρίου Εκπαιδευτικού" />
+										</f:facet>
+										
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Ώρες/Εβδομάδα" />
+											</f:facet>
+											<h:outputText value="#{_partTimeEmployment.hoursPerWeek}" />
+										</rich:column>	
+										
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Από" />
+											</f:facet>
+											<h:outputText value="#{_partTimeEmployment.startDate}">
+												<s:convertDateTime pattern="dd/MM/yyyy" />
+											</h:outputText>
+										</rich:column>										
+										
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Έως" />
+											</f:facet>
+											<h:outputText value="#{_partTimeEmployment.endDate}">
+												<s:convertDateTime pattern="dd/MM/yyyy" />
+											</h:outputText>
+										</rich:column>
+										
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Σχόλια" />
+											</f:facet>
+											<h:outputText value="#{_partTimeEmployment.comment}" />
+										</rich:column>
+										
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Ενέργεια" />
+											</f:facet>
+											<rich:toolBar itemSeparator="line">
+												<a4j:commandLink id="updatelink"
+													rendered="#{(s:hasRole('ADMIN') or s:hasRole('MODIFY_PART_TIME_EMPLOYMENT'))}"
+													reRender="updatePartTimeEmploymentModalPanel"
+													oncomplete="#{rich:component('updatePartTimeEmploymentModalPanel')}.show()"
+													value="Τροποποίηση">
+													<h:graphicImage value="/img/icons/edit.png" width="12"
+														height="12" style="border:0" />
+													<f:setPropertyActionListener value="#{_partTimeEmployment.id}"
+														target="#{partTimeEmploymentHome.id}" />
+												</a4j:commandLink>
+							
+																								
+												<a4j:commandLink id="deletelink"
+													rendered="#{(s:hasRole('ADMIN') or s:hasRole('DELETE_PART_TIME_EMPLOYMENT'))}"
+													reRender="deletePartTimeEmploymentModalPanel"
+													oncomplete="#{rich:component('deletePartTimeEmploymentModalPanel')}.show()"
+													value="Διαγραφή">
+													<h:graphicImage value="/img/icons/delete.png" width="12"
+														height="12" style="border:0" />
+													<f:setPropertyActionListener value="#{_partTimeEmployment.id}"
+														target="#{partTimeEmploymentHome.id}" />
+												</a4j:commandLink>
+
+											</rich:toolBar>
+										</rich:column>
+
+										<f:facet name="footer">
+											<rich:datascroller for="employeePartTimeEmploymentsList">
+												<f:facet name="first">
+													<h:outputText value="Πρώτη" />
+												</f:facet>
+												<f:facet name="last">
+													<h:outputText value="Τελευταία" />
+												</f:facet>
+											</rich:datascroller>
+
+										</f:facet>
+
+									</rich:dataTable>
+								</h:panelGrid>
+							</a4j:outputPanel>
+						</rich:panel>
+						<rich:panel>
+							<s:div styleClass="actionButtons">
+								<s:button action="backButton" value="Επιστροφή" />
+								<s:button action="endButton" value="Τέλος Ενέργειας" />
+								<a4j:commandButton id="createButton"
+									disabled="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_PART_TIME_EMPLOYMENT'))}"
+									action="#{partTimeEmploymentHome.clearInstance()}"
+									reRender="createPartTimeEmploymentModalPanel" immediate="true"
+									oncomplete="#{rich:component('createPartTimeEmploymentModalPanel')}.show()"
+									value="Καταχώρηση Νέας Περιόδου Μειωμένου Ωραρίου">
+								</a4j:commandButton>
+							</s:div>
+						</rich:panel>
+					</h:panelGrid>
+				</h:form>
+
+
+			</rich:panel>
+		</a4j:region>
+
+
+		<a4j:region>
+		<rich:modalPanel id="updatePartTimeEmploymentModalPanel" autosized="true"
+			width="450">
+			<f:facet name="header">
+				<h:outputText value="Τροποποίηση Περιόδου Μειωμένου Ωραρίου"
+					style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<h:graphicImage value="/img/modal/close.png" styleClass="hidelink"
+						width="18" height="18" id="hidelink_historyPartTimeEmployment" />
+					<rich:componentControl for="updatePartTimeEmploymentModalPanel"
+						attachTo="hidelink_historyPartTimeEmployment" operation="hide"
+						event="onclick" />
+				</h:panelGroup>
+			</f:facet>
+			
+			<a4j:region>
+				<h:panelGrid columns="1">
+					<h:form>
+						<a4j:outputPanel id="updatePartTimeEmploymentModalPanelContent"
+							layout="inline">
+							<h:outputText
+								value="Με την παρακάτω φόρμα, μπορείτε να τροποποίησετε την περίοδο μειωμένου ωραρίου του/της εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}." />
+							<rich:messages style="color:red;"></rich:messages>
+							<h:panelGrid columns="2">
+
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Ώρες/Εβδομάδα" />
+									</ui:define>
+									<h:inputText required="true" size="3"
+										value="#{partTimeEmploymentHome.instance.hoursPerWeek}" />
+								</s:decorate>
+
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Από : " />
+									</ui:define>
+									<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
+										style="width:50px" enableManualInput="true"
+										styleClass="fieldValueText" required="true"
+										value="#{partTimeEmploymentHome.instance.startDate}">
+									</rich:calendar>
+								</s:decorate>
+
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Έως : " />
+									</ui:define>
+									<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
+										style="width:50px" enableManualInput="true"
+										styleClass="fieldValueText" required="true"
+										value="#{partTimeEmploymentHome.instance.endDate}">
+									</rich:calendar>
+								</s:decorate>
+							</h:panelGrid>
+
+							<s:decorate template="/layout/doubleLineEdit.xhtml" >
+								<ui:define name="label">
+									<h:outputText value="Σχόλιο" />
+								</ui:define>
+								<h:inputTextarea value="#{partTimeEmploymentHome.instance.comment}"  rows="6" cols="40" />
+							</s:decorate>
+						</a4j:outputPanel>
+
+						<h:panelGrid columns="2">
+
+							<a4j:commandButton value="Τροποποίηση Περιόδου !"
+								action="#{partTimeEmploymentManagement.modifyPartTimeEmployment()}"
+								data="#{facesContext.maximumSeverity.ordinal ge 2}"
+								oncomplete="if(data == false) Richfaces.hideModalPanel('updatePartTimeEmploymentModalPanel');"
+								reRender="partTimeEmploymentOutputPanel" />
+							<a4j:commandButton value="Επιστροφή .."
+								action="#{partTimeEmploymentHome.revert()}"
+								reRender="partTimeEmploymentOutputPanel"
+								oncomplete="#{rich:component('updatePartTimeEmploymentModalPanel')}.hide();" />
+						</h:panelGrid>
+					</h:form>
+				</h:panelGrid>
+			</a4j:region>
+		</rich:modalPanel>
+		</a4j:region>
+		
+		<a4j:region>
+		<rich:modalPanel id="deletePartTimeEmploymentModalPanel" autosized="true"
+			width="450">
+			<f:facet name="header">
+				<h:outputText value="Διαγραφή Περιόδου Μειωμένου Ωραρίου"
+					style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<h:graphicImage value="/img/modal/close.png" styleClass="hidelink"
+						width="18" height="18" id="hidelink_deletePartTimeEmployment" />
+					<rich:componentControl for="deletePartTimeEmploymentModalPanel"
+						attachTo="hidelink_deletePartTimeEmployment" operation="hide"
+						event="onclick" />
+				</h:panelGroup>
+			</f:facet>
+			
+				<h:panelGrid columns="1">
+					<h:form>
+						<a4j:outputPanel id="deletePartTimeEmploymentModalPanelContent"
+							layout="inline">
+							<h:outputText
+								value="Με την παρακάτω φόρμα, μπορείτε να διαγράψετε την περίοδο μειωμένου ωραρίου του/της εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}. Εξήγηστε τον λόγο της διαγραφής στο σχετικό πλαίσιο κειμένου." />
+							<rich:messages style="color:red;"></rich:messages>
+							<h:panelGrid columns="4">
+
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Λόγος / Επεξήγηση Διαγραφής Περιόδου" />
+									</ui:define>
+									<h:inputTextarea value="#{partTimeEmploymentHome.instance.deletedComment}" required="true" rows="2" cols="40"></h:inputTextarea>
+									</s:decorate>
+							</h:panelGrid>
+						</a4j:outputPanel>
+
+						<h:panelGrid columns="2">
+
+							<a4j:commandButton value="Διαγραφή Περιόδου !"
+								action="#{partTimeEmploymentManagement.deletePartTimeEmployment()}"
+								data="#{facesContext.maximumSeverity.ordinal ge 2}"
+								oncomplete="if(data == false) Richfaces.hideModalPanel('deletePartTimeEmploymentModalPanel');"
+								reRender="partTimeEmploymentOutputPanel" />
+							<a4j:commandButton value="Επιστροφή .."
+								action="#{partTimeEmploymentHome.revert()}"
+								reRender="partTimeEmploymentOutputPanel"
+								oncomplete="#{rich:component('deletePartTimeEmploymentModalPanel')}.hide();" />
+						</h:panelGrid>
+					</h:form>
+				</h:panelGrid>
+			
+		</rich:modalPanel>
+		</a4j:region>
+
+
+
+
+		<!-- *********************************************** -->
+		<!-- ** create modal panel -->
+		<!-- *********************************************** -->
+		<rich:modalPanel id="createPartTimeEmploymentModalPanel" autosized="true"
+			width="450">
+			<f:facet name="header">
+				<h:outputText
+					value="Καταχώρηση Νέας Περιόδου Μειωμένου Ωραρίου #{employeeUtil.prettyFormat(employeeHome.instance)}"
+					style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<h:graphicImage value="/img/modal/close.png" styleClass="hidelink"
+						width="18" height="18" id="hidelink4" />
+					<rich:componentControl for="createPartTimeEmploymentModalPanel"
+						attachTo="hidelink4" operation="hide" event="onclick" />
+				</h:panelGroup>
+			</f:facet>
+
+			<h:panelGrid columns="1">
+				<rich:messages style="color:red;"></rich:messages>
+
+				<h:form>
+					<a4j:region>
+						<a4j:outputPanel id="createPartTimeEmploymentModalPanelContent"
+							layout="inline">
+							<h:outputText
+								value="Συμπληρώστε τα στοιχεία της παρακάτω φόρμας για να εισάγετε νέα περίοδο μειωμένου ωραρίου για τον εκπαιδευτικό." />
+
+							<h:panelGrid columns="2">
+							
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Ώρες/Εβδομάδα" />
+									</ui:define>
+									<h:inputText required="true" size="3"
+										value="#{partTimeEmploymentHome.instance.hoursPerWeek}" />
+								</s:decorate>
+
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Από : " />
+									</ui:define>
+									<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
+										style="width:50px" enableManualInput="true"
+										styleClass="fieldValueText" required="true"
+										value="#{partTimeEmploymentHome.instance.startDate}">
+									</rich:calendar>
+								</s:decorate>
+
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Έως : " />
+									</ui:define>
+									<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
+										style="width:50px" enableManualInput="true"
+										styleClass="fieldValueText" required="true"
+										value="#{partTimeEmploymentHome.instance.endDate}">
+									</rich:calendar>
+								</s:decorate>
+							</h:panelGrid>
+							
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Σχόλιο" />
+								</ui:define>
+								<h:inputTextarea value="#{partTimeEmploymentHome.instance.comment}"  rows="6" cols="40"/>
+							</s:decorate>
+							
+							<h:panelGrid columns="2">
+
+								<a4j:commandButton value="Καταχώρηση Περιόδου !"
+									action="#{partTimeEmploymentManagement.createPartTimeEmployment()}"
+									data="#{facesContext.maximumSeverity.ordinal ge 2}"
+									oncomplete="if(data == false) Richfaces.hideModalPanel('createPartTimeEmploymentModalPanel');"
+									reRender="partTimeEmploymentOutputPanel" />
+								<a4j:commandButton value="Επιστροφή .."
+									action="#{partTimeEmploymentHome.revert()}"
+									reRender="partTimeEmploymentOutputPanel"
+									onclick="#{rich:component('createPartTimeEmploymentModalPanel')}.hide();" />
+							</h:panelGrid>
+
+						</a4j:outputPanel>
+					</a4j:region>
+				</h:form>
+			</h:panelGrid>
+
+		</rich:modalPanel>
+
+		<ui:include src="/components/wait-modal-panel.xhtml" />
+
+	</ui:define>
+</ui:composition>
+</html>

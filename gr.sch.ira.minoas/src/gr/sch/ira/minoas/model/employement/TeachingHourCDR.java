@@ -94,6 +94,10 @@ public class TeachingHourCDR extends BaseIDModel {
     @JoinColumn(name="SPECIAL_ASSIGMENT_ID", nullable=true)
     private SpecialAssigment specialAssigment;
 
+    @Basic
+    @Column(name="IS_FUTURE_CDR")
+    private Boolean futureCDR = Boolean.FALSE;
+
     /**
      * @return the schoolYear
      */
@@ -310,5 +314,19 @@ public class TeachingHourCDR extends BaseIDModel {
      */
     public void setSpecialAssigment(SpecialAssigment specialAssigment) {
         this.specialAssigment = specialAssigment;
+    }
+
+    /**
+     * @return the futureCDR
+     */
+    public Boolean getFutureCDR() {
+        return futureCDR;
+    }
+
+    /**
+     * @param futureCDR the futureCDR to set
+     */
+    public void setFutureCDR(Boolean futureCDR) {
+        this.futureCDR = futureCDR;
     }
 }

@@ -1,19 +1,19 @@
 package gr.sch.ira.minoas.model.employee;
 
+import gr.sch.ira.minoas.model.BaseIDDeleteAwareModel;
+
 import java.util.Date;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Entity;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import gr.sch.ira.minoas.model.BaseIDDeleteAwareModel;
 
 
 /**
@@ -149,6 +149,18 @@ public class Evaluation extends BaseIDDeleteAwareModel {
 	 */
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Evaluation [evaluationDate=" + evaluationDate
+				+ ", evaluationGrade=" + evaluationGrade
+				+ ", evaluationStartDate=" + evaluationStartDate
+				+ ", evaluationEndDate=" + evaluationEndDate + ", comment="
+				+ comment + "]";
 	}
 	
 }

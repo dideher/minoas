@@ -49,17 +49,23 @@ public class LegacyCodeSync {
     
     public static List<EmployeeSignature> findCandidatesForMinoasEmployee(EmployeeSignature minoasEmployee, List<EmployeeSignature> legacyEmployees) {
         List<EmployeeSignature> candidates = new ArrayList<EmployeeSignature>();
+        String tmpStr = null;
+        EmployeeSignature tmple = null;
+        int bestMatch = Integer.MAX_VALUE;
         for(EmployeeSignature le : legacyEmployees) {
             int stringDistance = LevenshteinDistance.computeLevenshteinDistance(le.getSignature(), minoasEmployee.getSignature());
-//            if(le.getSignature().equals(minoasEmployee.getSignature())) {
-//                candidates.add(le);
-//            }
-            if(stringDistance<9) {
-                le.setMinoasEmployeeId(minoasEmployee.getMinoasEmployeeId());
-                candidates.add(le);
-                System.err.println(String.format("distance = %d -> '%s' and '%s'", stringDistance, le.getSignature(), minoasEmployee.getSignature()));
+            if(stringDistance<30) {
+                if(stringDistance<bestMatch) {
+                    tmpStr = String.format("distance = %d -> '%s' and '%s'", stringDistance, le.getSignature(), minoasEmployee.getSignature());
+                    tmple = le;
+                    bestMatch=stringDistance;
+                }
             }
-            
+        }
+        if(tmple!=null) {
+            tmple.setMinoasEmployeeId(minoasEmployee.getMinoasEmployeeId());
+            candidates.add(tmple);
+            System.err.println(tmpStr);
         }
         return candidates;
     }

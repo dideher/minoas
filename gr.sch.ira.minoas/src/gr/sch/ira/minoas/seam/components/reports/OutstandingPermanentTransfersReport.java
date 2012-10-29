@@ -90,6 +90,7 @@ public class OutstandingPermanentTransfersReport extends BaseReport {
 		if(transferType!=null) {
 			q.setParameter("transferType", transferType);
 		}
+		@SuppressWarnings("unchecked")
 		Collection<PermanentTransfer> permanentTransfers = q.getResultList();
 		info("found totally #0 outstanding permanent transfer(s) matching criteria", permanentTransfers.size());
 		reportData = new ArrayList<OutstandingPermanentTransferItem>(permanentTransfers.size());

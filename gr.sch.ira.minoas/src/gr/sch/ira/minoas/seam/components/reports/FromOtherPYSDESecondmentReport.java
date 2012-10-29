@@ -136,7 +136,8 @@ public class FromOtherPYSDESecondmentReport extends BaseReport {
 		if (employeeRequested != null) {
 			q.setParameter("employeeRequested", employeeRequested);
 		}
-		Collection<Secondment> secondments = q.getResultList();
+		@SuppressWarnings("unchecked")
+        Collection<Secondment> secondments = q.getResultList();
 		info("found totally #0 secondments matching criteria", secondments.size());
 		reportData = new ArrayList<SecondmentItem>(secondments.size());
 		for (Secondment secondment : secondments) {

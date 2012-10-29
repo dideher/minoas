@@ -15,8 +15,10 @@ import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
 import gr.sch.ira.minoas.model.employee.Evaluation;
+import gr.sch.ira.minoas.model.employee.PartTimeEmployment;
+import gr.sch.ira.minoas.model.employee.Penalty;
+import gr.sch.ira.minoas.model.employee.PenaltyType;
 import gr.sch.ira.minoas.model.employee.Person;
-import gr.sch.ira.minoas.model.employee.RankInfo;
 import gr.sch.ira.minoas.model.employee.RankType;
 import gr.sch.ira.minoas.model.employement.Disposal;
 import gr.sch.ira.minoas.model.employement.DisposalTargetType;
@@ -47,6 +49,7 @@ import gr.sch.ira.minoas.seam.components.criteria.SpecializationGroupSearchType;
 import gr.sch.ira.minoas.seam.components.criteria.SpecializationSearchType;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -54,6 +57,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.AutoCreate;
 import org.jboss.seam.annotations.Factory;
@@ -156,7 +160,27 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     @Transactional(TransactionPropagationType.REQUIRED)
     @SuppressWarnings("unchecked")
     public Collection<EmployeeLeave> getActiveLeaves(EntityManager em) {
-        return getEntityManager(em).createQuery("SELECT l FROM EmployeeLeave l WHERE l.active IS TRUE").getResultList();
+        return getEntityManager(em).createQuery("SELECT l FROM EmployeeLeave l WHERE l.active IS TRUE AND (l.deleted IS FALSE OR l.deleted IS NULL)").getResultList();
+    }
+    
+    @Transactional(TransactionPropagationType.REQUIRED)
+    @SuppressWarnings("unchecked")
+    public Collection<EmployeeLeave> getFutureLeavesThatWillBeActivated(EntityManager em, Date referenceDay, Integer dayThreshold) {
+        Calendar establishedFrom = Calendar.getInstance();
+        establishedFrom.setTime(referenceDay);
+        DateUtils.truncate(establishedFrom, Calendar.DAY_OF_MONTH);
+        
+        Calendar establishedTo = (Calendar)establishedFrom.clone();
+        establishedTo.add(Calendar.DAY_OF_MONTH, dayThreshold);
+        
+//        Calendar dueToFrom = Calendar.getInstance();
+//        dueToFrom.setTime(referenceDay);
+//        DateUtils.truncate(dueToFrom, Calendar.DAY_OF_MONTH);
+//        
+//        Calendar dueToTo = (Calendar)dueToFrom.clone();
+//        dueToTo.add(Calendar.DAY_OF_MONTH, dayThreshold);
+        
+        return getEntityManager(em).createQuery("SELECT l FROM EmployeeLeave l WHERE l.active IS FALSE AND (l.deleted IS FALSE OR l.deleted IS NULL) AND l.established BETWEEN :establishedFrom AND :establishedTo").setParameter("establishedFrom",  establishedFrom.getTime()).setParameter("establishedTo",  establishedTo.getTime()).getResultList();
     }
     
      /**
@@ -518,6 +542,15 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         } catch (NoResultException nre) {
             return null;
         }
+    }
+    
+    @SuppressWarnings("unchecked")
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public Collection<Employee> getActiveEmployeesOfType(EntityManager entityManager, EmployeeType employeeType) {
+        EntityManager em = getEntityManager(entityManager);
+        return em.createQuery("SELECT e FROM Employee e WHERE e.type=:employeeType AND e.active IS TRUE")
+                .setParameter("employeeType", employeeType).getResultList();
+
     }
 
     @SuppressWarnings("unchecked")
@@ -1213,6 +1246,14 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     }
 
     @SuppressWarnings("unchecked")
+    public Collection<TeachingHourCDR> getTeachingHoursCDRsRelatedToEmployment(EntityManager entityManager, Employment employment, SchoolYear schoolYear) {
+        List<TeachingHourCDR> return_value = getEntityManager(entityManager)
+                .createQuery("SELECT t FROM TeachingHourCDR t WHERE t.employment=:employment AND t.schoolYear=:schoolYear")
+                .setParameter("employment", employment).setParameter("schoolYear", schoolYear).getResultList();
+        return return_value;
+    }
+    
+    @SuppressWarnings("unchecked")
     public Collection<TeachingHourCDR> getEmployeeTeachingHoursCDRs(EntityManager entityManager, SchoolYear schoolYear,
             Employee employee) {
         List<TeachingHourCDR> return_value = getEntityManager(entityManager)
@@ -1373,7 +1414,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         info("searching employee's '#0' work experiences.", employee);
         result = entityManager
                 .createQuery(
-                        "SELECT s from WorkExperience s WHERE s.active IS TRUE AND s.employee=:employee ORDER BY s.fromDate")
+                        "SELECT s from WorkExperience s WHERE s.active IS TRUE AND (s.deleted IS FALSE OR s.deleted is NULL) AND s.employee=:employee ORDER BY s.fromDate")
                 .setParameter("employee", employee).getResultList();
 //        result = entityManager.createQuery(
 //	        "SELECT s from Leave s WHERE s.active IS FALSE AND s.employee=:employee ORDER BY s.established")
@@ -1390,14 +1431,39 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         Collection<Evaluation> result = null;
         info("searching employee's '#0' evaluations.", employee);
         result = entityManager.createQuery(
-            "SELECT s from Evaluation s WHERE s.employee=:employee AND s.deleted IS FALSE ORDER BY s.evaluationDate")
+            "SELECT s from Evaluation s WHERE s.employee=:employee AND (s.deleted IS FALSE OR s.deleted is NULL) ORDER BY s.evaluationDate")
             .setParameter("employee", employee).getResultList();
         info("found totally '#0' evaluation(s) in employee's '#1' history.", result.size(), employee);
         return result;
     }
    
-    
     @SuppressWarnings("unchecked")
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public Collection<PartTimeEmployment> getPartTimeEmploymentHistory(Employee employee) {
+        Collection<PartTimeEmployment> result = null;
+        info("searching employee's '#0' part-time employments.", employee);
+        result = entityManager.createQuery(
+            "SELECT s from PartTimeEmployment s WHERE s.employee=:employee AND (s.deleted IS FALSE OR s.deleted is NULL) ORDER BY s.startDate")
+            .setParameter("employee", employee).getResultList();
+        info("found totally '#0' part-time employment(s) in employee's '#1' history.", result.size(), employee);
+        return result;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public Collection<Penalty> getPenaltyHistory(Employee employee) {
+        Collection<Penalty> result = null;
+        result = entityManager.createQuery(
+            "SELECT s from Penalty s WHERE s.employee=:employee AND (s.deleted IS FALSE OR s.deleted is NULL) ORDER BY s.penaltyAwardDate")
+            .setParameter("employee", employee).getResultList();
+        return result;
+    }
+    
+    
+/*
+ * 	Deprecated because RankInfos are now available in employeeInfo.getRankInfos() collection
+ * 
+ *  @SuppressWarnings("unchecked")
     @Transactional(TransactionPropagationType.REQUIRED)
     public Collection<RankInfo> getRankInfoHistory(Employee employee) {
         Collection<RankInfo> result = null;
@@ -1423,6 +1489,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     public Collection<SpecialAssigment> getActiveSpecialAssigments(EntityManager em) {
         return getEntityManager(em).createQuery("SELECT s FROM SpecialAssigment s WHERE s.active IS TRUE").getResultList();
     }
+    */
 
     @Factory(value = "rankTypes")
     public RankType[] getRankTypes() {
@@ -1433,5 +1500,39 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     public EducationalLevelType[] getEducationalLevelTypes() {
         return EducationalLevelType.values();
     }
- 
+
+    @Factory(value = "penaltyTypes")
+    public PenaltyType[] getPenaltyTypes() {
+        return PenaltyType.values();
+    }
+
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public Long getSummedEducationalWorkExperience(Employee employee) {
+        Long returnValue = (Long) entityManager
+                .createQuery(
+                        "SELECT SUM(actualDays) FROM WorkExperience w WHERE w.active IS TRUE AND w.educational IS TRUE AND (w.deleted IS FALSE OR w.deleted IS NULL) AND w.employee=:employee")
+                .setParameter("employee", employee).getSingleResult();
+        return returnValue != null ? returnValue : new Long(0);
+    }
+    
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public Long getSummedTeachingWorkExperience(Employee employee) {
+        Long returnValue = (Long) entityManager
+                .createQuery(
+                        "SELECT SUM(actualDays) FROM WorkExperience w WHERE w.active IS TRUE AND w.teaching IS TRUE AND (w.deleted IS FALSE OR w.deleted IS NULL) AND w.employee=:employee")
+                .setParameter("employee", employee).getSingleResult();
+        return returnValue != null ? returnValue : new Long(0);
+    }
+    
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public Long getSummedWorkExperience(Employee employee) {
+        Long returnValue = (Long) entityManager
+                .createQuery(
+                        "SELECT SUM(actualDays) FROM WorkExperience w WHERE w.active IS TRUE AND (w.deleted IS FALSE OR w.deleted IS NULL) AND w.employee=:employee")
+                .setParameter("employee", employee).getSingleResult();
+        return returnValue != null ? returnValue : new Long(0);
+    } 
+    
+    
+
 }
