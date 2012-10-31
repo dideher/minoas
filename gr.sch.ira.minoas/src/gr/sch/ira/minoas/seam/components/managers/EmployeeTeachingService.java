@@ -24,11 +24,16 @@ public class EmployeeTeachingService extends BaseSeamComponent {
 
     @Unwrap
     public Integer calculate() {
-        EmployeeInfo employeeInfo = employeeHome.getInstance().getEmployeeInfo();
-        if (employeeInfo != null)
-            return  employeeInfo.getSumOfTeachingExperience() + employeeInfo.getTotalWorkService();
-        else
+        try {
+            EmployeeInfo employeeInfo = employeeHome.getInstance().getEmployeeInfo();
+            if (employeeInfo != null)
+                return employeeInfo.getSumOfTeachingExperience() + employeeInfo.getTotalWorkService();
+            else
+                return 0;
+        } catch (NullPointerException npe) {
             return 0;
+        }
+
     }
 
 }

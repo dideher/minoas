@@ -24,11 +24,15 @@ public class EmployeeTotalServiceIncludingWorkExperience extends BaseSeamCompone
 
     @Unwrap
     public Integer calculate() {
-        EmployeeInfo employeeInfo = employeeHome.getInstance().getEmployeeInfo();
-        if (employeeInfo != null)
-            return employeeInfo.getTotalWorkService() + employeeInfo.getSumOfExperience();
-        else
+        try {
+            EmployeeInfo employeeInfo = employeeHome.getInstance().getEmployeeInfo();
+            if (employeeInfo != null)
+                return employeeInfo.getTotalWorkService() + employeeInfo.getSumOfExperience();
+            else
+                return 0;
+        } catch (NullPointerException npe) {
             return 0;
+        }
     }
 
 }
