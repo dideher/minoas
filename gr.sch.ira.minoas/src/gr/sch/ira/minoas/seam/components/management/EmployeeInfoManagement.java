@@ -239,21 +239,32 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
         rinfo.setEmployeeInfo(employeeInfoHome.getInstance());
         
         employeeInfoHome.getInstance().setCurrentRankInfo(rinfo);
-
     }
     
     public void recalculateTotalWorkService() {
     	EmployeeInfo employeeInfo = employeeHome.getInstance().getEmployeeInfo();
-    	int totalWorkService = 0;
-    	if(totalWorkServiceCalculationDate != null && employeeInfo.getGogAppointmentDate()!=null)
-    		totalWorkService = CoreUtils.datesDifferenceIn360DaysYear(employeeInfo.getEntryIntoServiceDate(), totalWorkServiceCalculationDate);
-    	if(totalWorkService != 0)
-    		setTotalCalculatedServiceInDays(totalWorkService);
+    	if (employeeInfo != null) {
+	    	int totalWorkService = 0;
+	    	if(totalWorkServiceCalculationDate != null && employeeInfo.getGogAppointmentDate()!=null)
+	    		totalWorkService = CoreUtils.datesDifferenceIn360DaysYear(employeeInfo.getEntryIntoServiceDate(), totalWorkServiceCalculationDate);
+	    	if(totalWorkService != 0)
+	    		setTotalCalculatedServiceInDays(totalWorkService);
+    	}
     }
     
     public Integer getEducationalService() {
     	EmployeeInfo employeeInfo = employeeHome.getInstance().getEmployeeInfo();
-    	return employeeInfo.getSumOfEducationalExperience() + employeeInfo.getTotalWorkService();
+    	if(employeeInfo !=null) {
+	    	Integer sumOfEducationalExperience = employeeInfo.getSumOfEducationalExperience();
+	    	Integer totalWorkService = employeeInfo.getTotalWorkService();
+	    	if (sumOfEducationalExperience == null)
+	    		sumOfEducationalExperience = 0;
+	    	if(totalWorkService == null)
+	    		totalWorkService = 0;
+    	
+	    	return sumOfEducationalExperience + totalWorkService;
+    	} else 
+    		return 0;
     }
     
     public String getEducationalServiceYear_Month_Day() {
@@ -262,7 +273,18 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
     
     public Integer getTeachingService() {
     	EmployeeInfo employeeInfo = employeeHome.getInstance().getEmployeeInfo();
-    	return employeeInfo.getSumOfTeachingExperience() + employeeInfo.getTotalWorkService();
+    	
+    	if(employeeInfo !=null) {
+    		Integer sumOfTeachingExperience = employeeInfo.getSumOfTeachingExperience();
+        	Integer totalWorkService = employeeInfo.getTotalWorkService();
+        	if (sumOfTeachingExperience == null)
+        		sumOfTeachingExperience = 0;
+        	if(totalWorkService == null)
+        		totalWorkService = 0;
+        	
+        	return sumOfTeachingExperience + totalWorkService;	
+    	} else
+    		return 0;
     }
     
     public String getTeachingServiceYear_Month_Day() {
@@ -271,7 +293,10 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 
     public Integer getSumOfExperience() {
     	EmployeeInfo employeeInfo = employeeHome.getInstance().getEmployeeInfo();
-    	return employeeInfo.getSumOfExperience();
+    	if (employeeInfo != null)
+    		return employeeInfo.getSumOfExperience();
+    	else 
+    		return 0;
     }
     
     public String getSumOfExperienceYear_Month_Day() {
@@ -280,7 +305,17 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
     
     public Integer getTotalServiceIncludingWorkExperience() {
     	EmployeeInfo employeeInfo = employeeHome.getInstance().getEmployeeInfo();
-    	return employeeInfo.getTotalWorkService() + employeeInfo.getSumOfExperience();
+    	if(employeeInfo !=null) {
+    		Integer sumOfExperience = employeeInfo.getSumOfExperience();
+        	Integer totalWorkService = employeeInfo.getTotalWorkService();
+        	if (sumOfExperience == null)
+        		sumOfExperience = 0;
+        	if(totalWorkService == null)
+        		totalWorkService = 0;
+        	
+        	return totalWorkService + sumOfExperience;	
+    	} else 
+    		return 0;
     }
     
     public String getTotalServiceIncludingWorkExperienceYear_Month_Day() {
