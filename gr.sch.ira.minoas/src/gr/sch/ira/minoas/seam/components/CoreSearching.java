@@ -1475,6 +1475,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         return result;
     }
     
+    */
     @SuppressWarnings("unchecked")
     @Transactional(TransactionPropagationType.REQUIRED)
     public Collection<SpecialAssigment> getEmployeeSpecialAssigments(EntityManager entityManager, Employee employee) {
@@ -1484,12 +1485,13 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         return return_value;
     }
     
+    
     @Transactional(TransactionPropagationType.REQUIRED)
     @SuppressWarnings("unchecked")
     public Collection<SpecialAssigment> getActiveSpecialAssigments(EntityManager em) {
         return getEntityManager(em).createQuery("SELECT s FROM SpecialAssigment s WHERE s.active IS TRUE").getResultList();
     }
-    */
+    
 
     @Factory(value = "rankTypes")
     public RankType[] getRankTypes() {
