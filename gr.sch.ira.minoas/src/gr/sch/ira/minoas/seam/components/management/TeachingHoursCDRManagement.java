@@ -540,48 +540,62 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
             /* since we are about to include these leave in our computation, add it to the index for future reference */
             employeeWithAccountedLeaves.put(employeeWithLeave.getId(), employeeWithLeave);
             /* fix the common leave message */
-            StringBuffer sb = new StringBuffer();
-            sb.append("Άδεια τύπου ");
-            sb.append(leave.getEmployeeLeaveType().getDescription());
-            sb.append(" απο τις ");
-            sb.append(df.format(leave.getEstablished()));
-            sb.append(" μέχρι και  ");
-            sb.append(df.format(leave.getDueTo()));
-            sb.append(".");
+            StringBuffer commonLeaveMessagePattern = new StringBuffer();
+            commonLeaveMessagePattern.append("Άδεια τύπου '%s' απο τις '%s' μέχρι και τις '%s'.");
             if (isFutureLeave) {
-                sb.append(" Προσοχή, η άδεια είναι μελλοντική με έναρξη εντός εικοσαημέρου.");
+                commonLeaveMessagePattern.append(" Προσοχή, η άδεια είναι μελλοντική με έναρξη εντός εικοσαημέρου.");
             }
+            String msg = String.format(commonLeaveMessagePattern.toString(), leave.getEmployeeLeaveType().getDescription(), df.format(leave.getEstablished()), df.format(leave.getDueTo()));
+            /* for the given employee with a leave search and find in which units he provides work hour */
             Collection<Object[]> o = getEntityManager()
                     .createQuery(
                             "SELECT t.unit.id, SUM(t.hours) FROM TeachingHourCDR t WHERE t.schoolYear=:schoolYear AND t.employee=:employee GROUP BY (t.unit)")
                     .setParameter("schoolYear", currentSchoolYear).setParameter("employee", employeeWithLeave)
                     .getResultList();
+            /* for each unit with possitive work hours create a leave CDR */
             for (Object[] r : o) {
                 Long hours = (Long) r[1];
                 if (hours.longValue() > 0) {
-                    TeachingHourCDR cdr = new TeachingHourCDR();
-                    cdr.setCdrType(TeachingHourCDRType.LEAVE);
-                    cdr.setFutureCDR(isFutureLeave);
-                    cdr.setComment(sb.toString());
-                    cdr.setSpecialization(employeeWithLeave.getLastSpecialization());
-                    cdr.setEmployee(employeeWithLeave);
-                    /* */
-                    cdr.setHours(new Integer(hours.intValue() * -1));
-                    cdr.setLogisticCDR(Boolean.TRUE); /* this is a logistic CDR */
-                    cdr.setSchoolYear(currentSchoolYear);
-                    cdr.setUnit(getEntityManager().find(Unit.class, r[0]));
-                    cdr.setLeave(leave);
-                    entityManager.persist(cdr);
-                    if (((totalCDRsCreated++) % BatchSize) == 0)
-                        em.flush();
-
+                   
+                    /* 
+                    
+                    /* In 'hours' variable we have the total hours provided by the given employee to the given unit. Since there are 
+                     * SpecialAssigments, ie employee teaching hours of different specialization, we cannot just deduct the hours from 
+                     * the above query. 
+                     * 
+                     * We need to group the provided hours by specialization and add the corresponding leave CDRs 
+                     */
+                    Collection<Object[]> hoursPerSpecialization = getEntityManager()
+                            .createQuery(
+                                    "SELECT SUM(t.hours), t.specialization.id FROM TeachingHourCDR t WHERE t.schoolYear=:schoolYear AND t.employee=:employee AND t.unit.id=:unit GROUP BY (t.specialization)")
+                            .setParameter("schoolYear", currentSchoolYear).setParameter("employee", employeeWithLeave).setParameter("unit", r[0])
+                            .getResultList();
+                    /* For each hours of a given specialization in the given unit, create one LEAVE cdr.
+                     * We will by 99% generate only one CDR, but two when we have special assigments */
+                    for(Object[] hourPerSpecialization : hoursPerSpecialization) {
+                        Long _hours = (Long)hourPerSpecialization[0];
+                        Specialization _specialization = getEntityManager().find(Specialization.class, String.valueOf(hourPerSpecialization[1]));
+                        TeachingHourCDR cdr = new TeachingHourCDR();
+                        cdr.setCdrType(TeachingHourCDRType.LEAVE);
+                        cdr.setFutureCDR(isFutureLeave);
+                        cdr.setComment(msg);
+                        cdr.setSpecialization(_specialization);
+                        cdr.setEmployee(employeeWithLeave);
+                        /* */
+                        cdr.setHours(new Integer(_hours.intValue() * -1));
+                        cdr.setLogisticCDR(Boolean.TRUE); /* this is a logistic CDR */
+                        cdr.setSchoolYear(currentSchoolYear);
+                        cdr.setUnit(getEntityManager().find(Unit.class, r[0]));
+                        cdr.setLeave(leave);
+                        entityManager.persist(cdr);
+                        if (((totalCDRsCreated++) % BatchSize) == 0)
+                            em.flush();
+                        
+                    }
                 }
             }
 
         }
-
-        
-        
         
         em.flush();
         long finished = System.currentTimeMillis();
