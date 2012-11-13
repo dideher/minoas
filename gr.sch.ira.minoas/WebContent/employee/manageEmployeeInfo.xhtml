@@ -168,6 +168,7 @@
 
 									<a4j:commandLink id="updatelink"
 										rendered="#{(s:hasRole('ADMIN') or s:hasRole('MODIFY_EMPLOYEE_INFO'))}"
+										action="#{employeeInfoManagement.prepareNewEmployeeInfo()}"
 										reRender="updateEmployeeInfoModalPanel"
 										oncomplete="#{rich:component('updateEmployeeInfoModalPanel')}.show()"
 										value="Τροποποίηση" styleClass="rich-toolbar-item">
@@ -181,7 +182,7 @@
 
 									<a4j:commandLink id="insertlink"
 										rendered="#{(s:hasRole('ADMIN') or s:hasRole('MODIFY_EMPLOYEE_INFO'))}"
-										action="#{employeeInfoManagement.prepeareNewRankInfo()}"
+										action="#{employeeInfoManagement.prepareNewRankInfo()}"
 										reRender="insertRankInfoOutputPanel" immediate="true"
 										oncomplete="#{rich:component('insertRankInfoModalPanel')}.show()"
 										value="Εισαγωγή Βαθμού/ΜΚ" styleClass="rich-toolbar-item">

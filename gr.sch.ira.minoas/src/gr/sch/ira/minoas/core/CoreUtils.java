@@ -73,7 +73,7 @@ public abstract class CoreUtils {
     
     //	Return the days difference between two dates in a 360 days year (12 * 30 days)
     public static int datesDifferenceIn360DaysYear(Date dateFrom, Date dateTo) {
-    	if(dateFrom.after(dateTo))
+    	if(dateFrom == null || dateTo == null || dateFrom.after(dateTo))
     		return 0;
         Calendar startingDate = getStartingDate(dateFrom);
         Calendar endingDate = getEndingDateAccordingToStartingDate(dateTo, startingDate);

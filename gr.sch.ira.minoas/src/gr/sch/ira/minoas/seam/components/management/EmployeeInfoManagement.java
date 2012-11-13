@@ -3,7 +3,11 @@ package gr.sch.ira.minoas.seam.components.management;
 import gr.sch.ira.minoas.core.CoreUtils;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeInfo;
+import gr.sch.ira.minoas.model.employee.EmployeeType;
 import gr.sch.ira.minoas.model.employee.RankInfo;
+import gr.sch.ira.minoas.model.employee.RankType;
+import gr.sch.ira.minoas.model.employee.SectorType;
+import gr.sch.ira.minoas.model.employement.EducationalLevelType;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.CoreSearching;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
@@ -18,6 +22,7 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.international.StatusMessage.Severity;
+import org.omg.CosCollection.SetIRHelper;
 
 /**
  * @author <a href="mailto:gand@sch.gr">Yorgos Andreadakis</a>
@@ -230,9 +235,38 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 	}
 	
 	
+	/* this method is called when the user clicks the "add new rank info" */
+    public void prepareNewEmployeeInfo() {
+    	Employee employee = getEmployeeHome().getInstance();
+    	if(employee.getEmployeeInfo() == null) {
+
+    		
+    		EmployeeInfo ei = new EmployeeInfo(employee, "", null, "", null, "", null, false, null, false, null, false, null, false, null, SectorType.PUBLIC_SECTOR, 0, 0, 0, 0);
+    		//ei.resetEmployeeInfo();
+    		getEntityManager().persist(ei);
+
+    		
+    		RankInfo rInfo = new RankInfo(RankType.RANK_ST, 0, EducationalLevelType.UNIVERSITY_EDUCATION_LEVEL);
+    		rInfo.setEmployeeInfo(ei);
+    		getEntityManager().persist(rInfo);
+    		
+    		
+    		ei.getRankInfos().add(rInfo);
+    		ei.setCurrentRankInfo(rInfo);
+  		
+    		ei.setEmployee(employee);
+    		employee.setEmployeeInfo(ei);
+    		
+//    		getEntityManager().persist(employee);
+    		
+    		
+
+        }
+    }
+	
 	
     /* this method is called when the user clicks the "add new rank info" */
-    public void prepeareNewRankInfo() {
+    public void prepareNewRankInfo() {
         //employeeInfoHome.clearInstance();
         RankInfo rinfo = new RankInfo();
         rinfo.resetRankInfo();
@@ -253,7 +287,10 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
     
     public Integer getEducationalService() {
     	EmployeeInfo employeeInfo = employeeHome.getInstance().getEmployeeInfo();
-    	return employeeInfo.getSumOfEducationalExperience() + employeeInfo.getTotalWorkService();
+    	if(employeeInfo == null)
+    		return 0;
+    	else 
+    		return employeeInfo.getSumOfEducationalExperience() + employeeInfo.getTotalWorkService();
     }
     
     public String getEducationalServiceYear_Month_Day() {
@@ -262,7 +299,10 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
     
     public Integer getTeachingService() {
     	EmployeeInfo employeeInfo = employeeHome.getInstance().getEmployeeInfo();
-    	return employeeInfo.getSumOfTeachingExperience() + employeeInfo.getTotalWorkService();
+    	if(employeeInfo == null)
+    		return 0;
+    	else 
+    		return employeeInfo.getSumOfTeachingExperience() + employeeInfo.getTotalWorkService();
     }
     
     public String getTeachingServiceYear_Month_Day() {
@@ -271,7 +311,10 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 
     public Integer getSumOfExperience() {
     	EmployeeInfo employeeInfo = employeeHome.getInstance().getEmployeeInfo();
-    	return employeeInfo.getSumOfExperience();
+    	if(employeeInfo == null)
+    		return 0;
+    	else 
+    		return employeeInfo.getSumOfExperience();
     }
     
     public String getSumOfExperienceYear_Month_Day() {
@@ -280,7 +323,10 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
     
     public Integer getTotalServiceIncludingWorkExperience() {
     	EmployeeInfo employeeInfo = employeeHome.getInstance().getEmployeeInfo();
-    	return employeeInfo.getTotalWorkService() + employeeInfo.getSumOfExperience();
+    	if(employeeInfo == null)
+    		return 0;
+    	else 
+    		return employeeInfo.getTotalWorkService() + employeeInfo.getSumOfExperience();
     }
     
     public String getTotalServiceIncludingWorkExperienceYear_Month_Day() {
