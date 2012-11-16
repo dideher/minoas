@@ -87,49 +87,59 @@
 										<s:convertDateTime type="date" pattern="dd-MM-yyyy" />
 									</h:outputText>
 									<h:outputLabel value="" />
-									<h:outputText value="" />
-
-									<h:outputLabel styleClass="fieldValueLabel"
-										value="Μεταπυχιακό (MSc): " />
-									<h:selectBooleanCheckbox disabled="true"
-										value="#{employee.employeeInfo.hasAMasterDegree}" />
-									<h:outputLabel styleClass="fieldValueLabel"
-										value="* Ημ/νία Μεταπτυχιακού: " />
-									<h:outputText styleClass="fieldValueText"
-										value="#{employee.employeeInfo.mscDate}">
-										<s:convertDateTime type="date" pattern="dd-MM-yyyy" />
-									</h:outputText>
 									<h:outputLabel value="" />
-									<h:outputText styleClass="hintText"
-										value="* ημερομηνίες πριν την 1-11-2011 αναφέρονται στην ημερομηνία κατάθεσης του σχετικού τίτλου από την οποία λάμβανε" />
+
+
+									<h:outputLabel styleClass="fieldValueLabel" 
+										value="Μεταπυχιακό (MSc): " />
+									<h:panelGroup> 
+										<h:selectBooleanCheckbox disabled="true"
+											value="#{employee.employeeInfo.hasAMasterDegree}" />
+
+										<h:outputFormat styleClass="fieldValueLabel" value=" (Ημ/νία: {0, date, dd-MM-yyyy})"
+											id="MScDateOutputLabel" onmouseover="#{rich:component('MScDateTooltip')}.show(event);">
+										    <f:param value="#{employee.employeeInfo.mscDate}" />
+										</h:outputFormat>
+									</h:panelGroup>
+									<rich:toolTip  id="MScDateTooltip" value="Ημερομηνίες πριν την 1-11-2011 αναφέρονται στην ημερομηνία κατάθεσης του σχετικού τίτλου από την οποία λάμβανε και το σχετικό επίδομα, ενώ ημ/νίες μετά την 1-11-2011 αναφέρονται στην ημερομηνία πράξης του ΠΥΣΔΕ από την οποία ενσωματώνεται στο βαθμό ο χρόνος που αναλογεί." for="MScDateOutputLabel"/>
+									<h:outputLabel value="" />
+									<h:outputLabel value="" />
+									<h:outputLabel value="" />
+
 
 									<h:outputLabel styleClass="fieldValueLabel"
 										value="Ανώτ.Σχολ.Δημ.Διοίκ.: " />
-									<h:selectBooleanCheckbox disabled="true"
-										value="#{employee.employeeInfo.isANatSchPubAdminGraduate}" />
-									<h:outputLabel styleClass="fieldValueLabel"
-										value="* Ημ/νία Ανώτ. Σχολ. Δημ. Διοίκ.: " />
-									<h:outputText styleClass="fieldValueText"
-										value="#{employee.employeeInfo.natSchPubAdminDate}">
-										<s:convertDateTime type="date" pattern="dd-MM-yyyy" />
-									</h:outputText>
+									<h:panelGroup> 
+										<h:selectBooleanCheckbox disabled="true"
+											value="#{employee.employeeInfo.isANatSchPubAdminGraduate}" />
+
+										<h:outputFormat styleClass="fieldValueLabel" value=" (Ημ/νία: {0, date, dd-MM-yyyy})"
+											id="natSchPubAdminDateOutputLabel" onmouseover="#{rich:component('natSchPubAdminDateTooltip')}.show(event);">
+										    <f:param value="#{employee.employeeInfo.natSchPubAdminDate}" />
+										</h:outputFormat>
+									</h:panelGroup>
+									<rich:toolTip  id="natSchPubAdminDateTooltip" value="Ημερομηνίες πριν την 1-11-2011 αναφέρονται στην ημερομηνία κατάθεσης του σχετικού τίτλου από την οποία λάμβανε και το σχετικό επίδομα, ενώ ημ/νίες μετά την 1-11-2011 αναφέρονται στην ημερομηνία πράξης του ΠΥΣΔΕ από την οποία ενσωματώνεται στο βαθμό ο χρόνος που αναλογεί." for="natSchPubAdminDateOutputLabel"/>
 									<h:outputLabel value="" />
-									<h:outputText styleClass="hintText"
-										value="και το σχετικό επίδομα, ενώ ημ/νίες μετά την 1-11-2011 αναφέρονται στην ημερομηνία πράξης του ΠΥΣΔΕ" />
+									<h:outputLabel value="" />
+									<h:outputLabel value="" />
+									
 
 									<h:outputLabel styleClass="fieldValueLabel"
 										value="Διδακτορικό (PhD): " />
-									<h:selectBooleanCheckbox disabled="true"
-										value="#{employee.employeeInfo.hasAPhD}" />
-									<h:outputLabel styleClass="fieldValueLabel"
-										value="* Ημ/νία Διδακτορικού: " />
-									<h:outputText styleClass="fieldValueText"
-										value="#{employee.employeeInfo.phdDate}">
-										<s:convertDateTime type="date" pattern="dd-MM-yyyy" />
-									</h:outputText>
+									<h:panelGroup> 
+										<h:selectBooleanCheckbox disabled="true"
+											value="#{employee.employeeInfo.hasAPhD}" />
+
+										<h:outputFormat styleClass="fieldValueLabel" value=" (Ημ/νία: {0, date, dd-MM-yyyy})"
+											id="PhDDateOutputLabel" onmouseover="#{rich:component('PhDDateTooltip')}.show(event);">
+										    <f:param value="#{employee.employeeInfo.phdDate}" />
+										</h:outputFormat>
+									</h:panelGroup>
+									<rich:toolTip  id="PhDDateTooltip" value="Ημερομηνίες πριν την 1-11-2011 αναφέρονται στην ημερομηνία κατάθεσης του σχετικού τίτλου από την οποία λάμβανε και το σχετικό επίδομα, ενώ ημ/νίες μετά την 1-11-2011 αναφέρονται στην ημερομηνία πράξης του ΠΥΣΔΕ από την οποία ενσωματώνεται στο βαθμό ο χρόνος που αναλογεί." for="PhDDateOutputLabel"/>
 									<h:outputLabel value="" />
-									<h:outputText styleClass="hintText"
-										value="από την οποία ενσωματώνεται στο βαθμό ο χρόνος που αναλογεί." />
+									<h:outputLabel value="" />
+									<h:outputLabel value="" />
+									
 
 									<h:outputLabel styleClass="fieldValueLabel" value="Βαθμός: " />
 									<h:outputText styleClass="fieldValueText"
@@ -140,13 +150,24 @@
 										value="#{employee.employeeInfo.currentRankInfo.lastRankDate}">
 										<s:convertDateTime type="date" pattern="dd-MM-yyyy" />
 									</h:outputText>
-									<h:outputLabel styleClass="fieldValueLabel"
-										value="Πλεονάζ. Χρόνος στο Βαθμό: " />
+									<h:outputFormat styleClass="fieldValueLabel" value="Πλεονάζ. Χρόνος στο βαθμό την {0, date, dd-MM-yyyy}: ">
+									    <f:param value="#{employee.employeeInfo.currentRankInfo.lastRankDate}" />
+									</h:outputFormat>
 									<h:outputText styleClass="fieldValueText"
 										value="#{employee.employeeInfo.currentRankInfo.surplusTimeInRankYear_Month_Day} (#{employee.employeeInfo.currentRankInfo.surplusTimeInRank} ημ.)" />
 
-									<h:outputLabel styleClass="fieldValueLabel"
-										value="Μισθ. Κλιμάκιο: " />
+
+									<h:outputLabel value="" />
+									<h:outputLabel value="" />
+									<h:outputLabel value="" />
+									<h:outputLabel value="" />
+									<h:outputLabel styleClass="fieldValueLabel" value="Πλεονάζ. Χρόνος στο βαθμό σήμερα: "/>
+									<h:outputText styleClass="fieldValueText"
+										value="#{employee.employeeInfo.currentRankInfo.surplusTimeInRankUntilTodayYear_Month_Day} (#{employee.employeeInfo.currentRankInfo.surplusTimeInRankUntilToday} ημ.)" />
+
+
+
+									<h:outputLabel styleClass="fieldValueLabel" value="Μισθ. Κλιμάκιο: " />
 									<h:outputText styleClass="fieldValueText"
 										value="#{employee.employeeInfo.currentRankInfo.salaryGrade}" />
 									<h:outputLabel styleClass="fieldValueLabel"
@@ -155,8 +176,9 @@
 										value="#{employee.employeeInfo.currentRankInfo.lastSalaryGradeDate}">
 										<s:convertDateTime type="date" pattern="dd-MM-yyyy" />
 									</h:outputText>
-									<h:outputLabel styleClass="fieldValueLabel"
-										value="Πλεονάζ. Χρόνος στο Μ.Κ.: " />
+									<h:outputFormat styleClass="fieldValueLabel" value="Πλεονάζ. Χρόνος στο Μ.Κ. την {0, date, dd-MM-yyyy}: ">
+									    <f:param value="#{employee.employeeInfo.currentRankInfo.lastSalaryGradeDate}" />
+									</h:outputFormat>
 									<h:outputText styleClass="fieldValueText"
 										value="#{employee.employeeInfo.currentRankInfo.surplusTimeInSalaryGradeYear_Month_Day} (#{employee.employeeInfo.currentRankInfo.surplusTimeInSalaryGrade} ημ.)" />
 
@@ -165,7 +187,15 @@
 									<h:outputLabel value="" />
 									<h:outputLabel value="" />
 									<h:outputLabel value="" />
+									<h:outputLabel styleClass="fieldValueLabel" value="Πλεονάζ. Χρόνος στο Μ.Κ. σήμερα: "/>
+									<h:outputText styleClass="fieldValueText"
+										value="#{employee.employeeInfo.currentRankInfo.surplusTimeInSalaryGradeUntilTodayYear_Month_Day} (#{employee.employeeInfo.currentRankInfo.surplusTimeInSalaryGradeUntilToday} ημ.)" />
 
+
+									<h:outputLabel value="" />
+									<h:outputLabel value="" />
+									<h:outputLabel value="" />
+									<h:outputLabel value="" />
 									<a4j:commandLink id="updatelink"
 										rendered="#{(s:hasRole('ADMIN') or s:hasRole('MODIFY_EMPLOYEE_INFO'))}"
 										action="#{employeeInfoManagement.prepareNewEmployeeInfo()}"

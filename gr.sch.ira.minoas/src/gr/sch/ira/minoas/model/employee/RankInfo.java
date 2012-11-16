@@ -980,6 +980,23 @@ public class RankInfo extends BaseIDModel {
 		return surplusTimeInRank;
 	}
 
+	
+	/**
+	 * @return Τον πλεονάζοντα χρόνο στο Βαθμό Από τότε που πήρε το Βαθμό έως και σήμερα. 
+	 * Αν υπήρχε ήδη πλεονάζοντας χρόνος στον Βαθμό κατά την απονομή του τελευταίου τότε 
+	 * αυτός αθροίζεται στο διάστημα ημερών (έτος 360 ημερών) από τότε έως σήμερα.  
+	 */
+	public Integer getSurplusTimeInRankUntilToday() {
+		return CoreUtils.datesDifferenceIn360DaysYear(getLastRankDate(), new Date())+ surplusTimeInRank;
+	}
+	
+	/**
+	 * @return the surplusTimeInRankUntilToday in Year_Month_Day formated string
+	 */
+	public String getSurplusTimeInRankUntilTodayYear_Month_Day() {
+		return CoreUtils.getNoOfDaysInYear_Month_DayFormat(getSurplusTimeInRankUntilToday());
+	}
+	
 	/**
 	 * @return the surplusTimeInRank in Year_Month_Day formated string
 	 */
@@ -1000,6 +1017,22 @@ public class RankInfo extends BaseIDModel {
 	 */
 	public Integer getSurplusTimeInSalaryGrade() {
 		return surplusTimeInSalaryGrade;
+	}
+	
+	/**
+	 * @return Τον πλεονάζοντα χρόνο στο Μ.Κ. Από τότε που πήρε το Μ.Κ. έως και σήμερα. 
+	 * Αν υπήρχε ήδη πλεονάζοντας χρόνος στο Μ.Κ. κατά την απονομή του τελευταίου τότε 
+	 * αυτός αθροίζεται στο διάστημα ημερών (έτος 360 ημερών) από τότε έως σήμερα.  
+	 */
+	public Integer getSurplusTimeInSalaryGradeUntilToday() {
+		return CoreUtils.datesDifferenceIn360DaysYear(getLastSalaryGradeDate(), new Date())+ surplusTimeInSalaryGrade;
+	}
+	
+	/**
+	 * @return the surplusTimeInSalaryGradeUntilToday in Year_Month_Day formated string
+	 */
+	public String getSurplusTimeInSalaryGradeUntilTodayYear_Month_Day() {
+		return CoreUtils.getNoOfDaysInYear_Month_DayFormat(getSurplusTimeInSalaryGradeUntilToday());
 	}
 
 	/**
