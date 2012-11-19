@@ -422,6 +422,27 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
 	    if (getEmployeeHome().isManaged() && !getSpecialAssigmentHome().isManaged()) {
 	        Employee employee = getEmployeeHome().getInstance();
 	        SpecialAssigment sa = getSpecialAssigmentHome().getInstance();
+	        /* special assigment hours can be more than employee's mandatory working hours */
+	        Employment employement = employee.getCurrentEmployment();
+	        if(employement != null) {
+	            Integer hours = employement.getMandatoryWorkingHours();
+	            if(sa.getFinalWorkingHours()>hours) {
+	                facesMessages.add(Severity.ERROR, String.format("Η ώρες της ειδικής ασχολίας δεν μπορούν να υπερβαίνουν το υποχρεωτικό ωράριο των '%d' συνολικών ωρών του εκπαιδευτικού.",hours));
+	                return ACTION_OUTCOME_FAILURE;
+	            }
+	            
+	            Collection<SpecialAssigment> specialAssigments = getCoreSearching().getEmployeeSpecialAssigments(getEntityManager(), employee);
+	            int totalHours = 0;
+	            for(SpecialAssigment as : specialAssigments) {
+	                totalHours += as.getFinalWorkingHours();
+	            }
+	            if(totalHours>hours) {
+	                facesMessages.add(Severity.ERROR, String.format("Το σύνολο των '%d' ωρών ειδικής ασχολίας δεν μπορούν να υπερβαίνουν το υποχρεωτικό ωράριο των '%d' ωρών του εκπαιδευτικού.",totalHours, hours));
+                    return ACTION_OUTCOME_FAILURE;
+	            }
+	        }
+	        
+	        
 	        sa.setInsertedBy(getPrincipal());
 	        sa.setInsertedOn(new Date());
 	        sa.setEmployee(employee);
