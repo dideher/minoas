@@ -193,6 +193,19 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
      */
     private static final long serialVersionUID = 1L;
     
+    
+    private String inputTextFieldHelper1 = ""; 
+    
+    private String inputTextFieldHelper2 = "";
+    
+    private String inputTextFieldHelper3 = "";
+    
+    private String inputTextFieldHelper4 = "";
+    
+    private String inputTextFieldHelper5 = "";
+    
+    private String inputTextFieldHelper6 = "";
+    
 
 	@In(required = true, create = true)
 	private EmployeeHome employeeHome;
@@ -396,6 +409,12 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
 	/* this method is called when the user clicks the "add new employee special assigment" */
     public void prepareForNewSpecialAssigment() {
         specialAssigmentHome.clearInstance();
+        /* if the employee has an current employment prefill the value */
+        Employment emp = getEmployeeHome().getInstance().getCurrentEmployment();
+        if(emp!=null) {
+            inputTextFieldHelper1 = emp.getSchool().getTitle();
+            specialAssigmentHome.getInstance().setUnit(emp.getSchool());
+        }
     }
 	
 	@Transactional(TransactionPropagationType.REQUIRED)
@@ -412,6 +431,8 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
 	        getEntityManager().flush();
 	        constructSpecialAssigmentItems(); /* update the list */
 	        info("added new special assigment #0 for employee #1", sa, employee);
+	        inputTextFieldHelper1 = "";
+	        inputTextFieldHelper2 = "";
 	        return ACTION_OUTCOME_SUCCESS;
 	    } else {
             facesMessages.add(Severity.ERROR, "Employee #0 or is not managed or Special Assigment #1 IS managed.",getEmployeeHome());
@@ -657,6 +678,90 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
      */
     public void setEmployeeSpecialAssigmentItems(Collection<SpecialAssigmentReportItem> employeeSpecialAssigmentItems) {
         this.employeeSpecialAssigmentItems = employeeSpecialAssigmentItems;
+    }
+
+    /**
+     * @return the inputTextFieldHelper1
+     */
+    public String getInputTextFieldHelper1() {
+        return inputTextFieldHelper1;
+    }
+
+    /**
+     * @param inputTextFieldHelper1 the inputTextFieldHelper1 to set
+     */
+    public void setInputTextFieldHelper1(String inputTextFieldHelper1) {
+        this.inputTextFieldHelper1 = inputTextFieldHelper1;
+    }
+
+    /**
+     * @return the inputTextFieldHelper2
+     */
+    public String getInputTextFieldHelper2() {
+        return inputTextFieldHelper2;
+    }
+
+    /**
+     * @param inputTextFieldHelper2 the inputTextFieldHelper2 to set
+     */
+    public void setInputTextFieldHelper2(String inputTextFieldHelper2) {
+        this.inputTextFieldHelper2 = inputTextFieldHelper2;
+    }
+
+    /**
+     * @return the inputTextFieldHelper3
+     */
+    public String getInputTextFieldHelper3() {
+        return inputTextFieldHelper3;
+    }
+
+    /**
+     * @param inputTextFieldHelper3 the inputTextFieldHelper3 to set
+     */
+    public void setInputTextFieldHelper3(String inputTextFieldHelper3) {
+        this.inputTextFieldHelper3 = inputTextFieldHelper3;
+    }
+
+    /**
+     * @return the inputTextFieldHelper4
+     */
+    public String getInputTextFieldHelper4() {
+        return inputTextFieldHelper4;
+    }
+
+    /**
+     * @param inputTextFieldHelper4 the inputTextFieldHelper4 to set
+     */
+    public void setInputTextFieldHelper4(String inputTextFieldHelper4) {
+        this.inputTextFieldHelper4 = inputTextFieldHelper4;
+    }
+
+    /**
+     * @return the inputTextFieldHelper5
+     */
+    public String getInputTextFieldHelper5() {
+        return inputTextFieldHelper5;
+    }
+
+    /**
+     * @param inputTextFieldHelper5 the inputTextFieldHelper5 to set
+     */
+    public void setInputTextFieldHelper5(String inputTextFieldHelper5) {
+        this.inputTextFieldHelper5 = inputTextFieldHelper5;
+    }
+
+    /**
+     * @return the inputTextFieldHelper6
+     */
+    public String getInputTextFieldHelper6() {
+        return inputTextFieldHelper6;
+    }
+
+    /**
+     * @param inputTextFieldHelper6 the inputTextFieldHelper6 to set
+     */
+    public void setInputTextFieldHelper6(String inputTextFieldHelper6) {
+        this.inputTextFieldHelper6 = inputTextFieldHelper6;
     }
 
 }

@@ -7,7 +7,7 @@
 	xmlns:a4j="http://richfaces.org/a4j">
 
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 
 <ui:composition template="/layout/simple-beauty-template.xhtml">
@@ -1225,31 +1225,40 @@
 				</h:panelGroup>
 			</f:facet>
 			<a4j:region>
+			
 				<h:panelGrid columns="1">
-					<h:form>
-						<a4j:outputPanel id="addSpecialAssigmentModalPanelContent"
-							layout="inline">
-
-							<ui:include src="/components/messages-component.xhtml" />
-
-							<h:outputText style="font-style:italic; font-size:12px;"
+				
+				<h:outputText style="font-style:italic; font-size:12px;"
 								value="Με την παρακάτω φόρμα, μπορείται να εισάγετε ειδική ασχολία του εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}." />
+								
+				<a4j:outputPanel id="addSpecialAssigmentModalPanelContent">
+							
+													
+							<a4j:form id="addSpecialAssigmentForm">
+							
+							<ui:include src="/components/messages-component.xhtml"  />
+							
 							<h:panelGrid columns="1" width="100%">
+														
 								<h:panelGroup>
 									<h:panelGrid columns="2">
-
+										
 										<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 											<ui:define name="label">
 												<h:outputText value="Μονάδα Ασχολίας" />
 											</ui:define>
 
-											<h:inputText id="specialAssigmentUnitTarget"
-												value="#{specialAssigmentHome.instance.unit.title}"
-												styleClass="fieldValueText" required="true">
+										
+												<h:inputText id="sp_unit" styleClass="fieldValueText" required="true" value="#{employeeManagement.inputTextFieldHelper1}" immediate="true" />
+												<h:graphicImage value="/img/icons/arrowDown.jpg" height="16"
+												width="16"
+												onclick="#{rich:component('regionUnitSuggestion')}.callSuggestion(true)"
+												alt="" />
 
-												<rich:suggestionbox for="specialAssigmentUnitTarget"
-													var="_school" height="200" width="300"
-													suggestionAction="#{schoolUnitSuggester.suggest}">
+												<rich:suggestionbox id="regionUnitSuggestion" for="sp_unit"
+													height="200" width="300"
+													suggestionAction="#{schoolUnitSuggester.suggest}" var="_school"
+													ignoreDupResponses="true">
 													<f:facet name="nothingLabel">
 														<h:outputText value="Άγνωστη Μονάδα" />
 													</f:facet>
@@ -1261,18 +1270,25 @@
 															target="#{specialAssigmentHome.instance.unit}" />
 													</a4j:support>
 												</rich:suggestionbox>
-											</h:inputText>
+
+
+											
 										</s:decorate>
 
 										<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 											<ui:define name="label">
 												<h:outputText value="Ειδική Ασχολία" />
 											</ui:define>
-											<h:inputText id="specializationFilterVirtual" required="true"
-												value="#{specialAssigmentHome.instance.specializationGroup.title}"
-												styleClass="fieldValueText" size="17" maxlength="17">
-												<rich:suggestionbox height="100" width="250"
-													for="specializationFilterVirtual" var="a_spec"
+											
+											
+												<h:inputText id="value" styleClass="fieldValueText" required="true" value="#{employeeManagement.inputTextFieldHelper2}" immediate="true"/>
+												<h:graphicImage value="/img/icons/arrowDown.jpg" height="16"
+												width="16"
+												onclick="#{rich:component('specializationSuggester')}.callSuggestion(true)"
+												alt="" />
+												
+												<rich:suggestionbox height="100" width="250" for="value"
+													var="a_spec"  id="specializationSuggester"
 													suggestionAction="#{specializationGroupVirtualEditionSuggester.suggest}">
 													<f:facet name="nothingLabel">
 														<h:outputText value="Άγνωστη Ειδική Ασχολία" />
@@ -1285,7 +1301,8 @@
 															target="#{specialAssigmentHome.instance.specializationGroup}" />
 													</a4j:support>
 												</rich:suggestionbox>
-											</h:inputText>
+											
+											
 
 										</s:decorate>
 
@@ -1295,7 +1312,7 @@
 											</ui:define>
 											<h:inputText
 												value="#{specialAssigmentHome.instance.finalWorkingHours}"
-												required="true" maxlength="2" size="2"
+												required="true" maxlength="2" size="2" immediate="true"
 												styleClass="fieldValueText" />
 										</s:decorate>
 
@@ -1311,25 +1328,24 @@
 										required="false" styleClass="fieldValueText" />
 								</s:decorate>
 
-
 							</h:panelGrid>
-						</a4j:outputPanel>
-
+				
 						<h:panelGrid columns="2">
 
 							<a4j:commandButton value="Καταχώρηση Ειδικής Ασχολίας !"
 								action="#{employeeManagement.addEmployeeSpecialAssigment()}"
-								limitToList="true"
+								limitToList="true" 
 								data="#{facesContext.maximumSeverity.ordinal ge 2}"
-								oncomplete="if(data == false) Richfaces.hideModalPanel('addSpecialAssigmentModalPanel');"
-								reRender="employeeSpecialAssigmentOutputPanel" />
+								oncomplete="if(data == false)  #{rich:component('addSpecialAssigmentModalPanel')}.hide();" 
+								reRender="addSpecialAssigmentModalPanelContent,employeeSpecialAssigmentOutputPanel,addSpecialAssigmentForm" />
 							<a4j:commandButton value="Επιστροφή .."
-								reRender="employeeSpecialAssigmentOutputPanel"
+								reRender="addSpecialAssigmentModalPanelContent,employeeSpecialAssigmentOutputPanel"
 								oncomplete="#{rich:component('addSpecialAssigmentModalPanel')}.hide();" />
 						</h:panelGrid>
-					</h:form>
+						</a4j:form>
+								</a4j:outputPanel> 			
 				</h:panelGrid>
-			</a4j:region>
+				</a4j:region>
 		</rich:modalPanel>
 
 
