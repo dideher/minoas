@@ -557,11 +557,31 @@ public class SchoolReport extends BaseReport {
        
         for (TeachingHourCDR cdr : schoolsCDRS) {
             Employee employee = cdr.getEmployee();
-            SpecializationGroup sgroup = specializationGroupCache.get(employee.getLastSpecialization());
+            /* gh-54 */
+            
+            /* We need to determine with which specialization we will group the CDR. 
+             * If the cdr is related to a virtual specialization and this specialization is not the same with
+             * the employees last noted specialization, then use the CRD's specialization and not the employees
+             * specialization.
+             * 
+             * This is related to special assigments where a special assigment generates two CDRs :
+             * 
+             * One with the same specialization as the employee's specialization which deducts hours
+             * and one with special assigments specialization which adds hours to the virtual specialization
+             * 
+             */
+            Specialization referenceSpecialization = null;
+            if((!employee.getLastSpecialization().getId().equals(cdr.getSpecialization().getId())) &&  cdr.getSpecialization().getIsVirtual()) {
+                referenceSpecialization = cdr.getSpecialization();
+            } else referenceSpecialization = employee.getLastSpecialization();
+            
+            /* gh-54 */
+            
+            SpecializationGroup sgroup = specializationGroupCache.get(referenceSpecialization);
             /* if the employee's specialization does not map to a concrete specialization group, then
              * just use the specialization title as group title.
              */
-            String groupTitle = (sgroup != null) ? sgroup.getTitle() : employee.getLastSpecialization().getTitle();
+            String groupTitle = (sgroup != null) ? sgroup.getTitle() : referenceSpecialization.getTitle();
             GroupedEmployeesCDRItem group = groupCache.get(groupTitle);
             if (group == null) {
                 /* no such group so far */

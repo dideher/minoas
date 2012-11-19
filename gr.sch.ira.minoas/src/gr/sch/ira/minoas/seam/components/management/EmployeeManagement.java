@@ -7,6 +7,7 @@ import gr.sch.ira.minoas.model.employee.EmployeeExclusion;
 import gr.sch.ira.minoas.model.employee.RegularEmployeeInfo;
 import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 import gr.sch.ira.minoas.model.employement.Employment;
+import gr.sch.ira.minoas.model.employement.SpecialAssigment;
 import gr.sch.ira.minoas.model.employement.TeachingHourCDR;
 import gr.sch.ira.minoas.model.employement.TeachingHourCDRType;
 import gr.sch.ira.minoas.model.employement.WorkExperience;
@@ -15,8 +16,10 @@ import gr.sch.ira.minoas.seam.components.EmployeeMergeRequest;
 import gr.sch.ira.minoas.seam.components.home.EmployeeExclusionHome;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
 import gr.sch.ira.minoas.seam.components.home.RegularEmployeeInfoHome;
+import gr.sch.ira.minoas.seam.components.home.SpecialAssigmentHome;
 import gr.sch.ira.minoas.seam.components.reports.resource.EmployeeWorkExperienceItem;
 import gr.sch.ira.minoas.seam.components.reports.resource.LeaveReportItem;
+import gr.sch.ira.minoas.seam.components.reports.resource.SpecialAssigmentReportItem;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -190,9 +193,25 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
      */
     private static final long serialVersionUID = 1L;
     
+    
+    private String inputTextFieldHelper1 = ""; 
+    
+    private String inputTextFieldHelper2 = "";
+    
+    private String inputTextFieldHelper3 = "";
+    
+    private String inputTextFieldHelper4 = "";
+    
+    private String inputTextFieldHelper5 = "";
+    
+    private String inputTextFieldHelper6 = "";
+    
 
 	@In(required = true, create = true)
 	private EmployeeHome employeeHome;
+	
+	@In(required = true, create = true)
+	private SpecialAssigmentHome specialAssigmentHome;
 	
 	@In(required = true, create = true)
 	private RegularEmployeeInfoHome regularEmployeeInfoHome;
@@ -214,6 +233,9 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
 	
 	@DataModel(value="employeeLeaveItems")
 	private Collection<LeaveReportItem> employeeLeaveItems;
+	
+	@DataModel(value="employeeSpecialAssigmentItems")
+    private Collection<SpecialAssigmentReportItem> employeeSpecialAssigmentItems;
 	
 	/**
 	 * @return the employeeWorkExperienceItems
@@ -324,6 +346,8 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
         return return_value;
     }
 	
+	
+	
 	@Factory(value="employeeWorkExperienceItems")
 	public void constructEmployeeWorkExperienceHistory() {
 		Employee employee = getEmployeeHome().getInstance();
@@ -332,6 +356,16 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
 	    for(WorkExperience experience : employeeExperience) {
 	    	employeeWorkExperienceItems.add(new EmployeeWorkExperienceItem(experience));
 	    }
+	}
+	
+	@Factory(value="employeeSpecialAssigmentItems")
+	public void constructSpecialAssigmentItems() {
+	    Employee employee = getEmployeeHome().getInstance();
+        Collection<SpecialAssigment> employeeSpecialAssigments = getCoreSearching().getEmployeeSpecialAssigments(getEntityManager(), employee);
+        employeeSpecialAssigmentItems  = new ArrayList<SpecialAssigmentReportItem>(employeeSpecialAssigments.size());
+        for(SpecialAssigment specialAssigment : employeeSpecialAssigments) {
+            employeeSpecialAssigmentItems.add(new SpecialAssigmentReportItem(specialAssigment));
+        }
 	}
 	
 	@Transactional(TransactionPropagationType.REQUIRED)
@@ -367,11 +401,95 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
 			getEmployeeHome().update();
 			return ACTION_OUTCOME_SUCCESS;
 		} else {
-			facesMessages.add(Severity.ERROR, "Employee #0 is not managed.");
+			facesMessages.add(Severity.ERROR, "Employee #0 is not managed.", getEmployeeHome());
 			return ACTION_OUTCOME_FAILURE;
 		}
-
 	}
+	
+	/* this method is called when the user clicks the "add new employee special assigment" */
+    public void prepareForNewSpecialAssigment() {
+        specialAssigmentHome.clearInstance();
+        /* if the employee has an current employment prefill the value */
+        Employment emp = getEmployeeHome().getInstance().getCurrentEmployment();
+        if(emp!=null) {
+            inputTextFieldHelper1 = emp.getSchool().getTitle();
+            specialAssigmentHome.getInstance().setUnit(emp.getSchool());
+        }
+    }
+	
+	@Transactional(TransactionPropagationType.REQUIRED)
+    public String addEmployeeSpecialAssigment() {
+	    if (getEmployeeHome().isManaged() && !getSpecialAssigmentHome().isManaged()) {
+	        Employee employee = getEmployeeHome().getInstance();
+	        SpecialAssigment sa = getSpecialAssigmentHome().getInstance();
+	        /* special assigment hours can be more than employee's mandatory working hours */
+	        Employment employement = employee.getCurrentEmployment();
+	        if(employement != null) {
+	            Integer hours = employement.getMandatoryWorkingHours();
+	            if(sa.getFinalWorkingHours()>hours) {
+	                facesMessages.add(Severity.ERROR, String.format("Η ώρες της ειδικής ασχολίας δεν μπορούν να υπερβαίνουν το υποχρεωτικό ωράριο των '%d' συνολικών ωρών του εκπαιδευτικού.",hours));
+	                return ACTION_OUTCOME_FAILURE;
+	            }
+	            
+	            Collection<SpecialAssigment> specialAssigments = getCoreSearching().getEmployeeSpecialAssigments(getEntityManager(), employee);
+	            int totalHours = 0;
+	            for(SpecialAssigment as : specialAssigments) {
+	                totalHours += as.getFinalWorkingHours();
+	            }
+	            if(totalHours>hours) {
+	                facesMessages.add(Severity.ERROR, String.format("Το σύνολο των '%d' ωρών ειδικής ασχολίας δεν μπορούν να υπερβαίνουν το υποχρεωτικό ωράριο των '%d' ωρών του εκπαιδευτικού.",totalHours, hours));
+                    return ACTION_OUTCOME_FAILURE;
+	            }
+	        }
+	        
+	        
+	        sa.setInsertedBy(getPrincipal());
+	        sa.setInsertedOn(new Date());
+	        sa.setEmployee(employee);
+	        sa.setSchoolYear(getCoreSearching().getActiveSchoolYear(getEntityManager()));
+	        sa.setActive(Boolean.TRUE);
+	        getSpecialAssigmentHome().persist();
+	        getEntityManager().flush();
+	        constructSpecialAssigmentItems(); /* update the list */
+	        info("added new special assigment #0 for employee #1", sa, employee);
+	        inputTextFieldHelper1 = "";
+	        inputTextFieldHelper2 = "";
+	        return ACTION_OUTCOME_SUCCESS;
+	    } else {
+            facesMessages.add(Severity.ERROR, "Employee #0 or is not managed or Special Assigment #1 IS managed.",getEmployeeHome());
+            return ACTION_OUTCOME_FAILURE;
+        }
+	}
+	
+	@Transactional(TransactionPropagationType.REQUIRED)
+    public String removeEmployeeSpecialAssigment() {
+	    if (getEmployeeHome().isManaged() && getSpecialAssigmentHome().isManaged()) {
+            SpecialAssigment sa = getSpecialAssigmentHome().getInstance();
+            sa.setActive(Boolean.FALSE);
+            sa.setDeleted(Boolean.TRUE);
+            sa.setDeletedBy(getPrincipal());
+            sa.setDeletedOn(new Date());
+            
+            // delete all CDRs associated with the given special assigment */
+            for(TeachingHourCDR cdr : sa.getSpecialAssigmentCDRs()) {
+                cdr.setSpecialAssigment(null);
+                getEntityManager().remove(cdr);
+            }
+            sa.getSpecialAssigmentCDRs().clear();
+            getEntityManager().flush();
+            constructSpecialAssigmentItems();
+            info("removed special assigment #0 for employee #1", specialAssigmentHome.getInstance(), employeeHome.getInstance());
+            return ACTION_OUTCOME_FAILURE;
+        } else {
+            facesMessages.add(Severity.ERROR, "Employee #0 or special assigment #1 is not managed.",employeeHome, specialAssigmentHome);
+            return ACTION_OUTCOME_FAILURE;
+        }
+	}
+	
+	@Transactional(TransactionPropagationType.REQUIRED)
+    public String updateEmployeeSpecialAssigment() {
+	    return ACTION_OUTCOME_FAILURE;
+    }
 	
 	@Transactional
 	public String transferEmployee() {
@@ -553,6 +671,118 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
      */
     public void setRegularEmployeeInfoHome(RegularEmployeeInfoHome regularEmployeeInfoHome) {
         this.regularEmployeeInfoHome = regularEmployeeInfoHome;
+    }
+
+    /**
+     * @return the specialAssigmentHome
+     */
+    public SpecialAssigmentHome getSpecialAssigmentHome() {
+        return specialAssigmentHome;
+    }
+
+    /**
+     * @param specialAssigmentHome the specialAssigmentHome to set
+     */
+    public void setSpecialAssigmentHome(SpecialAssigmentHome specialAssigmentHome) {
+        this.specialAssigmentHome = specialAssigmentHome;
+    }
+
+    /**
+     * @return the employeeSpecialAssigmentItems
+     */
+    public Collection<SpecialAssigmentReportItem> getEmployeeSpecialAssigmentItems() {
+        return employeeSpecialAssigmentItems;
+    }
+
+    /**
+     * @param employeeSpecialAssigmentItems the employeeSpecialAssigmentItems to set
+     */
+    public void setEmployeeSpecialAssigmentItems(Collection<SpecialAssigmentReportItem> employeeSpecialAssigmentItems) {
+        this.employeeSpecialAssigmentItems = employeeSpecialAssigmentItems;
+    }
+
+    /**
+     * @return the inputTextFieldHelper1
+     */
+    public String getInputTextFieldHelper1() {
+        return inputTextFieldHelper1;
+    }
+
+    /**
+     * @param inputTextFieldHelper1 the inputTextFieldHelper1 to set
+     */
+    public void setInputTextFieldHelper1(String inputTextFieldHelper1) {
+        this.inputTextFieldHelper1 = inputTextFieldHelper1;
+    }
+
+    /**
+     * @return the inputTextFieldHelper2
+     */
+    public String getInputTextFieldHelper2() {
+        return inputTextFieldHelper2;
+    }
+
+    /**
+     * @param inputTextFieldHelper2 the inputTextFieldHelper2 to set
+     */
+    public void setInputTextFieldHelper2(String inputTextFieldHelper2) {
+        this.inputTextFieldHelper2 = inputTextFieldHelper2;
+    }
+
+    /**
+     * @return the inputTextFieldHelper3
+     */
+    public String getInputTextFieldHelper3() {
+        return inputTextFieldHelper3;
+    }
+
+    /**
+     * @param inputTextFieldHelper3 the inputTextFieldHelper3 to set
+     */
+    public void setInputTextFieldHelper3(String inputTextFieldHelper3) {
+        this.inputTextFieldHelper3 = inputTextFieldHelper3;
+    }
+
+    /**
+     * @return the inputTextFieldHelper4
+     */
+    public String getInputTextFieldHelper4() {
+        return inputTextFieldHelper4;
+    }
+
+    /**
+     * @param inputTextFieldHelper4 the inputTextFieldHelper4 to set
+     */
+    public void setInputTextFieldHelper4(String inputTextFieldHelper4) {
+        this.inputTextFieldHelper4 = inputTextFieldHelper4;
+    }
+
+    /**
+     * @return the inputTextFieldHelper5
+     */
+    public String getInputTextFieldHelper5() {
+        return inputTextFieldHelper5;
+    }
+
+    /**
+     * @param inputTextFieldHelper5 the inputTextFieldHelper5 to set
+     */
+    public void setInputTextFieldHelper5(String inputTextFieldHelper5) {
+        this.inputTextFieldHelper5 = inputTextFieldHelper5;
+    }
+
+    /**
+     * @return the inputTextFieldHelper6
+     */
+    public String getInputTextFieldHelper6() {
+        return inputTextFieldHelper6;
+    }
+
+    /**
+     * @param inputTextFieldHelper6 the inputTextFieldHelper6 to set
+     */
+    public void setInputTextFieldHelper6(String inputTextFieldHelper6) {
+        this.inputTextFieldHelper6 = inputTextFieldHelper6;
     }
 
 }

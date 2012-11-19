@@ -8,9 +8,10 @@
   <!-- navigation rules -->
   
  
-  
-  <navigation from-action="#{specializationGroupHome.persist()}">
+  <navigation from-action="#{specializationGroupManagement.addSpecializationGroupAction()}">
+    <rule if-outcome="success">
       <redirect view-id="#{empty add_specialization_group_from ? '/home' : add_specialization_group_from}.xhtml}" />
+    </rule>
   </navigation>
   
   

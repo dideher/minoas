@@ -34,10 +34,6 @@ public class SpecializationGroupHome extends MinoasEntityHome<SpecializationGrou
 	@Override
 	@Transactional
 	public String persist() {
-		SpecializationGroup group = (SpecializationGroup) getInstance();
-		group.setSchoolYear(getCoreSearching().getActiveSchoolYear(getEntityManager()));
-		group.setInsertedBy(getPrincipal());
-		getEntityManager().persist(group);
 		getLogger()
 				.info("specialization group #0 has been created by #1", getInstance().getTitle(), getPrincipalName());
 		return super.persist();

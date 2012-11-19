@@ -7,7 +7,7 @@
 	xmlns:a4j="http://richfaces.org/a4j">
 
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 
 <ui:composition template="/layout/simple-beauty-template.xhtml">
@@ -17,7 +17,6 @@
 				<h:outputText
 					value="Καρτέλα Εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}" />
 			</f:facet>
-
 
 			<ui:include src="/components/messages-component.xhtml" />
 			<h:form>
@@ -40,6 +39,7 @@
 			</h:form>
 
 			<h:panelGrid columns="1" width="100%">
+
 				<s:div>
 
 					<h:panelGrid columns="2">
@@ -54,37 +54,6 @@
 										<ui:include src="/employee/basic-info.xhtml">
 											<ui:param name="employee" value="#{employee}" />
 										</ui:include>
-										<h:form id="updateEmployeeForm">
-											<rich:toolBar itemSeparator="line">
-												<a4j:commandLink id="updateBasicInfolink"
-													reRender="updateBasicInfoModalPanelContent"
-													rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE_BASIC_INFO'))}"
-													oncomplete="#{rich:component('updateBasicInfoModalPanel')}.show()"
-													value="Τροποποίηση Στοιχείων">
-													<h:graphicImage value="/img/icons/edit.png" width="12"
-														height="12" style="border:0" />
-												</a4j:commandLink>
-												<a4j:commandLink id="updateSpecializationLink"
-													reRender="updateSpecializationModalPanelContent"
-													rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE_SPECIALIZATION'))}"
-													oncomplete="#{rich:component('updateSpecializationModalPanel')}.show()"
-													value="Αλλαγή Ειδικότητας">
-													<h:graphicImage value="/img/icons/edit.png" width="12"
-														height="12" style="border:0" />
-												</a4j:commandLink>
-												<a4j:commandLink id="updateRegistryLink"
-													reRender="updateRegularRegistryIDModalPanelContent"
-													rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE_REGULAR_REGISTRY')) and (employeeHome.instance.type eq 'REGULAR')}"
-													oncomplete="#{rich:component('updateRegularRegistryIDModalPanel')}.show()"
-													value="Ενημέρωση ΑΜ">
-													<h:graphicImage value="/img/icons/edit.png" width="12"
-														height="12" style="border:0" />
-													<f:setPropertyActionListener
-														value="#{employeeHome.instance.regularDetail.id}"
-														target="#{regularEmployeeInfoHome.id}" />
-												</a4j:commandLink>
-											</rich:toolBar>
-										</h:form>
 									</h:panelGrid>
 
 								</rich:panel>
@@ -171,13 +140,124 @@
 
 								</rich:dataTable>
 
+								<a4j:outputPanel id="employeeSpecialAssigmentOutputPanel">
+									<h:form id="employeeSpecialAssigmentTableForm">
+										<rich:dataTable id="employeeSpecialAssigmentTable"
+											rendered="#{employeeSpecialAssigmentItems.rowCount > 0}"
+											value="#{employeeSpecialAssigmentItems}" var="_item"
+											rows="15" border="0"
+											onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+											onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+											width="100%">
+											<f:facet name="header">
+												<h:outputLabel value="Ειδικές Ασχολίες Εκπαιδευτικού" />
+											</f:facet>
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="Ειδ. Ασχολία" />
+												</f:facet>
+												<h:outputText value="#{_item.specializationGroupTitle}" />
+											</rich:column>
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="Μονάδα" />
+												</f:facet>
+												<h:outputText value="#{_item.unitTitle}" />
+											</rich:column>
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="Ώρες" />
+												</f:facet>
+												<h:outputText value="#{_item.finalWorkingHours}" />
+											</rich:column>
+
+											<a4j:support event="onRowClick" reRender="menuOutputPanel"
+												limitToList="true"
+												oncomplete="#{rich:component('menu')}.show(event, {})">
+												<a4j:actionparam name="specialAssigmentId"
+													value="#{_item.id}" assignTo="#{specialAssigmentHome.id}"
+													converter="javax.faces.Integer" />
+											</a4j:support>
+
+										</rich:dataTable>
+
+										<a4j:outputPanel id="menuOutputPanel">
+											<rich:contextMenu styleClass="normal" attached="false"
+												id="menu" submitMode="none">
+												<rich:menuItem icon="/img/icons/edit.png" immediate="true"
+													disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE'))}"
+													submitMode="ajax"
+													reRender="updateSpecialAssigmentModalPanel"
+													value="Επεξεργασία" rendered="false"
+													oncomplete="#{rich:component('updateModalPanel')}.show()">
+												</rich:menuItem>
+
+												<rich:menuSeparator />
+												<rich:menuItem icon="/img/icons/delete.png" immediate="true"
+													disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE'))}"
+													submitMode="ajax" value="Διαγραφή"
+													reRender="employeeSpecialAssigmentOutputPanel"
+													limitToList="true"
+													onclick="if(!confirm('Θα διαγράψετε την ειδική ασχολία. Είστε σίγουρος ;')) {form.reset(); return false;}"
+													action="#{employeeManagement.removeEmployeeSpecialAssigment()}">
+												</rich:menuItem>
+											</rich:contextMenu>
+										</a4j:outputPanel>
+									</h:form>
+								</a4j:outputPanel>
 
 							</h:panelGrid>
 						</s:div>
 
 					</h:panelGrid>
 
+					<!-- this the bottom menu -->
+					<h:form id="manageEmployeeSpecialAssigmentForm">
+						<rich:toolBar itemSeparator="line">
+							<a4j:commandLink id="updateBasicInfolink"
+								reRender="updateBasicInfoModalPanelContent"
+								rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE_BASIC_INFO'))}"
+								oncomplete="#{rich:component('updateBasicInfoModalPanel')}.show()"
+								value="Τροποποίηση Στοιχείων">
+								<h:graphicImage value="/img/icons/edit.png" width="12"
+									height="12" style="border:0" />
+							</a4j:commandLink>
+							<a4j:commandLink id="updateSpecializationLink"
+								reRender="updateSpecializationModalPanelContent"
+								rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE_SPECIALIZATION'))}"
+								oncomplete="#{rich:component('updateSpecializationModalPanel')}.show()"
+								value="Αλλαγή Ειδικότητας">
+								<h:graphicImage value="/img/icons/edit.png" width="12"
+									height="12" style="border:0" />
+							</a4j:commandLink>
+							<a4j:commandLink id="updateRegistryLink"
+								reRender="updateRegularRegistryIDModalPanelContent"
+								rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE_REGULAR_REGISTRY')) and (employeeHome.instance.type eq 'REGULAR')}"
+								oncomplete="#{rich:component('updateRegularRegistryIDModalPanel')}.show()"
+								value="Ενημέρωση ΑΜ">
+								<h:graphicImage value="/img/icons/edit.png" width="12"
+									height="12" style="border:0" />
+								<f:setPropertyActionListener
+									value="#{employeeHome.instance.regularDetail.id}"
+									target="#{regularEmployeeInfoHome.id}" />
+							</a4j:commandLink>
+							<a4j:commandLink id="addEmployeeSpecialAssigmentLink"
+								reRender="addSpecialAssigmentModalPanelContent"
+								action="#{employeeManagement.prepareForNewSpecialAssigment()}"
+								rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE'))}"
+								oncomplete="#{rich:component('addSpecialAssigmentModalPanel')}.show()"
+								value="Εισαγωγή Ειδικής Ασχολίας">
+								<h:graphicImage value="/img/icons/edit.png" width="12"
+									height="12" style="border:0" />
+								<f:setPropertyActionListener
+									value="#{employeeHome.instance.regularDetail.id}"
+									target="#{regularEmployeeInfoHome.id}" />
+							</a4j:commandLink>
+						</rich:toolBar>
+					</h:form>
+
 				</s:div>
+
 
 				<h:panelGroup>
 					<h:form>
@@ -1120,6 +1200,152 @@
 					</h:form>
 				</h:panelGrid>
 			</a4j:region>
+		</rich:modalPanel>
+
+
+		<!-- ***********************************  -->
+		<!-- ADD EMPLOYEE SPECIAL ASSIGMENT  -->
+		<!-- ***********************************  -->
+
+
+		<rich:modalPanel id="addSpecialAssigmentModalPanel" autosized="true"
+			width="400">
+			<f:facet name="header">
+				<h:outputText value="Καταχώρηση Ειδικής Ασχολίας Εκπαιδευτικού"
+					style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<h:graphicImage value="/img/modal/close.png" styleClass="hidelink"
+						width="18" height="18" id="hidelink6">
+						<rich:componentControl for="addSpecialAssigmentModalPanel"
+							attachTo="hidelink6" operation="hide" event="onclick" />
+					</h:graphicImage>
+
+				</h:panelGroup>
+			</f:facet>
+			<a4j:region>
+			
+				<h:panelGrid columns="1">
+				
+				<h:outputText style="font-style:italic; font-size:12px;"
+								value="Με την παρακάτω φόρμα, μπορείται να εισάγετε ειδική ασχολία του εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}." />
+								
+				<a4j:outputPanel id="addSpecialAssigmentModalPanelContent">
+							
+													
+							<a4j:form id="addSpecialAssigmentForm">
+							
+							<ui:include src="/components/messages-component.xhtml"  />
+							
+							<h:panelGrid columns="1" width="100%">
+														
+								<h:panelGroup>
+									<h:panelGrid columns="2">
+										
+										<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+											<ui:define name="label">
+												<h:outputText value="Μονάδα Ασχολίας" />
+											</ui:define>
+
+										
+												<h:inputText id="sp_unit" styleClass="fieldValueText" required="true" value="#{employeeManagement.inputTextFieldHelper1}" immediate="true" />
+												<h:graphicImage value="/img/icons/arrowDown.jpg" height="16"
+												width="16"
+												onclick="#{rich:component('regionUnitSuggestion')}.callSuggestion(true)"
+												alt="" />
+
+												<rich:suggestionbox id="regionUnitSuggestion" for="sp_unit"
+													height="200" width="300"
+													suggestionAction="#{schoolUnitSuggester.suggest}" var="_school"
+													ignoreDupResponses="true">
+													<f:facet name="nothingLabel">
+														<h:outputText value="Άγνωστη Μονάδα" />
+													</f:facet>
+													<h:column>
+														<h:outputText value="#{_school.title}" />
+													</h:column>
+													<a4j:support ajaxSingle="true" event="onselect">
+														<f:setPropertyActionListener value="#{_school}"
+															target="#{specialAssigmentHome.instance.unit}" />
+													</a4j:support>
+												</rich:suggestionbox>
+
+
+											
+										</s:decorate>
+
+										<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+											<ui:define name="label">
+												<h:outputText value="Ειδική Ασχολία" />
+											</ui:define>
+											
+											
+												<h:inputText id="value" styleClass="fieldValueText" required="true" value="#{employeeManagement.inputTextFieldHelper2}" immediate="true"/>
+												<h:graphicImage value="/img/icons/arrowDown.jpg" height="16"
+												width="16"
+												onclick="#{rich:component('specializationSuggester')}.callSuggestion(true)"
+												alt="" />
+												
+												<rich:suggestionbox height="100" width="250" for="value"
+													var="a_spec"  id="specializationSuggester"
+													suggestionAction="#{specializationGroupVirtualEditionSuggester.suggest}">
+													<f:facet name="nothingLabel">
+														<h:outputText value="Άγνωστη Ειδική Ασχολία" />
+													</f:facet>
+													<h:column>
+														<h:outputText value="#{a_spec.title}" />
+													</h:column>
+													<a4j:support ajaxSingle="true" event="onselect">
+														<f:setPropertyActionListener value="#{a_spec}"
+															target="#{specialAssigmentHome.instance.specializationGroup}" />
+													</a4j:support>
+												</rich:suggestionbox>
+											
+											
+
+										</s:decorate>
+
+										<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+											<ui:define name="label">
+												<h:outputText value="Ώρες Εβδομαδιαίως : " />
+											</ui:define>
+											<h:inputText
+												value="#{specialAssigmentHome.instance.finalWorkingHours}"
+												required="true" maxlength="2" size="2" immediate="true"
+												styleClass="fieldValueText" />
+										</s:decorate>
+
+									</h:panelGrid>
+								</h:panelGroup>
+
+								<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Σχόλιο" />
+									</ui:define>
+									<h:inputTextarea rows="3" cols="40"
+										value="#{specialAssigmentHome.instance.comment}"
+										required="false" styleClass="fieldValueText" />
+								</s:decorate>
+
+							</h:panelGrid>
+				
+						<h:panelGrid columns="2">
+
+							<a4j:commandButton value="Καταχώρηση Ειδικής Ασχολίας !"
+								action="#{employeeManagement.addEmployeeSpecialAssigment()}"
+								limitToList="true" 
+								data="#{facesContext.maximumSeverity.ordinal ge 2}"
+								oncomplete="if(data == false)  #{rich:component('addSpecialAssigmentModalPanel')}.hide();" 
+								reRender="addSpecialAssigmentModalPanelContent,employeeSpecialAssigmentOutputPanel,addSpecialAssigmentForm" />
+							<a4j:commandButton value="Επιστροφή .."
+								reRender="addSpecialAssigmentModalPanelContent,employeeSpecialAssigmentOutputPanel"
+								oncomplete="#{rich:component('addSpecialAssigmentModalPanel')}.hide();" />
+						</h:panelGrid>
+						</a4j:form>
+								</a4j:outputPanel> 			
+				</h:panelGrid>
+				</a4j:region>
 		</rich:modalPanel>
 
 
