@@ -6,6 +6,7 @@ import gr.sch.ira.minoas.model.employee.EmployeeInfo;
 import gr.sch.ira.minoas.model.employee.RankInfo;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.CoreSearching;
+import gr.sch.ira.minoas.seam.components.WorkExperienceCalculation;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
 import gr.sch.ira.minoas.seam.components.home.EmployeeInfoHome;
 
@@ -40,6 +41,9 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 	
 	@In(required = true)
 	EmployeeInfoHome employeeInfoHome;
+	
+	@In(required=true, create=true)
+	private WorkExperienceCalculation workExperienceCalculation;
 	
 	private Date totalWorkServiceCalculationDate;
 	private int totalCalculatedServiceInDays;
@@ -242,14 +246,15 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
     }
     
     public void recalculateTotalWorkService() {
-    	EmployeeInfo employeeInfo = employeeHome.getInstance().getEmployeeInfo();
-    	if (employeeInfo != null) {
-	    	int totalWorkService = 0;
-	    	if(totalWorkServiceCalculationDate != null && employeeInfo.getGogAppointmentDate()!=null)
-	    		totalWorkService = CoreUtils.datesDifferenceIn360DaysYear(employeeInfo.getEntryIntoServiceDate(), totalWorkServiceCalculationDate);
-	    	if(totalWorkService != 0)
-	    		setTotalCalculatedServiceInDays(totalWorkService);
-    	}
+    	int totalWorkService = 0;
+    	
+    	//	Αν ο χρήστης έχει δώσει ημ/νία στο interface και η computeEmployeeFirstDayOfRegularWork βρεί ημερομηνία έναρξης της μόνιμης εργασίας
+    	if(totalWorkServiceCalculationDate != null && workExperienceCalculation.computeEmployeeFirstDayOfRegularWork(employeeHome.getInstance())!=null)
+    		totalWorkService = workExperienceCalculation.calculateEmployeeWorkExperience(employeeHome.getInstance()).getTotal().intValue()
+    						+ workExperienceCalculation.calculateRegularEmployeeService(employeeHome.getInstance(), workExperienceCalculation.computeEmployeeFirstDayOfRegularWork(employeeHome.getInstance()), totalWorkServiceCalculationDate).getTotalServiceInDays();
+    	
+    	if(totalWorkService != 0)
+    		setTotalCalculatedServiceInDays(totalWorkService);
     }
     
     public Integer getEducationalService() {
