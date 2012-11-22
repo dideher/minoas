@@ -828,7 +828,7 @@
 										onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
 										width="100%">
 										<f:facet name="header">
-											<h:outputLabel value="Ιστορικό Αδειών Εκπαιδευτικού" />
+											<h:outputLabel value="Ιστορικό Προϋπηρεσιών Εκπαιδευτικού" />
 										</f:facet>
 										<rich:column>
 											<f:facet name="header">
@@ -851,6 +851,17 @@
 											<h:outputText value="#{_workExperienceItem.dueTo}">
 												<s:convertDateTime pattern="dd-MM-yyyy" />
 											</h:outputText>
+										</rich:column>
+										
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Ημέρες Προ." />
+											</f:facet>
+											<h:outputText   
+												value="#{_workExperienceItem.calendarDays}" 
+												converter="#{workExperienceConverter}" />
+											<h:outputText  
+												value=" (#{_workExperienceItem.calendarDays} ημ.)" />
 										</rich:column>
 
 										<rich:column>
