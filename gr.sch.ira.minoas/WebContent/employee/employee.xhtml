@@ -852,6 +852,17 @@
 												<s:convertDateTime pattern="dd-MM-yyyy" />
 											</h:outputText>
 										</rich:column>
+										
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Ημέρες Προ." />
+											</f:facet>
+											<h:outputText   
+												value="#{_workExperienceItem.calendarDays}" 
+												converter="#{workExperienceConverter}" />
+											<h:outputText  
+												value=" (#{_workExperienceItem.calendarDays} ημ.)" />
+										</rich:column>
 
 										<rich:column>
 											<f:facet name="header">

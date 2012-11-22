@@ -25,6 +25,8 @@ public class EmployeeWorkExperienceItem extends BaseIDReportItem {
 
 	protected String typeTitle;
 	
+	protected Integer calendarDays;
+	
 	public EmployeeWorkExperienceItem(WorkExperience workExperience) {
 		super(workExperience);
 		if (workExperience.getEmployee() != null)
@@ -32,6 +34,7 @@ public class EmployeeWorkExperienceItem extends BaseIDReportItem {
 		established = workExperience.getFromDate();
 		dueTo = workExperience.getToDate();
 		comment = workExperience.getComment();
+		calendarDays = workExperience.getCalendarExperienceDays();
 		if (workExperience.getType() != null) {
 			typeId = workExperience.getType().getId();
 			typeTitle = workExperience.getType().getTitle();
@@ -127,5 +130,19 @@ public class EmployeeWorkExperienceItem extends BaseIDReportItem {
 	public void setTypeTitle(String typeTitle) {
 		this.typeTitle = typeTitle;
 	}
+
+    /**
+     * @return the calendarDays
+     */
+    public Integer getCalendarDays() {
+        return calendarDays;
+    }
+
+    /**
+     * @param calendarDays the calendarDays to set
+     */
+    public void setCalendarDays(Integer calendarDays) {
+        this.calendarDays = calendarDays;
+    }
 
 }
