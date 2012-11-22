@@ -408,7 +408,7 @@
 					</s:link>
 				</rich:menuItem>
 				
-				<rich:menuItem rendered="#{(s:hasRole('ADMIN'))}"  submitMode="none">
+				<rich:menuItem rendered="#{s:hasRole('ADMIN') or s:hasRole('RENEW_CDRS')}"  submitMode="none">
 					<a4j:htmlCommandLink action="#{teachingHoursCDRManagement.doCalculateCurrentCDRs()}" value="Ανανέωση CDRs">
 					</a4j:htmlCommandLink>
 				</rich:menuItem>
