@@ -318,7 +318,7 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
                 		currentEmployment.setMandatoryWorkingHours(mandatoryWorkingHours);
                	 		currentEmployment.setFinalWorkingHours(mandatoryWorkingHours);
             	}
-                    
+        	}
         }
     }
     
