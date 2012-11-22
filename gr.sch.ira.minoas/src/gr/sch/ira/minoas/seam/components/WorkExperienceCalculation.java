@@ -254,8 +254,10 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
             EmployeeInfo einfo = employee.getEmployeeInfo();
             Date gofDate = einfo.getGogAppointmentDate();
             Date entryIntoServiceDate = einfo.getEntryIntoServiceDate();
-            return CoreUtils.datesDifferenceIn360DaysYear(gofDate, entryIntoServiceDate) > 30 ? entryIntoServiceDate
-                    : gofDate;
+            if(gofDate != null && entryIntoServiceDate !=null)
+            	return CoreUtils.datesDifferenceIn360DaysYear(gofDate, entryIntoServiceDate) > 30 ? entryIntoServiceDate : gofDate;
+           	else
+            	return null;
         } else
             return null;
     }
@@ -298,23 +300,24 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
         WorkExperienceCalculation.EmployeeWorkExperienceHelper exp = calculateEmployeeWorkExperience(employee);
         WorkExperienceCalculation.EmployeeServiceHelper serviceHelper = calculateRegularEmployeeService(employee, fromDate, currentDate);
         
-        employeeInfo.setSumOfEducationalExperience(exp.getEducationalTotal());
-        employeeInfo.setSumOfTeachingExperience(exp.getTeachingTotal());
-        employeeInfo.setSumOfExperience(exp.getTotal());
-        employeeInfo.setTotalWorkService(serviceHelper.getTotalServiceInDays());
+        if(employeeInfo != null) {
+        	employeeInfo.setSumOfEducationalExperience(exp.getEducationalTotal());
+        	employeeInfo.setSumOfTeachingExperience(exp.getTeachingTotal());
+        	employeeInfo.setSumOfExperience(exp.getTotal());
+        	employeeInfo.setTotalWorkService(serviceHelper.getTotalServiceInDays());
         
-        /* handle working hours */
-        Employment currentEmployment = employee.getCurrentEmployment();
-        if(currentEmployment !=null) {
-            int currentMandatoryWorkHours = currentEmployment.getMandatoryWorkingHours();
-            int totalWorkServicePlusExperience = serviceHelper.getTotalServiceInDays().intValue() + exp.getEducationalTotal().intValue();
-            int mandatoryWorkingHours = calculateEmployeeMandatoryHours(totalWorkServicePlusExperience, EmployeeType.REGULAR);
-            if(currentMandatoryWorkHours!=mandatoryWorkingHours) {
-                /* we have a mandatory work hour mismatch ! */
-                info("Εmployee's '#0' working hours will be updated from '#1' to '#2", employee, currentMandatoryWorkHours, mandatoryWorkingHours);
-                currentEmployment.setMandatoryWorkingHours(mandatoryWorkingHours);
-                currentEmployment.setFinalWorkingHours(mandatoryWorkingHours);
-            }
+        	/* handle working hours */
+        	Employment currentEmployment = employee.getCurrentEmployment();
+        	if(currentEmployment !=null) {
+            		int currentMandatoryWorkHours = currentEmployment.getMandatoryWorkingHours();
+            		int totalWorkServicePlusExperience = serviceHelper.getTotalServiceInDays().intValue() + exp.getEducationalTotal().intValue();
+            		int mandatoryWorkingHours = calculateEmployeeMandatoryHours(totalWorkServicePlusExperience, EmployeeType.REGULAR);
+            		if(currentMandatoryWorkHours!=mandatoryWorkingHours) {
+                		/* we have a mandatory work hour mismatch ! */
+                		info("Εmployee's '#0' working hours will be updated from '#1' to '#2", employee, currentMandatoryWorkHours, mandatoryWorkingHours);
+                		currentEmployment.setMandatoryWorkingHours(mandatoryWorkingHours);
+               	 		currentEmployment.setFinalWorkingHours(mandatoryWorkingHours);
+            	}
                     
         }
     }

@@ -2,6 +2,8 @@ package gr.sch.ira.minoas.model.employee;
 
 import gr.sch.ira.minoas.core.CoreUtils;
 import gr.sch.ira.minoas.model.BaseIDModel;
+import gr.sch.ira.minoas.model.employement.EducationalLevelType;
+import gr.sch.ira.minoas.seam.components.NewRegularEmployeeHelper;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -192,6 +194,66 @@ public class EmployeeInfo extends BaseIDModel {
 	private Integer totalWorkService;
 	
 	
+	public EmployeeInfo() {
+		super();
+	}
+	
+	
+	/**
+	 * @param employee
+	 * @param gogAppointmentNo
+	 * @param gogAppointmentDate
+	 * @param entryIntoServiceAct
+	 * @param entryIntoServiceDate
+	 * @param permanentEmployeeAct
+	 * @param permanentEmployeeActDate
+	 * @param hasAMasterDegree
+	 * @param mscDate
+	 * @param hasAPhD
+	 * @param phdDate
+	 * @param isANatSchPubAdminGraduate
+	 * @param natSchPubAdminDate
+	 * @param isRecentlyHired
+	 * @param currentRankInfo
+	 * @param sector
+	 * @param sumOfEducationalExperience
+	 * @param sumOfTeachingExperience
+	 * @param sumOfExperience
+	 * @param totalWorkService
+	 */
+	public EmployeeInfo(Employee employee, String gogAppointmentNo,
+			Date gogAppointmentDate, String entryIntoServiceAct,
+			Date entryIntoServiceDate, String permanentEmployeeAct,
+			Date permanentEmployeeActDate, Boolean hasAMasterDegree,
+			Date mscDate, Boolean hasAPhD, Date phdDate,
+			Boolean isANatSchPubAdminGraduate, Date natSchPubAdminDate,
+			Boolean isRecentlyHired, RankInfo currentRankInfo,
+			SectorType sector, Integer sumOfEducationalExperience,
+			Integer sumOfTeachingExperience, Integer sumOfExperience,
+			Integer totalWorkService) {
+		super();
+		this.employee = employee;
+		this.gogAppointmentNo = gogAppointmentNo;
+		this.gogAppointmentDate = gogAppointmentDate;
+		this.entryIntoServiceAct = entryIntoServiceAct;
+		this.entryIntoServiceDate = entryIntoServiceDate;
+		this.permanentEmployeeAct = permanentEmployeeAct;
+		this.permanentEmployeeActDate = permanentEmployeeActDate;
+		this.hasAMasterDegree = hasAMasterDegree;
+		this.mscDate = mscDate;
+		this.hasAPhD = hasAPhD;
+		this.phdDate = phdDate;
+		this.isANatSchPubAdminGraduate = isANatSchPubAdminGraduate;
+		this.natSchPubAdminDate = natSchPubAdminDate;
+		this.isRecentlyHired = isRecentlyHired;
+		this.currentRankInfo = currentRankInfo;
+		this.sector = sector;
+		this.sumOfEducationalExperience = sumOfEducationalExperience;
+		this.sumOfTeachingExperience = sumOfTeachingExperience;
+		this.sumOfExperience = sumOfExperience;
+		this.totalWorkService = totalWorkService;
+	}
+
 	/**
 	 * @return the employee
 	 */
@@ -231,7 +293,10 @@ public class EmployeeInfo extends BaseIDModel {
 	 * @return the gogAppointmentDate
 	 */
 	public String getGogAppointmentDateString() {
-		return DateFormat.getDateInstance(DateFormat.SHORT).format(gogAppointmentDate);
+		if(gogAppointmentDate == null)
+			return "";
+		else
+			return DateFormat.getDateInstance(DateFormat.SHORT).format(gogAppointmentDate);
 	}	
 	
 	
@@ -443,7 +508,10 @@ public class EmployeeInfo extends BaseIDModel {
 	 * @return the sumOfEducationalExperience as a Year_Month_Day string
 	 */
 	public String getSumOfEducationalExperienceYear_Month_Day() {
-		return CoreUtils.getNoOfDaysInYear_Month_DayFormat(sumOfEducationalExperience);
+		if(sumOfEducationalExperience == null)
+			return "";
+		else
+			return CoreUtils.getNoOfDaysInYear_Month_DayFormat(sumOfEducationalExperience);
 	}
 	
 	/**
@@ -516,6 +584,29 @@ public class EmployeeInfo extends BaseIDModel {
 		this.totalWorkService = totalWorkService;
 	}
 
+	
+	/**
+	 * Reset EmployeeInfo and initialize its attributes
+	 * 
+	 */
+	public void resetEmployeeInfo() {
+		setSumOfEducationalExperience(0);
+		setSumOfTeachingExperience(0);
+		setSumOfExperience(0);
+		setSector(SectorType.PUBLIC_SECTOR);
+		
+		RankInfo rInfo = new RankInfo(RankType.RANK_ST, 0, EducationalLevelType.UNIVERSITY_EDUCATION_LEVEL);
+		rInfo.setEmployeeInfo(this);
+		setCurrentRankInfo(rInfo);
+		getRankInfos().add(rInfo);
+		
+		setIsANatSchPubAdminGraduate(false);
+		setHasAMasterDegree(false);
+		setHasAPhD(false);
+		
+	}
+	
+	
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
