@@ -169,6 +169,8 @@ public class SecurityStartup extends BaseDatabaseAwareSeamComponent {
 		createRole("MODIFY_PART_TIME_EMPLOYMENT", "Modify a Part-time Employment", admin);
 		createRole("DELETE_PART_TIME_EMPLOYMENT", "Delete a Part-time Employment", admin);
 		createRole("ADD_PART_TIME_EMPLOYMENT", "Add a Part-time Employment", admin);
-		
+
+		/* CDR Management - Διαχείριση CDR */
+		createRole("RENEW_CDRS", "Allow the renewal of the CDRs", admin);
 	}
 }
