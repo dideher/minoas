@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page login-required="true" xmlns="http://jboss.com/products/seam/pages"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.1.xsd">
+  <begin-conversation join="true" flush-mode="manual"/> 
+  <description>Διαχείριση Ποινών του/της #{employeeUtil.prettyFormat(employee)}</description>
+  
+  <param name="penalty_from"/>
+
+  
+  <!-- navigation rules -->
+  <navigation from-action="endButton">
+    <end-conversation />
+    <redirect view-id="/home.xhtml" />
+  </navigation>
+  
+  <navigation from-action="#{penaltyHome.cancel()}">
+    <rule if-outcome="canceled">
+      <render view-id="/penalty/penalty-management.xhtml"></render>
+    </rule>
+  </navigation>
+  
+  <navigation from-action="#{penaltyHome.update()}">
+    <rule if-outcome="updated">
+      <render view-id="/penalty/penalty-management.xhtml"></render>
+    </rule>
+  </navigation>
+  
+  <navigation from-action="#{penaltyHome.persist()}">
+    <rule if-outcome="persisted">
+      <render view-id="/penalty/penalty-management.xhtml"></render>
+    </rule>
+  </navigation>
+  
+  <navigation from-action="backButton">
+    <redirect view-id="#{empty penalty_from ? '/home' : penalty_from}.xhtml}" />
+  </navigation>
+  
+</page>

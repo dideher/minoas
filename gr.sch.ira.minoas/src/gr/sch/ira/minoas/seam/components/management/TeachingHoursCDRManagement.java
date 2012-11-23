@@ -2,15 +2,16 @@ package gr.sch.ira.minoas.seam.components.management;
 
 import gr.sch.ira.minoas.core.CoreUtils;
 import gr.sch.ira.minoas.model.core.SchoolYear;
+import gr.sch.ira.minoas.model.core.Specialization;
 import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employement.Disposal;
 import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
-import gr.sch.ira.minoas.model.employement.Leave;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.ServiceAllocation;
+import gr.sch.ira.minoas.model.employement.SpecialAssigment;
 import gr.sch.ira.minoas.model.employement.TeachingHourCDR;
 import gr.sch.ira.minoas.model.employement.TeachingHourCDRType;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
@@ -20,7 +21,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -33,11 +36,12 @@ import org.jboss.seam.annotations.RaiseEvent;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
 
-import sun.security.action.GetLongAction;
-
 @Name(value = "teachingHoursCDRManagement")
 @Scope(ScopeType.APPLICATION)
 public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
+    
+    
+    public static final int LEAVE_DAYS_THREASHOLD = 20;
 
     /**
      * Comment for <code>serialVersionUID</code>
@@ -76,13 +80,8 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
         for (Employment employment : regularEmployments) {
             TeachingHourCDR cdr = new TeachingHourCDR();
             cdr.setCdrType(TeachingHourCDRType.EMPLOYMENT);
-            StringBuffer sb = new StringBuffer();
-            sb.append("Οργανική θέση στην μονάδα απο τις ");
-            sb.append(df.format(employment.getEstablished()));
-            sb.append(" με υποχρεωτικό ωράριο ");
-            sb.append(employment.getFinalWorkingHours());
-            sb.append(" ώρες.");
-            cdr.setComment(sb.toString());
+            String msg = String.format("Οργανική θέση στην μονάδα απο τις '%s' με υποχρεωτικό ωράριο '%d' ώρες",df.format(employment.getEstablished()), employment.getFinalWorkingHours());
+            cdr.setComment(msg);
             cdr.setSpecialization(employment.getSpecialization());
             cdr.setEmployee(employment.getEmployee());
             cdr.setEmployment(employment);
@@ -306,7 +305,7 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
 
                 Employment relatedEmployment = serviceAllocation.getAffectedEmployment();
                 if (relatedEmployment != null) {
-                    Collection<TeachingHourCDR> employmentsCDRs = relatedEmployment.getEmploymentCDRs();
+                    Collection<TeachingHourCDR> employmentsCDRs = getCoreSearching().getTeachingHoursCDRsRelatedToEmployment(getEntityManager(), relatedEmployment, currentSchoolYear);
                     /* Employment should have one only one CDR */
                     if (employmentsCDRs.size() > 1) {
                         /* this should never happen */
@@ -433,53 +432,171 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
         }
 
         em.flush(); /* flush */
+        
+        /* handle special assigments */
+        Collection<SpecialAssigment> activeSpecialAssigments = coreSearching.getActiveSpecialAssigments(getEntityManager());
+        info("found #0 totally active special assigments", activeSpecialAssigments.size());
+        for (SpecialAssigment specialAssigment : activeSpecialAssigments) {
+            
+            /* deduct the special assigments hours from the employee's original specialization.
+             * We are deducting, because the employee will not provide all his hours for his
+             * primary specialization
+             */
+            
+            TeachingHourCDR cdr = new TeachingHourCDR();
+            cdr.setCdrType(TeachingHourCDRType.SPECIAL_ASSIGMENT);
+            String msg = String.format("Αντιλογισμός διδακτικών ωρών κύριας ειδικότητας, απο την μονάδα '%s', λόγο ειδικης ασχολίας τύπου '%s' για συνολικά '%d' ώρες.", 
+                    specialAssigment.getUnit().getTitle(), 
+                    specialAssigment.getSpecializationGroup().getTitle(),
+                    specialAssigment.getFinalWorkingHours());
+            cdr.setComment(msg);
+            cdr.setSpecialization(specialAssigment.getEmployee().getLastSpecialization());
+            cdr.setEmployee(specialAssigment.getEmployee());
+            cdr.setSpecialAssigment(specialAssigment);
+            cdr.setHours(-1 * specialAssigment.getFinalWorkingHours());
+            cdr.setUnit(specialAssigment.getUnit());
+            cdr.setSchoolYear(currentSchoolYear);
+            cdr.setLogisticCDR(Boolean.TRUE);
+            entityManager.persist(cdr);
+            if (((totalCDRsCreated++) % BatchSize) == 0)
+                em.flush();
+            
+            /* apply on target unit */
+            cdr = new TeachingHourCDR();
+            cdr.setCdrType(TeachingHourCDRType.SPECIAL_ASSIGMENT);
+            msg = String.format("Ειδική ασχολία στην μονάδα '%s' τύπου '%s' για συνολικά '%d' ώρες.", 
+                    specialAssigment.getUnit().getTitle(), 
+                    specialAssigment.getSpecializationGroup().getTitle(),
+                    specialAssigment.getFinalWorkingHours());
+            cdr.setComment(msg);
+            cdr.setSpecialization(specialAssigment.getSpecializationGroup().getVirtualSpecialization());
+            cdr.setEmployee(specialAssigment.getEmployee());
+            cdr.setSpecialAssigment(specialAssigment);
+            cdr.setHours(specialAssigment.getFinalWorkingHours());
+            cdr.setUnit(specialAssigment.getUnit());
+            cdr.setSchoolYear(currentSchoolYear);
+            entityManager.persist(cdr);
+            if (((totalCDRsCreated++) % BatchSize) == 0)
+                em.flush();
+        }
+        em.flush(); /* flush */
 
         /* WE NEED TO ADD LEAVES */
 
         /* Leaves are a special case. For each employee with a leave we will compute his hours distribution in all units. For each 
          * unit for which the employee has teaching hours > 0 we will add a LEAVE CDR with negative hours
          */
-
+        
+        /* found active leaves */
+        
         Collection<EmployeeLeave> activeLeaves = coreSearching.getActiveLeaves(em);
         info("found #0 totally active leaves.", activeLeaves.size());
+        
+        /* found future leaves */
+        Collection<EmployeeLeave> futureLeaves = coreSearching.getFutureLeavesThatWillBeActivated(em, new Date(), 20);
+        info("found #0 totally future leaves.", futureLeaves.size());
+        
+        Map<Integer, Employee> employeeWithAccountedLeaves = new HashMap<Integer, Employee>(activeLeaves.size());
+        
+        /* create the final array of all leaves that we should process */
+        Collection<EmployeeLeave> leavesToProcess = new ArrayList<EmployeeLeave>();
+        
+        /* first check the active Leaves */
         for (EmployeeLeave activeLeave : activeLeaves) {
-            Employee employeeWithLeave = activeLeave.getEmployee();
+            if (activeLeave.getEffectiveNumberOfDays() !=null && activeLeave.getEffectiveNumberOfDays() > LEAVE_DAYS_THREASHOLD ) {
+                Employee employeeWithLeave = activeLeave.getEmployee();
+                employeeWithAccountedLeaves.put(employeeWithLeave.getId(), employeeWithLeave);
+                leavesToProcess.add(activeLeave);
+            } else {
+                info("ignoring leave #0 because it's duration does not exceeds #1 days", activeLeave, LEAVE_DAYS_THREASHOLD);
+            }
+        }
+        
+        /* now check all future leaves */
+        Map<Integer, EmployeeLeave> futureLeavesIndex = new HashMap<Integer, EmployeeLeave>();
+        for (EmployeeLeave futureLeave : futureLeaves) {
+            if (futureLeave.getEffectiveNumberOfDays() !=null && futureLeave.getEffectiveNumberOfDays() > LEAVE_DAYS_THREASHOLD ) {
+                Employee employeeWithLeave = futureLeave.getEmployee();
+                if(employeeWithAccountedLeaves.containsKey(employeeWithLeave.getId())) {
+                    info("ignoring future leave #0 because for the employee #1 we have already an accounted leave", futureLeave, employeeWithLeave);
+                } else {
+                    /* future leave is exceeded required duration and it affects an employee for which we have not
+                     * accounted a leave so far
+                     */
+                    leavesToProcess.add(futureLeave);
+                    futureLeavesIndex.put(futureLeave.getId(), futureLeave);
+                }
+            } else {
+                info("ignoring future leave #0 because it's duration does not exceeds #1 days", futureLeave, LEAVE_DAYS_THREASHOLD);
+            }
+        }
+        
+        /* no process the leaves */
+        
+        for (EmployeeLeave leave : leavesToProcess) {
+            Boolean generatesCDR = leave.getGeneratesCDRs();
+            boolean isFutureLeave = (futureLeavesIndex.containsKey(leave.getId()));
+            Employee employeeWithLeave = leave.getEmployee();
+            /* since we are about to include these leave in our computation, add it to the index for future reference */
+            employeeWithAccountedLeaves.put(employeeWithLeave.getId(), employeeWithLeave);
             /* fix the common leave message */
-            StringBuffer sb = new StringBuffer();
-            sb.append("Άδεια τύπου  ");
-            sb.append(activeLeave.getEmployeeLeaveType().getDescription());
-            sb.append(" απο τις ");
-            sb.append(df.format(activeLeave.getEstablished()));
-            sb.append(" μέχρι και  ");
-            sb.append(df.format(activeLeave.getDueTo()));
-
+            StringBuffer commonLeaveMessagePattern = new StringBuffer();
+            commonLeaveMessagePattern.append("Άδεια τύπου '%s' απο τις '%s' μέχρι και τις '%s'.");
+            if (isFutureLeave) {
+                commonLeaveMessagePattern.append(" Προσοχή, η άδεια είναι μελλοντική με έναρξη εντός εικοσαημέρου.");
+            }
+            String msg = String.format(commonLeaveMessagePattern.toString(), leave.getEmployeeLeaveType().getDescription(), df.format(leave.getEstablished()), df.format(leave.getDueTo()));
+            /* for the given employee with a leave search and find in which units he provides work hour */
             Collection<Object[]> o = getEntityManager()
                     .createQuery(
                             "SELECT t.unit.id, SUM(t.hours) FROM TeachingHourCDR t WHERE t.schoolYear=:schoolYear AND t.employee=:employee GROUP BY (t.unit)")
                     .setParameter("schoolYear", currentSchoolYear).setParameter("employee", employeeWithLeave)
                     .getResultList();
+            /* for each unit with possitive work hours create a leave CDR */
             for (Object[] r : o) {
                 Long hours = (Long) r[1];
                 if (hours.longValue() > 0) {
-                    TeachingHourCDR cdr = new TeachingHourCDR();
-                    cdr.setCdrType(TeachingHourCDRType.LEAVE);
-                    cdr.setComment(sb.toString());
-                    cdr.setSpecialization(employeeWithLeave.getLastSpecialization());
-                    cdr.setEmployee(employeeWithLeave);
-                    /* */
-                    cdr.setHours(new Integer(hours.intValue() * -1));
-                    cdr.setLogisticCDR(Boolean.TRUE); /* this is a logistic CDR */
-                    cdr.setSchoolYear(currentSchoolYear);
-                    cdr.setUnit(getEntityManager().find(Unit.class, r[0]));
-                    cdr.setLeave(activeLeave);
-                    entityManager.persist(cdr);
-                    if (((totalCDRsCreated++) % BatchSize) == 0)
-                        em.flush();
-
+                   
+                    /* 
+                    
+                    /* In 'hours' variable we have the total hours provided by the given employee to the given unit. Since there are 
+                     * SpecialAssigments, ie employee teaching hours of different specialization, we cannot just deduct the hours from 
+                     * the above query. 
+                     * 
+                     * We need to group the provided hours by specialization and add the corresponding leave CDRs 
+                     */
+                    Collection<Object[]> hoursPerSpecialization = getEntityManager()
+                            .createQuery(
+                                    "SELECT SUM(t.hours), t.specialization.id FROM TeachingHourCDR t WHERE t.schoolYear=:schoolYear AND t.employee=:employee AND t.unit.id=:unit GROUP BY (t.specialization)")
+                            .setParameter("schoolYear", currentSchoolYear).setParameter("employee", employeeWithLeave).setParameter("unit", r[0])
+                            .getResultList();
+                    /* For each hours of a given specialization in the given unit, create one LEAVE cdr.
+                     * We will by 99% generate only one CDR, but two when we have special assigments */
+                    for(Object[] hourPerSpecialization : hoursPerSpecialization) {
+                        Long _hours = (Long)hourPerSpecialization[0];
+                        Specialization _specialization = getEntityManager().find(Specialization.class, String.valueOf(hourPerSpecialization[1]));
+                        TeachingHourCDR cdr = new TeachingHourCDR();
+                        cdr.setCdrType(TeachingHourCDRType.LEAVE);
+                        cdr.setFutureCDR(isFutureLeave);
+                        cdr.setComment(msg);
+                        cdr.setSpecialization(_specialization);
+                        cdr.setEmployee(employeeWithLeave);
+                        /* */
+                        cdr.setHours(new Integer(_hours.intValue() * -1));
+                        cdr.setLogisticCDR(Boolean.TRUE); /* this is a logistic CDR */
+                        cdr.setSchoolYear(currentSchoolYear);
+                        cdr.setUnit(getEntityManager().find(Unit.class, r[0]));
+                        cdr.setLeave(leave);
+                        entityManager.persist(cdr);
+                        if (((totalCDRsCreated++) % BatchSize) == 0)
+                            em.flush();
+                        
+                    }
                 }
             }
-        }
 
+        }
+        
         em.flush();
         long finished = System.currentTimeMillis();
 

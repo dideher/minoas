@@ -37,6 +37,10 @@ public class WorkExperienceType extends BaseIDModel {
     @Column(name="COMMENT", nullable = true)
     private String comment;
 
+    @Basic
+	@Column(name = "LEGACY_CODE", nullable = true, updatable = false, length = 2)
+	private String legacyCode;
+    
     /**
      * @return the active
      */
@@ -78,6 +82,20 @@ public class WorkExperienceType extends BaseIDModel {
     public void setComment(String comment) {
         this.comment = comment;
     }
+
+	/**
+	 * @return the legacyCode
+	 */
+	public String getLegacyCode() {
+		return legacyCode;
+	}
+
+	/**
+	 * @param legacyCode the legacyCode to set
+	 */
+	public void setLegacyCode(String legacyCode) {
+		this.legacyCode = legacyCode;
+	}
     
 
 	

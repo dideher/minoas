@@ -14,11 +14,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Fetch;
 
 /**
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
@@ -45,6 +47,18 @@ public class SpecializationGroup extends BaseIDModel implements Comparable<Speci
 	@Basic
 	@Column(name = "TITLE", length = 128, nullable = false)
 	private String title;
+	
+	/**
+	 * If set, then this specialization group is ment to be virtual. 
+	 * gh-54
+	 */
+	@Basic
+	@Column(name="IS_VIRTUAL_GROUP", nullable=true)
+	private Boolean isVirtualGroup = Boolean.FALSE;
+	
+	@OneToOne(fetch=FetchType.LAZY,cascade={CascadeType.ALL})
+	@JoinColumn(name="VIRTUAL_SPECIALIZATION_ID", nullable=true)
+	private Specialization virtualSpecialization;
 
 	/**
 	 * 
@@ -112,5 +126,33 @@ public class SpecializationGroup extends BaseIDModel implements Comparable<Speci
 		builder.append("]");
 		return builder.toString();
 	}
+
+    /**
+     * @return the isVirtualGroup
+     */
+    public Boolean getIsVirtualGroup() {
+        return isVirtualGroup;
+    }
+
+    /**
+     * @param isVirtualGroup the isVirtualGroup to set
+     */
+    public void setIsVirtualGroup(Boolean isVirtualGroup) {
+        this.isVirtualGroup = isVirtualGroup;
+    }
+
+    /**
+     * @return the virtualSpecialization
+     */
+    public Specialization getVirtualSpecialization() {
+        return virtualSpecialization;
+    }
+
+    /**
+     * @param virtualSpecialization the virtualSpecialization to set
+     */
+    public void setVirtualSpecialization(Specialization virtualSpecialization) {
+        this.virtualSpecialization = virtualSpecialization;
+    }
 
 }

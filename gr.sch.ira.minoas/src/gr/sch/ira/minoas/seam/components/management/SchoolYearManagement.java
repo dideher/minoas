@@ -12,6 +12,7 @@ import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.ServiceAllocation;
+import gr.sch.ira.minoas.model.employement.SpecialAssigment;
 import gr.sch.ira.minoas.model.transfers.OutstandingImprovement;
 import gr.sch.ira.minoas.model.transfers.PermanentTransfer;
 import gr.sch.ira.minoas.model.transfers.PermanentTransferType;
@@ -319,6 +320,13 @@ public class SchoolYearManagement extends BaseDatabaseAwareSeamComponent {
 
             /* end hanling of transfers */
 
+            /* handle special assigments */
+            Collection<SpecialAssigment> activeAssigments = coreSearching.getActiveSpecialAssigments(getEntityManager());
+            info("found #0 special assigments for handling.", activeAssigments.size());
+            for (SpecialAssigment sa : activeAssigments) {
+              sa.setActive(Boolean.FALSE);  
+            }
+            
             em.flush();
             fetchSchoolYears();
         } else {

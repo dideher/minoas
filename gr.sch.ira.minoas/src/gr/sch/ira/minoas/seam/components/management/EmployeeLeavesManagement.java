@@ -6,6 +6,7 @@ import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 import gr.sch.ira.minoas.model.employement.EmployeeLeaveType;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
+import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.printout.PrintoutRecipients;
 import gr.sch.ira.minoas.model.printout.PrintoutSignatures;
 import gr.sch.ira.minoas.model.security.Principal;
@@ -324,6 +325,8 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
     
     private Integer leaveDurationInDaysWithoutWeekends = 0;
     
+    private String employeeRegularPositionForLeavePrintout;
+    
     /**
      * It is the date used for various leave count computation. It is used by {@link RegularEmployeeLeavesOfCurrentYear}, 
      * {@link RegularEmployeeLeavesOfPreviousYear}, {@link MedicalEmployeeLeavesOfCurrentYear} and {@link MedicalEmployeeLeavesOfPrevious5Years}
@@ -517,7 +520,7 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
             }
 
             if (validateLeave(newLeave, true)) {
-                newLeave.setNumberOfDays(computeLeaveDuration(newLeave.getEstablished(), newLeave.getDueTo()));
+                newLeave.setNumberOfDays(CoreUtils.getDatesDifference(newLeave.getEstablished(), newLeave.getDueTo()));
                 employeeLeaveHome.persist();
                 setLeaveDurarionInDaysHelper(0);
                 setLeaveDurationInDaysWithoutWeekends(0);
@@ -579,7 +582,7 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
             EmployeeLeave newLeave = employeeLeaveHome.getInstance();
             if (validateLeave(newLeave, true)) {
                 newLeave.setActive(leaveShouldBeActivated(newLeave, new Date()));
-                newLeave.setNumberOfDays(computeLeaveDuration(newLeave.getEstablished(), newLeave.getDueTo()));
+                newLeave.setNumberOfDays(CoreUtils.getDatesDifference(newLeave.getEstablished(), newLeave.getDueTo()));
                 employeeLeaveHome.update();
                 getEntityManager().flush();
                 info("leave #0 for employee #1 has been modified", newLeave, employee);
@@ -620,11 +623,16 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
                 Map<String, Object> parameters = new HashMap<String, Object>();
                 Principal currentPrincipal = getPrincipal();
                 parameters.put("employeeForInformation", currentPrincipal.getRealName());
-                parameters.put("employeeForInformationTelephone", currentPrincipal.getInformationTelephone());
+                if(currentPrincipal.getInformationTelephone()!=null) {
+                    parameters.put("employeeForInformationTelephone", currentPrincipal.getInformationTelephone().getNumber());
+                } else 
+                    parameters.put("employeeForInformationTelephone", "");
                 parameters.put("leaveRequestDate", leavePrintoutRequestDate);
                 parameters.put("employeeName", employee.getFirstName());
                 parameters.put("employeeSurname", employee.getLastName());
                 parameters.put("employeeSpecialization", employee.getLastSpecialization().getTitle());
+                parameters.put("employeeSpecializationCode", employee.getLastSpecialization().getId());
+                parameters.put("employeeRegularSchool", this.employeeRegularPositionForLeavePrintout);
                 parameters.put("leaveDueToDate", leave.getDueTo());
                 parameters.put("leaveEstablishedDate", leave.getEstablished());
                 parameters.put("leaveDayDuration", leave.getEffectiveNumberOfDays());
@@ -633,40 +641,6 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
                 parameters.put("printDate", leavePrintoutDate);
                 parameters.put("signatureTitle", leavePrintoutSignature.getSignatureTitle());
                 parameters.put("signatureName", leavePrintoutSignature.getSignatureName());
-                
-                /* according to the leave type, populate the parameters map accordinally */
-                
-                if(leave.getEmployeeLeaveType().getLegacyCode().equals("33")) {
-                    parameters.put("numberOfBirthCertificate", printHelper.getFieldText1());
-                    parameters.put("numberOfCertificateFamilyStatus", printHelper.getFieldText2());
-                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("35")) {
-                    parameters.put("doctorOpinionDate", printHelper.getFieldDate1());
-                    parameters.put("doctorName", printHelper.getFieldText1());
-                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("36")) {
-                    parameters.put("leaveReason", printHelper.getFieldText1());
-                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("37")) {
-                    parameters.put("externalDecisionNumber", printHelper.getFieldText1());
-                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("38")) {
-                    parameters.put("externalDecisionNumber", printHelper.getFieldText1());
-                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("41")) {
-                    parameters.put("externalDecisionNumber", printHelper.getFieldText1());
-                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("42")) {
-                    parameters.put("externalDecisionDate", printHelper.getFieldDate1());
-                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("45")) {
-                    parameters.put("doctorOpinionDate", printHelper.getFieldDate1());
-                    parameters.put("doctorName", printHelper.getFieldText1());
-                    parameters.put("externalDecisionDate", printHelper.getFieldDate2());
-                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("46")) {
-                    parameters.put("doctorOpinionDate", printHelper.getFieldDate1());
-                    parameters.put("doctorName", printHelper.getFieldText1());
-                    parameters.put("externalDecisionDate", printHelper.getFieldDate2());
-                    parameters.put("textField2", printHelper.getFieldText2());
-                    parameters.put("numberOfBirthCertificate", printHelper.getFieldText3());
-                    parameters.put("textField1", printHelper.getFieldText4());
-                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("47")) {
-                    parameters.put("doctorOpinionDate", printHelper.getFieldDate1());
-                    parameters.put("doctorName", printHelper.getFieldText1());
-                }
                 
                /* compute a SHA-1 digest */
                 MessageDigest digest = MessageDigest.getInstance("SHA");
@@ -698,7 +672,6 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
     protected Map<String, Object> prepareSpecialParametersForLeavePrintout() throws NoSuchAlgorithmException, UnsupportedEncodingException {
 
         if (employeeLeaveHome.isManaged()) {
-            Employee employee = getEntityManager().merge(employeeHome.getInstance());
             EmployeeLeave leave = employeeLeaveHome.getInstance();
             
                 Map<String, Object> parameters = new HashMap<String, Object>();
@@ -709,7 +682,9 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
                 if(leave.getEmployeeLeaveType().getLegacyCode().equals("33")) {
                     parameters.put("numberOfBirthCertificate", printHelper.getFieldText1());
                     parameters.put("numberOfCertificateFamilyStatus", printHelper.getFieldText2());
-                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("35")) {
+                } if(leave.getEmployeeLeaveType().getLegacyCode().equals("34")) {
+                    parameters.put("numberOfBirthCertificate", printHelper.getFieldText1());
+                }  else if(leave.getEmployeeLeaveType().getLegacyCode().equals("35")) {
                     parameters.put("doctorOpinionDate", printHelper.getFieldDate1());
                     parameters.put("doctorName", printHelper.getFieldText1());
                 } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("36")) {
@@ -718,6 +693,10 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
                     parameters.put("externalDecisionNumber", printHelper.getFieldText1());
                 } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("38")) {
                     parameters.put("externalDecisionNumber", printHelper.getFieldText1());
+                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("40")) {
+                    parameters.put("textField1", printHelper.getFieldText1());
+                    parameters.put("textField2", printHelper.getFieldText2());
+                    parameters.put("textField3", printHelper.getFieldText3());
                 } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("41")) {
                     parameters.put("externalDecisionNumber", printHelper.getFieldText1());
                 } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("42")) {
@@ -736,6 +715,17 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
                 } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("47")) {
                     parameters.put("doctorOpinionDate", printHelper.getFieldDate1());
                     parameters.put("doctorName", printHelper.getFieldText1());
+                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("48")) {
+                    parameters.put("dateField1", printHelper.getFieldDate1());
+                    parameters.put("textField1", printHelper.getFieldText1());
+                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("52")) {
+                    parameters.put("textField2", printHelper.getFieldText2());
+                    parameters.put("textField3", printHelper.getFieldText3());
+                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("53")) {
+                    parameters.put("textField2", printHelper.getFieldText1());
+                    parameters.put("dateField1", printHelper.getFieldDate1());
+                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("55")) {
+                    parameters.put("externalDecisionNumber", printHelper.getFieldText1());
                 }
                        
             return parameters;
@@ -751,7 +741,7 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
             EmployeeLeave leave = employeeLeaveHome.getInstance();
             Map<String, Object> parameters = new HashMap<String, Object>();
             
-                if(leave.getEmployeeLeaveType().getLegacyCode().equals("55")) {
+                if(leave.getEmployeeLeaveType().getLegacyCode().equals("41") || leave.getEmployeeLeaveType().getLegacyCode().equals("55")) {
                     parameters.put("textField2", printHelper.getFieldText2());
                     parameters.put("textField3", printHelper.getFieldText3());
                     parameters.put("textField4", printHelper.getFieldText4());
@@ -760,7 +750,6 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
                     parameters.put("textField1", printHelper.getFieldText8());
                     parameters.put("doctorName", printHelper.getFieldText7());
                     parameters.put("dateField1", printHelper.getFieldDate2());
-                    
                 } 
             
             return parameters;
@@ -838,7 +827,7 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
                         employee.getLastSpecialization().getTitle());
                 // http://greenbytes.de/tech/webdav/rfc6266.html
                 //response.addHeader("Content-Disposition", String.format("attachment; filename*=UTF-8 ' '%s", pdfFile));
-                response.addHeader("Content-Disposition", String.format("attachment; filename=lalala.pdf", pdfFile));
+                response.addHeader("Content-Disposition", String.format("attachment; filename=ADEIA.pdf", pdfFile));
                 response.setContentLength(bytes.length);
                 ServletOutputStream servletOutputStream = response.getOutputStream();
                 servletOutputStream.write(bytes, 0, bytes.length);
@@ -912,46 +901,14 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
     }
 
     
-    protected int computeLeaveDuration(Date fromDate, Date toDate) {
-        if (fromDate != null && toDate != null) {
-            long DAY_TIME_IN_MILLIS = 24 * 60 * 60 * 1000;
-            long date1DaysMS = fromDate.getTime() - (fromDate.getTime() % DAY_TIME_IN_MILLIS);
-            long date2DaysMS = toDate.getTime() - (toDate.getTime() % DAY_TIME_IN_MILLIS);
-
-            long timeInMillisDiff = (date2DaysMS - date1DaysMS);
-            return (int) (timeInMillisDiff / DAY_TIME_IN_MILLIS);
-        } else
-            return 0;
-    }
-
-    protected int computeLeaveDurationWithoutWeekend(Date fromDate, Date toDate) {
-        if (fromDate != null && toDate != null) {
-            int countDays = 0;
-            Calendar fromCal = Calendar.getInstance();
-            fromCal.setTime(fromDate);
-            while (!(DateUtils.isSameDay(fromDate, toDate))) {
-                int dayOfWeek = fromCal.get(Calendar.DAY_OF_WEEK);
-                fromCal.add(Calendar.DAY_OF_YEAR, 1);
-                fromDate = fromCal.getTime();
-                if (dayOfWeek == Calendar.SATURDAY || dayOfWeek == Calendar.SUNDAY)
-                    continue; // don't count sundays and saturdays
-                else
-                    countDays++;
-            }
-            return countDays;
-        } else
-            return 0;
-    }
-    
-    
     public void silentlyComputeLeaveDuration() {
         EmployeeLeave leave = employeeLeaveHome.getInstance();
         Date established = leave.getEstablished() != null ? DateUtils.truncate(leave.getEstablished(),
                 Calendar.DAY_OF_MONTH) : null;
         Date dueTo = leave.getDueTo() != null ? DateUtils.truncate(leave.getDueTo(), Calendar.DAY_OF_MONTH) : null;
         if( established!=null && dueTo !=null &&  established.before(dueTo) ) {
-            setLeaveDurarionInDaysHelper(computeLeaveDuration(established, dueTo));
-            setLeaveDurationInDaysWithoutWeekends(computeLeaveDurationWithoutWeekend(established, dueTo));
+            setLeaveDurarionInDaysHelper(CoreUtils.getDatesDifference(established, dueTo));
+            setLeaveDurationInDaysWithoutWeekends(CoreUtils.getDatesDifferenceWithoutWeekend(established, dueTo));
         } else {
             setLeaveDurarionInDaysHelper(new Integer(0));
             setLeaveDurationInDaysWithoutWeekends(new Integer(0));
@@ -983,8 +940,8 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
                             "H ημ/νία έναρξης είναι μεταγενέστερη της ημ/νιας λήξης της άδειας. Μάλλον πρέπει να κάνεις ενα διάλειμα.");
             return;
         }
-        setLeaveDurarionInDaysHelper(computeLeaveDuration(established, dueTo));
-        setLeaveDurationInDaysWithoutWeekends(computeLeaveDurationWithoutWeekend(established, dueTo));
+        setLeaveDurarionInDaysHelper(CoreUtils.getDatesDifference(established, dueTo));
+        setLeaveDurationInDaysWithoutWeekends(CoreUtils.getDatesDifferenceWithoutWeekend(established, dueTo));
     }
 
     /**
@@ -1071,6 +1028,7 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
 
     /* this method is called when the user clicks the "print leave" */
     public void prepeareForLeavePrint() {
+        this.printHelper = new PrintingHelper();
         this.leavePrintoutDate = new Date();
         Collection<SelectItem> list = new ArrayList<SelectItem>();
         for (PrintoutRecipients r : getCoreSearching().getPrintoutRecipients(getEntityManager())) {
@@ -1080,6 +1038,20 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
         this.leavePrintounRecipientListSource = new ArrayList<PrintoutRecipients>(getCoreSearching()
                 .getPrintoutRecipients(getEntityManager()));
         this.leavePrintoutSignatureSource = getCoreSearching().getPrintoutSignatures(getEntityManager());
+        
+        Employment e = getEmployeeHome().getInstance().getCurrentEmployment();
+        if(e != null) {
+            this.employeeRegularPositionForLeavePrintout = e.getSchool().getTitle();
+        } else {
+            /* the employee has no regular employment */
+            String schoolTitle = null;
+            /* if the employee has no employment, then he might have a secondment here */
+            Secondment secodment = getCoreSearching().getEmployeeActiveSecondment(getEntityManager(), getEmployeeHome().getInstance(), new Date());
+            if(secodment != null) {
+                schoolTitle = secodment.getTargetUnit().getTitle();
+            }
+            this.employeeRegularPositionForLeavePrintout = schoolTitle;
+        }
     }
 
     /**
@@ -1246,6 +1218,20 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
      */
     public void setLeaveDurationInDaysWithoutWeekends(Integer leaveDurationInDaysWithoutWeekends) {
         this.leaveDurationInDaysWithoutWeekends = leaveDurationInDaysWithoutWeekends;
+    }
+
+    /**
+     * @return the employeeRegularPositionForLeavePrintout
+     */
+    public String getEmployeeRegularPositionForLeavePrintout() {
+        return employeeRegularPositionForLeavePrintout;
+    }
+
+    /**
+     * @param employeeRegularPositionForLeavePrintout the employeeRegularPositionForLeavePrintout to set
+     */
+    public void setEmployeeRegularPositionForLeavePrintout(String employeeRegularPositionForLeavePrintout) {
+        this.employeeRegularPositionForLeavePrintout = employeeRegularPositionForLeavePrintout;
     }
 
 }

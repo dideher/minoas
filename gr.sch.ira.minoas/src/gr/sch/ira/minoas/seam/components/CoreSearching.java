@@ -14,10 +14,16 @@ import gr.sch.ira.minoas.model.core.TeachingRequirement;
 import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
+import gr.sch.ira.minoas.model.employee.Evaluation;
+import gr.sch.ira.minoas.model.employee.PartTimeEmployment;
+import gr.sch.ira.minoas.model.employee.Penalty;
+import gr.sch.ira.minoas.model.employee.PenaltyType;
 import gr.sch.ira.minoas.model.employee.Person;
+import gr.sch.ira.minoas.model.employee.RankType;
 import gr.sch.ira.minoas.model.employement.Disposal;
 import gr.sch.ira.minoas.model.employement.DisposalTargetType;
 import gr.sch.ira.minoas.model.employement.DisposalType;
+import gr.sch.ira.minoas.model.employement.EducationalLevelType;
 import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 import gr.sch.ira.minoas.model.employement.EmployeeLeaveType;
 import gr.sch.ira.minoas.model.employement.Employment;
@@ -26,6 +32,7 @@ import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.SecondmentType;
 import gr.sch.ira.minoas.model.employement.ServiceAllocation;
 import gr.sch.ira.minoas.model.employement.ServiceAllocationType;
+import gr.sch.ira.minoas.model.employement.SpecialAssigment;
 import gr.sch.ira.minoas.model.employement.TeachingHourCDR;
 import gr.sch.ira.minoas.model.employement.TeachingHourCDRType;
 import gr.sch.ira.minoas.model.employement.WorkExperience;
@@ -42,6 +49,7 @@ import gr.sch.ira.minoas.seam.components.criteria.SpecializationGroupSearchType;
 import gr.sch.ira.minoas.seam.components.criteria.SpecializationSearchType;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -49,6 +57,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.AutoCreate;
 import org.jboss.seam.annotations.Factory;
@@ -151,7 +160,27 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     @Transactional(TransactionPropagationType.REQUIRED)
     @SuppressWarnings("unchecked")
     public Collection<EmployeeLeave> getActiveLeaves(EntityManager em) {
-        return getEntityManager(em).createQuery("SELECT l FROM EmployeeLeave l WHERE l.active IS TRUE").getResultList();
+        return getEntityManager(em).createQuery("SELECT l FROM EmployeeLeave l WHERE l.active IS TRUE AND (l.deleted IS FALSE OR l.deleted IS NULL)").getResultList();
+    }
+    
+    @Transactional(TransactionPropagationType.REQUIRED)
+    @SuppressWarnings("unchecked")
+    public Collection<EmployeeLeave> getFutureLeavesThatWillBeActivated(EntityManager em, Date referenceDay, Integer dayThreshold) {
+        Calendar establishedFrom = Calendar.getInstance();
+        establishedFrom.setTime(referenceDay);
+        DateUtils.truncate(establishedFrom, Calendar.DAY_OF_MONTH);
+        
+        Calendar establishedTo = (Calendar)establishedFrom.clone();
+        establishedTo.add(Calendar.DAY_OF_MONTH, dayThreshold);
+        
+//        Calendar dueToFrom = Calendar.getInstance();
+//        dueToFrom.setTime(referenceDay);
+//        DateUtils.truncate(dueToFrom, Calendar.DAY_OF_MONTH);
+//        
+//        Calendar dueToTo = (Calendar)dueToFrom.clone();
+//        dueToTo.add(Calendar.DAY_OF_MONTH, dayThreshold);
+        
+        return getEntityManager(em).createQuery("SELECT l FROM EmployeeLeave l WHERE l.active IS FALSE AND (l.deleted IS FALSE OR l.deleted IS NULL) AND l.established BETWEEN :establishedFrom AND :establishedTo").setParameter("establishedFrom",  establishedFrom.getTime()).setParameter("establishedTo",  establishedTo.getTime()).getResultList();
     }
     
      /**
@@ -501,29 +530,6 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
                 .setParameter("employee", employee).setParameter("referenceDate", referenceDate).getResultList();
         return result;
     }
-    
-    @SuppressWarnings("unchecked")
-    @Transactional(TransactionPropagationType.REQUIRED)
-    public Collection<Leave> getEmployeeLeaveHistory(Person employee) {
-        Collection<Leave> result = null;
-        info("searching employee's '#0' leaves.", employee);
-        result = entityManager.createQuery(
-                "SELECT s from Leave s WHERE s.active IS FALSE AND s.employee=:employee ORDER BY s.established")
-                .setParameter("employee", employee).getResultList();
-        info("found totally '#0' leave(s) in employee's '#1' history.", result.size(), employee);
-        return result;
-    }
-    
-    
-    public Collection<Leave> getEmployeeLeaveHistoryWithCurrentActive(Person employee) {
-        Collection<Leave> result = null;
-        info("searching employee's '#0' leaves.", employee);
-        result = entityManager.createQuery(
-                "SELECT s from Leave s WHERE ((s.active IS FALSE AND s.autoCanceled IS TRUE) OR (s.active IS TRUE)) AND s.employee=:employee ORDER BY s.established")
-                .setParameter("employee", employee).getResultList();
-        info("found totally '#0' leave(s) in employee's '#1' history.", result.size(), employee);
-        return result;
-    }
 
     @Transactional(TransactionPropagationType.REQUIRED)
     public Employee getEmployeeOfTypeByVatNumber(EntityManager entityManager, EmployeeType employeeType,
@@ -536,6 +542,15 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         } catch (NoResultException nre) {
             return null;
         }
+    }
+    
+    @SuppressWarnings("unchecked")
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public Collection<Employee> getActiveEmployeesOfType(EntityManager entityManager, EmployeeType employeeType) {
+        EntityManager em = getEntityManager(entityManager);
+        return em.createQuery("SELECT e FROM Employee e WHERE e.type=:employeeType AND e.active IS TRUE")
+                .setParameter("employeeType", employeeType).getResultList();
+
     }
 
     @SuppressWarnings("unchecked")
@@ -670,7 +685,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
                             "SELECT DISTINCT e FROM Employee AS e WHERE (e.active IS TRUE AND e.currentEmployment.active IS TRUE AND e.currentEmployment.school=:school AND e.currentEmployment.schoolYear=:schoolYear) "
                                     + " AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g IN (:specializations) AND e.lastSpecialization MEMBER OF g.specializations)"
                                     + " AND NOT EXISTS(SELECT s FROM Secondment s WHERE s.employee=e AND s.active IS TRUE AND s.sourceUnit=:school AND (:dayOfInterest BETWEEN s.established AND s.dueTo)) "
-                                    + " AND NOT EXISTS(SELECT l FROM Leave l WHERE l.employee=e AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
+                                    + " AND NOT EXISTS(SELECT l FROM EmployeeLeave l WHERE l.employee=e AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
                                     + " AND NOT EXISTS(SELECT a FROM ServiceAllocation a WHERE a.employee=e AND a.active IS TRUE AND a.sourceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo)) "
                                     + " ORDER BY e.lastSpecialization.id, e.lastName ").setParameter("school", school)
                     .setParameter("specializations", specializationGroups).setParameter("schoolYear", schoolYear)
@@ -681,7 +696,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
                     .createQuery(
                             "SELECT DISTINCT e FROM Employee AS e WHERE (e.active IS TRUE AND  e.currentEmployment.active IS TRUE AND e.currentEmployment.school=:school AND e.currentEmployment.schoolYear=:schoolYear) "
                                     + " AND NOT EXISTS(SELECT s FROM Secondment s WHERE s.employee=e AND s.active IS TRUE AND s.sourceUnit=:school AND (:dayOfInterest BETWEEN s.established AND s.dueTo)) "
-                                    + " AND NOT EXISTS(SELECT l FROM Leave l WHERE l.employee=e AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
+                                    + " AND NOT EXISTS(SELECT l FROM EmployeeLeave l WHERE l.employee=e AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
                                     + " AND NOT EXISTS(SELECT a FROM ServiceAllocation a WHERE a.employee=e AND a.active IS TRUE AND a.sourceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo)) "
                                     + " ORDER BY e.lastSpecialization.id, e.lastName ").setParameter("school", school)
                     .setParameter("schoolYear", schoolYear).setParameter("dayOfInterest", dayOfPrecense)
@@ -698,7 +713,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
                             "SELECT DISTINCT e FROM Employee AS e WHERE (e.active IS TRUE AND e.currentEmployment.active IS TRUE AND e.currentEmployment.school=:school AND e.currentEmployment.schoolYear=:schoolYear) "
                                     + " AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g=:specialization AND e.lastSpecialization MEMBER OF g.specializations)"
                                     + " AND NOT EXISTS(SELECT s FROM Secondment s WHERE s.employee=e AND s.active IS TRUE AND s.sourceUnit=:school AND (:dayOfInterest BETWEEN s.established AND s.dueTo)) "
-                                    + " AND NOT EXISTS(SELECT l FROM Leave l WHERE l.employee=e AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
+                                    + " AND NOT EXISTS(SELECT l FROM EmployeeLeave l WHERE l.employee=e AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
                                     + " AND NOT EXISTS(SELECT a FROM ServiceAllocation a WHERE a.employee=e AND a.active IS TRUE AND a.sourceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo)) "
                                     + " ORDER BY e.lastSpecialization.id, e.lastName ")
                     .setParameter("specialization", specializationGroup).setParameter("school", school)
@@ -710,7 +725,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
                     .createQuery(
                             "SELECT DISTINCT e FROM Employee AS e WHERE (e.active IS TRUE AND  e.currentEmployment.active IS TRUE AND e.currentEmployment.school=:school AND e.currentEmployment.schoolYear=:schoolYear) "
                                     + " AND NOT EXISTS(SELECT s FROM Secondment s WHERE s.employee=e AND s.active IS TRUE AND s.sourceUnit=:school AND (:dayOfInterest BETWEEN s.established AND s.dueTo)) "
-                                    + " AND NOT EXISTS(SELECT l FROM Leave l WHERE l.employee=e AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
+                                    + " AND NOT EXISTS(SELECT l FROM EmployeeLeave l WHERE l.employee=e AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
                                     + " AND NOT EXISTS(SELECT a FROM ServiceAllocation a WHERE a.employee=e AND a.active IS TRUE AND a.sourceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo)) "
                                     + " ORDER BY e.lastSpecialization.id, e.lastName ").setParameter("school", school)
                     .setParameter("schoolYear", schoolYear).setParameter("dayOfInterest", dayOfPrecense)
@@ -727,7 +742,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
                             "SELECT DISTINCT e FROM Employee AS e WHERE (e.active IS TRUE AND e.currentEmployment.active IS TRUE AND e.currentEmployment.type=:employmentType AND e.currentEmployment.school=:school AND e.currentEmployment.schoolYear=:schoolYear) "
                                     + " AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g IN (:specializations) AND e.lastSpecialization MEMBER OF g.specializations)"
                                     + " AND NOT EXISTS(SELECT s FROM Secondment s WHERE s.employee=e AND s.active IS TRUE AND s.sourceUnit=:school AND (:dayOfInterest BETWEEN s.established AND s.dueTo)) "
-                                    + " AND NOT EXISTS(SELECT l FROM Leave l WHERE l.employee=e AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
+                                    + " AND NOT EXISTS(SELECT l FROM EmployeeLeave l WHERE l.employee=e AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
                                     + " AND NOT EXISTS(SELECT a FROM ServiceAllocation a WHERE a.employee=e AND a.active IS TRUE AND a.sourceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo)) "
                                     + " ORDER BY e.lastSpecialization.id, e.lastName ").setParameter("school", school)
                     .setParameter("specializations", specializationGroups).setParameter("schoolYear", schoolYear)
@@ -739,7 +754,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
                     .createQuery(
                             "SELECT DISTINCT e FROM Employee AS e WHERE (e.active IS TRUE AND  e.currentEmployment.active IS TRUE AND e.currentEmployment.type=:employmentType AND e.currentEmployment.school=:school AND e.currentEmployment.schoolYear=:schoolYear) "
                                     + " AND NOT EXISTS(SELECT s FROM Secondment s WHERE s.employee=e AND s.active IS TRUE AND s.sourceUnit=:school AND (:dayOfInterest BETWEEN s.established AND s.dueTo)) "
-                                    + " AND NOT EXISTS(SELECT l FROM Leave l WHERE l.employee=e AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
+                                    + " AND NOT EXISTS(SELECT l FROM EmployeeLeave l WHERE l.employee=e AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
                                     + " AND NOT EXISTS(SELECT a FROM ServiceAllocation a WHERE a.employee=e AND a.active IS TRUE AND a.sourceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo)) "
                                     + " ORDER BY e.lastSpecialization.id, e.lastName ").setParameter("school", school)
                     .setParameter("employmentType", employmentType).setParameter("schoolYear", schoolYear)
@@ -763,7 +778,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
                             "SELECT DISTINCT e FROM Employee AS e WHERE (e.active IS TRUE AND e.currentEmployment.active IS TRUE AND e.currentEmployment.type=:employmentType AND e.currentEmployment.school=:school AND e.currentEmployment.schoolYear=:schoolYear) "
                                     + " AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g=:specialization AND e.lastSpecialization MEMBER OF g.specializations)"
                                     + " AND NOT EXISTS(SELECT s FROM Secondment s WHERE s.employee=e AND s.active IS TRUE AND s.sourceUnit=:school AND (:dayOfInterest BETWEEN s.established AND s.dueTo)) "
-                                    + " AND NOT EXISTS(SELECT l FROM Leave l WHERE l.employee=e AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
+                                    + " AND NOT EXISTS(SELECT l FROM EmployeeLeave l WHERE l.employee=e AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
                                     + " AND NOT EXISTS(SELECT a FROM ServiceAllocation a WHERE a.employee=e AND a.active IS TRUE AND a.sourceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo)) "
                                     + " ORDER BY e.lastSpecialization.id, e.lastName ")
                     .setParameter("specialization", specializationGroup).setParameter("school", school)
@@ -775,7 +790,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
                     .createQuery(
                             "SELECT DISTINCT e FROM Employee AS e WHERE (e.active IS TRUE AND e.currentEmployment.active IS TRUE AND e.currentEmployment.type=:employmentType AND e.currentEmployment.school=:school AND e.currentEmployment.schoolYear=:schoolYear) "
                                     + " AND NOT EXISTS(SELECT s FROM Secondment s WHERE s.employee=e AND s.active IS TRUE AND s.sourceUnit=:school AND (:dayOfInterest BETWEEN s.established AND s.dueTo)) "
-                                    + " AND NOT EXISTS(SELECT l FROM Leave l WHERE l.employee=e AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
+                                    + " AND NOT EXISTS(SELECT l FROM EmployeeLeave l WHERE l.employee=e AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
                                     + " AND NOT EXISTS(SELECT a FROM ServiceAllocation a WHERE a.employee=e AND a.active IS TRUE AND a.sourceUnit=:school AND (:dayOfInterest BETWEEN a.established AND a.dueTo)) "
                                     + " ORDER BY e.lastSpecialization.id, e.lastName ").setParameter("school", school)
                     .setParameter("employmentType", employmentType).setParameter("schoolYear", schoolYear)
@@ -832,7 +847,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
                     .createQuery(
                             "SELECT DISTINCT s FROM Disposal s JOIN FETCH s.employee WHERE (s.active IS TRUE AND s.disposalUnit=:school AND s.schoolYear=:schoolYear AND (:dayOfInterest BETWEEN s.established AND s.dueTo)) "
                                     + " AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g IN (:specializations) AND s.employee.lastSpecialization MEMBER OF g.specializations)"
-                                    + " AND NOT EXISTS(SELECT l FROM Leave l WHERE l.employee=s.employee AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
+                                    + " AND NOT EXISTS(SELECT l FROM EmployeeLeave l WHERE l.employee=s.employee AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
                                     + " ORDER BY s.employee.lastSpecialization.id, s.employee.lastName ")
                     .setParameter("specializations", specializationGroups).setParameter("school", school)
                     .setParameter("schoolYear", schoolYear).setParameter("dayOfInterest", dayOfPrecense)
@@ -841,7 +856,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
             return getEntityManager(em)
                     .createQuery(
                             "SELECT DISTINCT s FROM Disposal s JOIN FETCH s.employee WHERE (s.active IS TRUE AND s.disposalUnit=:school AND s.schoolYear=:schoolYear AND (:dayOfInterest BETWEEN s.established AND s.dueTo)) "
-                                    + " AND NOT EXISTS(SELECT l FROM Leave l WHERE l.employee=s.employee AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
+                                    + " AND NOT EXISTS(SELECT l FROM EmployeeLeave l WHERE l.employee=s.employee AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))"
                                     + " ORDER BY s.employee.lastSpecialization.id, s.employee.lastName ")
                     .setParameter("school", school).setParameter("schoolYear", schoolYear)
                     .setParameter("dayOfInterest", dayOfPrecense).getResultList();
@@ -1161,7 +1176,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
                     .createQuery(
                             "SELECT DISTINCT s FROM Secondment s JOIN FETCH s.employee WHERE (s.active IS TRUE AND s.targetUnit=:school AND s.schoolYear=:schoolYear AND (:dayOfInterest BETWEEN s.established AND s.dueTo))"
                                     + " AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g IN (:specializations) AND s.employee.lastSpecialization MEMBER OF g.specializations)"
-                                    + " AND NOT EXISTS(SELECT l FROM Leave l WHERE l.employee=s.employee AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))")
+                                    + " AND NOT EXISTS(SELECT l FROM EmployeeLeave l WHERE l.employee=s.employee AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))")
                     .setParameter("specializations", specializationGroups).setParameter("school", school)
                     .setParameter("schoolYear", schoolYear).setParameter("dayOfInterest", dayOfPrecense)
                     .getResultList();
@@ -1169,7 +1184,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
             return getEntityManager(em)
                     .createQuery(
                             "SELECT DISTINCT s FROM Secondment s JOIN FETCH s.employee WHERE (s.active IS TRUE AND s.targetUnit=:school AND s.schoolYear=:schoolYear AND (:dayOfInterest BETWEEN s.established AND s.dueTo))"
-                                    + " AND NOT EXISTS(SELECT l FROM Leave l WHERE l.employee=s.employee AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))")
+                                    + " AND NOT EXISTS(SELECT l FROM EmployeeLeave l WHERE l.employee=s.employee AND l.active IS TRUE AND (:dayOfInterest BETWEEN l.established AND l.dueTo))")
                     .setParameter("school", school).setParameter("schoolYear", schoolYear)
                     .setParameter("dayOfInterest", dayOfPrecense).getResultList();
         }
@@ -1215,8 +1230,6 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         return (Collection<Specialization>) em.createQuery("SELECT s FROM Specialization s ORDER BY s.id ASC")
                 .getResultList();
     }
-    
-
 
     @Factory(value = "specializationSearchTypes")
     public SpecializationSearchType[] getSpecializationSearchTypes() {
@@ -1232,6 +1245,14 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         return return_value;
     }
 
+    @SuppressWarnings("unchecked")
+    public Collection<TeachingHourCDR> getTeachingHoursCDRsRelatedToEmployment(EntityManager entityManager, Employment employment, SchoolYear schoolYear) {
+        List<TeachingHourCDR> return_value = getEntityManager(entityManager)
+                .createQuery("SELECT t FROM TeachingHourCDR t WHERE t.employment=:employment AND t.schoolYear=:schoolYear")
+                .setParameter("employment", employment).setParameter("schoolYear", schoolYear).getResultList();
+        return return_value;
+    }
+    
     @SuppressWarnings("unchecked")
     public Collection<TeachingHourCDR> getEmployeeTeachingHoursCDRs(EntityManager entityManager, SchoolYear schoolYear,
             Employee employee) {
@@ -1393,7 +1414,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         info("searching employee's '#0' work experiences.", employee);
         result = entityManager
                 .createQuery(
-                        "SELECT s from WorkExperience s WHERE s.active IS TRUE AND s.employee=:employee ORDER BY s.fromDate")
+                        "SELECT s from WorkExperience s WHERE s.active IS TRUE AND (s.deleted IS FALSE OR s.deleted is NULL) AND s.employee=:employee ORDER BY s.fromDate")
                 .setParameter("employee", employee).getResultList();
 //        result = entityManager.createQuery(
 //	        "SELECT s from Leave s WHERE s.active IS FALSE AND s.employee=:employee ORDER BY s.established")
@@ -1401,5 +1422,119 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         info("found totally '#0' work experience(s) in employee's '#1' history.", result.size(), employee);
         return result;
     }
+
+
+    
+    @SuppressWarnings("unchecked")
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public Collection<Evaluation> getEvaluationHistory(Employee employee) {
+        Collection<Evaluation> result = null;
+        info("searching employee's '#0' evaluations.", employee);
+        result = entityManager.createQuery(
+            "SELECT s from Evaluation s WHERE s.employee=:employee AND (s.deleted IS FALSE OR s.deleted is NULL) ORDER BY s.evaluationDate")
+            .setParameter("employee", employee).getResultList();
+        info("found totally '#0' evaluation(s) in employee's '#1' history.", result.size(), employee);
+        return result;
+    }
+   
+    @SuppressWarnings("unchecked")
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public Collection<PartTimeEmployment> getPartTimeEmploymentHistory(Employee employee) {
+        Collection<PartTimeEmployment> result = null;
+        info("searching employee's '#0' part-time employments.", employee);
+        result = entityManager.createQuery(
+            "SELECT s from PartTimeEmployment s WHERE s.employee=:employee AND (s.deleted IS FALSE OR s.deleted is NULL) ORDER BY s.startDate")
+            .setParameter("employee", employee).getResultList();
+        info("found totally '#0' part-time employment(s) in employee's '#1' history.", result.size(), employee);
+        return result;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public Collection<Penalty> getPenaltyHistory(Employee employee) {
+        Collection<Penalty> result = null;
+        result = entityManager.createQuery(
+            "SELECT s from Penalty s WHERE s.employee=:employee AND (s.deleted IS FALSE OR s.deleted is NULL) ORDER BY s.penaltyAwardDate")
+            .setParameter("employee", employee).getResultList();
+        return result;
+    }
+    
+    
+/*
+ * 	Deprecated because RankInfos are now available in employeeInfo.getRankInfos() collection
+ * 
+ *  @SuppressWarnings("unchecked")
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public Collection<RankInfo> getRankInfoHistory(Employee employee) {
+        Collection<RankInfo> result = null;
+        info("searching employee's '#0' rank information.", employee);
+        result = entityManager.createQuery(
+            "SELECT r from RankInfo r WHERE r.employeeInfo=:employeeInfo ORDER BY r.lastRankDate, r.lastSalaryGradeDate")
+            .setParameter("employeeInfo", employee.getEmployeeInfo()).getResultList();
+        info("found totally '#0' rank transitions in employee's '#1' history.", result.size(), employee);
+        return result;
+    }
+    
+    */
+    @SuppressWarnings("unchecked")
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public Collection<SpecialAssigment> getEmployeeSpecialAssigments(EntityManager entityManager, Employee employee) {
+        List<SpecialAssigment> return_value = entityManager.createQuery(
+                "SELECT w FROM SpecialAssigment w WHERE w.employee=:employee AND w.active IS TRUE")
+                .setParameter("employee", employee).getResultList();
+        return return_value;
+    }
+    
+    
+    @Transactional(TransactionPropagationType.REQUIRED)
+    @SuppressWarnings("unchecked")
+    public Collection<SpecialAssigment> getActiveSpecialAssigments(EntityManager em) {
+        return getEntityManager(em).createQuery("SELECT s FROM SpecialAssigment s WHERE s.active IS TRUE").getResultList();
+    }
+    
+
+    @Factory(value = "rankTypes")
+    public RankType[] getRankTypes() {
+        return RankType.values();
+    }
+    
+    @Factory(value = "educationalLevelTypes")
+    public EducationalLevelType[] getEducationalLevelTypes() {
+        return EducationalLevelType.values();
+    }
+
+    @Factory(value = "penaltyTypes")
+    public PenaltyType[] getPenaltyTypes() {
+        return PenaltyType.values();
+    }
+
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public Long getSummedEducationalWorkExperience(Employee employee) {
+        Long returnValue = (Long) entityManager
+                .createQuery(
+                        "SELECT SUM(actualDays) FROM WorkExperience w WHERE w.active IS TRUE AND w.educational IS TRUE AND (w.deleted IS FALSE OR w.deleted IS NULL) AND w.employee=:employee")
+                .setParameter("employee", employee).getSingleResult();
+        return returnValue != null ? returnValue : new Long(0);
+    }
+    
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public Long getSummedTeachingWorkExperience(Employee employee) {
+        Long returnValue = (Long) entityManager
+                .createQuery(
+                        "SELECT SUM(actualDays) FROM WorkExperience w WHERE w.active IS TRUE AND w.teaching IS TRUE AND (w.deleted IS FALSE OR w.deleted IS NULL) AND w.employee=:employee")
+                .setParameter("employee", employee).getSingleResult();
+        return returnValue != null ? returnValue : new Long(0);
+    }
+    
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public Long getSummedWorkExperience(Employee employee) {
+        Long returnValue = (Long) entityManager
+                .createQuery(
+                        "SELECT SUM(actualDays) FROM WorkExperience w WHERE w.active IS TRUE AND (w.deleted IS FALSE OR w.deleted IS NULL) AND w.employee=:employee")
+                .setParameter("employee", employee).getSingleResult();
+        return returnValue != null ? returnValue : new Long(0);
+    } 
+    
+    
 
 }

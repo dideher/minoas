@@ -164,6 +164,20 @@ a.menu_link:hover {
 	float: right;
 }
 
+.fieldValueLabelLeft {
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: black;
+	float: left;
+}
+
+.hintText {
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-size: 9px;
+	color: black;
+	text-align: justify;
+}
+
 .vertTop {
         vertical-align:top;
 }

@@ -344,7 +344,7 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
     }
     
     public Boolean isHourlyPaidEmployee() {
-        return getInstance().isHourlyPaidEmpoyee();
+        return getInstance().isHourlyPaidEmployee();
     }
 
 }

@@ -23,7 +23,7 @@
 				<h:panelGrid columns="1">
 
 					<h:outputText
-						value="Με την παρακάτω φόρμα μπορείτε να εισάγεται έναν νέο εκπαιδευτικό στην βάση του Μίνωα. Κατά την εισαγωγή του εκπαιδευτικού μπορείται προαιρετικά να εισάγεται και τα στοιχεία της σχέσης εργασίας που θα έχει αυτός ο εκπαιδευτικός με την υπηρεσία." />
+						value="Με την παρακάτω φόρμα μπορείτε να εισάγετε έναν νέο εκπαιδευτικό στην βάση του Μίνωα. Κατά την εισαγωγή του εκπαιδευτικού μπορείτε προαιρετικά να εισάγετε και τα στοιχεία της σχέσης εργασίας που θα έχει αυτός ο εκπαιδευτικός με την υπηρεσία." />
 					<a4j:outputPanel id="employeeBasePanel">
 						<rich:panel>
 							<f:facet name="header">
@@ -36,7 +36,7 @@
 									</ui:define>
 									<h:inputText value="#{employee.lastName}" required="true"
 										styleClass="fieldValueText" tabindex="1" size="25"
-										maxlength="30">
+										maxlength="35">
 									</h:inputText>
 								</s:decorate>
 
@@ -45,7 +45,7 @@
 										<h:outputText value="Όνομα" />
 									</ui:define>
 									<h:inputText value="#{employee.firstName}" required="true"
-										styleClass="fieldValueText" size="12" maxlength="30">
+										styleClass="fieldValueText" size="12" maxlength="25">
 									</h:inputText>
 								</s:decorate>
 
@@ -54,7 +54,7 @@
 										<h:outputText value="Όνομα Πατρός" />
 									</ui:define>
 									<h:inputText value="#{employee.fatherName}" required="true"
-										styleClass="fieldValueText" size="12" maxlength="30">
+										styleClass="fieldValueText" size="12" maxlength="25">
 									</h:inputText>
 								</s:decorate>
 
@@ -75,7 +75,7 @@
 										<h:outputText value="Έπωνυμο Πατρός" />
 									</ui:define>
 									<h:inputText value="#{employee.fatherSurname}" required="false"
-										styleClass="fieldValueText" size="25" maxlength="30">
+										styleClass="fieldValueText" size="25" maxlength="25">
 									</h:inputText>
 								</s:decorate>
 
@@ -99,7 +99,7 @@
 
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
 									<ui:define name="label">
-										<h:outputText value="Ημ/μια Γεννήσεως : " />
+										<h:outputText value="Ημ/νια Γεννήσεως : " />
 									</ui:define>
 									<rich:calendar datePattern="dd-MM-yyyy" style="width:50px"
 										enableManualInput="true" styleClass="fieldValueText"
@@ -160,7 +160,7 @@
 							<h:panelGrid columns="3">
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
 									<ui:define name="label">
-										<h:outputText value="Άντρας ;" />
+										<h:outputText value="Άρρεν ;" />
 									</ui:define>
 									<h:selectBooleanCheckbox value="#{employee.man}" />
 								</s:decorate>

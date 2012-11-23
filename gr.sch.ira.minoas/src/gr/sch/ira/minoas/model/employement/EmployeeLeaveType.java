@@ -19,7 +19,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 public class EmployeeLeaveType extends BaseIDModel {
 
     /**
-     * Comment for <code>serialVersionUID</code>
+     * Comment for <code>serialVersionUID</code> 
      */
     private static final long serialVersionUID = 1L;
     
@@ -112,5 +112,21 @@ public class EmployeeLeaveType extends BaseIDModel {
      */
     public void setSuitableForEmployeeType(EmployeeType suitableForEmployeeType) {
         this.suitableForEmployeeType = suitableForEmployeeType;
+    }
+
+    /**
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("EmployeeLeaveType [legacyCode=");
+        builder.append(legacyCode);
+        builder.append(", description=");
+        builder.append(description);
+        builder.append(", generatesCDRs=");
+        builder.append(generatesCDRs);
+        builder.append("]");
+        return builder.toString();
     }
 }

@@ -48,12 +48,19 @@
     <class>gr.sch.ira.minoas.model.AbstractArchivableEntity</class>
     <class>gr.sch.ira.minoas.model.employement.WorkExperienceType</class>
     <class>gr.sch.ira.minoas.model.employement.TeachingHourCDR</class>
+    <class>gr.sch.ira.minoas.model.employee.Evaluation</class>
+    <class>gr.sch.ira.minoas.model.employee.Penalty</class>
+    <class>gr.sch.ira.minoas.model.employee.EmployeeInfo</class>
+    <class>gr.sch.ira.minoas.model.employee.EvolutionCDR</class>
     <class>gr.sch.ira.minoas.model.employement.EmployeeLeaveType</class>
     <class>gr.sch.ira.minoas.model.core.WorkingOffice</class>
     <class>gr.sch.ira.minoas.model.printout.PrintoutSignatures</class>
     <class>gr.sch.ira.minoas.model.printout.PrintoutRecipients</class>
     <class>gr.sch.ira.minoas.model.printout.PrintoutHistory</class>
     <class>gr.sch.ira.minoas.model.employement.EmployeeLeave</class>
+    <class>gr.sch.ira.minoas.model.employement.Salary</class>
+    <class>gr.sch.ira.minoas.model.employee.RankInfo</class>
+    <class>gr.sch.ira.minoas.model.employement.SpecialAssigment</class>
     <properties>
       <!--
         <property name="hibernate.dialect"
@@ -73,11 +80,11 @@
       <property name="hibernate.format_sql" value="true" />
 
       <!-- simple caching settings -->
-      <property name="hibernate.cache.provider_class" value="net.sf.ehcache.hibernate.SingletonEhCacheProvider" />
+      <!-- <property name="hibernate.cache.provider_class" value="net.sf.ehcache.hibernate.SingletonEhCacheProvider" /> -->
       <!-- caching settings -->
-      <property name="hibernate.cache.use_second_level_cache" value="true" />
-      <property name="hibernate.cache.use_query_cache" value="true" />
-      <property name="hibernate.generate_statistics" value="true" />
+      <property name="hibernate.cache.use_second_level_cache" value="false" />
+      <property name="hibernate.cache.use_query_cache" value="false" />
+      <property name="hibernate.generate_statistics" value="false" />
       <!--
         <property name="hibernate.cache.use_second_level_cache" value="true" />
         <property name="hibernate.cache.use_query_cache" value="true" />
@@ -110,6 +117,36 @@
 
     </properties>
 
+  </persistence-unit>
+  
+  <persistence-unit name="spanoudakisDB" transaction-type="RESOURCE_LOCAL">
+    <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    <jta-data-source>java:/gr.sch.ira.spanoudakisDatasource</jta-data-source>
+    <exclude-unlisted-classes>true</exclude-unlisted-classes>
+    
+    <properties>
+      <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect" />
+      <property name="hibernate.default_schema" value="slavikos"/>
+      <property name="hibernate.hbm2ddl.auto" value="validate" />
+      <property name="hibernate.show_sql" value="false" />
+      <property name="hibernate.format_sql" value="true" />
+
+      <!-- simple caching settings -->
+      <property name="hibernate.cache.provider_class" value="net.sf.ehcache.hibernate.SingletonEhCacheProvider" />
+      <!-- caching settings -->
+      <property name="hibernate.cache.use_second_level_cache" value="true" />
+      <property name="hibernate.cache.use_query_cache" value="true" />
+      <property name="hibernate.generate_statistics" value="true" />
+     
+      <property name="hibernate.transaction.manager_lookup_class"
+        value="org.hibernate.transaction.JBossTransactionManagerLookup" />
+      <!--
+        Binds the EntityManagerFactory to JNDI where Seam can look it up. This
+        is only relevant when the container automatically loads the persistence
+        unit, as is the case in JBoss AS 5.
+      -->
+      <property name="jboss.entity.manager.factory.jndi.name" value="java:/spanoudakisEntityManagerFactory" />
+      </properties>
   </persistence-unit>
 
 </persistence>

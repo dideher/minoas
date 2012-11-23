@@ -4,6 +4,9 @@ import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.async.DisposalCleanupProcessor;
 import gr.sch.ira.minoas.seam.components.async.LeaveActivactionProcessor;
 import gr.sch.ira.minoas.seam.components.async.LeaveCleanupProcessor;
+import gr.sch.ira.minoas.seam.components.async.PensionsScannerProcessor;
+import gr.sch.ira.minoas.seam.components.async.RegularEmployeeServiceUpdaterProcessor;
+import gr.sch.ira.minoas.seam.components.async.SecondmentActivactionProcessor;
 import gr.sch.ira.minoas.seam.components.async.SecondmentCleanupProcessor;
 import gr.sch.ira.minoas.seam.components.async.ServiceAllocationCleanupProcessor;
 import gr.sch.ira.minoas.seam.components.reports.BasicUsageReport;
@@ -31,9 +34,16 @@ public class SchedulerController extends BaseDatabaseAwareSeamComponent {
     
     private static final long DISPOSAL_CLEANUP_INTERVAL = 1200000;
     
-    private static final long LEAVE_ACTIVATION_INTERVAL = 1200000;
-    
     private static final long BASIC_USAGE_REPORT_INTERVAL = 2400000;
+    
+    private static final long PENSION_SYNC_INTERVAL = 8400000;
+    
+    private static final long REGULAR_EMPLOYEE_SERVICE_SYNC_INTERVAL = 60000;
+    
+    private static final long ACTIVATION_TASK_INTERVAL = 1200000;
+    
+    
+    
     
     @In(create=true, value="secondmentCleanupProcessor")
     private SecondmentCleanupProcessor secondmentCleanupProcessor;
@@ -48,8 +58,24 @@ public class SchedulerController extends BaseDatabaseAwareSeamComponent {
     @In(create=true, value="leaveActivationProcessor")
     private LeaveActivactionProcessor leaveActivationProcessor;
     
+    @In(create=true, value="secondmentActivationProcessor")
+    private SecondmentActivactionProcessor secondmentActivationProcessor;
+    
+//    @In(create=true, value="serviceAllocationActivationProcessor")
+//    private ServiceAllocationActivactionProcessor serviceAllocationActivationProcessor;
+    
+//    @In(create=true, value="disposalActivationProcessor")
+//    private DisposalActivactionProcessor disposalActivationProcessor;
+    
+    
     @In(create=true, value="serviceAllocationCleanupProcessor")
     private ServiceAllocationCleanupProcessor serviceAllocationCleanupProcessor;
+    
+    @In(create=true, value="pensionsScannerProcessor")
+    private PensionsScannerProcessor pensionsScannerProcessor;
+    
+    @In(create=true, value="regularEmployeeServiceUpdaterProcessor")
+    private RegularEmployeeServiceUpdaterProcessor regularEmployeeServiceUpdaterProcessor;
     
     
     @In(create=true, value="basicUsageReport")
@@ -60,7 +86,13 @@ public class SchedulerController extends BaseDatabaseAwareSeamComponent {
     private QuartzTriggerHandle disposalCleanupProcessorHandler;
     private QuartzTriggerHandle serviceAllocationCleanupProcessorHandler;
     private QuartzTriggerHandle leaveActivationProcessorHandler;
+    private QuartzTriggerHandle secondmentActivationProcessorHandler;
+    //private QuartzTriggerHandle serviceAllocationActivationProcessorHandler;
+    //private QuartzTriggerHandle disposalActivationProcessorHandler;
+    private QuartzTriggerHandle regularEmployeeServiceUpdaterProcessorHandler;
     private QuartzTriggerHandle basicUsageReportProcessorHandler;
+    private QuartzTriggerHandle pensionsScannerProcessorHandler;
+    
 	/**
      * Comment for <code>serialVersionUID</code>
      */
@@ -83,19 +115,45 @@ public class SchedulerController extends BaseDatabaseAwareSeamComponent {
             disposalCleanupProcessorHandler = disposalCleanupProcessor.scheduleSecondmentCleanup(new Date(), DISPOSAL_CLEANUP_INTERVAL, null);
             info("scheduled #0", disposalCleanupProcessorHandler.getTrigger().getFullName());
         }
+        
         if(serviceAllocationCleanupProcessor!=null) {
             serviceAllocationCleanupProcessorHandler = serviceAllocationCleanupProcessor.scheduleSecondmentCleanup(new Date(), SERVICE_ALLOCATION_CLEANUP_INTERVAL, null);
             info("scheduled #0", serviceAllocationCleanupProcessorHandler.getTrigger().getFullName());
         }
         
         if(leaveActivationProcessor!=null) {
-            leaveActivationProcessorHandler = leaveActivationProcessor.scheduleSecondmentCleanup(new Date(), LEAVE_ACTIVATION_INTERVAL, null);
+            leaveActivationProcessorHandler = leaveActivationProcessor.scheduleSecondmentCleanup(new Date(), ACTIVATION_TASK_INTERVAL, null);
             info("scheduled #0", leaveActivationProcessorHandler.getTrigger().getFullName());
         }
+        
+        if(secondmentActivationProcessor!=null) {
+            secondmentActivationProcessorHandler = secondmentActivationProcessor.scheduleSecondmentActivation(new Date(), ACTIVATION_TASK_INTERVAL, null);
+            info("scheduled #0", secondmentActivationProcessorHandler.getTrigger().getFullName());
+        }
+        
+//        if(serviceAllocationActivationProcessor!=null) {
+//            serviceAllocationActivationProcessorHandler = serviceAllocationActivationProcessor.scheduleServiceAllocationActivation(new Date(), ACTIVATION_TASK_INTERVAL, null);
+//            info("scheduled #0", serviceAllocationActivationProcessorHandler.getTrigger().getFullName());
+//        }
+//        
+//        if(disposalActivationProcessor!=null) {
+//            disposalActivationProcessorHandler = disposalActivationProcessor.scheduleDisposalActivation(new Date(), ACTIVATION_TASK_INTERVAL, null);
+//            info("scheduled #0", disposalActivationProcessorHandler.getTrigger().getFullName());
+//        }
         
         if(basicUsageReportProcessor!=null) {
             basicUsageReportProcessorHandler = basicUsageReportProcessor.scheduleReportGeneration(new Date(), BASIC_USAGE_REPORT_INTERVAL, null);
             info("scheduled #0", basicUsageReportProcessorHandler.getTrigger().getFullName());
+        }
+        
+        if(pensionsScannerProcessor!=null) {
+            pensionsScannerProcessorHandler = pensionsScannerProcessor.schedulePensionsCleanup(new Date(), PENSION_SYNC_INTERVAL, null);
+            info("scheduled #0", pensionsScannerProcessorHandler.getTrigger().getFullName());
+        }
+        
+        if(regularEmployeeServiceUpdaterProcessor!=null) {
+            regularEmployeeServiceUpdaterProcessorHandler = regularEmployeeServiceUpdaterProcessor.schedule(new Date(), REGULAR_EMPLOYEE_SERVICE_SYNC_INTERVAL, null);
+            info("scheduled #0", regularEmployeeServiceUpdaterProcessorHandler.getTrigger().getFullName());
         }
         
         } catch(Exception ex) {
