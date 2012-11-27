@@ -280,7 +280,7 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
     	EmployeeInfo employeeInfo = employeeHome.getInstance().getEmployeeInfo();
     	int totalWorkService = 0;
     	if(totalWorkServiceCalculationDate != null && employeeInfo.getGogAppointmentDate()!=null)
-    		totalWorkService = CoreUtils.datesDifferenceIn360DaysYear(employeeInfo.getEntryIntoServiceDate(), totalWorkServiceCalculationDate);
+    		totalWorkService = CoreUtils.datesDifferenceIn360DaysYear(employeeInfo.getEntryIntoServiceDate(), totalWorkServiceCalculationDate) + getSumOfExperience();
     	if(totalWorkService != 0)
     		setTotalCalculatedServiceInDays(totalWorkService);
     }

@@ -81,13 +81,15 @@
 									<h:outputText styleClass="fieldValueText"
 										value="#{employee.employeeInfo.gogAppointmentNo} - #{employee.employeeInfo.getGogAppointmentDateString()}" />
 									<h:outputLabel styleClass="fieldValueLabel"
-										value="Ανάληψη Υπηρεσίας: " />
-									<h:outputText styleClass="fieldValueText"
-										value="#{employee.employeeInfo.entryIntoServiceDate}">
-										<s:convertDateTime type="date" pattern="dd-MM-yyyy" />
-									</h:outputText>
-									<h:outputLabel value="" />
-									<h:outputLabel value="" />
+										value="(Πράξη)-Ανάληψη Υπηρεσίας: " />
+									<h:outputFormat styleClass="fieldValueText" value="(#{employee.employeeInfo.entryIntoServiceAct})-{0, date, dd/MM/yyyy}">
+									    <f:param value="#{employee.employeeInfo.entryIntoServiceDate}" />
+									</h:outputFormat>
+									<h:outputLabel styleClass="fieldValueLabel"
+										value="(Πράξη)-Ημερομηνία Μονιμοποίησης: " />
+									<h:outputFormat styleClass="fieldValueText" value="(#{employee.employeeInfo.permanentEmployeeAct})-{0, date, dd/MM/yyyy}">
+									    <f:param value="#{employee.employeeInfo.permanentEmployeeActDate}" />
+									</h:outputFormat>
 
 
 									<h:outputLabel styleClass="fieldValueLabel" 
@@ -96,15 +98,14 @@
 										<h:selectBooleanCheckbox disabled="true"
 											value="#{employee.employeeInfo.hasAMasterDegree}" />
 
-										<h:outputFormat styleClass="fieldValueLabel" value=" (Ημ/νία: {0, date, dd-MM-yyyy})"
+										<h:outputFormat styleClass="fieldValueLabelLeft" value=" (Ημ/νία: {0, date, dd/MM/yyyy})"
 											id="MScDateOutputLabel" onmouseover="#{rich:component('MScDateTooltip')}.show(event);">
 										    <f:param value="#{employee.employeeInfo.mscDate}" />
 										</h:outputFormat>
+										<rich:toolTip  id="MScDateTooltip" value="Ημερομηνίες πριν την 1-11-2011 αναφέρονται στην ημερομηνία κατάθεσης του σχετικού τίτλου από την οποία λάμβανε και το σχετικό επίδομα, ενώ ημ/νίες μετά την 1-11-2011 αναφέρονται στην ημερομηνία πράξης του ΠΥΣΔΕ από την οποία ενσωματώνεται στο βαθμό ο χρόνος που αναλογεί." for="MScDateOutputLabel"/>
 									</h:panelGroup>
-									<rich:toolTip  id="MScDateTooltip" value="Ημερομηνίες πριν την 1-11-2011 αναφέρονται στην ημερομηνία κατάθεσης του σχετικού τίτλου από την οποία λάμβανε και το σχετικό επίδομα, ενώ ημ/νίες μετά την 1-11-2011 αναφέρονται στην ημερομηνία πράξης του ΠΥΣΔΕ από την οποία ενσωματώνεται στο βαθμό ο χρόνος που αναλογεί." for="MScDateOutputLabel"/>
-									<h:outputLabel value="" />
-									<h:outputLabel value="" />
-									<h:outputLabel value="" />
+									
+								
 
 
 									<h:outputLabel styleClass="fieldValueLabel"
@@ -113,15 +114,14 @@
 										<h:selectBooleanCheckbox disabled="true"
 											value="#{employee.employeeInfo.isANatSchPubAdminGraduate}" />
 
-										<h:outputFormat styleClass="fieldValueLabel" value=" (Ημ/νία: {0, date, dd-MM-yyyy})"
+										<h:outputFormat styleClass="fieldValueLabelLeft" value=" (Ημ/νία: {0, date, dd/MM/yyyy})"
 											id="natSchPubAdminDateOutputLabel" onmouseover="#{rich:component('natSchPubAdminDateTooltip')}.show(event);">
 										    <f:param value="#{employee.employeeInfo.natSchPubAdminDate}" />
 										</h:outputFormat>
+										<rich:toolTip  id="natSchPubAdminDateTooltip" value="Ημερομηνίες πριν την 1-11-2011 αναφέρονται στην ημερομηνία κατάθεσης του σχετικού τίτλου από την οποία λάμβανε και το σχετικό επίδομα, ενώ ημ/νίες μετά την 1-11-2011 αναφέρονται στην ημερομηνία πράξης του ΠΥΣΔΕ από την οποία ενσωματώνεται στο βαθμό ο χρόνος που αναλογεί." for="natSchPubAdminDateOutputLabel"/>
 									</h:panelGroup>
-									<rich:toolTip  id="natSchPubAdminDateTooltip" value="Ημερομηνίες πριν την 1-11-2011 αναφέρονται στην ημερομηνία κατάθεσης του σχετικού τίτλου από την οποία λάμβανε και το σχετικό επίδομα, ενώ ημ/νίες μετά την 1-11-2011 αναφέρονται στην ημερομηνία πράξης του ΠΥΣΔΕ από την οποία ενσωματώνεται στο βαθμό ο χρόνος που αναλογεί." for="natSchPubAdminDateOutputLabel"/>
-									<h:outputLabel value="" />
-									<h:outputLabel value="" />
-									<h:outputLabel value="" />
+									
+								
 									
 
 									<h:outputLabel styleClass="fieldValueLabel"
@@ -130,15 +130,14 @@
 										<h:selectBooleanCheckbox disabled="true"
 											value="#{employee.employeeInfo.hasAPhD}" />
 
-										<h:outputFormat styleClass="fieldValueLabel" value=" (Ημ/νία: {0, date, dd-MM-yyyy})"
+										<h:outputFormat styleClass="fieldValueLabelLeft" value=" (Ημ/νία: {0, date, dd/MM/yyyy})"
 											id="PhDDateOutputLabel" onmouseover="#{rich:component('PhDDateTooltip')}.show(event);">
 										    <f:param value="#{employee.employeeInfo.phdDate}" />
 										</h:outputFormat>
+										<rich:toolTip  id="PhDDateTooltip" value="Ημερομηνίες πριν την 1-11-2011 αναφέρονται στην ημερομηνία κατάθεσης του σχετικού τίτλου από την οποία λάμβανε και το σχετικό επίδομα, ενώ ημ/νίες μετά την 1-11-2011 αναφέρονται στην ημερομηνία πράξης του ΠΥΣΔΕ από την οποία ενσωματώνεται στο βαθμό ο χρόνος που αναλογεί." for="PhDDateOutputLabel"/>
 									</h:panelGroup>
-									<rich:toolTip  id="PhDDateTooltip" value="Ημερομηνίες πριν την 1-11-2011 αναφέρονται στην ημερομηνία κατάθεσης του σχετικού τίτλου από την οποία λάμβανε και το σχετικό επίδομα, ενώ ημ/νίες μετά την 1-11-2011 αναφέρονται στην ημερομηνία πράξης του ΠΥΣΔΕ από την οποία ενσωματώνεται στο βαθμό ο χρόνος που αναλογεί." for="PhDDateOutputLabel"/>
-									<h:outputLabel value="" />
-									<h:outputLabel value="" />
-									<h:outputLabel value="" />
+									
+									
 									
 
 									<h:outputLabel styleClass="fieldValueLabel" value="Βαθμός: " />
@@ -150,7 +149,7 @@
 										value="#{employee.employeeInfo.currentRankInfo.lastRankDate}">
 										<s:convertDateTime type="date" pattern="dd-MM-yyyy" />
 									</h:outputText>
-									<h:outputFormat styleClass="fieldValueLabel" value="Πλεονάζ. Χρόνος στο βαθμό την {0, date, dd-MM-yyyy}: ">
+									<h:outputFormat styleClass="fieldValueLabel" value="Πλεονάζ. Χρόνος στο βαθμό την {0, date, dd/MM/yyyy}: ">
 									    <f:param value="#{employee.employeeInfo.currentRankInfo.lastRankDate}" />
 									</h:outputFormat>
 									<h:outputText styleClass="fieldValueText"
@@ -176,7 +175,7 @@
 										value="#{employee.employeeInfo.currentRankInfo.lastSalaryGradeDate}">
 										<s:convertDateTime type="date" pattern="dd-MM-yyyy" />
 									</h:outputText>
-									<h:outputFormat styleClass="fieldValueLabel" value="Πλεονάζ. Χρόνος στο Μ.Κ. την {0, date, dd-MM-yyyy}: ">
+									<h:outputFormat styleClass="fieldValueLabel" value="Πλεονάζ. Χρόνος στο Μ.Κ. την {0, date, dd/MM/yyyy}: ">
 									    <f:param value="#{employee.employeeInfo.currentRankInfo.lastSalaryGradeDate}" />
 									</h:outputFormat>
 									<h:outputText styleClass="fieldValueText"
@@ -329,7 +328,7 @@
 
 										<h:outputLabel styleClass="fieldValueLabel"
 											value="Συνολική Υπηρεσία μέχρι την :" />
-										<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
+										<rich:calendar inputSize="8" datePattern="dd/MM/yyyy"
 											style="width:50px" enableManualInput="true"
 											styleClass="fieldValueText"
 											value="#{employeeInfoManagement.totalWorkServiceCalculationDate}">
@@ -364,7 +363,7 @@
 		<!-- *********************************************** -->
 		<a4j:region>
 			<rich:modalPanel id="updateEmployeeInfoModalPanel" autosized="true"
-				width="600">
+				width="850">
 				<f:facet name="header">
 					<h:outputText value="Τροποποίηση Στοιχείων Μισθοδοσίας"
 						style="padding-right:15px;" />
@@ -392,139 +391,165 @@
 
 
 								<h:panelGrid columns="3">
-									<s:decorate template="/layout/doubleLineEdit.xhtml">
-										<ui:define name="label">
-											<h:outputText styleClass="fieldValueLabel"
-												value="ΦΕΚ Διορισμού: " />
-										</ui:define>
-										<h:inputText id="gogAppointmentNoFilter" required="true"
-											value="#{employee.employeeInfo.gogAppointmentNo}" size="10"></h:inputText>
-									</s:decorate>
+									
+									<h:panelGrid columns="2"> 
+										<s:decorate template="/layout/doubleLineEdit.xhtml">
+											<ui:define name="label">
+												<h:outputText styleClass="fieldValueLabel"
+													value="ΦΕΚ : " />
+											</ui:define>
+											<h:inputText id="gogAppointmentNoFilter" required="true"
+												value="#{employee.employeeInfo.gogAppointmentNo}" size="4" maxlength="5"></h:inputText>
+										</s:decorate>
+	
+										<s:decorate template="/layout/doubleLineEdit.xhtml">
+											<ui:define name="label">
+												<h:outputText styleClass="fieldValueLabel"
+													value="Ημ/νία ΦΕΚ Διορισμού: " />
+											</ui:define>
+											<rich:calendar inputSize="8" datePattern="dd/MM/yyyy"
+												style="width:50px" enableManualInput="true"
+												styleClass="fieldValueText" required="true"
+												value="#{employee.employeeInfo.gogAppointmentDate}">
+											</rich:calendar>
+										</s:decorate>
+									</h:panelGrid>
+									
 
-									<s:decorate template="/layout/doubleLineEdit.xhtml">
-										<ui:define name="label">
-											<h:outputText styleClass="fieldValueLabel"
-												value="Ημ/νία ΦΕΚ: " />
-										</ui:define>
-										<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
-											style="width:50px" enableManualInput="true"
-											styleClass="fieldValueText" required="true"
-											value="#{employee.employeeInfo.gogAppointmentDate}">
-										</rich:calendar>
-									</s:decorate>
+									<h:panelGrid columns="2">
+										<s:decorate template="/layout/doubleLineEdit.xhtml">
+											<ui:define name="label">
+												<h:outputText styleClass="fieldValueLabel"
+													value="Πράξη: " />
+											</ui:define>
+											<h:inputText id="entryIntoServiceActFilter" required="true"
+												value="#{employee.employeeInfo.entryIntoServiceAct}" size="4" maxlength="5"></h:inputText>
+										</s:decorate>
+	
+										<s:decorate template="/layout/doubleLineEdit.xhtml">
+											<ui:define name="label">
+												<h:outputText styleClass="fieldValueLabel"
+													value="Ημ/νία Ανάληψης Υπηρεσίας: " />
+											</ui:define>
+											<rich:calendar inputSize="8" datePattern="dd/MM/yyyy"
+												style="width:50px" enableManualInput="true"
+												styleClass="fieldValueText" required="true"
+												value="#{employee.employeeInfo.entryIntoServiceDate}">
+											</rich:calendar>
+										</s:decorate>
+									</h:panelGrid>
+									
+									<h:panelGrid columns="2">
+										<s:decorate template="/layout/doubleLineEdit.xhtml">
+											<ui:define name="label">
+												<h:outputText styleClass="fieldValueLabel"
+													value="Πράξη: " />
+											</ui:define>
+											<h:inputText id="permanentEmployeeActFilter" 
+												value="#{employee.employeeInfo.permanentEmployeeAct}" size="6" maxlength="7"></h:inputText>
+										</s:decorate>
+	
+										<s:decorate template="/layout/doubleLineEdit.xhtml">
+											<ui:define name="label">
+												<h:outputText styleClass="fieldValueLabel"
+													value="Ημ/νία Πράξης Μονιμοποίησης: " />
+											</ui:define>
+											<rich:calendar inputSize="8" datePattern="dd/MM/yyyy"
+												style="width:50px" enableManualInput="true"
+												styleClass="fieldValueText" 
+												value="#{employee.employeeInfo.permanentEmployeeActDate}">
+											</rich:calendar>
+										</s:decorate>
+									</h:panelGrid>
+									
+									<h:panelGrid columns="2">
+										<s:decorate template="/layout/doubleLineEdit.xhtml">
+											<ui:define name="label">
+												<h:outputText styleClass="fieldValueLabel"
+													value="Μεταπυχιακό (MSc): " />
+											</ui:define>
+											<h:selectBooleanCheckbox
+												value="#{employee.employeeInfo.hasAMasterDegree}" />
+										</s:decorate>
+	
+										<s:decorate template="/layout/doubleLineEdit.xhtml">
+											<ui:define name="label">
+												<h:outputText styleClass="fieldValueLabel"
+													value="Ημ/νία Μεταπτυχιακού: " />
+											</ui:define>
+											<rich:calendar inputSize="8" datePattern="dd/MM/yyyy"
+												style="width:50px" enableManualInput="true"
+												styleClass="fieldValueText"
+												value="#{employee.employeeInfo.mscDate}">
+											</rich:calendar>
+										</s:decorate>
+									</h:panelGrid>
+									
+									<h:panelGrid columns="2">
+										<s:decorate template="/layout/doubleLineEdit.xhtml">
+											<ui:define name="label">
+												<h:outputText styleClass="fieldValueLabel"
+													value="Διδακτορικό (PhD): " />
+											</ui:define>
+											<h:selectBooleanCheckbox
+												value="#{employee.employeeInfo.hasAPhD}" />
+										</s:decorate>
+	
+										<s:decorate template="/layout/doubleLineEdit.xhtml">
+											<ui:define name="label">
+												<h:outputText styleClass="fieldValueLabel"
+													value="Ημ/νία Διδακτορικού: " />
+											</ui:define>
+											<rich:calendar inputSize="8" datePattern="dd/MM/yyyy"
+												style="width:50px" enableManualInput="true"
+												styleClass="fieldValueText"
+												value="#{employee.employeeInfo.phdDate}">
+											</rich:calendar>
+										</s:decorate>
+									</h:panelGrid>
 
-									<s:decorate template="/layout/doubleLineEdit.xhtml">
-										<ui:define name="label">
-											<h:outputText styleClass="fieldValueLabel"
-												value="Ημ/νία Ανάληψης Υπηρεσίας: " />
-										</ui:define>
-										<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
-											style="width:50px" enableManualInput="true"
-											styleClass="fieldValueText" required="true"
-											value="#{employee.employeeInfo.entryIntoServiceDate}">
-										</rich:calendar>
-									</s:decorate>
+									<h:panelGrid columns="2">
+										<s:decorate template="/layout/doubleLineEdit.xhtml">
+											<ui:define name="label">
+												<h:outputText styleClass="fieldValueLabel"
+													value="Ανώτ.Σχολ.Δημ.Διοίκ.: " />
+											</ui:define>
+											<h:selectBooleanCheckbox
+												value="#{employee.employeeInfo.isANatSchPubAdminGraduate}" />
+										</s:decorate>
+	
+										<s:decorate template="/layout/doubleLineEdit.xhtml">
+											<ui:define name="label">
+												<h:outputText styleClass="fieldValueLabel"
+													value="Ημ/νία Ανώτ.Σχολ.Δημ.Διοίκ.: " />
+											</ui:define>
+											<rich:calendar inputSize="8" datePattern="dd/MM/yyyy"
+												style="width:50px" enableManualInput="true"
+												styleClass="fieldValueText"
+												value="#{employee.employeeInfo.natSchPubAdminDate}">
+											</rich:calendar>
+										</s:decorate>
+									</h:panelGrid>
 
-									<s:decorate template="/layout/doubleLineEdit.xhtml">
-										<ui:define name="label">
-											<h:outputText styleClass="fieldValueLabel"
-												value="Μεταπυχιακό (MSc): " />
-										</ui:define>
-										<h:selectBooleanCheckbox
-											value="#{employee.employeeInfo.hasAMasterDegree}" />
-									</s:decorate>
+								</h:panelGrid>
 
-									<s:decorate template="/layout/doubleLineEdit.xhtml">
-										<ui:define name="label">
-											<h:outputText styleClass="fieldValueLabel"
-												value="Ημ/νία Μεταπτυχιακού: " />
-										</ui:define>
-										<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
-											style="width:50px" enableManualInput="true"
-											styleClass="fieldValueText"
-											value="#{employee.employeeInfo.mscDate}">
-										</rich:calendar>
-									</s:decorate>
-
-									<s:decorate template="/layout/doubleLineEdit.xhtml">
-										<h:outputLabel value="" />
-										<h:outputText value="" />
-									</s:decorate>
-
-									<s:decorate template="/layout/doubleLineEdit.xhtml">
-										<ui:define name="label">
-											<h:outputText styleClass="fieldValueLabel"
-												value="Διδακτορικό (PhD): " />
-										</ui:define>
-										<h:selectBooleanCheckbox
-											value="#{employee.employeeInfo.hasAPhD}" />
-									</s:decorate>
-
-									<s:decorate template="/layout/doubleLineEdit.xhtml">
-										<ui:define name="label">
-											<h:outputText styleClass="fieldValueLabel"
-												value="Ημ/νία Διδακτορικού: " />
-										</ui:define>
-										<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
-											style="width:50px" enableManualInput="true"
-											styleClass="fieldValueText"
-											value="#{employee.employeeInfo.phdDate}">
-										</rich:calendar>
-									</s:decorate>
-
-									<s:decorate template="/layout/doubleLineEdit.xhtml">
-										<h:outputLabel value="" />
-										<h:outputText value="" />
-									</s:decorate>
-
-									<s:decorate template="/layout/doubleLineEdit.xhtml">
-										<ui:define name="label">
-											<h:outputText styleClass="fieldValueLabel"
-												value="Ανώτ.Σχολ.Δημ.Διοίκ.: " />
-										</ui:define>
-										<h:selectBooleanCheckbox
-											value="#{employee.employeeInfo.isANatSchPubAdminGraduate}" />
-									</s:decorate>
-
-									<s:decorate template="/layout/doubleLineEdit.xhtml">
-										<ui:define name="label">
-											<h:outputText styleClass="fieldValueLabel"
-												value="Ημ/νία Ανώτ.Σχολ.Δημ.Διοίκ.: " />
-										</ui:define>
-										<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
-											style="width:50px" enableManualInput="true"
-											styleClass="fieldValueText"
-											value="#{employee.employeeInfo.natSchPubAdminDate}">
-										</rich:calendar>
-									</s:decorate>
-
-									<s:decorate template="/layout/doubleLineEdit.xhtml">
-										<h:outputLabel value="" />
-										<h:outputText value="" />
-									</s:decorate>
-
-									<s:decorate template="/layout/doubleLineEdit.xhtml">
-										<ui:define name="label">
-											<h:outputText styleClass="fieldValueLabel"
-												value="Επίπεδο Εκπ/σης: " />
-										</ui:define>
-										<h:selectOneMenu id="Rank"
-											value="#{employee.employeeInfo.currentRankInfo.educationalLevel}"
-											required="true">
-											<s:selectItems hideNoSelectionLabel="false"
-												var="_educationalLevel" value="#{educationalLevelTypes}"
-												label="#{messages[_educationalLevel.key]}" />
-											<s:convertEnum />
-										</h:selectOneMenu>
-									</s:decorate>
-									<s:decorate template="/layout/doubleLineEdit.xhtml">
-										<h:outputLabel value="" />
-										<h:outputText value="" />
-									</s:decorate>
-									<s:decorate template="/layout/doubleLineEdit.xhtml">
-										<h:outputLabel value="" />
-										<h:outputText value="" />
-									</s:decorate>
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText styleClass="fieldValueLabel"
+											value="Επίπεδο Εκπ/σης: " />
+									</ui:define>
+									<h:selectOneMenu id="Rank"
+										value="#{employee.employeeInfo.currentRankInfo.educationalLevel}"
+										required="true">
+										<s:selectItems hideNoSelectionLabel="false"
+											var="_educationalLevel" value="#{educationalLevelTypes}"
+											label="#{messages[_educationalLevel.key]}" />
+										<s:convertEnum />
+									</h:selectOneMenu>
+								</s:decorate>
+									
+									
+								<h:panelGrid columns="3">
 
 									<s:decorate template="/layout/doubleLineEdit.xhtml">
 										<ui:define name="label">
@@ -544,7 +569,7 @@
 											<h:outputText styleClass="fieldValueLabel"
 												value="Ημ/νία Απόδοσης Βαθμού: " />
 										</ui:define>
-										<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
+										<rich:calendar inputSize="8" datePattern="dd/MM/yyyy"
 											style="width:50px" enableManualInput="true"
 											styleClass="fieldValueText" required="true"
 											value="#{employee.employeeInfo.currentRankInfo.lastRankDate}">
@@ -577,7 +602,7 @@
 											<h:outputText styleClass="fieldValueLabel"
 												value="Ημ/νία Απόδοσης Μ.Κ.: " />
 										</ui:define>
-										<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
+										<rich:calendar inputSize="8" datePattern="dd/MM/yyyy"
 											style="width:50px" enableManualInput="true"
 											styleClass="fieldValueText" required="true"
 											value="#{employee.employeeInfo.currentRankInfo.lastSalaryGradeDate}">
@@ -601,7 +626,7 @@
 											<h:outputText styleClass="fieldValueLabelLeft"
 												value="Σχόλια Βαθμού/Μ.Κ.: " />
 										</ui:define>
-										<h:inputTextarea cols="66" rows="4" id="salaryGradeFilter"
+										<h:inputTextarea cols="96" rows="4" id="salaryGradeFilter"
 											value="#{employee.employeeInfo.currentRankInfo.comments}"></h:inputTextarea>
 									</s:decorate>
 								</h:panelGrid>
@@ -698,7 +723,7 @@
 											<h:outputText styleClass="fieldValueLabel"
 												value="Ημ/νία Απόδοσης Βαθμού: " />
 										</ui:define>
-										<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
+										<rich:calendar inputSize="8" datePattern="dd/MM/yyyy"
 											style="width:50px" enableManualInput="true"
 											styleClass="fieldValueText" required="true"
 											value="#{employeeInfoHome.getInstance().currentRankInfo.lastRankDate}">
@@ -731,7 +756,7 @@
 											<h:outputText styleClass="fieldValueLabel"
 												value="Ημ/νία Απόδοσης Μ.Κ.: " />
 										</ui:define>
-										<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
+										<rich:calendar inputSize="8" datePattern="dd/MM/yyyy"
 											style="width:50px" enableManualInput="true"
 											styleClass="fieldValueText" required="true"
 											value="#{employeeInfoHome.getInstance().currentRankInfo.lastSalaryGradeDate}">
