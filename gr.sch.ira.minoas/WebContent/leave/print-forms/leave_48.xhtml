@@ -15,7 +15,7 @@
 
 			<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
 				style="width:50px" enableManualInput="true"
-				styleClass="fieldValueText" required="true"
+				styleClass="fieldValueText" required="true" immediate="true"
 				value="#{employeeLeavesManagement.printHelper.fieldDate1}">
 				<a4j:support event="onchanged" ajaxSingle="true" />
 			</rich:calendar>
@@ -28,7 +28,7 @@
 			<h:inputText
 				value="#{employeeLeavesManagement.printHelper.fieldText1}" size="40"
 				disabled="false" maxlength="50" styleClass="fieldValueText"
-				required="true" readonly="false" />
+				required="true" immediate="true" readonly="false" />
 		</s:decorate>
 		
 	</h:panelGrid>

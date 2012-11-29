@@ -1033,13 +1033,16 @@
 			</f:facet>
 			<a4j:region>
 				<h:panelGrid columns="1">
-					<h:form>
+					
 
 						<a4j:outputPanel id="printModalPanelContent" layout="inline">
 
 							<ui:include src="/components/messages-component.xhtml" />
 							<h:outputText
 								value="Εκτύπωση άδειας του/της εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}." />
+								
+								<a4j:form id="printOutForm">
+								
 							<h:panelGrid columns="1">
 								<h:panelGrid columns="3">
 									<s:decorate template="/layout/newDoubleLineEdit.xhtml">
@@ -1048,7 +1051,7 @@
 										</ui:define>
 										<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
 											style="width:50px" enableManualInput="true"
-											styleClass="fieldValueText" required="true"
+											styleClass="fieldValueText" required="true" immediate="true"
 											value="#{employeeLeavesManagement.leavePrintoutRequestDate}">
 											<a4j:support event="onchanged" ajaxSingle="true" />
 										</rich:calendar>
@@ -1060,7 +1063,7 @@
 										</ui:define>
 										<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
 											style="width:50px" enableManualInput="true"
-											styleClass="fieldValueText" required="true"
+											styleClass="fieldValueText" required="true" immediate="true"
 											value="#{employeeLeavesManagement.leavePrintoutDate}">
 											<a4j:support event="onchanged" ajaxSingle="true" />
 										</rich:calendar>
@@ -1075,7 +1078,7 @@
 										</ui:define>
 										<h:inputText value="#{employeeLeavesManagement.leavePrintoutReferenceNumber}"
 											size="6" disabled="false" maxlength="10"
-											styleClass="fieldValueText" required="true" readonly="false" />
+											styleClass="fieldValueText" required="true" readonly="false" immediate="true"/>
 
 									</s:decorate>
 									
@@ -1084,7 +1087,7 @@
 											<h:outputText value="Θέση που Υπηρετή. : " />
 										</ui:define>
 										<h:inputTextarea value="#{employeeLeavesManagement.employeeRegularPositionForLeavePrintout}" cols="20"
-										styleClass="fieldValueText" required="true" readonly="false" rows="3" />
+										styleClass="fieldValueText" required="true" readonly="false" rows="3" immediate="true" />
 									</s:decorate>
 									
 									
@@ -1196,20 +1199,27 @@
 									<ui:include src="/leave/print-forms/leave_52.xhtml" />
 								</h:panelGroup>
 							</h:panelGrid>
-						</a4j:outputPanel>
-
+						
 						<h:panelGrid columns="6">
-
-
-							<h:commandButton value="Εκτύπωση"
-								action="#{employeeLeavesManagement.printEmployeeLeaveAction()}" />
+							
+							<a4j:commandButton value="Εκτύπωση"
+								action="fakeAction" limitToList="true" 
+								data="#{facesContext.maximumSeverity.ordinal ge 2}"
+								oncomplete="if(data == false) { jQuery('#printOutForm\\:printLeaveButton').click(); Richfaces.hideModalPanel('printModalPanel');  }" 
+								reRender="printModalPanelContent" />
 
 							<a4j:commandButton value="Επιστροφή .."
 								reRender="employeeAllLeavesList"
 								oncomplete="#{rich:component('printModalPanel')}.hide();" />
-
 						</h:panelGrid>
-					</h:form>
+						
+						<!-- hidden button is programatically 'clicked'  -->
+							<h:commandButton value="Εκτύπωση (hidden)" target="_blank" style="display:none;" id="printLeaveButton"
+							action="#{employeeLeavesManagement.printEmployeeLeaveAction()}" />
+						</a4j:form>
+						
+						</a4j:outputPanel>
+					
 				</h:panelGrid>
 			</a4j:region>
 		</rich:modalPanel>
