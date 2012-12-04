@@ -147,7 +147,7 @@
 				<textElement textAlignment="Justified" markup="styled"/>
 				<textFieldExpression><![CDATA["1. Τις διατάξεις του άρθρου 51 παρ. 1 του Ν.3528/07 (ΦΕΚ 26/9.2.2007 τ.Α)<br/><br/>"+
 "2. Την αριθμ.Φ353.1/324/105675/∆1/ΦΕΚ 1340 τ.B /16-10-2002 Υπουργική απόφαση (καθήκοντα και αρμοδιότητες Περ/κών ∆/ντών Εκπ/σης και των Προΐσταμένων Τμημάτων των ∆/νσεων αυτών)<br/><br/>"+
-"4. Το με ημερομηνία <b>"+$V{DATE_FORMATTER}.format($P{dateField1})+"</b> δικαιλογοτικό &quot;"+$P{textField1}+"&quot;<br/><br/>"+
+"4. Το με ημερομηνία <b>"+$V{DATE_FORMATTER}.format($P{dateField1})+"</b> δικαιολογιτικό &quot;"+$P{textField1}+"&quot;<br/><br/>"+
 "3. Την απο <b>"+$V{DATE_FORMATTER}.format($P{leaveRequestDate})+"</b> αίτηση του <b>"+$P{employeeSurname}+" "+$P{employeeName}+"</b> του "+$P{employeeFatherName}+" εκπαιδευτικού λειτουργού κλάδου <b>"+$P{employeeSpecializationCode}+"</b>.<br/><br/>"]]></textFieldExpression>
 			</textField>
 			<staticText>
