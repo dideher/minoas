@@ -25,7 +25,7 @@
 
   <properties>
     <servlet-api.version>2.5</servlet-api.version>
-
+    <seam-version>2.2.1.Final</seam-version>
 
   </properties>
 
@@ -55,7 +55,54 @@
         <artifactId>servlet-api</artifactId>
         <version>${servlet-api.version}</version>
       </dependency>
-
+      
+      <dependency>
+        <groupId>org.jboss.seam</groupId>
+        <artifactId>jboss-seam</artifactId>
+        <version>${seam-version}</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.jboss.seam</groupId>
+        <artifactId>jboss-debug</artifactId>
+        <version>${seam-version}</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.jboss.seam</groupId>
+        <artifactId>jboss-excel</artifactId>
+        <version>${seam-version}</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.jboss.seam</groupId>
+        <artifactId>jboss-ioc</artifactId>
+        <version>${seam-version}</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.jboss.seam</groupId>
+        <artifactId>jboss-main</artifactId>
+        <version>${seam-version}</version>
+      </dependency>
+        
+      <dependency>
+        <groupId>org.jboss.seam</groupId>
+        <artifactId>jboss-pdf</artifactId>
+        <version>${seam-version}</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.jboss.seam</groupId>
+        <artifactId>jboss-remoting</artifactId>
+        <version>${seam-version}</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.jboss.seam</groupId>
+        <artifactId>jboss-ui</artifactId>
+        <version>${seam-version}</version>
+      </dependency>
 
     </dependencies>
   </dependencyManagement>
@@ -90,18 +137,87 @@
       </plugins>
     </pluginManagement>
   </build>
-  
-  
+
+
   <dependencies>
     <dependency>
-        <groupId>javax.servlet</groupId>
-        <artifactId>servlet-api</artifactId>
-        <scope>provided</scope>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    
+    <dependency>
+        <groupId>org.jboss.seam</groupId>
+        <artifactId>jboss-seam</artifactId>
+    </dependency>
+    
+    <dependency>
+        <groupId>org.jboss.seam</groupId>
+        <artifactId>jboss-debug</artifactId>
       </dependency>
+      
+      <dependency>
+        <groupId>org.jboss.seam</groupId>
+        <artifactId>jboss-excel</artifactId>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.jboss.seam</groupId>
+        <artifactId>jboss-ioc</artifactId>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.jboss.seam</groupId>
+        <artifactId>jboss-main</artifactId>
+      </dependency>
+        
+      <dependency>
+        <groupId>org.jboss.seam</groupId>
+        <artifactId>jboss-pdf</artifactId>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.jboss.seam</groupId>
+        <artifactId>jboss-remoting</artifactId>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.jboss.seam</groupId>
+        <artifactId>jboss-ui</artifactId>
+       </dependency>
+      
   </dependencies>
 
 
-
-
+  <repositories>
+    <repository>
+      <id>jboss-public-repository-group</id>
+      <name>JBoss Public Maven Repository Group</name>
+      <url>http://repository.jboss.org/nexus/content/groups/public</url>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>never</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+        <updatePolicy>never</updatePolicy>
+      </snapshots>
+    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>jboss-public-repository-group</id>
+      <name>JBoss Public Maven Repository Group</name>
+      <url>http://repository.jboss.org/nexus/content/groups/public</url>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>never</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+        <updatePolicy>never</updatePolicy>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>
 
 </project>
