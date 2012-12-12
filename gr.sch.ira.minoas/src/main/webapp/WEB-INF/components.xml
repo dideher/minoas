@@ -73,7 +73,7 @@
   <event type="org.jboss.seam.postInitialization"> 
     <action execute="#{schedulerController.scheduleJobs}"/> 
   </event>
-
+  
   <event type="org.jboss.seam.security.notLoggedIn">
     <action execute="#{redirect.captureCurrentView}" />
     <action execute="#{identity.tryLogin}" />
