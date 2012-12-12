@@ -12,7 +12,6 @@
                  http://jboss.com/products/seam/drools http://jboss.com/products/seam/drools-2.1.xsd
                  http://jboss.com/products/seam/bpm http://jboss.com/products/seam/bpm-2.1.xsd
                  http://jboss.com/products/seam/security http://jboss.com/products/seam/security-2.1.xsd
-                 http://jboss.com/products/seam/async http://jboss.com/products/seam/async-2.1.xsd
                  http://jboss.com/products/seam/mail http://jboss.com/products/seam/mail-2.1.xsd
                  http://jboss.com/products/seam/components http://jboss.com/products/seam/components-2.1.xsd
                  http://jboss.com/products/seam/theme http://jboss.com/products/seam/theme-2.1.xsd
@@ -23,7 +22,7 @@
                  http://jboss.com/products/seam/framework http://jboss.com/products/seam/framework-2.1.xsd">
 
 
-  <core:init debug="true" jndi-pattern="@jndiPattern@"
+  <core:init debug="true" jndi-pattern="\#{ejbName}/local"
     transaction-management-enabled="true" />
 
   <core:manager concurrent-request-timeout="500"
