@@ -22,7 +22,6 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.international.StatusMessage.Severity;
-import org.omg.CosCollection.SetIRHelper;
 
 /**
  * @author <a href="mailto:gand@sch.gr">Yorgos Andreadakis</a>
