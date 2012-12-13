@@ -51,7 +51,6 @@
   <!-- 
   <async:timer-service-dispatcher/>
    -->
-   
    <async:quartz-dispatcher />
   
   <web:character-encoding-filter encoding="UTF-8"
