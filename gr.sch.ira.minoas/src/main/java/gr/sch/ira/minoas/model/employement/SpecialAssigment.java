@@ -1,13 +1,13 @@
 package gr.sch.ira.minoas.model.employement;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import gr.sch.ira.minoas.model.BaseIDDeleteAwareModel;
 import gr.sch.ira.minoas.model.core.SchoolYear;
 import gr.sch.ira.minoas.model.core.SpecializationGroup;
 import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employee.Employee;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;

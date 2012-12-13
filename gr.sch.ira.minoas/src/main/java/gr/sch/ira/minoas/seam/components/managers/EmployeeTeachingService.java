@@ -1,12 +1,12 @@
 package gr.sch.ira.minoas.seam.components.managers;
 
-import org.jboss.seam.annotations.In;
-import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Unwrap;
-
 import gr.sch.ira.minoas.model.employee.EmployeeInfo;
 import gr.sch.ira.minoas.seam.components.BaseSeamComponent;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
+
+import org.jboss.seam.annotations.In;
+import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Unwrap;
 
 @Name("employeeTeachingService")
 public class EmployeeTeachingService extends BaseSeamComponent {

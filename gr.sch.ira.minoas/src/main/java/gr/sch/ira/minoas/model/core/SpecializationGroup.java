@@ -20,7 +20,6 @@ import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Fetch;
 
 /**
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
