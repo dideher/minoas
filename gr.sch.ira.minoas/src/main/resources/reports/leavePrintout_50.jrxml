@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="leavePrintout" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="20" bottomMargin="20" whenResourceMissingType="Key">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="240"/>
+	<property name="ireport.y" value="0"/>
 	<style name="normalText" fontName="DejaVu Serif" fontSize="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
 	<style name="boldText" fontName="DejaVu Serif" fontSize="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
 	<style name="headlineText" fontName="DejaVu Serif" fontSize="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
@@ -128,7 +128,7 @@
 			</staticText>
 			<image hAlign="Center" vAlign="Middle">
 				<reportElement x="108" y="0" width="48" height="48"/>
-				<imageExpression><![CDATA["/home/fsla/work/git-repositories/minoas/gr.sch.ira.minoas/src/reports/greekflagsima.jpg"]]></imageExpression>
+				<imageExpression><![CDATA["reports/greekflagsima.jpg"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement style="boldText" x="2" y="239" width="513" height="14"/>

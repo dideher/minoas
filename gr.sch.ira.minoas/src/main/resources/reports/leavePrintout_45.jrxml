@@ -110,7 +110,7 @@
 			</staticText>
 			<image hAlign="Center" vAlign="Middle">
 				<reportElement x="108" y="0" width="48" height="48"/>
-				<imageExpression><![CDATA["/home/fsla/work/git-repositories/minoas/gr.sch.ira.minoas/src/reports/greekflagsima.jpg"]]></imageExpression>
+				<imageExpression><![CDATA["reports/greekflagsima.jpg"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement style="boldText" x="2" y="239" width="513" height="14"/>
