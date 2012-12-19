@@ -226,13 +226,13 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
     }
 	
 	
-	@Factory(value="rankInfoHistory",autoCreate=true)
-	public void constructRankInfoHistory() {
-	    Employee employee = getEmployeeHome().getInstance();
-	    info("constructing evaluation history for employee #0", employee);
-//	    setRankInfoHistory(coreSearching.getRankInfoHistory(employee));		// coreSearching.getRankInfoHistory() is now deprecated.	
-	    //setRankInfoHistory(employee.getEmployeeInfo().getRankInfos());
-	}
+//	@Factory(value="rankInfoHistory",autoCreate=true)
+//	public void constructRankInfoHistory() {
+//	    Employee employee = getEmployeeHome().getInstance();
+//	    info("constructing evaluation history for employee #0", employee);
+//	    //setRankInfoHistory(coreSearching.getRankInfoHistory(employee));		// coreSearching.getRankInfoHistory() is now deprecated.	
+//	    //setRankInfoHistory(employee.getEmployeeInfo().getRankInfos());
+//	}
 	
 	
 	/* this method is called when the user clicks the "add new rank info" */
