@@ -21,145 +21,41 @@
 			<ui:include src="/components/messages-component.xhtml" />
 
 			<h:form>
-				<h:panelGrid columns="1">
-					<a4j:outputPanel id="activeSecondment">
-						<rich:panel>
-							<f:facet name="header">
-								<h:outputText value="Ενεργή Απόσπαση" />
-							</f:facet>
-							<h:outputText
-								value="Δεν βρέθηκε καμία ενεργή απόσπαση για τον εκπαιδευτικό."
-								rendered="#{empty employee.currentEmployment.secondment}" />
-
-
-							<h:panelGrid columns="1"
-								rendered="#{not empty employee.currentEmployment.secondment}">
-								<h:outputText
-									value="Στον παραπάνω πίνακα εμφανίζετε η τρέχουσα ενεργή απόσπαση του Εκπαιδευτικού." />
-								<rich:dataTable
-									value="#{employeeActiveSecondmentListQuery.resultList}"
-									var="_secondment" rows="15" border="0"
-									onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
-									onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
-									width="100%">
-									<f:facet name="header">
-										<h:outputLabel value="Ενεργή Απόσπαση Εκπαιδευτικού" />
-									</f:facet>
-									<rich:column>
-										<f:facet name="header">
-											<h:outputText value="Σχ. Χρονία" />
-										</f:facet>
-										<h:outputText value="#{_secondment.schoolYear.title}" />
-									</rich:column>
-									<rich:column>
-										<f:facet name="header">
-											<h:outputText value="Αποσπ. Απο" />
-										</f:facet>
-										<h:outputText value="#{_secondment.sourceUnit.title}" />
-									</rich:column>
-									<rich:column>
-										<f:facet name="header">
-											<h:outputText value="Αποσπ. Σε" />
-										</f:facet>
-										<h:outputText value="#{_secondment.targetUnit.title}" />
-									</rich:column>
-									<rich:column>
-										<f:facet name="header">
-											<h:outputText value="Απο" />
-										</f:facet>
-										<h:outputText value="#{_secondment.established}">
-											<s:convertDateTime pattern="dd-MM-yyyy" />
-										</h:outputText>
-									</rich:column>
-									<rich:column>
-										<f:facet name="header">
-											<h:outputText value="Εώς" />
-										</f:facet>
-										<h:outputText value="#{_secondment.dueTo}">
-											<s:convertDateTime pattern="dd-MM-yyyy" />
-										</h:outputText>
-									</rich:column>
-									<rich:column>
-										<f:facet name="header">
-											<h:outputText value="Σχόλιο" />
-										</f:facet>
-										<h:outputText value="#{_secondment.comment}" />
-									</rich:column>
-
-
-									<rich:column>
-										<f:facet name="header">
-											<h:outputText value="Με Αίτηση Του" />
-										</f:facet>
-										<h:outputText value="Ναί"
-											rendered="#{_secondment.employeeRequested}" />
-										<h:outputText value="Οχι"
-											rendered="#{!_secondment.employeeRequested}" />
-									</rich:column>
-
-									<rich:column>
-										<f:facet name="header">
-											<h:outputText value="Πραγ. Ωράριο" />
-										</f:facet>
-										<h:outputText value="#{_secondment.finalWorkingHours}" />
-									</rich:column>
-
-
-									<rich:column>
-										<f:facet name="header">
-											<h:outputText value="Ενέργεια" />
-										</f:facet>
-										<rich:toolBar itemSeparator="line">
-											<a4j:commandLink id="cancellink"
-												reRender="cancelModalPanelContent"
-												oncomplete="#{rich:component('cancelModalPanel')}.show()"
-												value="Ακύρωση">
-												<h:graphicImage value="/img/icons/delete.png" width="12"
-													height="12" style="border:0" />
-												<f:setPropertyActionListener value="#{_secondment.id}"
-													target="#{secondmentHome.id}" />
-											</a4j:commandLink>
-
-											<a4j:commandLink id="updatelink"
-												reRender="updateModalPanelContent"
-												oncomplete="#{rich:component('updateModalPanel')}.show()"
-												value="Τροποποίηση">
-												<h:graphicImage value="/img/icons/edit.png" width="12"
-													height="12" style="border:0" />
-												<f:setPropertyActionListener value="#{_secondment.id}"
-													target="#{secondmentHome.id}" />
-											</a4j:commandLink>
-										</rich:toolBar>
-									</rich:column>
-								</rich:dataTable>
-							</h:panelGrid>
-
-						</rich:panel>
-					</a4j:outputPanel>
+				<h:panelGrid columns="1" width="100%">
+				
+					<rich:panel id="basicEmployeeInfoPanel">
+								<f:facet name="header">
+									<h:outputText value="Βασικά Στοιχεία" />
+								</f:facet>
+								<ui:include src="/employee/basic-info.xhtml">
+									<ui:param name="employee" value="#{employee}" />
+								</ui:include>
+							</rich:panel>
+					
 					<rich:panel>
 						<f:facet name="header">
-							<h:outputText value="Ιστορικό Αποσπάσεων Εκπαιδευτικού" />
+							<h:outputText value="Αποσπάσεις Εκπαιδευτικού" />
 						</f:facet>
 
 						<a4j:outputPanel id="secondmentsTable">
 							<h:panelGroup
-								rendered="#{employeeSecondmentsListQuery.resultCount==0}">
+								rendered="#{employeeSecondments.size()==0}">
 								<h:outputText
-									value="Δεν βρέθηκε ιστορικό αποσπάσων για τον εκπαιδευτικό." />
+									value="Δεν υπάρχουν αποσπάσεις για τον εκπαιδευτικό." />
 							</h:panelGroup>
 							<h:panelGrid columns="1"
-								rendered="#{employeeSecondmentsListQuery.resultCount gt 0}">
+								rendered="#{employeeSecondments.size() gt 0}">
 								<h:outputText
-									value="Στον παρακάτω πίνακα εμφανίζεται το ιστορικό όλων των αποσπάσεων του εκπαιδευτικού. Μπορείτε να τροποποιήσεται, αν θέλετε, την ενεργή κατά το τρέχων σχολικό έτος απόσπαση." />
+									value="Στον παρακάτω πίνακα εμφανίζονται οι αποσπάσεις του εκπαιδευτικού." />
 
 								<rich:dataTable id="employeeSecondmentsList"
-									value="#{employeeSecondmentsListQuery.resultList}"
+									value="#{employeeSecondments}"
 									var="_secondment" rows="15" border="0"
 									onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
 									onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
 									width="100%">
 									<f:facet name="header">
-										<h:outputLabel value="Ιστορικό Αποσπάσεων Εκπαιδευτικού" />
+										<h:outputLabel value="Αποσπάσεις Εκπαιδευτικού" />
 									</f:facet>
 									<rich:column>
 										<f:facet name="header">
@@ -228,19 +124,21 @@
 											<h:outputText value="Ενέργεια" />
 										</f:facet>
 										<rich:toolBar itemSeparator="line">
-											<a4j:commandLink reRender="cancelModalPanelContent"
-												oncomplete="#{rich:component('cancelModalPanel')}.show()"
-												value="Ακύρωση">
-												<h:graphicImage value="/img/icons/delete.png" width="12"
-													height="12" style="border:0" />
-												<f:setPropertyActionListener value="#{_secondment.id}"
-													target="#{secondmentHome.id}" />
-											</a4j:commandLink>
-
+											
 											<a4j:commandLink reRender="updateModalPanelContent"
 												oncomplete="#{rich:component('updateModalPanel')}.show()"
 												value="Τροποποίηση">
 												<h:graphicImage value="/img/icons/edit.png" width="12"
+													height="12" style="border:0" />
+												<f:setPropertyActionListener value="#{_secondment.id}"
+													target="#{secondmentHome.id}" />
+											</a4j:commandLink>
+											
+											<a4j:commandLink reRender="deleteModalPanelContent" ajaxSingle="true"
+												disabled="#{!(s:hasRole('ADMIN') or s:hasRole('DELETE_SECONDMENT'))}"
+												oncomplete="#{rich:component('deleteModalPanel')}.show()"
+												value="Διαγραφή">
+												<h:graphicImage value="/img/icons/delete.png" width="12"
 													height="12" style="border:0" />
 												<f:setPropertyActionListener value="#{_secondment.id}"
 													target="#{secondmentHome.id}" />
@@ -263,27 +161,32 @@
 
 
 		</rich:panel>
-
-
-		<rich:modalPanel id="cancelModalPanel" autosized="true" width="350">
+		
+		<!-- DELETE Secondment -->
+		
+		<rich:modalPanel id="deleteModalPanel" autosized="true" width="350">
 			<f:facet name="header">
-				<h:outputText value="Να ακυρωθή η απόσπαση ?"
+				<h:outputText value="Διαγραφή Απόσπασης ?"
 					style="padding-right:15px;" />
 			</f:facet>
 			<f:facet name="controls">
 				<h:panelGroup>
 					<h:graphicImage value="/img/modal/close.png" styleClass="hidelink"
-						width="18" height="18" id="hidelink2" />
-					<rich:componentControl for="cancelModalPanel" attachTo="hidelink2"
+						width="18" height="18" id="hidelink10" />
+					<rich:componentControl for="deleteModalPanel" attachTo="hidelink10"
 						operation="hide" event="onclick" />
 				</h:panelGroup>
 			</f:facet>
-			<h:form>
+			<a4j:region>
+			
+				<rich:messages style="color:red;"></rich:messages>
 				<h:panelGrid columns="1">
-					<a4j:outputPanel id="cancelModalPanelContent" layout="inline">
+					<a4j:outputPanel id="deleteModalPanelContent" layout="inline">
+						<ui:include src="/components/messages-component.xhtml" />
+						<a4j:form>
 						<h:panelGroup>
 							<h:outputText
-								value="Να ακυρωθή η τρέχουσα ενεργή απόσπαση του εκπαιδευτικού #{employeeUtil.prettyFormat(secondmentHome.instance.employee)} στην μονάδα " />
+								value="Να διαγραφή η απόσπαση του εκπαιδευτικού #{employeeUtil.prettyFormat(secondmentHome.instance.employee)} στην μονάδα " />
 							<h:outputText value="#{secondmentHome.instance.targetUnit.title}"
 								styleClass="fieldValueText" />
 							<h:outputText value=" με λήξη την " />
@@ -292,25 +195,47 @@
 								<s:convertDateTime pattern="dd-MM-yyyy" />
 							</h:outputText>
 							<h:outputText value=" ;" />
+							<p>
+							<h:outputText value="Προσοχή ! Αν θέλετε να τερματίσεται μια απόσπαση, τότε κάντε τροποποίηση των ημερομηνίων λήξης της απόσπασης και ΟΧΙ διαγραφή."
+								styleClass="fieldValueText" />
+							</p>
+							
+							<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Σχόλιο Διαγραφής" />
+								</ui:define>
+								<h:inputTextarea immediate="true"
+									value="#{secondmentHome.instance.deletedComment}"
+									required="true" cols="50" rows="3" />
+							</s:decorate>
 
 						</h:panelGroup>
-					</a4j:outputPanel>
+					
 
 					<h:panelGrid columns="2">
-						<a4j:commandButton value="Ακύρωση Απόσπασης !" ajaxSingle="true"
-							action="#{secondmentHome.cancel()}"
-							oncomplete="#{rich:component('cancelModalPanel')}.hide();"
-							reRender="activeSecondment,secondmentsTable" />
+						<a4j:commandButton value="Διαγραφή Απόσπασης !"
+							data="#{facesContext.maximumSeverity.ordinal ge 2}"
+							limitToList="true"
+							oncomplete="if(data == false) Richfaces.hideModalPanel('deleteModalPanel');"
+							action="#{employeeSecondmentsManagement.deleteEmployeeSecondmentAction()}"
+							reRender="secondmentsTable,deleteModalPanelContent" />
 						<a4j:commandButton value="Επιστροφή .."
-							onclick="#{rich:component('cancelModalPanel')}.hide();return false;" />
+							onclick="#{rich:component('deleteModalPanel')}.hide();return false;" />
 					</h:panelGrid>
+					</a4j:form>
+					</a4j:outputPanel>
 				</h:panelGrid>
-			</h:form>
+			
+			</a4j:region>
 		</rich:modalPanel>
+		
+
+
+		
 
 		<rich:modalPanel id="updateModalPanel" autosized="true" width="450">
 			<f:facet name="header">
-				<h:outputText value="Τροποποίηση Ενεργής Απόσπασης "
+				<h:outputText value="Τροποποίηση Απόσπασης "
 					style="padding-right:15px;" />
 			</f:facet>
 			<f:facet name="controls">
@@ -326,7 +251,7 @@
 					<h:form>
 						<a4j:outputPanel id="updateModalPanelContent" layout="inline">
 							<h:outputText
-								value="Με την παρακάτω φόρμα, μπορείται να τροποποίησεται την ενεργή απόσπαση του/της εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}." />
+								value="Με την παρακάτω φόρμα, μπορείται να τροποποίησεται την  απόσπαση του/της εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}." />
 							<rich:messages style="color:red;"></rich:messages>
 							<h:panelGrid columns="4">
 

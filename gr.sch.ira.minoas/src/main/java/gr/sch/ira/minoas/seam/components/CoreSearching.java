@@ -206,7 +206,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         Collection<Secondment> result = null;
         info("searching employee's '#0' secondments.", employee);
         result = entityManager
-                .createQuery("SELECT s from Secondment s WHERE s.employee=:employee ORDER BY s.insertedOn")
+                .createQuery("SELECT s from Secondment s WHERE s.employee=:employee AND (s.deleted IS FALSE or s.deleted IS NULL) ORDER BY s.established DESC")
                 .setParameter("employee", employee).getResultList();
         info("found totally '#0' secondments for employee '#1'.", result.size(), employee);
         return result;

@@ -32,29 +32,7 @@ public class SecondmentHome extends MinoasEntityHome<Secondment> {
 	@In(create = true)
 	private EmployeeHome employeeHome;
 
-	@Transactional
-	public String cancel() {
-		Secondment current_secondment = getInstance();
-		Employee employee = current_secondment.getEmployee();
-		current_secondment.setActive(Boolean.FALSE);
-
-		Employment employment = current_secondment.getAffectedEmployment();
-		if (employment != null) {
-			/*
-			 * if the canceled secondment is the employee's current secondment
-			 * then update the employee as well.
-			 */
-			if (employment.getSecondment() != null
-					&& employment.getSecondment().getId().equals(current_secondment.getId()))
-				employment.setSecondment(null);
-		}
-		super.update();
-		info("principal '#0' canceled employee #1 current secondment #1.", getPrincipalName(), employee,
-				current_secondment);
-		clearInstance();
-		return "updated";
-	}
-
+	
 	/**
 	 * @see org.jboss.seam.framework.Home#createInstance()
 	 */
