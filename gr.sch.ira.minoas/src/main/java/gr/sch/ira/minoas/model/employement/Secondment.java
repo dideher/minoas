@@ -10,6 +10,7 @@ import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employee.Employee;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 
@@ -28,6 +29,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -454,6 +456,23 @@ public class Secondment extends BaseIDDeleteAwareModel implements Cloneable {
      */
     public void setSecondmentCDRs(Collection<TeachingHourCDR> secondmentCDRs) {
         this.secondmentCDRs = secondmentCDRs;
+    }
+    
+    public boolean isFuture() {
+        Date currentDate = DateUtils.truncate(new Date(),  Calendar.DAY_OF_MONTH);
+        return DateUtils.truncate(getEstablished(),  Calendar.DAY_OF_MONTH).after(currentDate); 
+    }
+    
+    public boolean isCurrent() {
+        Date currentDate = DateUtils.truncate(new Date(),  Calendar.DAY_OF_MONTH);
+        Date established = DateUtils.truncate(getEstablished(),  Calendar.DAY_OF_MONTH);
+        Date dueTo = DateUtils.truncate(getDueTo(),  Calendar.DAY_OF_MONTH);
+        return  isActive() && ( (established.before(currentDate) || established.equals(currentDate)) && (dueTo.after(currentDate) || dueTo.equals(currentDate)));
+    }
+    
+    public boolean isPast() {
+        Date currentDate = DateUtils.truncate(new Date(),  Calendar.DAY_OF_MONTH);
+        return DateUtils.truncate(getEstablished(),  Calendar.DAY_OF_MONTH).before(currentDate);
     }
 
 }

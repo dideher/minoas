@@ -57,25 +57,25 @@
 									<f:facet name="header">
 										<h:outputLabel value="Αποσπάσεις Εκπαιδευτικού" />
 									</f:facet>
-									<rich:column>
+									<rich:column styleClass="#{employeeSecondmentsManagement.getTableCellClassForSecondment(_secondment)}">
 										<f:facet name="header">
 											<h:outputText value="Σχ. Χρονία" />
 										</f:facet>
 										<h:outputText value="#{_secondment.schoolYear.title}" />
 									</rich:column>
-									<rich:column>
+									<rich:column styleClass="#{employeeSecondmentsManagement.getTableCellClassForSecondment(_secondment)}">
 										<f:facet name="header">
 											<h:outputText value="Αποσπ. Απο" />
 										</f:facet>
 										<h:outputText value="#{_secondment.sourceUnit.title}" />
 									</rich:column>
-									<rich:column>
+									<rich:column styleClass="#{employeeSecondmentsManagement.getTableCellClassForSecondment(_secondment)}">
 										<f:facet name="header">
 											<h:outputText value="Αποσπ. Σε" />
 										</f:facet>
 										<h:outputText value="#{_secondment.targetUnit.title}" />
 									</rich:column>
-									<rich:column>
+									<rich:column styleClass="#{employeeSecondmentsManagement.getTableCellClassForSecondment(_secondment)}">
 										<f:facet name="header">
 											<h:outputText value="Απο" />
 										</f:facet>
@@ -83,7 +83,7 @@
 											<s:convertDateTime pattern="dd-MM-yyyy" />
 										</h:outputText>
 									</rich:column>
-									<rich:column>
+									<rich:column styleClass="#{employeeSecondmentsManagement.getTableCellClassForSecondment(_secondment)}">
 										<f:facet name="header">
 											<h:outputText value="Εώς" />
 										</f:facet>
@@ -91,13 +91,13 @@
 											<s:convertDateTime pattern="dd-MM-yyyy" />
 										</h:outputText>
 									</rich:column>
-									<rich:column>
+									<rich:column styleClass="#{employeeSecondmentsManagement.getTableCellClassForSecondment(_secondment)}">
 										<f:facet name="header">
 											<h:outputText value="Σχόλιο" />
 										</f:facet>
 										<h:outputText value="#{_secondment.comment}" />
 									</rich:column>
-									<rich:column>
+									<rich:column styleClass="#{employeeSecondmentsManagement.getTableCellClassForSecondment(_secondment)}">
 										<f:facet name="header">
 											<h:outputText value="Με Αίτηση Του" />
 										</f:facet>
@@ -107,25 +107,26 @@
 											rendered="#{!_secondment.employeeRequested}" />
 									</rich:column>
 
-									<rich:column>
+									<rich:column styleClass="#{employeeSecondmentsManagement.getTableCellClassForSecondment(_secondment)}">
 										<f:facet name="header">
 											<h:outputText value="Υποχ. Ωράριο" />
 										</f:facet>
 										<h:outputText value="#{_secondment.mandatoryWorkingHours}" />
 									</rich:column>
-									<rich:column>
+									<rich:column styleClass="#{employeeSecondmentsManagement.getTableCellClassForSecondment(_secondment)}">
 										<f:facet name="header">
 											<h:outputText value="Πραγ. Ωράριο" />
 										</f:facet>
 										<h:outputText value="#{_secondment.finalWorkingHours}" />
 									</rich:column>
-									<rich:column>
+									<rich:column styleClass="#{employeeSecondmentsManagement.getTableCellClassForSecondment(_secondment)}">
 										<f:facet name="header">
 											<h:outputText value="Ενέργεια" />
 										</f:facet>
 										<rich:toolBar itemSeparator="line">
 											
-											<a4j:commandLink reRender="updateModalPanelContent"
+											<a4j:commandLink reRender="updateModalPanelContent" ajaxSingle="true"
+												disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MANAGE_SECONDMENT'))}"
 												oncomplete="#{rich:component('updateModalPanel')}.show()"
 												value="Τροποποίηση">
 												<h:graphicImage value="/img/icons/edit.png" width="12"
@@ -347,10 +348,10 @@
 						<h:panelGrid columns="2">
 
 							<a4j:commandButton value="Τροποποίηση Απόσπασης !"
-								action="#{secondmentHome.update()}"
+								action="#{employeeSecondmentsManagement.modifySecondment}"
 								data="#{facesContext.maximumSeverity.ordinal ge 2}"
 								oncomplete="if(data == false) Richfaces.hideModalPanel('updateModalPanel');"
-								reRender="activeSecondment,secondmentsTable" />
+								reRender="updateModalPanelContent,secondmentsTable" />
 							<a4j:commandButton value="Επιστροφή .."
 								action="#{secondmentHome.revert}"
 								onclick="#{rich:component('updateModalPanel')}.hide();" />

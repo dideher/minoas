@@ -372,6 +372,18 @@ vertical-align:top;
 		background:#D6D6C2;
 	}
 	
+	.rich-table-future-secondment {
+		background:#99C2FF;
+	}
+	
+	.rich-table-current-secondment {
+		background:#C2FF85
+	}
+	
+	.rich-table-past-secondment {
+		background:#D6D6C2;
+	}
+	
 .required-flag {
 	color:#CC0000;
 	font-weight:bold;
