@@ -1,11 +1,10 @@
 package gr.sch.ira.minoas.seam.components.home;
 
 import gr.sch.ira.minoas.model.employement.Secondment;
-import gr.sch.ira.minoas.model.employement.SecondmentType;
 
 import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.AutoCreate;
 import org.jboss.seam.annotations.Factory;
-import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
 
@@ -14,15 +13,17 @@ import org.jboss.seam.annotations.Transactional;
  * @version $Id$
  */
 @Name("secondmentHome")
+@AutoCreate
 public class SecondmentHome extends MinoasEntityHome<Secondment> {
 
-	/**
+	
+    protected String tempValueHolder1; /* used as a holder value in forms */ 
+    
+    /**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@In(create = true)
-	private EmployeeHome employeeHome;
 
 	
 	/**
@@ -31,11 +32,6 @@ public class SecondmentHome extends MinoasEntityHome<Secondment> {
 	@Override
 	protected Secondment createInstance() {
 		Secondment instance = new Secondment();
-		instance.setSecondmentType(SecondmentType.FULL_TO_SCHOOL);
-		instance.setEmployeeRequested(Boolean.TRUE);
-		instance
-				.setEstablished(getCoreSearching().getActiveSchoolYear(getEntityManager()).getTeachingSchoolYearStart());
-		instance.setDueTo(getCoreSearching().getActiveSchoolYear(getEntityManager()).getTeachingSchoolYearStop());
 		return instance;
 	}
 
@@ -56,9 +52,30 @@ public class SecondmentHome extends MinoasEntityHome<Secondment> {
 		getEntityManager().refresh(getInstance());
 		return "reverted";
 	}
+	
+	/**
+     * @return the tempValueHolder1
+     */
+    public String getTempValueHolder1() {
+        return tempValueHolder1;
+    }
+
+    /**
+     * @param tempValueHolder1 the tempValueHolder1 to set
+     */
+    public void setTempValueHolder1(String tempValueHolder1) {
+        this.tempValueHolder1 = tempValueHolder1;
+    }
 
 	
-
+    /**
+     * @see gr.sch.ira.minoas.seam.components.home.MinoasEntityHome#clearInstance()
+     */
+    @Override
+    public void clearInstance() {
+        super.clearInstance();
+        setTempValueHolder1(null);
+    }
 	
 
 }

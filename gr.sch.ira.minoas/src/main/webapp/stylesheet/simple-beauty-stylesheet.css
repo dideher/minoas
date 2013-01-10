@@ -157,6 +157,10 @@ a.menu_link:hover {
 	color: black;
 }
 
+.panelMenuItemHover {
+	color: green;
+}
+
 .fieldValueLabel {
 	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
 	font-size: 11px;

@@ -1,30 +1,35 @@
 package gr.sch.ira.minoas.seam.components.management;
 
+import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.employee.Employee;
-import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.Secondment;
+import gr.sch.ira.minoas.model.employement.SecondmentType;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
 import gr.sch.ira.minoas.seam.components.home.SecondmentHome;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.Begin;
+import org.jboss.seam.annotations.End;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.RaiseEvent;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.international.StatusMessage.Severity;
+import org.omg.PortableInterceptor.SUCCESSFUL;
 
 @Name(value = "employeeSecondmentsManagement")
 @Scope(ScopeType.PAGE)
 public class EmployeeSecondmentsManagement extends BaseDatabaseAwareSeamComponent {
-    
 
     /**
      * Comment for <code>serialVersionUID</code>
@@ -34,7 +39,6 @@ public class EmployeeSecondmentsManagement extends BaseDatabaseAwareSeamComponen
     @In(required = true)
     private EmployeeHome employeeHome;
 
-   
     /**
      * @return the employeeHome
      */
@@ -48,7 +52,6 @@ public class EmployeeSecondmentsManagement extends BaseDatabaseAwareSeamComponen
     public void setEmployeeHome(EmployeeHome employeeHome) {
         this.employeeHome = employeeHome;
     }
-
 
     @In(required = true)
     private SecondmentHome secondmentHome;
@@ -110,30 +113,42 @@ public class EmployeeSecondmentsManagement extends BaseDatabaseAwareSeamComponen
             secondmentHome.persist();
             getEntityManager().flush();
             return ACTION_OUTCOME_SUCCESS;
-            
+
         } else {
 
-            facesMessages
-                    .add(Severity.ERROR, "employee home #0 not managed.", employeeHome);
+            facesMessages.add(Severity.ERROR, "employee home #0 not managed.", employeeHome);
             return ACTION_OUTCOME_FAILURE;
-        
+
         }
-        
+
     }
     
-    
+    public String cancelSecondmentModificationAction() {
+        System.err.println("lalal : " + secondmentHome.getInstance());
+        try {
+            System.err.println("pysde : " + secondmentHome.getInstance().getPysdeOrder());
+        } catch(Exception ex) {
+            
+        }
+        if(secondmentHome.isManaged()) {
+            secondmentHome.revert();
+        } else {
+            secondmentHome.clearInstance();
+        }
+        return ACTION_OUTCOME_SUCCESS;
+    }
+
     /* this method is being called from the page containing a list of leaves and returns the CSS class that should be used by the leave row */
     public String getTableCellClassForSecondment(Secondment secondment) {
-        if(secondment.isFuture()) {
+        if (secondment.isFuture()) {
             return "rich-table-future-secondment";
-        } else if(secondment.isCurrent()) {
+        } else if (secondment.isCurrent()) {
             return "rich-table-current-secondment";
-        } else if(secondment.isPast()) {
+        } else if (secondment.isPast()) {
             return "rich-table-past-secondment";
-        } else return "";
+        } else
+            return "";
     }
-    
-    
 
     @Transactional
     @RaiseEvent("secondmentDeleted")
@@ -159,29 +174,45 @@ public class EmployeeSecondmentsManagement extends BaseDatabaseAwareSeamComponen
             getEntityManager().flush();
             return ACTION_OUTCOME_SUCCESS;
         } else {
-            facesMessages
-                    .add(Severity.ERROR, "employee home #0 or secondment home #1 not managed.", employeeHome, secondmentHome);
+            facesMessages.add(Severity.ERROR, "employee home #0 or secondment home #1 not managed.", employeeHome,
+                    secondmentHome);
             return ACTION_OUTCOME_FAILURE;
         }
     }
-    
-    protected boolean validateSecondment(Secondment secondment, boolean addMessages) {
 
+    protected boolean validateSecondment(Secondment secondment, boolean addMessages) {
+        DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
         Date established = DateUtils.truncate(secondment.getEstablished(), Calendar.DAY_OF_MONTH);
         Date dueTo = DateUtils.truncate(secondment.getDueTo(), Calendar.DAY_OF_MONTH);
+        School currentSchool = null;
+        try {
+            currentSchool = secondment.getEmployee().getCurrentEmployment().getSchool();
+        } catch(Exception ex) {
+            ; // ignore
+        }
+        
+        /* check if the secondoment's target unit is the employee's current school */
+        if(currentSchool!=null && currentSchool.getId().equals(secondment.getTargetUnit().getId())) {
+            if (addMessages)
+                facesMessages
+                        .add(Severity.ERROR,
+                                "Η τρέχουσα οργανική του εκπαιδευτικού είναι η ίδια με την μονάδα απόσπασης.");
+            return false;
+        }
+         
         /* check if the dates are correct */
         if (established.after(dueTo)) {
 
             if (addMessages)
                 facesMessages
                         .add(Severity.ERROR,
-                                "Η ημερομηνία λήξης της απόσπασης πρέπει να είναι μεταγενέστερη της ένερξης. Κάνε ένα διάλειμα για καφέ !");
+                                "Η ημερομηνία λήξης της απόσπασης πρέπει να είναι μεταγενέστερη της έναρξης. Κάνε ένα διάλειμα για καφέ !");
             return false;
         }
         /* source & target unit must not be same */
 
-        if (secondment.getSourceUnit() != null
-                && secondment.getSourceUnit().getId().equals(secondment.getTargetUnit().getId())) {
+        if (secondment.getSourceUnit() != null &&
+                secondment.getSourceUnit().getId().equals(secondment.getTargetUnit().getId())) {
             if (addMessages)
                 facesMessages
                         .add(Severity.ERROR,
@@ -198,9 +229,14 @@ public class EmployeeSecondmentsManagement extends BaseDatabaseAwareSeamComponen
             if (DateUtils.isSameDay(established, current_established) || DateUtils.isSameDay(dueTo, current_dueTo)) {
                 if (addMessages)
                     facesMessages
-                            .add(
-                                    Severity.ERROR,
-                                    "Υπάρχει ήδει καταχωρημένη απόσπαση για τον εκπαιδευτικό με τις ημερομηνίες που εισάγατε. Κάντε ενα διάλειμα να ξεσκωτίσεται.");
+                            .add(Severity.ERROR,
+                                    String.format(
+                                            "Για τον εκπαιδευτικό υπάρχει ήδη καταχωρημένη απόσπαση από '%s' εώς και '%s' στην μονάδα '%s' η οποία έχει τις ίδιες ημ/νιες με αυτή που προσπαθείτε να εισάγετε.",
+                                            df.format(current_secondment.getEstablished()), df.format(current_secondment.getDueTo()),
+                                            current_secondment.getTargetUnit().getTitle(),
+                                            df.format(secondment.getEstablished()),
+                                            df.format(secondment.getDueTo()), 
+                                            secondment.getTargetUnit().getTitle()));
                 return false;
             }
 
@@ -213,13 +249,19 @@ public class EmployeeSecondmentsManagement extends BaseDatabaseAwareSeamComponen
                 return false;
             }
 
-            if ((established.before(current_established) && dueTo.after(current_established))
-                    || (established.after(current_established) && dueTo.before(current_dueTo))
-                    || (established.before(current_dueTo) && dueTo.after(current_dueTo))) {
+            if ((established.before(current_established) && dueTo.after(current_established)) ||
+                    (established.after(current_established) && dueTo.before(current_dueTo)) ||
+                    (established.before(current_dueTo) && dueTo.after(current_dueTo))) {
                 if (addMessages)
                     facesMessages
-                            .add(Severity.ERROR,
-                                    "Υπάρχει επικαλυπτόμενο διάστημα της νέας απόσπασης με παλαιότερη. Μήπως να κάνεις ενα διάλειμα ;");
+                    .add(Severity.ERROR,
+                            String.format(
+                                    "Για τον εκπαιδευτικό υπάρχει ήδη καταχωρημένη απόσπαση από '%s' εώς και '%s' στην μονάδα '%s' η οποία έχει επικάλυψη με την απόσπαση από '%s' εως και '%s' στην μονάδα '%s' που προσπαθείτε να εισάγετε.",
+                                    df.format(current_secondment.getEstablished()), df.format(current_secondment.getDueTo()),
+                                    current_secondment.getTargetUnit().getTitle(),
+                                    df.format(secondment.getEstablished()),
+                                    df.format(secondment.getDueTo()), 
+                                    secondment.getTargetUnit().getTitle()));
                 return false;
             }
 
@@ -227,7 +269,7 @@ public class EmployeeSecondmentsManagement extends BaseDatabaseAwareSeamComponen
         return true;
 
     }
-    
+
     @Transactional
     @RaiseEvent("secondmentModified")
     public String modifySecondment() {
@@ -280,12 +322,6 @@ public class EmployeeSecondmentsManagement extends BaseDatabaseAwareSeamComponen
 
     }
 
-
-
-   
-    
-
-
     /**
      * Checks if a secondment should be set active in regards to the reference date.
      * @param secondment
@@ -303,12 +339,24 @@ public class EmployeeSecondmentsManagement extends BaseDatabaseAwareSeamComponen
     }
 
     /* this method is called when the user clicks the "add new secondment" */
-       public void prepareForNewSecondment() {
+    public void prepareForNewSecondment() {
         secondmentHome.clearInstance();
         Secondment secondment = secondmentHome.getInstance();
-        secondment.setEstablished(new Date());
-        secondment.setDueTo(new Date());
+        secondment.setSecondmentType(SecondmentType.FULL_TO_SCHOOL);
+        secondment.setEmployeeRequested(Boolean.TRUE);
+        secondment.setEstablished(getCoreSearching().getActiveSchoolYear(getEntityManager())
+                .getTeachingSchoolYearStart());
+        secondment.setDueTo(getCoreSearching().getActiveSchoolYear(getEntityManager()).getTeachingSchoolYearStop());
         secondment.setEmployee(employeeHome.getInstance());
+        secondment.setSchoolYear(getCoreSearching().getActiveSchoolYear(getEntityManager()));
+        Employment employment = employeeHome.getInstance().getCurrentEmployment();
+        if (employment != null) {
+            secondment.setSourceUnit(employment.getSchool());
+            secondment.setSourcePYSDE(employment.getSchool().getPysde());
+            secondment.setMandatoryWorkingHours(employment.getMandatoryWorkingHours());
+            secondment.setFinalWorkingHours(employment.getFinalWorkingHours());
+        }
+
     }
-    
+
 }
