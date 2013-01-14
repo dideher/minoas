@@ -2,9 +2,11 @@ package gr.sch.ira.minoas.seam.components.management;
 
 import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.employee.Employee;
+import gr.sch.ira.minoas.model.employement.Disposal;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.SecondmentType;
+import gr.sch.ira.minoas.model.employement.ServiceAllocation;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
 import gr.sch.ira.minoas.seam.components.home.SecondmentHome;
@@ -17,15 +19,12 @@ import java.util.Date;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.jboss.seam.ScopeType;
-import org.jboss.seam.annotations.Begin;
-import org.jboss.seam.annotations.End;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.RaiseEvent;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.international.StatusMessage.Severity;
-import org.omg.PortableInterceptor.SUCCESSFUL;
 
 @Name(value = "employeeSecondmentsManagement")
 @Scope(ScopeType.PAGE)
@@ -219,6 +218,39 @@ public class EmployeeSecondmentsManagement extends BaseDatabaseAwareSeamComponen
                                 "Η μονάδα αποσπάσης πρέπει να είναι διαφορετική απο την τρέχουσα οργανική του εκπαιδευτικού. Καφέ ήπιες ;");
             return false;
         }
+        
+        /* check if the employee has a disposal that conflicts with the new secondment */
+        Collection<Disposal> conflictingDisposals = getCoreSearching().getEmployeeDisposalWithingPeriod(getEntityManager(), secondment.getEmployee(), established, dueTo);
+        if(conflictingDisposals.size()>0) {
+            if (addMessages) {
+                Disposal d = conflictingDisposals.iterator().next();
+                String dunit = d.getDisposalUnit().getTitle();
+                String dfrom = df.format(d.getEstablished());
+                String dto = df.format(d.getDueTo());
+                
+                facesMessages
+                        .add(Severity.ERROR,String.format("Η απόσπαση δεν μπορεί να καταχωρηθεί γίατι για τον εκπαιδευτικό υπάρχει ήδη καταχωρημένη διάθεση στην μονάδα '%s' απο '%s' εως '%s'.", dunit, dfrom, dto));
+                facesMessages.add(Severity.INFO,"Εαν η απόσπαση πρέπει να καταχωρηθεί, ακυρώστε πρώτα την διάθεση.");
+            }
+            return false;
+        }
+        
+        /* check if the employee has a service allocation that conflicts with the new secondment */
+        Collection<ServiceAllocation> conflictingServiceAllocations = getCoreSearching().getEmployeeServiceAllocationWithinPeriod(getEntityManager(), secondment.getEmployee(), established, dueTo);
+        if(conflictingServiceAllocations.size()>0) {
+            if (addMessages) {
+                ServiceAllocation d = conflictingServiceAllocations.iterator().next();
+                String dunit = d.getServiceUnit().getTitle();
+                String dfrom = df.format(d.getEstablished());
+                String dto = df.format(d.getDueTo());
+                
+                facesMessages
+                        .add(Severity.ERROR,String.format("Η απόσπαση δεν μπορεί να καταχωρηθεί γίατι για τον εκπαιδευτικό υπάρχει ήδη καταχωρημένη θητεία στην μονάδα '%s' απο '%s' εως '%s'.", dunit, dfrom, dto));
+                facesMessages.add(Severity.INFO,"Εαν η απόσπαση πρέπει να καταχωρηθεί, ακυρώστε πρώτα την θητεία.");
+            }
+            return false;
+        }
+        
         Collection<Secondment> current_secondments = getCoreSearching().getAllEmployeeSecondments(
                 employeeHome.getInstance());
         for (Secondment current_secondment : current_secondments) {
