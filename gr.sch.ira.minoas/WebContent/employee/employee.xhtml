@@ -934,11 +934,19 @@
 									</rich:dataTable>
 								</h:panelGrid>
 							</rich:tab>
+							
+							
+							<rich:tab rendered="true">
+								<f:facet name="label">
+									<h:outputText value="Στοιχεία Βαθμού/ΜΚ" />
+								</f:facet>
+
+								<ui:include
+									src="/employee/rankAndSalaryGradeInfo.xhtml">
+								</ui:include>
+							</rich:tab>
 
 						</rich:tabPanel>
-
-
-
 
 					</h:form>
 
