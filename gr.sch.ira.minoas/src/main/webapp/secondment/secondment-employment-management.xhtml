@@ -13,6 +13,9 @@
 
 <ui:composition template="/layout/simple-beauty-template.xhtml">
 	<ui:define name="body">
+	
+	
+		<ui:include src="/components/wait-modal-panel.xhtml" />
 		
 		<rich:panel>
 			<f:facet name="header">
@@ -620,8 +623,9 @@
 				</a4j:form>
 			
 		</rich:modalPanel>
+	
 
-		<ui:include src="/components/wait-modal-panel.xhtml" />
+		
 
 	</ui:define>
 </ui:composition>

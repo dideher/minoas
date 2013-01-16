@@ -27,7 +27,7 @@ import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.international.StatusMessage.Severity;
 
 @Name(value = "employeeSecondmentsManagement")
-@Scope(ScopeType.PAGE)
+@Scope(ScopeType.CONVERSATION)
 public class EmployeeSecondmentsManagement extends BaseDatabaseAwareSeamComponent {
 
     /**
@@ -35,7 +35,7 @@ public class EmployeeSecondmentsManagement extends BaseDatabaseAwareSeamComponen
      */
     private static final long serialVersionUID = 1L;
 
-    @In(required = true)
+    @In(required = true, create=true)
     private EmployeeHome employeeHome;
 
     /**

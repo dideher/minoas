@@ -416,6 +416,11 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
             specialAssigmentHome.getInstance().setUnit(emp.getSchool());
         }
     }
+    
+    public void prepareForNewEmployee() {
+        employeeHome.clearInstance(); 
+    }
+    
 	
 	@Transactional(TransactionPropagationType.REQUIRED)
     public String addEmployeeSpecialAssigment() {
