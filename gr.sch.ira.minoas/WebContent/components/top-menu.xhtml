@@ -291,7 +291,8 @@
 				</rich:menuGroup>
 				
 				<rich:menuItem submitMode="none"
-					rendered="#{(s:hasRole('ADMIN') )}">
+					rendered="#{(s:hasRole('ADMIN') or s:hasRole('VIEW_EMPLOYEE_INFO'))}">
+					          
 					<s:link value="Διαχείριση Στοιχείων Μισθοδοσίας" 
 						view="/employee/select-employee.xhtml">
 						<f:param name="from" value="/home" />
