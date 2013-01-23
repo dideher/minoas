@@ -1,5 +1,6 @@
 package gr.sch.ira.minoas.model.employement;
 
+import gr.sch.ira.minoas.model.BaseIDDeleteAwareModel;
 import gr.sch.ira.minoas.model.BaseIDModel;
 import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employee.Employee;
@@ -30,7 +31,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "SERVICE_ALLOCATION")
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
-public class ServiceAllocation extends BaseIDModel {
+public class ServiceAllocation extends BaseIDDeleteAwareModel {
 	/**
 	 * 
 	 */

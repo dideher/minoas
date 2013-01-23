@@ -253,15 +253,18 @@
 				</rich:menuGroup>
 
 				<rich:menuGroup value="Διαχείριση Αποσπάσεων">
+					
 					<rich:menuItem submitMode="none"
 						rendered="#{(s:hasRole('ADMIN') or s:hasRole('ADD_SECONDMENT'))}">
 
-						<s:link value="Εισαγωγή Νέας Απόσπασης" 
-							action="#{secondmentHome.prepareForNewSecondment}"
-							view="/secondment/add-new-secondment.xhtml">
-							<f:param name="add_new_secondment_from" value="/home" />
+						<s:link value="Εισαγωγή Νέας Απόσπασης απο άλλο ΠΥΣΔΕ" action="#{employeeManagement.prepareForNewEmployee()}" 
+							view="/employee/fast-add-new-employee.xhtml">
+							<f:param name="fast_add_new_employee_from" value="/home" />
+							<f:param name="actionVariation" value="secondment" /> 
+							<f:param name="fast_add_new_employee_to" value="/secondment/secondment-employment-management"></f:param>
 						</s:link>
 					</rich:menuItem>
+					
 					<rich:menuItem submitMode="none"
 						rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_SECONDMENT'))}">
 						<s:link value="Διαχείριση Απόσπασης Εκπαιδευτικού"

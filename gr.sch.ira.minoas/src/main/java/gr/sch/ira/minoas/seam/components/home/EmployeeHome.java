@@ -54,24 +54,7 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 	@In(create = true)
 	private ServiceAllocationHome serviceAllocationHome;
 
-	@Transactional
-	public String addNewEmployeeFromOtherPYSDE() {
-		/*
-		 * we will quickly create an employee to be used for secondment
-		 */
-		Employee new_employee = getInstance();
-		new_employee.setActive(Boolean.TRUE);
-		getEntityManager().persist(new_employee);
-		if (!regularEmployeeInfoHome.isManaged()) {
-			RegularEmployeeInfo info = regularEmployeeInfoHome.getInstance();
-			info.setEmployee(new_employee);
-			info.setInsertedBy(getPrincipal());
-			new_employee.setRegularDetail(info);
-			getEntityManager().persist(info);
-		}
-		wire();
-		return persist();
-	}
+	
 
 	@Transactional
 	public String addNewEmployeeInLocalPYSDE() {

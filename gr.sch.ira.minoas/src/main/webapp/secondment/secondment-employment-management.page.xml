@@ -15,6 +15,7 @@
     <redirect view-id="/home.xhtml" />
   </navigation>
   
+  
   <!-- 
   <navigation from-action="#{secondmentHome.cancel()}">
     <rule if-outcome="updated">

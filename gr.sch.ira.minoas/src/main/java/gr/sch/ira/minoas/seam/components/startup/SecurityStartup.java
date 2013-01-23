@@ -118,6 +118,8 @@ public class SecurityStartup extends BaseDatabaseAwareSeamComponent {
 		createRole("ADD_SECONDMENT", "Add New Secondments", admin);
 		createRole("MANAGE_SECONDMENT", "Manage Secondment", admin);
 		createRole("VIEW_SECONDMENT", "View Secondment", admin);
+		createRole("DELETE_SECONDMENT", "Delete Secondment", admin);
+		
 		/* Service Allocation */
 		createRole("ADD_SERVICE_ALLOCATION", "Add New Service Allocation", admin);
 		createRole("MANAGE_SERVICE_ALLOCATION", "Manage Service Allocation", admin);

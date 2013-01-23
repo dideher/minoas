@@ -157,6 +157,10 @@ a.menu_link:hover {
 	color: black;
 }
 
+.panelMenuItemHover {
+	color: green;
+}
+
 .fieldValueLabel {
 	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
 	font-size: 11px;
@@ -369,6 +373,18 @@ vertical-align:top;
 	}
 	
 	.rich-table-past-leave {
+		background:#D6D6C2;
+	}
+	
+	.rich-table-future-secondment {
+		background:#99C2FF;
+	}
+	
+	.rich-table-current-secondment {
+		background:#C2FF85
+	}
+	
+	.rich-table-past-secondment {
 		background:#D6D6C2;
 	}
 	

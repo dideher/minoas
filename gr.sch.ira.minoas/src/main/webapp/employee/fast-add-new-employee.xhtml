@@ -1,0 +1,277 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<ui:composition template="/layout/simple-beauty-template.xhtml">
+	<ui:define name="body">
+		<rich:panel>
+			<f:facet name="header">
+				<h:outputText
+					value="Γρήγορη Εισαγωγή Νέου Εκπαιδευτικού" />
+			</f:facet>
+			
+			
+			
+			<ui:include src="/components/wait-modal-panel.xhtml" />
+			
+			
+			
+				<h:panelGrid columns="1">
+		
+				<s:div rendered="#{param.actionVariation eq 'secondment'}" styleClass="clean-warning">
+					<h:outputText value="Παρακαλώ, εισάγετε τον εκπαιδευτικό με οργανική σε άλλο ΠΥΣΔΕ, συμπληρόνωντας τα παρακάτω πεδία. Στην συνέχεια και αφού καταχωρείσεται τον εκπαιδευτικό, θα μεταφερθείτε στην περιοχή διαχείρισης αποσπάσεων" />
+				</s:div>		
+				
+				<s:div rendered="#{param.actionVariation eq 'secondment'}" styleClass="clean-error">
+					<h:outputText value="Προσοχή ! Πριν καταχωρήσεται τον εκπαιδευτικό, σιγουρευτείτε πως ο εκπαιδευτικός δεν είναι ήδει καταχωρυμένος στον Μίνωα." />
+				</s:div>		
+					
+					
+
+<a4j:form>
+			<a4j:region>
+					<a4j:outputPanel id="fastEmployeeOutputPanel">
+						
+						<ui:include src="/components/messages-component.xhtml" />
+
+						<h:panelGrid columns="4">
+
+							<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Επώνυμο" />
+								</ui:define>
+								<h:inputText value="#{employeeHome.instance.lastName}"
+									required="true" styleClass="fieldValueText" 
+									size="15" maxlength="30" immediate="true">
+									<a4j:support eventsQueue="queue" event="onkeyup" ignoreDupResponses="true" requestDelay="500" action="#{employeeManagement.searchForDuplicateEmployees()}" ajaxSingle="true"  reRender="grid" />
+								</h:inputText>
+								
+							</s:decorate>
+
+							<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Όνομα" />
+								</ui:define>
+								<h:inputText value="#{employeeHome.instance.firstName}"
+									required="true" styleClass="fieldValueText" immediate="true"
+									size="15" maxlength="30">
+									<a4j:support eventsQueue="queue" event="onkeyup" ignoreDupResponses="true" requestDelay="500" action="#{employeeManagement.searchForDuplicateEmployees()}" ajaxSingle="true" reRender="grid" />
+								</h:inputText>
+							</s:decorate>
+							
+							<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Όνομα Πατρός" />
+								</ui:define>
+								<h:inputText value="#{employeeHome.instance.fatherName}"
+									required="true" styleClass="fieldValueText" immediate="true" 
+									size="15" maxlength="30">
+									<a4j:support eventsQueue="queue" event="onkeyup" ignoreDupResponses="true" requestDelay="500" action="#{employeeManagement.searchForDuplicateEmployees()}" ajaxSingle="true" reRender="grid" />
+								</h:inputText>
+							</s:decorate>
+
+							<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Επώνυμο Πατρός" />
+								</ui:define>
+								<h:inputText value="#{employeeHome.instance.fatherSurname}"
+									required="false" styleClass="fieldValueText"  immediate="true"
+									size="15" maxlength="30">
+								</h:inputText>
+							</s:decorate>
+							
+							
+
+							<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="ΑΜ" />
+								</ui:define>
+								<h:inputText
+									value="#{regularEmployeeInfoHome.instance.registryID}"
+									required="false" styleClass="fieldValueText" immediate="true"
+									size="8" maxlength="8">
+								</h:inputText>
+							</s:decorate>
+							
+							<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="ΑΦΜ" />
+								</ui:define>
+								<h:inputText
+									value="#{employeeHome.instance.vatNumber}"
+									required="true" styleClass="fieldValueText" immediate="true"
+									size="9" maxlength="9">
+								</h:inputText>
+							</s:decorate>
+							
+							
+
+							<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="ΠΥΣΔΕ Οργανικής : " />
+								</ui:define>
+								<h:inputText id="PYSDEFilter" required="true" immediate="true"
+									styleClass="fieldValueText" size="15" maxlength="30">
+									<rich:suggestionbox height="150" width="150" 
+										for="PYSDEFilter" var="_pysde" 
+										suggestionAction="#{pysdeSuggester.suggest}">
+										<f:facet name="nothingLabel">
+											<h:outputText value="Άγνωστο ΠΥΣΔΕ" />
+										</f:facet>
+										<h:column>
+											<h:outputText value="#{_pysde.title}" />
+										</h:column>
+										<a4j:support ajaxSingle="true" event="onselect">
+											<f:setPropertyActionListener value="#{_pysde}"
+												target="#{employeeHome.instance.currentPYSDE}" />
+										</a4j:support>
+									</rich:suggestionbox>
+								</h:inputText>
+							</s:decorate>
+							
+							<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Ειδικότητα : " />
+								</ui:define>
+								<h:inputText id="specializationFilter" required="true" immediate="true"
+									styleClass="fieldValueText" size="7" maxlength="7">
+									<rich:suggestionbox height="150" width="350"
+										for="specializationFilter" var="a_spec" 
+										suggestionAction="#{specializationSuggester.suggest}">
+										<f:facet name="nothingLabel">
+											<h:outputText value="Άγνωστη Ειδικότητα" />
+										</f:facet>
+										<h:column>
+											<h:outputText value="#{a_spec.id}" />
+										</h:column>
+										<h:column>
+											<h:outputText value="#{a_spec.title}" />
+										</h:column>
+										<a4j:support ajaxSingle="true" event="onselect" eventsQueue="queue"  ignoreDupResponses="true" requestDelay="500" action="#{employeeManagement.searchForDuplicateEmployees()}" reRender="grid">
+											<f:setPropertyActionListener value="#{a_spec}"
+												target="#{employeeHome.instance.lastSpecialization}" />
+										</a4j:support>
+									</rich:suggestionbox>
+								</h:inputText>
+							</s:decorate>
+
+							<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Ημ/νια Γέννησης : " />
+								</ui:define>
+								<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
+									style="width:50px" enableManualInput="true" immediate="true"
+									styleClass="fieldValueText" required="false"
+									value="#{employeeHome.instance.dateOfBirth}">
+								</rich:calendar>
+							</s:decorate>
+						</h:panelGrid>
+					</a4j:outputPanel>
+				
+				<h:panelGrid columns="2">
+
+					<a4j:commandButton value="Καταχώρηση Εκπαιδευτικού !"
+						action="#{employeeManagement.addNewEmployeeFromOtherPYSDE()}"
+						data="#{facesContext.maximumSeverity.ordinal ge 2}"
+						oncomplete="if(data == false) Richfaces.hideModalPanel('fastEmployeeInsertPanel');"
+						reRender="fastEmployeeOutputPanel" />
+					<a4j:commandButton value="Επιστροφή .."
+						action="#{employeeHome.revert()}"
+						reRender="employeePanel,newSecondmentPanel"
+						onclick="#{rich:component('fastEmployeeInsertPanel')}.hide();" />
+				</h:panelGrid>
+				</a4j:region>
+				</a4j:form>
+				
+				<a4j:region>
+
+     
+      
+      <a4j:outputPanel id="grid">
+      
+      	<s:div>
+      
+      	<s:div styleClass="clean-warning" rendered="#{duplicateEmployeeList.rowCount gt 0}">
+      	
+      	<h:panelGrid columns="1" width="100%">
+      	<h:outputText  value="Τα στοιχεία του εκπαιδευτικού που εισάγατε είναι παραπλήσια με τα στοιχεία των παρακάτων εκπαιδευτικών. Ελένξτε ότι ο εκπαιδευτικός που προσπαθείτε να εισάγεται δεν είναι ήδη καταχωρήμενος." />
+      	<rich:dataTable value="#{employeeManagement.duplicateEmployeeList}" var="_employee">
+      		<rich:column>
+      			<f:facet name="header">
+      				<h:outputText value="ΑΜ" />
+      			</f:facet>
+      			<h:outputText value="#{_employee.employeeCode}" />
+      		</rich:column>
+      		
+      		<rich:column>
+      			<f:facet name="header">
+      				<h:outputText value="Επώνυμο" />
+      			</f:facet>
+      			<h:outputText value="#{_employee.employeeLastName}" />
+      		</rich:column>
+      		<rich:column>
+      			<f:facet name="header">
+      				<h:outputText value="Όνομα" />
+      			</f:facet>
+      			<h:outputText value="#{_employee.employeeFirstName}" />
+      		</rich:column>
+      		<rich:column>
+      			<f:facet name="header">
+      				<h:outputText value="Όνομα Πατρός" />
+      			</f:facet>
+      			<h:outputText value="#{_employee.employeeFatherName}" />
+      		</rich:column>
+      		<rich:column>
+      			<f:facet name="header">
+      				<h:outputText value="Όνομα Μητρός" />
+      			</f:facet>
+      			<h:outputText value="#{_employee.employeeMotherName}" />
+      		</rich:column>
+      		<rich:column>
+      			<f:facet name="header">
+      				<h:outputText value="Ειδικότητα" />
+      			</f:facet>
+      			<h:outputText value="#{_employee.employeeSpecialization}" />
+      		</rich:column>
+      		<rich:column>
+      			<f:facet name="header">
+      				<h:outputText value="Τύπος" />
+      			</f:facet>
+      			<h:outputText value="#{messages[_employee.employeeTypeKey]}" />
+      		</rich:column>
+      		<rich:column>
+      			<f:facet name="header">
+      				<h:outputText value="Ημ/νια Γένν." />
+      			</f:facet>
+      			<h:outputText value="#{_employee.employeeBirthday}">
+      				<f:convertDateTime type="date" pattern="dd-MM-yyyy"/>
+      			</h:outputText>
+      		</rich:column>
+      	</rich:dataTable>
+      	</h:panelGrid>
+      	</s:div>
+      	
+      	</s:div>
+      	
+      </a4j:outputPanel>
+
+</a4j:region>
+		
+				
+		
+		</h:panelGrid>
+		
+		
+		</rich:panel>
+	
+	</ui:define>
+</ui:composition>
+</html>
