@@ -554,13 +554,19 @@
 									<h:outputText value="Ιστορικό Αποσπάσεων" />
 								</f:facet>
 								<h:form id="employeeSecondmentListForm">
-
+									
 									<h:panelGrid columns="1" width="100%">
+										<h:panelGroup
+											rendered="#{employeeSecondments.size()==0}">
+											<h:outputText
+											value="Δεν υπάρχουν αποσπάσεις για τον εκπαιδευτικό." />
+										</h:panelGroup>
+										<h:panelGroup rendered="#{employeeSecondments.size() gt 0}">	
 										<h:outputText
 											value="Στον παρακάτω πίνακα εμφανίζεται το ιστορικό των αποσπάσεων του εκπαιδευτικού." />
 										<rich:dataTable id="employeeSecondmentsList"
-											value="#{employeeSecondmentsListQuery.resultList}"
-											var="_secondment" rows="15" border="0"
+											value="#{employeeSecondments}"
+											var="_secondment" rows="15" border="0" 
 											onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
 											onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
 											width="100%">
@@ -624,7 +630,13 @@
 												</f:facet>
 												<h:outputText value="#{_secondment.finalWorkingHours}" />
 											</rich:column>
+											
+											<f:facet name="footer">
+										<rich:datascroller align="left"  
+											maxPages="20" renderIfSinglePage="false"  />
+									</f:facet>
 										</rich:dataTable>
+										</h:panelGroup>
 
 									</h:panelGrid>
 								</h:form>

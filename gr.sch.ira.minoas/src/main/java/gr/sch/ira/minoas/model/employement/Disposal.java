@@ -3,7 +3,7 @@
  */
 package gr.sch.ira.minoas.model.employement;
 
-import gr.sch.ira.minoas.model.BaseIDModel;
+import gr.sch.ira.minoas.model.BaseIDDeleteAwareModel;
 import gr.sch.ira.minoas.model.core.SchoolYear;
 import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employee.Employee;
@@ -36,7 +36,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "DISPOSAL")
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
-public class Disposal extends BaseIDModel {
+public class Disposal extends BaseIDDeleteAwareModel {
 
 	/**
 	 * 

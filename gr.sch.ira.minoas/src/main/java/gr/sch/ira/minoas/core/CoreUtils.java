@@ -22,7 +22,7 @@ public abstract class CoreUtils {
     public static final String SEAM_MESSAGES_RESOURCE_BUNDLE_NAME = "messages";
 
 	public static final String getSearchPattern(String searchString) {
-		return searchString == null ? "%" : '%' + searchString.toLowerCase().replace('*', '%') + '%';
+		return searchString == null ? "%" : '%' + searchString.trim().toLowerCase().replace('*', '%') + '%';
 	}
 
     public static FacesContext getFacesContext() {

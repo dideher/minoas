@@ -206,7 +206,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         Collection<Secondment> result = null;
         info("searching employee's '#0' secondments.", employee);
         result = entityManager
-                .createQuery("SELECT s from Secondment s WHERE s.employee=:employee ORDER BY s.insertedOn")
+                .createQuery("SELECT s from Secondment s WHERE s.employee=:employee AND (s.deleted IS FALSE or s.deleted IS NULL) ORDER BY s.established DESC")
                 .setParameter("employee", employee).getResultList();
         info("found totally '#0' secondments for employee '#1'.", result.size(), employee);
         return result;
@@ -308,6 +308,68 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
                 .setParameter("employee", employee).setParameter("dayOfInterest", dayOfIntereset).getResultList();
         return result;
     }
+    
+    /**
+     * Searches for an employee's disposal at a given date that is NOT DELETED or AUTO CANCELED. In other words, the 
+     * operation will return a disposal that is active or will be active on a given date.
+     * @param em
+     * @param employee
+     * @param dayOfIntereset
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public Collection<Disposal> getEmployeeDisposalWithingPeriod(EntityManager em, Person employee, Date periodFrom, Date periodTo) {
+
+        Collection<Disposal> result = null;
+        result = getEntityManager(em)
+                .createQuery(
+                        "SELECT s FROM Disposal s WHERE (s.deleted IS FALSE OR s.deleted IS NULL) AND (s.autoCanceled IS FALSE OR s.autoCanceled IS NULL) AND s.employee=:employee AND ((:from <= s.established AND :end >= s.established) OR (:from <=s.dueTo AND :end >= s.dueTo ) OR (:from >= s.established AND :end <= s.dueTo)) ORDER BY s.insertedOn")
+                .setParameter("employee", employee).setParameter("from", periodFrom).setParameter("end", periodTo).getResultList();
+        return result;
+    }
+    
+    /**
+     * Searches for an employee's secondment at a given date that is NOT DELETED or AUTO CANCELED. In other words, the 
+     * operation will return a secondment that is active or will be active on a given date.
+     * @param em
+     * @param employee
+     * @param dayOfIntereset
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public Collection<Secondment> getEmployeeSecondmentWithinPeriod(EntityManager em, Person employee,  Date periodFrom, Date periodTo) {
+
+        Collection<Secondment> result = null;
+        result = getEntityManager(em)
+                .createQuery(
+                        "SELECT s FROM Secondment s WHERE (s.deleted IS FALSE OR s.deleted IS NULL) AND (s.autoCanceled IS FALSE OR s.autoCanceled IS NULL) AND s.employee=:employee AND ((:from <= s.established AND :end >= s.established) OR (:from <=s.dueTo AND :end >= s.dueTo ) OR (:from >= s.established AND :end <= s.dueTo)) ORDER BY s.insertedOn")
+                .setParameter("employee", employee).setParameter("from", periodFrom).setParameter("end", periodTo).getResultList();
+        return result;
+    }
+    
+    /**
+     * Searches for an employee's service allocation at a given date that is NOT DELETED or AUTO CANCELED. In other words, the 
+     * operation will return a service allocation that is active or will be active on a given date.
+     * @param em
+     * @param employee
+     * @param dayOfIntereset
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public Collection<ServiceAllocation> getEmployeeServiceAllocationWithinPeriod(EntityManager em, Person employee,  Date periodFrom, Date periodTo) {
+
+        Collection<ServiceAllocation> result = null;
+        result = getEntityManager(em)
+                .createQuery(
+                        "SELECT s FROM ServiceAllocation s WHERE (s.deleted IS FALSE OR s.deleted IS NULL) AND (s.autoCanceled IS FALSE OR s.autoCanceled IS NULL) AND s.employee=:employee AND ((:from <= s.established AND :end >= s.established) OR (:from <=s.dueTo AND :end >= s.dueTo ) OR (:from >= s.established AND :end <= s.dueTo)) ORDER BY s.insertedOn")
+                .setParameter("employee", employee).setParameter("from", periodFrom).setParameter("end", periodTo).getResultList();
+        return result;
+    }
+    
+    
 
 //    @Transactional(TransactionPropagationType.REQUIRED)
 //    @Deprecated

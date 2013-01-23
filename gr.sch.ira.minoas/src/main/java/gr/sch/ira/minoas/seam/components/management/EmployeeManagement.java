@@ -1,12 +1,18 @@
 package gr.sch.ira.minoas.seam.components.management;
 
+import gr.sch.ira.minoas.core.CoreUtils;
+import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.core.SchoolYear;
+import gr.sch.ira.minoas.model.core.Specialization;
 import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeExclusion;
+import gr.sch.ira.minoas.model.employee.EmployeeType;
 import gr.sch.ira.minoas.model.employee.RegularEmployeeInfo;
+import gr.sch.ira.minoas.model.employement.EducationalLevelType;
 import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 import gr.sch.ira.minoas.model.employement.Employment;
+import gr.sch.ira.minoas.model.employement.EmploymentType;
 import gr.sch.ira.minoas.model.employement.SpecialAssigment;
 import gr.sch.ira.minoas.model.employement.TeachingHourCDR;
 import gr.sch.ira.minoas.model.employement.TeachingHourCDRType;
@@ -15,8 +21,10 @@ import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.EmployeeMergeRequest;
 import gr.sch.ira.minoas.seam.components.home.EmployeeExclusionHome;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
+import gr.sch.ira.minoas.seam.components.home.EmploymentHome;
 import gr.sch.ira.minoas.seam.components.home.RegularEmployeeInfoHome;
 import gr.sch.ira.minoas.seam.components.home.SpecialAssigmentHome;
+import gr.sch.ira.minoas.seam.components.reports.resource.EmployeeReportItem;
 import gr.sch.ira.minoas.seam.components.reports.resource.EmployeeWorkExperienceItem;
 import gr.sch.ira.minoas.seam.components.reports.resource.LeaveReportItem;
 import gr.sch.ira.minoas.seam.components.reports.resource.SpecialAssigmentReportItem;
@@ -30,6 +38,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
@@ -39,6 +48,7 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.TransactionPropagationType;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.annotations.datamodel.DataModel;
+import org.jboss.seam.annotations.web.RequestParameter;
 import org.jboss.seam.international.StatusMessage.Severity;
 
 @Name(value = "employeeManagement")
@@ -206,6 +216,9 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
     
     private String inputTextFieldHelper6 = "";
     
+    @RequestParameter(value="actionVariation")
+    private String actionVariation;
+  
 
 	@In(required = true, create = true)
 	private EmployeeHome employeeHome;
@@ -215,6 +228,9 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
 	
 	@In(required = true, create = true)
 	private RegularEmployeeInfoHome regularEmployeeInfoHome;
+	
+	@In(required = true, create = true)
+	private EmploymentHome employmentHome;
 
 	@In(required = true, create = true)
 	private EmployeeExclusionHome employeeExclusionHome;
@@ -236,6 +252,9 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
 	
 	@DataModel(value="employeeSpecialAssigmentItems")
     private Collection<SpecialAssigmentReportItem> employeeSpecialAssigmentItems;
+	
+	@DataModel(value="duplicateEmployeeList")
+	private Collection<EmployeeReportItem> duplicateEmployeeList = new ArrayList<EmployeeReportItem>();
 	
 	/**
 	 * @return the employeeWorkExperienceItems
@@ -416,6 +435,18 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
             specialAssigmentHome.getInstance().setUnit(emp.getSchool());
         }
     }
+    
+    
+    public void lalal() {
+        
+    }
+    
+    public void prepareForNewEmployee() {
+        employeeHome.clearInstance();
+        regularEmployeeInfoHome.clearInstance();
+        employmentHome.clearInstance();
+    }
+    
 	
 	@Transactional(TransactionPropagationType.REQUIRED)
     public String addEmployeeSpecialAssigment() {
@@ -460,6 +491,103 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
             return ACTION_OUTCOME_FAILURE;
         }
 	}
+	
+	
+    public void searchForDuplicateEmployees() {
+        Employee employee = employeeHome.getInstance();
+        
+        System.err.println("jflgkjfdlkdfgj : "+actionVariation);
+        
+        if (employee.getLastName() != null && employee.getLastName().length() > 4 && employee.getFirstName() != null &&
+                employee.getFirstName().length() > 2) {
+            String lastName = CoreUtils.getSearchPattern(employee.getLastName());
+            String firstName = CoreUtils.getSearchPattern(employee.getFirstName());
+            String fatherName = CoreUtils.getSearchPattern(employee.getFatherName());
+            String motherName = CoreUtils.getSearchPattern(employee.getMotherName());
+            Specialization specialization = employee.getLastSpecialization();
+            StringBuffer sb = new StringBuffer();
+            sb.append("SELECT e FROM Employee e WHERE ");
+
+            /* last name and first name are not null nor empty */
+            sb.append("lower(e.lastName) LIKE :lastName AND lower(e.firstName) LIKE :firstName ");
+
+            if (fatherName.length() > 1)
+                sb.append("AND lower(e.fatherName) LIKE :fatherName ");
+            if (motherName.length() > 1)
+                sb.append("AND lower(e.motherName) LIKE :motherName ");
+            if (specialization != null)
+                sb.append("AND e.lastSpecialization=:specialization ");
+            
+            Query query = getEntityManager().createQuery(sb.toString());
+
+            query.setParameter("lastName", lastName);
+            query.setParameter("firstName", firstName);
+            if (fatherName.length() > 1)
+                query.setParameter("fatherName", fatherName);
+            if (motherName.length() > 1)
+                query.setParameter("motherName", motherName);
+            if (specialization != null)
+                query.setParameter("specialization", specialization);
+            
+            List<Employee> duplicateEmployees = query.getResultList();
+
+            Collection<EmployeeReportItem> result = new ArrayList<EmployeeReportItem>(duplicateEmployees.size());
+            for (Employee e : duplicateEmployees) {
+                result.add(new EmployeeReportItem(e));
+            }
+            this.duplicateEmployeeList = result;
+        } 
+        else {
+            if (duplicateEmployeeList != null)
+                duplicateEmployeeList.clear();
+        }
+    }
+	
+    
+    
+	@Transactional(TransactionPropagationType.REQUIRED)
+    public String addNewEmployeeFromOtherPYSDE() {
+        /*
+         * we will quickly create an employee to be used for secondment
+         */
+        if(!employeeHome.isManaged() && !employmentHome.isManaged() && !regularEmployeeInfoHome.isManaged()) {
+            SchoolYear currentYear = getCoreSearching().getActiveSchoolYear(getEntityManager());
+            Employee new_employee = employeeHome.getInstance();
+            new_employee.setType(EmployeeType.REGULAR);
+            new_employee.setActive(Boolean.TRUE);
+            new_employee.setComment(String.format("Εισαγωγή εκπαιδευτικού απο άλλο ΠΥΣΔΕ '%s' κατά την σχολική χρονία '%s'.", new_employee.getCurrentPYSDE().getTitle(), currentYear));
+            employeeHome.persist();
+            
+            Employment newEmployment = employmentHome.getInstance();
+            
+            newEmployment.setActive(Boolean.TRUE);
+            newEmployment.setEmployee(new_employee);
+            newEmployment.setEstablished(new Date());
+            newEmployment.setFinalWorkingHours(21);
+            newEmployment.setMandatoryWorkingHours(21);
+            newEmployment.setSchoolYear(currentYear);
+            newEmployment.setSchool(getEntityManager().find(School.class, getCoreSearching().getLocalPYSDE(getEntityManager()).getRepresentedByUnit().getId()));
+            newEmployment.setSpecialization(new_employee.getLastSpecialization());
+            newEmployment.setType(EmploymentType.REGULAR);
+            newEmployment.setEmployee(new_employee);
+            new_employee.setCurrentEmployment(newEmployment);
+            employmentHome.persist();
+            
+            RegularEmployeeInfo empInfo = regularEmployeeInfoHome.getInstance();
+            new_employee.setRegularDetail(empInfo);
+            empInfo.setEmployee(new_employee);
+                
+            
+            regularEmployeeInfoHome.persist();
+            
+            facesMessages.add(Severity.INFO, String.format("Η καταχώρηση του εκπαιδευτικού '%s %s του %s απο το ΠΥΣΔΕ '%s' έγινε επιτυχώς' ",new_employee.getLastName(), new_employee.getFirstName(), new_employee.getFatherName(), new_employee.getCurrentPYSDE().getTitle()));
+            return ACTION_OUTCOME_SUCCESS;
+            
+        } else {
+            facesMessages.add(Severity.ERROR, "Employee #0 is managed!",employeeHome);
+            return ACTION_OUTCOME_FAILURE;
+        }
+    }
 	
 	@Transactional(TransactionPropagationType.REQUIRED)
     public String removeEmployeeSpecialAssigment() {
@@ -783,6 +911,50 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
      */
     public void setInputTextFieldHelper6(String inputTextFieldHelper6) {
         this.inputTextFieldHelper6 = inputTextFieldHelper6;
+    }
+
+    
+
+    /**
+     * @return the duplicateEmployeeList
+     */
+    public Collection<EmployeeReportItem> getDuplicateEmployeeList() {
+        return duplicateEmployeeList;
+    }
+
+    /**
+     * @param duplicateEmployeeList the duplicateEmployeeList to set
+     */
+    public void setDuplicateEmployeeList(Collection<EmployeeReportItem> duplicateEmployeeList) {
+        this.duplicateEmployeeList = duplicateEmployeeList;
+    }
+
+    /**
+     * @return the actionVariation
+     */
+    public String getActionVariation() {
+        return actionVariation;
+    }
+
+    /**
+     * @param actionVariation the actionVariation to set
+     */
+    public void setActionVariation(String actionVariation) {
+        this.actionVariation = actionVariation;
+    }
+
+    /**
+     * @return the employmentHome
+     */
+    public EmploymentHome getEmploymentHome() {
+        return employmentHome;
+    }
+
+    /**
+     * @param employmentHome the employmentHome to set
+     */
+    public void setEmploymentHome(EmploymentHome employmentHome) {
+        this.employmentHome = employmentHome;
     }
 
 }
