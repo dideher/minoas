@@ -815,9 +815,15 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
             
             
             try {
+                InputStream leaveTemplateInputStream = this.getClass().getResourceAsStream(String.format("/reports/leavePrintout_%s.jasper", leave.getEmployeeLeaveType().getLegacyCode()));;
                 
-                InputStream leaveTemplateInputStream = this.getClass().getResourceAsStream(String.format("/reports/leavePrintout_%s.jasper", leave.getEmployeeLeaveType().getLegacyCode()));
-                
+                if(leaveTemplateInputStream==null) {
+                    
+                    facesMessages
+                    .add(Severity.ERROR, String.format("Δεν υπάρχει διαθέσιμη φόρμα εκτύπωσης για την άδεια τύπου '(%s) %s'. Παρακαλώ, επικοινωνήστε με τους διαχειριστές του συστήματος.",  leave.getEmployeeLeaveType().getLegacyCode(), leave.getEmployeeLeaveType().getDescription()));
+                    error(String.format("could not print leave with code '%s' for employee '%s' because there is not jaser report available.", leave.getEmployeeLeaveType().getLegacyCode(), employee));
+                    return ACTION_OUTCOME_FAILURE;
+                }
                 Map<String, Object> parameters = prepareParametersForLeavePrintout();
                 /* add special parameters for the printout */
                 parameters.putAll(prepareSpecialParametersForLeavePrintout());
@@ -838,7 +844,10 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
                 servletOutputStream.close();
                 CoreUtils.getFacesContext().responseComplete();
             } catch (Exception ex) {
-                ex.printStackTrace(System.out);
+                facesMessages
+                .add(Severity.ERROR, String.format("Η εκτυπώση δεν πραγματοποιήθηκε λόγω σφάλματος '%s'", ex.getMessage()));
+                error("unhandled exception while printing leave", ex);
+                return ACTION_OUTCOME_FAILURE;
             }
 
             info("leave #0 for employee #1 has been printed !", leave, employee);
