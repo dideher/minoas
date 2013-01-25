@@ -27,6 +27,8 @@ public class EmployeeWorkExperienceItem extends BaseIDReportItem {
 	
 	protected Integer calendarDays;
 	
+	protected Integer actualDays;
+	
 	public EmployeeWorkExperienceItem(WorkExperience workExperience) {
 		super(workExperience);
 		if (workExperience.getEmployee() != null)
@@ -35,6 +37,7 @@ public class EmployeeWorkExperienceItem extends BaseIDReportItem {
 		dueTo = workExperience.getToDate();
 		comment = workExperience.getComment();
 		calendarDays = workExperience.getCalendarExperienceDays();
+		actualDays = workExperience.getActualDays();
 		if (workExperience.getType() != null) {
 			typeId = workExperience.getType().getId();
 			typeTitle = workExperience.getType().getTitle();
@@ -144,5 +147,19 @@ public class EmployeeWorkExperienceItem extends BaseIDReportItem {
     public void setCalendarDays(Integer calendarDays) {
         this.calendarDays = calendarDays;
     }
+
+	/**
+	 * @return the actualDays
+	 */
+	public Integer getActualDays() {
+		return actualDays;
+	}
+
+	/**
+	 * @param actualDays the actualDays to set
+	 */
+	public void setActualDays(Integer actualDays) {
+		this.actualDays = actualDays;
+	}
 
 }
