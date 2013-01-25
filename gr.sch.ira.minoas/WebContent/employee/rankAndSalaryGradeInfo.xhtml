@@ -1,0 +1,130 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:a4j="http://richfaces.org/a4j">
+
+	<ui:component>
+
+		<h:panelGrid columns="6">
+			<h:outputLabel styleClass="fieldValueLabel"
+				value="ΦΕΚ Διορισμού: " />
+			<h:outputText styleClass="fieldValueText"
+				value="#{employee.employeeInfo.gogAppointmentNo} - #{employee.employeeInfo.getGogAppointmentDateString()}" />
+			<h:outputLabel styleClass="fieldValueLabel"
+				value="(Πράξη)-Ανάληψη Υπηρεσίας: " />
+			<h:outputFormat styleClass="fieldValueText" value="(#{employee.employeeInfo.entryIntoServiceAct})-{0, date, dd/MM/yyyy}">
+			    <f:param value="#{employee.employeeInfo.entryIntoServiceDate}" />
+			</h:outputFormat>
+			<h:outputLabel styleClass="fieldValueLabel"
+				value="(Πράξη)-Ημερομηνία Μονιμοποίησης: " />
+			<h:outputFormat styleClass="fieldValueText" value="(#{employee.employeeInfo.permanentEmployeeAct})-{0, date, dd/MM/yyyy}">
+			    <f:param value="#{employee.employeeInfo.permanentEmployeeActDate}" />
+			</h:outputFormat>
+	
+	
+			<h:outputLabel styleClass="fieldValueLabel" 
+				value="Μεταπυχιακό (MSc): " />
+			<h:panelGroup> 
+				<h:selectBooleanCheckbox disabled="true"
+					value="#{employee.employeeInfo.hasAMasterDegree}" />
+	
+				<h:outputFormat styleClass="fieldValueLabelLeft" value=" (Ημ/νία: {0, date, dd/MM/yyyy})"
+					id="MScDateOutputLabel" onmouseover="#{rich:component('MScDateTooltip')}.show(event);">
+				    <f:param value="#{employee.employeeInfo.mscDate}" />
+				</h:outputFormat>
+				<rich:toolTip  id="MScDateTooltip" value="Ημερομηνίες πριν την 1-11-2011 αναφέρονται στην ημερομηνία κατάθεσης του σχετικού τίτλου από την οποία λάμβανε και το σχετικό επίδομα, ενώ ημ/νίες μετά την 1-11-2011 αναφέρονται στην ημερομηνία πράξης του ΠΥΣΔΕ από την οποία ενσωματώνεται στο βαθμό ο χρόνος που αναλογεί." for="MScDateOutputLabel"/>
+			</h:panelGroup>
+			
+		
+	
+	
+			<h:outputLabel styleClass="fieldValueLabel"
+				value="Ανώτ.Σχολ.Δημ.Διοίκ.: " />
+			<h:panelGroup> 
+				<h:selectBooleanCheckbox disabled="true"
+					value="#{employee.employeeInfo.isANatSchPubAdminGraduate}" />
+	
+				<h:outputFormat styleClass="fieldValueLabelLeft" value=" (Ημ/νία: {0, date, dd/MM/yyyy})"
+					id="natSchPubAdminDateOutputLabel" onmouseover="#{rich:component('natSchPubAdminDateTooltip')}.show(event);">
+				    <f:param value="#{employee.employeeInfo.natSchPubAdminDate}" />
+				</h:outputFormat>
+				<rich:toolTip  id="natSchPubAdminDateTooltip" value="Ημερομηνίες πριν την 1-11-2011 αναφέρονται στην ημερομηνία κατάθεσης του σχετικού τίτλου από την οποία λάμβανε και το σχετικό επίδομα, ενώ ημ/νίες μετά την 1-11-2011 αναφέρονται στην ημερομηνία πράξης του ΠΥΣΔΕ από την οποία ενσωματώνεται στο βαθμό ο χρόνος που αναλογεί." for="natSchPubAdminDateOutputLabel"/>
+			</h:panelGroup>
+			
+		
+			
+	
+			<h:outputLabel styleClass="fieldValueLabel"
+				value="Διδακτορικό (PhD): " />
+			<h:panelGroup> 
+				<h:selectBooleanCheckbox disabled="true"
+					value="#{employee.employeeInfo.hasAPhD}" />
+	
+				<h:outputFormat styleClass="fieldValueLabelLeft" value=" (Ημ/νία: {0, date, dd/MM/yyyy})"
+					id="PhDDateOutputLabel" onmouseover="#{rich:component('PhDDateTooltip')}.show(event);">
+				    <f:param value="#{employee.employeeInfo.phdDate}" />
+				</h:outputFormat>
+				<rich:toolTip  id="PhDDateTooltip" value="Ημερομηνίες πριν την 1-11-2011 αναφέρονται στην ημερομηνία κατάθεσης του σχετικού τίτλου από την οποία λάμβανε και το σχετικό επίδομα, ενώ ημ/νίες μετά την 1-11-2011 αναφέρονται στην ημερομηνία πράξης του ΠΥΣΔΕ από την οποία ενσωματώνεται στο βαθμό ο χρόνος που αναλογεί." for="PhDDateOutputLabel"/>
+			</h:panelGroup>
+			
+			
+			
+	
+			<h:outputLabel styleClass="fieldValueLabel" value="Βαθμός: " />
+			<h:outputText styleClass="fieldValueText"
+				value="#{messages[employee.employeeInfo.currentRankInfo.rank.key]}" />
+			<h:outputLabel styleClass="fieldValueLabel"
+				value="Ημ/νία Απόδοσης Βαθμού: " />
+			<h:outputText styleClass="fieldValueText"
+				value="#{employee.employeeInfo.currentRankInfo.lastRankDate}">
+				<s:convertDateTime type="date" pattern="dd-MM-yyyy" />
+			</h:outputText>
+			<h:outputFormat styleClass="fieldValueLabel" value="Πλεονάζ. Χρόνος στο βαθμό την {0, date, dd/MM/yyyy}: ">
+			    <f:param value="#{employee.employeeInfo.currentRankInfo.lastRankDate}" />
+			</h:outputFormat>
+			<h:outputText styleClass="fieldValueText"
+				value="#{employee.employeeInfo.currentRankInfo.surplusTimeInRankYear_Month_Day} (#{employee.employeeInfo.currentRankInfo.surplusTimeInRank} ημ.)" />
+	
+	
+			<h:outputLabel value="" />
+			<h:outputLabel value="" />
+			<h:outputLabel value="" />
+			<h:outputLabel value="" />
+			<h:outputLabel styleClass="fieldValueLabel" value="Πλεονάζ. Χρόνος στο βαθμό σήμερα: "/>
+			<h:outputText styleClass="fieldValueText"
+				value="#{employee.employeeInfo.currentRankInfo.surplusTimeInRankUntilTodayYear_Month_Day} (#{employee.employeeInfo.currentRankInfo.surplusTimeInRankUntilToday} ημ.)" />
+	
+	
+	
+			<h:outputLabel styleClass="fieldValueLabel" value="Μισθ. Κλιμάκιο: " />
+			<h:outputText styleClass="fieldValueText"
+				value="#{employee.employeeInfo.currentRankInfo.salaryGrade}" />
+			<h:outputLabel styleClass="fieldValueLabel"
+				value="Ημ/νία Απόδοσης Μ.Κ. " />
+			<h:outputText styleClass="fieldValueText"
+				value="#{employee.employeeInfo.currentRankInfo.lastSalaryGradeDate}">
+				<s:convertDateTime type="date" pattern="dd-MM-yyyy" />
+			</h:outputText>
+			<h:outputFormat styleClass="fieldValueLabel" value="Πλεονάζ. Χρόνος στο Μ.Κ. την {0, date, dd/MM/yyyy}: ">
+			    <f:param value="#{employee.employeeInfo.currentRankInfo.lastSalaryGradeDate}" />
+			</h:outputFormat>
+			<h:outputText styleClass="fieldValueText"
+				value="#{employee.employeeInfo.currentRankInfo.surplusTimeInSalaryGradeYear_Month_Day} (#{employee.employeeInfo.currentRankInfo.surplusTimeInSalaryGrade} ημ.)" />
+	
+	
+			<h:outputLabel value="" />
+			<h:outputLabel value="" />
+			<h:outputLabel value="" />
+			<h:outputLabel value="" />
+			<h:outputLabel styleClass="fieldValueLabel" value="Πλεονάζ. Χρόνος στο Μ.Κ. σήμερα: "/>
+			<h:outputText styleClass="fieldValueText"
+				value="#{employee.employeeInfo.currentRankInfo.surplusTimeInSalaryGradeUntilTodayYear_Month_Day} (#{employee.employeeInfo.currentRankInfo.surplusTimeInSalaryGradeUntilToday} ημ.)" />
+	
+		</h:panelGrid>
+	
+	</ui:component>
+
+</html>
