@@ -612,7 +612,12 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
         return buf.toString();
     }
     
-    
+    protected String normalizeStringForXML(String value) {
+        String returnValue = value.replace("&", "&amp;"); 
+        returnValue = returnValue.replace("<", "&lt;");
+        returnValue = returnValue.replace(">", "&gt;");
+        return returnValue;
+    }
 
     protected Map<String, Object> prepareParametersForLeavePrintout() throws NoSuchAlgorithmException, UnsupportedEncodingException {
 
@@ -628,19 +633,19 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
                 } else 
                     parameters.put("employeeForInformationTelephone", "");
                 parameters.put("leaveRequestDate", leavePrintoutRequestDate);
-                parameters.put("employeeName", employee.getFirstName());
-                parameters.put("employeeSurname", employee.getLastName());
-                parameters.put("employeeSpecialization", employee.getLastSpecialization().getTitle());
-                parameters.put("employeeSpecializationCode", employee.getLastSpecialization().getId());
+                parameters.put("employeeName", normalizeStringForXML(employee.getFirstName()));
+                parameters.put("employeeSurname", normalizeStringForXML(employee.getLastName()));
+                parameters.put("employeeSpecialization", normalizeStringForXML(employee.getLastSpecialization().getTitle()));
+                parameters.put("employeeSpecializationCode", normalizeStringForXML(employee.getLastSpecialization().getId()));
                 parameters.put("employeeRegularSchool", this.employeeRegularPositionForLeavePrintout);
                 parameters.put("leaveDueToDate", leave.getDueTo());
                 parameters.put("leaveEstablishedDate", leave.getEstablished());
                 parameters.put("leaveDayDuration", leave.getEffectiveNumberOfDays());
-                parameters.put("employeeFatherName", employee.getFatherName());
-                parameters.put("referenceNumber", leavePrintoutReferenceNumber);
+                parameters.put("employeeFatherName", normalizeStringForXML(employee.getFatherName()));
+                parameters.put("referenceNumber", normalizeStringForXML(leavePrintoutReferenceNumber));
                 parameters.put("printDate", leavePrintoutDate);
-                parameters.put("signatureTitle", leavePrintoutSignature.getSignatureTitle());
-                parameters.put("signatureName", leavePrintoutSignature.getSignatureName());
+                parameters.put("signatureTitle", normalizeStringForXML(leavePrintoutSignature.getSignatureTitle()));
+                parameters.put("signatureName", normalizeStringForXML(leavePrintoutSignature.getSignatureName()));
                 
                /* compute a SHA-1 digest */
                 MessageDigest digest = MessageDigest.getInstance("SHA");
@@ -730,6 +735,16 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
                 } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("55")) {
                     parameters.put("externalDecisionNumber", printHelper.getFieldText1());
                 }
+                
+                /* gh-115 */
+                /* check all parameters and if the value is of type string, ensure it is in CDATA */
+               for(String key : parameters.keySet()) {
+                   Object value = parameters.get(key);
+                   if(value instanceof String) {
+                       parameters.put(key, normalizeStringForXML((String)value));
+                   }
+               }
+               /* gh-115 */
                        
             return parameters;
         } else {
