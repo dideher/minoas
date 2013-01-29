@@ -734,7 +734,9 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
                     parameters.put("dateField1", printHelper.getFieldDate1());
                 } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("55")) {
                     parameters.put("externalDecisionNumber", printHelper.getFieldText1());
-                }
+                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("61")) {
+		            parameters.put("externalDecisionNumber", printHelper.getFieldText1());
+		        }
                 
                 /* gh-115 */
                 /* check all parameters and if the value is of type string, ensure it is in CDATA */

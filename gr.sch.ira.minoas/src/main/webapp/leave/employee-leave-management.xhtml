@@ -93,9 +93,9 @@
 									<rich:column
 										styleClass="#{employeeLeavesManagement.getTableCellClassForLeave(_leave)}">
 										<f:facet name="header">
-											<h:outputText value="Σχολίο Οργανικής">
+											<h:outputText value="Σχολείο Οργανικής">
 												<rich:toolTip
-													value="Εμφανίζεται το Σχολίο της Οργανικής του Εκπαιδευτικού κατά την καταχώρηση της Άδειας." />
+													value="Εμφανίζεται το Σχολείο της Οργανικής του Εκπαιδευτικού κατά την καταχώρηση της Άδειας." />
 											</h:outputText>
 										</f:facet>
 										<h:outputText value="#{_leave.regularSchool.title}" />
@@ -106,7 +106,7 @@
 										<f:facet name="header">
 											<h:outputText value="Υπ.Κενά">
 												<rich:toolTip
-													value="Αν είναι ενεργοποιημένο, τότε η άδεια συμπεριλαμβάνετε στους υπολογισμούς που έχουν κάνουν με κένα." />
+													value="Αν είναι ενεργοποιημένο, τότε η άδεια συμπεριλαμβάνεται στους υπολογισμούς που έχουν να κάνουν με κενά." />
 											</h:outputText>
 										</f:facet>
 										<h:selectBooleanCheckbox value="#{_leave.generatesCDRs}"
@@ -189,7 +189,7 @@
 									<h:outputText styleClass="fieldValueText"
 										value="#{regularEmployeeLeavesOfCurrentYear} ημέρες Κανονικής Άδειας φέτος" />
 									<h:outputText styleClass="fieldValueText"
-										value="#{regularEmployeeLeavesOfPreviousYear} ημέρες Κανονικής Άδειας πέρσυ." />
+										value="#{regularEmployeeLeavesOfPreviousYear} ημέρες Κανονικής Άδειας πέρυσι." />
 									<h:outputText styleClass="fieldValueText"
 										value="#{medicalEmployeeLeavesOfCurrentYear} ημέρες Αναρρωτικής Άδειας φέτος" />
 									<h:outputText styleClass="fieldValueText"
@@ -285,7 +285,7 @@
 
 						<h:panelGroup>
 							<s:div>
-								<h:outputText value="Να διαγραφή η άδεια τύπου " />
+								<h:outputText value="Να διαγραφεί η άδεια τύπου " />
 								<h:outputText
 									value="#{employeeLeaveHome.instance.employeeLeaveType.description}"
 									styleClass="fieldValueText" />
@@ -341,7 +341,7 @@
 
 		<rich:modalPanel id="updateModalPanel" autosized="true">
 			<f:facet name="header">
-				<h:outputText value="Τροποποίηση Άδειας Εκπαιδεύτικου"
+				<h:outputText value="Τροποποίηση Άδειας Εκπαιδευτικού"
 					style="padding-right:15px;" />
 			</f:facet>
 			<f:facet name="controls">
@@ -360,7 +360,7 @@
 
 							<ui:include src="/components/messages-component.xhtml" />
 							<h:outputText
-								value="Με την παρακάτω φόρμα, μπορείται να τροποποίησεται την άδεια του/της εκπαιδευτικού " />
+								value="Με την παρακάτω φόρμα, μπορείτε να τροποποίησετε την άδεια του/της εκπαιδευτικού " />
 							<h:outputText styleClass="fieldValueText"
 								value="#{employeeUtil.prettyFormat(employeeHome.instance)}" />
 
@@ -589,7 +589,7 @@
 							<ui:include src="/components/messages-component.xhtml" />
 
 							<h:outputText
-								value="Συμπληρώστε τα στοιχεία της παρακάτω φόρμας για να εισάγεται νέα άδεια για τον εκπαιδευτικό " />
+								value="Συμπληρώστε τα στοιχεία της παρακάτω φόρμας για να εισάγετε νέα άδεια για τον εκπαιδευτικό " />
 							<h:outputText styleClass="fieldValueText"
 								value="#{employeeUtil.prettyFormat(employeeHome.instance)}" />
 							<h:panelGrid columns="5" cellpadding="2">
@@ -875,7 +875,7 @@
 
 									<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 										<ui:define name="label">
-											<h:outputText value="Υπογραφή Απο  : " />
+											<h:outputText value="Υπογραφή από  : " />
 										</ui:define>
 
 										<h:selectOneMenu
@@ -1084,7 +1084,7 @@
 									
 									<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 										<ui:define name="label">
-											<h:outputText value="Θέση που Υπηρετή. : " />
+											<h:outputText value="Θέση που Υπηρετεί : " />
 										</ui:define>
 										<h:inputTextarea value="#{employeeLeavesManagement.employeeRegularPositionForLeavePrintout}" cols="20"
 										styleClass="fieldValueText" required="true" readonly="false" rows="3" immediate="true" />
@@ -1100,7 +1100,7 @@
 								
 									<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 										<ui:define name="label">
-											<h:outputText value="Κοινοποίηση. : " />
+											<h:outputText value="Κοινοποίηση : " />
 										</ui:define>
 										<h:selectManyCheckbox
 											value="#{employeeLeavesManagement.leavePrintounRecipientList}"
@@ -1116,7 +1116,7 @@
 
 									<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 										<ui:define name="label">
-											<h:outputText value="Υπογραφή Απο  : " />
+											<h:outputText value="Υπογραφή από  : " />
 										</ui:define>
 
 										<h:selectOneMenu
@@ -1191,6 +1191,10 @@
 									<ui:include src="/leave/print-forms/leave_50.xhtml" />
 								</h:panelGroup>
 								<h:panelGroup
+									rendered="${employeeLeaveHome.instance.employeeLeaveType.legacyCode eq 52}">
+									<ui:include src="/leave/print-forms/leave_52.xhtml" />
+								</h:panelGroup>
+								<h:panelGroup
 									rendered="${employeeLeaveHome.instance.employeeLeaveType.legacyCode eq 53}">
 									<ui:include src="/leave/print-forms/leave_53.xhtml" />
 								</h:panelGroup>
@@ -1199,8 +1203,8 @@
 									<ui:include src="/leave/print-forms/leave_55.xhtml" />
 								</h:panelGroup>
 								<h:panelGroup
-									rendered="${employeeLeaveHome.instance.employeeLeaveType.legacyCode eq 52}">
-									<ui:include src="/leave/print-forms/leave_52.xhtml" />
+									rendered="${employeeLeaveHome.instance.employeeLeaveType.legacyCode eq 61}">
+									<ui:include src="/leave/print-forms/leave_61.xhtml" />
 								</h:panelGroup>
 							</h:panelGrid>
 						

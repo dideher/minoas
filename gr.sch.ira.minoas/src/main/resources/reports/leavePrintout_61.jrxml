@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="leavePrintout" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="20" bottomMargin="20" whenResourceMissingType="Key">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="220"/>
 	<style name="normalText" fontName="DejaVu Serif" fontSize="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
 	<style name="boldText" fontName="DejaVu Serif" fontSize="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
 	<style name="headlineText" fontName="DejaVu Serif" fontSize="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
@@ -141,7 +141,7 @@
 				<textElement>
 					<font isUnderline="true"/>
 				</textElement>
-				<text><![CDATA[ΘΕΜΑ : Χορήγηση ειδικής άδειας για την άσκηση εκλογικού δικαιώματος]]></text>
+				<text><![CDATA[ΘΕΜΑ : Χορήγηση ειδικής άδειας με αποδοχές]]></text>
 			</staticText>
 			<staticText>
 				<reportElement style="normalText" x="0" y="273" width="199" height="20"/>
@@ -149,12 +149,12 @@
 				<text><![CDATA[Έχοντας υπόψη :]]></text>
 			</staticText>
 			<textField>
-				<reportElement style="normalText" x="0" y="298" width="515" height="145"/>
+				<reportElement style="normalText" x="30" y="325" width="460" height="145"/>
 				<textElement textAlignment="Justified" markup="styled"/>
-				<textFieldExpression><![CDATA["1. Τις διατάξεις των άρθρων 1, 18 του Ν.3801/2009 (ΦΕΚ 163/4.9.2009)<br/><br/>"+
-"2. Την εγκύκλιο 13/14461/11.1.2012 του ΥΠ.ΕΣ.ΓΕΝ.Δ/ΝΣΗ ΑΝΑΠΤ. ΠΡΟΓΡ. Τμήμα Εκλογών<br/><br/>"+
-"3. Την αριθμ.Φ353.1/324/105675/∆1/ΦΕΚ 1340 τ.B /16-10-2002 Υπουργική απόφαση (καθήκοντα και αρμοδιότητες Περ/κών ∆/ντών Εκπ/σης και των Προΐσταμένων Τμημάτων των ∆/νσεων αυτών)<br/><br/>"+
-"4. Την απο <b>"+$V{DATE_FORMATTER}.format($P{leaveRequestDate})+"</b> αίτηση του/της <b>"+$P{employeeSurname}+" "+$P{employeeName}+"</b> του "+$P{employeeFatherName}+" εκπαιδευτικού λειτουργού κλάδου <b>"+$P{employeeSpecializationCode}+"</b>.<br/><br/>"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["1. Τις διατάξεις των άρθρων 2, 50 παρ. 2, 3 του Ν.3528/2007 (ΦΕΚ 26/9.2.2007)<br/><br/>"+
+"2. Την εγκύκλιο 74275/Δ2/10.07.2007 του ΥΠΕΠΘ<br/><br/>"+
+"3. Την αριθμ.Φ353.1/324/105675/Δ1/ΦΕΚ 1340 τ.B /16-10-2002 Υπουργική απόφαση (καθήκοντα και αρμοδιότητες Περ/κών Δ/ντών Εκπ/σης και των Προΐσταμένων Τμημάτων των Δ/νσεων αυτών)<br/><br/>"+
+"4. Την αριθμ. <b>"+$P{externalDecisionNumber}+"</b> γνωμάτευση της Α/θμιας Υγειον. Επιτροπής Ν. Ηρακλείου .<br/><br/>"]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement style="boldText" x="138" y="450" width="279" height="20"/>
@@ -171,11 +171,8 @@
 				<textFieldExpression><![CDATA["Χορηγούμε στον/στην "
 +"<b>"+$P{employeeSurname}+" "+$P{employeeName}+"</b> του <b>"+$P{employeeFatherName}+"</b>,"+
 " εκπαιδευτικό κλάδου "+$P{employeeSpecializationCode}+" - "+$P{employeeSpecialization}+
-" του "+$P{employeeRegularSchool}+", άδεια ασκήσεως εκλογικού δικαιώματος <b>"+$P{leaveDayDuration}+"</b> ημερών με τις δικαιούμενες αποδοχές, από <b>"+$V{DATE_FORMATTER}.format($P{leaveEstablishedDate})+" </b> έως και <b>"+$V{DATE_FORMATTER}.format($P{leaveDueToDate})+"</b>"+
-".<br/><br/><br/>"+
-"Ο/η παραπάνω εκπ/κός οφείλει, με την επιστροφή του, να προσκομίσει στην "+
-"υπηρεσία μας βεβαίωση που θα αποδεικύει την άσκηση του εκλογικού του "+
-"δικαιώματος."]]></textFieldExpression>
+" του "+$P{employeeRegularSchool}+", <b>"+$P{leaveDayDuration}+"</b> ημέρες ειδική άδεια με τις δικαιούμενες αποδοχές από <b>"+$V{DATE_FORMATTER}.format($P{leaveEstablishedDate})+" </b> έως και <b>"+$V{DATE_FORMATTER}.format($P{leaveDueToDate})+"</b>"+
+".<br/><br/><br/>"]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement style="normalText" x="4" y="109" width="179" height="35"/>
