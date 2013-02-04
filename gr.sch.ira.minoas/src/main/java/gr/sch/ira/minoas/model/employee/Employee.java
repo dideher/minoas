@@ -139,6 +139,28 @@ public class Employee extends Person {
 	private Date serviceLastUpdated = null;
 
 	/**
+     * The date at which the employee has been terminated
+     */
+	@Basic(fetch=FetchType.LAZY)
+    @Column(name="TERMINATION_DATE", nullable=true)
+    @Temporal(TemporalType.TIMESTAMP)
+	private Date terminationDate = null;
+	
+	
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="TERMINATION_TYPE_ID", nullable=true)
+    private EmployeeTerminationReason terminationReason = null;
+	
+	
+	/**
+     * An optional comment giving more information about the reason 
+     * an employee's termination
+     */
+    @Basic(fetch=FetchType.LAZY)
+    @Column(name="TERMINATION_COMMENT", nullable=true, length=250)
+    private String terminationOptionalComment;
+	
+	/**
 	 * 
 	 */
 	public Employee() {
@@ -516,6 +538,48 @@ public class Employee extends Person {
      */
     public void setServiceLastUpdated(Date serviceLastUpdated) {
         this.serviceLastUpdated = serviceLastUpdated;
+    }
+
+    /**
+     * @return the terminationDate
+     */
+    public Date getTerminationDate() {
+        return terminationDate;
+    }
+
+    /**
+     * @param terminationDate the terminationDate to set
+     */
+    public void setTerminationDate(Date terminationDate) {
+        this.terminationDate = terminationDate;
+    }
+
+    /**
+     * @return the terminationReason
+     */
+    public EmployeeTerminationReason getTerminationReason() {
+        return terminationReason;
+    }
+
+    /**
+     * @param terminationReason the terminationReason to set
+     */
+    public void setTerminationReason(EmployeeTerminationReason terminationReason) {
+        this.terminationReason = terminationReason;
+    }
+
+    /**
+     * @return the terminationOptionalComment
+     */
+    public String getTerminationOptionalComment() {
+        return terminationOptionalComment;
+    }
+
+    /**
+     * @param terminationOptionalComment the terminationOptionalComment to set
+     */
+    public void setTerminationOptionalComment(String terminationOptionalComment) {
+        this.terminationOptionalComment = terminationOptionalComment;
     }
 	
 

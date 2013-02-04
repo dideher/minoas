@@ -91,10 +91,11 @@ public class SecurityStartup extends BaseDatabaseAwareSeamComponent {
 		createRole("ADD_EMPLOYEE_HOURLY_BASED", "Add New Hourly Based Employee", admin);
 		createRole("ADD_EMPLOYEE_DEPUTY", "Add New Deputy Employee", admin);
 		createRole("ADD_EMPLOYEE_REGULAR", "Add New Regular Employee", admin);
-        
+		
 		/* Employee Management */
 		createRole("MANAGE_EMPLOYEE", "Manage Employee", admin);
-        
+		createRole("MANAGE_EMPLOYEE_TERMINATE", "Terminate Employee", admin);
+		
         createRole("MANAGE_EMPLOYEE_BASIC_INFO", "Manage Employee's Basic Info", admin);
         createRole("MANAGE_EMPLOYEE_SPECIALIZATION", "Manage Employee's Specialization", admin);
         createRole("MANAGE_EMPLOYEE_REGULAR_REGISTRY", "Manage Employee's Regular Registry ID", admin);

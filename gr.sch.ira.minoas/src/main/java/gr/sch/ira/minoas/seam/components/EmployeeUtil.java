@@ -3,6 +3,9 @@
  */
 package gr.sch.ira.minoas.seam.components;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
 import gr.sch.ira.minoas.model.employee.Person;
@@ -69,6 +72,25 @@ public class EmployeeUtil extends BaseSeamComponent {
 			return sb.toString();
 		} else
 			return null;
+	}
+	
+	public String prettyFormatTerminationReason(Employee employee) {
+	    if (employee != null) {
+	        return employee.getTerminationReason() != null ? employee.getTerminationReason().getDescription() : "άγνωστος λόγος";
+	    } else return null;
+	}
+	
+	public String prettyFormatTerminationDate(Employee employee) {
+	    if (employee != null) {
+	        DateFormat df = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT);
+	        return employee.getTerminationDate() != null ? df.format(employee.getTerminationDate()) : "άγνωστη ημ/νια";
+        } else return null;
+	}
+	
+	public String prettyFormatTerminationComment(Employee employee) {
+	    if (employee != null) {
+            return employee.getTerminationOptionalComment() != null ? employee.getTerminationOptionalComment() : "Χωρίς σχόλιο";
+        } else return null;
 	}
 	
 	public String prettyFormatForRegularEmployee(Employee employee) {

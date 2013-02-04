@@ -9,10 +9,13 @@ import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeExclusion;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
 import gr.sch.ira.minoas.model.employee.RegularEmployeeInfo;
+import gr.sch.ira.minoas.model.employement.Disposal;
 import gr.sch.ira.minoas.model.employement.EducationalLevelType;
 import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
+import gr.sch.ira.minoas.model.employement.Secondment;
+import gr.sch.ira.minoas.model.employement.ServiceAllocation;
 import gr.sch.ira.minoas.model.employement.SpecialAssigment;
 import gr.sch.ira.minoas.model.employement.TeachingHourCDR;
 import gr.sch.ira.minoas.model.employement.TeachingHourCDRType;
@@ -436,6 +439,102 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
         }
     }
     
+    public void prepareForEmployeeTermination() {
+        inputTextFieldHelper1 = null;
+        Employee e = employeeHome.getInstance();
+        if(e!=null && e.getActive() == true) {
+            e.setTerminationDate(new Date(System.currentTimeMillis()));
+        }
+            
+    }
+    
+    
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public String terminateEmployee() {
+        
+        
+        if (getEmployeeHome().isManaged() && getEmployeeHome().getInstance().getActive()) {
+            Employee e = getEmployeeHome().getInstance();
+            if(e.getTerminationDate() == null || e.getTerminationReason() == null) {
+                facesMessages.add(Severity.ERROR, "Πρέπει να συμπληρώσετε την αιτία και την ημ/νια τερματισμού.", getEmployeeHome());
+                
+                return ACTION_OUTCOME_FAILURE;
+            }
+            
+            
+            
+            /* Ok, proceed with the termination */
+            Collection<EmployeeLeave> leaves = getCoreSearching().getEmployeeLeaves2(e);
+            for(EmployeeLeave l : leaves) {
+                if(l.getActive()) {
+                    l.setActive(false);
+                    l.setAutoCanceled(true);
+                }
+            }
+            
+            Collection<SpecialAssigment> sa = getCoreSearching().getEmployeeSpecialAssigments(entityManager, e);
+            for(SpecialAssigment s : sa) {
+                if(s.getActive()) {
+                    s.setActive(false);
+                }
+            }
+            
+            Collection<Secondment> secondments = getCoreSearching().getEmployeeSecondments(e);
+            for(Secondment s : secondments) {
+                if(s.isActive()) {
+                    s.setActive(false);
+                    s.setAutoCanceled(true);
+                }
+            }
+            
+            Collection<Disposal> disposals = getCoreSearching().getEmployeeDisposals(entityManager, e);
+            for(Disposal s : disposals) {
+                if(s.isActive()) {
+                    s.setActive(false);
+                    s.setAutoCanceled(true);
+                }
+            }
+            
+            Collection<ServiceAllocation> serviceAllocations = getCoreSearching().getEmployeeServiceAllocation(entityManager, e);
+            for(ServiceAllocation s : serviceAllocations) {
+                if(s.getActive()) {
+                    s.setActive(false);
+                    s.setAutoCanceled(true);
+                }
+            }
+            
+            Collection<Employment> employments = getCoreSearching().getEmployeeEmployments(e);
+            for(Employment em : employments) {
+                if(em.getActive()) {
+                    em.setActive(false);
+                }
+            }
+            
+            Collection<TeachingHourCDR> cdrs = getCoreSearching().getEmployeeTeachingHoursCDRs(entityManager, getCoreSearching().getActiveSchoolYear(entityManager), e);
+            for(TeachingHourCDR c : cdrs) {
+                entityManager.remove(c);
+            }
+            
+            e.setActive(false);
+            getEmployeeHome().update();
+            
+            constructEmployeeCurrentHoursDistributionReport();
+            constructEmployeeCurrentStatusReport();
+            constructEmployeeLeavesHistory();
+            constructEmployeeWorkExperienceHistory();
+            constructSpecialAssigmentItems();
+            
+            getEntityManager().flush();
+            
+        } else {
+            facesMessages.add(Severity.ERROR, "Employee #0 is not managed or not active", getEmployeeHome());
+            return ACTION_OUTCOME_FAILURE;
+        }
+        
+        return ACTION_OUTCOME_FAILURE;
+    }
+    
+   
     
     public void lalal() {
         
