@@ -369,6 +369,30 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         return result;
     }
     
+    @SuppressWarnings("unchecked")
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public Collection<ServiceAllocation> getEmployeeServiceAllocation(EntityManager em, Person employee) {
+
+        Collection<ServiceAllocation> result = null;
+        result = getEntityManager(em)
+                .createQuery(
+                        "SELECT s FROM ServiceAllocation s WHERE (s.deleted IS FALSE OR s.deleted IS NULL) AND (s.autoCanceled IS FALSE OR s.autoCanceled IS NULL) AND s.employee=:employee ORDER BY s.insertedOn")
+                .setParameter("employee", employee).getResultList();
+        return result;
+    }
+    
+    @SuppressWarnings("unchecked")
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public Collection<Disposal> getEmployeeDisposals(EntityManager em, Person employee) {
+
+        Collection<Disposal> result = null;
+        result = getEntityManager(em)
+                .createQuery(
+                        "SELECT s FROM Disposal s WHERE (s.deleted IS FALSE OR s.deleted IS NULL) AND (s.autoCanceled IS FALSE OR s.autoCanceled IS NULL) AND s.employee=:employee ORDER BY s.insertedOn")
+                .setParameter("employee", employee).getResultList();
+        return result;
+    }
+    
     
 
 //    @Transactional(TransactionPropagationType.REQUIRED)
@@ -647,7 +671,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
                 .setParameter("schoolYear", schoolYear).getResultList();
 
     }
-
+    
     @Factory(value = "employeeTypes")
     public EmployeeType[] getEmployeeTypes() {
         return EmployeeType.values();

@@ -62,6 +62,7 @@
     <class>gr.sch.ira.minoas.model.employee.RankInfo</class>
     <class>gr.sch.ira.minoas.model.employement.SpecialAssigment</class>
     <class>gr.sch.ira.minoas.model.employee.PartTimeEmployment</class>
+    <class>gr.sch.ira.minoas.model.employee.EmployeeTerminationReason</class>
     <properties>
       <!--
         <property name="hibernate.dialect"

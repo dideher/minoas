@@ -7,7 +7,7 @@
 	xmlns:a4j="http://richfaces.org/a4j">
 
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 
 <ui:composition template="/layout/simple-beauty-template.xhtml">
@@ -37,6 +37,19 @@
 					</a4j:outputPanel>
 				</a4j:region>
 			</h:form>
+			
+			<a4j:outputPanel id="inactive-employee-panel">
+				<s:div rendered="#{employeeHome.instance.active eq false}" styleClass="clean-warning">
+					<h:outputFormat value="Ο εκπαιδευτικός είναι ανενεργός. Συγκεκριμένα, έχει απενεργοποιηθεί στις ''{0}'' λόγω ''{1}'' με προαιρετικό σχόλιο ''{2}''.">
+						<f:param value="#{employeeUtil.prettyFormatTerminationDate(employeeHome.instance)}" />
+						<f:param value="#{employeeUtil.prettyFormatTerminationReason(employeeHome.instance)}" />
+						<f:param value="#{employeeUtil.prettyFormatTerminationComment(employeeHome.instance)}" />
+					</h:outputFormat>
+				</s:div>
+			</a4j:outputPanel>
+
+			<a4j:outputPanel id="rootPanel">
+			
 
 			<h:panelGrid columns="1" width="100%">
 
@@ -193,6 +206,7 @@
 												</rich:menuItem>
 
 												<rich:menuSeparator />
+												
 												<rich:menuItem icon="/img/icons/delete.png" immediate="true"
 													disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE'))}"
 													submitMode="ajax" value="Διαγραφή"
@@ -210,8 +224,8 @@
 						</s:div>
 
 					</h:panelGrid>
-					
-					
+
+
 					<!-- this the bottom menu -->
 					<h:form id="manageEmployeeSpecialAssigmentForm">
 						<rich:toolBar itemSeparator="line">
@@ -254,14 +268,15 @@
 									value="#{employeeHome.instance.regularDetail.id}"
 									target="#{regularEmployeeInfoHome.id}" />
 							</a4j:commandLink>
-							
-							
+
+
 							<rich:dropDownMenu value="Διαχείριση Εργαζόμενου">
-								<rich:menuItem submitMode="none" 
-								rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYMENT'))}">
-									<s:link value="Διαχείριση Σχέσης Εργασίας"  propagation="join"
+								<rich:menuItem submitMode="none"
+									rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYMENT'))}">
+									<s:link value="Διαχείριση Σχέσης Εργασίας" propagation="join"
 										view="/employee/manage-employment.xhtml">
-										<f:param name="employment_management_from" value="/employee/employee" />
+										<f:param name="employment_management_from"
+											value="/employee/employee" />
 									</s:link>
 								</rich:menuItem>
 								<rich:menuItem submitMode="none"
@@ -303,6 +318,18 @@
 								</rich:menuItem>
 
 								<rich:menuSeparator />
+
+								<rich:menuItem submitMode="none"
+									rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE_TERMINATE'))}">
+									<a4j:commandLink value="Τερματισμός Υπηρεσίας Εκπαιδευτικού"
+										reRender="terminateEmployeeModalPanelContent" 
+										action="#{employeeManagement.prepareForEmployeeTermination()}"
+										oncomplete="#{rich:component('terminateEmployeeModalPanel')}.show()"
+										onclick="if(!confirm('Να τερματιστεί ο εκπαιδευτικός ? Προσοχή!!!! Η Διαδικασία δεν είναι αναστρέψιμη.')) {form.reset(); return false;}" />
+								</rich:menuItem>
+
+								<rich:menuSeparator />
+
 								<rich:menuItem submitMode="none"
 									rendered="#{(s:hasRole('ADMIN'))}">
 									<h:commandLink value="Διαγραφή Εκπαιδευτικού !!!!"
@@ -312,7 +339,7 @@
 
 
 							</rich:dropDownMenu>
-							
+
 						</rich:toolBar>
 					</h:form>
 
@@ -554,88 +581,87 @@
 									<h:outputText value="Ιστορικό Αποσπάσεων" />
 								</f:facet>
 								<h:form id="employeeSecondmentListForm">
-									
+
 									<h:panelGrid columns="1" width="100%">
-										<h:panelGroup
-											rendered="#{employeeSecondments.size()==0}">
+										<h:panelGroup rendered="#{employeeSecondments.size()==0}">
 											<h:outputText
-											value="Δεν υπάρχουν αποσπάσεις για τον εκπαιδευτικό." />
+												value="Δεν υπάρχουν αποσπάσεις για τον εκπαιδευτικό." />
 										</h:panelGroup>
-										<h:panelGroup rendered="#{employeeSecondments.size() gt 0}">	
-										<h:outputText
-											value="Στον παρακάτω πίνακα εμφανίζεται το ιστορικό των αποσπάσεων του εκπαιδευτικού." />
-										<rich:dataTable id="employeeSecondmentsList"
-											value="#{employeeSecondments}"
-											var="_secondment" rows="15" border="0" 
-											onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
-											onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
-											width="100%">
-											<f:facet name="header">
-												<h:outputLabel value="Ιστορικό Αποσπάσεων Εκπαιδευτικού" />
-											</f:facet>
-											<rich:column>
+										<h:panelGroup rendered="#{employeeSecondments.size() gt 0}">
+											<h:outputText
+												value="Στον παρακάτω πίνακα εμφανίζεται το ιστορικό των αποσπάσεων του εκπαιδευτικού." />
+											<rich:dataTable id="employeeSecondmentsList"
+												value="#{employeeSecondments}" var="_secondment" rows="15"
+												border="0"
+												onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+												onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+												width="100%">
 												<f:facet name="header">
-													<h:outputText value="Σχ. Χρονία" />
+													<h:outputLabel value="Ιστορικό Αποσπάσεων Εκπαιδευτικού" />
 												</f:facet>
-												<h:outputText value="#{_secondment.schoolYear.title}" />
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Αποσπ. Απο" />
-												</f:facet>
-												<h:outputText value="#{_secondment.sourceUnit.title}" />
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Αποσπ. Σε" />
-												</f:facet>
-												<h:outputText value="#{_secondment.targetUnit.title}" />
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Απο" />
-												</f:facet>
-												<h:outputText value="#{_secondment.established}">
-													<s:convertDateTime pattern="dd-MM-yyyy" />
-												</h:outputText>
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Εώς" />
-												</f:facet>
-												<h:outputText value="#{_secondment.dueTo}">
-													<s:convertDateTime pattern="dd-MM-yyyy" />
-												</h:outputText>
-											</rich:column>
+												<rich:column>
+													<f:facet name="header">
+														<h:outputText value="Σχ. Χρονία" />
+													</f:facet>
+													<h:outputText value="#{_secondment.schoolYear.title}" />
+												</rich:column>
+												<rich:column>
+													<f:facet name="header">
+														<h:outputText value="Αποσπ. Απο" />
+													</f:facet>
+													<h:outputText value="#{_secondment.sourceUnit.title}" />
+												</rich:column>
+												<rich:column>
+													<f:facet name="header">
+														<h:outputText value="Αποσπ. Σε" />
+													</f:facet>
+													<h:outputText value="#{_secondment.targetUnit.title}" />
+												</rich:column>
+												<rich:column>
+													<f:facet name="header">
+														<h:outputText value="Απο" />
+													</f:facet>
+													<h:outputText value="#{_secondment.established}">
+														<s:convertDateTime pattern="dd-MM-yyyy" />
+													</h:outputText>
+												</rich:column>
+												<rich:column>
+													<f:facet name="header">
+														<h:outputText value="Εώς" />
+													</f:facet>
+													<h:outputText value="#{_secondment.dueTo}">
+														<s:convertDateTime pattern="dd-MM-yyyy" />
+													</h:outputText>
+												</rich:column>
 
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Με Αίτηση Του" />
-												</f:facet>
-												<h:outputText value="Ναί"
-													rendered="#{_secondment.employeeRequested}" />
-												<h:outputText value="Οχι"
-													rendered="#{!_secondment.employeeRequested}" />
-											</rich:column>
+												<rich:column>
+													<f:facet name="header">
+														<h:outputText value="Με Αίτηση Του" />
+													</f:facet>
+													<h:outputText value="Ναί"
+														rendered="#{_secondment.employeeRequested}" />
+													<h:outputText value="Οχι"
+														rendered="#{!_secondment.employeeRequested}" />
+												</rich:column>
 
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Υποχ. Ωράριο" />
+												<rich:column>
+													<f:facet name="header">
+														<h:outputText value="Υποχ. Ωράριο" />
+													</f:facet>
+													<h:outputText value="#{_secondment.mandatoryWorkingHours}" />
+												</rich:column>
+												<rich:column>
+													<f:facet name="header">
+														<h:outputText value="Πραγ. Ωράριο" />
+													</f:facet>
+													<h:outputText value="#{_secondment.finalWorkingHours}" />
+												</rich:column>
+
+												<f:facet name="footer">
+													<rich:datascroller align="left" maxPages="20"
+														renderIfSinglePage="false" />
 												</f:facet>
-												<h:outputText value="#{_secondment.mandatoryWorkingHours}" />
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Πραγ. Ωράριο" />
-												</f:facet>
-												<h:outputText value="#{_secondment.finalWorkingHours}" />
-											</rich:column>
-											
-											<f:facet name="footer">
-										<rich:datascroller align="left"  
-											maxPages="20" renderIfSinglePage="false"  />
-									</f:facet>
-										</rich:dataTable>
+											</rich:dataTable>
 										</h:panelGroup>
 
 									</h:panelGrid>
@@ -924,15 +950,14 @@
 												<s:convertDateTime pattern="dd-MM-yyyy" />
 											</h:outputText>
 										</rich:column>
-										
+
 										<rich:column>
 											<f:facet name="header">
 												<h:outputText value="Ημέρες Προ." />
 											</f:facet>
-											<h:outputText   
-												value="#{_workExperienceItem.actualDays}" 
+											<h:outputText value="#{_workExperienceItem.actualDays}"
 												converter="#{workExperienceConverter}" />
-											<h:outputText  
+											<h:outputText
 												value=" (#{_workExperienceItem.actualDays} ημ.)" />
 										</rich:column>
 
@@ -946,15 +971,14 @@
 									</rich:dataTable>
 								</h:panelGrid>
 							</rich:tab>
-							
-							
+
+
 							<rich:tab rendered="true">
 								<f:facet name="label">
 									<h:outputText value="Στοιχεία Βαθμού/ΜΚ" />
 								</f:facet>
 
-								<ui:include
-									src="/employee/rankAndSalaryGradeInfo.xhtml">
+								<ui:include src="/employee/rankAndSalaryGradeInfo.xhtml">
 								</ui:include>
 							</rich:tab>
 
@@ -977,7 +1001,11 @@
 
 
 			</h:panelGrid>
+			
+			</a4j:outputPanel>
 		</rich:panel>
+		
+		
 
 		<!-- **************************  -->
 		<!-- UPDATE BASIC EMPLOYEE INFO -->
@@ -1071,7 +1099,7 @@
 								limitToList="true"
 								data="#{facesContext.maximumSeverity.ordinal ge 2}"
 								oncomplete="if(data == false) Richfaces.hideModalPanel('updateBasicInfoModalPanel');"
-								reRender="basicEmployeeInfoPanel, updateBasicInfoModalPanelContent" />
+								reRender="basicEmployeeInfoPanel,updateBasicInfoModalPanelContent" />
 							<a4j:commandButton value="Επιστροφή .."
 								action="#{employeeHome.revert()}"
 								reRender="basicEmployeeInfoPanel,"
@@ -1236,6 +1264,127 @@
 			</a4j:region>
 		</rich:modalPanel>
 
+		<!-- ***********************************  -->
+		<!-- TERMINATE EMPLOYEE					  -->
+		<!-- ***********************************  -->
+
+		<rich:modalPanel id="terminateEmployeeModalPanel" autosized="true"
+			width="400">
+			<f:facet name="header">
+				<h:outputText value="Τερματισμός Υπηρεσίας"
+					style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<h:graphicImage value="/img/modal/close.png" styleClass="hidelink" 
+						width="18" height="18" id="hidelink10">
+						<a4j:support event="onclick" action="#{employeeHome.revert()}" />
+						<rich:componentControl for="terminateEmployeeModalPanel" 
+							attachTo="hidelink10" operation="hide" event="onclick" />
+					</h:graphicImage>
+
+				</h:panelGroup>
+			</f:facet>
+			<a4j:region>
+
+				<h:panelGrid columns="1">
+
+					<h:outputText style="font-style:italic; font-size:12px;"
+						value="Με την παρακάτω φόρμα μπορείται να τερματίσεται την υπηρεσία του εργαζόμενου #{employeeUtil.prettyFormat(employee)}." />
+
+					<a4j:outputPanel id="terminateEmployeeModalPanelContent">
+
+
+						<a4j:form id="terminateEmployeeForm">
+
+							<ui:include src="/components/messages-component.xhtml" />
+
+							<h:panelGrid columns="1" width="100%">
+
+								<h:panelGroup>
+									<h:panelGrid columns="2">
+
+
+
+										<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+											<ui:define name="label">
+												<h:outputText value="Αιτία Τερματισμού Υπηρεσίας" />
+											</ui:define>
+
+
+											<h:inputText id="value" styleClass="fieldValueText" size="30"
+												required="true"
+												value="#{employeeManagement.inputTextFieldHelper1}"
+												immediate="true" />
+
+											<rich:suggestionbox height="100" width="350" for="value"
+												var="a_spec" id="specializationSuggester"
+												suggestionAction="#{employeeTerminationReasonTypeSuggester.suggest}">
+												<f:facet name="nothingLabel">
+													<h:outputText value="Άγνωστος λόγος τερματισμού" />
+												</f:facet>
+												<h:column>
+													<h:outputText value="#{a_spec.description}" />
+												</h:column>
+												<a4j:support ajaxSingle="true" event="onselect">
+													<f:setPropertyActionListener value="#{a_spec}"
+														target="#{employeeHome.instance.terminationReason}" />
+												</a4j:support>
+											</rich:suggestionbox>
+
+
+
+										</s:decorate>
+
+
+										<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+											<ui:define name="label">
+												<h:outputText value="Ημ/νια Τερματισμού : " />
+											</ui:define>
+											<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
+												style="width:50px" enableManualInput="true"
+												styleClass="fieldValueText" required="true" immediate="true"
+												value="#{employeeHome.instance.terminationDate}">
+											</rich:calendar>
+										</s:decorate>
+
+
+
+
+									</h:panelGrid>
+								</h:panelGroup>
+
+								<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Προαιρετικό Σχόλιο" />
+									</ui:define>
+									<h:inputTextarea rows="3" cols="80"
+										value="#{employeeHome.instance.terminationOptionalComment}"
+										required="false" styleClass="fieldValueText" />
+								</s:decorate>
+
+							</h:panelGrid>
+
+							<h:panelGrid columns="2">
+
+								<a4j:commandButton value="Τερματισμός Υπηρεσίας !"
+									action="#{employeeManagement.terminateEmployee()}"
+									limitToList="false"
+									data="#{facesContext.maximumSeverity.ordinal ge 2}"
+									oncomplete="if(data == false)  #{rich:component('terminateEmployeeModalPanel')}.hide();"
+									reRender="terminateEmployeeModalPanelContent,rootPanel,inactive-employee-panel" />
+								<a4j:commandButton value="Επιστροφή .."
+									action="#{employeeHome.revert()}"
+									reRender="terminateEmployeeModalPanelContent"
+									oncomplete="#{rich:component('terminateEmployeeModalPanel')}.hide();" />
+							</h:panelGrid>
+						</a4j:form>
+					</a4j:outputPanel>
+				</h:panelGrid>
+			</a4j:region>
+		</rich:modalPanel>
+
+
 
 		<!-- ***********************************  -->
 		<!-- ADD EMPLOYEE SPECIAL ASSIGMENT  -->
@@ -1259,84 +1408,90 @@
 				</h:panelGroup>
 			</f:facet>
 			<a4j:region>
-			
+
 				<h:panelGrid columns="1">
-				
-				<h:outputText style="font-style:italic; font-size:12px;"
-								value="Με την παρακάτω φόρμα, μπορείται να εισάγετε ειδική ασχολία του εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}." />
-								
-				<a4j:outputPanel id="addSpecialAssigmentModalPanelContent">
-							
-													
-							<a4j:form id="addSpecialAssigmentForm">
-							
-							<ui:include src="/components/messages-component.xhtml"  />
-							
+
+					<h:outputText style="font-style:italic; font-size:12px;"
+						value="Με την παρακάτω φόρμα, μπορείται να εισάγετε ειδική ασχολία του εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}." />
+
+					<a4j:outputPanel id="addSpecialAssigmentModalPanelContent">
+
+
+						<a4j:form id="addSpecialAssigmentForm">
+
+							<ui:include src="/components/messages-component.xhtml" />
+
 							<h:panelGrid columns="1" width="100%">
-														
+
 								<h:panelGroup>
 									<h:panelGrid columns="2">
-										
+
 										<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 											<ui:define name="label">
 												<h:outputText value="Μονάδα Ασχολίας" />
 											</ui:define>
 
-										
-												<h:inputText id="sp_unit" styleClass="fieldValueText" required="true" value="#{employeeManagement.inputTextFieldHelper1}" immediate="true" />
-												<h:graphicImage value="/img/icons/arrowDown.jpg" height="16"
+
+											<h:inputText id="sp_unit" styleClass="fieldValueText"
+												required="true"
+												value="#{employeeManagement.inputTextFieldHelper1}"
+												immediate="true" />
+											<h:graphicImage value="/img/icons/arrowDown.jpg" height="16"
 												width="16"
 												onclick="#{rich:component('regionUnitSuggestion')}.callSuggestion(true)"
 												alt="" />
 
-												<rich:suggestionbox id="regionUnitSuggestion" for="sp_unit"
-													height="200" width="300"
-													suggestionAction="#{schoolUnitSuggester.suggest}" var="_school"
-													ignoreDupResponses="true">
-													<f:facet name="nothingLabel">
-														<h:outputText value="Άγνωστη Μονάδα" />
-													</f:facet>
-													<h:column>
-														<h:outputText value="#{_school.title}" />
-													</h:column>
-													<a4j:support ajaxSingle="true" event="onselect">
-														<f:setPropertyActionListener value="#{_school}"
-															target="#{specialAssigmentHome.instance.unit}" />
-													</a4j:support>
-												</rich:suggestionbox>
+											<rich:suggestionbox id="regionUnitSuggestion" for="sp_unit"
+												height="200" width="300"
+												suggestionAction="#{schoolUnitSuggester.suggest}"
+												var="_school" ignoreDupResponses="true">
+												<f:facet name="nothingLabel">
+													<h:outputText value="Άγνωστη Μονάδα" />
+												</f:facet>
+												<h:column>
+													<h:outputText value="#{_school.title}" />
+												</h:column>
+												<a4j:support ajaxSingle="true" event="onselect">
+													<f:setPropertyActionListener value="#{_school}"
+														target="#{specialAssigmentHome.instance.unit}" />
+												</a4j:support>
+											</rich:suggestionbox>
 
 
-											
+
 										</s:decorate>
 
 										<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 											<ui:define name="label">
 												<h:outputText value="Ειδική Ασχολία" />
 											</ui:define>
-											
-											
-												<h:inputText id="value" styleClass="fieldValueText" required="true" value="#{employeeManagement.inputTextFieldHelper2}" immediate="true"/>
-												<h:graphicImage value="/img/icons/arrowDown.jpg" height="16"
+
+
+											<h:inputText id="value" styleClass="fieldValueText"
+												required="true"
+												value="#{employeeManagement.inputTextFieldHelper2}"
+												immediate="true" />
+											<h:graphicImage value="/img/icons/arrowDown.jpg" height="16"
 												width="16"
 												onclick="#{rich:component('specializationSuggester')}.callSuggestion(true)"
 												alt="" />
-												
-												<rich:suggestionbox height="100" width="250" for="value"
-													var="a_spec"  id="specializationSuggester"
-													suggestionAction="#{specializationGroupVirtualEditionSuggester.suggest}">
-													<f:facet name="nothingLabel">
-														<h:outputText value="Άγνωστη Ειδική Ασχολία" />
-													</f:facet>
-													<h:column>
-														<h:outputText value="#{a_spec.title}" />
-													</h:column>
-													<a4j:support ajaxSingle="true" event="onselect">
-														<f:setPropertyActionListener value="#{a_spec}"
-															target="#{specialAssigmentHome.instance.specializationGroup}" />
-													</a4j:support>
-												</rich:suggestionbox>
-											
-											
+
+											<rich:suggestionbox height="100" width="250" for="value"
+												var="a_spec" id="specializationSuggester"
+												suggestionAction="#{specializationGroupVirtualEditionSuggester.suggest}">
+												<f:facet name="nothingLabel">
+													<h:outputText value="Άγνωστη Ειδική Ασχολία" />
+												</f:facet>
+												<h:column>
+													<h:outputText value="#{a_spec.title}" />
+												</h:column>
+												<a4j:support ajaxSingle="true" event="onselect">
+													<f:setPropertyActionListener value="#{a_spec}"
+														target="#{specialAssigmentHome.instance.specializationGroup}" />
+												</a4j:support>
+											</rich:suggestionbox>
+
+
 
 										</s:decorate>
 
@@ -1363,23 +1518,23 @@
 								</s:decorate>
 
 							</h:panelGrid>
-				
-						<h:panelGrid columns="2">
 
-							<a4j:commandButton value="Καταχώρηση Ειδικής Ασχολίας !"
-								action="#{employeeManagement.addEmployeeSpecialAssigment()}"
-								limitToList="true" 
-								data="#{facesContext.maximumSeverity.ordinal ge 2}"
-								oncomplete="if(data == false)  #{rich:component('addSpecialAssigmentModalPanel')}.hide();" 
-								reRender="addSpecialAssigmentModalPanelContent,employeeSpecialAssigmentOutputPanel,addSpecialAssigmentForm" />
-							<a4j:commandButton value="Επιστροφή .."
-								reRender="addSpecialAssigmentModalPanelContent,employeeSpecialAssigmentOutputPanel"
-								oncomplete="#{rich:component('addSpecialAssigmentModalPanel')}.hide();" />
-						</h:panelGrid>
+							<h:panelGrid columns="2">
+
+								<a4j:commandButton value="Καταχώρηση Ειδικής Ασχολίας !"
+									action="#{employeeManagement.addEmployeeSpecialAssigment()}"
+									limitToList="true"
+									data="#{facesContext.maximumSeverity.ordinal ge 2}"
+									oncomplete="if(data == false)  #{rich:component('addSpecialAssigmentModalPanel')}.hide();"
+									reRender="addSpecialAssigmentModalPanelContent,employeeSpecialAssigmentOutputPanel,addSpecialAssigmentForm" />
+								<a4j:commandButton value="Επιστροφή .."
+									reRender="addSpecialAssigmentModalPanelContent,employeeSpecialAssigmentOutputPanel"
+									oncomplete="#{rich:component('addSpecialAssigmentModalPanel')}.hide();" />
+							</h:panelGrid>
 						</a4j:form>
-								</a4j:outputPanel> 			
+					</a4j:outputPanel>
 				</h:panelGrid>
-				</a4j:region>
+			</a4j:region>
 		</rich:modalPanel>
 
 
