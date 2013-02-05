@@ -4,7 +4,6 @@ import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.async.DisposalCleanupProcessor;
 import gr.sch.ira.minoas.seam.components.async.LeaveActivactionProcessor;
 import gr.sch.ira.minoas.seam.components.async.LeaveCleanupProcessor;
-import gr.sch.ira.minoas.seam.components.async.PensionsScannerProcessor;
 import gr.sch.ira.minoas.seam.components.async.RegularEmployeeServiceUpdaterProcessor;
 import gr.sch.ira.minoas.seam.components.async.SecondmentActivactionProcessor;
 import gr.sch.ira.minoas.seam.components.async.SecondmentCleanupProcessor;
@@ -71,8 +70,6 @@ public class SchedulerController extends BaseDatabaseAwareSeamComponent {
     @In(create=true, value="serviceAllocationCleanupProcessor")
     private ServiceAllocationCleanupProcessor serviceAllocationCleanupProcessor;
     
-    @In(create=true, value="pensionsScannerProcessor")
-    private PensionsScannerProcessor pensionsScannerProcessor;
     
     @In(create=true, value="regularEmployeeServiceUpdaterProcessor")
     private RegularEmployeeServiceUpdaterProcessor regularEmployeeServiceUpdaterProcessor;
@@ -144,11 +141,6 @@ public class SchedulerController extends BaseDatabaseAwareSeamComponent {
         if(basicUsageReportProcessor!=null) {
             basicUsageReportProcessorHandler = basicUsageReportProcessor.scheduleReportGeneration(new Date(), BASIC_USAGE_REPORT_INTERVAL, null);
             info("scheduled #0", basicUsageReportProcessorHandler.getTrigger().getFullName());
-        }
-        
-        if(pensionsScannerProcessor!=null) {
-            pensionsScannerProcessorHandler = pensionsScannerProcessor.schedulePensionsCleanup(new Date(), PENSION_SYNC_INTERVAL, null);
-            info("scheduled #0", pensionsScannerProcessorHandler.getTrigger().getFullName());
         }
         
         if(regularEmployeeServiceUpdaterProcessor!=null) {
