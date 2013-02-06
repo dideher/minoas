@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="leavePrintout" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="20" bottomMargin="20" whenResourceMissingType="Key">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="8"/>
+	<style name="normalText" fontName="DejaVu Serif" fontSize="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+	<style name="boldText" fontName="DejaVu Serif" fontSize="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+	<style name="headlineText" fontName="DejaVu Serif" fontSize="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+	<style name="bigHeadlineText" fontName="DejaVu Serif" fontSize="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+	<parameter name="employeeForInformation" class="java.lang.String" isForPrompting="false">
+		<parameterDescription><![CDATA[The name of the employee which should be able to give information to the public]]></parameterDescription>
+		<defaultValueExpression><![CDATA["Φίλιππος Σλάβικ"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="employeeForInformationTelephone" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["2810333771"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="leaveRequestDate" class="java.util.Date" isForPrompting="false">
+		<parameterDescription><![CDATA[The date on which the interersted party has requested his leave.]]></parameterDescription>
+		<defaultValueExpression><![CDATA[new java.util.Date()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="employeeName" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["Φίλιππος"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="employeeSurname" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["Σλάβικ"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="employeeSpecializationCode" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["ΠΕ-19"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="employeeSpecialization" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["ΠΛΗΡΟΦΟΡΙΚΗ "]]></defaultValueExpression>
+	</parameter>
+	<parameter name="employeeRegularSchool" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["ΓΕΛ ΑΣΗΜΙΟΥ"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="leaveDueToDate" class="java.util.Date" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new java.util.Date()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="leaveEstablishedDate" class="java.util.Date" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new java.util.Date()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="leaveDayDuration" class="java.lang.Integer" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new java.lang.Integer(10)]]></defaultValueExpression>
+	</parameter>
+	<parameter name="employeeFatherName" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["Κάρελ"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="referenceNumber" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["12345678"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="printDate" class="java.util.Date" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new java.util.Date()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="signatureTitle" class="java.lang.String" isForPrompting="false">
+		<parameterDescription><![CDATA[The title above the signature]]></parameterDescription>
+		<defaultValueExpression><![CDATA["Ο Διευθυντής της Δ/νσης Εκπ/σης"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="signatureName" class="java.lang.String" isForPrompting="false">
+		<parameterDescription><![CDATA[The name bellow the signature]]></parameterDescription>
+		<defaultValueExpression><![CDATA["Μανουσάκης Γεώργιος"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="notificationList" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="localReferenceNumber" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["xxxxxxxxyyyyyzzzzzzzz"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="doctorOpinionDate" class="java.util.Date" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new java.util.Date()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="doctorName" class="java.lang.String" isForPrompting="false">
+		<parameterDescription><![CDATA[The name of the doctor]]></parameterDescription>
+		<defaultValueExpression><![CDATA["Σλάβικ ο Γιατρός"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="leaveReason" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["Μάρτυρας σε Δικαστήριο"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="externalDecisionNumber" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["12122334"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="externalDecisionDate" class="java.util.Date" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new java.util.Date()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="numberOfCertificateFamilyStatus" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["1212121214"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="numberOfBirthCertificate" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["12345678"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="textField1" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["textField1"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="textField2" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["textField2"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="textField3" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["textField3"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="dateField1" class="java.util.Date" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new java.util.Date()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="dateField2" class="java.util.Date" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new java.util.Date()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="dateField3" class="java.util.Date" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new java.util.Date()]]></defaultValueExpression>
+	</parameter>
+	<variable name="DATE_FORMATTER" class="java.text.DateFormat">
+		<initialValueExpression><![CDATA[new java.text.SimpleDateFormat("dd/MM/yyyy")]]></initialValueExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="802" splitType="Stretch">
+			<staticText>
+				<reportElement style="bigHeadlineText" x="1" y="52" width="262" height="17"/>
+				<textElement textAlignment="Center">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[ΕΛΛΗΝΙΚΗ ΔΗΜΟΚΡΑΤΙΑ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="headlineText" x="1" y="69" width="262" height="15"/>
+				<textElement textAlignment="Center">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[ΥΠΟΥΡΓΕΙΟ ΠΑΙΔΕΙΑΣ ΚΑΙ ΘΡΗΣΚΕΥΜΑΤΩΝ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="boldText" x="1" y="83" width="262" height="26"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[ΠΟΛΙΤΙΣΜΟΥ ΚΑΙ ΑΘΛΗΤΙΣΜΟΥ]]></text>
+			</staticText>
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="108" y="0" width="48" height="48"/>
+				<imageExpression><![CDATA["reports/greekflagsima.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement style="boldText" x="2" y="239" width="513" height="14"/>
+				<textElement>
+					<font isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[ΘΕΜΑ : Χορήγηση άδειας αιμοδοσίας]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="normalText" x="0" y="263" width="199" height="20"/>
+				<textElement/>
+				<text><![CDATA[Έχοντας υπόψη :]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="normalText" x="0" y="288" width="515" height="145"/>
+				<textElement textAlignment="Justified" markup="styled"/>
+				<textFieldExpression><![CDATA["1. Τις διατάξεις των άρθρων 2 και 50 παρ. 5 του Ν.3528/07 (ΦΕΚ 26/9.2.2007 τ.Α)<br/><br/>"+
+"2. Την με αρ.πρωτ. 74275/Δ2/10-07-2007 εγκύκλιο του ΥΠ.Π.Δ.Β.Μ.Θ.<br/><br/>"+
+"3. Την αριθμ.Φ353.1/324/105675/∆1/ΦΕΚ 1340 τ.B /16-10-2002 Υπουργική απόφαση (καθήκοντα και αρμοδιότητες Περ/κών ∆/ντών Εκπ/σης και των Προΐσταμένων Τμημάτων των ∆/νσεων αυτών)<br/><br/>"+
+"4. Την απο <b>"+$V{DATE_FORMATTER}.format($P{leaveRequestDate})+"</b> αίτηση του/της <b>"+$P{employeeSurname}+" "+$P{employeeName}+"</b> του "+$P{employeeFatherName}+" εκπαιδευτικού λειτουργού κλάδου <b>"+$P{employeeSpecializationCode}+"</b>.<br/><br/>"+
+"5. Βεβαίωση του κέντρου αιμοδοσίας.<br/><br/>"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="boldText" x="138" y="450" width="279" height="20"/>
+				<textElement textAlignment="Center">
+					<font isItalic="false" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Α Π Ο Φ Α Σ Ι Ζ Ο Υ Μ Ε]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="normalText" x="2" y="476" width="513" height="78"/>
+				<textElement textAlignment="Justified" markup="styled">
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Χορηγούμε στον/στην "
++"<b>"+$P{employeeSurname}+" "+$P{employeeName}+"</b> του <b>"+$P{employeeFatherName}+"</b>,"+
+" εκπαιδευτικό κλάδου "+$P{employeeSpecializationCode}+" - "+$P{employeeSpecialization}+
+" του "+$P{employeeRegularSchool}+", άδεια αιμοδοσίας <b>"+$P{leaveDayDuration}+"</b> ημερών με τις δικαιούμενες αποδοχές, από <b>"+$V{DATE_FORMATTER}.format($P{leaveEstablishedDate})+" </b> έως και <b>"+$V{DATE_FORMATTER}.format($P{leaveDueToDate})+"</b>"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="normalText" x="4" y="109" width="179" height="35"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[ΠΕΡΙΦΕΡΕΙΑΚΗ Δ/ΝΣΗ Π/ΘΜΙΑΣ
+ΚΑΙ Δ/ΘΜΙΑΣ ΕΚΠ/ΣΗΣ ΚΡΗΤΗΣ
+Δ/ΝΣΗ ΔΕΥΤ/ΘΜΙΑΣ ΕΚΠ/ΣΗΣ Ν.ΗΡΑΚΛΕΙΟΥ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="normalText" x="2" y="154" width="330" height="15"/>
+				<textElement textAlignment="Left"/>
+				<text><![CDATA[ΤΜΗΜΑ ΔΙΟΙΚΗΤΙΚΩΝ ΘΕΜΑΤΩΝ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="normalText" x="2" y="169" width="80" height="60"/>
+				<textElement textAlignment="Left"/>
+				<text><![CDATA[Ταχ. Διεύθυνση
+Ταχ. Κωδικός
+Πληροφορίες
+Τηλέφωνο
+E-mail]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="normalText" x="359" y="52" width="155" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA["Ηράκλειο "+$V{DATE_FORMATTER}.format($P{printDate})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="normalText" x="359" y="72" width="155" height="12"/>
+				<textElement textAlignment="Left" markup="none"/>
+				<textFieldExpression><![CDATA["Αρθμ.Πρωτ. ΔΕΑΦ/"+$P{referenceNumber}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="boldText" x="287" y="743" width="178" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$P{signatureName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="boldText" x="220" y="662" width="313" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$P{signatureTitle}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="normalText" x="84" y="169" width="250" height="60"/>
+				<textElement textAlignment="Left" markup="styled"/>
+				<textFieldExpression><![CDATA[": Μονοφατσίου 8<br/>" +
+": 712 01<br/>"+
+": "+$P{employeeForInformation}+"<br />"+
+": "+$P{employeeForInformationTelephone}+"<br />"+
+": "+"mail@dide.ira.sch.gr"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="boldText" x="0" y="658" width="100" height="20"/>
+				<textElement>
+					<font isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[ΚΟΙΝΟΠΟΙΗΣΗ]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="normalText" x="2" y="687" width="184" height="114"/>
+				<textElement markup="styled">
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{notificationList}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="108" y="0" width="407" height="15"/>
+				<textElement textAlignment="Right" rotation="None">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{localReferenceNumber}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+</jasperReport>

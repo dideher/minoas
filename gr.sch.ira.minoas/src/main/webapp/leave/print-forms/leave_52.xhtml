@@ -1,0 +1,33 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich">
+
+<ui:component>
+	<h:panelGrid columns="2">
+		
+		<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+			<ui:define name="label">
+				<h:outputText value="Την Αριθμ. : " />
+			</ui:define>
+			<h:inputText
+				value="#{employeeLeavesManagement.printHelper.fieldText2}" size="20"
+				disabled="false" maxlength="50" styleClass="fieldValueText"
+				required="true" immediate="true" readonly="false" />
+		</s:decorate>
+		
+		<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+			<ui:define name="label">
+				<h:outputText value="Λόγος  : " />
+			</ui:define>
+			<h:inputText
+				value="#{employeeLeavesManagement.printHelper.fieldText3}" size="20"
+				disabled="false" maxlength="50" styleClass="fieldValueText"
+				required="true" immediate="true" readonly="false" />
+		</s:decorate>
+		
+	</h:panelGrid>
+</ui:component>
+</html>
