@@ -583,6 +583,17 @@ public class EmployeeInfo extends BaseIDModel {
 		this.totalWorkService = totalWorkService;
 	}
 
+	/**
+	 * Check if EmployeeInfo currently has a RankInfo assigned to it.
+	 * In other words if there is a row in RankInfo table holding the Rank and Salary Grade info assigned to this employee.  
+	 * 
+	 */
+	public boolean hasCurrentRankInfo() {
+		if(getCurrentRankInfo() == null)
+			return false;
+		else
+			return true;
+	}
 	
 	/**
 	 * Reset EmployeeInfo and initialize its attributes
