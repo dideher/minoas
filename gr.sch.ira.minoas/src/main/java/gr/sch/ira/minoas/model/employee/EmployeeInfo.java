@@ -288,15 +288,15 @@ public class EmployeeInfo extends BaseIDModel {
 		return gogAppointmentDate;
 	}
 
-	/**
-	 * @return the gogAppointmentDate
-	 */
-	public String getGogAppointmentDateString() {
-		if(gogAppointmentDate == null)
-			return "";
-		else
-			return DateFormat.getDateInstance(DateFormat.SHORT).format(gogAppointmentDate);
-	}	
+//	/**
+//	 * @return the gogAppointmentDate
+//	 */
+//	public String getGogAppointmentDateString() {
+//		if(gogAppointmentDate == null)
+//			return "";
+//		else
+//			return DateFormat.getDateInstance(DateFormat.SHORT).format(gogAppointmentDate);
+//	}	
 	
 	
 	/**

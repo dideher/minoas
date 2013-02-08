@@ -11,8 +11,10 @@
 		<h:panelGrid columns="6">
 			<h:outputLabel styleClass="fieldValueLabel"
 				value="ΦΕΚ Διορισμού: " />
-			<h:outputText styleClass="fieldValueText"
-				value="#{employee.employeeInfo.gogAppointmentNo} - #{employee.employeeInfo.getGogAppointmentDateString()}" />
+			<h:outputFormat styleClass="fieldValueText" value="#{employee.employeeInfo.gogAppointmentNo}-{0, date, dd/MM/yyyy}">
+			    <f:param value="#{employee.employeeInfo.gogAppointmentDate}" />
+			</h:outputFormat>
+			
 			<h:outputLabel styleClass="fieldValueLabel"
 				value="(Πράξη)-Ανάληψη Υπηρεσίας: " />
 			<h:outputFormat styleClass="fieldValueText" value="(#{employee.employeeInfo.entryIntoServiceAct})-{0, date, dd/MM/yyyy}">
