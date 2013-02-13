@@ -361,13 +361,16 @@
 									<h:form id="regulartEmploymentListForm">
 										<rich:dataTable id="employeeRegularEmploymentList"
 											value="#{employeeRegularEmploymentsListQuery.resultList}"
-											var="_employment" rows="15" border="0"
+											var="_employment" rows="10" border="0"
 											onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
 											onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
 											width="100%">
 											<f:facet name="header">
 												<h:outputLabel
 													value="Ιστορικό Οργανικών Θέσεων Εκπαιδευτικού" />
+											</f:facet>
+											<f:facet name="footer">
+												<rich:datascroller for="employeeRegularEmploymentList"  maxPages="10"></rich:datascroller>
 											</f:facet>
 											<rich:column>
 												<f:facet name="header">
@@ -436,13 +439,16 @@
 									<h:form id="deputytEmploymentListForm">
 										<rich:dataTable id="employeeDeputyEmploymentList"
 											value="#{employeeDeputyEmploymentsListQuery.resultList}"
-											var="_employment" rows="15" border="0"
+											var="_employment" rows="10" border="0"
 											onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
 											onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
 											width="100%">
 											<f:facet name="header">
 												<h:outputLabel
 													value="Ιστορικό Τοποθετήσεων Αναπληρωτή Εκπαιδευτικού" />
+											</f:facet>
+											<f:facet name="footer">
+												<rich:datascroller for="employeeDeputyEmploymentList"  maxPages="10" />
 											</f:facet>
 											<rich:column>
 												<f:facet name="header">
@@ -512,13 +518,16 @@
 									<h:form id="hourlyBasedEmploymentListForm">
 										<rich:dataTable id="employeeHourlyEmploymentList"
 											value="#{employeeHourlyBasedEmploymentsListQuery.resultList}"
-											var="_employment" rows="15" border="0"
+											var="_employment" rows="10" border="0"
 											onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
 											onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
 											width="100%">
 											<f:facet name="header">
 												<h:outputLabel
 													value="Ιστορικό Προσλήψεων Ωρομίσθιου Εκπαιδευτικού" />
+											</f:facet>
+											<f:facet name="footer">
+												<rich:datascroller for="employeeHourlyEmploymentList"  maxPages="10" />
 											</f:facet>
 											<rich:column>
 												<f:facet name="header">
@@ -591,13 +600,16 @@
 											<h:outputText
 												value="Στον παρακάτω πίνακα εμφανίζεται το ιστορικό των αποσπάσεων του εκπαιδευτικού." />
 											<rich:dataTable id="employeeSecondmentsList"
-												value="#{employeeSecondments}" var="_secondment" rows="15"
+												value="#{employeeSecondments}" var="_secondment" rows="10"
 												border="0"
 												onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
 												onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
 												width="100%">
 												<f:facet name="header">
 													<h:outputLabel value="Ιστορικό Αποσπάσεων Εκπαιδευτικού" />
+												</f:facet>
+												<f:facet name="footer">
+													<rich:datascroller for="employeeSecondmentsList"  maxPages="10" />
 												</f:facet>
 												<rich:column>
 													<f:facet name="header">
@@ -657,10 +669,7 @@
 													<h:outputText value="#{_secondment.finalWorkingHours}" />
 												</rich:column>
 
-												<f:facet name="footer">
-													<rich:datascroller align="left" maxPages="20"
-														renderIfSinglePage="false" />
-												</f:facet>
+												
 											</rich:dataTable>
 										</h:panelGroup>
 
@@ -677,14 +686,17 @@
 								<h:panelGrid columns="1" width="100%">
 									<h:outputText
 										value="Στον παραπάνω πίνακα εμφανίζονται συνολικά, ανα σχολικό έτος, οι διαθέσεις του Εκπαιδευτικού." />
-									<rich:dataTable
+									<rich:dataTable id="employeeDisposalList"
 										value="#{employeeDisposalsListQuery.resultList}"
-										var="_disposal" rows="15" border="0"
+										var="_disposal" rows="10" border="0"
 										onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
 										onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
 										width="100%">
 										<f:facet name="header">
 											<h:outputLabel value="Ενεργές Διαθέσεις Εκπαιδευτικού" />
+										</f:facet>
+										<f:facet name="footer">
+											<rich:datascroller for="employeeDisposalList"  maxPages="10" />
 										</f:facet>
 
 										<rich:column>
@@ -772,12 +784,15 @@
 
 									<rich:dataTable id="employeeSecondmentsList"
 										value="#{employeeServiceAllocationsListQuery.resultList}"
-										var="_serviceAllocation" rows="15" border="0"
+										var="_serviceAllocation" rows="10" border="0"
 										onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
 										onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
 										width="100%">
 										<f:facet name="header">
 											<h:outputLabel value="Ιστορικό Θητείων Εκπαιδευτικού" />
+										</f:facet>
+										<f:facet name="footer">
+											<rich:datascroller for="employeeSecondmentsList"  maxPages="10" />
 										</f:facet>
 										<rich:column>
 											<f:facet name="header">
@@ -851,13 +866,16 @@
 									<h:outputText
 										value="Στον παρακάτω πίνακα εμφανίζεται το ιστορικό των αδειών του εκπαιδευτικού." />
 									<rich:dataTable id="employeeLeavesList"
-										value="#{employeeLeaveItems}" var="_leave" rows="15"
+										value="#{employeeLeaveItems}" var="_leave" rows="10"
 										border="0"
 										onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
 										onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
 										width="100%">
 										<f:facet name="header">
 											<h:outputLabel value="Ιστορικό Αδειών Εκπαιδευτικού" />
+										</f:facet>
+										<f:facet name="footer">
+											<rich:datascroller for="employeeLeavesList"  maxPages="10"></rich:datascroller>
 										</f:facet>
 										<rich:column>
 											<f:facet name="header">
@@ -921,12 +939,15 @@
 										value="Στον παρακάτω πίνακα εμφανίζεται το ιστορικό των προϋπηρεσίων του εκπαιδευτικού." />
 									<rich:dataTable id="employeeWorkExpirenceItemsList"
 										value="#{employeeWorkExperienceItems}"
-										var="_workExperienceItem" rows="15" border="0"
+										var="_workExperienceItem" rows="10" border="0"
 										onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
 										onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
 										width="100%">
 										<f:facet name="header">
 											<h:outputLabel value="Ιστορικό Προϋπηρεσιών Εκπαιδευτικού" />
+										</f:facet>
+										<f:facet name="footer">
+											<rich:datascroller for="employeeWorkExpirenceItemsList"  maxPages="10" />
 										</f:facet>
 										<rich:column>
 											<f:facet name="header">
