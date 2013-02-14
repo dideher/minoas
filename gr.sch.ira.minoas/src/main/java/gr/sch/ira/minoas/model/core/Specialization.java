@@ -33,6 +33,24 @@ public class Specialization extends BaseModel {
 	@Column(name = "TITLE", nullable = false, length = 70)
 	private String title;
 	
+	
+	/**
+	 * The public specialization ID that should be used when printing reports, etc.
+	 */
+	@Basic
+	@Column(name = "PUBLIC_SPECIALIZATION_ID", length = 6, nullable=true)
+    private String publicId;
+
+	
+	/**
+	 * The public specialization title that should be used when printintg reports, etc
+	 */
+	@Basic
+	@Column(name = "PUBLIC_TITLE", nullable = true, length = 70)
+    private String publicTitle;
+	
+	
+	
 	/**
 	 * If set to true then this specialization has been created to
 	 * support a virtual specialization group
@@ -93,5 +111,39 @@ public class Specialization extends BaseModel {
     public void setIsVirtual(Boolean isVirtual) {
         this.isVirtual = isVirtual;
     }
+
+    /**
+     * Returns the public specialization id. If there is no public id, then
+     * the legacy ID will be returned instead.
+     * @return the publicId
+     */
+    public String getPublicId() {
+        return publicId != null ? publicId : id;
+    }
+
+    /**
+     * @param publicId the publicId to set
+     */
+    public void setPublicId(String publicId) {
+        this.publicId = publicId;
+    }
+
+    /**
+     * Returns the public specialization title. If there is no public title, then
+     * the legacy title will be returned instead.
+     * @return the publicTitle
+     */
+    public String getPublicTitle() {
+        return publicTitle != null ? publicTitle : title;
+    }
+
+    /**
+     * @param publicTitle the publicTitle to set
+     */
+    public void setPublicTitle(String publicTitle) {
+        this.publicTitle = publicTitle;
+    }
+    
+    
 
 }

@@ -635,8 +635,8 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
                 parameters.put("leaveRequestDate", leavePrintoutRequestDate);
                 parameters.put("employeeName", normalizeStringForXML(employee.getFirstName()));
                 parameters.put("employeeSurname", normalizeStringForXML(employee.getLastName()));
-                parameters.put("employeeSpecialization", normalizeStringForXML(employee.getLastSpecialization().getTitle()));
-                parameters.put("employeeSpecializationCode", normalizeStringForXML(employee.getLastSpecialization().getId()));
+                parameters.put("employeeSpecialization", normalizeStringForXML(employee.getLastSpecialization().getPublicTitle()));
+                parameters.put("employeeSpecializationCode", normalizeStringForXML(employee.getLastSpecialization().getPublicId()));
                 parameters.put("employeeRegularSchool", this.employeeRegularPositionForLeavePrintout);
                 parameters.put("leaveDueToDate", leave.getDueTo());
                 parameters.put("leaveEstablishedDate", leave.getEstablished());
@@ -802,7 +802,7 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
                         .getResponse();
                 response.setContentType("application/pdf");
                 String pdfFile = String.format("ΑΔΕΙΑ_%s_%s_(%s).pdf", employee.getLastName(), employee.getFirstName(),
-                        employee.getLastSpecialization().getTitle());
+                        employee.getLastSpecialization().getPublicTitle());
                 // http://greenbytes.de/tech/webdav/rfc6266.html
                 //response.addHeader("Content-Disposition", String.format("attachment; filename*=UTF-8 ' '%s", pdfFile));
                 response.addHeader("Content-Disposition", String.format("attachment; filename=ADEIA.pdf", pdfFile));
@@ -852,7 +852,7 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
                         .getResponse();
                 response.setContentType("application/pdf");
                 String pdfFile = String.format("ΑΔΕΙΑ_%s_%s_(%s).pdf", employee.getLastName(), employee.getFirstName(),
-                        employee.getLastSpecialization().getTitle());
+                        employee.getLastSpecialization().getPublicTitle());
                 // http://greenbytes.de/tech/webdav/rfc6266.html
                 //response.addHeader("Content-Disposition", String.format("attachment; filename*=UTF-8 ' '%s", pdfFile));
                 response.addHeader("Content-Disposition", String.format("attachment; filename=ADEIA.pdf", pdfFile));
@@ -909,7 +909,7 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
                         .getResponse();
                 response.setContentType("application/vnd.oasis.opendocument.text");
                 String pdfFile = String.format("ΑΔΕΙΑ_%s_%s_(%s).pdf", employee.getLastName(), employee.getFirstName(),
-                        employee.getLastSpecialization().getTitle());
+                        employee.getLastSpecialization().getPublicTitle());
                 // http://greenbytes.de/tech/webdav/rfc6266.html
                 //response.addHeader("Content-Disposition", String.format("attachment; filename*=UTF-8 ' '%s", pdfFile));
                 response.addHeader("Content-Disposition", String.format("attachment; filename=lalala.odt", pdfFile));
