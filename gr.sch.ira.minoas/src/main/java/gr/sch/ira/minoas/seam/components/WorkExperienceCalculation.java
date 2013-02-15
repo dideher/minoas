@@ -336,7 +336,7 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
         /* computation logic from :
          * http://edu.klimaka.gr/leitoyrgia-sxoleivn/anakoinvseis/539-school-diafora-vrario-ergasia-symplhrvsh-orariou.html
          */
-        if (years > 0 && years <= 6)
+        if (years >= 0 && years <= 6)
             return 21;
         else if (years >= 7 && years <= 12)
             return 19;
