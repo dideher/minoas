@@ -613,10 +613,13 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
     }
     
     protected String normalizeStringForXML(String value) {
-        String returnValue = value.replace("&", "&amp;"); 
-        returnValue = returnValue.replace("<", "&lt;");
-        returnValue = returnValue.replace(">", "&gt;");
-        return returnValue;
+        if(value!=null) {
+            String returnValue = value.replace("&", "&amp;"); 
+            returnValue = returnValue.replace("<", "&lt;");
+            returnValue = returnValue.replace(">", "&gt;");
+            return returnValue;
+        } else 
+            return EMPTY_STRING;
     }
 
     protected Map<String, Object> prepareParametersForLeavePrintout() throws NoSuchAlgorithmException, UnsupportedEncodingException {
