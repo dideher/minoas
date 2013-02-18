@@ -12,6 +12,191 @@
 
 <ui:composition template="/layout/simple-beauty-template.xhtml">
 	<ui:define name="body">
+	
+	<ui:include src="/components/wait-modal-panel.xhtml" />
+	
+	
+	<rich:panel>
+			<f:facet name="header">
+				<h:outputText
+					value="Διαχείρηση Διαθέσεων του/της #{employeeUtil.prettyFormat(employee)}" />
+			</f:facet>
+
+			<ui:include src="/components/messages-component.xhtml" />
+
+			<h:form>
+				<h:panelGrid columns="1" width="100%">
+
+					<h:panelGrid columns="2" width="100%">
+						<rich:panel id="basicEmployeeInfoPanel">
+							<f:facet name="header">
+								<h:outputText value="Βασικά Στοιχεία" />
+							</f:facet>
+							<ui:include src="/employee/basic-info.xhtml">
+								<ui:param name="employee" value="#{employee}" />
+							</ui:include>
+						</rich:panel>
+
+						<rich:panelMenu mode="ajax">
+
+							<rich:panelMenuGroup label="Ενέργειες" expanded="true">
+								<rich:panelMenuItem mode="server" action="backButton"
+									label="Επιστροφή" hoverClass="panelMenuItemHover" />
+
+								<rich:panelMenuItem mode="server" action="endButton"
+									label="Τέλος Ενέργειας" hoverClass="panelMenuItemHover" />
+
+								<rich:panelMenuItem mode="ajax"
+									disabled="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_DISPOSAL'))}"
+									action="#{employeeDisposalManagement.prepareForNewDisposal()}"
+									reRender="createModalPanelContent"  limitToList="true" 
+									oncomplete="#{rich:component('createModalPanel')}.show()"
+									label="Νέα Διάθεση" hoverClass="panelMenuItemHover">
+								</rich:panelMenuItem>
+
+							</rich:panelMenuGroup>
+
+
+						</rich:panelMenu>
+			
+					</h:panelGrid>
+
+
+					<rich:panel>
+						<f:facet name="header">
+							<h:outputText value="Διαθέσεις Εκπαιδευτικού" />
+						</f:facet>
+
+						<a4j:outputPanel id="secondmentsTable">
+							<h:panelGroup rendered="#{employeeDisposals.size()==0}">
+								<h:outputText
+									value="Δεν υπάρχουν διαθέσεις για τον εκπαιδευτικό." />
+							</h:panelGroup>
+							<h:panelGrid columns="1"
+								rendered="#{employeeSecondments.size() gt 0}">
+								<h:outputText
+									value="Στον παρακάτω πίνακα εμφανίζονται οι διαθέσεις του εκπαιδευτικού." />
+
+								<rich:dataTable id="employeeDisposalsList"
+									value="#{employeeDisposals}" var="_secondment" rows="15"
+									border="0"
+									onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+									onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+									width="100%">
+									<f:facet name="header">
+										<h:outputLabel value="Διαθέσεις Εκπαιδευτικού" />
+									</f:facet>
+									<rich:column
+										styleClass="#{employeeSecondmentsManagement.getTableCellClassForSecondment(_secondment)}">
+										<f:facet name="header">
+											<h:outputText value="Σχ. Χρονία" />
+										</f:facet>
+										<h:outputText value="#{_secondment.schoolYear.title}" />
+									</rich:column>
+									<rich:column
+										styleClass="#{employeeSecondmentsManagement.getTableCellClassForSecondment(_secondment)}">
+										<f:facet name="header">
+											<h:outputText value="Αποσπ. Απο" />
+										</f:facet>
+										<h:outputText value="#{_secondment.sourceUnit.title}" />
+									</rich:column>
+									<rich:column
+										styleClass="#{employeeSecondmentsManagement.getTableCellClassForSecondment(_secondment)}">
+										<f:facet name="header">
+											<h:outputText value="Αποσπ. Σε" />
+										</f:facet>
+										<h:outputText value="#{_secondment.targetUnit.title}" />
+									</rich:column>
+									<rich:column
+										styleClass="#{employeeSecondmentsManagement.getTableCellClassForSecondment(_secondment)}">
+										<f:facet name="header">
+											<h:outputText value="Απο" />
+										</f:facet>
+										<h:outputText value="#{_secondment.established}">
+											<s:convertDateTime pattern="dd-MM-yyyy" />
+										</h:outputText>
+									</rich:column>
+									<rich:column
+										styleClass="#{employeeSecondmentsManagement.getTableCellClassForSecondment(_secondment)}">
+										<f:facet name="header">
+											<h:outputText value="Εώς" />
+										</f:facet>
+										<h:outputText value="#{_secondment.dueTo}">
+											<s:convertDateTime pattern="dd-MM-yyyy" />
+										</h:outputText>
+									</rich:column>
+									<rich:column
+										styleClass="#{employeeSecondmentsManagement.getTableCellClassForSecondment(_secondment)}">
+										<f:facet name="header">
+											<h:outputText value="Σχόλιο" />
+										</f:facet>
+										<h:outputText value="#{_secondment.comment}" />
+									</rich:column>
+									<rich:column
+										styleClass="#{employeeSecondmentsManagement.getTableCellClassForSecondment(_secondment)}">
+										<f:facet name="header">
+											<h:outputText value="Με Αίτηση Του" />
+										</f:facet>
+										<h:outputText value="Ναί"
+											rendered="#{_secondment.employeeRequested}" />
+										<h:outputText value="Οχι"
+											rendered="#{!_secondment.employeeRequested}" />
+									</rich:column>
+
+									<rich:column
+										styleClass="#{employeeSecondmentsManagement.getTableCellClassForSecondment(_secondment)}">
+										<f:facet name="header">
+											<h:outputText value="Υποχ. Ωράριο" />
+										</f:facet>
+										<h:outputText value="#{_secondment.mandatoryWorkingHours}" />
+									</rich:column>
+									<rich:column
+										styleClass="#{employeeSecondmentsManagement.getTableCellClassForSecondment(_secondment)}">
+										<f:facet name="header">
+											<h:outputText value="Πραγ. Ωράριο" />
+										</f:facet>
+										<h:outputText value="#{_secondment.finalWorkingHours}" />
+									</rich:column>
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText value="Ενέργεια" />
+										</f:facet>
+										<rich:toolBar itemSeparator="line">
+
+											<a4j:commandLink reRender="updateModalPanelContent"
+												ajaxSingle="true"
+												disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MANAGE_SECONDMENT'))}"
+												oncomplete="#{rich:component('updateModalPanel')}.show()"
+												value="Τροποποίηση">
+												<h:graphicImage value="/img/icons/edit.png" width="12"
+													height="12" style="border:0" />
+												<f:setPropertyActionListener value="#{_secondment.id}"
+													target="#{secondmentHome.id}" />
+											</a4j:commandLink>
+
+											<a4j:commandLink reRender="deleteModalPanelContent"
+												ajaxSingle="true"
+												disabled="#{!(s:hasRole('ADMIN') or s:hasRole('DELETE_SECONDMENT'))}"
+												oncomplete="#{rich:component('deleteModalPanel')}.show()"
+												value="Διαγραφή">
+												<h:graphicImage value="/img/icons/delete.png" width="12"
+													height="12" style="border:0" />
+												<f:setPropertyActionListener value="#{_secondment.id}"
+													target="#{secondmentHome.id}" />
+											</a4j:commandLink>
+										</rich:toolBar>
+									</rich:column>
+								</rich:dataTable>
+							</h:panelGrid>
+						</a4j:outputPanel>
+					</rich:panel>
+
+				</h:panelGrid>
+			</h:form>
+
+
+		</rich:panel>
+	
 		<a4j:region>
 			<rich:panel>
 				<f:facet name="header">
@@ -350,8 +535,7 @@
 		</rich:modalPanel>
 
 
-		<ui:include src="/components/wait-modal-panel.xhtml" />
-
+		
 	</ui:define>
 </ui:composition>
 </html>

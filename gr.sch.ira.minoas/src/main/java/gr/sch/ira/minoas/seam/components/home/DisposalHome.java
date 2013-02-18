@@ -7,6 +7,7 @@ import gr.sch.ira.minoas.model.employement.DisposalType;
 import gr.sch.ira.minoas.model.employement.Secondment;
 
 import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.AutoCreate;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -19,7 +20,7 @@ import org.jboss.seam.international.StatusMessage.Severity;
  * @version $Id$
  */
 @Name("disposalHome")
-@Scope(ScopeType.CONVERSATION)
+@AutoCreate
 public class DisposalHome extends MinoasEntityHome<Disposal> {
 
 	/**

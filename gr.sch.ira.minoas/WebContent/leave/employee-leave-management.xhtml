@@ -1,0 +1,922 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<ui:composition template="/layout/simple-beauty-template.xhtml">
+	<ui:define name="body">
+		<a4j:region>
+			<rich:panel>
+				<f:facet name="header">
+					<h:outputText
+						value="Διαχείρηση Αδειών του/της #{employeeUtil.prettyFormat(employee)}" />
+				</f:facet>
+
+
+				<ui:include src="/components/messages-component.xhtml" />
+
+
+
+				<h:panelGrid columns="2">
+					<h:panelGroup>
+						<h:panelGrid columns="1">
+
+							<rich:panel id="activeLeavePanel">
+								<f:facet name="header">
+									<h:outputText value="Ενεργή Άδεια" />
+								</f:facet>
+
+								<h:outputText value="Ο εκπαιδευτικός δεν έχει ενεργή άδεια."
+									styleClass="fieldValueText"
+									rendered="#{currentEmployeeLeave eq null}" />
+
+								<h:form>
+									<rich:dataTable value="#{currentEmployeeLeave}" var="_leave"
+										rendered="#{currentEmployeeLeave ne null}" rows="15"
+										border="0"
+										onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+										onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+										width="100%">
+										<f:facet name="header">
+											<h:outputLabel value="Ενεργή Άδεια Εκπαιδευτικού" />
+										</f:facet>
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Τύπος Άδειας" />
+											</f:facet>
+											<h:outputText value="#{_leave.employeeLeaveType.description}" />
+										</rich:column>
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Υπολογισμός στα Κενά" />
+											</f:facet>
+											<h:outputText value="#{_leave.generatesCDRs}" />
+										</rich:column>
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Έναρξη" />
+											</f:facet>
+											<h:outputText value="#{_leave.established}">
+												<s:convertDateTime pattern="dd/MM/yyyy" />
+											</h:outputText>
+										</rich:column>
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Λήξη" />
+											</f:facet>
+											<h:outputText value="#{_leave.dueTo}">
+												<s:convertDateTime pattern="dd/MM/yyyy" />
+											</h:outputText>
+										</rich:column>
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Σχολίο Οργανικής">
+													<rich:toolTip
+														value="Εμφανίζεται το Σχολίο της Οργανικής του Εκπαιδευτικού κατά την καταχώρηση της Άδειας." />
+												</h:outputText>
+											</f:facet>
+											<h:outputText value="#{_leave.regularSchool.title}" />
+										</rich:column>
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Σχόλιο" />
+											</f:facet>
+											<h:outputText value="#{_leave.comment}" />
+										</rich:column>
+
+										<f:facet name="footer">
+											<rich:datascroller align="left" for="employeeLeavesList"
+												maxPages="20" renderIfSinglePage="false" id="sc1" />
+										</f:facet>
+
+										<rich:componentControl event="onRowClick" for="menu"
+											operation="show">
+											<f:param name="leaveid" value="#{_leave.id}" />
+											<f:param name="leaveLegacyCode"
+												value="#{_leave.employeeLeaveType.legacyCode}" />
+										</rich:componentControl>
+									</rich:dataTable>
+								</h:form>
+
+							</rich:panel>
+
+							<rich:panel id="futureLeavesPanel">
+								<f:facet name="header">
+									<h:outputText value="Μελλοντικές Άδειες" />
+								</f:facet>
+
+								<h:outputText
+									value="Ο εκπαιδευτικός δεν έχει μελλοντικές άδειες."
+									styleClass="fieldValueText"
+									rendered="#{futureEmployeeLeaves.size() eq 0}" />
+								<h:form>
+									<rich:dataTable value="#{futureEmployeeLeaves}" var="_leave"
+										rendered="#{futureEmployeeLeaves.size() ne 0}" rows="15"
+										border="0"
+										onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+										onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+										width="100%">
+										<f:facet name="header">
+											<h:outputLabel value="Μελλοντικές Άδειες Εκπαιδευτικού" />
+										</f:facet>
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Τύπος Άδειας" />
+											</f:facet>
+											<h:outputText value="#{_leave.employeeLeaveType.description}" />
+										</rich:column>
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Υπολογισμός στα Κενά" />
+											</f:facet>
+											<h:outputText value="#{_leave.generatesCDRs}" />
+										</rich:column>
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Έναρξη" />
+											</f:facet>
+											<h:outputText value="#{_leave.established}">
+												<s:convertDateTime pattern="dd/MM/yyyy" />
+											</h:outputText>
+										</rich:column>
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Λήξη" />
+											</f:facet>
+											<h:outputText value="#{_leave.dueTo}">
+												<s:convertDateTime pattern="dd/MM/yyyy" />
+											</h:outputText>
+										</rich:column>
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Σχολίο Οργανικής">
+													<rich:toolTip
+														value="Εμφανίζεται το Σχολίο της Οργανικής του Εκπαιδευτικού κατά την καταχώρηση της Άδειας." />
+												</h:outputText>
+											</f:facet>
+											<h:outputText value="#{_leave.regularSchool.title}" />
+										</rich:column>
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Σχόλιο" />
+											</f:facet>
+											<h:outputText value="#{_leave.comment}" />
+										</rich:column>
+
+										<f:facet name="footer">
+											<rich:datascroller align="left" for="employeeLeavesList"
+												maxPages="20" renderIfSinglePage="false" id="sc1" />
+										</f:facet>
+
+										<rich:componentControl event="onRowClick" for="menu"
+											operation="show">
+											<f:param name="leaveid" value="#{_leave.id}" />
+											<f:param name="leaveLegacyCode"
+												value="#{_leave.employeeLeaveType.legacyCode}" />
+										</rich:componentControl>
+									</rich:dataTable>
+								</h:form>
+							</rich:panel>
+
+
+
+							<rich:panel id="allLeavesPanel">
+								<f:facet name="header">
+									<h:outputText value="Λίστα Αδειών Εκπαιδευτικού" />
+								</f:facet>
+
+								<h:outputText
+									value="Ο εκπαιδευτικός δεν έχει καταχυρωμένες άδειες."
+									styleClass="fieldValueText"
+									rendered="#{employeeLeaves.size() eq 0}" />
+								<h:form>
+									<rich:dataTable id="employeeLeavesList"
+										value="#{employeeLeaves}"
+										rendered="#{employeeLeaves.size() ne 0}" var="_leave"
+										rows="15" border="0"
+										onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+										onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+										width="100%">
+										<f:facet name="header">
+											<h:outputLabel value="Ιστορικό Αδειών Εκπαιδευτικού" />
+										</f:facet>
+										<rich:column style="text-align:center">
+											<f:facet name="header">
+												<h:outputText value="Κωδ.Άδ." />
+											</f:facet>
+											<h:outputText styleClass="fieldValueText"
+												value="#{_leave.employeeLeaveType.legacyCode}" />
+										</rich:column>
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Τύπος Άδειας" />
+											</f:facet>
+											<h:outputText value="#{_leave.employeeLeaveType.description}" />
+										</rich:column>
+
+										<rich:column style="text-align:center">
+											<f:facet name="header">
+												<h:outputText value="Ημέρες" />
+											</f:facet>
+											<h:outputText styleClass="fieldValueText"
+												value="#{_leave.effectiveNumberOfDays}" />
+										</rich:column>
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Έναρξη" />
+											</f:facet>
+											<h:outputText value="#{_leave.established}">
+												<s:convertDateTime pattern="dd/MM/yyyy" />
+											</h:outputText>
+										</rich:column>
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Λήξη" />
+											</f:facet>
+											<h:outputText value="#{_leave.dueTo}">
+												<s:convertDateTime pattern="dd/MM/yyyy" />
+											</h:outputText>
+										</rich:column>
+
+										<rich:column style="text-align:center">
+											<f:facet name="header">
+												<h:outputText value="Υπ.Κενά">
+													<rich:toolTip
+														value="Αν είναι ενεργοποιημένο, τότε η άδεια συμπεριλαμβάνετε στους υπολογισμούς που έχουν κάνουν με κένα." />
+												</h:outputText>
+											</f:facet>
+											<h:selectBooleanCheckbox value="#{_leave.generatesCDRs}"
+												readonly="true" disabled="true" />
+										</rich:column>
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Σχόλιο" />
+											</f:facet>
+											<h:outputText value="#{_leave.comment}" />
+										</rich:column>
+
+										<f:facet name="footer">
+											<rich:datascroller align="left" for="employeeLeavesList"
+												maxPages="20" renderIfSinglePage="false" id="sc1" />
+										</f:facet>
+
+										<rich:componentControl event="onRowClick" for="menu"
+											operation="show">
+											<f:param name="leaveid" value="#{_leave.id}">
+											</f:param>
+											<f:param name="leaveLegacyCode"
+												value="#{_leave.employeeLeaveType.legacyCode}" />
+
+
+										</rich:componentControl>
+
+									</rich:dataTable>
+								</h:form>
+							</rich:panel>
+
+							<h:form>
+								<rich:contextMenu styleClass="normal" attached="false" id="menu"
+									submitMode="nove">
+									<rich:menuItem icon="/img/icons/edit.png" immediate="true"
+										submitMode="ajax" reRender="updateModalPanel"
+										value="Επεξεργασία"
+										oncomplete="#{rich:component('updateModalPanel')}.show()">
+										<a4j:actionparam name="leaveid" value="{leaveid}"
+											assignTo="#{leaveHome.id}" converter="javax.faces.Integer" />
+										<a4j:actionparam name="leaveLegacyCode"
+											value="{leaveLegacyCode}"
+											assignTo="#{leaveHome.tempValueHolder1}" />
+									</rich:menuItem>
+									<rich:menuItem icon="/img/icons/printer.png" immediate="true"
+										action="#{employeeLeavesManagement.prepeareForLeavePrint()}"
+										submitMode="ajax" reRender="printModalPanel" value="Εκτύπωση"
+										oncomplete="#{rich:component('printModalPanel')}.show()">
+										<a4j:actionparam name="leaveid" value="{leaveid}"
+											assignTo="#{leaveHome.id}" converter="javax.faces.Integer" />
+									</rich:menuItem>
+
+									<rich:menuSeparator />
+									<rich:menuItem icon="/img/icons/delete.png" immediate="true"
+										submitMode="ajax" reRender="deleteModalPanelContent"
+										value="Διαγραφή"
+										oncomplete="#{rich:component('deleteModalPanel')}.show()">
+										<a4j:actionparam name="leaveid" value="{leaveid}"
+											assignTo="#{leaveHome.id}" converter="javax.faces.Integer" />
+									</rich:menuItem>
+								</rich:contextMenu>
+							</h:form>
+
+							<rich:panel>
+								<s:div styleClass="actionButtons">
+									<h:form>
+										<s:button action="backButton" value="Επιστροφή" />
+										<s:button action="endButton" value="Τέλος Ενέργειας" />
+										<a4j:commandButton id="createButton"
+											disabled="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_LEAVE'))}"
+											action="#{employeeLeavesManagement.prepeareNewLeave()}"
+											reRender="createModalPanelContent" immediate="true"
+											oncomplete="#{rich:component('createModalPanel')}.show()"
+											value="Καταχώρηση Νέας Άδειας">
+										</a4j:commandButton>
+									</h:form>
+								</s:div>
+							</rich:panel>
+
+						</h:panelGrid>
+					</h:panelGroup>
+					<h:panelGroup>
+						<!--  second column of main layout -->
+						
+							<rich:panel id="employeeLeaveStats">
+								<f:facet name="header">
+									<h:outputText value="Στατιστικά Αδειών Εκπαιδευτικού" />
+								</f:facet>
+								<h:form id="employeeLeaveStatsForm">
+								<h:panelGrid>
+									<h:outputText styleClass="fieldValueText"
+										value="#{regularEmployeeLeavesOfCurrentYear} ημέρες Κανονικής Άδειας φέτος" />
+									<h:outputText styleClass="fieldValueText"
+										value="#{regularEmployeeLeavesOfPreviousYear} ημέρες Κανονικής Άδειας πέρσυ." />
+										<h:outputText styleClass="fieldValueText"
+										value="#{medicalEmployeeLeavesOfCurrentYear} ημέρες Αναρρωτικής Άδειας φέτος" />
+									<h:outputText styleClass="fieldValueText"
+										value="#{medicalEmployeeLeavesOfPrevious5Years} ημέρες Αναρρωτικής Άδειας την τελευταία 5ετία." />
+								</h:panelGrid>
+								
+								<rich:separator lineType="dotted" height="2" />
+								
+								<h:panelGrid columns="2"> 
+								
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Ημερομηνία Υπολογισμού : " />
+									</ui:define>
+									<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
+										style="width:50px" enableManualInput="true"
+										styleClass="fieldValueText" required="true"
+										value="#{employeeLeavesManagement.leaveComputationReferenceDay}">
+										<a4j:support event="onchanged" ajaxSingle="true" />
+									</rich:calendar>
+								</s:decorate>
+								
+								<a4j:commandButton value="Υπολόγισε"  action="#{employeeLeavesManagement.triggerLeaveAddedAction()}" 
+								reRender="employeeLeaveStats" limitToList="true">
+								</a4j:commandButton>
+								</h:panelGrid>
+								</h:form>
+							</rich:panel>
+						
+					</h:panelGroup>
+				</h:panelGrid>
+
+
+
+			</rich:panel>
+		</a4j:region>
+
+
+
+		<!-- ******************************************************* -->
+		<!-- ******************************************************* -->
+		<!-- DELETE LEAVE MODEL PANEL -->
+		<!-- ******************************************************* -->
+		<!-- ******************************************************* -->
+
+
+		<rich:modalPanel id="deleteModalPanel" autosized="true">
+			<f:facet name="header">
+				<h:outputText value="Να διαγραφεί η άδεια ?"
+					style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<h:graphicImage value="/img/modal/close.png" styleClass="hidelink"
+						width="18" height="18" id="hidelink2" />
+					<rich:componentControl for="deleteModalPanel" attachTo="hidelink2"
+						operation="hide" event="onclick" />
+				</h:panelGroup>
+			</f:facet>
+			<h:form>
+				<rich:messages style="color:red;"></rich:messages>
+				<h:panelGrid columns="1">
+					<a4j:outputPanel id="deleteModalPanelContent" layout="inline">
+						<ui:include src="/components/messages-component.xhtml" />
+
+						<h:panelGroup>
+							<h:outputText value="Να διαγραφή η άδεια " />
+							<h:outputText
+								value="#{messages[leaveHome.instance.leaveType.key]}"
+								styleClass="fieldValueText" />
+							<h:outputText
+								value=" του εκπαιδευτικού #{employeeUtil.prettyFormat(leaveHome.instance.employee)} " />
+							<h:outputText value=" με λήξη την " />
+							<h:outputText value="#{leaveHome.instance.dueTo}"
+								styleClass="fieldValueText">
+								<s:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputText>
+							<h:outputText value=" ;" />
+
+
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Σχόλιο Διαγραφής" />
+								</ui:define>
+								<h:inputTextarea value="#{leaveHome.instance.deletedComment}"
+									required="true" cols="50" rows="3" />
+							</s:decorate>
+
+						</h:panelGroup>
+					</a4j:outputPanel>
+
+					<h:panelGrid columns="2">
+						<a4j:commandButton value="Διαγραφή Άδειας !" ajaxSingle="true"
+							action="#{employeeLeavesManagement.deleteEmployeeLeaveAction()}"
+							data="#{facesContext.maximumSeverity.ordinal ge 2}"
+							limitToList="true"
+							oncomplete="if(data == false) Richfaces.hideModalPanel('deleteModalPanel');"
+							reRender="futureLeavesPanel,allLeavesPanel,activeLeavePanel" />
+						<a4j:commandButton value="Επιστροφή .."
+							onclick="#{rich:component('deleteModalPanel')}.hide();return false;" />
+					</h:panelGrid>
+				</h:panelGrid>
+			</h:form>
+		</rich:modalPanel>
+
+
+
+		<!-- ******************************************************* -->
+		<!-- ******************************************************* -->
+		<!-- MODIFY LEAVE MODEL PANEL -->
+		<!-- ******************************************************* -->
+		<!-- ******************************************************* -->
+
+
+		<rich:modalPanel id="updateModalPanel" autosized="true">
+			<f:facet name="header">
+				<h:outputText value="Τροποποίηση Άδειας Εκπαιδεύτικου"
+					style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<h:graphicImage value="/img/modal/close.png" styleClass="hidelink"
+						width="18" height="18" id="hidelink3" />
+					<rich:componentControl for="updateModalPanel" attachTo="hidelink3"
+						operation="hide" event="onclick" />
+				</h:panelGroup>
+			</f:facet>
+			<a4j:region>
+				<h:panelGrid columns="1">
+					<h:form>
+
+						<a4j:outputPanel id="updateModalPanelContent" layout="inline">
+
+							<ui:include src="/components/messages-component.xhtml" />
+							<h:outputText
+								value="Με την παρακάτω φόρμα, μπορείται να τροποποίησεται την άδεια του/της εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}." />
+							<h:panelGrid columns="4">
+
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Τύπος Άδειας" />
+									</ui:define>
+									<h:panelGrid columns="3" border="0" cellpadding="2"
+										cellspacing="2">
+										<h:inputText id="employeeLeaveTypeCodeTextField"
+											value="#{leaveHome.tempValueHolder1}" size="3" maxlength="2"
+											styleClass="fieldValueText" required="true">
+											<rich:suggestionbox width="400" id="leaveTypeSuggestionbox"
+												suggestionAction="#{employeeLeavesManagement.suggestLeaveTypesBasedOnSelectedEmployee}"
+												var="_leaveType" ajaxSingle="true"
+												for="employeeLeaveTypeCodeTextField"
+												fetchValue="#{_leaveType.legacyCode}">
+												<rich:column>
+													<h:outputText value="#{_leaveType.legacyCode}" />
+												</rich:column>
+												<rich:column>
+													<h:outputText value="#{_leaveType.description}" />
+												</rich:column>
+												<a4j:support ajaxSingle="true" event="onselect"
+													reRender="leaveTypeDescriptionDiv,leaveGeneratesCDRsDecoration">
+													<f:setPropertyActionListener value="#{_leaveType}"
+														target="#{leaveHome.instance.employeeLeaveType}" />
+													<f:setPropertyActionListener
+														target="#{leaveHome.instance.generatesCDRs}"
+														value="#{_leaveType.generatesCDRs}" />
+												</a4j:support>
+
+											</rich:suggestionbox>
+										</h:inputText>
+										<h:graphicImage value="/img/icons/arrowDown.jpg" height="16"
+											width="16"
+											onclick="#{rich:component('leaveTypeSuggestionbox')}.callSuggestion(true)"
+											alt="" />
+										<s:div id="leaveTypeDescriptionDiv">
+											<h:outputText
+												value="#{leaveHome.instance.employeeLeaveType.description}"
+												styleClass="fieldValueText"
+												rendered="#{leaveHome.instance.employeeLeaveType ne null}" />
+											<h:outputText value="Άγνωστος Κωδικός Άδειας"
+												styleClass="fieldValueText"
+												rendered="#{leaveHome.instance.employeeLeaveType eq null}" />
+										</s:div>
+									</h:panelGrid>
+
+
+								</s:decorate>
+
+								<s:decorate id="leaveGeneratesCDRsDecoration"
+									template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Υπολογισμός στα κενά" />
+									</ui:define>
+									<h:selectBooleanCheckbox
+										value="#{leaveHome.instance.generatesCDRs}" />
+								</s:decorate>
+
+
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Έναρξη : " />
+									</ui:define>
+									<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
+										style="width:50px" enableManualInput="true"
+										styleClass="fieldValueText" required="true"
+										value="#{leaveHome.instance.established}">
+										<a4j:support event="onchanged" ajaxSingle="true" />
+									</rich:calendar>
+								</s:decorate>
+
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Λήξη : " />
+									</ui:define>
+									<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
+										style="width:50px" enableManualInput="true"
+										styleClass="fieldValueText" required="true"
+										value="#{leaveHome.instance.dueTo}">
+										<a4j:support event="onchanged" ajaxSingle="true" />
+									</rich:calendar>
+								</s:decorate>
+
+								<h:panelGroup>
+									<h:panelGrid columns="1">
+										<s:decorate template="/layout/doubleLineEdit.xhtml"
+											id="employeeLeaveEffectiveNumberOfDaysDecoration">
+											<ui:define name="label">
+												<h:outputText value="Διάρκεια (ημέρες) : " />
+											</ui:define>
+											<h:inputText id="employeeLeaveEffectiveNumberOfDaysTextField"
+												value="#{leaveHome.instance.effectiveNumberOfDays}" size="3"
+												maxlength="3" styleClass="fieldValueText" required="true" />
+
+										</s:decorate>
+
+										<a4j:commandLink value="Υπολογισμός"
+											action="#{employeeLeavesManagement.computeLeaveDuration()}"
+											reRender="employeeLeaveEffectiveNumberOfDaysDecoration"
+											ajaxSingle="true" />
+									</h:panelGrid>
+								</h:panelGroup>
+
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Σχόλιο" />
+									</ui:define>
+									<h:inputTextarea value="#{leaveHome.instance.comment}" />
+								</s:decorate>
+
+							</h:panelGrid>
+						</a4j:outputPanel>
+
+						<h:panelGrid columns="2">
+
+							<a4j:commandButton value="Τροποποίηση Άδειας !"
+								action="#{employeeLeavesManagement.modifyEmployeeLeaveAction()}"
+								data="#{facesContext.maximumSeverity.ordinal ge 2}"
+								limitToList="true"
+								oncomplete="if(data == false) Richfaces.hideModalPanel('updateModalPanel');"
+								reRender="futureLeavesPanel,allLeavesPanel,activeLeavePanel,updateModalPanelContent" />
+							<a4j:commandButton value="Επιστροφή .."
+								action="#{leaveHome.revert()}"
+								reRender="futureLeavesPanel,allLeavesPanel,activeLeavePanel"
+								oncomplete="#{rich:component('updateModalPanel')}.hide();" />
+						</h:panelGrid>
+					</h:form>
+				</h:panelGrid>
+			</a4j:region>
+		</rich:modalPanel>
+
+		<!-- ******************************************************* -->
+		<!-- ******************************************************* -->
+		<!-- ADD NEW LEAVE MODEL PANEL -->
+		<!-- ******************************************************* -->
+		<!-- ******************************************************* -->
+
+
+		<rich:modalPanel id="createModalPanel" autosized="true">
+			<f:facet name="header">
+				<h:outputText
+					value="Καταχώρηση Άδειας Εκπαιδευτικού #{employeeUtil.prettyFormat(employeeHome.instance)}"
+					style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<h:graphicImage value="/img/modal/close.png" styleClass="hidelink"
+						width="18" height="18" id="hidelink4" />
+					<rich:componentControl for="createModalPanel" attachTo="hidelink4"
+						operation="hide" event="onclick" />
+				</h:panelGroup>
+			</f:facet>
+			<a4j:region>
+				<h:panelGrid columns="1">
+
+					<h:form>
+						<a4j:outputPanel id="createModalPanelContent" layout="inline">
+							<ui:include src="/components/messages-component.xhtml" />
+
+							<h:outputText
+								value="Συμπληρώστε τα στοιχεία της παρακάτω φόρμας για να εισάγεται νέα άδεια για τον εκπαιδευτικό." />
+							<h:panelGrid columns="2" cellpadding="2">
+
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Τύπος Άδειας" />
+									</ui:define>
+									<h:panelGrid columns="3" border="0" cellpadding="2"
+										cellspacing="2">
+										<h:inputText id="employeeLeaveTypeCodeTextField"
+											value="#{leaveHome.tempValueHolder1}" size="3" maxlength="2"
+											styleClass="fieldValueText" required="true">
+											<rich:suggestionbox width="400" id="leaveTypeSuggestionbox"
+												suggestionAction="#{employeeLeavesManagement.suggestLeaveTypesBasedOnSelectedEmployee}"
+												var="_leaveType" ajaxSingle="true"
+												for="employeeLeaveTypeCodeTextField"
+												fetchValue="#{_leaveType.legacyCode}">
+												<rich:column>
+													<h:outputText value="#{_leaveType.legacyCode}" />
+												</rich:column>
+												<rich:column>
+													<h:outputText value="#{_leaveType.description}" />
+												</rich:column>
+												<a4j:support ajaxSingle="true" event="onselect"
+													reRender="leaveTypeDescriptionDiv,leaveGeneratesCDRsDecoration">
+													<f:setPropertyActionListener value="#{_leaveType}"
+														target="#{leaveHome.instance.employeeLeaveType}" />
+													<f:setPropertyActionListener
+														target="#{leaveHome.instance.generatesCDRs}"
+														value="#{_leaveType.generatesCDRs}" />
+												</a4j:support>
+
+											</rich:suggestionbox>
+										</h:inputText>
+										<h:graphicImage value="/img/icons/arrowDown.jpg" height="16"
+											width="16"
+											onclick="#{rich:component('leaveTypeSuggestionbox')}.callSuggestion(true)"
+											alt="" />
+										<s:div id="leaveTypeDescriptionDiv">
+											<h:outputText
+												value="#{leaveHome.instance.employeeLeaveType.description}"
+												styleClass="fieldValueText"
+												rendered="#{leaveHome.instance.employeeLeaveType ne null}" />
+											<h:outputText value="Άγνωστος Κωδικός Άδειας"
+												styleClass="fieldValueText"
+												rendered="#{leaveHome.instance.employeeLeaveType eq null}" />
+										</s:div>
+									</h:panelGrid>
+
+
+								</s:decorate>
+
+								<s:decorate id="leaveGeneratesCDRsDecoration"
+									template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Υπολογισμός στα κενά" />
+									</ui:define>
+									<h:selectBooleanCheckbox
+										value="#{leaveHome.instance.generatesCDRs}" />
+								</s:decorate>
+
+
+								<s:decorate id="establishedDateDecoration"
+									template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Έναρξη Άδειας" />
+									</ui:define>
+									<rich:calendar id="establishedDate" enableManualInput="true"
+										value="#{leaveHome.instance.established}" required="true"
+										inputSize="10" mode="ajax" locale="el_GR"
+										inputClass="fieldValueText" datePattern="dd/MM/yyyy">
+										<a4j:support event="onchanged" ajaxSingle="true" />
+									</rich:calendar>
+								</s:decorate>
+								<s:decorate id="dueToDateDecoration"
+									template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Λήξη Άδειας" />
+									</ui:define>
+									<rich:calendar id="dueToDate"
+										value="#{leaveHome.instance.dueTo}" required="true"
+										mode="ajax" locale="el_GR" inputSize="10"
+										enableManualInput="true" inputClass="fieldValueText"
+										datePattern="dd/MM/yyyy">
+										<a4j:support event="onchanged" ajaxSingle="true" />
+									</rich:calendar>
+								</s:decorate>
+
+								<h:panelGroup>
+									<h:panelGrid columns="1">
+										<s:decorate template="/layout/doubleLineEdit.xhtml"
+											id="employeeLeaveEffectiveNumberOfDaysDecoration">
+											<ui:define name="label">
+												<h:outputText value="Διάρκεια (ημέρες) : " />
+											</ui:define>
+											<h:inputText id="employeeLeaveEffectiveNumberOfDaysTextField"
+												value="#{leaveHome.instance.effectiveNumberOfDays}" size="3"
+												maxlength="3" styleClass="fieldValueText" required="true" />
+
+										</s:decorate>
+
+										<a4j:commandLink value="Υπολογισμός"
+											action="#{employeeLeavesManagement.computeLeaveDuration()}"
+											reRender="employeeLeaveEffectiveNumberOfDaysDecoration"
+											ajaxSingle="true" />
+									</h:panelGrid>
+								</h:panelGroup>
+
+							</h:panelGrid>
+
+
+
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Σχόλιο" />
+								</ui:define>
+								<h:inputTextarea value="#{leaveHome.instance.comment}" rows="3"
+									cols="50" />
+							</s:decorate>
+						</a4j:outputPanel>
+
+						<h:panelGrid columns="2">
+
+							<a4j:commandButton value="Καταχώρηση Άδειας !"
+								action="#{employeeLeavesManagement.addEmployeeLeaveAction()}"
+								data="#{facesContext.maximumSeverity.ordinal ge 2}"
+								limitToList="true"
+								oncomplete="if(data == false) Richfaces.hideModalPanel('createModalPanel');"
+								reRender="futureLeavesPanel,allLeavesPanel,activeLeavePanel,createModalPanelContent" />
+							<a4j:commandButton value="Επιστροφή .."
+								action="#{leaveHome.clearInstance()}"
+								onclick="#{rich:component('createModalPanel')}.hide();" />
+						</h:panelGrid>
+					</h:form>
+				</h:panelGrid>
+			</a4j:region>
+		</rich:modalPanel>
+
+
+		<!-- ******************************************************* -->
+		<!-- ******************************************************* -->
+		<!-- PRINT LEAVE MODEL PANEL -->
+		<!-- ******************************************************* -->
+		<!-- ******************************************************* -->
+
+
+		<rich:modalPanel id="printModalPanel" autosized="true">
+			<f:facet name="header">
+				<h:outputText value="Εκτύπωση Άδειας Εκπαιδεύτικου"
+					style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<h:graphicImage value="/img/modal/close.png" styleClass="hidelink"
+						width="18" height="18">
+						<rich:componentControl for="printModalPanel" operation="hide"
+							event="onclick" />
+					</h:graphicImage>
+
+				</h:panelGroup>
+			</f:facet>
+			<a4j:region>
+				<h:panelGrid columns="1">
+					<h:form>
+
+						<a4j:outputPanel id="printModalPanelContent" layout="inline">
+
+							<ui:include src="/components/messages-component.xhtml" />
+							<h:outputText
+								value="Εκτύπωση άδειας του/της εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}." />
+							<h:panelGrid columns="1">
+								<h:panelGrid columns="3">
+									<s:decorate template="/layout/doubleLineEdit.xhtml">
+										<ui:define name="label">
+											<h:outputText value="Ημερομηνία Αίτησης : " />
+										</ui:define>
+										<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
+											style="width:50px" enableManualInput="true"
+											styleClass="fieldValueText" required="true"
+											value="#{employeeLeavesManagement.leavePrintoutRequestDate}">
+											<a4j:support event="onchanged" ajaxSingle="true" />
+										</rich:calendar>
+									</s:decorate>
+
+									<s:decorate template="/layout/doubleLineEdit.xhtml">
+										<ui:define name="label">
+											<h:outputText value="Ημερομηνία Εκτυπώσης : " />
+										</ui:define>
+										<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
+											style="width:50px" enableManualInput="true"
+											styleClass="fieldValueText" required="true"
+											value="#{employeeLeavesManagement.leavePrintoutDate}">
+											<a4j:support event="onchanged" ajaxSingle="true" />
+										</rich:calendar>
+									</s:decorate>
+
+
+
+									<s:decorate template="/layout/doubleLineEdit.xhtml"
+										id="employeeLeaveEffectiveNumberOfDaysDecoration">
+										<ui:define name="label">
+											<h:outputText value="Αριθμός Πρωτ. : " />
+										</ui:define>
+										<h:inputText id="employeeLeaveEffectiveNumberOfDaysTextField"
+											value="#{employeeLeavesManagement.leavePrintoutReferenceNumber}"
+											size="6" disabled="false" maxlength="10"
+											styleClass="fieldValueText" required="true" readonly="false" />
+
+									</s:decorate>
+								</h:panelGrid>
+
+								<h:panelGrid columns="2">
+									<s:decorate template="/layout/doubleLineEdit.xhtml">
+										<ui:define name="label">
+											<h:outputText value="Κοινοποίηση. : " />
+										</ui:define>
+										<rich:pickList
+											value="#{employeeLeavesManagement.leavePrintounRecipientList}">
+											<s:selectItems
+												value="#{employeeLeavesManagement.leavePrintounRecipientListSource}"
+												itemValue="${recipient}" var="recipient"
+												label="#{recipient.recipientTitle}" />
+											<s:convertEntity />
+										</rich:pickList>
+									</s:decorate>
+
+									<s:decorate template="/layout/doubleLineEdit.xhtml">
+										<ui:define name="label">
+											<h:outputText value="Υπογραφή Απο  : " />
+										</ui:define>
+										<h:selectOneListbox
+											value="#{employeeLeavesManagement.leavePrintoutSignature}">
+											<s:selectItems
+												value="#{employeeLeavesManagement.leavePrintoutSignatureSource}"
+												var="signature" label="#{signature.signatureTitle}" />
+											<s:convertEntity />
+										</h:selectOneListbox>
+									</s:decorate>
+
+								</h:panelGrid>
+
+
+
+
+
+
+							</h:panelGrid>
+						</a4j:outputPanel>
+
+						<h:panelGrid columns="6">
+							<h:commandButton value="PDF commandbutton"
+								action="#{employeeLeavesManagement.printEmployeeLeaveAction()}" />
+							<h:commandButton value="WORD commandbutton"
+								action="#{employeeLeavesManagement.printWordEmployeeLeaveAction()}" />
+							<!-- 
+							<a4j:commandLink value="PDF commandbutton (ajax/link) " target="_blank" action="#{employeeLeavesManagement.printEmployeeLeaveAction()}"></a4j:commandLink>
+							<a4j:commandButton value="PDF commandbutton (ajax)" action="#{employeeLeavesManagement.printEmployeeLeaveAction()}"></a4j:commandButton>
+							
+							<s:button
+								action="#{employeeLeavesManagement.printEmployeeLeaveAction()}"
+								value="Εκτύπωση (PDF)" target="new" type="button" />
+							 -->
+							<a4j:commandButton value="Επιστροφή .."
+								reRender="futureLeavesPanel,allLeavesPanel,activeLeavePanel"
+								oncomplete="#{rich:component('printModalPanel')}.hide();" />
+
+						</h:panelGrid>
+					</h:form>
+				</h:panelGrid>
+			</a4j:region>
+		</rich:modalPanel>
+
+
+		<ui:include src="/components/wait-modal-panel.xhtml" />
+
+	</ui:define>
+</ui:composition>
+</html>
