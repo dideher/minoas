@@ -388,6 +388,18 @@ vertical-align:top;
 		background:#D6D6C2;
 	}
 	
+	.rich-table-future-disposal {
+		background:#99C2FF;
+	}
+	
+	.rich-table-current-disposal {
+		background:#C2FF85
+	}
+	
+	.rich-table-past-disposal {
+		background:#D6D6C2;
+	}
+	
 .required-flag {
 	color:#CC0000;
 	font-weight:bold;

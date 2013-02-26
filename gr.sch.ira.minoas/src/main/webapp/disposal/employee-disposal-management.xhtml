@@ -67,13 +67,13 @@
 							<h:outputText value="Διαθέσεις Εκπαιδευτικού" />
 						</f:facet>
 
-						<a4j:outputPanel id="secondmentsTable">
+						<a4j:outputPanel id="disposalsTable">
 							<h:panelGroup rendered="#{employeeDisposals.size()==0}">
 								<h:outputText
 									value="Δεν υπάρχουν διαθέσεις για τον εκπαιδευτικό." />
 							</h:panelGroup>
 							<h:panelGrid columns="1"
-								rendered="#{employeeSecondments.size() gt 0}">
+								rendered="#{employeeDisposals.size() gt 0}">
 								<h:outputText
 									value="Στον παρακάτω πίνακα εμφανίζονται οι διαθέσεις του εκπαιδευτικού." />
 
@@ -86,77 +86,78 @@
 									<f:facet name="header">
 										<h:outputLabel value="Διαθέσεις Εκπαιδευτικού" />
 									</f:facet>
+									
 									<rich:column
-										styleClass="#{employeeSecondmentsManagement.getTableCellClassForSecondment(_secondment)}">
+										styleClass="#{employeeDisposalManagement.getTableCellClassForDisposal(_secondment)}">
 										<f:facet name="header">
 											<h:outputText value="Σχ. Χρονία" />
 										</f:facet>
 										<h:outputText value="#{_secondment.schoolYear.title}" />
 									</rich:column>
+									
 									<rich:column
-										styleClass="#{employeeSecondmentsManagement.getTableCellClassForSecondment(_secondment)}">
+										styleClass="#{employeeDisposalManagement.getTableCellClassForDisposal(_secondment)}">
 										<f:facet name="header">
-											<h:outputText value="Αποσπ. Απο" />
+											<h:outputText value="Διαθέση Απο" />
 										</f:facet>
-										<h:outputText value="#{_secondment.sourceUnit.title}" />
+										<h:outputText value="#{_secondment.affectedSecondment.sourceUnit.title} (Απόσπαση)" rendered="#{_secondment.affectedSecondment ne null}" />
+										<h:outputText value="#{_secondment.affectedEmployment.school.title} (Οργανική))" rendered="#{_secondment.affectedEmployment ne null}" />
 									</rich:column>
+									
+									
+									
+									<rich:column styleClass="#{employeeDisposalManagement.getTableCellClassForDisposal(_secondment)}">
+												<f:facet name="header">
+													<h:outputText value="Τύπος Προορισμού" />
+												</f:facet>
+												<h:outputText value="#{messages[_secondment.targetType.key]}" />
+											</rich:column>
+											<rich:column styleClass="#{employeeDisposalManagement.getTableCellClassForDisposal(_secondment)}">
+												<f:facet name="header">
+													<h:outputText value="Μονάδα Διάθεσης" />
+												</f:facet>
+												<h:outputText value="#{_secondment.disposalUnit.title}" />
+											</rich:column>
+											<rich:column styleClass="#{employeeDisposalManagement.getTableCellClassForDisposal(_secondment)}">
+												<f:facet name="header">
+													<h:outputText value="'Ωρες" />
+												</f:facet>
+												<h:outputText value="#{_secondment.hours}" />
+											</rich:column>
+											<rich:column styleClass="#{employeeDisposalManagement.getTableCellClassForDisposal(_secondment)}">
+												<f:facet name="header">
+													<h:outputText value="'Ημέρες" />
+												</f:facet>
+												<h:outputText value="#{_secondment.days}" />
+											</rich:column>
+											<rich:column styleClass="#{employeeDisposalManagement.getTableCellClassForDisposal(_secondment)}">
+												<f:facet name="header">
+													<h:outputText value="Έναρξη" />
+												</f:facet>
+												<h:outputText value="#{_secondment.established}">
+													<s:convertDateTime pattern="dd-MM-yyyy" />
+												</h:outputText>
+											</rich:column>
+
+											<rich:column styleClass="#{employeeDisposalManagement.getTableCellClassForDisposal(_secondment)}">
+												<f:facet name="header">
+													<h:outputText value="Λήξη" />
+												</f:facet>
+												<h:outputText value="#{_secondment.dueTo}">
+													<s:convertDateTime pattern="dd-MM-yyyy" />
+												</h:outputText>
+											</rich:column>
+									
+									
 									<rich:column
-										styleClass="#{employeeSecondmentsManagement.getTableCellClassForSecondment(_secondment)}">
-										<f:facet name="header">
-											<h:outputText value="Αποσπ. Σε" />
-										</f:facet>
-										<h:outputText value="#{_secondment.targetUnit.title}" />
-									</rich:column>
-									<rich:column
-										styleClass="#{employeeSecondmentsManagement.getTableCellClassForSecondment(_secondment)}">
-										<f:facet name="header">
-											<h:outputText value="Απο" />
-										</f:facet>
-										<h:outputText value="#{_secondment.established}">
-											<s:convertDateTime pattern="dd-MM-yyyy" />
-										</h:outputText>
-									</rich:column>
-									<rich:column
-										styleClass="#{employeeSecondmentsManagement.getTableCellClassForSecondment(_secondment)}">
-										<f:facet name="header">
-											<h:outputText value="Εώς" />
-										</f:facet>
-										<h:outputText value="#{_secondment.dueTo}">
-											<s:convertDateTime pattern="dd-MM-yyyy" />
-										</h:outputText>
-									</rich:column>
-									<rich:column
-										styleClass="#{employeeSecondmentsManagement.getTableCellClassForSecondment(_secondment)}">
+										styleClass="#{employeeDisposalManagement.getTableCellClassForDisposal(_secondment)}">
 										<f:facet name="header">
 											<h:outputText value="Σχόλιο" />
 										</f:facet>
 										<h:outputText value="#{_secondment.comment}" />
 									</rich:column>
-									<rich:column
-										styleClass="#{employeeSecondmentsManagement.getTableCellClassForSecondment(_secondment)}">
-										<f:facet name="header">
-											<h:outputText value="Με Αίτηση Του" />
-										</f:facet>
-										<h:outputText value="Ναί"
-											rendered="#{_secondment.employeeRequested}" />
-										<h:outputText value="Οχι"
-											rendered="#{!_secondment.employeeRequested}" />
-									</rich:column>
-
-									<rich:column
-										styleClass="#{employeeSecondmentsManagement.getTableCellClassForSecondment(_secondment)}">
-										<f:facet name="header">
-											<h:outputText value="Υποχ. Ωράριο" />
-										</f:facet>
-										<h:outputText value="#{_secondment.mandatoryWorkingHours}" />
-									</rich:column>
-									<rich:column
-										styleClass="#{employeeSecondmentsManagement.getTableCellClassForSecondment(_secondment)}">
-										<f:facet name="header">
-											<h:outputText value="Πραγ. Ωράριο" />
-										</f:facet>
-										<h:outputText value="#{_secondment.finalWorkingHours}" />
-									</rich:column>
+									
+									
 									<rich:column>
 										<f:facet name="header">
 											<h:outputText value="Ενέργεια" />
@@ -165,7 +166,7 @@
 
 											<a4j:commandLink reRender="updateModalPanelContent"
 												ajaxSingle="true"
-												disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MANAGE_SECONDMENT'))}"
+												disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MANAGE_DISPOSAL'))}"
 												oncomplete="#{rich:component('updateModalPanel')}.show()"
 												value="Τροποποίηση">
 												<h:graphicImage value="/img/icons/edit.png" width="12"
@@ -176,13 +177,13 @@
 
 											<a4j:commandLink reRender="deleteModalPanelContent"
 												ajaxSingle="true"
-												disabled="#{!(s:hasRole('ADMIN') or s:hasRole('DELETE_SECONDMENT'))}"
+												disabled="#{!(s:hasRole('ADMIN') or s:hasRole('DELETE_DISPOSAL'))}"
 												oncomplete="#{rich:component('deleteModalPanel')}.show()"
 												value="Διαγραφή">
 												<h:graphicImage value="/img/icons/delete.png" width="12"
 													height="12" style="border:0" />
 												<f:setPropertyActionListener value="#{_secondment.id}"
-													target="#{secondmentHome.id}" />
+													target="#{disposalHome.id}" />
 											</a4j:commandLink>
 										</rich:toolBar>
 									</rich:column>
@@ -196,6 +197,50 @@
 
 
 		</rich:panel>
+		
+		
+		
+		
+		<rich:separator/>
+		<rich:separator/>
+		<rich:separator/>
+		<rich:separator/>
+		<rich:separator/>
+		<rich:separator/>
+		<rich:separator/>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 	
 		<a4j:region>
 			<rich:panel>
@@ -446,6 +491,88 @@
 
 			</rich:panel>
 		</a4j:region>
+		
+		
+		
+		
+		
+		<!-- DELETE Disposal -->
+
+		<rich:modalPanel id="deleteModalPanel" autosized="true" width="350">
+			<f:facet name="header">
+				<h:outputText value="Διαγραφή Διαθέσης ?"
+					style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<h:graphicImage value="/img/modal/close.png" styleClass="hidelink"
+						width="18" height="18" id="hidelink10" />
+					<rich:componentControl for="deleteModalPanel" attachTo="hidelink10"
+						operation="hide" event="onclick" />
+				</h:panelGroup>
+			</f:facet>
+			<a4j:region>
+
+				<rich:messages style="color:red;"></rich:messages>
+				<h:panelGrid columns="1">
+					<a4j:outputPanel id="deleteModalPanelContent" layout="inline">
+						<ui:include src="/components/messages-component.xhtml" />
+						<a4j:form>
+							<h:panelGroup>
+								<h:outputText
+									value="Να διαγραφή η διάθεση του εκπαιδευτικού #{employeeUtil.prettyFormat(disposalHome.instance.employee)} στην μονάδα " />
+								<h:outputText
+									value="#{disposalHome.instance.disposalUnit.title}"
+									styleClass="fieldValueText" />
+								<h:outputText value=" με λήξη την " />
+								<h:outputText value="#{disposalHome.instance.dueTo}"
+									styleClass="fieldValueText">
+									<s:convertDateTime pattern="dd-MM-yyyy" />
+								</h:outputText>
+								<h:outputText value=" ;" />
+								<p>
+									<h:outputText
+										value="Προσοχή ! Αν θέλετε να τερματίσεται μια διάθεση τότε κάντε τροποποίηση των ημερομηνίων λήξης της διάθεσης και ΟΧΙ διαγραφή."
+										styleClass="fieldValueText" />
+								</p>
+
+								<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Σχόλιο Διαγραφής" />
+									</ui:define>
+									<h:inputTextarea immediate="true"
+										value="#{disposalHome.instance.deletedComment}"
+										required="true" cols="50" rows="3" />
+								</s:decorate>
+
+							</h:panelGroup>
+
+
+							<h:panelGrid columns="2">
+								<a4j:commandButton value="Διαγραφή Διάθεσης !"
+									data="#{facesContext.maximumSeverity.ordinal ge 2}"
+									limitToList="true"
+									oncomplete="if(data == false) Richfaces.hideModalPanel('deleteModalPanel');"
+									action="#{employeeDisposalsManagement.deleteEmployeeDisposalAction()}"
+									reRender="disposalsTable,deleteModalPanelContent" />
+								<a4j:commandButton value="Επιστροφή .."
+									onclick="#{rich:component('deleteModalPanel')}.hide();return false;" />
+							</h:panelGrid>
+						</a4j:form>
+					</a4j:outputPanel>
+				</h:panelGrid>
+
+			</a4j:region>
+		</rich:modalPanel>
+		
+		
+		
+		
+		
+		
+		
+		
+		
 
 		<rich:modalPanel id="cancelModalPanel" autosized="true" width="350">
 			<f:facet name="header">

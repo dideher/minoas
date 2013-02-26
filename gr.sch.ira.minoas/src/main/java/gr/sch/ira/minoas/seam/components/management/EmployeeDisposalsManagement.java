@@ -26,7 +26,7 @@ import org.jboss.seam.international.StatusMessage.Severity;
 
 @Name(value = "employeeDisposalsManagement")
 @Scope(ScopeType.CONVERSATION)
-public class EmployeeDisposalManagement extends BaseDatabaseAwareSeamComponent {
+public class EmployeeDisposalsManagement extends BaseDatabaseAwareSeamComponent {
 
     /**
      * Comment for <code>serialVersionUID</code>
@@ -119,14 +119,14 @@ public class EmployeeDisposalManagement extends BaseDatabaseAwareSeamComponent {
         return ACTION_OUTCOME_SUCCESS;
     }
 
-    /* this method is being called from the page containing a list of leaves and returns the CSS class that should be used by the leave row */
-    public String getTableCellClassForSecondment(Secondment secondment) {
-        if (secondment.isFuture()) {
-            return "rich-table-future-secondment";
-        } else if (secondment.isCurrent()) {
-            return "rich-table-current-secondment";
-        } else if (secondment.isPast()) {
-            return "rich-table-past-secondment";
+    /* this method is being called from the page containing a list of disposals and returns the CSS class that should be used by the disposal row */
+    public String getTableCellClassForDisposal(Disposal disposal) {
+        if (disposal.isFuture()) {
+            return "rich-table-future-disposal";
+        } else if (disposal.isCurrent()) {
+            return "rich-table-current-disposal";
+        } else if (disposal.isPast()) {
+            return "rich-table-past-disposal";
         } else
             return "";
     }
@@ -136,26 +136,26 @@ public class EmployeeDisposalManagement extends BaseDatabaseAwareSeamComponent {
     public String deleteEmployeeDisposalAction() {
         if (employeeHome.isManaged() && disposalHome.isManaged()) {
             Employee employee = getEntityManager().merge(employeeHome.getInstance());
-//            Secondment secondment = disposalHome.getInstance();
-//            info("deleting employee #0 secondment #1", employee, secondment);
+            Disposal disposal = disposalHome.getInstance();
+            info("deleting employee #0 disposal #1", employee, disposal);
+
+//            for (TeachingHourCDR cdr : leave.getLeaveCDRs()) {
+//                info("deleting leave's #0 cdr #1", employee, cdr);
+//                cdr.setLeave(null);
+//                getEntityManager().remove(cdr);
+//            }
 //
-////            for (TeachingHourCDR cdr : leave.getLeaveCDRs()) {
-////                info("deleting leave's #0 cdr #1", employee, cdr);
-////                cdr.setLeave(null);
-////                getEntityManager().remove(cdr);
-////            }
-////
-////            leave.getLeaveCDRs().removeAll(leave.getLeaveCDRs());
-//            secondment.setActive(Boolean.FALSE);
-//            secondment.setDeleted(Boolean.TRUE);
-//            secondment.setDeletedOn(new Date());
-//            secondment.setDeletedBy(getPrincipal());
-//            disposalHome.update();
-//            info("secondent #0 for employee #1 has been deleted", secondment, employee);
-//            getEntityManager().flush();
+//            leave.getLeaveCDRs().removeAll(leave.getLeaveCDRs());
+            disposal.setActive(Boolean.FALSE);
+            disposal.setDeleted(Boolean.TRUE);
+            disposal.setDeletedOn(new Date());
+            disposal.setDeletedBy(getPrincipal());
+            disposalHome.update();
+            info("disposal #0 for employee #1 has been deleted", disposal, employee);
+            getEntityManager().flush();
             return ACTION_OUTCOME_SUCCESS;
         } else {
-            facesMessages.add(Severity.ERROR, "employee home #0 or secondment home #1 not managed.", employeeHome,
+            facesMessages.add(Severity.ERROR, "employee home #0 or disposal home #1 not managed.", employeeHome,
                     disposalHome);
             return ACTION_OUTCOME_FAILURE;
         }
