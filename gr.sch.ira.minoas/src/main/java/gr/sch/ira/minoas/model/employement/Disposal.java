@@ -399,5 +399,19 @@ public class Disposal extends BaseIDDeleteAwareModel {
         Date currentDate = DateUtils.truncate(new Date(),  Calendar.DAY_OF_MONTH);
         return DateUtils.truncate(getEstablished(),  Calendar.DAY_OF_MONTH).before(currentDate);
     }
+    
+    public Unit getSourceUnit() {
+        if(getAffectedEmployment()!=null) {
+            return getAffectedEmployment().getSchool();
+        } else if(getAffectedSecondment()!=null) {
+            return getAffectedSecondment().getTargetUnit();
+        } else {
+            return null;
+        }
+    }
+    
+    public boolean isSourceUnitSecondment() {
+        return getAffectedSecondment()!=null && getAffectedSecondment().getTargetUnit()!=null;
+    }
 
 }
