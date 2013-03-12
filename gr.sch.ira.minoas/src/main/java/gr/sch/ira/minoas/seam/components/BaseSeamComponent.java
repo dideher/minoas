@@ -21,6 +21,8 @@ public abstract class BaseSeamComponent implements Serializable {
 	
 	public static final String ACTION_OUTCOME_FAILURE = "failure";
 
+	public static final String EMPTY_STRING = "";
+	
 	public static final Locale greekLocale = new Locale("el", "GR");
 
 	/**
