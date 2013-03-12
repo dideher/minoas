@@ -987,6 +987,17 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
     protected boolean validateLeave(EmployeeLeave leave, boolean addMessages) {
         Date established = DateUtils.truncate(leave.getEstablished(), Calendar.DAY_OF_MONTH);
         Date dueTo = DateUtils.truncate(leave.getDueTo(), Calendar.DAY_OF_MONTH);
+        
+        /* check if the employee type has been specified */
+        if(leave.getEmployeeLeaveType()==null) {
+            if (addMessages)
+                facesMessages
+                        .add(Severity.ERROR,
+                                "Προσοχή, δεν έχετε επιλέξει τύπο άδειας.");
+            
+            return false;
+        }
+        
         /* check if the dates are correct */
         if (established.after(dueTo)) {
 
