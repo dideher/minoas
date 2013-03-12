@@ -613,10 +613,13 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
     }
     
     protected String normalizeStringForXML(String value) {
-        String returnValue = value.replace("&", "&amp;"); 
-        returnValue = returnValue.replace("<", "&lt;");
-        returnValue = returnValue.replace(">", "&gt;");
-        return returnValue;
+        if(value!=null) {
+            String returnValue = value.replace("&", "&amp;"); 
+            returnValue = returnValue.replace("<", "&lt;");
+            returnValue = returnValue.replace(">", "&gt;");
+            return returnValue;
+        } else 
+            return EMPTY_STRING;
     }
 
     protected Map<String, Object> prepareParametersForLeavePrintout() throws NoSuchAlgorithmException, UnsupportedEncodingException {
@@ -986,6 +989,17 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
     protected boolean validateLeave(EmployeeLeave leave, boolean addMessages) {
         Date established = DateUtils.truncate(leave.getEstablished(), Calendar.DAY_OF_MONTH);
         Date dueTo = DateUtils.truncate(leave.getDueTo(), Calendar.DAY_OF_MONTH);
+        
+        /* check if the employee type has been specified */
+        if(leave.getEmployeeLeaveType()==null) {
+            if (addMessages)
+                facesMessages
+                        .add(Severity.ERROR,
+                                "Προσοχή, δεν έχετε επιλέξει τύπο άδειας.");
+            
+            return false;
+        }
+        
         /* check if the dates are correct */
         if (established.after(dueTo)) {
 
