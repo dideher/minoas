@@ -3,8 +3,9 @@
  */
 package gr.sch.ira.minoas.seam.components.home;
 
-import gr.sch.ira.minoas.model.employee.EmployeeInfo;
-import gr.sch.ira.minoas.model.employee.SectorType;
+import gr.sch.ira.minoas.model.employee.RankInfo;
+import gr.sch.ira.minoas.model.employee.RankType;
+import gr.sch.ira.minoas.model.employement.EducationalLevelType;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.AutoCreate;
@@ -16,9 +17,9 @@ import org.jboss.seam.annotations.Transactional;
  * @author <a href="mailto:gand@sch.gr">Yorgos Andreadakis</a>
  * @version $Id$
  */
-@Name(value = "employeeInfoHome")
+@Name(value = "rankInfoHome")
 @AutoCreate
-public class EmployeeInfoHome extends MinoasEntityHome<EmployeeInfo> {
+public class RankInfoHome extends MinoasEntityHome<RankInfo> {
 
 	/**
 	 * 
@@ -29,8 +30,8 @@ public class EmployeeInfoHome extends MinoasEntityHome<EmployeeInfo> {
 	 * @see org.jboss.seam.framework.Home#createInstance()
 	 */
 	@Override
-	protected EmployeeInfo createInstance() {
-		EmployeeInfo instance = new EmployeeInfo(null, "", null, "", null, "", null, false, null, false, null, false, null, false, null, SectorType.PUBLIC_SECTOR, 0, 0, 0, 0);
+	protected RankInfo createInstance() {
+		RankInfo instance = new RankInfo(RankType.RANK_ST, 0, EducationalLevelType.UNIVERSITY_EDUCATION_LEVEL);
 		
 		return instance;
 	}
@@ -39,11 +40,11 @@ public class EmployeeInfoHome extends MinoasEntityHome<EmployeeInfo> {
 	 * @see org.jboss.seam.framework.Home#getInstance()
 	 */
 	@Override
-	@Factory(value = "employeeInfo", scope = ScopeType.PAGE)
-	public EmployeeInfo getInstance() {
+	@Factory(value = "rankInfo", scope = ScopeType.PAGE)
+	public RankInfo getInstance() {
 		// TODO Auto-generated method stub
-		EmployeeInfo epInfo = (EmployeeInfo) super.getInstance();
-		return epInfo;
+		RankInfo rnkInfo = (RankInfo) super.getInstance();
+		return rnkInfo;
 	}
 
 	/**
@@ -88,20 +89,4 @@ public class EmployeeInfoHome extends MinoasEntityHome<EmployeeInfo> {
     public void clearInstance() {
         super.clearInstance();
     }
-	
-//	/**
-//	 * @see gr.sch.ira.minoas.seam.components.home.MinoasEntityHome#update()
-//	 */
-//	@Transactional
-//	public String insertRankInfo() {
-//		
-//		EmployeeInfo employeeInfo = (EmployeeInfo)super.getInstance();
-//		RankInfo newRankInfo = new RankInfo(employeeInfo.getRankInfo());
-//		
-//		employeeInfo.setRankInfo(newRankInfo);
-//	
-//		return update();
-//	}
-
-
 }
