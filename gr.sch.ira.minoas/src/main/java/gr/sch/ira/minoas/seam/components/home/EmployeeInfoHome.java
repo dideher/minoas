@@ -30,7 +30,7 @@ public class EmployeeInfoHome extends MinoasEntityHome<EmployeeInfo> {
 	 */
 	@Override
 	protected EmployeeInfo createInstance() {
-		EmployeeInfo instance = new EmployeeInfo(null, "", null, "", null, "", null, false, null, false, null, false, null, false, null, SectorType.PUBLIC_SECTOR, 0, 0, 0, 0);
+		EmployeeInfo instance = new EmployeeInfo();
 		
 		return instance;
 	}

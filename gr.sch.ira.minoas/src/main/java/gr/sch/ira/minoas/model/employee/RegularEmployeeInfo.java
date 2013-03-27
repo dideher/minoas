@@ -32,20 +32,20 @@ public class RegularEmployeeInfo extends BaseIDModel {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Greek Official Gazette of appointment (÷≈  ƒÈÔÒÈÛÏÔ˝)
-	 * 
+	 * Greek Official Gazette Αppointment Number (Αριθμός ΦΕΚ Διορισμού)
 	 */
 	@Basic
-	@Column(name = "APPOINTMENT_GOF", length = 4)
-	private String appointmentGOF;
+	@Column(name = "GOG_APPOINTMENT_NO", length = 4)
+	private String gogAppointmentNo;
 
 	/**
-	 * Greek Official Gazette of Date appointment («ÏÂÒÔÏÁÌﬂ· ÷≈  ƒÈÔÒÈÛÏÔ˝)
-	 * 
+	 * Greek Official Gazette Αppointment Date (Ημερομηνία ΦΕΚ Διορισμού)
 	 */
 	@Basic
-	@Column(name = "APPOINTMENT_GOF_DATE")
-	private Date appointmentGOFDate;
+	@Column(name = "GOG_APPOINTMENT_DATE")
+	private Date gogAppointmentDate;
+	
+	
 
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "EMPLOYEE_ID", nullable = false)
@@ -54,20 +54,29 @@ public class RegularEmployeeInfo extends BaseIDModel {
 	@Basic
 	@Column(name = "REGISTRY_ID", length = 7)
 	private String registryID;
-
+	
+	
 	/**
-	 * @return the appointmentGOF
+	 * Permanent Employee Act (Πράξη Μονιμοποίησης)
 	 */
-	public String getAppointmentGOF() {
-		return appointmentGOF;
-	}
-
+	@Basic
+	@Column(name = "PERMANENT_EMPLOYEE_ACT", length = 8)
+	private String permanentEmployeeAct;
+	
 	/**
-	 * @return the appointmentGOFDate
+	 * Permanent Empoloyee Act Date (Ημερομηνία Πράξης Μονιμοποίησης)
 	 */
-	public Date getAppointmentGOFDate() {
-		return appointmentGOFDate;
-	}
+	@Basic
+	@Column(name = "PERMANENT_EMPLOYEE_ACT_DATE")
+	private Date permanentEmployeeActDate;
+	
+	/**
+	 * Is Recently Hired (Νεοδιορισμένος)
+	 */
+	@Basic
+	@Column(name = "IS_RECENTLY_HIRED")
+	private Boolean isRecentlyHired;
+
 
 	/**
 	 * @return the employee
@@ -84,20 +93,6 @@ public class RegularEmployeeInfo extends BaseIDModel {
 	}
 
 	/**
-	 * @param appointmentGOF the appointmentGOF to set
-	 */
-	public void setAppointmentGOF(String appointmentGOF) {
-		this.appointmentGOF = appointmentGOF;
-	}
-
-	/**
-	 * @param appointmentGOFDate the appointmentGOFDate to set
-	 */
-	public void setAppointmentGOFDate(Date appointmentGOFDate) {
-		this.appointmentGOFDate = appointmentGOFDate;
-	}
-
-	/**
 	 * @param employee the employee to set
 	 */
 	public void setEmployee(Employee employee) {
@@ -111,4 +106,73 @@ public class RegularEmployeeInfo extends BaseIDModel {
 		this.registryID = registryID;
 	}
 
+	/**
+	 * @return the permanentEmployeeAct
+	 */
+	public String getPermanentEmployeeAct() {
+		return permanentEmployeeAct;
+	}
+
+	/**
+	 * @param permanentEmployeeAct the permanentEmployeeAct to set
+	 */
+	public void setPermanentEmployeeAct(String permanentEmployeeAct) {
+		this.permanentEmployeeAct = permanentEmployeeAct;
+	}
+
+	/**
+	 * @return the permanentEmployeeActDate
+	 */
+	public Date getPermanentEmployeeActDate() {
+		return permanentEmployeeActDate;
+	}
+
+	/**
+	 * @param permanentEmployeeActDate the permanentEmployeeActDate to set
+	 */
+	public void setPermanentEmployeeActDate(Date permanentEmployeeActDate) {
+		this.permanentEmployeeActDate = permanentEmployeeActDate;
+	}
+
+	/**
+	 * @return the isRecentlyHired
+	 */
+	public Boolean getIsRecentlyHired() {
+		return isRecentlyHired;
+	}
+
+	/**
+	 * @param isRecentlyHired the isRecentlyHired to set
+	 */
+	public void setIsRecentlyHired(Boolean isRecentlyHired) {
+		this.isRecentlyHired = isRecentlyHired;
+	}
+
+	/**
+	 * @return the gogAppointmentNo
+	 */
+	public String getGogAppointmentNo() {
+		return gogAppointmentNo;
+	}
+
+	/**
+	 * @param gogAppointmentNo the gogAppointmentNo to set
+	 */
+	public void setGogAppointmentNo(String gogAppointmentNo) {
+		this.gogAppointmentNo = gogAppointmentNo;
+	}
+
+	/**
+	 * @return the gogAppointmentDate
+	 */
+	public Date getGogAppointmentDate() {
+		return gogAppointmentDate;
+	}
+	
+	/**
+	 * @param gogAppointmentDate the gogAppointmentDate to set
+	 */
+	public void setGogAppointmentDate(Date gogAppointmentDate) {
+		this.gogAppointmentDate = gogAppointmentDate;
+	}
 }

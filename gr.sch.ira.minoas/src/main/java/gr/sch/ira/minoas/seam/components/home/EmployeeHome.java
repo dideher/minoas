@@ -3,9 +3,9 @@ package gr.sch.ira.minoas.seam.components.home;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
 import gr.sch.ira.minoas.model.employee.RegularEmployeeInfo;
-import gr.sch.ira.minoas.model.employement.DeputyEmploymentInfo;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
+import gr.sch.ira.minoas.model.employement.NonRegularEmploymentInfo;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.ServiceAllocation;
 
@@ -37,7 +37,7 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 	private static final long serialVersionUID = 1L;
 
 	@In(create = true)
-	private DeputyEmploymentInfoHome deputyEmploymentInfoHome;
+	private NonRegularEmploymentInfoHome nonRegularEmploymentInfoHome;
 
 	@In(create = true)
 	private EmploymentHome employmentHome;
@@ -60,13 +60,13 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 	public String addNewEmployeeInLocalPYSDE() {
 
 		if (isManaged() || employmentHome.isManaged() || regularEmployeeInfoHome.isManaged()
-				|| deputyEmploymentInfoHome.isManaged()) {
+				|| nonRegularEmploymentInfoHome.isManaged()) {
 			throw new RuntimeException(
 					"employee home or employment home or employeeRegularInfo or deputyEmploymentInfoHome is managed.");
 		}
 
 		RegularEmployeeInfo info = null;
-		DeputyEmploymentInfo deputyEmploymentInfo = null;
+		NonRegularEmploymentInfo nonRegularEmploymentInfo = null;
 		Employee new_employee = getInstance();
 		Employment employment = employmentHome.getInstance();
 
@@ -118,10 +118,10 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 			new_employee.setCurrentEmployment(employment);
 			getEntityManager().persist(employment);
 
-			deputyEmploymentInfo = new DeputyEmploymentInfo();
-			deputyEmploymentInfo.setEmployment(employment);
-			deputyEmploymentInfo.setInsertedBy(getPrincipal());
-			getEntityManager().persist(deputyEmploymentInfo);
+			nonRegularEmploymentInfo = new NonRegularEmploymentInfo();
+			nonRegularEmploymentInfo.setEmployment(employment);
+			nonRegularEmploymentInfo.setInsertedBy(getPrincipal());
+			getEntityManager().persist(nonRegularEmploymentInfo);
 		}
 
 		if (new_employee.getType() == EmployeeType.HOURLYPAID) {
@@ -164,8 +164,8 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 	/**
 	 * @return the deputyEmploymentInfoHome
 	 */
-	public DeputyEmploymentInfoHome getDeputyEmploymentInfoHome() {
-		return deputyEmploymentInfoHome;
+	public NonRegularEmploymentInfoHome getNonRegularEmploymentInfoHome() {
+		return nonRegularEmploymentInfoHome;
 	}
 
 	/**
@@ -219,7 +219,7 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 		this.clearInstance();
 		regularEmployeeInfoHome.clearInstance();
 		employmentHome.clearInstance();
-		deputyEmploymentInfoHome.clearInstance();
+		nonRegularEmploymentInfoHome.clearInstance();
 		employmentHome.getInstance().setEstablished(
 				getCoreSearching().getActiveSchoolYear(getEntityManager()).getSchoolYearStart());
 		employmentHome.getInstance().setFinalWorkingHours(21);
@@ -250,10 +250,10 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 	}
 
 	/**
-	 * @param deputyEmploymentInfoHome the deputyEmploymentInfoHome to set
+	 * @param nonRegularEmploymentInfoHome the nonRegularEmploymentInfoHome to set
 	 */
-	public void setDeputyEmploymentInfoHome(DeputyEmploymentInfoHome deputyEmploymentInfoHome) {
-		this.deputyEmploymentInfoHome = deputyEmploymentInfoHome;
+	public void setNonRegularEmploymentInfoHome(NonRegularEmploymentInfoHome nonRegularEmploymentInfoHome) {
+		this.nonRegularEmploymentInfoHome = nonRegularEmploymentInfoHome;
 	}
 
 	/**

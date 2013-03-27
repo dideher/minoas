@@ -3,7 +3,10 @@ package gr.sch.ira.minoas.seam.components.management;
 import gr.sch.ira.minoas.core.CoreUtils;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeInfo;
+import gr.sch.ira.minoas.model.employee.EmployeeType;
 import gr.sch.ira.minoas.model.employee.RankInfo;
+import gr.sch.ira.minoas.model.employee.RegularEmployeeInfo;
+import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.CoreSearching;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
@@ -322,16 +325,42 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 	 * totalWorkService = Ημ/νία Διορισμού + Συνολική Υπηρεσία + Συνολική Προϋπηρεσία
 	 */
 	public void recalculateTotalWorkService() {
-		EmployeeInfo employeeInfo = employeeHome.getInstance().getEmployeeInfo();
-		int totalWorkService = 0;
-		if (totalWorkServiceCalculationDate != null
-				&& employeeInfo.getGogAppointmentDate() != null)
-			totalWorkService = CoreUtils.datesDifferenceIn360DaysYear(
-					employeeInfo.getEntryIntoServiceDate(),
-					totalWorkServiceCalculationDate)
-					+ getSumOfExperience();
-		if (totalWorkService != 0)
-			setTotalCalculatedServiceInDays(totalWorkService);
+		//EmployeeInfo employeeInfo = employeeHome.getInstance().getEmployeeInfo();
+		Employee employee = employeeHome.getInstance();
+		if (employee.getType() == EmployeeType.REGULAR) {
+			RegularEmployeeInfo regularEmployeeInfo = employee.getRegularEmployeeInfo();
+			Employment employment = employee.getCurrentEmployment();
+			int totalWorkService = 0;
+			if (totalWorkServiceCalculationDate != null
+					&& regularEmployeeInfo.getGogAppointmentDate() != null)
+				totalWorkService = CoreUtils.datesDifferenceIn360DaysYear(
+						employment.getEntryIntoServiceDate(),
+						totalWorkServiceCalculationDate)
+						+ getSumOfExperience();
+			if (totalWorkService != 0)
+				setTotalCalculatedServiceInDays(totalWorkService);
+		} else if (employee.getType() == EmployeeType.DEPUTY || employee.getType() == EmployeeType.HOURLYPAID) {
+			
+			
+			
+			// Total Work Service Recalculation for DEPUTY and HOURLY PAID pending!!!!
+			
+			
+//			Employment employment = employee.getCurrentEmployment();
+//			int totalWorkService = 0;
+//			if (totalWorkServiceCalculationDate != null
+//					&& regularEmployeeInfo.getGogAppointmentDate() != null)
+//				totalWorkService = CoreUtils.datesDifferenceIn360DaysYear(
+//						employment.getEntryIntoServiceDate(),
+//						totalWorkServiceCalculationDate)
+//						+ getSumOfExperience();
+//			if (totalWorkService != 0)
+//				setTotalCalculatedServiceInDays(totalWorkService);
+			
+			
+		}
+		
+		
 	}
 
 	/**

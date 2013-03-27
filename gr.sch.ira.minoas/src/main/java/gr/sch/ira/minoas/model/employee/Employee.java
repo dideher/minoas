@@ -6,7 +6,6 @@ import gr.sch.ira.minoas.model.employement.Disposal;
 import gr.sch.ira.minoas.model.employement.EducationalLevelType;
 import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 import gr.sch.ira.minoas.model.employement.Employment;
-import gr.sch.ira.minoas.model.employement.Salary;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.ServiceAllocation;
 import gr.sch.ira.minoas.model.employement.WorkExperience;
@@ -74,10 +73,6 @@ public class Employee extends Person {
 	@OneToMany(mappedBy = "employee", fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
 	private Set<Employment> employments;
 	
-	@OneToOne(optional=true, fetch=FetchType.LAZY, cascade={CascadeType.ALL})
-	@JoinColumn(name="SALARY_ID", nullable=true)
-	private Salary salary;
-	
 	@OneToMany(fetch=FetchType.LAZY,cascade={CascadeType.ALL}, mappedBy="employee")
 	private Collection<WorkExperience> workExperience =  new ArrayList<WorkExperience>();
 
@@ -104,7 +99,7 @@ public class Employee extends Person {
 	@OneToOne(optional = true, fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
 	@JoinColumn(name = "REGULAR_EMPLOYMEE_INFO_ID", nullable = true)
 	private RegularEmployeeInfo regularEmployeeInfo;
-
+	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", cascade = { CascadeType.ALL })
 	private Collection<Secondment> secondments = new ArrayList<Secondment>();
 
@@ -125,6 +120,28 @@ public class Employee extends Person {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "EDUCATIONAL_LEVEL_TYPE", length = 2, nullable = true)
 	private EducationalLevelType educationalLevelType;
+	
+	/**
+     * Οικογενειακή Κατάσταση 
+     */
+	@Enumerated(EnumType.STRING)
+	@Column(name = "MARITAL_STATUS", length = 30, nullable = true, updatable = false)
+	private MaritalStatusType maritalType;
+	
+	/**
+     * Αριθμός παιδιών 
+     */
+	@Basic
+    @Column(name = "NUMBER_OF_CHILDREN", nullable = true)
+	private Integer numberOfChildren;
+	
+	/**
+     * Αριθμός Μητρώου ΙΚΑ 
+     * Μήκος: 7 χαρακτήρες
+     */
+    @Basic(fetch=FetchType.LAZY)
+    @Column(name="IKA_ID", nullable=true, length=10)
+    private String ikaId;
 	
 	@OneToOne(fetch=FetchType.LAZY, cascade={CascadeType.ALL}, mappedBy="employee")
 	private EmployeeExclusion exclusion;
@@ -473,20 +490,6 @@ public class Employee extends Person {
 	}
 
     /**
-     * @return the salary
-     */
-    public Salary getSalary() {
-        return salary;
-    }
-
-    /**
-     * @param salary the salary to set
-     */
-    public void setSalary(Salary salary) {
-        this.salary = salary;
-    }
-
-    /**
      * @return the workExperience
      */
     public Collection<WorkExperience> getWorkExperience() {
@@ -514,7 +517,21 @@ public class Employee extends Person {
 		this.employeeInfo = employeeInfo;
 	}
 	
-    public boolean isRegularEmployee() {
+    /**
+	 * @return the regularEmployeeInfo
+	 */
+	public RegularEmployeeInfo getRegularEmployeeInfo() {
+		return regularEmployeeInfo;
+	}
+
+	/**
+	 * @param regularEmployeeInfo the regularEmployeeInfo to set
+	 */
+	public void setRegularEmployeeInfo(RegularEmployeeInfo regularEmployeeInfo) {
+		this.regularEmployeeInfo = regularEmployeeInfo;
+	}
+
+	public boolean isRegularEmployee() {
         return type==EmployeeType.REGULAR;
     }
     
@@ -581,6 +598,48 @@ public class Employee extends Person {
     public void setTerminationOptionalComment(String terminationOptionalComment) {
         this.terminationOptionalComment = terminationOptionalComment;
     }
+
+	/**
+	 * @return the maritalType
+	 */
+	public MaritalStatusType getMaritalType() {
+		return maritalType;
+	}
+
+	/**
+	 * @param maritalType the maritalType to set
+	 */
+	public void setMaritalType(MaritalStatusType maritalType) {
+		this.maritalType = maritalType;
+	}
+
+	/**
+	 * @return the numberOfChildren
+	 */
+	public Integer getNumberOfChildren() {
+		return numberOfChildren;
+	}
+
+	/**
+	 * @param numberOfChildren the numberOfChildren to set
+	 */
+	public void setNumberOfChildren(Integer numberOfChildren) {
+		this.numberOfChildren = numberOfChildren;
+	}
+
+	/**
+	 * @return the ikaId
+	 */
+	public String getIkaId() {
+		return ikaId;
+	}
+
+	/**
+	 * @param ikaId the ikaId to set
+	 */
+	public void setIkaId(String ikaId) {
+		this.ikaId = ikaId;
+	}
 	
 
 }

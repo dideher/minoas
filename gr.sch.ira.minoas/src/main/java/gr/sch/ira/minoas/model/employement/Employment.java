@@ -58,8 +58,8 @@ public class Employment extends BaseIDDeleteAwareModel {
 	private Boolean homeBased = Boolean.FALSE;
 
 	@OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
-	@JoinColumn(name = "DEPUTY_EMPLOYMENT_INFO_ID", nullable = true)
-	private DeputyEmploymentInfo deputyEmploymentInfo;
+	@JoinColumn(name = "NONREGULAR_EMPLOYMENT_INFO_ID", nullable = true)
+	private NonRegularEmploymentInfo nonRegularEmploymentInfo;
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
 	@JoinColumn(name = "EMPLOYEE_ID", nullable = false)
@@ -129,6 +129,31 @@ public class Employment extends BaseIDDeleteAwareModel {
 	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.LAZY, mappedBy="employment")
     private Collection<TeachingHourCDR>employmentCDRs = new ArrayList<TeachingHourCDR>();
 
+	
+	/**
+	 * Entry into service Act (Πράξη ανάληψης υπηρεσίας)
+	 * Πράξη ανάληψης στην Β/θμια στην περίπτωση Αναπληρωτή
+	 * Πράξη ανάληψης στο σχολείο στην περίπτωση Ωρομισθίου
+	 */
+	@Basic
+	@Column(name = "ENTRY_INTO_SERVICE_ACT", length = 5)
+	private String entryIntoServiceAct;
+	
+	/**
+	 * Entry into service date (Ημερομηνία ανάληψης υπηρεσίας)
+	 * Πράξη ανάληψης στην Β/θμια στην περίπτωση Αναπληρωτή
+	 * Πράξη ανάληψης στο σχολείο στην περίπτωση Ωρομισθίου
+	 */
+	@Basic
+	@Column(name = "ENTRY_INTO_SERVICE_DATE")
+	private Date entryIntoServiceDate;
+	
+	
+	@Basic
+	@Column(name = "COMMENTS", nullable = true)
+	private String comments;
+	
+	
 	/**
 	 * 
 	 */
@@ -142,13 +167,6 @@ public class Employment extends BaseIDDeleteAwareModel {
 	 */
 	public Boolean getActive() {
 		return active;
-	}
-
-	/**
-	 * @return the deputyEmploymentInfo
-	 */
-	public DeputyEmploymentInfo getDeputyEmploymentInfo() {
-		return deputyEmploymentInfo;
 	}
 
 	/**
@@ -258,13 +276,6 @@ public class Employment extends BaseIDDeleteAwareModel {
 	 */
 	public void setActive(Boolean active) {
 		this.active = active;
-	}
-
-	/**
-	 * @param deputyEmploymentInfo the deputyEmploymentInfo to set
-	 */
-	public void setDeputyEmploymentInfo(DeputyEmploymentInfo deputyEmploymentInfo) {
-		this.deputyEmploymentInfo = deputyEmploymentInfo;
 	}
 
 	/**
@@ -412,5 +423,63 @@ public class Employment extends BaseIDDeleteAwareModel {
     public void setEmploymentCDRs(Collection<TeachingHourCDR> employmentCDRs) {
         this.employmentCDRs = employmentCDRs;
     }
+
+    
+	/**
+	 * @return the entryIntoServiceDate
+	 */
+	public Date getEntryIntoServiceDate() {
+		return entryIntoServiceDate;
+	}
+
+	/**
+	 * @param entryIntoServiceDate the entryIntoServiceDate to set
+	 */
+	public void setEntryIntoServiceDate(Date entryIntoServiceDate) {
+		this.entryIntoServiceDate = entryIntoServiceDate;
+	}
+	
+	/**
+	 * @return the entryIntoServiceAct
+	 */
+	public String getEntryIntoServiceAct() {
+		return entryIntoServiceAct;
+	}
+
+	/**
+	 * @param entryIntoServiceAct the entryIntoServiceAct to set
+	 */
+	public void setEntryIntoServiceAct(String entryIntoServiceAct) {
+		this.entryIntoServiceAct = entryIntoServiceAct;
+	}
+
+	/**
+	 * @return the comments
+	 */
+	public String getComments() {
+		return comments;
+	}
+
+	/**
+	 * @param comments the comments to set
+	 */
+	public void setComments(String comments) {
+		this.comments = comments;
+	}
+
+	/**
+	 * @return the nonRegularEmploymentInfo
+	 */
+	public NonRegularEmploymentInfo getNonRegularEmploymentInfo() {
+		return nonRegularEmploymentInfo;
+	}
+
+	/**
+	 * @param nonRegularEmploymentInfo the nonRegularEmploymentInfo to set
+	 */
+	public void setNonRegularEmploymentInfo(
+			NonRegularEmploymentInfo nonRegularEmploymentInfo) {
+		this.nonRegularEmploymentInfo = nonRegularEmploymentInfo;
+	}
 
 }
