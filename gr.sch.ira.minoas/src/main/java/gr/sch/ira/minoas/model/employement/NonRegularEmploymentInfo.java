@@ -34,7 +34,7 @@ public class NonRegularEmploymentInfo extends BaseIDModel {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@OneToOne(mappedBy = "deputyEmploymentInfo", fetch = FetchType.LAZY)
+	@OneToOne(mappedBy = "nonRegularEmploymentInfo", fetch = FetchType.LAZY)
 	private Employment employment;
 
 	/*

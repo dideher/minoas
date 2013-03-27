@@ -20,7 +20,7 @@
     <class>gr.sch.ira.minoas.model.employement.Employment</class>
     <class>gr.sch.ira.minoas.model.employement.DisposalUnit</class>
     <class>gr.sch.ira.minoas.model.employement.Disposal</class>
-    <class>gr.sch.ira.minoas.model.employement.DeputyEmploymentInfo</class>
+    <class>gr.sch.ira.minoas.model.employement.NonRegularEmploymentInfo</class>
     <class>gr.sch.ira.minoas.model.employee.RegularEmployeeInfo</class>
     <class>gr.sch.ira.minoas.model.employee.Person</class>
     <class>gr.sch.ira.minoas.model.employee.EmployeeExclusion</class>

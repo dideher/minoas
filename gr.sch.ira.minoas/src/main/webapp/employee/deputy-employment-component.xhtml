@@ -20,29 +20,29 @@
 				<ui:define name="label">
 					<h:outputText value="Υπουργική Απόφαση : " />
 				</ui:define>
-				<h:inputText value="#{deputyEmploymentInfo.ministryVerdict}"
+				<h:inputText value="#{nonRegularEmploymentInfo.order}"
 					styleClass="fieldValueText" size="20" maxlength="64" required="true" />
 			</s:decorate>
 			
 			<s:decorate template="/layout/doubleLineEdit.xhtml">
 				<ui:define name="label">
-					<h:outputText value="Απόφαση Διευθυντή: " />
+					<h:outputText value="Αριθμός Διαύγειας (ΑΔΑ): " />
 				</ui:define>
-				<h:inputText value="#{deputyEmploymentInfo.chiefVerdict}"
+				<h:inputText value="#{nonRegularEmploymentInfo.diaygeiaNo}"
 					styleClass="fieldValueText" size="20" maxlength="64" required="false" />
 			</s:decorate>
 			<s:decorate template="/layout/doubleLineEdit.xhtml">
 				<ui:define name="label">
 					<h:outputText value="Πράξη ΠΥΣΔΕ : " />
 				</ui:define>
-				<h:inputText value="#{deputyEmploymentInfo.pysdeAct}"
+				<h:inputText value="#{nonRegularEmploymentInfo.pysdeAct}"
 					styleClass="fieldValueText" size="20" maxlength="64" required="false" />
 			</s:decorate>
 			<s:decorate template="/layout/doubleLineEdit.xhtml">
 				<ui:define name="label">
 					<h:outputText value="Πράξη Ανάληψης : " />
 				</ui:define>
-				<h:inputText value="#{deputyEmploymentInfo.analipsiAct}"
+				<h:inputText value="#{employment.entryIntoServiceAct}"
 					styleClass="fieldValueText" size="20" maxlength="64" required="false" />
 			</s:decorate>
 

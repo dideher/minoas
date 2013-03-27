@@ -9,10 +9,10 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
 
 /**
- * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
+ * @author <a href="mailto:gand@sch.gr">Yorgos Andreadakis</a>
  * @version $Id$
  */
-@Name("deputyEmploymentInfoHome")
+@Name("nonRegularEmploymentInfoHome")
 @Scope(ScopeType.CONVERSATION)
 public class NonRegularEmploymentInfoHome extends MinoasEntityHome<NonRegularEmploymentInfo> {
 

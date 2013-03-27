@@ -62,7 +62,7 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 		if (isManaged() || employmentHome.isManaged() || regularEmployeeInfoHome.isManaged()
 				|| nonRegularEmploymentInfoHome.isManaged()) {
 			throw new RuntimeException(
-					"employee home or employment home or employeeRegularInfo or deputyEmploymentInfoHome is managed.");
+					"employee home or employment home or employeeRegularInfo or nonRegularEmploymentInfoHome is managed.");
 		}
 
 		RegularEmployeeInfo info = null;
@@ -162,7 +162,7 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 	}
 
 	/**
-	 * @return the deputyEmploymentInfoHome
+	 * @return the nonRegularEmploymentInfoHome
 	 */
 	public NonRegularEmploymentInfoHome getNonRegularEmploymentInfoHome() {
 		return nonRegularEmploymentInfoHome;
