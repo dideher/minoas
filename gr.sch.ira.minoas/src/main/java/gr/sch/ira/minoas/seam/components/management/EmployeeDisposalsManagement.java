@@ -37,7 +37,9 @@ public class EmployeeDisposalsManagement extends BaseDatabaseAwareSeamComponent 
      */
     private static final long serialVersionUID = 1L;
 
-    @In(required = true, create=true)
+    private String diposalUnitHelper;
+
+    @In(required = true, create = true)
     private EmployeeHome employeeHome;
 
     /**
@@ -91,15 +93,14 @@ public class EmployeeDisposalsManagement extends BaseDatabaseAwareSeamComponent 
         }
 
     }
-    
+
     public String cancelDisposalModificationAction() {
-        System.err.println("lalal : " + disposalHome.getInstance());
         try {
             System.err.println("pysde : " + disposalHome.getInstance().getPysdeOrder());
-        } catch(Exception ex) {
-            
+        } catch (Exception ex) {
+
         }
-        if(disposalHome.isManaged()) {
+        if (disposalHome.isManaged()) {
             disposalHome.revert();
         } else {
             disposalHome.clearInstance();
@@ -153,29 +154,58 @@ public class EmployeeDisposalsManagement extends BaseDatabaseAwareSeamComponent 
         DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
         Date established = DateUtils.truncate(disposal.getEstablished(), Calendar.DAY_OF_MONTH);
         Date dueTo = DateUtils.truncate(disposal.getDueTo(), Calendar.DAY_OF_MONTH);
+        Employee employee = employeeHome.getInstance();
         School currentSchool = null;
         try {
-            currentSchool = disposal.getEmployee().getCurrentEmployment().getSchool();
-        } catch(Exception ex) {
+            currentSchool = employee.getCurrentEmployment().getSchool();
+        } catch (Exception ex) {
             ; // ignore
         }
-        
-        /* check if the disposal target unit is the employee's current school */
-        if(currentSchool!=null && currentSchool.getId().equals(disposal.getDisposalUnit().getId())) {
+
+        /* check hours & days */
+        if (disposal.getHours() == null || disposal.getHours() <= 0) {
             if (addMessages)
-                facesMessages
-                        .add(Severity.ERROR,
-                                "Η τρέχουσα οργανική του εκπαιδευτικού είναι η ίδια με την μονάδα διάθεσης.");
+                facesMessages.add(Severity.ERROR, "Οι ώρες της διάθεσης πρέπει να είναι θετικός αριθμός");
+            return false;
+        }
+
+        if (employee.getCurrentEmployment() != null) {
+            if (disposal.getHours() == null ||
+                    disposal.getHours() > employee.getCurrentEmployment().getMandatoryWorkingHours()) {
+                if (addMessages)
+                    facesMessages.add(Severity.ERROR,
+                            "Οι ώρες της διάθεσης δεν μπορούν να υπερβαίνουν το υποχρεωτικό ωράριο του εκπαιδευτικού.");
+                return false;
+            }
+        }
+
+        if (disposal.getDays() == null || disposal.getDays() <= 0) {
+            if (addMessages)
+                facesMessages.add(Severity.ERROR, "Οι ήμερες διάθεσης πρέπει να είναι θετικός αριθμός.");
+            return false;
+        }
+
+        if (disposal.getDays() == null || disposal.getDays() > 5) {
+            if (addMessages)
+                facesMessages.add(Severity.ERROR, "Οι ήμερες διάθεσης δεν μπορούν να υπερβαίνουν τις πέντε (5).");
             return false;
         }
         
-        if(disposal.getDisposalUnit()==null) {
+        if (disposal.getDisposalUnit() == null) {
             if (addMessages)
-                facesMessages
-                        .add(Severity.ERROR,
-                                "Προσοχή, δεν έχετε επιλέξει μονάδα διάθεσης.");
+                facesMessages.add(Severity.ERROR, "Προσοχή, δεν έχετε επιλέξει μονάδα διάθεσης.");
+            return false;
         }
-         
+
+        /* check if the disposal target unit is the employee's current school */
+        if (disposal.getSourceUnit().getId().equals(disposal.getDisposalUnit().getId())) {
+            if (addMessages)
+                facesMessages.add(Severity.ERROR,
+                        "Η τρέχουσα οργανική του εκπαιδευτικού είναι η ίδια με την μονάδα διάθεσης.");
+            return false;
+        }
+        
+
         /* check if the dates are correct */
         if (established.after(dueTo)) {
 
@@ -185,8 +215,7 @@ public class EmployeeDisposalsManagement extends BaseDatabaseAwareSeamComponent 
                                 "Η ημερομηνία λήξης της διάθεσης πρέπει να είναι μεταγενέστερη της έναρξης. Κάνε ένα διάλειμα για καφέ !");
             return false;
         }
-        
-        
+
 //        /* check if the employee has a disposal that conflicts with the new secondment */
 //        Collection<Disposal> conflictingDisposals = getCoreSearching().getEmployeeDisposalWithingPeriod(getEntityManager(), disposal.getEmployee(), established, dueTo);
 //        if(conflictingDisposals.size()>0) {
@@ -202,26 +231,30 @@ public class EmployeeDisposalsManagement extends BaseDatabaseAwareSeamComponent 
 //            }
 //            return false;
 //        }
-        
+
         /* check if the employee has a service allocation that conflicts with the new secondment */
-        Collection<ServiceAllocation> conflictingServiceAllocations = getCoreSearching().getEmployeeServiceAllocationWithinPeriod(getEntityManager(), disposal.getEmployee(), established, dueTo);
-        if(conflictingServiceAllocations.size()>0) {
+        Collection<ServiceAllocation> conflictingServiceAllocations = getCoreSearching()
+                .getEmployeeServiceAllocationWithinPeriod(getEntityManager(), disposal.getEmployee(), established,
+                        dueTo);
+        if (conflictingServiceAllocations.size() > 0) {
             if (addMessages) {
                 ServiceAllocation d = conflictingServiceAllocations.iterator().next();
                 String dunit = d.getServiceUnit().getTitle();
                 String dfrom = df.format(d.getEstablished());
                 String dto = df.format(d.getDueTo());
-                
+
                 facesMessages
-                        .add(Severity.ERROR,String.format("Η διάθεση δεν μπορεί να καταχωρηθεί γίατι για τον εκπαιδευτικό υπάρχει ήδη καταχωρημένη θητεία στην μονάδα '%s' απο '%s' εως '%s'.", dunit, dfrom, dto));
-                facesMessages.add(Severity.INFO,"Εαν η διάθεση πρέπει να καταχωρηθεί, ακυρώστε πρώτα την θητεία.");
+                        .add(Severity.ERROR,
+                                String.format(
+                                        "Η διάθεση δεν μπορεί να καταχωρηθεί γίατι για τον εκπαιδευτικό υπάρχει ήδη καταχωρημένη θητεία στην μονάδα '%s' απο '%s' εως '%s'.",
+                                        dunit, dfrom, dto));
+                facesMessages.add(Severity.INFO, "Εαν η διάθεση πρέπει να καταχωρηθεί, ακυρώστε πρώτα την θητεία.");
             }
             return false;
         }
-        
-        Collection<Disposal> current_secondments = getCoreSearching().getAllEmployeeDisposals(
-                employeeHome.getInstance());
-        for (Disposal current_secondment : current_secondments) {
+
+        Collection<Disposal> current_disposal = getCoreSearching().getAllEmployeeDisposals(employeeHome.getInstance());
+        for (Disposal current_secondment : current_disposal) {
             if (current_secondment.getId().equals(disposal.getId()))
                 continue;
             Date current_established = DateUtils.truncate(current_secondment.getEstablished(), Calendar.DAY_OF_MONTH);
@@ -232,8 +265,9 @@ public class EmployeeDisposalsManagement extends BaseDatabaseAwareSeamComponent 
                             .add(Severity.ERROR,
                                     String.format(
                                             "Για τον εκπαιδευτικό υπάρχει ήδη καταχωρημένη διάθεση από '%s' εώς και '%s' στην μονάδα '%s' η οποία έχει τις ίδιες ημ/νιες με αυτή που προσπαθείτε να εισάγετε.",
-                                            df.format(current_secondment.getEstablished()), df.format(current_secondment.getDueTo()),
-                                            current_secondment.getDisposalUnit().getTitle()));
+                                            df.format(current_secondment.getEstablished()), df
+                                                    .format(current_secondment.getDueTo()), current_secondment
+                                                    .getDisposalUnit().getTitle()));
                 return false;
             }
 
@@ -251,14 +285,14 @@ public class EmployeeDisposalsManagement extends BaseDatabaseAwareSeamComponent 
                     (established.before(current_dueTo) && dueTo.after(current_dueTo))) {
                 if (addMessages)
                     facesMessages
-                    .add(Severity.ERROR,
-                            String.format(
-                                    "Για τον εκπαιδευτικό υπάρχει ήδη καταχωρημένη απόσπαση από '%s' εώς και '%s' στην μονάδα '%s' η οποία έχει επικάλυψη με την απόσπαση από '%s' εως και '%s' στην μονάδα '%s' που προσπαθείτε να εισάγετε.",
-                                    df.format(current_secondment.getEstablished()), df.format(current_secondment.getDueTo()),
-                                    current_secondment.getDisposalUnit().getTitle(),
-                                    df.format(disposal.getEstablished()),
-                                    df.format(disposal.getDueTo()), 
-                                    disposal.getDisposalUnit().getTitle()));
+                            .add(Severity.ERROR,
+                                    String.format(
+                                            "Για τον εκπαιδευτικό υπάρχει ήδη καταχωρημένη απόσπαση από '%s' εώς και '%s' στην μονάδα '%s' η οποία έχει επικάλυψη με την απόσπαση από '%s' εως και '%s' στην μονάδα '%s' που προσπαθείτε να εισάγετε.",
+                                            df.format(current_secondment.getEstablished()), df
+                                                    .format(current_secondment.getDueTo()), current_secondment
+                                                    .getDisposalUnit().getTitle(),
+                                            df.format(disposal.getEstablished()), df.format(disposal.getDueTo()),
+                                            disposal.getDisposalUnit().getTitle()));
                 return false;
             }
 
@@ -274,17 +308,17 @@ public class EmployeeDisposalsManagement extends BaseDatabaseAwareSeamComponent 
             Disposal current_secondment = disposalHome.getInstance();
             Employee employee = employeeHome.getInstance();
             Employment employment = current_secondment.getAffectedEmployment();
-            
+
             SchoolYear currentSchoolYear = getCoreSearching().getActiveSchoolYear(getEntityManager());
-            
+
             Date dueTo = DateUtils.truncate(currentSchoolYear.getTeachingSchoolYearStop(), Calendar.DAY_OF_MONTH);
             Date today = DateUtils.truncate(new Date(System.currentTimeMillis()), Calendar.DAY_OF_MONTH);
 
             if (!validateDisposal(current_secondment, true)) {
-                
+
                 return ACTION_OUTCOME_FAILURE;
             }
-            
+
             current_secondment.setActive(disposalShouldBeActivated(current_secondment, today));
             disposalHome.update();
             info("disposal #0 for employee #1 has been updated", current_secondment, employee);
@@ -316,48 +350,46 @@ public class EmployeeDisposalsManagement extends BaseDatabaseAwareSeamComponent 
 
     /* this method is called when the user clicks the "add new disposal" */
     public void prepareForNewDisposal() {
-        System.err.println("********* prepare disposal **********");
         disposalHome.clearInstance();
         Employee employee = employeeHome.getInstance();
         Disposal disposal = disposalHome.getInstance();
-        
+
         SchoolYear currentSchoolYear = getCoreSearching().getActiveSchoolYear(getEntityManager());
         Date today = DateUtils.truncate(new Date(System.currentTimeMillis()), Calendar.DAY_OF_MONTH);
-        
+
         Date dueTo = DateUtils.truncate(currentSchoolYear.getTeachingSchoolYearStop(), Calendar.DAY_OF_MONTH);
-        
+
         disposal.setSchoolYear(currentSchoolYear);
         disposal.setActive(Boolean.TRUE);
         disposal.setEstablished(today);
         disposal.setDueTo(getCoreSearching().getActiveSchoolYear(getEntityManager()).getTeachingSchoolYearStop());
         disposal.setType(DisposalType.PARTIAL);
         disposal.setTargetType(DisposalTargetType.TO_SCHOOL);
-        
+
         /* we need to clarify if the employee has a secondment or not */
-        
-        Collection<Secondment> secondments = getCoreSearching().getEmployeeSecondmentWithinPeriod(getEntityManager(), employee, today, dueTo);
-        if(secondments != null && secondments.size()>0) {
+
+        Collection<Secondment> secondments = getCoreSearching().getEmployeeSecondmentWithinPeriod(getEntityManager(),
+                employee, today, dueTo);
+        if (secondments != null && secondments.size() > 0) {
             disposal.setAffectedSecondment(secondments.iterator().next());
         } else {
             disposal.setAffectedEmployment(employee.getCurrentEmployment());
         }
-        
-//        Secondment secondment = disposalHome.getInstance();
-//        secondment.setSecondmentType(SecondmentType.FULL_TO_SCHOOL);
-//        secondment.setEmployeeRequested(Boolean.TRUE);
-//        secondment.setEstablished(getCoreSearching().getActiveSchoolYear(getEntityManager())
-//                .getTeachingSchoolYearStart());
-//        secondment.setDueTo(getCoreSearching().getActiveSchoolYear(getEntityManager()).getTeachingSchoolYearStop());
-//        secondment.setEmployee(employeeHome.getInstance());
-//        secondment.setSchoolYear(getCoreSearching().getActiveSchoolYear(getEntityManager()));
-//        Employment employment = employeeHome.getInstance().getCurrentEmployment();
-//        if (employment != null) {
-//            secondment.setSourceUnit(employment.getSchool());
-//            secondment.setSourcePYSDE(employment.getSchool().getPysde());
-//            secondment.setMandatoryWorkingHours(employment.getMandatoryWorkingHours());
-//            secondment.setFinalWorkingHours(employment.getFinalWorkingHours());
-//        }
 
+    }
+
+    /**
+     * @return the diposalUnitHelper
+     */
+    public String getDiposalUnitHelper() {
+        return diposalUnitHelper;
+    }
+
+    /**
+     * @param diposalUnitHelper the diposalUnitHelper to set
+     */
+    public void setDiposalUnitHelper(String diposalUnitHelper) {
+        this.diposalUnitHelper = diposalUnitHelper;
     }
 
 }
