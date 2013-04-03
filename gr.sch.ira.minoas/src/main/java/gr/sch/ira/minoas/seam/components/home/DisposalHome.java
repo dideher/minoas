@@ -1,25 +1,22 @@
 package gr.sch.ira.minoas.seam.components.home;
 
-import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employement.Disposal;
 import gr.sch.ira.minoas.model.employement.DisposalTargetType;
 import gr.sch.ira.minoas.model.employement.DisposalType;
-import gr.sch.ira.minoas.model.employement.Secondment;
 
 import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.AutoCreate;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
-import org.jboss.seam.international.StatusMessage.Severity;
 
 /**
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * @version $Id$
  */
 @Name("disposalHome")
-@Scope(ScopeType.CONVERSATION)
+@AutoCreate
 public class DisposalHome extends MinoasEntityHome<Disposal> {
 
 	/**
@@ -65,40 +62,33 @@ public class DisposalHome extends MinoasEntityHome<Disposal> {
 		return (Disposal) super.getInstance();
 
 	}
-
+	
 	/**
-	 * @see gr.sch.ira.minoas.seam.components.home.MinoasEntityHome#persist()
-	 */
-	@Override
-	@Transactional
-	public String persist() {
-		Disposal newDisposal = getInstance();
-		/* wire things */
-		Employee employee = employeeHome.getInstance();
-		newDisposal.setEmployee(employee);
-		newDisposal.setSchoolYear(getCoreSearching().getActiveSchoolYear(getEntityManager()));
+     * @see gr.sch.ira.minoas.seam.components.home.MinoasEntityHome#persist()
+     */
+    @Override
+    @Transactional
+    public String persist() {
+        return super.persist();
+    }
 
-		/*
-		 *  so, we need to determine if the employee has a secondment on not
-		 */
-		Secondment possibleSecondment = getCoreSearching().getEmployeeActiveSecondment(getEntityManager(), employee,
-				newDisposal.getEstablished());
-		if (possibleSecondment != null) {
-			facesMessages
-					.add(
-							Severity.INFO,
-							"Ο εκπαιδευτικός είναι αποσπασμένος στην μονάδα #0 κατά την σχετική περίοδο της διάθεσης, οπότε η διαθέση που μόλις καταχωρήσατε θεωρείται πως επηρεάζει την σχολική μονάδα της απόσπασης.",
-							possibleSecondment.getTargetUnit().getTitle());
+    @Transactional
+    public String revert() {
+        info("principal #0 is reverting updates to leave #1", getPrincipalName(), getInstance());
+        getEntityManager().refresh(getInstance());
+        return "reverted";
+    }
 
-			newDisposal.setAffectedSecondment(possibleSecondment);
-		} else {
-			newDisposal.setAffectedEmployment(employee.getCurrentEmployment());
-		}
-		newDisposal.setInsertedBy(getPrincipal());
-		//Employee employee = getInstance();
-		//employee.setInsertedBy(getPrincipal());
-		return super.persist();
-	}
+    /**
+     * @see gr.sch.ira.minoas.seam.components.home.MinoasEntityHome#update()
+     */
+    @Override
+    @Transactional
+    public String update() {
+      return super.update();
+    }
+
+	
 
 	@Transactional
 	public void prepareForNewDisposal() {
@@ -106,21 +96,7 @@ public class DisposalHome extends MinoasEntityHome<Disposal> {
 		employmentHome.clearInstance();
 	}
 
-	@Transactional
-	public String revert() {
-		info("principal #0 is reverting updates to disposal #1", getPrincipalName(), getInstance());
-		getEntityManager().refresh(getInstance());
-		return "reverted";
-	}
-
-	/**
-	 * @see gr.sch.ira.minoas.seam.components.home.MinoasEntityHome#update()
-	 */
-	@Override
-	@Transactional
-	public String update() {
-		return super.update();
-	}
+	
 
 	@Transactional
 	public boolean wire() {

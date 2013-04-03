@@ -12,303 +12,328 @@
 
 <ui:composition template="/layout/simple-beauty-template.xhtml">
 	<ui:define name="body">
-		<a4j:region>
-			<rich:panel>
-				<f:facet name="header">
-					<h:outputText
-						value="Διαχείρηση Διαθέσεων του/της #{employeeUtil.prettyFormat(employee)}" />
-				</f:facet>
+
+		<ui:include src="/components/wait-modal-panel.xhtml" />
 
 
-				<ui:include src="/components/messages-component.xhtml" />
-
-				<h:form>
-					<h:panelGrid columns="1">
-						<rich:panel>
-							<f:facet name="header">
-								<h:outputText
-									value="Ενεργές Διαθέσεις Τρέχουσας Σχολικής Χρονίας" />
-							</f:facet>
-
-							<a4j:outputPanel id="activeDisposals">
-
-
-								<s:div
-									rendered="#{employeeCurrentDisposalsListQuery.resultCount > 0}">
-
-									<h:panelGrid columns="1">
-
-										<h:outputText
-											value="Στον παραπάνω πίνακα εμφανίζονται οι ενεργές διαθέσεις του Εκπαιδευτικού κατά την τρέχουσα σχολική χρονία." />
-										<rich:dataTable
-											value="#{employeeCurrentDisposalsListQuery.resultList}"
-											var="_disposal" rows="15" border="0"
-											onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
-											onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
-											width="100%">
-											<f:facet name="header">
-												<h:outputLabel value="Ενεργές Διαθέσεις Εκπαιδευτικού" />
-											</f:facet>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Διάθεση Απο">
-													</h:outputText>
-												</f:facet>
-												<h:outputText value="#{_disposal.affectedSecondment.sourceUnit.title} (Απόσπαση)" rendered="#{_disposal.affectedSecondment ne null}" />
-												<h:outputText value="#{_disposal.affectedEmployment.school.title} (Οργανική))" rendered="#{_disposal.affectedEmployment ne null}" />
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Τύπος Διάθεσης" />
-												</f:facet>
-												<h:outputText value="#{messages[_disposal.type.key]}" />
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Τύπος Προορισμού" />
-												</f:facet>
-												<h:outputText value="#{messages[_disposal.targetType.key]}" />
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Μονάδα Διάθεσης" />
-												</f:facet>
-												<h:outputText value="#{_disposal.disposalUnit.title}" />
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="'Ωρες" />
-												</f:facet>
-												<h:outputText value="#{_disposal.hours}" />
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="'Ημέρες" />
-												</f:facet>
-												<h:outputText value="#{_disposal.days}" />
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Έναρξη" />
-												</f:facet>
-												<h:outputText value="#{_disposal.established}">
-													<s:convertDateTime pattern="dd-MM-yyyy" />
-												</h:outputText>
-											</rich:column>
-
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Λήξη" />
-												</f:facet>
-												<h:outputText value="#{_disposal.dueTo}">
-													<s:convertDateTime pattern="dd-MM-yyyy" />
-												</h:outputText>
-											</rich:column>
-
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Ενέργεια" />
-												</f:facet>
-												<rich:toolBar itemSeparator="line">
-													<a4j:commandLink id="cancellink"
-														reRender="cancelModalPanelContent"
-														oncomplete="#{rich:component('cancelModalPanel')}.show()"
-														value="Ακύρωση">
-														<h:graphicImage value="/img/icons/delete.png" width="12"
-															height="12" style="border:0" />
-														<f:setPropertyActionListener value="#{_disposal.id}"
-															target="#{disposalHome.id}" />
-													</a4j:commandLink>
-
-													<a4j:commandLink id="updatelink"
-														reRender="updateModalPanelContent"
-														oncomplete="#{rich:component('updateModalPanel')}.show()"
-														value="Τροποποίηση">
-														<h:graphicImage value="/img/icons/edit.png" width="12"
-															height="12" style="border:0" />
-														<f:setPropertyActionListener value="#{_disposal.id}"
-															target="#{disposalHome.id}" />
-													</a4j:commandLink>
-												</rich:toolBar>
-											</rich:column>
-										</rich:dataTable>
-									</h:panelGrid>
-								</s:div>
-
-								<s:div
-									rendered="#{employeeCurrentDisposalsListQuery.resultCount == 0}">
-									<h:outputText
-										value="Δεν βρέθηκαν ενεργές διαθέσεις κατά την τρέχουσα σχολική χρόνια για τον εκπαιδευτικό."
-										styleClass="fieldValueText" />
-
-								</s:div>
-
-
-							</a4j:outputPanel>
-						</rich:panel>
-
-						<rich:panel>
-							<f:facet name="header">
-								<h:outputText value="Ιστορικό Διαθέσεων Εκπαιδευτικού" />
-							</f:facet>
-							<a4j:outputPanel id="employeeDisposals">
-
-
-								<s:div rendered="#{employeeDisposalsListQuery.resultCount > 0}">
-									<h:panelGrid columns="1">
-										<h:outputText
-											value="Στον παραπάνω πίνακα εμφανίζονται συνολικά, ανα σχολικό έτος, οι διαθέσεις του Εκπαιδευτικού." />
-										<rich:dataTable
-											value="#{employeeDisposalsListQuery.resultList}"
-											var="_disposal" rows="15" border="0"
-											onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
-											onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
-											width="100%">
-											<f:facet name="header">
-												<h:outputLabel value="Ενεργές Διαθέσεις Εκπαιδευτικού" />
-											</f:facet>
-											
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Σχ. Έτος">
-													</h:outputText>
-												</f:facet>
-												<h:outputText value="#{_disposal.schoolYear.title}" />
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Διάθεση Απο">
-													</h:outputText>
-												</f:facet>
-												<h:outputText value="#{_disposal.affectedSecondment.sourceUnit.title} (Απόσπαση)" rendered="#{_disposal.affectedSecondment ne null}" />
-												<h:outputText value="#{_disposal.affectedEmployment.school.title} (Οργανική))" rendered="#{_disposal.affectedEmployment ne null}" />
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Τύπος Διάθεσης" />
-												</f:facet>
-												<h:outputText value="#{messages[_disposal.type.key]}" />
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Τύπος Προορισμού" />
-												</f:facet>
-												<h:outputText value="#{messages[_disposal.targetType.key]}" />
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Μονάδα Διάθεσης" />
-												</f:facet>
-												<h:outputText value="#{_disposal.disposalUnit.title}" />
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="'Ωρες" />
-												</f:facet>
-												<h:outputText value="#{_disposal.hours}" />
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="'Ημέρες" />
-												</f:facet>
-												<h:outputText value="#{_disposal.days}" />
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Έναρξη" />
-												</f:facet>
-												<h:outputText value="#{_disposal.established}">
-													<s:convertDateTime pattern="dd-MM-yyyy" />
-												</h:outputText>
-											</rich:column>
-
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Λήξη" />
-												</f:facet>
-												<h:outputText value="#{_disposal.dueTo}">
-													<s:convertDateTime pattern="dd-MM-yyyy" />
-												</h:outputText>
-											</rich:column>
-
-											
-										</rich:dataTable>
-									</h:panelGrid>
-								</s:div>
-								<s:div rendered="#{employeeDisposalsListQuery.resultCount == 0}">
-									<h:outputText
-										value="Δεν βρέθηκαν διαθέσεις  για τον εκπαιδευτικό."
-										styleClass="fieldValueText" />
-
-								</s:div>
-							</a4j:outputPanel>
-						</rich:panel>
-						<rich:panel>
-							<s:div styleClass="actionButtons">
-								<s:button action="backButton" value="Επιστροφή" />
-								<s:button action="endButton" value="Τέλος Ενέργειας" />
-								<a4j:commandButton id="createButton" disabled="true"
-									action="#{disposalHome.prepareForNewDisposal}"
-									reRender="createModalPanelContent" immediate="true"
-									oncomplete="#{rich:component('createModalPanel')}.show()"
-									value="Καταχώρηση Νέας Διάθεσης">
-								</a4j:commandButton>
-							</s:div>
-						</rich:panel>
-					</h:panelGrid>
-				</h:form>
-
-
-			</rich:panel>
-		</a4j:region>
-
-		<rich:modalPanel id="cancelModalPanel" autosized="true" width="350">
+		<rich:panel>
 			<f:facet name="header">
-				<h:outputText value="Να ακυρωθή η διάθεση ?"
+				<h:outputText
+					value="Διαχείρηση Διαθέσεων του/της #{employeeUtil.prettyFormat(employee)}" />
+			</f:facet>
+
+			<ui:include src="/components/messages-component.xhtml" />
+
+			<h:form>
+				<h:panelGrid columns="1" width="100%">
+
+
+					<h:panelGroup>
+						<h:panelGrid columns="2" width="100%">
+
+							<h:panelGroup>
+								<rich:panel id="basicEmployeeInfoPanel">
+									<f:facet name="header">
+										<h:outputText value="Βασικά Στοιχεία" />
+									</f:facet>
+									<ui:include src="/employee/basic-info.xhtml">
+										<ui:param name="employee" value="#{employee}" />
+									</ui:include>
+								</rich:panel>
+							</h:panelGroup>
+
+							<h:panelGroup>
+
+								<rich:dataTable id="employeeCurrentStatusTable"
+									value="#{employeeCurrentStatusItems}" var="_item" rows="15"
+									border="0"
+									onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+									onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+									width="100%">
+									<f:facet name="header">
+										<h:outputLabel value="Τρέχουσα Κατάσταση Εκπαιδευτικού" />
+									</f:facet>
+
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText value="Σχολική Μονάδα" />
+										</f:facet>
+										<h:outputText value="#{_item.schoolUnit}" />
+									</rich:column>
+
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText value="Τύπος" />
+										</f:facet>
+										<h:outputText value="#{messages[_item.cdrTypeKey]}" />
+									</rich:column>
+
+
+
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText value="Σχόλιο" />
+										</f:facet>
+										<h:outputText value="#{_item.comment}" />
+									</rich:column>
+
+
+								</rich:dataTable>
+
+							</h:panelGroup>
+
+
+
+
+
+						</h:panelGrid>
+					</h:panelGroup>
+
+					<h:panelGroup>
+						<s:div styleClass="actionBox">
+							<a4j:commandButton value="Νέα Διάθεση"
+								styleClass="btn btn-primary"
+								disabled="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_DISPOSAL'))}"
+								action="#{employeeDisposalsManagement.prepareForNewDisposal()}"
+								reRender="createModalPanelContent" limitToList="true"
+								oncomplete="#{rich:component('createModalPanel')}.show()">
+							</a4j:commandButton>
+
+							<s:button value="Επιστροφή" styleClass="btn btn-default"
+								action="backButton" />
+
+							<s:button value="Τέλος Ενέργειας" styleClass="btn btn-default"
+								action="endButton" />
+						</s:div>
+
+					</h:panelGroup>
+
+
+
+					<rich:panel>
+						<f:facet name="header">
+							<h:outputText value="Διαθέσεις Εκπαιδευτικού" />
+						</f:facet>
+
+						<a4j:outputPanel id="disposalsTable">
+							<h:panelGroup rendered="#{employeeDisposals.size()==0}">
+								<h:outputText
+									value="Δεν υπάρχουν διαθέσεις για τον εκπαιδευτικό." />
+							</h:panelGroup>
+							<h:panelGrid columns="1"
+								rendered="#{employeeDisposals.size() gt 0}">
+								<h:outputText
+									value="Στον παρακάτω πίνακα εμφανίζονται οι διαθέσεις του εκπαιδευτικού." />
+
+								<rich:dataTable id="employeeDisposalsList"
+									value="#{employeeDisposals}" var="_secondment" rows="15"
+									border="0"
+									onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+									onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+									width="100%">
+									<f:facet name="header">
+										<h:outputLabel value="Διαθέσεις Εκπαιδευτικού" />
+									</f:facet>
+
+									<rich:column
+										styleClass="#{employeeDisposalsManagement.getTableCellClassForDisposal(_secondment)}">
+										<f:facet name="header">
+											<h:outputText value="Σχ. Χρονία" />
+										</f:facet>
+										<h:outputText value="#{_secondment.schoolYear.title}" />
+									</rich:column>
+
+									<rich:column
+										styleClass="#{employeeDisposalsManagement.getTableCellClassForDisposal(_secondment)}">
+										<f:facet name="header">
+											<h:outputText value="Διαθέση Απο" />
+										</f:facet>
+										<h:outputText
+											value="#{_secondment.affectedSecondment.sourceUnit.title} (Απόσπαση)"
+											rendered="#{_secondment.affectedSecondment ne null}" />
+										<h:outputText
+											value="#{_secondment.affectedEmployment.school.title} (Οργανική))"
+											rendered="#{_secondment.affectedEmployment ne null}" />
+									</rich:column>
+
+
+
+									<rich:column
+										styleClass="#{employeeDisposalsManagement.getTableCellClassForDisposal(_secondment)}">
+										<f:facet name="header">
+											<h:outputText value="Τύπος Προορισμού" />
+										</f:facet>
+										<h:outputText value="#{messages[_secondment.targetType.key]}" />
+									</rich:column>
+									<rich:column
+										styleClass="#{employeeDisposalsManagement.getTableCellClassForDisposal(_secondment)}">
+										<f:facet name="header">
+											<h:outputText value="Μονάδα Διάθεσης" />
+										</f:facet>
+										<h:outputText value="#{_secondment.disposalUnit.title}" />
+									</rich:column>
+									<rich:column
+										styleClass="#{employeeDisposalsManagement.getTableCellClassForDisposal(_secondment)}">
+										<f:facet name="header">
+											<h:outputText value="'Ωρες" />
+										</f:facet>
+										<h:outputText value="#{_secondment.hours}" />
+									</rich:column>
+									<rich:column
+										styleClass="#{employeeDisposalsManagement.getTableCellClassForDisposal(_secondment)}">
+										<f:facet name="header">
+											<h:outputText value="'Ημέρες" />
+										</f:facet>
+										<h:outputText value="#{_secondment.days}" />
+									</rich:column>
+									<rich:column
+										styleClass="#{employeeDisposalsManagement.getTableCellClassForDisposal(_secondment)}">
+										<f:facet name="header">
+											<h:outputText value="Έναρξη" />
+										</f:facet>
+										<h:outputText value="#{_secondment.established}">
+											<s:convertDateTime pattern="dd-MM-yyyy" />
+										</h:outputText>
+									</rich:column>
+
+									<rich:column
+										styleClass="#{employeeDisposalsManagement.getTableCellClassForDisposal(_secondment)}">
+										<f:facet name="header">
+											<h:outputText value="Λήξη" />
+										</f:facet>
+										<h:outputText value="#{_secondment.dueTo}">
+											<s:convertDateTime pattern="dd-MM-yyyy" />
+										</h:outputText>
+									</rich:column>
+
+
+									<rich:column
+										styleClass="#{employeeDisposalsManagement.getTableCellClassForDisposal(_secondment)}">
+										<f:facet name="header">
+											<h:outputText value="Σχόλιο" />
+										</f:facet>
+										<h:outputText value="#{_secondment.comment}" />
+									</rich:column>
+
+
+									<rich:column
+										styleClass="#{employeeDisposalsManagement.getTableCellClassForDisposal(_secondment)}">
+										<f:facet name="header">
+											<h:outputText value="Ενέργεια" />
+										</f:facet>
+										<rich:toolBar itemSeparator="line" styleClass="actionBox">
+
+											<a4j:commandButton reRender="updateModalPanelContent"
+												styleClass="btn btn-primary btn-mini" ajaxSingle="true"
+												disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MANAGE_DISPOSAL'))}"
+												oncomplete="#{rich:component('updateModalPanel')}.show()"
+												value="Τροποποίηση">
+												<f:setPropertyActionListener value="#{_secondment.id}"
+													target="#{disposalHome.id}" />
+											</a4j:commandButton>
+
+											<a4j:commandButton reRender="deleteModalPanelContent"
+												styleClass="btn btn-danger btn-mini" ajaxSingle="true"
+												disabled="#{!(s:hasRole('ADMIN') or s:hasRole('DELETE_DISPOSAL'))}"
+												oncomplete="#{rich:component('deleteModalPanel')}.show()"
+												value="Διαγραφή">
+												<f:setPropertyActionListener value="#{_secondment.id}"
+													target="#{disposalHome.id}" />
+											</a4j:commandButton>
+										</rich:toolBar>
+									</rich:column>
+								</rich:dataTable>
+							</h:panelGrid>
+						</a4j:outputPanel>
+					</rich:panel>
+
+				</h:panelGrid>
+			</h:form>
+
+
+		</rich:panel>
+
+
+		<!-- DELETE Disposal -->
+
+		<rich:modalPanel id="deleteModalPanel" autosized="true" width="350">
+			<f:facet name="header">
+				<h:outputText value="Διαγραφή Διαθέσης ?"
 					style="padding-right:15px;" />
 			</f:facet>
 			<f:facet name="controls">
 				<h:panelGroup>
 					<h:graphicImage value="/img/modal/close.png" styleClass="hidelink"
-						width="18" height="18" id="hidelink2" />
-					<rich:componentControl for="cancelModalPanel" attachTo="hidelink2"
+						width="18" height="18" id="hidelink10" />
+					<rich:componentControl for="deleteModalPanel" attachTo="hidelink10"
 						operation="hide" event="onclick" />
 				</h:panelGroup>
 			</f:facet>
-			<h:form>
+			<a4j:region>
+
+				<rich:messages style="color:red;"></rich:messages>
+
+				<p class="well well-small">
+					<h:outputText
+						value="Να διαγραφή η διάθεση του εκπαιδευτικού #{employeeUtil.prettyFormat(disposalHome.instance.employee)} στην μονάδα " />
+					<h:outputText value="#{disposalHome.instance.disposalUnit.title}"
+						styleClass="fieldValueText" />
+					<h:outputText value=" με λήξη την " />
+					<h:outputText value="#{disposalHome.instance.dueTo}"
+						styleClass="fieldValueText">
+						<s:convertDateTime pattern="dd-MM-yyyy" />
+					</h:outputText>
+					<h:outputText value=" ;" />
+
+				</p>
+
 				<h:panelGrid columns="1">
-					<a4j:outputPanel id="cancelModalPanelContent" layout="inline">
-						<h:panelGroup>
-							<h:outputText value="Να ακυρωθή η διάθεση τύπου " />
-							<h:outputText
-								value="#{messages[disposalHome.instance.type.key]}"
-								styleClass="fieldValueText" />
-							<h:outputText
-								value=" του εκπαιδευτικού #{employeeUtil.prettyFormat(disposalHome.instance.employee)} " />
-							<h:outputText value=" με λήξη την " />
-							<h:outputText value="#{disposalHome.instance.dueTo}"
-								styleClass="fieldValueText">
-								<s:convertDateTime pattern="dd-MM-yyyy" />
-							</h:outputText>
-							<h:outputText value=" στην μονάδα " />
-							<h:outputText value="#{disposalHome.instance.disposalUnit.title}"
-								styleClass="fieldValueText" />
-							
+					<a4j:outputPanel id="deleteModalPanelContent" layout="inline">
+						<ui:include src="/components/messages-component.xhtml" />
+						<a4j:form>
 
-						</h:panelGroup>
+
+							<s:div styleClass="alert alert-warning">
+
+								<h:outputText
+									value="Προσοχή ! Αν θέλετε να τερματίσεται μια διάθεση τότε κάντε τροποποίηση των ημερομηνίων λήξης της διάθεσης και ΟΧΙ διαγραφή."
+									styleClass="fieldValueText" />
+
+							</s:div>
+							<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Σχόλιο Διαγραφής" />
+								</ui:define>
+								<h:inputTextarea immediate="true"
+									value="#{disposalHome.instance.deletedComment}" required="true"
+									cols="50" rows="3" />
+							</s:decorate>
+
+
+
+							<s:div styleClass="actionBox">
+
+								<h:panelGrid columns="2">
+									<a4j:commandButton value="Διαγραφή Διάθεσης !"
+										styleClass="btn btn-danger"
+										data="#{facesContext.maximumSeverity.ordinal ge 2}"
+										limitToList="true"
+										oncomplete="if(data == false) Richfaces.hideModalPanel('deleteModalPanel');"
+										action="#{employeeDisposalsManagement.deleteEmployeeDisposalAction()}"
+										reRender="disposalsTable,deleteModalPanelContent" />
+									<a4j:commandButton value="Επιστροφή .."
+										styleClass="btn btn-default"
+										onclick="#{rich:component('deleteModalPanel')}.hide();return false;" />
+								</h:panelGrid>
+							</s:div>
+						</a4j:form>
 					</a4j:outputPanel>
-
-					<h:panelGrid columns="2">
-						<a4j:commandButton value="Ακύρωση Διάθεσης !" ajaxSingle="true"
-							action="#{disposalHome.cancel()}"
-							oncomplete="#{rich:component('cancelModalPanel')}.hide();"
-							reRender="activeDisposals,employeeDisposals" />
-						<a4j:commandButton value="Επιστροφή .."
-							onclick="#{rich:component('cancelModalPanel')}.hide();return false;" />
-					</h:panelGrid>
 				</h:panelGrid>
-			</h:form>
+
+			</a4j:region>
 		</rich:modalPanel>
+
+		<!-- Update Disposal  -->
 
 		<rich:modalPanel id="updateModalPanel" autosized="true" width="450">
 			<f:facet name="header">
@@ -324,33 +349,114 @@
 				</h:panelGroup>
 			</f:facet>
 			<a4j:region>
-				<h:panelGrid columns="1">
-					<h:form>
-						<a4j:outputPanel id="updateModalPanelContent" layout="inline">
+
+				<h:form>
+					<a4j:outputPanel id="updateModalPanelContent" layout="inline">
+
+						<ui:include src="/components/messages-component.xhtml" />
+
+						<p class="well well-small">
 							<h:outputText
 								value="Με την παρακάτω φόρμα, μπορείται να τροποποίησεται την διάθεση του/της εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}." />
-							<rich:messages style="color:red;"></rich:messages>
-							<ui:include src="/disposal/disposal-component.xhtml" />
-						</a4j:outputPanel>
+						</p>
 
+						<ui:include src="/disposal/disposal-component.xhtml">
+							<ui:param name="updateMode" value="#{true}" />
+						</ui:include>
+
+
+					</a4j:outputPanel>
+					<s:div styleClass="actionBox">
 						<h:panelGrid columns="2">
 
 							<a4j:commandButton value="Τροποποίηση Διάθεσης !"
-								action="#{disposalHome.update()}"
+								styleClass="btn btn-primary"
+								action="#{employeeDisposalsManagement.modifyDisposal()}"
 								data="#{facesContext.maximumSeverity.ordinal ge 2}"
 								oncomplete="if(data == false) Richfaces.hideModalPanel('updateModalPanel');"
-								reRender="activeDisposals,employeeDisposals" />
+								reRender="updateModalPanelContent,disposalsTable" />
 							<a4j:commandButton value="Επιστροφή .."
-								action="#{disposalHome.revert()}" reRender="activeDisposals"
+								styleClass="btn btn-default" action="#{disposalHome.revert()}"
+								reRender="disposalsTable"
 								oncomplete="#{rich:component('updateModalPanel')}.hide();" />
 						</h:panelGrid>
-					</h:form>
-				</h:panelGrid>
+					</s:div>
+				</h:form>
+
 			</a4j:region>
 		</rich:modalPanel>
 
 
-		<ui:include src="/components/wait-modal-panel.xhtml" />
+
+		<!-- *************************************************************************************************************** -->
+		<!-- *************************************************************************************************************** -->
+		<!-- Create Disposal  -->
+		<!-- *************************************************************************************************************** -->
+		<!-- *************************************************************************************************************** -->
+
+		<rich:modalPanel id="createModalPanel" autosized="true" width="450">
+			<f:facet name="header">
+				<h:outputText value="Καταχώρηση Νέας Διάθεσης"
+					style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<h:graphicImage value="/img/modal/close.png" styleClass="hidelink"
+						width="18" height="18" id="hidelink4" />
+					<rich:componentControl for="createModalPanel" attachTo="hidelink4"
+						operation="hide" event="onclick" />
+				</h:panelGroup>
+			</f:facet>
+
+
+			<a4j:form id="createSecondmentForm">
+				<a4j:region>
+
+					<a4j:outputPanel id="createModalPanelContent">
+						<ui:include src="/components/messages-component.xhtml" />
+						<p class="well well-small">
+							<h:outputText
+								value="Συμπληρώστε τα στοιχεία της παρακάτω φόρμας για να εισάγεται νέα απόσπαση για τον εκπαιδευτικό " />
+
+							<h:outputText styleClass="fieldValueText"
+								value="#{employeeUtil.prettyFormat(employeeHome.instance)}" />
+						</p>
+						<ui:include src="/disposal/disposal-component.xhtml">
+							<ui:param name="updateMode" value="#{false}" />
+						</ui:include>
+
+
+
+
+
+					</a4j:outputPanel>
+					<s:div styleClass="actionBox">
+						<h:panelGrid columns="2">
+
+
+							<a4j:commandButton value="Καταχώρηση Διάθεσης !"
+								styleClass="btn btn-success"
+								action="#{employeeDisposalsManagement.addEmployeeDisposalAction()}"
+								data="#{facesContext.maximumSeverity.ordinal ge 2}"
+								limitToList="true"
+								oncomplete="if(data == false) { Richfaces.hideModalPanel('createModalPanel'); }"
+								reRender="createModalPanelContent,employeeDisposalsList" />
+							<a4j:commandButton value="Επιστροφή .."
+								styleClass="btn btn-default" limitToList="true"
+								oncomplete="{ Richfaces.hideModalPanel('createModalPanel'); }"
+								reRender="createModalPanelContent, secondmentsTable"
+								action="#{employeeDisposalsManagement.cancelDisposalModificationAction() }">
+							</a4j:commandButton>
+
+						</h:panelGrid>
+					</s:div>
+				</a4j:region>
+			</a4j:form>
+
+		</rich:modalPanel>
+
+
+
 
 	</ui:define>
 </ui:composition>

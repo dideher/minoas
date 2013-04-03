@@ -211,6 +211,17 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         info("found totally '#0' secondments for employee '#1'.", result.size(), employee);
         return result;
     }
+    
+    @SuppressWarnings("unchecked")
+    public Collection<Disposal> getAllEmployeeDisposals(Person employee) {
+        Collection<Disposal> result = null;
+        info("searching employee's '#0' disposals.", employee);
+        result = entityManager
+                .createQuery("SELECT s from Disposal s WHERE s.employee=:employee AND (s.deleted IS FALSE or s.deleted IS NULL) ORDER BY s.established DESC")
+                .setParameter("employee", employee).getResultList();
+        info("found totally '#0' disposals for employee '#1'.", result.size(), employee);
+        return result;
+    }
 
     @Factory(value = "dateSearchTypes")
     public DateSearchType[] getAvailableDateSearchTypes() {

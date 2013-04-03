@@ -678,7 +678,7 @@
 
 							</rich:tab>
 							<rich:tab
-								rendered="#{employeeDisposalsListQuery.resultCount gt 0}">
+								rendered="#{employeeDisposals.size gt 0}">
 								<f:facet name="label">
 									<h:outputText value="Ιστορικό Διαθέσεων" />
 								</f:facet>
@@ -687,7 +687,7 @@
 									<h:outputText
 										value="Στον παραπάνω πίνακα εμφανίζονται συνολικά, ανα σχολικό έτος, οι διαθέσεις του Εκπαιδευτικού." />
 									<rich:dataTable id="employeeDisposalList"
-										value="#{employeeDisposalsListQuery.resultList}"
+										value="#{employeeDisposals}"
 										var="_disposal" rows="10" border="0"
 										onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
 										onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
