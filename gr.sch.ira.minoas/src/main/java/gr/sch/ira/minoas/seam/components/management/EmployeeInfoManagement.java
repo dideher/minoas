@@ -4,18 +4,15 @@ import gr.sch.ira.minoas.core.CoreUtils;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeInfo;
 import gr.sch.ira.minoas.model.employee.RankInfo;
-import gr.sch.ira.minoas.model.employee.RankType;
-import gr.sch.ira.minoas.model.employee.SectorType;
-import gr.sch.ira.minoas.model.employement.EducationalLevelType;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.CoreSearching;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
 import gr.sch.ira.minoas.seam.components.home.EmployeeInfoHome;
+import gr.sch.ira.minoas.seam.components.home.RankInfoHome;
 
 import java.util.Date;
 
 import org.jboss.seam.ScopeType;
-import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
@@ -40,19 +37,17 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 
 	@In(required = true)
 	EmployeeHome employeeHome;
-	
-	@In(required = true)
+
+	// create=true : Auto create employeeInfoHome when needed
+	@In(required = true, create = true)
 	EmployeeInfoHome employeeInfoHome;
-	
+
+	// create=true : Auto create rankInfoHome when needed
+	@In(required = true, create = true)
+	RankInfoHome rankInfoHome;
+
 	private Date totalWorkServiceCalculationDate;
 	private int totalCalculatedServiceInDays;
-	
-
-//	/**
-//	 * Employee's rank transitions history
-//	 */
-//	@DataModel(scope=ScopeType.PAGE, value="rankInfoHistory")
-//	private Collection<RankInfo> rankInfoHistory = null;
 
 	public void setTotalWorkServiceCalculationDate(
 			Date totalWorkServiceCalculationDate) {
@@ -62,7 +57,7 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 	public Date getTotalWorkServiceCalculationDate() {
 		return totalWorkServiceCalculationDate;
 	}
-	
+
 	/**
 	 * @return the totalCalculatedServiceInDays
 	 */
@@ -71,20 +66,20 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 	}
 
 	/**
-	 * @param totalCalculatedServiceInDays the totalCalculatedServiceInDays to set
+	 * @param totalCalculatedServiceInDays
+	 *            the totalCalculatedServiceInDays to set
 	 */
 	public void setTotalCalculatedServiceInDays(int totalCalculatedServiceInDays) {
 		this.totalCalculatedServiceInDays = totalCalculatedServiceInDays;
 	}
-	
-	
+
 	/**
 	 * @return the totalWorkService as a Year_Month_Day string
 	 */
 	public String getTotalCalculatedServiceInDaysYear_Month_Day() {
-		return CoreUtils.getNoOfDaysInYear_Month_DayFormat(totalCalculatedServiceInDays);
+		return CoreUtils
+				.getNoOfDaysInYear_Month_DayFormat(totalCalculatedServiceInDays);
 	}
-	
 
 	/**
 	 * @return the employeeHome
@@ -94,13 +89,12 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 	}
 
 	/**
-	 * @param employeeHome the employeeHome to set
+	 * @param employeeHome
+	 *            the employeeHome to set
 	 */
 	public void setEmployeeHome(EmployeeHome employeeHome) {
 		this.employeeHome = employeeHome;
 	}
-
-
 
 	/**
 	 * @return the coreSearching
@@ -110,7 +104,8 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 	}
 
 	/**
-	 * @param coreSearching the coreSearching to set
+	 * @param coreSearching
+	 *            the coreSearching to set
 	 */
 	public void setCoreSearching(CoreSearching coreSearching) {
 		this.coreSearching = coreSearching;
@@ -124,211 +119,302 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 	}
 
 	/**
-	 * @param employeeInfoHome the employeeInfoHome to set
+	 * @param employeeInfoHome
+	 *            the employeeInfoHome to set
 	 */
 	public void setEmployeeInfoHome(EmployeeInfoHome employeeInfoHome) {
 		this.employeeInfoHome = employeeInfoHome;
 	}
 
-	
-	
-//	/**
-//	 * @return the rankInfoHistory
-//	 */
-//	public Collection<RankInfo> getRankInfoHistory() {
-//		return rankInfoHistory;
-//	}
-//
-//	/**
-//	 * @param rankInfoHistory the rankInfoHistory to set
-//	 */
-//	public void setRankInfoHistory(Collection<RankInfo> rankInfoHistory) {
-//		this.rankInfoHistory = rankInfoHistory;
-//	}
+	/**
+	 * @return the rankInfoHome
+	 */
+	public RankInfoHome getRankInfoHome() {
+		return rankInfoHome;
+	}
 
-	public String modifyEmployeeInfo() {
-        if(employeeInfoHome != null && employeeInfoHome.isManaged()) {
-            info("trying to modify employee info #0", employeeInfoHome);
-            /* check if the work experience dates are allowed. */
-            
-            EmployeeInfo employeeInfo = employeeInfoHome.getInstance();
-            
-            if(!employeeInfo.getHasAMasterDegree()) employeeInfo.setMscDate(null);
-            if(!employeeInfo.getHasAPhD()) employeeInfo.setPhdDate(null);
-            if(!employeeInfo.getIsANatSchPubAdminGraduate()) employeeInfo.setNatSchPubAdminDate(null);
-            
-            if(employeeInfo.getHasAMasterDegree() && employeeInfo.getMscDate() == null) { 
-            	facesMessages.add(Severity.ERROR, "Δεν ορίσατε την ημερομηνία Μεταπτυχιακού.");
-                return ACTION_OUTCOME_FAILURE;
-            } else if(employeeInfo.getHasAPhD() && employeeInfo.getPhdDate() == null) { 
-            	facesMessages.add(Severity.ERROR, "Δεν ορίσατε την ημερομηνία Διδακτορικού.");
-                return ACTION_OUTCOME_FAILURE;
-            } else if(employeeInfo.getIsANatSchPubAdminGraduate() && employeeInfo.getNatSchPubAdminDate() == null) { 
-            	facesMessages.add(Severity.ERROR, "Δεν ορίσατε την ημερομηνία Ανώτ. Σχολ. Δημ. Διοίκ.");
-                return ACTION_OUTCOME_FAILURE;
-            } else {
-                employeeInfoHome.update();
-                info("employee's #0 employee info #1 has been updated!", employeeInfoHome.getInstance().getEmployee(), employeeInfoHome.getInstance());
-                return ACTION_OUTCOME_SUCCESS;
-            }
-        } else {
-            facesMessages.add(Severity.ERROR, "employeeInfo home #0 is not managed, thus #1 can't be modified.", employeeInfoHome, employeeInfoHome.getInstance());
-            return ACTION_OUTCOME_FAILURE;
-        }
-    }
-	
-//	public String insertRankInfo() {
-//        if(employeeInfoHome != null && employeeInfoHome.isManaged()) {
-//            info("trying to insert a rank info for employee info #0", employeeInfoHome);
-//                employeeInfoHome.insertRankInfo();
-//                info("employee's #0 Rank Info #1 has been updated!", employeeInfoHome.getInstance().getEmployee(), employeeInfoHome.getInstance().getRankInfo());
-//                return ACTION_OUTCOME_SUCCESS;
-//
-//        } else {
-//            facesMessages.add(Severity.ERROR, "employeeInfo home #0 is not managed, thus #1 can't be inserted.", employeeInfoHome, employeeInfoHome.getInstance().getRankInfo());
-//            return ACTION_OUTCOME_FAILURE;
-//        }
-//    }
-	
-	
+	/**
+	 * @param rankInfoHome
+	 *            the rankInfoHome to set
+	 */
+	public void setRankInfoHome(RankInfoHome rankInfoHome) {
+		this.rankInfoHome = rankInfoHome;
+	}
+
+
+	/**
+	 * Prepare EmployeeInfoHome & RankInfoHome objects for the update or insertion of data   
+	 */
+	public void prepareForNewOrUpdateEmployeeInfo() {
+		Employee employee = getEmployeeHome().getInstance();
+
+		//	If employee HAS EmployeeInfo data
+		if (employee.getEmployeeInfo() != null) {
+			
+			//	Set EmployeeInfoHome with the Employee's EmployeeInfo data
+			employeeInfoHome.setId(employee.getEmployeeInfo().getId());
+			
+			//	If EmployeeInfo HAS a current RankInfo
+			if (employee.getEmployeeInfo().getCurrentRankInfo() != null) {
+				//	Set RankInfoHome with the Employee's RankInfo data
+				rankInfoHome.setId(employee.getEmployeeInfo().getCurrentRankInfo().getId());
+			}
+		}
+		
+		//	If employee HAS EmployeeInfo data
+		if (employeeInfoHome.isManaged()) {
+			/* 
+			 * we are updating an existing EmployeeInfo & RankInfo, thus do nothing 
+			 * */
+		} else {	//	If employee HAS NO EmployeeInfo data
+			/* Create new employee & rank info home objects. (see the create=true directives at lines 42 & 46 )*/
+			employeeInfoHome.getInstance();
+			rankInfoHome.getInstance();
+		}
+	}
+
+	public void cancelInsertOrUpdateEmployeeInfo() {
+		//	Clear the auto created home object if cancel is pressed when updating or inserting rank info data 
+		rankInfoHome.clearInstance();
+	}
+
+	public String insertOrUpdateEmployeeInfo() {
+		if (employeeHome.isManaged()) {
+
+			Employee employee = getEmployeeHome().getInstance();
+			EmployeeInfo employeeInfo = employeeInfoHome.getInstance();
+			RankInfo rInfo = rankInfoHome.getInstance();
+
+			//	If a user sets a date but forgets to check the corresponding checkbox, assume that he set the date by mistake and clear it.
+			if (!employeeInfo.getHasAMasterDegree())
+				employeeInfo.setMscDate(null);
+			if (!employeeInfo.getHasAPhD())
+				employeeInfo.setPhdDate(null);
+			if (!employeeInfo.getIsANatSchPubAdminGraduate())
+				employeeInfo.setNatSchPubAdminDate(null);
+
+			//	If a user sets a MSc, PhD or a NatSchPubAdmin qualification but forgets to set corresponding date obtained, 
+			//	oblige him to set the date.
+			if (employeeInfo.getHasAMasterDegree()
+					&& employeeInfo.getMscDate() == null) {
+				facesMessages.add(Severity.ERROR,
+						"Δεν ορίσατε την ημερομηνία Μεταπτυχιακού.");
+				return ACTION_OUTCOME_FAILURE;
+			} else if (employeeInfo.getHasAPhD()
+					&& employeeInfo.getPhdDate() == null) {
+				facesMessages.add(Severity.ERROR,
+						"Δεν ορίσατε την ημερομηνία Διδακτορικού.");
+				return ACTION_OUTCOME_FAILURE;
+			} else if (employeeInfo.getIsANatSchPubAdminGraduate()
+					&& employeeInfo.getNatSchPubAdminDate() == null) {
+				facesMessages.add(Severity.ERROR,
+						"Δεν ορίσατε την ημερομηνία Ανώτ. Σχολ. Δημ. Διοίκ.");
+				return ACTION_OUTCOME_FAILURE;
+			}
+
+			//	If employee HAS EmployeeInfo data, then he is changing existing data
+			if (employeeInfoHome.isManaged()) {
+				info("trying to update employee info #0", employeeInfoHome);
+
+				//	Apply changes to the existing employeeInfo and rankInfo data
+				employeeInfoHome.update();
+
+				info("employee's #0 employee info #1 has been updated!",
+						employeeInfoHome.getInstance().getEmployee(),
+						employeeInfoHome.getInstance());
+				return ACTION_OUTCOME_SUCCESS;
+			} 
+			else {	//	If employee HAD EmployeeInfo data, then 
+				info("trying to insert employee info #0", employeeInfoHome);
+
+				//	set the employee to the newly created employeeInfo object
+				employeeInfo.setEmployee(employee);
+				//	save the newly created employeeInfo object
+				employeeInfoHome.persist();
+				//	set the employeeInfo to the newly created rankInfo object
+				rInfo.setEmployeeInfo(employeeInfo);
+				//	save the newly created rankInfo object
+				rankInfoHome.persist();
+				//	set the newly created rankInfo as current at the respective employeeInfo 
+				//	NOTE: that method setCurrentRankInfo(rInfo) also adds rInfo to the Collection of RankInfos within EmployeeInfo !!!! 
+				employeeInfo.setCurrentRankInfo(rInfo);
+
+				//	set the newly created employeeInfo as at the respective employee
+				employee.setEmployeeInfo(employeeInfo);
+
+				//	Save
+				getEntityManager().flush();
+
+				info("employee's #0 employee info #1 has been inserted!",
+						employeeInfoHome.getInstance().getEmployee(),
+						employeeInfoHome.getInstance());
+				return ACTION_OUTCOME_SUCCESS;
+			}
+
+		} else {
+			facesMessages.add(Severity.ERROR,
+					"employee home #0 is not managed.", employeeHome,
+					employeeHome.getInstance());
+			return ACTION_OUTCOME_FAILURE;
+		}
+
+	}
+
+	/**
+	 * Prepare RankInfoHome objects for the insertion of new RankInfo
+	 */
+	public void prepareNewRankInfo() {
+		//	Clear any previous data in RankInfo
+		rankInfoHome.clearInstance();
+
+		
+		if (!rankInfoHome.isManaged()) {
+			/* new rank info */
+			RankInfo rInfo = rankInfoHome.getInstance();
+			//	Reset to default values ( ΣΤ 0 )
+			rInfo.resetRankInfo();
+		}
+	}
+
+	public void cancelInsertRankInfo() {
+		//	Clear the auto created home object if cancel is pressed when inserting rank info data
+		rankInfoHome.clearInstance();
+	}
+
 	@Transactional
-    public String insertRankInfo() {
-        if (employeeHome.isManaged()) {
-        	RankInfo rinfo = employeeInfoHome.getInstance().getCurrentRankInfo();
-        	
-            //rinfo.setEmployeeInfo(employeeInfoHome.getInstance().getEmployee().getEmployeeInfo());
-            rinfo.setInsertedBy(getPrincipal());
-            rinfo.setInsertedOn(new Date());
-        	
-        	
-        	getEntityManager().persist(rinfo);
-        	employeeInfoHome.getInstance().setCurrentRankInfo(rinfo);
-        	
-            Employee employee = getEntityManager().merge(employeeHome.getInstance());
+	public String insertRankInfo() {
 
-                
-            //employeeInfoHome.persist();
-            getEntityManager().flush();
-            
-            employeeInfoHome.getInstance().getRankInfos().add(rinfo);
-           
-//    	    setRankInfoHistory(coreSearching.getRankInfoHistory(employee));		// coreSearching.getRankInfoHistory() is now deprecated.
-            //setRankInfoHistory(employee.getEmployeeInfo().getRankInfos());
-            info("Rank Info #0 for employee #1 has been created", rinfo, employee);
-            return ACTION_OUTCOME_SUCCESS;
+		if (employeeHome.isManaged()) {
+			Employee employee = getEmployeeHome().getInstance();
+			EmployeeInfo employeeInfo = employee.getEmployeeInfo();
+			RankInfo rinfo = rankInfoHome.getInstance();
 
-        } else {
-            facesMessages.add(Severity.ERROR, "employee home #0 is not managed.", employeeHome);
-            return ACTION_OUTCOME_FAILURE;
-        }
-    }
+			// set InsertedBy to Minoas user username
+			rinfo.setInsertedBy(getPrincipal());
+			// set InsertedOn to today's date
+			rinfo.setInsertedOn(new Date());
+
+			//	set EmployeeInfo to the new RankInfo
+			rinfo.setEmployeeInfo(employeeInfo);
+			//	save the new RankInfo
+			getEntityManager().persist(rinfo);
+			
+			//	set the newly created rankInfo as current at the respective employeeInfo
+			//	NOTE: that method setCurrentRankInfo(rInfo) also adds rInfo to the Collection of RankInfos within EmployeeInfo !!!!
+			employeeInfo.setCurrentRankInfo(rinfo);
+
+			// Save
+			getEntityManager().flush();
+
+			info("Rank Info #0 for employee #1 has been created", rinfo,
+					employee);
+			return ACTION_OUTCOME_SUCCESS;
+
+		} else {
+			facesMessages.add(Severity.ERROR,
+					"employee home #0 is not managed.", employeeHome);
+			return ACTION_OUTCOME_FAILURE;
+		}
+	}
+
 	
-	
-//	@Factory(value="rankInfoHistory",autoCreate=true)
-//	public void constructRankInfoHistory() {
-//	    Employee employee = getEmployeeHome().getInstance();
-//	    info("constructing evaluation history for employee #0", employee);
-//	    //setRankInfoHistory(coreSearching.getRankInfoHistory(employee));		// coreSearching.getRankInfoHistory() is now deprecated.	
-//	    //setRankInfoHistory(employee.getEmployeeInfo().getRankInfos());
-//	}
-	
-	
-	/* this method is called when the user clicks the "add new rank info" */
-    public void prepareNewEmployeeInfo() {
-    	Employee employee = getEmployeeHome().getInstance();
-    	if(employee.getEmployeeInfo() == null) {
+	/**
+	 * totalWorkService = Ημ/νία Διορισμού + Συνολική Υπηρεσία + Συνολική Προϋπηρεσία
+	 */
+	public void recalculateTotalWorkService() {
+		EmployeeInfo employeeInfo = employeeHome.getInstance().getEmployeeInfo();
+		int totalWorkService = 0;
+		if (totalWorkServiceCalculationDate != null
+				&& employeeInfo.getGogAppointmentDate() != null)
+			totalWorkService = CoreUtils.datesDifferenceIn360DaysYear(
+					employeeInfo.getEntryIntoServiceDate(),
+					totalWorkServiceCalculationDate)
+					+ getSumOfExperience();
+		if (totalWorkService != 0)
+			setTotalCalculatedServiceInDays(totalWorkService);
+	}
 
-    		
-    		EmployeeInfo ei = new EmployeeInfo(employee, "", null, "", null, "", null, false, null, false, null, false, null, false, null, SectorType.PUBLIC_SECTOR, 0, 0, 0, 0);
-    		//ei.resetEmployeeInfo();
-    		getEntityManager().persist(ei);
+	/**
+	 * @return Συνολική Εκπ/κή Υπηρεσία = Εκπ/κή Προϋπηρεσία + Συνολική Υπηρεσία  
+	 */
+	public Integer getEducationalService() {
+		EmployeeInfo employeeInfo = employeeHome.getInstance()
+				.getEmployeeInfo();
+		if (employeeInfo == null)
+			return 0;
+		else
+			return employeeInfo.getSumOfEducationalExperience()
+					+ employeeInfo.getTotalWorkService();
+	}
 
-    		
-    		RankInfo rInfo = new RankInfo(RankType.RANK_ST, 0, EducationalLevelType.UNIVERSITY_EDUCATION_LEVEL);
-    		rInfo.setEmployeeInfo(ei);
-    		getEntityManager().persist(rInfo);
-    		
-    		
-    		ei.getRankInfos().add(rInfo);
-    		ei.setCurrentRankInfo(rInfo);
-  		
-    		ei.setEmployee(employee);
-    		employee.setEmployeeInfo(ei);
-    		
-//    		getEntityManager().persist(employee);
-    		
-    		
+	/**
+	 * @return Εκπ/κή Υπηρεσία σε μορφή εε Έτη μμ Μήνες ηη Ημέρες  
+	 */
+	public String getEducationalServiceYear_Month_Day() {
+		return CoreUtils
+				.getNoOfDaysInYear_Month_DayFormat(getEducationalService());
+	}
 
-        }
-    }
-	
-	
-    /* this method is called when the user clicks the "add new rank info" */
-    public void prepareNewRankInfo() {
-        //employeeInfoHome.clearInstance();
-        RankInfo rinfo = new RankInfo();
-        rinfo.resetRankInfo();
-        rinfo.setEmployeeInfo(employeeInfoHome.getInstance());
-        
-        employeeInfoHome.getInstance().setCurrentRankInfo(rinfo);
+	/**
+	 * @return Συνολική Διδακτική Υπηρεσία = Διδακτική Προϋπηρεσία + Συνολική Υπηρεσία  
+	 */
+	public Integer getTeachingService() {
+		EmployeeInfo employeeInfo = employeeHome.getInstance()
+				.getEmployeeInfo();
+		if (employeeInfo == null)
+			return 0;
+		else
+			return employeeInfo.getSumOfTeachingExperience()
+					+ employeeInfo.getTotalWorkService();
+	}
 
-    }
-    
-    public void recalculateTotalWorkService() {
-    	EmployeeInfo employeeInfo = employeeHome.getInstance().getEmployeeInfo();
-    	int totalWorkService = 0;
-    	if(totalWorkServiceCalculationDate != null && employeeInfo.getGogAppointmentDate()!=null)
-    		totalWorkService = CoreUtils.datesDifferenceIn360DaysYear(employeeInfo.getEntryIntoServiceDate(), totalWorkServiceCalculationDate) + getSumOfExperience();
-    	if(totalWorkService != 0)
-    		setTotalCalculatedServiceInDays(totalWorkService);
-    }
-    
-    public Integer getEducationalService() {
-    	EmployeeInfo employeeInfo = employeeHome.getInstance().getEmployeeInfo();
-    	if(employeeInfo == null)
-    		return 0;
-    	else 
-    		return employeeInfo.getSumOfEducationalExperience() + employeeInfo.getTotalWorkService();
-    }
-    
-    public String getEducationalServiceYear_Month_Day() {
-    	return CoreUtils.getNoOfDaysInYear_Month_DayFormat(getEducationalService());
-    }
-    
-    public Integer getTeachingService() {
-    	EmployeeInfo employeeInfo = employeeHome.getInstance().getEmployeeInfo();
-    	if(employeeInfo == null)
-    		return 0;
-    	else 
-    		return employeeInfo.getSumOfTeachingExperience() + employeeInfo.getTotalWorkService();
-    }
-    
-    public String getTeachingServiceYear_Month_Day() {
-    	return CoreUtils.getNoOfDaysInYear_Month_DayFormat(getTeachingService());
-    }
+	/**
+	 * @return Διδακτική Υπηρεσία σε μορφή εε Έτη μμ Μήνες ηη Ημέρες  
+	 */
+	public String getTeachingServiceYear_Month_Day() {
+		return CoreUtils
+				.getNoOfDaysInYear_Month_DayFormat(getTeachingService());
+	}
 
-    public Integer getSumOfExperience() {
-    	EmployeeInfo employeeInfo = employeeHome.getInstance().getEmployeeInfo();
-    	if(employeeInfo == null)
-    		return 0;
-    	else 
-    		return employeeInfo.getSumOfExperience();
-    }
-    
-    public String getSumOfExperienceYear_Month_Day() {
-    	return CoreUtils.getNoOfDaysInYear_Month_DayFormat(getSumOfExperience());
-    }
-    
-    public Integer getTotalServiceIncludingWorkExperience() {
-    	EmployeeInfo employeeInfo = employeeHome.getInstance().getEmployeeInfo();
-    	if(employeeInfo == null)
-    		return 0;
-    	else 
-    		return employeeInfo.getTotalWorkService() + employeeInfo.getSumOfExperience();
-    }
-    
-    public String getTotalServiceIncludingWorkExperienceYear_Month_Day() {
-    	return CoreUtils.getNoOfDaysInYear_Month_DayFormat(getTotalServiceIncludingWorkExperience());
-    }
-    
+	/**
+	 * @return Συνολική Προϋπηρεσία  
+	 */
+	public Integer getSumOfExperience() {
+		EmployeeInfo employeeInfo = employeeHome.getInstance()
+				.getEmployeeInfo();
+		if (employeeInfo == null)
+			return 0;
+		else
+			return employeeInfo.getSumOfExperience();
+	}
+
+	/**
+	 * @return Συνολική Προϋπηρεσία σε μορφή εε Έτη μμ Μήνες ηη Ημέρες  
+	 */
+	public String getSumOfExperienceYear_Month_Day() {
+		return CoreUtils
+				.getNoOfDaysInYear_Month_DayFormat(getSumOfExperience());
+	}
+
+	/**
+	 * @return Συνολική Υπηρεσία μαζί με την Προϋπηρεσία  
+	 */
+	public Integer getTotalServiceIncludingWorkExperience() {
+		EmployeeInfo employeeInfo = employeeHome.getInstance()
+				.getEmployeeInfo();
+		if (employeeInfo == null)
+			return 0;
+		else
+			return employeeInfo.getTotalWorkService()
+					+ employeeInfo.getSumOfExperience();
+	}
+
+	/**
+	 * @return Συνολική Υπηρεσία μαζί με την Προϋπηρεσία σε μορφή εε Έτη μμ Μήνες ηη Ημέρες  
+	 */
+	public String getTotalServiceIncludingWorkExperienceYear_Month_Day() {
+		return CoreUtils
+				.getNoOfDaysInYear_Month_DayFormat(getTotalServiceIncludingWorkExperience());
+	}
+
 }

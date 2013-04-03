@@ -388,6 +388,9 @@ public class EmployeeInfo extends BaseIDModel {
 	 */
 	public void setCurrentRankInfo(RankInfo currentRankInfo) {
 		this.currentRankInfo = currentRankInfo;
+		if(currentRankInfo != null && !rankInfos.contains(currentRankInfo)) {
+			rankInfos.add(currentRankInfo);
+		}
 	}
 
 	/**
