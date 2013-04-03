@@ -28,40 +28,86 @@
 				<h:panelGrid columns="1" width="100%">
 
 
+					<h:panelGroup>
+						<h:panelGrid columns="2" width="100%">
 
-					<h:panelGrid columns="2" width="100%">
-						<rich:panel id="basicEmployeeInfoPanel">
-							<f:facet name="header">
-								<h:outputText value="Βασικά Στοιχεία" />
-							</f:facet>
-							<ui:include src="/employee/basic-info.xhtml">
-								<ui:param name="employee" value="#{employee}" />
-							</ui:include>
-						</rich:panel>
+							<h:panelGroup>
+								<rich:panel id="basicEmployeeInfoPanel">
+									<f:facet name="header">
+										<h:outputText value="Βασικά Στοιχεία" />
+									</f:facet>
+									<ui:include src="/employee/basic-info.xhtml">
+										<ui:param name="employee" value="#{employee}" />
+									</ui:include>
+								</rich:panel>
+							</h:panelGroup>
 
-						<rich:panelMenu mode="ajax">
+							<h:panelGroup>
 
-							<rich:panelMenuGroup label="Ενέργειες" expanded="true">
-								<rich:panelMenuItem mode="server" action="backButton"
-									label="Επιστροφή" hoverClass="panelMenuItemHover" />
+								<rich:dataTable id="employeeCurrentStatusTable"
+									value="#{employeeCurrentStatusItems}" var="_item" rows="15"
+									border="0"
+									onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+									onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+									width="100%">
+									<f:facet name="header">
+										<h:outputLabel value="Τρέχουσα Κατάσταση Εκπαιδευτικού" />
+									</f:facet>
 
-								<rich:panelMenuItem mode="server" action="endButton"
-									label="Τέλος Ενέργειας" hoverClass="panelMenuItemHover" />
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText value="Σχολική Μονάδα" />
+										</f:facet>
+										<h:outputText value="#{_item.schoolUnit}" />
+									</rich:column>
 
-								<rich:panelMenuItem mode="ajax"
-									disabled="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_DISPOSAL'))}"
-									action="#{employeeDisposalsManagement.prepareForNewDisposal()}"
-									reRender="createModalPanelContent" limitToList="true"
-									oncomplete="#{rich:component('createModalPanel')}.show()"
-									label="Νέα Διάθεση" hoverClass="panelMenuItemHover">
-								</rich:panelMenuItem>
-
-							</rich:panelMenuGroup>
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText value="Τύπος" />
+										</f:facet>
+										<h:outputText value="#{messages[_item.cdrTypeKey]}" />
+									</rich:column>
 
 
-						</rich:panelMenu>
 
-					</h:panelGrid>
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText value="Σχόλιο" />
+										</f:facet>
+										<h:outputText value="#{_item.comment}" />
+									</rich:column>
+
+
+								</rich:dataTable>
+
+							</h:panelGroup>
+
+
+
+
+
+						</h:panelGrid>
+					</h:panelGroup>
+
+					<h:panelGroup>
+						<s:div styleClass="actionBox">
+							<a4j:commandButton value="Νέα Διάθεση"
+								styleClass="btn btn-primary"
+								disabled="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_DISPOSAL'))}"
+								action="#{employeeDisposalsManagement.prepareForNewDisposal()}"
+								reRender="createModalPanelContent" limitToList="true"
+								oncomplete="#{rich:component('createModalPanel')}.show()">
+							</a4j:commandButton>
+
+							<s:button value="Επιστροφή" styleClass="btn btn-default"
+								action="backButton" />
+
+							<s:button value="Τέλος Ενέργειας" styleClass="btn btn-default"
+								action="endButton" />
+						</s:div>
+
+					</h:panelGroup>
+
 
 
 					<rich:panel>
@@ -175,29 +221,25 @@
 										<f:facet name="header">
 											<h:outputText value="Ενέργεια" />
 										</f:facet>
-										<rich:toolBar itemSeparator="line">
+										<rich:toolBar itemSeparator="line" styleClass="actionBox">
 
-											<a4j:commandLink reRender="updateModalPanelContent"
-												ajaxSingle="true"
+											<a4j:commandButton reRender="updateModalPanelContent"
+												styleClass="btn btn-primary btn-mini" ajaxSingle="true"
 												disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MANAGE_DISPOSAL'))}"
 												oncomplete="#{rich:component('updateModalPanel')}.show()"
 												value="Τροποποίηση">
-												<h:graphicImage value="/img/icons/edit.png" width="12"
-													height="12" style="border:0" />
 												<f:setPropertyActionListener value="#{_secondment.id}"
 													target="#{disposalHome.id}" />
-											</a4j:commandLink>
+											</a4j:commandButton>
 
-											<a4j:commandLink reRender="deleteModalPanelContent"
-												ajaxSingle="true"
+											<a4j:commandButton reRender="deleteModalPanelContent"
+												styleClass="btn btn-danger btn-mini" ajaxSingle="true"
 												disabled="#{!(s:hasRole('ADMIN') or s:hasRole('DELETE_DISPOSAL'))}"
 												oncomplete="#{rich:component('deleteModalPanel')}.show()"
 												value="Διαγραφή">
-												<h:graphicImage value="/img/icons/delete.png" width="12"
-													height="12" style="border:0" />
 												<f:setPropertyActionListener value="#{_secondment.id}"
 													target="#{disposalHome.id}" />
-											</a4j:commandLink>
+											</a4j:commandButton>
 										</rich:toolBar>
 									</rich:column>
 								</rich:dataTable>
@@ -210,8 +252,6 @@
 
 
 		</rich:panel>
-
-
 
 
 		<!-- DELETE Disposal -->
@@ -232,51 +272,57 @@
 			<a4j:region>
 
 				<rich:messages style="color:red;"></rich:messages>
+
+				<p class="well well-small">
+					<h:outputText
+						value="Να διαγραφή η διάθεση του εκπαιδευτικού #{employeeUtil.prettyFormat(disposalHome.instance.employee)} στην μονάδα " />
+					<h:outputText value="#{disposalHome.instance.disposalUnit.title}"
+						styleClass="fieldValueText" />
+					<h:outputText value=" με λήξη την " />
+					<h:outputText value="#{disposalHome.instance.dueTo}"
+						styleClass="fieldValueText">
+						<s:convertDateTime pattern="dd-MM-yyyy" />
+					</h:outputText>
+					<h:outputText value=" ;" />
+
+				</p>
+
 				<h:panelGrid columns="1">
 					<a4j:outputPanel id="deleteModalPanelContent" layout="inline">
 						<ui:include src="/components/messages-component.xhtml" />
 						<a4j:form>
-							<h:panelGroup>
-								
-								<h:outputText
-									value="Να διαγραφή η διάθεση του εκπαιδευτικού #{employeeUtil.prettyFormat(disposalHome.instance.employee)} στην μονάδα " />
-								<h:outputText
-									value="#{disposalHome.instance.disposalUnit.title}"
-									styleClass="fieldValueText" />
-								<h:outputText value=" με λήξη την " />
-								<h:outputText value="#{disposalHome.instance.dueTo}"
-									styleClass="fieldValueText">
-									<s:convertDateTime pattern="dd-MM-yyyy" />
-								</h:outputText>
-								<h:outputText value=" ;" />
-							
-								<s:div styleClass="alert alert-warning">
-								
-									<h:outputText
-										value="Προσοχή ! Αν θέλετε να τερματίσεται μια διάθεση τότε κάντε τροποποίηση των ημερομηνίων λήξης της διάθεσης και ΟΧΙ διαγραφή."
-										styleClass="fieldValueText" />
-								
-								</s:div>
-								<s:decorate template="/layout/newDoubleLineEdit.xhtml">
-									<ui:define name="label">
-										<h:outputText value="Σχόλιο Διαγραφής" />
-									</ui:define>
-									<h:inputTextarea immediate="true"
-										value="#{disposalHome.instance.deletedComment}"
-										required="true" cols="50" rows="3" />
-								</s:decorate>
 
-							</h:panelGroup>
+
+							<s:div styleClass="alert alert-warning">
+
+								<h:outputText
+									value="Προσοχή ! Αν θέλετε να τερματίσεται μια διάθεση τότε κάντε τροποποίηση των ημερομηνίων λήξης της διάθεσης και ΟΧΙ διαγραφή."
+									styleClass="fieldValueText" />
+
+							</s:div>
+							<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Σχόλιο Διαγραφής" />
+								</ui:define>
+								<h:inputTextarea immediate="true"
+									value="#{disposalHome.instance.deletedComment}" required="true"
+									cols="50" rows="3" />
+							</s:decorate>
+
+
 
 							<s:div styleClass="actionBox">
+
 								<h:panelGrid columns="2">
-									<a4j:commandButton value="Διαγραφή Διάθεσης !" styleClass="btn btn-danger"
+									<a4j:commandButton value="Διαγραφή Διάθεσης !"
+										styleClass="btn btn-danger"
 										data="#{facesContext.maximumSeverity.ordinal ge 2}"
 										limitToList="true"
 										oncomplete="if(data == false) Richfaces.hideModalPanel('deleteModalPanel');"
 										action="#{employeeDisposalsManagement.deleteEmployeeDisposalAction()}"
 										reRender="disposalsTable,deleteModalPanelContent" />
-									<a4j:commandButton value="Επιστροφή .."  styleClass="btn btn-default"
+									<a4j:commandButton value="Επιστροφή .."
+										styleClass="btn btn-default"
 										onclick="#{rich:component('deleteModalPanel')}.hide();return false;" />
 								</h:panelGrid>
 							</s:div>
@@ -303,38 +349,40 @@
 				</h:panelGroup>
 			</f:facet>
 			<a4j:region>
-				<h:panelGrid columns="1">
-					<h:form>
-						<a4j:outputPanel id="updateModalPanelContent" layout="inline">
 
+				<h:form>
+					<a4j:outputPanel id="updateModalPanelContent" layout="inline">
 
-							<ui:include src="/components/messages-component.xhtml" />
+						<ui:include src="/components/messages-component.xhtml" />
 
+						<p class="well well-small">
 							<h:outputText
 								value="Με την παρακάτω φόρμα, μπορείται να τροποποίησεται την διάθεση του/της εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}." />
+						</p>
+
+						<ui:include src="/disposal/disposal-component.xhtml">
+							<ui:param name="updateMode" value="#{true}" />
+						</ui:include>
 
 
-							<ui:include src="/disposal/disposal-component.xhtml">
-								<ui:param name="updateMode" value="#{true}" />
-							</ui:include>
+					</a4j:outputPanel>
+					<s:div styleClass="actionBox">
+						<h:panelGrid columns="2">
 
+							<a4j:commandButton value="Τροποποίηση Διάθεσης !"
+								styleClass="btn btn-primary"
+								action="#{employeeDisposalsManagement.modifyDisposal()}"
+								data="#{facesContext.maximumSeverity.ordinal ge 2}"
+								oncomplete="if(data == false) Richfaces.hideModalPanel('updateModalPanel');"
+								reRender="updateModalPanelContent,disposalsTable" />
+							<a4j:commandButton value="Επιστροφή .."
+								styleClass="btn btn-default" action="#{disposalHome.revert()}"
+								reRender="disposalsTable"
+								oncomplete="#{rich:component('updateModalPanel')}.hide();" />
+						</h:panelGrid>
+					</s:div>
+				</h:form>
 
-						</a4j:outputPanel>
-						<s:div styleClass="actionBox">
-							<h:panelGrid columns="2">
-
-								<a4j:commandButton value="Τροποποίηση Διάθεσης !"  styleClass="btn btn-primary"
-									action="#{employeeDisposalsManagement.modifyDisposal()}"
-									data="#{facesContext.maximumSeverity.ordinal ge 2}"
-									oncomplete="if(data == false) Richfaces.hideModalPanel('updateModalPanel');"
-									reRender="updateModalPanelContent,disposalsTable" />
-								<a4j:commandButton value="Επιστροφή .." styleClass="btn btn-default"
-									action="#{disposalHome.revert()}" reRender="disposalsTable"
-									oncomplete="#{rich:component('updateModalPanel')}.hide();" />
-							</h:panelGrid>
-						</s:div>
-					</h:form>
-				</h:panelGrid>
 			</a4j:region>
 		</rich:modalPanel>
 
@@ -385,13 +433,15 @@
 						<h:panelGrid columns="2">
 
 
-							<a4j:commandButton value="Καταχώρηση Διάθεσης !" styleClass="btn btn-success"
+							<a4j:commandButton value="Καταχώρηση Διάθεσης !"
+								styleClass="btn btn-success"
 								action="#{employeeDisposalsManagement.addEmployeeDisposalAction()}"
 								data="#{facesContext.maximumSeverity.ordinal ge 2}"
 								limitToList="true"
 								oncomplete="if(data == false) { Richfaces.hideModalPanel('createModalPanel'); }"
 								reRender="createModalPanelContent,employeeDisposalsList" />
-							<a4j:commandButton value="Επιστροφή .." styleClass="btn btn-default"
+							<a4j:commandButton value="Επιστροφή .."
+								styleClass="btn btn-default" limitToList="true"
 								oncomplete="{ Richfaces.hideModalPanel('createModalPanel'); }"
 								reRender="createModalPanelContent, secondmentsTable"
 								action="#{employeeDisposalsManagement.cancelDisposalModificationAction() }">

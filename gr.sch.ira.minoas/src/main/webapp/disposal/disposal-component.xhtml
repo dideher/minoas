@@ -9,8 +9,8 @@
 <ui:component>
 
 
-	<s:div rendered="#{disposalHome.instance.isSourceUnitSecondment()}">
-		<h:outputText
+	<s:div rendered="#{disposalHome.instance.isSourceUnitSecondment()}" styleClass="alert alert-warning">
+		<h:outputText 
 			value="Προσοχή, ο εκπαιδευτικός έχει ενεργή απόσπαση. Οι διαθέσεις του εκπαιδευτικού λογίζονται στην μονάδα απόσπασης και όχι στην οργανική του." />
 	</s:div>
 	<h:panelGrid columns="4">
