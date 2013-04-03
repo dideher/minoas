@@ -396,7 +396,7 @@
 
 		<rich:modalPanel id="createModalPanel" autosized="true" width="450">
 			<f:facet name="header">
-				<h:outputText value="Καταχώρηση Νέας Απόσπασης"
+				<h:outputText value="Καταχώρηση Νέας Διάθεσης"
 					style="padding-right:15px;" />
 			</f:facet>
 			<f:facet name="controls">
@@ -414,12 +414,13 @@
 
 					<a4j:outputPanel id="createModalPanelContent">
 						<ui:include src="/components/messages-component.xhtml" />
+						<p class="well well-small">
+							<h:outputText
+								value="Συμπληρώστε τα στοιχεία της παρακάτω φόρμας για να εισάγεται νέα απόσπαση για τον εκπαιδευτικό " />
 
-						<h:outputText
-							value="Συμπληρώστε τα στοιχεία της παρακάτω φόρμας για να εισάγεται νέα απόσπαση για τον εκπαιδευτικό " />
-						<h:outputText styleClass="fieldValueText"
-							value="#{employeeUtil.prettyFormat(employeeHome.instance)}" />
-
+							<h:outputText styleClass="fieldValueText"
+								value="#{employeeUtil.prettyFormat(employeeHome.instance)}" />
+						</p>
 						<ui:include src="/disposal/disposal-component.xhtml">
 							<ui:param name="updateMode" value="#{false}" />
 						</ui:include>
