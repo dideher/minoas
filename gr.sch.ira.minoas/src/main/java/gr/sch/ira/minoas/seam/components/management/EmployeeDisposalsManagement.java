@@ -161,6 +161,12 @@ public class EmployeeDisposalsManagement extends BaseDatabaseAwareSeamComponent 
         } catch (Exception ex) {
             ; // ignore
         }
+        
+        if(!employee.getActive()) {
+        	if (addMessages)
+                facesMessages.add(Severity.ERROR, "O εκπαιδευτικός δεν είναι ενεργός.");
+            return false;
+        }
 
         /* check hours & days */
         if (disposal.getHours() == null || disposal.getHours() <= 0) {
