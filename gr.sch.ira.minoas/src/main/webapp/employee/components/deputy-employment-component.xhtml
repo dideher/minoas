@@ -9,7 +9,7 @@
 
 
 <ui:component>
-	<h:panelGrid columns="6">
+	<h:panelGrid columns="3">
 		<s:decorate template="/layout/doubleLineEdit.xhtml" id="regularSchoolUnit">
 			<ui:define name="label">
 				<h:outputText value="Σχολική Μονάδα : " />
@@ -55,8 +55,36 @@
 			</rich:calendar>
 		</s:decorate>
 		
+		<h:outputText value="" />
+		
+		<s:decorate template="/layout/doubleLineEdit.xhtml" id="deputyEntryIntoServiceActId">
+			<ui:define name="label">
+				<h:outputText value="Πράξη Ανάληψης Υπηρεσίας: " />
+			</ui:define>
+			<h:inputText value="#{_deputyEmployment.entryIntoServiceAct}"
+				size="15" styleClass="fieldValueText" maxlength="15" required="false"/>
+		</s:decorate>
+		<s:decorate template="/layout/doubleLineEdit.xhtml" id="deputyEntryIntoServiceActDateId">
+			<ui:define name="label">
+				<h:outputText value="Ημ/νία Πράξης Ανάληψης: " />
+			</ui:define>
+			<rich:calendar id="entryIntoServiceCalendar" datePattern="dd-MM-yyyy"
+				style="width:50px" enableManualInput="true"
+				styleClass="fieldValueText" inputSize="10" required="false"
+				value="${_deputyEmployment.entryIntoServiceDate}">
+			</rich:calendar>
+		</s:decorate>
 	</h:panelGrid>
+	<h:panelGrid columns="1">
+		<s:decorate template="/layout/doubleLineEdit.xhtml" id="deputy-based-employment-commentsId">
+		<ui:define name="label">
+			<h:outputText value="Σχόλια: " />
+		</ui:define>
+		<h:inputTextarea value="${_deputyEmployment.comments}" 
+		cols="60" rows="3" required="false"/>
 
+		</s:decorate>
+	</h:panelGrid>
 
 </ui:component>
 </html>

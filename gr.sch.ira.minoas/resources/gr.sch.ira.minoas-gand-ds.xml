@@ -8,6 +8,7 @@
   <driver-class>com.microsoft.sqlserver.jdbc.SQLServerDriver</driver-class>
   <user-name>gand2</user-name>
   <password>gand2</password>
+  <prefill>true</prefill>
   <!-- sql to call when connection is created
         <new-connection-sql>some arbitrary sql</new-connection-sql>
         

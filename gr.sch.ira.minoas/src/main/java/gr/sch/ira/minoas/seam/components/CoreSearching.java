@@ -15,6 +15,7 @@ import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
 import gr.sch.ira.minoas.model.employee.Evaluation;
+import gr.sch.ira.minoas.model.employee.MaritalStatusType;
 import gr.sch.ira.minoas.model.employee.PartTimeEmployment;
 import gr.sch.ira.minoas.model.employee.Penalty;
 import gr.sch.ira.minoas.model.employee.PenaltyType;
@@ -677,6 +678,11 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         return EmployeeType.values();
     }
 
+    @Factory(value = "maritalStatusTypes")
+    public MaritalStatusType[] getMaritalStatusTypes() {
+        return MaritalStatusType.values();
+    }
+    
     public Collection<WorkExperience> getEmployeeWorkExperience(EntityManager em, Person employee) {
         return null;
     }

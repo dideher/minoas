@@ -14,18 +14,34 @@
 		<h:outputLabel styleClass="fieldValueLabel" value="Όνομα Πατρός" />
 		<h:outputText styleClass="fieldValueText" value="#{employee.fatherName}" />
 		<h:outputLabel styleClass="fieldValueLabel" value="Ειδικότητα" />
-		<h:outputText styleClass="fieldValueText" value="#{employee.lastSpecialization}" />
+		<h:outputText styleClass="fieldValueText" value="#{employee.lastSpecialization.id} - #{employee.lastSpecialization.title}" />
 		
-		<h:outputLabel styleClass="fieldValueLabel" value="Όνομα Μητρός" />
-		<h:outputText styleClass="fieldValueText" value="#{employee.motherName}" />
-		<h:outputLabel styleClass="fieldValueLabel" value="ΑΦΜ" />
-		<h:outputText styleClass="fieldValueText" value="#{employee.vatNumber}" />
-		<h:outputLabel styleClass="fieldValueLabel" value="ΑΜ" />
-		<h:outputText styleClass="fieldValueText" value="#{employeeUtil.getRegistryID(employee)}" />
+		
 		<h:outputLabel styleClass="fieldValueLabel" value="Ημ/νία Γεννήσεως" />
 		<h:outputText styleClass="fieldValueText" value="#{employee.dateOfBirth}">
-			<s:convertDateTime type="date" pattern="dd-MM-yyyy" />
+			<s:convertDateTime type="date" pattern="dd/MM/yyyy" />
 		</h:outputText>
+		<h:outputLabel styleClass="fieldValueLabel" value="Όνομα Μητρός" />
+		<h:outputText styleClass="fieldValueText" value="#{employee.motherName}" />
+		<h:outputLabel styleClass="fieldValueLabel" value="ΑΜ" />
+		<h:outputText styleClass="fieldValueText" value="#{employeeUtil.getRegistryID(employee)}" />
+		<h:outputLabel styleClass="fieldValueLabel" value="ΑΦΜ" />
+		<h:outputText styleClass="fieldValueText" value="#{employee.vatNumber}" />
+		<h:outputLabel styleClass="fieldValueLabel" value="Αριθ. Ταυτότητας" />
+		<h:outputText styleClass="fieldValueText" value="#{employee.idNumber}" />
+		
+		<h:outputLabel styleClass="fieldValueLabel" value="Οικογεν. Κατάσταση" />
+		<h:outputText styleClass="fieldValueText" value="#{messages[employee.maritalType.key]}" />
+		<h:outputLabel styleClass="fieldValueLabel" value="Αριθμός Τέκνων" />
+		<h:outputText styleClass="fieldValueText" value="#{employee.numberOfChildren}" />
+		<h:outputLabel styleClass="fieldValueLabel" value="Αριθ. ΙΚΑ"/>
+		<h:outputText styleClass="fieldValueText" value="#{employee.ikaId}"/>
+		
+		<h:outputLabel styleClass="fieldValueLabel" value="Πολύτεκνος" />
+		<h:selectBooleanCheckbox value="#{employee.bigFamily}" disabled="true"/>
+		<h:outputLabel value="" />
+		<h:outputText value="" />
+		
 	</h:panelGrid>
 </ui:component>
 

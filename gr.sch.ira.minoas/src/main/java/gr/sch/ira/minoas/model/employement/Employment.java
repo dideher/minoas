@@ -24,6 +24,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -159,7 +160,6 @@ public class Employment extends BaseIDDeleteAwareModel {
 	 */
 	public Employment() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**

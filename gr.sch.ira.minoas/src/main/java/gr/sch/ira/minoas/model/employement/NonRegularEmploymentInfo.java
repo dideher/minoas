@@ -43,8 +43,8 @@ public class NonRegularEmploymentInfo extends BaseIDModel {
 	 * (Απόφαση Δευτεροβάθμιας στην περίπτωση Ωρομισθίου)
 	 */
 	@Basic
-	@Column(name = "ORDER", nullable = true, length = 32)
-	private String order;
+	@Column(name = "ACT", nullable = true, length = 32)
+	private String act;
 
 	
 	/**
@@ -53,8 +53,8 @@ public class NonRegularEmploymentInfo extends BaseIDModel {
 	 * (Απόφαση Δευτεροβάθμιας στην περίπτωση Ωρομισθίου)
 	 */
 	@Basic
-	@Column(name = "ORDER_DATE")
-	private Date orderDate;
+	@Column(name = "ACT_DATE")
+	private Date actDate;
 	
 	/**
 	 * Απόφαση ΠΥΣΔΕ
@@ -182,40 +182,40 @@ public class NonRegularEmploymentInfo extends BaseIDModel {
 
 
 	/**
-	 * @return the order
+	 * @return the act
 	 * Απόφαση 
 	 * (Υπουργική απόφαση στην περίπτωση Αναπληρωτή)
 	 * (Απόφαση Δευτεροβάθμιας στην περίπτωση Ωρομισθίου)
 	 */
-	public String getOrder() {
-		return order;
+	public String getAct() {
+		return act;
 	}
 
 
 	/**
-	 * @param order the order to set
+	 * @param act the act to set
 	 * Απόφαση 
 	 * (Υπουργική απόφαση στην περίπτωση Αναπληρωτή)
 	 * (Απόφαση Δευτεροβάθμιας στην περίπτωση Ωρομισθίου)
 	 */
-	public void setOrder(String order) {
-		this.order = order;
+	public void setAct(String act) {
+		this.act = act;
 	}
 
 
 	/**
-	 * @return the orderDate
+	 * @return the actDate
 	 */
-	public Date getOrderDate() {
-		return orderDate;
+	public Date getActDate() {
+		return actDate;
 	}
 
 
 	/**
-	 * @param orderDate the orderDate to set
+	 * @param actDate the actDate to set
 	 */
-	public void setOrderDate(Date orderDate) {
-		this.orderDate = orderDate;
+	public void setActDate(Date actDate) {
+		this.actDate = actDate;
 	}
 
 

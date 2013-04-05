@@ -52,7 +52,6 @@ public class EmployeeLeaveHome extends MinoasEntityHome<EmployeeLeave> {
 	@Override
 	@Factory(value = "employeeLeave", scope = ScopeType.PAGE)
 	public EmployeeLeave getInstance() {
-		// TODO Auto-generated method stub
 		return (EmployeeLeave) super.getInstance();
 	}
 

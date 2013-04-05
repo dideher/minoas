@@ -43,7 +43,6 @@ public class UnitCategory extends BaseIDModel {
 	 * 
 	 */
 	public UnitCategory() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public String getTitle() {

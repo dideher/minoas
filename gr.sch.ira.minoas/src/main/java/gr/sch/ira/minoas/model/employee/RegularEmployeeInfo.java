@@ -36,21 +36,22 @@ public class RegularEmployeeInfo extends BaseIDModel {
 	 */
 	@Basic
 	@Column(name = "GOG_APPOINTMENT_NO", length = 4)
-	private String gogAppointmentNo;
+	private String appointmentGOG;
 
 	/**
 	 * Greek Official Gazette Αppointment Date (Ημερομηνία ΦΕΚ Διορισμού)
 	 */
 	@Basic
 	@Column(name = "GOG_APPOINTMENT_DATE")
-	private Date gogAppointmentDate;
+	private Date appointmentGOGDate;
 	
-	
-
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "EMPLOYEE_ID", nullable = false)
 	private Employee employee;
 
+	/**
+	 * Registry ID (Αριθμός Μητρώου (ΑΜ))
+	 */
 	@Basic
 	@Column(name = "REGISTRY_ID", length = 7)
 	private String registryID;
@@ -147,32 +148,44 @@ public class RegularEmployeeInfo extends BaseIDModel {
 	public void setIsRecentlyHired(Boolean isRecentlyHired) {
 		this.isRecentlyHired = isRecentlyHired;
 	}
-
-	/**
-	 * @return the gogAppointmentNo
-	 */
-	public String getGogAppointmentNo() {
-		return gogAppointmentNo;
-	}
-
-	/**
-	 * @param gogAppointmentNo the gogAppointmentNo to set
-	 */
-	public void setGogAppointmentNo(String gogAppointmentNo) {
-		this.gogAppointmentNo = gogAppointmentNo;
-	}
-
-	/**
-	 * @return the gogAppointmentDate
-	 */
-	public Date getGogAppointmentDate() {
-		return gogAppointmentDate;
-	}
 	
 	/**
-	 * @param gogAppointmentDate the gogAppointmentDate to set
+	 * @return the appointmentGOG
 	 */
-	public void setGogAppointmentDate(Date gogAppointmentDate) {
-		this.gogAppointmentDate = gogAppointmentDate;
+	public String getAppointmentGOG() {
+		return appointmentGOG;
 	}
+
+	/**
+	 * @param appointmentGOG the appointmentGOG to set
+	 */
+	public void setAppointmentGOG(String appointmentGOG) {
+		this.appointmentGOG = appointmentGOG;
+	}
+
+	/**
+	 * @return the appointmentGOGDate
+	 */
+	public Date getAppointmentGOGDate() {
+		return appointmentGOGDate;
+	}
+
+	/**
+	 * @param appointmentGOGDate the appointmentGOGDate to set
+	 */
+	public void setAppointmentGOGDate(Date appointmentGOGDate) {
+		this.appointmentGOGDate = appointmentGOGDate;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Regular EmployeeInfo [appointmentGOG=" + appointmentGOG + ", appointmentGOGDate="
+				+ appointmentGOGDate + ", registryID=" + registryID + ", permanentEmployeeAct=" + permanentEmployeeAct
+				+ ", permanentEmployeeActDate=" + permanentEmployeeActDate
+				+ ", isRecentlyHired=" + isRecentlyHired + "]";
+	}
+
 }

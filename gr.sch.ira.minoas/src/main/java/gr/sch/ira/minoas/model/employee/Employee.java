@@ -70,6 +70,10 @@ public class Employee extends Person {
 	@OneToOne(mappedBy="employee")
 	private EmployeeInfo employeeInfo;
 	
+	@OneToOne(optional = true, fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
+	@JoinColumn(name = "REGULAR_EMPLOYMEE_INFO_ID", nullable = true)
+	private RegularEmployeeInfo regularEmployeeInfo;
+	
 	@OneToMany(mappedBy = "employee", fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
 	private Set<Employment> employments;
 	
@@ -96,9 +100,7 @@ public class Employee extends Person {
 	@Column(name = "LEGACY_CODE", nullable = true, updatable = false, length = 10)
 	private String legacyCode;
 
-	@OneToOne(optional = true, fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
-	@JoinColumn(name = "REGULAR_EMPLOYMEE_INFO_ID", nullable = true)
-	private RegularEmployeeInfo regularEmployeeInfo;
+
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", cascade = { CascadeType.ALL })
 	private Collection<Secondment> secondments = new ArrayList<Secondment>();
@@ -125,7 +127,7 @@ public class Employee extends Person {
      * Οικογενειακή Κατάσταση 
      */
 	@Enumerated(EnumType.STRING)
-	@Column(name = "MARITAL_STATUS", length = 30, nullable = true, updatable = false)
+	@Column(name = "MARITAL_STATUS", length = 30, nullable = true)
 	private MaritalStatusType maritalType;
 	
 	/**

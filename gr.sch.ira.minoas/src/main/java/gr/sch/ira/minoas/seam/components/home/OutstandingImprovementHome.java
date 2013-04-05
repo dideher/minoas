@@ -46,7 +46,6 @@ public class OutstandingImprovementHome extends MinoasEntityHome<OutstandingImpr
 	@Override
 	@Factory(value = "outstandingImprovement", scope = ScopeType.PAGE)
 	public OutstandingImprovement getInstance() {
-		// TODO Auto-generated method stub
 		return (OutstandingImprovement) super.getInstance();
 	}
 

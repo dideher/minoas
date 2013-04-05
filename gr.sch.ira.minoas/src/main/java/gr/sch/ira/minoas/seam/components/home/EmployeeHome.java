@@ -41,7 +41,7 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 
 	@In(create = true)
 	private EmploymentHome employmentHome;
-
+	
 	@DataModel(value = "hourlyBasedEmployments")
 	private Collection<Employment> hourlyBasedEmployments = new ArrayList<Employment>();
 
@@ -54,6 +54,10 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 	@In(create = true)
 	private ServiceAllocationHome serviceAllocationHome;
 
+	
+	protected String tempValueHolder1; /* used as a holder value in forms */ 
+	
+	
 	
 
 	@Transactional
@@ -227,6 +231,17 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 		addNewHourlyBasedEmploymentItem();
 	}
 
+    
+	/**
+     * @see gr.sch.ira.minoas.seam.components.home.MinoasEntityHome#clearInstance()
+     */
+    @Override
+    public void clearInstance() {
+        super.clearInstance();
+        setTempValueHolder1(null);
+    }
+	
+	
 	/**
 	 * @see gr.sch.ira.minoas.seam.components.home.MinoasEntityHome#remove()
 	 */
@@ -330,4 +345,17 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
         return getInstance().isHourlyPaidEmployee();
     }
 
+    /**
+     * @return the tempValueHolder1
+     */
+    public String getTempValueHolder1() {
+        return tempValueHolder1;
+    }
+
+    /**
+     * @param tempValueHolder1 the tempValueHolder1 to set
+     */
+    public void setTempValueHolder1(String tempValueHolder1) {
+        this.tempValueHolder1 = tempValueHolder1;
+    }
 }

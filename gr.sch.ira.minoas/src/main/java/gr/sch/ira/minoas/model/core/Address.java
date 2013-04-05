@@ -61,7 +61,7 @@ public class Address extends BaseIDModel {
 	 * 
 	 */
 	public Address() {
-		// TODO Auto-generated constructor stub
+
 	}
 
 	/**

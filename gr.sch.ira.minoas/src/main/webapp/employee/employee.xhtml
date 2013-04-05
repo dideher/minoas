@@ -231,6 +231,7 @@
 						<rich:toolBar itemSeparator="line">
 							<a4j:commandLink id="updateBasicInfolink"
 								reRender="updateBasicInfoModalPanelContent"
+								action="#{employeeHome.setTempValueHolder1(employee.lastSpecialization.id)}"
 								rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE_BASIC_INFO'))}"
 								oncomplete="#{rich:component('updateBasicInfoModalPanel')}.show()"
 								value="Τροποποίηση Στοιχείων">
@@ -1082,13 +1083,33 @@
 									<h:inputText value="#{employeeHome.instance.fatherName}"
 										required="true" maxlength="25" size="20" />
 								</s:decorate>
-
+								
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
 									<ui:define name="label">
-										<h:outputText value="Όνομα Μητρός" />
+										<h:outputText value="Ειδικότητα: " />
 									</ui:define>
-									<h:inputText value="#{employeeHome.instance.motherName}"
-										required="false" maxlength="25" size="20" />
+									<h:inputText id="specializationFilter" required="true" 
+										value="#{employeeHome.tempValueHolder1}"
+										styleClass="fieldValueText" size="25" maxlength="40">
+										<rich:suggestionbox height="100" width="250"
+											for="specializationFilter" var="a_spec" ajaxSingle="true"
+											suggestionAction="#{specializationSuggester.suggest}"
+											fetchValue="#{a_spec.id}">>
+											<f:facet name="nothingLabel">
+												<h:outputText value="Άγνωστη Ειδικότητα" />
+											</f:facet>
+											<h:column>
+												<h:outputText value="#{a_spec.id}" />
+											</h:column>
+											<h:column>
+												<h:outputText value="#{a_spec.title}" />
+											</h:column>
+											<a4j:support ajaxSingle="true" event="onselect">
+												<f:setPropertyActionListener value="#{a_spec}"
+													target="#{employeeHome.instance.lastSpecialization}" />
+											</a4j:support>
+										</rich:suggestionbox>
+									</h:inputText>
 								</s:decorate>
 
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
@@ -1104,10 +1125,69 @@
 
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
 									<ui:define name="label">
+										<h:outputText value="Όνομα Μητρός" />
+									</ui:define>
+									<h:inputText value="#{employeeHome.instance.motherName}"
+										required="false" maxlength="25" size="20" />
+								</s:decorate>
+
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
 										<h:outputText value="ΑΦΜ" />
 									</ui:define>
 									<h:inputText value="#{employeeHome.instance.vatNumber}"
-										required="true" maxlength="10" size="10" />
+										required="false" maxlength="10" size="10" />
+								</s:decorate>
+								
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="ΑΜ" />
+									</ui:define>
+									<h:inputText value="#{employeeHome.instance.regularEmployeeInfo.registryID}"
+										required="false" maxlength="10" size="10" />
+								</s:decorate>
+								
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Αριθμ. Ταυτότητας" />
+									</ui:define>
+									<h:inputText value="#{employeeHome.instance.idNumber}"
+										required="false" maxlength="10" size="10" />
+								</s:decorate>
+								
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Οικογεν. Κατάσταση: " />
+									</ui:define>
+									<h:selectOneMenu value="#{employee.maritalType}" required="true">
+										<s:selectItems noSelectionLabel="Επιλέξτε Οικογ. Κατάσταση"
+											var="_maritalStatusType" value="#{maritalStatusTypes}"
+											label="#{messages[_maritalStatusType.key]}">
+										</s:selectItems>
+									</h:selectOneMenu>
+								</s:decorate>
+								
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Αριθμ. Τέκνων" />
+									</ui:define>
+									<h:inputText value="#{employeeHome.instance.numberOfChildren}"
+										required="false" maxlength="10" size="10" />
+								</s:decorate>
+								
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Αριθμ. ΙΚΑ" />
+									</ui:define>
+									<h:inputText value="#{employeeHome.instance.ikaId}"
+										required="false" maxlength="10" size="10" />
+								</s:decorate>
+								
+								<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Πολύτεκνος" />
+									</ui:define>
+									<h:selectBooleanCheckbox value="#{employeeHome.instance.bigFamily}" /> 
 								</s:decorate>
 
 							</h:panelGrid>

@@ -9,7 +9,7 @@
 
 
 <ui:component>
-	<h:panelGrid columns="6">
+	<h:panelGrid columns="3">
 		<s:decorate template="/layout/doubleLineEdit.xhtml" id="hourlyBasedSchoolUnit">
 			<ui:define name="label">
 				<h:outputText value="Σχολική Μονάδα : " />
@@ -44,6 +44,12 @@
 					reRender="workingHours" />
 			</h:inputText>
 		</s:decorate>
+				<s:decorate template="/layout/doubleLineEdit.xhtml" id="homebased">
+			<ui:define name="label">
+				<h:outputText value="Κατοίκον ; " />
+			</ui:define>
+			<h:selectBooleanCheckbox value="#{_hourlybasedEmployment.homeBased}" />
+		</s:decorate>
 		<s:decorate template="/layout/doubleLineEdit.xhtml" id="from">
 			<ui:define name="label">
 				<h:outputText value="Από : " />
@@ -65,14 +71,37 @@
 				<a4j:support event="onchanged" ajaxSingle="true" reRender="until" />
 			</rich:calendar>
 		</s:decorate>
-		<s:decorate template="/layout/doubleLineEdit.xhtml" id="homebased">
+		
+		<h:outputText value="" />
+		
+		<s:decorate template="/layout/doubleLineEdit.xhtml" id="hourlyEntryIntoServiceActId">
 			<ui:define name="label">
-				<h:outputText value="Κατοίκον ; " />
+				<h:outputText value="Πράξη Ανάληψης Υπηρεσίας: " />
 			</ui:define>
-			<h:selectBooleanCheckbox value="#{_hourlybasedEmployment.homeBased}" />
+			<h:inputText value="#{_hourlybasedEmployment.entryIntoServiceAct}"
+				size="15" styleClass="fieldValueText" maxlength="15" required="false"/>
+		</s:decorate>
+		<s:decorate template="/layout/doubleLineEdit.xhtml" id="hourlyEntryIntoServiceActDateId">
+			<ui:define name="label">
+				<h:outputText value="Ημ/νία Πράξης Ανάληψης: " />
+			</ui:define>
+			<rich:calendar id="entryIntoServiceCalendar" datePattern="dd-MM-yyyy"
+				style="width:50px" enableManualInput="true"
+				styleClass="fieldValueText" inputSize="10" required="false"
+				value="${_hourlybasedEmployment.entryIntoServiceDate}">
+				<a4j:support event="onchanged" ajaxSingle="true" />
+			</rich:calendar>
 		</s:decorate>
 	</h:panelGrid>
+	<h:panelGrid columns="3">
+		<s:decorate template="/layout/doubleLineEdit.xhtml" id="hourly-based-employment-commentsId">
+		<ui:define name="label">
+			<h:outputText value="Σχόλια: " />
+		</ui:define>
+		<h:inputTextarea value="${_hourlybasedEmployment.comments}" 
+		cols="60" rows="3" required="false"/>
 
-
+		</s:decorate>
+	</h:panelGrid>
 </ui:component>
 </html>

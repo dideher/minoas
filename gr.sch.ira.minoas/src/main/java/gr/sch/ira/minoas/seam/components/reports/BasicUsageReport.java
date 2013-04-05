@@ -1,6 +1,7 @@
 package gr.sch.ira.minoas.seam.components.reports;
 
 import gr.sch.ira.minoas.model.employee.EmployeeType;
+import gr.sch.ira.minoas.model.employee.MaritalStatusType;
 import gr.sch.ira.minoas.model.security.Principal;
 
 import java.net.MalformedURLException;
@@ -49,7 +50,7 @@ public class BasicUsageReport extends BaseReport {
 		private Collection<Long> employeeTypeCounts;
 
 		private Collection<EmployeeType> employeeTypes;
-
+		
 		/**
 		 * @return the rawData
 		 */
@@ -187,7 +188,6 @@ public class BasicUsageReport extends BaseReport {
 		public void setEmployeeTypes(Collection<EmployeeType> employeeTypes) {
 			this.employeeTypes = employeeTypes;
 		}
-
 	}
 
 	@Out

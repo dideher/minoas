@@ -251,11 +251,11 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
      * @return
      */
     public Date computeEmployeeFirstDayOfRegularWork(Employee employee) {
-        if (employee != null && employee.getEmployeeInfo() != null) {
+        if (employee != null && employee.getRegularEmployeeInfo() != null) {
         	RegularEmployeeInfo reinfo = employee.getRegularEmployeeInfo();
         	Employment curr_employment = employee.getCurrentEmployment();
         	
-            Date gofDate = reinfo.getGogAppointmentDate();
+            Date gofDate = reinfo.getAppointmentGOGDate();
             Date entryIntoServiceDate = curr_employment.getEntryIntoServiceDate();
             if(gofDate != null && entryIntoServiceDate !=null)
             	return CoreUtils.datesDifferenceIn360DaysYear(gofDate, entryIntoServiceDate) > 30 ? entryIntoServiceDate : gofDate;

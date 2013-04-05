@@ -7,23 +7,25 @@
       xmlns:a4j="http://richfaces.org/a4j">
 
 	<ui:component>
-
 		<h:panelGrid columns="6">
 			<h:outputLabel styleClass="fieldValueLabel"
 				value="ΦΕΚ Διορισμού: " />
-			<h:outputFormat styleClass="fieldValueText" value="#{employee.employeeInfo.gogAppointmentNo}-{0, date, dd/MM/yyyy}">
-			    <f:param value="#{employee.employeeInfo.gogAppointmentDate}" />
+			<ui:remove> <!-- TODO Review this as Employee my not be only Regular but also NonRegular --> </ui:remove> 
+			<h:outputFormat styleClass="fieldValueText" value="#{employee.regularEmployeeInfo.appointmentGOG}-{0, date, dd/MM/yyyy}">
+			    <f:param value="#{employee.regularEmployeeInfo.appointmentGOGDate}" />
 			</h:outputFormat>
 			
 			<h:outputLabel styleClass="fieldValueLabel"
 				value="(Πράξη)-Ανάληψη Υπηρεσίας: " />
-			<h:outputFormat styleClass="fieldValueText" value="(#{employee.employeeInfo.entryIntoServiceAct})-{0, date, dd/MM/yyyy}">
-			    <f:param value="#{employee.employeeInfo.entryIntoServiceDate}" />
+			<ui:remove> <!-- TODO Review this as Employee my not be only Regular but also NonRegular --> </ui:remove>
+			<h:outputFormat styleClass="fieldValueText" value="(#{employee.currentEmployment.entryIntoServiceAct})-{0, date, dd/MM/yyyy}">
+			    <f:param value="#{employee.currentEmployment.entryIntoServiceDate}" />
 			</h:outputFormat>
 			<h:outputLabel styleClass="fieldValueLabel"
 				value="(Πράξη)-Ημερομηνία Μονιμοποίησης: " />
-			<h:outputFormat styleClass="fieldValueText" value="(#{employee.employeeInfo.permanentEmployeeAct})-{0, date, dd/MM/yyyy}">
-			    <f:param value="#{employee.employeeInfo.permanentEmployeeActDate}" />
+			<ui:remove> <!-- TODO Review this as Employee my not be only Regular but also NonRegular --> </ui:remove>
+			<h:outputFormat styleClass="fieldValueText" value="(#{employee.regularEmployeeInfo.permanentEmployeeAct})-{0, date, dd/MM/yyyy}">
+			    <f:param value="#{employee.regularEmployeeInfo.permanentEmployeeActDate}" />
 			</h:outputFormat>
 	
 	
@@ -39,26 +41,8 @@
 				</h:outputFormat>
 				<rich:toolTip  id="MScDateTooltip" value="Ημερομηνίες πριν την 1-11-2011 αναφέρονται στην ημερομηνία κατάθεσης του σχετικού τίτλου από την οποία λάμβανε και το σχετικό επίδομα, ενώ ημ/νίες μετά την 1-11-2011 αναφέρονται στην ημερομηνία πράξης του ΠΥΣΔΕ από την οποία ενσωματώνεται στο βαθμό ο χρόνος που αναλογεί." for="MScDateOutputLabel"/>
 			</h:panelGroup>
-			
-		
-	
-	
-			<h:outputLabel styleClass="fieldValueLabel"
-				value="Ανώτ.Σχολ.Δημ.Διοίκ.: " />
-			<h:panelGroup> 
-				<h:selectBooleanCheckbox disabled="true"
-					value="#{employee.employeeInfo.isANatSchPubAdminGraduate}" />
-	
-				<h:outputFormat styleClass="fieldValueLabelLeft" value=" (Ημ/νία: {0, date, dd/MM/yyyy})"
-					id="natSchPubAdminDateOutputLabel" onmouseover="#{rich:component('natSchPubAdminDateTooltip')}.show(event);">
-				    <f:param value="#{employee.employeeInfo.natSchPubAdminDate}" />
-				</h:outputFormat>
-				<rich:toolTip  id="natSchPubAdminDateTooltip" value="Ημερομηνίες πριν την 1-11-2011 αναφέρονται στην ημερομηνία κατάθεσης του σχετικού τίτλου από την οποία λάμβανε και το σχετικό επίδομα, ενώ ημ/νίες μετά την 1-11-2011 αναφέρονται στην ημερομηνία πράξης του ΠΥΣΔΕ από την οποία ενσωματώνεται στο βαθμό ο χρόνος που αναλογεί." for="natSchPubAdminDateOutputLabel"/>
-			</h:panelGroup>
-			
-		
-			
-	
+
+
 			<h:outputLabel styleClass="fieldValueLabel"
 				value="Διδακτορικό (PhD): " />
 			<h:panelGroup> 
@@ -71,10 +55,21 @@
 				</h:outputFormat>
 				<rich:toolTip  id="PhDDateTooltip" value="Ημερομηνίες πριν την 1-11-2011 αναφέρονται στην ημερομηνία κατάθεσης του σχετικού τίτλου από την οποία λάμβανε και το σχετικό επίδομα, ενώ ημ/νίες μετά την 1-11-2011 αναφέρονται στην ημερομηνία πράξης του ΠΥΣΔΕ από την οποία ενσωματώνεται στο βαθμό ο χρόνος που αναλογεί." for="PhDDateOutputLabel"/>
 			</h:panelGroup>
-			
-			
-			
+
+			<h:outputLabel styleClass="fieldValueLabel"
+				value="Ανώτ.Σχολ.Δημ.Διοίκ.: " />
+			<h:panelGroup> 
+				<h:selectBooleanCheckbox disabled="true"
+					value="#{employee.employeeInfo.isANatSchPubAdminGraduate}" />
 	
+				<h:outputFormat styleClass="fieldValueLabelLeft" value=" (Ημ/νία: {0, date, dd/MM/yyyy})"
+					id="natSchPubAdminDateOutputLabel" onmouseover="#{rich:component('natSchPubAdminDateTooltip')}.show(event);">
+				    <f:param value="#{employee.employeeInfo.natSchPubAdminDate}" />
+				</h:outputFormat>
+				<rich:toolTip  id="natSchPubAdminDateTooltip" value="Ημερομηνίες πριν την 1-11-2011 αναφέρονται στην ημερομηνία κατάθεσης του σχετικού τίτλου από την οποία λάμβανε και το σχετικό επίδομα, ενώ ημ/νίες μετά την 1-11-2011 αναφέρονται στην ημερομηνία πράξης του ΠΥΣΔΕ από την οποία ενσωματώνεται στο βαθμό ο χρόνος που αναλογεί." for="natSchPubAdminDateOutputLabel"/>
+			</h:panelGroup>
+
+
 			<h:outputLabel styleClass="fieldValueLabel" value="Βαθμός: " />
 			<h:outputText styleClass="fieldValueText"
 				value="#{messages[employee.employeeInfo.currentRankInfo.rank.key]}" />
