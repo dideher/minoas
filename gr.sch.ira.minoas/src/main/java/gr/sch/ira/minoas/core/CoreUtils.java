@@ -148,5 +148,14 @@ public abstract class CoreUtils {
 		} else
 			return "";
 	}
+	
+	public static boolean isEmpty(Object object) {
+		return !isNonEmpty(object);
+	}
+
+	public static boolean isNonEmpty(Object object) {
+		return object != null && String.valueOf(object).trim().length() > 0;
+	}
+
 
 }
