@@ -3,13 +3,17 @@
  */
 package gr.sch.ira.minoas.seam.components.search;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.faces.event.ValueChangeEvent;
+import javax.persistence.Query;
 
 import gr.sch.ira.minoas.core.CoreUtils;
 import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
+import gr.sch.ira.minoas.seam.components.CoreSearching;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
@@ -22,48 +26,78 @@ import org.jboss.seam.annotations.security.Restrict;
  * 
  */
 @Name("schoolSearch")
-@Scope(ScopeType.SESSION)
+@Scope(ScopeType.CONVERSATION)
 @Restrict("#{identity.loggedIn}")
-public class SchoolSearchAction extends BaseDatabaseAwareSeamComponent {
+public class SchoolSearchAction extends BaseSearchAction<School> {
+
+	@DataModel
+	public List<School> schoolsSearchResult;
+	
+	@Override
+	protected List<School> getResults() {
+		return schoolsSearchResult;
+	}
+
+	@Override
+	protected void setResults(List<School> results) {
+		schoolsSearchResult = results;
+	}
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -1;
 
-	@DataModel
-	private List<School> schools;
-
 	private String searchString;
 
+	private String schoolRegion;
+
+	public String getSchoolRegion() {
+		return schoolRegion;
+	}
+
+	public void setSchoolRegion(String schoolRegion) {
+		this.schoolRegion = schoolRegion;
+	}
+
 	private Integer sxolikaMoria;
-	private Integer pageSize = 10;
 
-	public List<School> getSchools() {
-		return schools;
+	@Override
+	public Query constructQuery() {
+
+		System.err.println("searchingggg !!!!!!!!");
+		StringBuilder queryBuilder = new StringBuilder(
+				"SELECT s FROM School s WHERE ");
+		List<String> paramList = new ArrayList<String>();
+		paramList.add("lower(s.title) LIKE :schoolTitleSearchPattern");
+
+		if (CoreUtils.isNonEmpty(getSchoolRegion())) {
+			paramList.add("s.regionCode = :schoolRegionCode");
+		}
+		Iterator<String> itr = paramList.iterator();
+
+		while (itr.hasNext()) {
+			queryBuilder.append(itr.next());
+			if (itr.hasNext()) {
+				queryBuilder.append(" AND ");
+			}
+		}
+
+		final Query query = getEntityManager().createQuery(
+				queryBuilder.toString());
+
+		/* handle parameters */
+		query.setParameter("schoolTitleSearchPattern",
+				CoreUtils.getSearchPattern(getSearchString()));
+		if (CoreUtils.isNonEmpty(getSchoolRegion())) {
+			query.setParameter("schoolRegionCode", getSchoolRegion());
+		}
+
+		return query;
+	
 	}
 
-	public void setSchools(List<School> schools) {
-		this.schools = schools;
-	}
-
-	public Integer getPageSize() {
-		return pageSize;
-	}
-
-	public void setPageSize(Integer pageSize) {
-		this.pageSize = pageSize;
-	}
-
-	public Integer getPage() {
-		return page;
-	}
-
-	public void setPage(Integer page) {
-		this.page = page;
-	}
-
-	private Integer page = 0;
+	
 
 	public Integer getSxolikaMoria() {
 		return sxolikaMoria;
@@ -81,49 +115,15 @@ public class SchoolSearchAction extends BaseDatabaseAwareSeamComponent {
 		this.searchString = searchString;
 	}
 
-	public void find() {
-		page = 0;
-		querySchools();
-	}
-
-	@SuppressWarnings("unchecked")
-	private void querySchools() {
-		System.err.println("searchingggg !!!!!!!!");
-		schools = getEntityManager()
-				.createQuery(
-						"SELECT s from School s WHERE lower(s.title) LIKE :search_pattern AND s.ministryCode != '0000000'")
-				.setParameter("search_pattern",
-						CoreUtils.getSearchPattern(getSearchString()))
-				.setMaxResults(pageSize).setFirstResult(page * pageSize)
-				.getResultList();
-	}
-
-	public boolean isNextPageAvailable() {
-		return schools != null && schools.size() == pageSize;
-	}
-
-	public boolean isPreviousPageAvailable() {
-		return page > 0;
-	}
+	
 
 	public void handleSearchStringChange(ValueChangeEvent e) {
 		System.err.println("handleSearchStringChange !!!!!!!!");
-		page = 0;
+		setPage(0);
 		setSearchString((String) e.getNewValue());
-		querySchools();
+		performQuery();
+		System.err.println(getResults().size());
+		System.err.println(schoolsSearchResult.size());
 	}
 
-	public void nextPage() {
-		if (isNextPageAvailable()) {
-			page++;
-			querySchools();
-		}
-	}
-
-	public void previousPage() {
-		if (isPreviousPageAvailable()) {
-			page--;
-			querySchools();
-		}
-	}
 }
