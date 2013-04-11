@@ -60,6 +60,12 @@ public abstract class BaseSearchAction<T> extends
 		page = 0;
 		performQuery();
 	}
+	
+	public void reset() {
+		pagingEnabled=false;
+		page = 0;
+		getResults().clear();
+	}
 
 	public abstract Query constructQuery();
 

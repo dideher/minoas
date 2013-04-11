@@ -1412,6 +1412,10 @@ table {
   background-color: #ffffff;
 }
 
+.table tbody tr.info th {
+    background-color: #d9edf7;
+}
+
 .table-condensed th,
 .table-condensed td {
   padding: 4px 5px;
