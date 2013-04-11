@@ -7,14 +7,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.faces.event.ValueChangeEvent;
 import javax.persistence.Query;
 
 import gr.sch.ira.minoas.core.CoreUtils;
 import gr.sch.ira.minoas.model.core.School;
-import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
-import gr.sch.ira.minoas.seam.components.CoreSearching;
-
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
@@ -30,42 +26,23 @@ import org.jboss.seam.annotations.security.Restrict;
 @Restrict("#{identity.loggedIn}")
 public class SchoolSearchAction extends BaseSearchAction<School> {
 
-	@DataModel
-	public List<School> schoolsSearchResult;
-	
-	@Override
-	protected List<School> getResults() {
-		return schoolsSearchResult;
-	}
-
-	@Override
-	protected void setResults(List<School> results) {
-		schoolsSearchResult = results;
-	}
-
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -1;
 
-	private String searchString;
-
 	private String schoolRegion;
 
-	public String getSchoolRegion() {
-		return schoolRegion;
-	}
+	@DataModel
+	public List<School> schoolsSearchResult;
 
-	public void setSchoolRegion(String schoolRegion) {
-		this.schoolRegion = schoolRegion;
-	}
+	private String searchString;
 
 	private Integer sxolikaMoria;
 
 	@Override
 	public Query constructQuery() {
 
-		System.err.println("searchingggg !!!!!!!!");
 		StringBuilder queryBuilder = new StringBuilder(
 				"SELECT s FROM School s WHERE ");
 		List<String> paramList = new ArrayList<String>();
@@ -94,36 +71,41 @@ public class SchoolSearchAction extends BaseSearchAction<School> {
 		}
 
 		return query;
-	
+
 	}
 
-	
-
-	public Integer getSxolikaMoria() {
-		return sxolikaMoria;
+	@Override
+	protected List<School> getResults() {
+		return schoolsSearchResult;
 	}
 
-	public void setSxolikaMoria(Integer sxolikaMoria) {
-		this.sxolikaMoria = sxolikaMoria;
+	public String getSchoolRegion() {
+		return schoolRegion;
 	}
 
 	public String getSearchString() {
 		return searchString;
 	}
 
+	public Integer getSxolikaMoria() {
+		return sxolikaMoria;
+	}
+
+	@Override
+	protected void setResults(List<School> results) {
+		schoolsSearchResult = results;
+	}
+
+	public void setSchoolRegion(String schoolRegion) {
+		this.schoolRegion = schoolRegion;
+	}
+
 	public void setSearchString(String searchString) {
 		this.searchString = searchString;
 	}
 
-	
-
-	public void handleSearchStringChange(ValueChangeEvent e) {
-		System.err.println("handleSearchStringChange !!!!!!!!");
-		setPage(0);
-		setSearchString((String) e.getNewValue());
-		performQuery();
-		System.err.println(getResults().size());
-		System.err.println(schoolsSearchResult.size());
+	public void setSxolikaMoria(Integer sxolikaMoria) {
+		this.sxolikaMoria = sxolikaMoria;
 	}
 
 }
