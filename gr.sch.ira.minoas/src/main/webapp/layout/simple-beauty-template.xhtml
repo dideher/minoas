@@ -6,11 +6,9 @@
 	xmlns:a4j="http://richfaces.org/a4j"
 	xmlns:rich="http://richfaces.org/rich">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<a4j:loadStyle src="/stylesheet/simple-beauty-stylesheet.css" />
-
-<ui:insert name="head" />
-
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<a4j:loadStyle src="/stylesheet/simple-beauty-stylesheet.css" />
+	<ui:insert name="head" />
 </head>
 
 
@@ -46,12 +44,11 @@
 
 	<s:div id="main_content">
 
-
-
 		<s:div styleClass="content">
-			<h:panelGrid columns="1" width="100%">
+			<ui:insert name="body" />  
+			<!-- <h:panelGrid columns="1" width="100%">
 				<ui:insert name="body" />
-			</h:panelGrid>
+			</h:panelGrid> -->
 		</s:div>
 
 

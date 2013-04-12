@@ -613,10 +613,13 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
     }
     
     protected String normalizeStringForXML(String value) {
-        String returnValue = value.replace("&", "&amp;"); 
-        returnValue = returnValue.replace("<", "&lt;");
-        returnValue = returnValue.replace(">", "&gt;");
-        return returnValue;
+        if(value!=null) {
+            String returnValue = value.replace("&", "&amp;"); 
+            returnValue = returnValue.replace("<", "&lt;");
+            returnValue = returnValue.replace(">", "&gt;");
+            return returnValue;
+        } else 
+            return EMPTY_STRING;
     }
 
     protected Map<String, Object> prepareParametersForLeavePrintout() throws NoSuchAlgorithmException, UnsupportedEncodingException {
@@ -635,8 +638,8 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
                 parameters.put("leaveRequestDate", leavePrintoutRequestDate);
                 parameters.put("employeeName", normalizeStringForXML(employee.getFirstName()));
                 parameters.put("employeeSurname", normalizeStringForXML(employee.getLastName()));
-                parameters.put("employeeSpecialization", normalizeStringForXML(employee.getLastSpecialization().getTitle()));
-                parameters.put("employeeSpecializationCode", normalizeStringForXML(employee.getLastSpecialization().getId()));
+                parameters.put("employeeSpecialization", normalizeStringForXML(employee.getLastSpecialization().getPublicTitle()));
+                parameters.put("employeeSpecializationCode", normalizeStringForXML(employee.getLastSpecialization().getPublicId()));
                 parameters.put("employeeRegularSchool", this.employeeRegularPositionForLeavePrintout);
                 parameters.put("leaveDueToDate", leave.getDueTo());
                 parameters.put("leaveEstablishedDate", leave.getEstablished());
@@ -736,7 +739,9 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
                     parameters.put("dateField1", printHelper.getFieldDate1());
                 } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("55")) {
                     parameters.put("externalDecisionNumber", printHelper.getFieldText1());
-                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("61")) {
+                } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("59")) {
+		            parameters.put("numberOfCertificateFamilyStatus", printHelper.getFieldText1());
+		        } else if(leave.getEmployeeLeaveType().getLegacyCode().equals("61")) {
 		            parameters.put("externalDecisionNumber", printHelper.getFieldText1());
 		        }
                 
@@ -802,7 +807,7 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
                         .getResponse();
                 response.setContentType("application/pdf");
                 String pdfFile = String.format("ΑΔΕΙΑ_%s_%s_(%s).pdf", employee.getLastName(), employee.getFirstName(),
-                        employee.getLastSpecialization().getTitle());
+                        employee.getLastSpecialization().getPublicTitle());
                 // http://greenbytes.de/tech/webdav/rfc6266.html
                 //response.addHeader("Content-Disposition", String.format("attachment; filename*=UTF-8 ' '%s", pdfFile));
                 response.addHeader("Content-Disposition", String.format("attachment; filename=ADEIA.pdf", pdfFile));
@@ -852,7 +857,7 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
                         .getResponse();
                 response.setContentType("application/pdf");
                 String pdfFile = String.format("ΑΔΕΙΑ_%s_%s_(%s).pdf", employee.getLastName(), employee.getFirstName(),
-                        employee.getLastSpecialization().getTitle());
+                        employee.getLastSpecialization().getPublicTitle());
                 // http://greenbytes.de/tech/webdav/rfc6266.html
                 //response.addHeader("Content-Disposition", String.format("attachment; filename*=UTF-8 ' '%s", pdfFile));
                 response.addHeader("Content-Disposition", String.format("attachment; filename=ADEIA.pdf", pdfFile));
@@ -909,7 +914,7 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
                         .getResponse();
                 response.setContentType("application/vnd.oasis.opendocument.text");
                 String pdfFile = String.format("ΑΔΕΙΑ_%s_%s_(%s).pdf", employee.getLastName(), employee.getFirstName(),
-                        employee.getLastSpecialization().getTitle());
+                        employee.getLastSpecialization().getPublicTitle());
                 // http://greenbytes.de/tech/webdav/rfc6266.html
                 //response.addHeader("Content-Disposition", String.format("attachment; filename*=UTF-8 ' '%s", pdfFile));
                 response.addHeader("Content-Disposition", String.format("attachment; filename=lalala.odt", pdfFile));
@@ -984,6 +989,17 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
     protected boolean validateLeave(EmployeeLeave leave, boolean addMessages) {
         Date established = DateUtils.truncate(leave.getEstablished(), Calendar.DAY_OF_MONTH);
         Date dueTo = DateUtils.truncate(leave.getDueTo(), Calendar.DAY_OF_MONTH);
+        
+        /* check if the employee type has been specified */
+        if(leave.getEmployeeLeaveType()==null) {
+            if (addMessages)
+                facesMessages
+                        .add(Severity.ERROR,
+                                "Προσοχή, δεν έχετε επιλέξει τύπο άδειας.");
+            
+            return false;
+        }
+        
         /* check if the dates are correct */
         if (established.after(dueTo)) {
 

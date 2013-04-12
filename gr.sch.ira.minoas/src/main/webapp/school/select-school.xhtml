@@ -10,134 +10,154 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 
+
 <ui:composition template="/layout/simple-beauty-template.xhtml">
 	<ui:define name="body">
 
-		<rich:panel headerClass="pagetitle" bodyClass="post">
-			<f:facet name="header">
-				<h:outputText value="Αναζήτηση Σχολικής Μονάδας" />
-			</f:facet>
-			<br />
-			<h:outputText
-				value="Πριν συνεχίσετε, πρέπει να επιλέξετε σχολική μονάδα από
-				τον παρακάτω πίνακα. Για την διευκόλυνσή σας, μπορείτε να
-				φιλτράρετε την λίστα με τα διαθέσιμα φίλτρα." />
-			<br />
-			<br />
+		<s:div styleClass="well well-small">
+			<h:form id="searchForm" styleClass="form-inline">
+
+				<p>
+				<h3>Αναζήτηση Σχολίκης Μονάδας</h3>
+				</p>
+
+				<h:panelGrid columns="4">
+					<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+						<ui:define name="label">
+							<h:outputText value="Τίτλος Σχολικής Μονάδας" />
+						</ui:define>
+						<h:inputText value="#{schoolSearch.searchString}" size="12"
+							immediate="true" styleClass="input-medium search-query"
+							required="true">
+							<a4j:support event="onchange" eventsQueue="schoolSearch"
+								reRender="schoolSearchResultOutputPanel"
+								action="#{schoolSearch.find()}" ignoreDupResponses="true" />
+						</h:inputText>
+					</s:decorate>
 
 
-			<h:form id="schoolSearchForm">
-				<h:panelGrid columns="1" width="100%">
-					<h:panelGroup>
-						<h:panelGrid columns="3">
-							<s:decorate template="/layout/doubleLineEdit.xhtml">
-								<ui:define name="label">
-									<h:outputText value="Τίτλος Σχολικής Μονάδας : " />
-								</ui:define>
-								<h:inputText value="#{exampleSchool.title}" size="12" />
-							</s:decorate>
-
-							<s:decorate template="/layout/doubleLineEdit.xhtml">
-								<ui:define name="label">
-									<h:outputText value="Περιοχή : " />
-								</ui:define>
-								<h:selectOneMenu value="#{exampleSchool.regionCode}"
-									required="false">
-									<f:selectItem itemLabel="Όλες οι Περιοχές" itemValue="" />
-									<f:selectItem itemLabel="'Α ΗΡΑΚΛΕΙΟΥ" itemValue="Α' ΗΡΑΚΛΕΙΟΥ" />
-									<f:selectItem itemLabel="'Β ΗΡΑΚΛΕΙΟΥ" itemValue="Β' ΗΡΑΚΛΕΙΟΥ" />
-								</h:selectOneMenu>
-							</s:decorate>
-
-							<s:decorate template="/layout/doubleLineEdit.xhtml">
-								<ui:define name="label">
-									<h:outputText value="Μόρια : " />
-								</ui:define>
-								<h:inputText value="#{exampleSchool.points}" size="2"
-									maxlength="2" />
-							</s:decorate>
-						</h:panelGrid>
-					</h:panelGroup>
-
-					<s:div styleClass="actionButtons">
-						<h:commandButton id="searchButton" value="Αναζήτηση"
-							actionListener="#{schoolList.first}">
-							<s:defaultAction />
-						</h:commandButton>
-						<s:button disabled="#{empty preparatoryOwnersListFrom}"
-							action="backButton" value="Επιστροφή" />
-						<rich:spacer width="20" />
-						<s:button action="endButton" value="Τέλος Ενέργειας" />
-					</s:div>
-					<h:panelGroup>
-						<rich:spacer height="5" />
-						<rich:separator height="2" lineType="dashed" />
-						<rich:spacer height="5" />
-					</h:panelGroup>
-					<rich:dataTable id="schoolList" value="#{schoolList.resultList}"
-						var="_school" rows="15" border="0"
-						onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
-						onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
-						width="100%">
-						<f:facet name="header">
-							<h:outputLabel value="Λίστα Σχολικών Μονάδων" />
-						</f:facet>
-
-						<rich:column>
-							<f:facet name="header">
-								<h:outputText value="Κωδ. Υπουργείου" />
-							</f:facet>
-							<h:outputText value="#{_school.ministryCode}" />
-						</rich:column>
-
-						<rich:column>
-							<f:facet name="header">Τίτλος Μονάδας</f:facet>
-							<h:outputText value="#{_school.title}" />
-						</rich:column>
-						<rich:column>
-							<f:facet name="header">Είδος</f:facet>
-							<h:outputText value="#{messages[_school.type.key]}" />
-						</rich:column>
-						
-						<rich:column>
-							<f:facet name="header">Μόρια</f:facet>
-							<h:outputText value="#{_school.points}" />
-						</rich:column>
-						<rich:column>
-							<f:facet name="header">Περιοχή</f:facet>
-							<h:outputText value="#{_school.regionCode}' ΗΡΑΚΛΕΙΟΥ" />
-						</rich:column>
-						<rich:column>
-							<f:facet name="header">Διεύθυνση</f:facet>
-							<h:outputText
-								value="#{_school.address.address} #{_school.address.number} - #{_school.address.postCode} - #{_school.address.city}" />
-						</rich:column>
-						<rich:column>
-							<f:facet name="header">
-								<h:outputText value="Ενέργεια" />
-							</f:facet>
-							<rich:toolBar itemSeparator="line">
-								<s:link rendered="#{to!=null}" value="Επιλογή"
-									view="#{to}.xhtml">
-									<f:param name="schoolID" value="#{_school.id}" />
-									<f:param name="from" value="/school/select-school" />
-								</s:link>
-							</rich:toolBar>
-						</rich:column>
-
-
-						<f:facet name="footer">
-							<rich:datascroller align="left" for="schoolList" maxPages="20"
-								renderIfSinglePage="false" id="sc1" />
-						</f:facet>
-
-					</rich:dataTable>
-
+					<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+						<ui:define name="label">
+							<h:outputText value="Περιοχή" />
+						</ui:define>
+						<h:selectOneMenu value="#{schoolSearch.schoolRegion}"
+							immediate="true" required="false">
+							<f:selectItem itemLabel="Όλες οι Περιοχές" itemValue="" />
+							<f:selectItem itemLabel="Α ΗΡΑΚΛΕΙΟΥ" itemValue="Α" />
+							<f:selectItem itemLabel="Β ΗΡΑΚΛΕΙΟΥ" itemValue="Β" />
+							<a4j:support event="onchange" eventsQueue="schoolSearch"
+								reRender="schoolSearchResultOutputPanel"
+								action="#{schoolSearch.find()}" ignoreDupResponses="true" />
+						</h:selectOneMenu>
+					</s:decorate>
 
 				</h:panelGrid>
-			</h:form>
 
-		</rich:panel>
+				<s:div styleClass="form-actions">
+					<a4j:commandButton styleClass="btn btn-primary" value="Αναζήτηση"
+						action="#{schoolSearch.find()}" eventsQueue="schoolSearch"
+						reRender="schoolSearchResultOutputPanel" limitToList="true"
+						ignoreDupResponses="true" />
+
+					<a4j:commandButton styleClass="btn btn-default" value="Καθαρισμός"
+						action="#{schoolSearch.reset()}" eventsQueue="schoolSearch"
+						reRender="schoolSearchResultOutputPanel" limitToList="true"
+						ignoreDupResponses="true" />
+
+				</s:div>
+			</h:form>
+		</s:div>
+
+
+
+		<h:form id="searchResult">
+
+			<a4j:outputPanel id="schoolSearchResultOutputPanel">
+
+				<s:div styleClass="alert"
+					rendered="#{schoolsSearchResult != null and schoolsSearchResult.rowCount==0}">
+					<strong>Προσοχή !</strong>
+					<p>Δεν βρέθηκαν σχολικές μονάδες με τα στοιχεία που
+						καταχωρήσατε</p>
+				</s:div>
+
+				<s:div styleClass="well well-small"
+					rendered="#{schoolsSearchResult != null and schoolsSearchResult.rowCount gt 0}">
+					
+					<h2>
+						Αποτελέσματα Αναζήτησης
+					</h2>
+					<h:dataTable id="table1" value="#{schoolsSearchResult}"
+						var="school" 
+						styleClass="table table-hover table-striped table-condensed table-bordered">
+						<f:facet name="header">
+							<h:outputText class="info" value="Λίστα Σχολικών Μονάδων" />
+						</f:facet>
+
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Κωδ. Υπ." />
+							</f:facet>
+							<s:link rendered="#{to!=null}" view="#{to}.xhtml"
+								styleClass="btn btn-small btn-default">
+								<f:param name="schoolID" value="#{school.id}" />
+								<f:param name="from" value="/school/select-school" />
+								<h:outputText styleClass="text-center" value="#{school.id}" />
+							</s:link>
+
+						</h:column>
+
+						<h:column>
+							<f:facet name="header">Τίτλος Μονάδας</f:facet>
+							<h:outputText styleClass="text-center" value="#{school.title}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">Είδος</f:facet>
+							<h:outputText value="#{messages[school.type.key]}" />
+						</h:column>
+
+						<h:column>
+							<f:facet name="header">Μόρια</f:facet>
+							<s:span styleClass="badge badge-info">
+								<h:outputText styleClass="text-center" value="#{school.points}" />
+							</s:span>
+						</h:column>
+						<h:column>
+							<f:facet name="header">Περιοχή</f:facet>
+							<h:outputText value="#{school.regionCode}' ΗΡΑΚΛΕΙΟΥ" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">Διεύθυνση</f:facet>
+							<h:outputText
+								value="#{school.address.address} #{school.address.number} - #{school.address.postCode} - #{school.address.city}" />
+						</h:column>
+					</h:dataTable>
+
+					<s:div>
+						<ul class="pager">
+							<li class="next"><a4j:commandLink value="Προηγούμενη"
+									action="#{schoolSearch.previousPage}"
+									rendered="#{schoolSearch.previousPageAvailable}"
+									ignoreDupResponses="true" eventsQueue="schoolSearch"
+									reRender="schoolSearchResultOutputPanel" /></li>
+
+							<li class="next"><a4j:commandLink value="Επόμενη"
+									action="#{schoolSearch.nextPage}"
+									rendered="#{schoolSearch.nextPageAvailable}"
+									ignoreDupResponses="true" eventsQueue="schoolSearch"
+									reRender="schoolSearchResultOutputPanel" /></li>
+						</ul>
+					</s:div>
+
+				</s:div>
+
+
+
+
+			</a4j:outputPanel>
+		</h:form>
+
+
 
 
 

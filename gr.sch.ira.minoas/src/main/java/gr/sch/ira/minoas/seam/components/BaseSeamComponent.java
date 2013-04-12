@@ -3,6 +3,8 @@
  */
 package gr.sch.ira.minoas.seam.components;
 
+import gr.sch.ira.minoas.core.CoreUtils;
+
 import java.io.Serializable;
 import java.util.Locale;
 
@@ -21,6 +23,8 @@ public abstract class BaseSeamComponent implements Serializable {
 	
 	public static final String ACTION_OUTCOME_FAILURE = "failure";
 
+	public static final String EMPTY_STRING = "";
+	
 	public static final Locale greekLocale = new Locale("el", "GR");
 
 	/**
@@ -122,11 +126,11 @@ public abstract class BaseSeamComponent implements Serializable {
 	}
 
 	protected boolean isEmpty(Object object) {
-		return !isNonEmpty(object);
+		return CoreUtils.isEmpty(object);
 	}
 
 	protected boolean isNonEmpty(Object object) {
-		return object != null && String.valueOf(object).trim().length() > 0;
+		return CoreUtils.isNonEmpty(object);
 	}
 
 	/**
