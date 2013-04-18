@@ -179,5 +179,9 @@ public class SecurityStartup extends BaseDatabaseAwareSeamComponent {
 
 		/* CDR Management - Διαχείριση CDR */
 		createRole("RENEW_CDRS", "Allow the renewal of the CDRs", admin);
+		
+		/* Employee Work Attendance */
+		createRole("VIEW_WORK_ATTENDANCE", "Allow viewing of work attendance", admin);
+		
 	}
 }

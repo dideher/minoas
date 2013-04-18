@@ -1,0 +1,122 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<ui:composition template="/layout/simple-beauty-template.xhtml">
+	<ui:define name="body">
+		<h2>Προβολή Προσέλευσης Εργαζομένων</h2>
+		<s:div styleClass="well well-small">
+			<h:form id="searchForm" styleClass="form-inline">
+				<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+					<ui:define name="label">
+						<h:outputText value="Ημερομηνία Υπολογισμού : " />
+					</ui:define>
+					<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
+						style="width:50px" enableManualInput="true"
+						styleClass="fieldValueText" required="true"
+						value="#{workAttendanceSearch.referenceDay}">
+						<a4j:support event="onchanged" eventsQueue="schoolSearch"
+							ajaxSingle="true" action="#{workAttendanceSearch.find()}"
+							reRender="schoolSearchResultOutputPanel" />
+					</rich:calendar>
+				</s:decorate>
+
+				<s:div styleClass="form-actions">
+					<a4j:commandButton styleClass="btn btn-primary" value="Αναζήτηση"
+						action="#{workAttendanceSearch.find()}" eventsQueue="schoolSearch"
+						reRender="schoolSearchResultOutputPanel" limitToList="true"
+						ignoreDupResponses="true" />
+
+					<a4j:commandButton styleClass="btn btn-default" value="Καθαρισμός"
+						action="#{workAttendanceSearch.reset()}"
+						eventsQueue="schoolSearch"
+						reRender="schoolSearchResultOutputPanel" limitToList="true"
+						ignoreDupResponses="true" />
+
+				</s:div>
+			</h:form>
+		</s:div>
+
+		<h:form id="searchResult">
+
+			<a4j:outputPanel id="schoolSearchResultOutputPanel">
+
+				<s:div styleClass="alert"
+					rendered="#{workAttendanceSearchResult != null and workAttendanceSearchResult.rowCount==0}">
+					<strong>Προσοχή !</strong>
+					<p>Δεν βρέθηκαν καταχωρήσεις που να πληρούν τα κριτήρια που θέσατε.</p>
+				</s:div>
+
+				<s:div styleClass="well well-small"
+					rendered="#{workAttendanceSearchResult != null and workAttendanceSearchResult.rowCount gt 0}">
+
+					<h2>Αποτελέσματα Αναζήτησης</h2>
+					<h:dataTable id="table1" value="#{workAttendanceSearchResult}"
+						var="workAttendance"
+						styleClass="table table-hover table-striped table-condensed table-bordered">
+						<f:facet name="header">
+							<h:outputText class="info"
+								value="Ώρες προέλευσης εργαζομένων" />
+						</f:facet>
+
+
+
+						<h:column>
+							<f:facet name="header">Όνομα Χρήστη</f:facet>
+							<h:outputText styleClass="text-center"
+								value="#{workAttendance.principalRealName}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">Κωδικός</f:facet>
+							<h:outputText styleClass="text-center"
+								value="#{workAttendance.principalName}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">Ημ/νια</f:facet>
+							<h:outputText styleClass="text-center"
+								value="#{workAttendance.entryDate}">
+								<s:convertDateTime pattern="dd/MM/yyyy"></s:convertDateTime>
+							</h:outputText>
+						</h:column>
+						<h:column>
+							<f:facet name="header">Πρώτη Είσοδος</f:facet>
+							<h:outputText styleClass="text-center"
+								value="#{workAttendance.entryDate}">
+								<s:convertDateTime pattern="HH:mm"></s:convertDateTime>
+							</h:outputText>
+						</h:column>
+						<h:column>
+							<f:facet name="header">Τελευταία Έξοδος</f:facet>
+							<h:outputText styleClass="text-center"
+								value="#{workAttendance.exitDate}">
+								<s:convertDateTime pattern="HH:mm"></s:convertDateTime>
+							</h:outputText>
+						</h:column>
+
+					</h:dataTable>
+
+
+
+				</s:div>
+
+
+
+
+			</a4j:outputPanel>
+		</h:form>
+
+
+
+
+
+	</ui:define>
+</ui:composition>
+</html>
