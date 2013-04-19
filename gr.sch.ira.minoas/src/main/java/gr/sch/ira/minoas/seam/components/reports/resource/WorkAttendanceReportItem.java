@@ -1,8 +1,6 @@
 package gr.sch.ira.minoas.seam.components.reports.resource;
 
-import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.WorkAttendanceEvent;
-import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.security.Principal;
 
 import java.util.Date;
