@@ -14,9 +14,10 @@
 	<ui:define name="body">
 		<h2>Προβολή του ωραρίου μου</h2>
 		<s:div styleClass="well well-small">
-		<p>
-			<h:outputText value="Επιλέξτε την ημερομηνία έναρξης και λήξης της αναφοράς του ωραρίου σας." />
-		</p>
+			<p>
+				<h:outputText
+					value="Επιλέξτε την ημερομηνία έναρξης και λήξης της αναφοράς του ωραρίου σας." />
+			</p>
 			<h:form id="searchForm" styleClass="form-inline">
 				<h:panelGrid columns="2">
 					<s:decorate template="/layout/newDoubleLineEdit.xhtml">
@@ -28,7 +29,8 @@
 							styleClass="fieldValueText" required="true"
 							value="#{workAttendanceSearch.referenceDayFrom}">
 							<a4j:support event="onchanged" eventsQueue="schoolSearch"
-								ajaxSingle="true" action="#{workAttendanceSearch.findMyWorkAttandances()}"
+								ajaxSingle="true"
+								action="#{workAttendanceSearch.findMyWorkAttandances()}"
 								reRender="schoolSearchResultOutputPanel" />
 						</rich:calendar>
 					</s:decorate>
@@ -42,7 +44,8 @@
 							styleClass="fieldValueText" required="true"
 							value="#{workAttendanceSearch.referenceDayTo}">
 							<a4j:support event="onchanged" eventsQueue="schoolSearch"
-								ajaxSingle="true" action="#{workAttendanceSearch.findMyWorkAttandances()}"
+								ajaxSingle="true"
+								action="#{workAttendanceSearch.findMyWorkAttandances()}"
 								reRender="schoolSearchResultOutputPanel" />
 						</rich:calendar>
 					</s:decorate>
@@ -50,7 +53,8 @@
 
 				<s:div styleClass="form-actions">
 					<a4j:commandButton styleClass="btn btn-primary" value="Αναζήτηση"
-						action="#{workAttendanceSearch.findMyWorkAttandances()}" eventsQueue="schoolSearch"
+						action="#{workAttendanceSearch.findMyWorkAttandances()}"
+						eventsQueue="schoolSearch"
 						reRender="schoolSearchResultOutputPanel" limitToList="true"
 						ignoreDupResponses="true" />
 
@@ -63,6 +67,8 @@
 				</s:div>
 			</h:form>
 		</s:div>
+
+		<ui:include src="/components/messages-component.xhtml" />
 
 		<h:form id="searchResult">
 

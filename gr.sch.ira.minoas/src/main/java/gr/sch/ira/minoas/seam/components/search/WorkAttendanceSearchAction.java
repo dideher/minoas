@@ -3,6 +3,7 @@
  */
 package gr.sch.ira.minoas.seam.components.search;
 
+import gr.sch.ira.minoas.core.CoreUtils;
 import gr.sch.ira.minoas.model.employee.WorkAttendanceEvent;
 import gr.sch.ira.minoas.model.security.Principal;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
@@ -24,6 +25,8 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.datamodel.DataModel;
 import org.jboss.seam.annotations.security.Restrict;
+import org.jboss.seam.international.StatusMessage.Severity;
+import org.jfree.date.DateUtilities;
 
 /**
  * @author slavikos
@@ -176,6 +179,13 @@ public class WorkAttendanceSearchAction extends BaseDatabaseAwareSeamComponent {
 	
 	@SuppressWarnings("unchecked")
 	public void findMyWorkAttandances() {
+		int dateDiff = CoreUtils.datesDifferenceIn360DaysYear(referenceDayFrom, referenceDayTo);
+		if(dateDiff > 30) {
+			getFacesMessages()
+            .add(Severity.ERROR,
+                    "Η περίοδος του report δεν μπορεί να υπερβαίνει τις 30 ημέρες.");
+			return;
+		}
 		Query q = constructQueryForPersonalEvents();
 		List<WorkAttendanceEvent> r = q
 				.getResultList();
