@@ -359,13 +359,13 @@
 				</rich:menuItem>
 				<rich:menuSeparator /> 
 				<rich:menuItem submitMode="none" rendered="#{(s:hasRole('ADMIN') or s:hasRole('VIEW_WORK_ATTENDANCE'))}">
-					<s:link value="Λίστα Προσέλευσης Εργαζομένων"
+					<s:link value="Ωράριο Εργαζομένων"
 						view="/employee/employeeWorkAttendance.xhtml">
 						<f:param name="employees-exclusion_report_from" value="home" />
 					</s:link>
 				</rich:menuItem>
 				<rich:menuItem submitMode="none">
-					<s:link value="Οι Προσελέυσεις μου"
+					<s:link value="Το Ωράριο μου"
 						view="/employee/myWorkAttendance.xhtml">
 						<f:param name="employees-exclusion_report_from" value="home" />
 					</s:link>

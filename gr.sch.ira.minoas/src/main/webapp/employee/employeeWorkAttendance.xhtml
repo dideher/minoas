@@ -12,8 +12,11 @@
 
 <ui:composition template="/layout/simple-beauty-template.xhtml">
 	<ui:define name="body">
-		<h2>Προβολή Προσέλευσης Εργαζομένων</h2>
+		<h2>Προβολή Ωραρίου Εργαζομένων</h2>
 		<s:div styleClass="well well-small">
+			<p>
+			<h:outputText value="Επιλέξτε την ημερομηνία που σας ενδιαφέρει" />
+			</p>
 			<h:form id="searchForm" styleClass="form-inline">
 				<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 					<ui:define name="label">
@@ -64,7 +67,7 @@
 						styleClass="table table-hover table-striped table-condensed table-bordered">
 						<f:facet name="header">
 							<h:outputText class="info"
-								value="Ώρες προέλευσης εργαζομένων" />
+								value="Ωράριο Εργαζομένων ..." />
 						</f:facet>
 
 
