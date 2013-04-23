@@ -74,7 +74,8 @@ public class EmployeeWorkAttendaceController extends
 			WorkAttendanceEvent workevent = new WorkAttendanceEvent();
 			workevent.setAttendaceType(WorkAttendanceEventType.ENTRY);
 			workevent.setInsertedOn(insertedDate);
-			workevent.setOccuredOn(insertedDate);
+			/* gh-136 : deduct 15 minutes in favour of employee */
+			workevent.setOccuredOn(DateUtils.addMinutes(insertedDate, -15));
 			workevent.setInsertedBy(principalObject);
 			workevent
 					.setComment("Αυτόματη εισαγωγή κατά την είσοδο στο σύστημα.");
@@ -83,6 +84,7 @@ public class EmployeeWorkAttendaceController extends
 
 	}
 
+	@SuppressWarnings("unchecked")
 	@Observer(EMPLOYEE_WORK_ATTENDANCE_EXIT)
 	@Transactional
 	public void handlePrincipalExit(String principal, Date event) {
