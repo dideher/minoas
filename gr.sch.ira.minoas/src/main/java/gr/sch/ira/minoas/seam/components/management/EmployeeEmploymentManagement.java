@@ -2,12 +2,16 @@ package gr.sch.ira.minoas.seam.components.management;
 
 import gr.sch.ira.minoas.model.core.AuditType;
 import gr.sch.ira.minoas.model.employee.Employee;
+import gr.sch.ira.minoas.model.employee.EmployeeType;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
+import gr.sch.ira.minoas.model.employement.NonRegularEmploymentInfo;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.CoreSearching;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
 import gr.sch.ira.minoas.seam.components.home.EmploymentHome;
+import gr.sch.ira.minoas.seam.components.home.NonRegularEmploymentInfoHome;
+import gr.sch.ira.minoas.seam.components.home.RegularEmployeeInfoHome;
 
 import java.util.Collection;
 import java.util.Date;
@@ -42,7 +46,13 @@ public class EmployeeEmploymentManagement extends BaseDatabaseAwareSeamComponent
 
 	@In(required = false)
 	EmploymentHome employmentHome;
+	
+	@In(required = false)
+	NonRegularEmploymentInfoHome nonRegularEmploymentInfoHome;
 
+	@In(required = false)
+	RegularEmployeeInfoHome regularEmployeeInfoHome;
+	
 	@DataModel(value = "schoolYearEmployments")
 	private Collection<Employment> schoolYearEmployments;
 
@@ -230,16 +240,25 @@ public class EmployeeEmploymentManagement extends BaseDatabaseAwareSeamComponent
 	@RaiseEvent("employeeEmploymentCreated")
 	public String createEmployment() {
 		if (getEmployeeHome().isManaged()) {
-			if (!getEmploymentHome().isManaged()) {
-				String result = employmentHome.persist();
+			if (!getEmploymentHome().isManaged() && !getNonRegularEmploymentInfoHome().isManaged()) {
+				
+				if(employeeHome.getInstance().getType() != EmployeeType.REGULAR) {
+					nonRegularEmploymentInfoHome.getInstance().setInsertedBy(getPrincipal());
+					nonRegularEmploymentInfoHome.update();
+					nonRegularEmploymentInfoHome.persist();
+					employmentHome.getInstance().setNonRegularEmploymentInfo(nonRegularEmploymentInfoHome.getInstance());
+				}
+				
+				String emplHomeResult = employmentHome.persist();
+				
 				employeeHome.getInstance().setCurrentEmployment(employmentHome.getInstance());
 				employeeHome.update();
 				initializeEmployeeEmployments();
 				initializeSchoolYearEmployeeEmployments();
 				initializeOldEmployments();
-				return result;
+				return emplHomeResult;
 			} else {
-				getFacesMessages().add(Severity.ERROR, "employment home is managed", (Object[]) null);
+				getFacesMessages().add(Severity.ERROR, "employment home or NonRegularEmploymentInfo home is managed", (Object[]) null);
 				return null;
 			}
 		} else {
@@ -251,6 +270,9 @@ public class EmployeeEmploymentManagement extends BaseDatabaseAwareSeamComponent
 	@Transactional(TransactionPropagationType.REQUIRED)
 	public String prepareForNewHourlyBasedEmployment() {
 		if (getEmployeeHome().isManaged()) {
+			NonRegularEmploymentInfoHome nonRegularEmploymentInfoHome = getNonRegularEmploymentInfoHome();
+			nonRegularEmploymentInfoHome.clearInstance();
+			
 			EmploymentHome employmentHome = getEmploymentHome();
 			employmentHome.clearInstance();
 			Employment e = employmentHome.getInstance();
@@ -274,6 +296,11 @@ public class EmployeeEmploymentManagement extends BaseDatabaseAwareSeamComponent
 		if (getEmployeeHome().isManaged()) {
 			EmploymentHome employmentHome = getEmploymentHome();
 			employmentHome.clearInstance();
+			
+			NonRegularEmploymentInfoHome nonRegularEmploymentInfoHome = getNonRegularEmploymentInfoHome();
+			nonRegularEmploymentInfoHome.clearInstance();
+			//NonRegularEmploymentInfo nrei = nonRegularEmploymentInfoHome.getInstance();
+			
 			Employment e = employmentHome.getInstance();
 			e.setEmployee(getEmployeeHome().getInstance());
 			e.setActive(Boolean.TRUE);
@@ -282,8 +309,9 @@ public class EmployeeEmploymentManagement extends BaseDatabaseAwareSeamComponent
 			e.setEstablished(new Date());
 			e.setFinalWorkingHours(21);
 			e.setMandatoryWorkingHours(21);
-			
-			/* be helpfull and calculate the end date */
+			//e.setNonRegularEmploymentInfo(nrei);
+
+			/* be helpful and calculate the end date */
 			e.setTerminated(e.getSchoolYear().getTeachingSchoolYearStop());
 			e.setSpecialization(getEmployeeHome().getInstance().getLastSpecialization());
 			return "prepared";
@@ -297,6 +325,9 @@ public class EmployeeEmploymentManagement extends BaseDatabaseAwareSeamComponent
 	public String prepareForNewRegularEmployment() {
 		if (getEmployeeHome().isManaged()) {
 			if(getEmployeeHome().getInstance().getCurrentEmployment()==null) {
+				RegularEmployeeInfoHome regularEmployeeInfoHome = getRegularEmployeeInfoHome();
+				regularEmployeeInfoHome.clearInstance();
+				
 				EmploymentHome employmentHome = getEmploymentHome();
 				employmentHome.clearInstance();
 				Employment e = employmentHome.getInstance();
@@ -346,4 +377,36 @@ public class EmployeeEmploymentManagement extends BaseDatabaseAwareSeamComponent
 	public void setOldEmployments(Collection<Employment> oldEmployments) {
 		this.oldEmployments = oldEmployments;
 	}
+
+	/**
+	 * @return the nonRegularEmploymentInfoHome
+	 */
+	public NonRegularEmploymentInfoHome getNonRegularEmploymentInfoHome() {
+		return nonRegularEmploymentInfoHome;
+	}
+
+	/**
+	 * @param nonRegularEmploymentInfoHome the nonRegularEmploymentInfoHome to set
+	 */
+	public void setNonRegularEmploymentInfoHome(
+			NonRegularEmploymentInfoHome nonRegularEmploymentInfoHome) {
+		this.nonRegularEmploymentInfoHome = nonRegularEmploymentInfoHome;
+	}
+
+	/**
+	 * @return the regularEmployeeInfoHome
+	 */
+	public RegularEmployeeInfoHome getRegularEmployeeInfoHome() {
+		return regularEmployeeInfoHome;
+	}
+
+	/**
+	 * @param regularEmployeeInfoHome the regularEmployeeInfoHome to set
+	 */
+	public void setRegularEmployeeInfoHome(
+			RegularEmployeeInfoHome regularEmployeeInfoHome) {
+		this.regularEmployeeInfoHome = regularEmployeeInfoHome;
+	}
+	
+	
 }

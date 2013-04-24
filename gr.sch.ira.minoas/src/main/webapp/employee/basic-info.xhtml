@@ -5,45 +5,220 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:rich="http://richfaces.org/rich">
 
-<ui:component>
-	<h:panelGrid columns="6" cellspacing="8">
-		<h:outputLabel styleClass="fieldValueLabel" value="Επώνυμο" />
-		<h:outputText styleClass="fieldValueText" value="#{employee.lastName}"/>
-		<h:outputLabel styleClass="fieldValueLabel" value="Όνομα" />
-		<h:outputText styleClass="fieldValueText" value="#{employee.firstName}" />
-		<h:outputLabel styleClass="fieldValueLabel" value="Όνομα Πατρός" />
-		<h:outputText styleClass="fieldValueText" value="#{employee.fatherName}" />
-		<h:outputLabel styleClass="fieldValueLabel" value="Ειδικότητα" />
-		<h:outputText styleClass="fieldValueText" value="#{employee.lastSpecialization.id} - #{employee.lastSpecialization.title}" />
+	<ui:component>
+	
+		<rich:tabPanel mode="ajax">
 		
-		
-		<h:outputLabel styleClass="fieldValueLabel" value="Ημ/νία Γεννήσεως" />
-		<h:outputText styleClass="fieldValueText" value="#{employee.dateOfBirth}">
-			<s:convertDateTime type="date" pattern="dd/MM/yyyy" />
-		</h:outputText>
-		<h:outputLabel styleClass="fieldValueLabel" value="Όνομα Μητρός" />
-		<h:outputText styleClass="fieldValueText" value="#{employee.motherName}" />
-		<h:outputLabel styleClass="fieldValueLabel" value="ΑΜ" />
-		<h:outputText styleClass="fieldValueText" value="#{employeeUtil.getRegistryID(employee)}" />
-		<h:outputLabel styleClass="fieldValueLabel" value="ΑΦΜ" />
-		<h:outputText styleClass="fieldValueText" value="#{employee.vatNumber}" />
-		<h:outputLabel styleClass="fieldValueLabel" value="Αριθ. Ταυτότητας" />
-		<h:outputText styleClass="fieldValueText" value="#{employee.idNumber}" />
-		
-		<h:outputLabel styleClass="fieldValueLabel" value="Οικογεν. Κατάσταση" />
-		<h:outputText styleClass="fieldValueText" value="#{messages[employee.maritalType.key]}" />
-		<h:outputLabel styleClass="fieldValueLabel" value="Αριθμός Τέκνων" />
-		<h:outputText styleClass="fieldValueText" value="#{employee.numberOfChildren}" />
-		<h:outputLabel styleClass="fieldValueLabel" value="Αριθ. ΙΚΑ"/>
-		<h:outputText styleClass="fieldValueText" value="#{employee.ikaId}"/>
-		
-		<h:outputLabel styleClass="fieldValueLabel" value="Πολύτεκνος" />
-		<h:selectBooleanCheckbox value="#{employee.bigFamily}" disabled="true"/>
-		<h:outputLabel value="" />
-		<h:outputText value="" />
-		
-	</h:panelGrid>
-</ui:component>
+			<rich:tab id="employeeData_tab1">
+				<f:facet name="label">
+					<h:outputText value="Βασικά Στοιχεία" />
+				</f:facet>
 
+				<h:panelGrid columns="6" cellspacing="8">
+					<h:outputLabel styleClass="fieldValueLabel" value="Επώνυμο: " />
+					<h:outputText styleClass="fieldValueText" value="#{employee.lastName}"/>
+					<h:outputLabel styleClass="fieldValueLabel" value="Όνομα: " />
+					<h:outputText styleClass="fieldValueText" value="#{employee.firstName}" />
+					<h:outputLabel styleClass="fieldValueLabel" value="Όνομα Πατρός: " />
+					<h:outputText styleClass="fieldValueText" value="#{employee.fatherName}" />
+					<h:outputLabel styleClass="fieldValueLabel" value="Ειδικότητα: " />
+					<h:outputText styleClass="fieldValueText" value="#{employee.lastSpecialization.id} - #{employee.lastSpecialization.title}" />
+					
+					<h:outputLabel styleClass="fieldValueLabel" value="Ημ/νία Γεννήσεως: " />
+					<h:outputText styleClass="fieldValueText" value="#{employee.dateOfBirth}">
+						<s:convertDateTime type="date" pattern="dd/MM/yyyy" />
+					</h:outputText>
+					<h:outputLabel styleClass="fieldValueLabel" value="Όνομα Μητρός: " />
+					<h:outputText styleClass="fieldValueText" value="#{employee.motherName}" />
+					<h:outputLabel styleClass="fieldValueLabel" value="ΑΜ: " />
+					<h:outputText styleClass="fieldValueText" value="#{employeeUtil.getRegistryID(employee)}" />
+					<h:outputLabel styleClass="fieldValueLabel" value="ΑΦΜ: " />
+					<h:outputText styleClass="fieldValueText" value="#{employee.vatNumber}" />
+					<h:outputLabel styleClass="fieldValueLabel" value="Αριθ. Ταυτότητας: " />
+					<h:outputText styleClass="fieldValueText" value="#{employee.idNumber}" />
+					
+					<h:outputLabel styleClass="fieldValueLabel" value="Οικογεν. Κατάσταση: " />
+					<h:outputText styleClass="fieldValueText" value="#{messages[employee.maritalType.key]}" />
+					<h:outputLabel styleClass="fieldValueLabel" value="Αριθμός Τέκνων: " />
+					<h:outputText styleClass="fieldValueText" value="#{employee.numberOfChildren}" />
+					<h:outputLabel styleClass="fieldValueLabel" value="Αριθ. ΙΚΑ: "/>
+					<h:outputText styleClass="fieldValueText" value="#{employee.ikaId}"/>
+					
+					<h:outputLabel styleClass="fieldValueLabel" value="Πολύτεκνος: " />
+					<h:selectBooleanCheckbox value="#{employee.bigFamily}" disabled="true"/>
+					<h:outputLabel value="" />
+					<h:outputText value="" />
+					
+					<h:outputLabel styleClass="fieldValueLabel" value="Τύπος: " />
+					<h:outputText styleClass="fieldValueText" value="#{messages[employee.type.key]}" />
+					
+					
+				</h:panelGrid>
+
+			</rich:tab>
+
+
+			<rich:tab id="employeeInfoData">
+				<f:facet name="label">
+					<h:outputText value="Σπουδές" />
+				</f:facet>
+				
+				<h:panelGrid columns="4" cellspacing="8">
+
+					<h:outputLabel styleClass="fieldValueLabel" 
+						value="Μεταπυχιακό (MSc): " />
+					<h:panelGroup> 
+						<h:selectBooleanCheckbox disabled="true"
+							value="#{employee.employeeInfo.hasAMasterDegree}" />
+			
+						<h:outputFormat styleClass="fieldValueLabelLeft" value=" (Ημ/νία: {0, date, dd/MM/yyyy})"
+							rendered = "#{employee.employeeInfo.mscDate ne null}"
+							id="MScDateOutputLabel" onmouseover="#{rich:component('MScDateTooltip')}.show(event);">
+						    <f:param value="#{employee.employeeInfo.mscDate}" />
+						</h:outputFormat>
+						<rich:toolTip  id="MScDateTooltip" value="Ημερομηνίες πριν την 1-11-2011 αναφέρονται στην ημερομηνία κατάθεσης του σχετικού τίτλου από την οποία λάμβανε και το σχετικό επίδομα, ενώ ημ/νίες μετά την 1-11-2011 αναφέρονται στην ημερομηνία πράξης του ΠΥΣΔΕ από την οποία ενσωματώνεται στο βαθμό ο χρόνος που αναλογεί." for="MScDateOutputLabel"/>
+					</h:panelGroup>
+		
+					<h:outputLabel styleClass="fieldValueLabel"
+						value="Διδακτορικό (PhD): " />
+					<h:panelGroup> 
+						<h:selectBooleanCheckbox disabled="true"
+							value="#{employee.employeeInfo.hasAPhD}" />
+			
+						<h:outputFormat styleClass="fieldValueLabelLeft" value=" (Ημ/νία: {0, date, dd/MM/yyyy})"
+							rendered = "#{employee.employeeInfo.phdDate ne null}"
+							id="PhDDateOutputLabel" onmouseover="#{rich:component('PhDDateTooltip')}.show(event);">
+						    <f:param value="#{employee.employeeInfo.phdDate}" />
+						</h:outputFormat>
+						<rich:toolTip  id="PhDDateTooltip" value="Ημερομηνίες πριν την 1-11-2011 αναφέρονται στην ημερομηνία κατάθεσης του σχετικού τίτλου από την οποία λάμβανε και το σχετικό επίδομα, ενώ ημ/νίες μετά την 1-11-2011 αναφέρονται στην ημερομηνία πράξης του ΠΥΣΔΕ από την οποία ενσωματώνεται στο βαθμό ο χρόνος που αναλογεί." for="PhDDateOutputLabel"/>
+					</h:panelGroup>
+		
+					<h:outputLabel styleClass="fieldValueLabel"
+						value="Ανώτ.Σχολ.Δημ.Διοίκ.: " />
+					<h:panelGroup> 
+						<h:selectBooleanCheckbox disabled="true"
+							value="#{employee.employeeInfo.isANatSchPubAdminGraduate}" />
+			
+						<h:outputFormat styleClass="fieldValueLabelLeft" value=" (Ημ/νία: {0, date, dd/MM/yyyy})"
+							rendered = "#{employee.employeeInfo.natSchPubAdminDate ne null}"
+							id="natSchPubAdminDateOutputLabel" onmouseover="#{rich:component('natSchPubAdminDateTooltip')}.show(event);">
+						    <f:param value="#{employee.employeeInfo.natSchPubAdminDate}" />
+						</h:outputFormat>
+						<rich:toolTip  id="natSchPubAdminDateTooltip" value="Ημερομηνίες πριν την 1-11-2011 αναφέρονται στην ημερομηνία κατάθεσης του σχετικού τίτλου από την οποία λάμβανε και το σχετικό επίδομα, ενώ ημ/νίες μετά την 1-11-2011 αναφέρονται στην ημερομηνία πράξης του ΠΥΣΔΕ από την οποία ενσωματώνεται στο βαθμό ο χρόνος που αναλογεί." for="natSchPubAdminDateOutputLabel"/>
+					</h:panelGroup>
+				</h:panelGrid>
+				
+			</rich:tab>
+
+
+
+			<rich:tab id="regularEmployeeInfoData" rendered="#{employee.type == 'REGULAR'}">
+				<f:facet name="label">
+					<h:outputText value="Στοιχεία Μονίμου" />
+				</f:facet>
+				
+				<h:panelGrid columns="4" cellspacing="8">
+					<h:outputLabel styleClass="fieldValueLabel" value="ΑΜ: " />
+					<h:outputText styleClass="fieldValueText" value="#{employeeUtil.getRegistryID(employee)}" />
+					
+					<h:outputLabel styleClass="fieldValueLabel" rendered="#{employee.type == 'REGULAR'}"
+						value="Νεο-διορισμένος: " />
+					<ui:remove> <!-- TODO Review this as Employee my not be only Regular but also NonRegular --> </ui:remove>
+					<h:selectBooleanCheckbox value="#{employee.regularEmployeeInfo.isRecentlyHired}" disabled="true" 
+						rendered="#{employee.type == 'REGULAR'}"/>
+					
+				
+					<h:outputLabel styleClass="fieldValueLabel" rendered="#{employee.type == 'REGULAR'}"
+						value="ΦΕΚ Διορισμού: " />
+					<ui:remove> <!-- TODO Review this as Employee my not be only Regular but also NonRegular --> </ui:remove>
+					<rich:spacer rendered="#{(employee.type != 'REGULAR') or (employee.regularEmployeeInfo.appointmentGOGDate eq null)}"/> 
+					<h:outputFormat styleClass="fieldValueText" value="#{employee.regularEmployeeInfo.appointmentGOG}-{0, date, dd/MM/yyyy}"
+						rendered="#{(employee.type == 'REGULAR') and (employee.regularEmployeeInfo.appointmentGOGDate ne null)}">
+					    <f:param value="#{employee.regularEmployeeInfo.appointmentGOGDate}" />
+					</h:outputFormat>
+
+		
+					<h:outputLabel styleClass="fieldValueLabel" rendered="#{employee.type == 'REGULAR'}"
+						value="(Πράξη Μονιμοποίησης)-Ημερομηνία: " />
+					<ui:remove> <!-- TODO Review this as Employee my not be only Regular but also NonRegular --> </ui:remove>
+					<h:outputFormat styleClass="fieldValueText" value="(#{employee.regularEmployeeInfo.permanentEmployeeAct})-{0, date, dd/MM/yyyy}"
+						rendered="#{(employee.type == 'REGULAR') and (employee.regularEmployeeInfo.permanentEmployeeActDate ne null)}">
+					    <f:param value="#{employee.regularEmployeeInfo.permanentEmployeeActDate}" />
+					</h:outputFormat>
+
+					
+				</h:panelGrid>
+									
+			</rich:tab>
+			
+			
+			<rich:tab id="nonRegularEmploymentInfoData">
+				<f:facet name="label">
+					<h:outputText value="Στοιχεία Εργασίας" />
+				</f:facet>
+				
+				<h:panelGrid columns="2" cellspacing="2">
+					
+					<h:outputLabel styleClass="fieldValueLabel" rendered="#{employee.type != 'REGULAR'}" 
+						value="Αριθ. Διαύγειας (ΑΔΑ): "/>
+					<h:outputText styleClass="fieldValueText" rendered="#{employee.type != 'REGULAR'}" 
+						value="#{employee.currentEmployment.nonRegularEmploymentInfo.diaygeiaNo}"/>
+				
+					<rich:spacer rendered="#{(employee.type == 'REGULAR')}"/>
+					<h:outputLabel styleClass="fieldValueLabel" rendered="#{employee.type == 'DEPUTY'}"
+						value="(Απόφαση Πρόσληψης ΥΠΕΠΘ)-Ημερομηνία: " />
+					<h:outputLabel styleClass="fieldValueLabel" rendered="#{employee.type == 'HOURLYPAID'}"
+						value="(Απόφαση Πρόσληψης Β/θμιας)-Ημερομηνία: " />
+					<rich:spacer rendered="#{(employee.type == 'REGULAR') or (employee.currentEmployment.nonRegularEmploymentInfo.act eq '')}"/>
+					<h:outputFormat styleClass="fieldValueText" rendered="#{(employee.type != 'REGULAR') and (employee.currentEmployment.nonRegularEmploymentInfo.act ne '')}"
+						value="(#{employee.currentEmployment.nonRegularEmploymentInfo.act})-{0, date, dd/MM/yyyy}">
+					    <f:param value="#{employee.currentEmployment.nonRegularEmploymentInfo.actDate}" />
+					</h:outputFormat>
+
+					<h:outputLabel styleClass="fieldValueLabel" value="(Πράξη Ανάληψης Υπηρ.)-Ημερομηνία: " />
+					<rich:spacer rendered="#{employee.currentEmployment.entryIntoServiceAct eq ''}"/>
+					<h:outputFormat styleClass="fieldValueText"  rendered="#{employee.currentEmployment.entryIntoServiceAct ne ''}"
+						value="(#{employee.currentEmployment.entryIntoServiceAct})-{0, date, dd/MM/yyyy}">
+					    <f:param value="#{employee.currentEmployment.entryIntoServiceDate}" />
+					</h:outputFormat>
+					
+					<h:outputLabel styleClass="fieldValueLabel" rendered="#{employee.type == 'DEPUTY'}"
+						value="(Πράξη Πρότασης ΠΥΣΔΕ)-Ημερομηνία: " />
+					<rich:spacer rendered="#{(employee.type != 'DEPUTY') or (employee.currentEmployment.nonRegularEmploymentInfo.pysdeAct eq '')}"/>
+					<h:outputFormat styleClass="fieldValueText" rendered="#{(employee.type == 'DEPUTY') and (employee.currentEmployment.nonRegularEmploymentInfo.pysdeAct ne '')}" 
+						value="(#{employee.currentEmployment.nonRegularEmploymentInfo.pysdeAct})-{0, date, dd/MM/yyyy}">
+					    <f:param value="#{employee.currentEmployment.nonRegularEmploymentInfo.pysdeActDate}" />
+					</h:outputFormat>
+					
+					<h:outputLabel styleClass="fieldValueLabel" rendered="#{employee.type == 'DEPUTY'}"
+						value="(Απόφαση Τοποθέτησης)-Ημερομηνία: " />
+					<rich:spacer rendered="#{(employee.type != 'DEPUTY') or (employee.currentEmployment.nonRegularEmploymentInfo.placementOrder eq '')}"/>
+					<h:outputFormat styleClass="fieldValueText" rendered="#{(employee.type == 'DEPUTY') and (employee.currentEmployment.nonRegularEmploymentInfo.placementOrder ne '')}" 
+						value="(#{employee.currentEmployment.nonRegularEmploymentInfo.placementOrder})-{0, date, dd/MM/yyyy}">
+					    <f:param value="#{employee.currentEmployment.nonRegularEmploymentInfo.placementOrderDate}" />
+					</h:outputFormat>
+				
+					<h:outputLabel styleClass="fieldValueLabel" rendered="#{employee.type == 'DEPUTY'}"
+						value="(Τροποπ. Απόφασης Τοποθ.)-Ημερομηνία: " />
+					<rich:spacer rendered="#{(employee.type != 'DEPUTY') or (employee.currentEmployment.nonRegularEmploymentInfo.placementOrderModification eq '')}"/>
+					<h:outputFormat styleClass="fieldValueText" rendered="#{(employee.type == 'DEPUTY') and (employee.currentEmployment.nonRegularEmploymentInfo.placementOrderModification ne '')}" 
+						value="(#{employee.currentEmployment.nonRegularEmploymentInfo.placementOrderModification})-{0, date, dd/MM/yyyy}">
+					    <f:param value="#{employee.currentEmployment.nonRegularEmploymentInfo.placementOrderModificationDate}" />
+					</h:outputFormat>
+					
+					<h:outputLabel styleClass="fieldValueLabel" rendered="#{employee.type != 'REGULAR'}"
+						value="(Απόφαση Απόλυσης)-Ημερομηνία: " />
+					<rich:spacer rendered="#{(employee.type == 'REGULAR') or (employee.currentEmployment.nonRegularEmploymentInfo.terminationOrder eq '')}"/>
+					<h:outputFormat styleClass="fieldValueText" rendered="#{(employee.type != 'REGULAR') and (employee.currentEmployment.nonRegularEmploymentInfo.terminationOrder ne '')}"
+						value="(#{employee.currentEmployment.nonRegularEmploymentInfo.terminationOrder})-{0, date, dd/MM/yyyy}">
+					    <f:param value="#{employee.currentEmployment.nonRegularEmploymentInfo.terminationOrderDate}" />
+					</h:outputFormat>
+
+				</h:panelGrid>
+			</rich:tab>
+
+		</rich:tabPanel>
+
+	</ui:component>
 
 </html>

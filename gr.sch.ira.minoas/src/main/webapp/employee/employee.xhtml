@@ -51,38 +51,35 @@
 			<a4j:outputPanel id="rootPanel">
 			
 
-			<h:panelGrid columns="1" width="100%">
+			<h:panelGrid columns="1">
 
 				<s:div>
 
 					<h:panelGrid columns="2">
 						<s:div>
-							<h:panelGrid columns="1">
-								<rich:panel id="basicEmployeeInfoPanel">
-									<f:facet name="header">
-										<h:outputText value="Βασικά Στοιχεία" />
-									</f:facet>
-
-									<h:panelGrid>
-										<ui:include src="/employee/basic-info.xhtml">
-											<ui:param name="employee" value="#{employee}" />
-										</ui:include>
-									</h:panelGrid>
-
-								</rich:panel>
-
-								<rich:panel id="workExperienceInfoPanel">
-									<f:facet name="header">
-										<h:outputText value="Στοιχεία Υπηρεσίας" />
-									</f:facet>
-
-									<ui:include
-										src="/components/employee/workExperienceAndServiceInfo.xhtml">
+							<a4j:outputPanel id="employeeAndEmploymentDataOutputPanel">
+								<h:panelGrid columns="1" width="500">
+	
+	
+									<ui:include src="/employee/basic-info.xhtml">
 										<ui:param name="employee" value="#{employee}" />
 									</ui:include>
-								</rich:panel>
+	
+									<rich:panel id="workExperienceInfoPanel">
+										<f:facet name="header">
+											<h:outputText value="Στοιχεία Υπηρεσίας" />
+										</f:facet>
+	
+										<ui:include
+											src="/components/employee/workExperienceAndServiceInfo.xhtml">
+											<ui:param name="employee" value="#{employee}" />
+										</ui:include>
+									</rich:panel>
 
-							</h:panelGrid>
+								</h:panelGrid>
+							
+							</a4j:outputPanel>
+							
 						</s:div>
 						<s:div>
 							<h:panelGrid columns="1">
@@ -305,6 +302,16 @@
 										view="/secondment/secondment-employment-management.xhtml">
 										<f:param name="secondment_management_from"
 											value="/employee/employee" />
+									</s:link>
+								</rich:menuItem>
+
+								<rich:menuItem submitMode="none"
+									rendered="#{(s:hasRole('ADMIN') or s:hasRole('VIEW_EMPLOYEE_INFO'))}">
+									          
+									<s:link value="Διαχείριση Στοιχείων Μισθοδοσίας" 
+										view="/employee/manageEmployeeInfo.xhtml">
+										<f:param name="from" value="/home" />
+										<f:param name="to" value="/employee/manageEmployeeInfo" />
 									</s:link>
 								</rich:menuItem>
 
@@ -1055,7 +1062,7 @@
 							<ui:include src="/components/messages-component.xhtml" />
 
 							<h:outputText
-								value="Με την παρακάτω φόρμα, μπορείται να τροποποίησεται τα βασικά στοιχεία του/της εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}." />
+								value="Με την παρακάτω φόρμα, μπορείται να τροποποίησετε τα βασικά στοιχεία του/της εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}." />
 							<h:panelGrid columns="3">
 
 
@@ -1144,7 +1151,7 @@
 										<h:outputText value="ΑΜ" />
 									</ui:define>
 									<h:inputText value="#{employeeHome.instance.regularEmployeeInfo.registryID}"
-										required="false" maxlength="10" size="10" />
+										required="false" maxlength="7" size="7" />
 								</s:decorate>
 								
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
@@ -1172,7 +1179,7 @@
 										<h:outputText value="Αριθμ. Τέκνων" />
 									</ui:define>
 									<h:inputText value="#{employeeHome.instance.numberOfChildren}"
-										required="false" maxlength="10" size="10" />
+										required="false" maxlength="3" size="3" />
 								</s:decorate>
 								
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
@@ -1200,10 +1207,10 @@
 								limitToList="true"
 								data="#{facesContext.maximumSeverity.ordinal ge 2}"
 								oncomplete="if(data == false) Richfaces.hideModalPanel('updateBasicInfoModalPanel');"
-								reRender="basicEmployeeInfoPanel,updateBasicInfoModalPanelContent" />
+								reRender="employeeAndEmploymentDataOutputPanel,updateBasicInfoModalPanelContent" />
 							<a4j:commandButton value="Επιστροφή .."
 								action="#{employeeHome.revert()}"
-								reRender="basicEmployeeInfoPanel,"
+								reRender="employeeAndEmploymentDataOutputPanel,"
 								oncomplete="#{rich:component('updateBasicInfoModalPanel')}.hide();" />
 						</h:panelGrid>
 					</h:form>
@@ -1264,10 +1271,10 @@
 								limitToList="true"
 								data="#{facesContext.maximumSeverity.ordinal ge 2}"
 								oncomplete="if(data == false) Richfaces.hideModalPanel('updateRegularRegistryIDModalPanel');"
-								reRender="basicEmployeeInfoPanel, updateRegularRegistryIDModalPanelContent" />
+								reRender="employeeAndEmploymentDataOutputPanel, updateRegularRegistryIDModalPanelContent" />
 							<a4j:commandButton value="Επιστροφή .."
 								action="#{regularEmployeeInfoHome.revert()}"
-								reRender="basicEmployeeInfoPanel,"
+								reRender="employeeAndEmploymentDataOutputPanel,"
 								oncomplete="#{rich:component('updateRegularRegistryIDModalPanel')}.hide();" />
 						</h:panelGrid>
 					</h:form>
@@ -1354,10 +1361,10 @@
 								limitToList="true"
 								data="#{facesContext.maximumSeverity.ordinal ge 2}"
 								oncomplete="if(data == false) Richfaces.hideModalPanel('updateSpecializationModalPanel');"
-								reRender="basicEmployeeInfoPanel,updateSpecializationModalPanelContent" />
+								reRender="employeeAndEmploymentDataOutputPanel,updateSpecializationModalPanelContent" />
 							<a4j:commandButton value="Επιστροφή .."
 								action="#{employeeHome.revert()}"
-								reRender="basicEmployeeInfoPanel,"
+								reRender="employeeAndEmploymentDataOutputPanel"
 								oncomplete="#{rich:component('updateSpecializationModalPanel')}.hide();" />
 						</h:panelGrid>
 					</h:form>

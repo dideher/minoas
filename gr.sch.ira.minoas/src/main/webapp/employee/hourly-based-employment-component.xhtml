@@ -24,7 +24,7 @@
 				<ui:define name="label">
 					<h:outputText value="Απόφαση Διευθυντή: " />
 				</ui:define>
-				<h:inputText value="#{nonRegularEmploymentInfo.order}"
+				<h:inputText value="#{nonRegularEmploymentInfo.act}"
 					styleClass="fieldValueText" size="20" maxlength="64"
 					required="false" />
 			</s:decorate>
@@ -52,6 +52,8 @@
 						src="/employee/components/hourly-based-employment-component.xhtml">
 						<ui:param value="#{_hourlyBasedEmploymentItem}"
 							name="_hourlybasedEmployment" />
+						<ui:param value="#{_hourlyBasedEmploymentItem.nonRegularEmploymentInfo}"
+							name="_hourlyNonRegularEmploymentInfo" />
 					</ui:include>
 					<a4j:commandButton id="deleteEmployment" ajaxSingle="true"
 						action="#{employeeHome.removeNewHourlyBasedEmploymentItem(_hourlyBasedEmploymentItem)}"

@@ -8,91 +8,89 @@
 
 
 
-<ui:component>
-	<h:panelGrid columns="3">
-		<s:decorate template="/layout/doubleLineEdit.xhtml" id="deputySchoolUnit">
-			<ui:define name="label">
-				<h:outputText value="Σχολική Μονάδα : " />
-			</ui:define>
-			<h:inputText id="deputySchoolUnitTarget" styleClass="fieldValueText"
-				value="#{_regularEmployment.school.title}" required="true" readonly="#{!enableSchoolUnitField}">
-				<rich:suggestionbox for="deputySchoolUnitTarget" var="_school"
-					height="200" width="300"
-					suggestionAction="#{schoolUnitSuggester.suggest}">
-					<f:facet name="nothingLabel">
-						<h:outputText value="Άγνωστη Μονάδα Τοποθέτησης" />
-					</f:facet>
-					<h:column>
-						<h:outputText value="#{_school.title}" />
-					</h:column>
-					<a4j:support ajaxSingle="true" event="onselect"
-						reRender="deputySchoolUnit">
-						<f:setPropertyActionListener value="#{_school}"
-							target="#{_regularEmployment.school}" />
-					</a4j:support>
-				</rich:suggestionbox>
-			</h:inputText>
+	<ui:component>
+		<h:panelGrid columns="3">
+			<s:decorate template="/layout/doubleLineEdit.xhtml" id="regularSchoolUnit">
+				<ui:define name="label">
+					<h:outputText value="Σχολική Μονάδα: " />
+				</ui:define>
+				<h:inputText id="regularSchoolUnitTarget" styleClass="fieldValueText" tabindex="51" 
+					value="#{_regularEmployment.school.title}" required="true" readonly="#{enableSchoolUnitField}">
+					<rich:suggestionbox for="regularSchoolUnitTarget" var="_school" 
+						height="200" width="300"
+						suggestionAction="#{schoolUnitSuggester.suggest}">
+						<f:facet name="nothingLabel">
+							<h:outputText value="Άγνωστη Μονάδα Τοποθέτησης" />
+						</f:facet>
+						<h:column>
+							<h:outputText value="#{_school.title}" />
+						</h:column>
+						<a4j:support ajaxSingle="true" event="onselect"
+							reRender="regularSchoolUnit">
+							<f:setPropertyActionListener value="#{_school}"
+								target="#{_regularEmployment.school}" />
+						</a4j:support>
+					</rich:suggestionbox>
+				</h:inputText>
+			</s:decorate>
 
-		</s:decorate>
-		<s:decorate template="/layout/doubleLineEdit.xhtml" id="deputyWorkingHours">
-			<ui:define name="label">
-				<h:outputText value="Ώρες Διδασκαλίας : " />
-			</ui:define>
-			<h:inputText value="#{_regularEmployment.finalWorkingHours}"
-				size="3" styleClass="fieldValueText" maxlength="3" required="true">
-				<a4j:support event="onblur" ajaxSingle="true"
-					reRender="deputyWorkingHours" />
-			</h:inputText>
-		</s:decorate>
-		<s:decorate template="/layout/doubleLineEdit.xhtml" id="deputyFrom">
-			<ui:define name="label">
-				<h:outputText value="Από : " />
-			</ui:define>
-			<rich:calendar datePattern="dd-MM-yyyy" style="width:50px"
-				enableManualInput="true" styleClass="fieldValueText" inputSize="10"
-				required="true" value="${_regularEmployment.established}">
-				<a4j:support event="onchanged" ajaxSingle="true" reRender="deputyFrom" />
-			</rich:calendar>
-		</s:decorate>
-		
-		<s:decorate template="/layout/doubleLineEdit.xhtml" id="regularEntryIntoServiceActId">
-			<ui:define name="label">
-				<h:outputText value="Πράξη Ανάληψης Υπηρεσίας: " />
-			</ui:define>
-			<h:inputText value="#{_regularEmployment.entryIntoServiceAct}"
-				size="15" styleClass="fieldValueText" maxlength="15" required="false"/>
-		</s:decorate>
-		<s:decorate template="/layout/doubleLineEdit.xhtml" id="regularEntryIntoServiceActDateId">
-			<ui:define name="label">
-				<h:outputText value="Ημ/νία Πράξης Ανάληψης: " />
-			</ui:define>
-			<rich:calendar id="entryIntoServiceCalendar" datePattern="dd-MM-yyyy"
-				style="width:50px" enableManualInput="true"
-				styleClass="fieldValueText" inputSize="10" required="false"
-				value="${_regularEmployment.entryIntoServiceDate}">
-			</rich:calendar>
-		</s:decorate>
-		
-		<s:decorate template="/layout/doubleLineEdit.xhtml">
-			<ui:define name="label">
-				<h:outputText value="Προσωρινή Οργανική ;" />
-			</ui:define>
-			<h:selectBooleanCheckbox value="#{_regularEmployment.temporar}" />
-		</s:decorate>
-		
-		
-	</h:panelGrid>
+			<s:decorate template="/layout/doubleLineEdit.xhtml" id="regularWorkingHours">
+				<ui:define name="label">
+					<h:outputText value="Υποχρ. Ώρες Διδασκαλίας: " />
+				</ui:define>
+				<h:inputText value="#{_regularEmployment.mandatoryWorkingHours}" tabindex="52"
+					size="3" styleClass="fieldValueText" maxlength="2" required="true">
+				</h:inputText>
+			</s:decorate>
+			<s:decorate template="/layout/doubleLineEdit.xhtml" id="regularFrom">
+				<ui:define name="label">
+					<h:outputText value="Από: " />
+				</ui:define>
+				<rich:calendar datePattern="dd-MM-yyyy" style="width:50px" tabindex="53"
+					enableManualInput="true" styleClass="fieldValueText" inputSize="10"
+					required="true" value="${_regularEmployment.established}">
+					<a4j:support event="onchanged" ajaxSingle="true" reRender="regularFrom" />
+				</rich:calendar>
+			</s:decorate>
+			
+			<s:decorate template="/layout/doubleLineEdit.xhtml" id="regularEntryIntoServiceActId">
+				<ui:define name="label">
+					<h:outputText value="Πράξη Ανάληψης Υπηρεσίας: " />
+				</ui:define>
+				<h:inputText value="#{_regularEmployment.entryIntoServiceAct}" tabindex="54"
+					size="15" styleClass="fieldValueText" maxlength="5" required="false"/>
+			</s:decorate>
+			<s:decorate template="/layout/doubleLineEdit.xhtml" id="regularEntryIntoServiceActDateId">
+				<ui:define name="label">
+					<h:outputText value="Ημ/νία Πράξης Ανάληψης: " />
+				</ui:define>
+				<rich:calendar id="entryIntoServiceCalendar" datePattern="dd-MM-yyyy"
+					style="width:50px" enableManualInput="true" tabindex="55"
+					styleClass="fieldValueText" inputSize="10" required="false"
+					value="${_regularEmployment.entryIntoServiceDate}">
+				</rich:calendar>
+			</s:decorate>
+			
+			<s:decorate template="/layout/doubleLineEdit.xhtml">
+				<ui:define name="label">
+					<h:outputText value="Προσωρινή Οργανική ;" />
+				</ui:define>
+				<h:selectBooleanCheckbox value="#{_regularEmployment.temporar}" tabindex="56"/>
+			</s:decorate>
+			
+			
+		</h:panelGrid>
 		<h:panelGrid columns="1">
-		<s:decorate template="/layout/doubleLineEdit.xhtml" id="regular-based-employment-commentsId">
-		<ui:define name="label">
-			<h:outputText value="Σχόλια: " />
-		</ui:define>
-		<h:inputTextarea value="${_regularEmployment.comments}" 
-		cols="60" rows="3" required="false"/>
-
-		</s:decorate>
-	</h:panelGrid>
-
-
-</ui:component>
+			<s:decorate template="/layout/doubleLineEdit.xhtml" id="regular-based-employment-commentsId">
+			<ui:define name="label">
+				<h:outputText value="Σχόλια: " />
+			</ui:define>
+			<h:inputTextarea value="${_regularEmployment.comments}" tabindex="57" 
+			cols="60" rows="3" maxlength="255" required="false"/>
+	
+			</s:decorate>
+		</h:panelGrid>
+	
+	
+	</ui:component>
 </html>

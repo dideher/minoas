@@ -31,6 +31,7 @@ import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.SecondmentType;
+import gr.sch.ira.minoas.model.employement.SelectionTableType;
 import gr.sch.ira.minoas.model.employement.ServiceAllocation;
 import gr.sch.ira.minoas.model.employement.ServiceAllocationType;
 import gr.sch.ira.minoas.model.employement.SpecialAssigment;
@@ -676,6 +677,11 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     @Factory(value = "employeeTypes")
     public EmployeeType[] getEmployeeTypes() {
         return EmployeeType.values();
+    }
+    
+    @Factory(value = "selectionTableTypes")
+    public SelectionTableType[] getSelectionTableTypes() {
+        return SelectionTableType.values();
     }
 
     @Factory(value = "maritalStatusTypes")

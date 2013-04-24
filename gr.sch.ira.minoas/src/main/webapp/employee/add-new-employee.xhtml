@@ -44,7 +44,7 @@
 									<ui:define name="label">
 										<h:outputText value="Όνομα: " />
 									</ui:define>
-									<h:inputText value="#{employee.firstName}" required="true"
+									<h:inputText value="#{employee.firstName}" required="true" tabindex="2"
 										styleClass="fieldValueText" size="12" maxlength="25">
 									</h:inputText>
 								</s:decorate>
@@ -53,7 +53,7 @@
 									<ui:define name="label">
 										<h:outputText value="Όνομα Πατρός: " />
 									</ui:define>
-									<h:inputText value="#{employee.fatherName}" required="true"
+									<h:inputText value="#{employee.fatherName}" required="true" tabindex="3" 
 										styleClass="fieldValueText" size="12" maxlength="25">
 									</h:inputText>
 								</s:decorate>
@@ -62,7 +62,7 @@
 									<ui:define name="label">
 										<h:outputText value="Α.Φ.Μ.: " />
 									</ui:define>
-									<h:inputText id="employeeVatNumber"
+									<h:inputText id="employeeVatNumber" tabindex="4"
 										value="#{employee.vatNumber}" required="true"
 										styleClass="fieldValueText" size="9" maxlength="9">
 										<f:validateLength minimum="9" maximum="9" />
@@ -74,8 +74,8 @@
 									<ui:define name="label">
 										<h:outputText value="Αριθμός ΙΚΑ: " />
 									</ui:define>
-									<h:inputText value="#{employee.ikaId}" required="false"
-										styleClass="fieldValueText" size="25" maxlength="30">
+									<h:inputText value="#{employee.ikaId}" required="false" tabindex="5"
+										styleClass="fieldValueText" size="25" maxlength="10">
 									</h:inputText>
 								</s:decorate>
 
@@ -83,8 +83,8 @@
 									<ui:define name="label">
 										<h:outputText value="Έπώνυμο Πατρός: " />
 									</ui:define>
-									<h:inputText value="#{employee.fatherSurname}" required="false"
-										styleClass="fieldValueText" size="25" maxlength="25">
+									<h:inputText value="#{employee.fatherSurname}" required="false" tabindex="6"
+										styleClass="fieldValueText" size="25" maxlength="35">
 									</h:inputText>
 								</s:decorate>
 
@@ -92,8 +92,8 @@
 									<ui:define name="label">
 										<h:outputText value="Έπώνυμο Μητρός: " />
 									</ui:define>
-									<h:inputText value="#{employee.motherSurname}" required="false"
-										styleClass="fieldValueText" size="25" maxlength="30">
+									<h:inputText value="#{employee.motherSurname}" required="false" tabindex="7"
+										styleClass="fieldValueText" size="25" maxlength="35">
 									</h:inputText>
 								</s:decorate>
 
@@ -101,8 +101,8 @@
 									<ui:define name="label">
 										<h:outputText value="Όνομα Μητρός: " />
 									</ui:define>
-									<h:inputText value="#{employee.motherName}" required="false"
-										styleClass="fieldValueText" size="12" maxlength="30">
+									<h:inputText value="#{employee.motherName}" required="false" tabindex="8"
+										styleClass="fieldValueText" size="12" maxlength="25">
 									</h:inputText>
 								</s:decorate>
 
@@ -110,7 +110,7 @@
 									<ui:define name="label">
 										<h:outputText value="Ημ/νια Γεννήσεως: " />
 									</ui:define>
-									<rich:calendar datePattern="dd-MM-yyyy" style="width:50px"
+									<rich:calendar datePattern="dd-MM-yyyy" style="width:50px" tabindex="9"
 										enableManualInput="true" styleClass="fieldValueText"
 										inputSize="10" required="true" value="#{employee.dateOfBirth}">
 									</rich:calendar>
@@ -122,7 +122,7 @@
 									<ui:define name="label">
 										<h:outputText value="Τύπος Εκπαιδευτικού: " />
 									</ui:define>
-									<h:selectOneMenu value="#{employee.type}" required="true">
+									<h:selectOneMenu value="#{employee.type}" required="true" tabindex="10">
 										<s:selectItems noSelectionLabel="Επιλέξτε Τύπο Εκπαιδευτικού"
 											var="_employeeType" value="#{employeeTypes}"
 											label="#{messages[_employeeType.key]}">
@@ -136,7 +136,7 @@
 									<ui:define name="label">
 										<h:outputText value="Ειδικότητα: " />
 									</ui:define>
-									<h:inputText id="specializationFilter" required="true"
+									<h:inputText id="specializationFilter" required="true" tabindex="11"
 										styleClass="fieldValueText" size="25" maxlength="40">
 										<rich:suggestionbox height="100" width="250"
 											for="specializationFilter" var="a_spec"
@@ -169,7 +169,7 @@
 									<ui:define name="label">
 										<h:outputText value="Οικογεν. Κατάσταση: " />
 									</ui:define>
-									<h:selectOneMenu value="#{employee.maritalType}" required="true">
+									<h:selectOneMenu value="#{employee.maritalType}" required="true" tabindex="12">
 										<s:selectItems noSelectionLabel="Επιλέξτε Οικογ. Κατάσταση"
 											var="_maritalStatusType" value="#{maritalStatusTypes}"
 											label="#{messages[_maritalStatusType.key]}">
@@ -181,8 +181,8 @@
 									<ui:define name="label">
 										<h:outputText value="Αριθμός Παιδιών: " />
 									</ui:define>
-									<h:inputText value="#{employee.numberOfChildren}" size="3"
-										styleClass="fieldValueText" maxlength="3" />
+									<h:inputText value="#{employee.numberOfChildren}" size="3" tabindex="13"
+										styleClass="fieldValueText" maxlength="2" />
 								</s:decorate>
 							
 							
@@ -190,21 +190,21 @@
 									<ui:define name="label">
 										<h:outputText value="Άρρεν: " />
 									</ui:define>
-									<h:selectBooleanCheckbox value="#{employee.man}" />
+									<h:selectBooleanCheckbox value="#{employee.man}" tabindex="14"/>
 								</s:decorate>
 
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
 									<ui:define name="label">
 										<h:outputText value="Πολύτεκνος: " />
 									</ui:define>
-									<h:selectBooleanCheckbox value="#{employee.bigFamily}" />
+									<h:selectBooleanCheckbox value="#{employee.bigFamily}" tabindex="15"/>
 								</s:decorate>
 
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
 									<ui:define name="label">
 										<h:outputText value="Ειδική Κατηγορία: " />
 									</ui:define>
-									<h:selectBooleanCheckbox value="#{employee.specialCategory}" />
+									<h:selectBooleanCheckbox value="#{employee.specialCategory}" tabindex="16"/>
 								</s:decorate>
 
 							</h:panelGrid>
@@ -214,8 +214,8 @@
 									<ui:define name="label">
 										<h:outputText value="Σχόλια:" />
 									</ui:define>
-									<h:inputTextarea value="#{employee.comment}" cols="96" rows="3"
-										styleClass="fieldValueText" maxlength="200" />
+									<h:inputTextarea value="#{employee.comment}" cols="96" rows="3" tabindex="17"
+										styleClass="fieldValueText" maxlength="255" />
 										
 								</s:decorate>
 							</h:panelGrid>
@@ -225,15 +225,29 @@
 					</a4j:outputPanel>
 					<a4j:outputPanel id="employmentPanel">
 
-						<a4j:include viewId="/employee/regular-employment-component.xhtml"
-							rendered="#{employee.type == 'REGULAR'}" />
+						<a4j:include viewId="/employee/components/regular-employment-component.xhtml"
+							rendered="#{employee.type == 'REGULAR'}" >
+							<ui:param value="#{employmentHome.instance}"
+								name="_regularEmployment" />
+						</a4j:include>
 
-						<a4j:include viewId="/employee/deputy-employment-component.xhtml"
-							rendered="#{employee.type == 'DEPUTY'}" />
+						<a4j:include viewId="/employee/components/deputy-employment-component.xhtml"
+							rendered="#{employee.type == 'DEPUTY'}" >
+							<ui:param value="#{employmentHome.instance}"
+								name="_deputyEmployment" />
+							<ui:param value="#{nonRegularEmploymentInfoHome.instance}"
+								name="_deputyNonRegularEmploymentInfo" />
+						</a4j:include>
 
 						<a4j:include
 							viewId="/employee/hourly-based-employment-component.xhtml"
-							rendered="#{employee.type == 'HOURLYPAID'}" />
+							rendered="#{employee.type == 'HOURLYPAID'}">
+							<ui:param value="#{employmentHome.instance}"
+								name="_hourlybasedEmployment" />
+							<ui:param value="#{nonRegularEmploymentInfoHome.instance}"
+								name="_hourlyNonRegularEmploymentInfo" />
+							
+						</a4j:include>
 
 
 					</a4j:outputPanel>
