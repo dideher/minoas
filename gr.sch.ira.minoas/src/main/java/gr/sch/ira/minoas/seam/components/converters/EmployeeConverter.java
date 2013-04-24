@@ -28,12 +28,10 @@ public class EmployeeConverter extends DatabaseAwareBaseConverter {
 	private static final long serialVersionUID = 1L;
 
 	public Object getAsObject(FacesContext arg0, UIComponent arg1, String arg2) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public String getAsString(FacesContext arg0, UIComponent arg1, Object arg2) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

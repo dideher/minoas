@@ -38,7 +38,6 @@ public class EvaluationHome extends MinoasEntityHome<Evaluation> {
 	@Override
 	@Factory(value = "evaluation", scope = ScopeType.PAGE)
 	public Evaluation getInstance() {
-		// TODO Auto-generated method stub
 		return (Evaluation) super.getInstance();
 	}
 

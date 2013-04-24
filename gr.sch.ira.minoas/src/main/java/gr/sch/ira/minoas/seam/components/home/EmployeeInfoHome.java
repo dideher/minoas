@@ -30,7 +30,7 @@ public class EmployeeInfoHome extends MinoasEntityHome<EmployeeInfo> {
 	 */
 	@Override
 	protected EmployeeInfo createInstance() {
-		EmployeeInfo instance = new EmployeeInfo(null, "", null, "", null, "", null, false, null, false, null, false, null, false, null, SectorType.PUBLIC_SECTOR, 0, 0, 0, 0);
+		EmployeeInfo instance = new EmployeeInfo();
 		
 		return instance;
 	}
@@ -41,7 +41,6 @@ public class EmployeeInfoHome extends MinoasEntityHome<EmployeeInfo> {
 	@Override
 	@Factory(value = "employeeInfo", scope = ScopeType.PAGE)
 	public EmployeeInfo getInstance() {
-		// TODO Auto-generated method stub
 		EmployeeInfo epInfo = (EmployeeInfo) super.getInstance();
 		return epInfo;
 	}

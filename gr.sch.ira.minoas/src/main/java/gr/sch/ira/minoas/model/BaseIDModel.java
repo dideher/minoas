@@ -30,7 +30,6 @@ public class BaseIDModel extends BaseModel {
 	 * 
 	 */
 	public BaseIDModel() {
-		// TODO Auto-generated constructor stub
 	}
 
 	/**

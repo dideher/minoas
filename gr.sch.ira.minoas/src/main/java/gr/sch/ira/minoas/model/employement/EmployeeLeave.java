@@ -91,7 +91,6 @@ public class EmployeeLeave extends BaseIDDeleteAwareModel {
 	
 	public EmployeeLeave() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**

@@ -118,7 +118,7 @@ public class Disposal extends BaseIDDeleteAwareModel {
 	 * 
 	 */
 	public Disposal() {
-		// TODO Auto-generated constructor stub
+
 	}
 
 	/**

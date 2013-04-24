@@ -15,6 +15,7 @@ import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
 import gr.sch.ira.minoas.model.employee.Evaluation;
+import gr.sch.ira.minoas.model.employee.MaritalStatusType;
 import gr.sch.ira.minoas.model.employee.PartTimeEmployment;
 import gr.sch.ira.minoas.model.employee.Penalty;
 import gr.sch.ira.minoas.model.employee.PenaltyType;
@@ -30,6 +31,7 @@ import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.SecondmentType;
+import gr.sch.ira.minoas.model.employement.SelectionTableType;
 import gr.sch.ira.minoas.model.employement.ServiceAllocation;
 import gr.sch.ira.minoas.model.employement.ServiceAllocationType;
 import gr.sch.ira.minoas.model.employement.SpecialAssigment;
@@ -687,7 +689,17 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     public EmployeeType[] getEmployeeTypes() {
         return EmployeeType.values();
     }
+    
+    @Factory(value = "selectionTableTypes")
+    public SelectionTableType[] getSelectionTableTypes() {
+        return SelectionTableType.values();
+    }
 
+    @Factory(value = "maritalStatusTypes")
+    public MaritalStatusType[] getMaritalStatusTypes() {
+        return MaritalStatusType.values();
+    }
+    
     public Collection<WorkExperience> getEmployeeWorkExperience(EntityManager em, Person employee) {
         return null;
     }

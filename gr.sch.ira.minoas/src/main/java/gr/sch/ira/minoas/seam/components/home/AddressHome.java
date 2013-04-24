@@ -38,7 +38,6 @@ public class AddressHome extends MinoasEntityHome<Address> {
 	@Override
 	@Factory(value = "address", scope = ScopeType.PAGE)
 	public Address getInstance() {
-		// TODO Auto-generated method stub
 		return (Address) super.getInstance();
 	}
 

@@ -49,7 +49,6 @@ public class SchoolYear extends BaseIDModel {
 	 */
 	public SchoolYear() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**

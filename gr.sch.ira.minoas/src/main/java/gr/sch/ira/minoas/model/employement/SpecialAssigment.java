@@ -81,7 +81,6 @@ public class SpecialAssigment extends BaseIDDeleteAwareModel {
 	 */
 	public SpecialAssigment() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
     /**

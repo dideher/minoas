@@ -46,7 +46,6 @@ public class PermanentTransferHome extends MinoasEntityHome<PermanentTransfer> {
 	@Override
 	@Factory(value = "permanentTransfer", scope = ScopeType.PAGE)
 	public PermanentTransfer getInstance() {
-		// TODO Auto-generated method stub
 		return (PermanentTransfer) super.getInstance();
 	}
 

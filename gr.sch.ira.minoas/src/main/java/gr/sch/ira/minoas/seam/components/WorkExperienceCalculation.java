@@ -5,6 +5,7 @@ import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeInfo;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
 import gr.sch.ira.minoas.model.employee.Penalty;
+import gr.sch.ira.minoas.model.employee.RegularEmployeeInfo;
 import gr.sch.ira.minoas.model.employement.Employment;
 
 import java.util.Calendar;
@@ -250,10 +251,12 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
      * @return
      */
     public Date computeEmployeeFirstDayOfRegularWork(Employee employee) {
-        if (employee != null && employee.getEmployeeInfo() != null) {
-            EmployeeInfo einfo = employee.getEmployeeInfo();
-            Date gofDate = einfo.getGogAppointmentDate();
-            Date entryIntoServiceDate = einfo.getEntryIntoServiceDate();
+        if (employee != null && employee.getRegularEmployeeInfo() != null) {
+        	RegularEmployeeInfo reinfo = employee.getRegularEmployeeInfo();
+        	Employment curr_employment = employee.getCurrentEmployment();
+        	
+            Date gofDate = reinfo.getAppointmentGOGDate();
+            Date entryIntoServiceDate = curr_employment.getEntryIntoServiceDate();
             if(gofDate != null && entryIntoServiceDate !=null)
             	return CoreUtils.datesDifferenceIn360DaysYear(gofDate, entryIntoServiceDate) > 30 ? entryIntoServiceDate : gofDate;
            	else
