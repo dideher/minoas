@@ -140,6 +140,8 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 			nonRegularEmploymentInfo.setInsertedBy(getPrincipal());
 			getEntityManager().persist(nonRegularEmploymentInfo);
 			
+			employment.setNonRegularEmploymentInfo(nonRegularEmploymentInfo);
+			
 			new_employee.setCurrentEmployment(employment);
 			getEntityManager().persist(employment);
 

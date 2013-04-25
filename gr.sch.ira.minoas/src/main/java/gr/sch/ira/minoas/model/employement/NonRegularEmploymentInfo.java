@@ -76,7 +76,7 @@ public class NonRegularEmploymentInfo extends BaseIDModel {
      * (Ενιαίος Πίνακας / Πίνακας Ειδικής Αγωγής) 
      */
 	@Enumerated(EnumType.STRING)
-	@Column(name = "SELECTION_TABLE", length = 30, nullable = true, updatable = false)
+	@Column(name = "SELECTION_TABLE", length = 30, nullable = true)
 	private SelectionTableType selectionTableType;
 	
 	

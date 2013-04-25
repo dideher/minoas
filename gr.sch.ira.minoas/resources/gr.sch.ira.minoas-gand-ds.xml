@@ -6,8 +6,8 @@
   <jndi-name>gr.sch.ira.minoasDatasource</jndi-name>
   <connection-url>jdbc:sqlserver://agaph-vm.dide.ira.net:1433;DatabaseName=minoas</connection-url>
   <driver-class>com.microsoft.sqlserver.jdbc.SQLServerDriver</driver-class>
-  <user-name>gand2</user-name>
-  <password>gand2</password>
+  <user-name>slavikos</user-name>
+  <password>slavikos</password>
   <prefill>true</prefill>
   <!-- sql to call when connection is created
         <new-connection-sql>some arbitrary sql</new-connection-sql>
