@@ -56,7 +56,11 @@ public class MedicalEmployeeLeavesOfPrevious5Years extends BaseDatabaseAwareSeam
         Collection<EmployeeLeave> leaves = getCoreSearching().getEmployeeLeaves(employeeHome.getInstance(), startOfYear, endOfYear, leaveTypes);
         int count = 0;
         for(EmployeeLeave l : leaves) {
-            count+=l.getEffectiveNumberOfDays();
+        	try {
+        		count+=l.getEffectiveNumberOfDays();
+        	} catch(NullPointerException npe) {
+        		// ignore
+        	}
         }
         this.medicalEmployeeLeavesOfPrevious5Years = count;
     }
