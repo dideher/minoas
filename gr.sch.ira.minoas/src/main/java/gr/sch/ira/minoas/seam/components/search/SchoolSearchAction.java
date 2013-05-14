@@ -3,14 +3,15 @@
  */
 package gr.sch.ira.minoas.seam.components.search;
 
+import gr.sch.ira.minoas.core.CoreUtils;
+import gr.sch.ira.minoas.model.core.School;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.Query;
 
-import gr.sch.ira.minoas.core.CoreUtils;
-import gr.sch.ira.minoas.model.core.School;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;

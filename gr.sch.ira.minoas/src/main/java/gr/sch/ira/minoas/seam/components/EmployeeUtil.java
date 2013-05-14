@@ -3,13 +3,13 @@
  */
 package gr.sch.ira.minoas.seam.components;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
 import gr.sch.ira.minoas.model.employee.Person;
 import gr.sch.ira.minoas.model.employee.RegularEmployeeInfo;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;

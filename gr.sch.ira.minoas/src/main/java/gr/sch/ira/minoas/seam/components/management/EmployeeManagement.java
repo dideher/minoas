@@ -10,7 +10,6 @@ import gr.sch.ira.minoas.model.employee.EmployeeExclusion;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
 import gr.sch.ira.minoas.model.employee.RegularEmployeeInfo;
 import gr.sch.ira.minoas.model.employement.Disposal;
-import gr.sch.ira.minoas.model.employement.EducationalLevelType;
 import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;

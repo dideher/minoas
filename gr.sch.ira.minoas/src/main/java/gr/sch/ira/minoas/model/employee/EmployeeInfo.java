@@ -4,7 +4,6 @@ import gr.sch.ira.minoas.core.CoreUtils;
 import gr.sch.ira.minoas.model.BaseIDModel;
 import gr.sch.ira.minoas.model.employement.EducationalLevelType;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;

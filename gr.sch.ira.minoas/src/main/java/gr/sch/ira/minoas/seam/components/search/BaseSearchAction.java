@@ -9,8 +9,6 @@ import java.util.List;
 
 import javax.persistence.Query;
 
-import org.jboss.seam.annotations.datamodel.DataModel;
-
 /**
  * @author slavikos
  * 
