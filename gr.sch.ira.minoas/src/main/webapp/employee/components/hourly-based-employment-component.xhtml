@@ -6,73 +6,223 @@
 	xmlns:s="http://jboss.com/products/seam/taglib"
 	xmlns:rich="http://richfaces.org/rich">
 
+	<ui:component>
+		<h:outputText styleClass="fieldValueText"
+			value="Δεν έχετε το δικαίωμα καταχώρησης αυτού του τύπου εκπαιδευτικού."
+			rendered="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_EMPLOYEE_HOURLY_BASED'))}" />
+		<rich:panel rendered="#{(s:hasRole('ADMIN') or s:hasRole('ADD_EMPLOYEE_HOURLY_BASED'))}">
+			<f:facet name="header">
+				<h:outputText value="Βασικά Στοιχεία Εργασίας" />
+			</f:facet>
+
+			<h:panelGrid columns="3">
+				<s:decorate template="/layout/doubleLineEdit.xhtml" id="hourlyBasedSchoolUnit">
+					<ui:define name="label">
+						<h:outputText value="Σχολική Μονάδα: " />
+					</ui:define>
+					<h:inputText id="hourlySchoolUnitTarget" styleClass="fieldValueText" readonly="#{enableSchoolUnitField}"
+						value="#{_hourlybasedEmployment.school.title}" required="true">
+						<rich:suggestionbox for="hourlySchoolUnitTarget" var="_school"
+							height="200" width="300"
+							suggestionAction="#{schoolUnitSuggester.suggest}">
+							<f:facet name="nothingLabel">
+								<h:outputText value="Άγνωστη Μονάδα Τοποθέτησης" />
+							</f:facet>
+							<h:column>
+								<h:outputText value="#{_school.title}" />
+							</h:column>
+							<a4j:support ajaxSingle="true" event="onselect"
+								reRender="hourlyBasedSchoolUnit">
+								<f:setPropertyActionListener value="#{_school}"
+									target="#{_hourlybasedEmployment.school}" />
+							</a4j:support>
+						</rich:suggestionbox>
+					</h:inputText>
+				</s:decorate>
+				<s:decorate template="/layout/doubleLineEdit.xhtml" id="workingHours">
+					<ui:define name="label">
+						<h:outputText value="Υποχρ. Ώρες Διδασκαλίας: " />
+					</ui:define>
+					<h:inputText value="#{_hourlybasedEmployment.mandatoryWorkingHours}"
+						size="3" styleClass="fieldValueText" maxlength="2" required="true">
+						<a4j:support event="onblur" ajaxSingle="true"
+							reRender="workingHours" />
+					</h:inputText>
+				</s:decorate>
+						<s:decorate template="/layout/doubleLineEdit.xhtml" id="homebased">
+					<ui:define name="label">
+						<h:outputText value="Κατοίκον ; " />
+					</ui:define>
+					<h:selectBooleanCheckbox value="#{_hourlybasedEmployment.homeBased}" />
+				</s:decorate>
+				<s:decorate template="/layout/doubleLineEdit.xhtml" id="from">
+					<ui:define name="label">
+						<h:outputText value="Από : " />
+					</ui:define>
+					<rich:calendar datePattern="dd-MM-yyyy" style="width:50px"
+						enableManualInput="true" styleClass="fieldValueText" inputSize="10"
+						required="true" value="${_hourlybasedEmployment.established}">
+						<a4j:support event="onchanged" ajaxSingle="true" reRender="from" />
+					</rich:calendar>
+				</s:decorate>
+				<s:decorate template="/layout/doubleLineEdit.xhtml" id="until">
+					<ui:define name="label">
+						<h:outputText value="Εώς : " />
+					</ui:define>
+					<rich:calendar id="untilCalendar" datePattern="dd-MM-yyyy"
+						style="width:50px" enableManualInput="true"
+						styleClass="fieldValueText" inputSize="10" required="true"
+						value="${_hourlybasedEmployment.terminated}">
+						<a4j:support event="onchanged" ajaxSingle="true" reRender="until" />
+					</rich:calendar>
+				</s:decorate>
+				
+				<h:outputText value="" />
+				
+				<s:decorate template="/layout/doubleLineEdit.xhtml" id="hourlyEntryIntoServiceActId">
+					<ui:define name="label">
+						<h:outputText value="Πράξη Ανάληψης Υπηρεσίας: " />
+					</ui:define>
+					<h:inputText value="#{_hourlybasedEmployment.entryIntoServiceAct}"
+						size="15" styleClass="fieldValueText" maxlength="5" required="false"/>
+				</s:decorate>
+				<s:decorate template="/layout/doubleLineEdit.xhtml" id="hourlyEntryIntoServiceActDateId">
+					<ui:define name="label">
+						<h:outputText value="Ημ/νία Πράξης Ανάληψης: " />
+					</ui:define>
+					<rich:calendar id="entryIntoServiceCalendar" datePattern="dd-MM-yyyy"
+						style="width:50px" enableManualInput="true"
+						styleClass="fieldValueText" inputSize="10" required="false"
+						value="${_hourlybasedEmployment.entryIntoServiceDate}">
+						<a4j:support event="onchanged" ajaxSingle="true" />
+					</rich:calendar>
+				</s:decorate>
+			</h:panelGrid>
+			<h:panelGrid columns="3">
+				<s:decorate template="/layout/doubleLineEdit.xhtml" id="hourly-based-employment-commentsId">
+				<ui:define name="label">
+					<h:outputText value="Σχόλια: " />
+				</ui:define>
+				<h:inputTextarea value="${_hourlybasedEmployment.comments}" 
+				cols="60" rows="3" required="false" maxlength="255"/>
+		
+				</s:decorate>
+			</h:panelGrid>
+		</rich:panel>
+		
+		<rich:panel rendered="#{(s:hasRole('ADMIN') or s:hasRole('ADD_EMPLOYEE_HOURLY_BASED'))}">
+			<f:facet name="header">
+				<h:outputText value="Συμπληρωματικά Στοιχεία Εργασίας" />
+			</f:facet>
+			
+			<h:panelGrid columns="4" width="600">
+				<s:decorate template="/layout/doubleLineEdit.xhtml" id="hourlyBasedDiaygeiaNoId">
+					<ui:define name="label">
+						<h:outputText value="Αριθμός Διαύγειας (ΑΔΑ): " />
+					</ui:define>
+					<h:inputText value="#{_hourlyNonRegularEmploymentInfo.diaygeiaNo}" immediate="true"
+						size="15" styleClass="fieldValueText" maxlength="20" required="true"/>
+				</s:decorate>
+				<h:outputText value="" />
+				<h:outputText value="" />
+				<h:outputText value="" />
 
 
-<ui:component>
-	<h:panelGrid columns="6">
-		<s:decorate template="/layout/doubleLineEdit.xhtml" id="hourlyBasedSchoolUnit">
-			<ui:define name="label">
-				<h:outputText value="Σχολική Μονάδα : " />
-			</ui:define>
-			<h:inputText id="hourlySchoolUnitTarget" styleClass="fieldValueText"
-				value="#{_hourlybasedEmployment.school.title}" required="true">
-				<rich:suggestionbox for="hourlySchoolUnitTarget" var="_school"
-					height="200" width="300"
-					suggestionAction="#{schoolUnitSuggester.suggest}">
-					<f:facet name="nothingLabel">
-						<h:outputText value="Άγνωστη Μονάδα Τοποθέτησης" />
-					</f:facet>
-					<h:column>
-						<h:outputText value="#{_school.title}" />
-					</h:column>
-					<a4j:support ajaxSingle="true" event="onselect"
-						reRender="hourlyBasedSchoolUnit">
-						<f:setPropertyActionListener value="#{_school}"
-							target="#{_hourlybasedEmployment.school}" />
-					</a4j:support>
-				</rich:suggestionbox>
-			</h:inputText>
-
-		</s:decorate>
-		<s:decorate template="/layout/doubleLineEdit.xhtml" id="workingHours">
-			<ui:define name="label">
-				<h:outputText value="Ώρες Διδασκαλίας : " />
-			</ui:define>
-			<h:inputText value="#{_hourlybasedEmployment.finalWorkingHours}"
-				size="3" styleClass="fieldValueText" maxlength="3" required="true">
-				<a4j:support event="onblur" ajaxSingle="true"
-					reRender="workingHours" />
-			</h:inputText>
-		</s:decorate>
-		<s:decorate template="/layout/doubleLineEdit.xhtml" id="from">
-			<ui:define name="label">
-				<h:outputText value="Από : " />
-			</ui:define>
-			<rich:calendar datePattern="dd-MM-yyyy" style="width:50px"
-				enableManualInput="true" styleClass="fieldValueText" inputSize="10"
-				required="true" value="${_hourlybasedEmployment.established}">
-				<a4j:support event="onchanged" ajaxSingle="true" reRender="from" />
-			</rich:calendar>
-		</s:decorate>
-		<s:decorate template="/layout/doubleLineEdit.xhtml" id="until">
-			<ui:define name="label">
-				<h:outputText value="Εώς : " />
-			</ui:define>
-			<rich:calendar id="untilCalendar" datePattern="dd-MM-yyyy"
-				style="width:50px" enableManualInput="true"
-				styleClass="fieldValueText" inputSize="10" required="true"
-				value="${_hourlybasedEmployment.terminated}">
-				<a4j:support event="onchanged" ajaxSingle="true" reRender="until" />
-			</rich:calendar>
-		</s:decorate>
-		<s:decorate template="/layout/doubleLineEdit.xhtml" id="homebased">
-			<ui:define name="label">
-				<h:outputText value="Κατοίκον ; " />
-			</ui:define>
-			<h:selectBooleanCheckbox value="#{_hourlybasedEmployment.homeBased}" />
-		</s:decorate>
-	</h:panelGrid>
-
-
-</ui:component>
+				
+				<s:decorate template="/layout/doubleLineEdit.xhtml" id="hourlyBasedActId">
+					<ui:define name="label">
+						<h:outputText value="Απόφαση Πρόσληψης Β/θμιας: " />
+					</ui:define>
+					<h:inputText value="#{_hourlyNonRegularEmploymentInfo.act}" immediate="true"
+						size="15" styleClass="fieldValueText" maxlength="30" required="true"/>
+				</s:decorate>
+				<s:decorate template="/layout/doubleLineEdit.xhtml" id="hourlyBasedActDateId">
+					<ui:define name="label">
+						<h:outputText value="Ημ/νία Απόφασης Πρόσληψης Β/θμιας: " />
+					</ui:define>
+					<rich:calendar id="hourlyBasedActCalendar" datePattern="dd-MM-yyyy"
+						style="width:50px" enableManualInput="true" immediate="true"
+						styleClass="fieldValueText" inputSize="10" required="true"
+						value="${_hourlyNonRegularEmploymentInfo.actDate}">
+					</rich:calendar>
+				</s:decorate>
+				
+				<s:decorate template="/layout/doubleLineEdit.xhtml" id="hourlyBasedPysdeActId">
+					<ui:define name="label">
+						<h:outputText value="Πράξη Πρότασης ΠΥΣΔΕ: " />
+					</ui:define>
+					<h:inputText value="#{_hourlyNonRegularEmploymentInfo.pysdeAct}" immediate="true"
+						size="15" styleClass="fieldValueText" maxlength="30" required="true"/>
+				</s:decorate>
+				<s:decorate template="/layout/doubleLineEdit.xhtml" id="hourlyBasedPysdeActDateId">
+					<ui:define name="label">
+						<h:outputText value="Ημ/νία Πράξης ΠΥΣΔΕ: " />
+					</ui:define>
+					<rich:calendar id="hourlyBasedPysdeActCalendar" datePattern="dd-MM-yyyy"
+						style="width:50px" enableManualInput="true" immediate="true"
+						styleClass="fieldValueText" inputSize="10" required="true"
+						value="${_hourlyNonRegularEmploymentInfo.pysdeActDate}">
+					</rich:calendar>
+				</s:decorate>
+				
+				<s:decorate template="/layout/doubleLineEdit.xhtml" id="hourlyBasedPlacementOrderId">
+					<ui:define name="label">
+						<h:outputText value="Απόφαση Τοποθέτησης: " />
+					</ui:define>
+					<h:inputText value="#{_hourlyNonRegularEmploymentInfo.placementOrder}" immediate="true"
+						size="15" styleClass="fieldValueText" maxlength="5" required="true"/>
+				</s:decorate>
+				<s:decorate template="/layout/doubleLineEdit.xhtml" id="hourlyBasedPlacementOrderDateId">
+					<ui:define name="label">
+						<h:outputText value="Ημ/νία Απόφασης Τοποθέτησης: " />
+					</ui:define>
+					<rich:calendar id="hourlyBasedPlacementOrderCalendar" datePattern="dd-MM-yyyy"
+						style="width:50px" enableManualInput="true" immediate="true"
+						styleClass="fieldValueText" inputSize="10" required="true"
+						value="${_hourlyNonRegularEmploymentInfo.placementOrderDate}">
+					</rich:calendar>
+				</s:decorate>
+		
+				<s:decorate template="/layout/doubleLineEdit.xhtml" id="hourlyBasedPlacementOrderModificationId">
+					<ui:define name="label">
+						<h:outputText value="Τροποπ. Απόφασης Τοποθέτησης: " />
+					</ui:define>
+					<h:inputText value="#{_hourlyNonRegularEmploymentInfo.placementOrderModification}" immediate="true"
+						size="15" styleClass="fieldValueText" maxlength="5" required="false"/>
+				</s:decorate>
+				<s:decorate template="/layout/doubleLineEdit.xhtml" id="hourlyBasedPlacementOrderModificationDateId">
+					<ui:define name="label">
+						<h:outputText value="Ημ/νία Τροποπ. Απόφασης Τοποθέτησης: " />
+					</ui:define>
+					<rich:calendar id="hourlyBasedPlacementOrderModificationCalendar" datePattern="dd-MM-yyyy"
+						style="width:50px" enableManualInput="true" immediate="true"
+						styleClass="fieldValueText" inputSize="10" required="false"
+						value="${_hourlyNonRegularEmploymentInfo.placementOrderModificationDate}">
+					</rich:calendar>
+				</s:decorate>
+		
+				<s:decorate template="/layout/doubleLineEdit.xhtml" id="hourlyBasedTerminationOrderId">
+					<ui:define name="label">
+						<h:outputText value="Απόφαση Απόλυσης: " />
+					</ui:define>
+					<h:inputText value="#{_hourlyNonRegularEmploymentInfo.terminationOrder}" immediate="true"
+						size="15" styleClass="fieldValueText" maxlength="5" required="false"/>
+				</s:decorate>
+				<s:decorate template="/layout/doubleLineEdit.xhtml" id="hourlyBasedTerminationOrderDateId">
+					<ui:define name="label">
+						<h:outputText value="Ημ/νία Απόφασης Απόλυσης: " />
+					</ui:define>
+					<rich:calendar id="hourlyBasedTerminationOrderCalendar" datePattern="dd-MM-yyyy"
+						style="width:50px" enableManualInput="true" immediate="true"
+						styleClass="fieldValueText" inputSize="10" required="false"
+						value="${_hourlyNonRegularEmploymentInfo.terminationOrderDate}">
+					</rich:calendar>
+				</s:decorate>
+			
+			
+			
+			</h:panelGrid>
+		</rich:panel>
+	
+	</ui:component>
 </html>

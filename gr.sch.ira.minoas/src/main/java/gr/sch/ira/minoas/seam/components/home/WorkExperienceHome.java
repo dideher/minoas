@@ -42,7 +42,6 @@ public class WorkExperienceHome extends MinoasEntityHome<WorkExperience> {
 	@Override
 	@Factory(value = "workExperience", scope = ScopeType.PAGE)
 	public WorkExperience getInstance() {
-		// TODO Auto-generated method stub
 		return (WorkExperience) super.getInstance();
 	}
 

@@ -43,49 +43,6 @@ public class EmployeeInfo extends BaseIDModel {
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "EMPLOYEE_ID", nullable = false)
 	private Employee employee;
-	
-	/**
-	 * Greek Official Gazette Αppointment Number (Αριθμός ΦΕΚ Διορισμού)
-	 */
-	@Basic
-	@Column(name = "GOG_APPOINTMENT_NO", length = 4)
-	private String gogAppointmentNo;
-
-	/**
-	 * Greek Official Gazette Αppointment Date (Ημερομηνία ΦΕΚ Διορισμού)
-	 */
-	@Basic
-	@Column(name = "GOG_APPOINTMENT_DATE")
-	private Date gogAppointmentDate;
-
-	
-	/**
-	 * Entry into service Act (Πράξη ανάληψης υπηρεσίας)
-	 */
-	@Basic
-	@Column(name = "ENTRY_INTO_SERVICE_ACT", length = 5)
-	private String entryIntoServiceAct;
-	
-	/**
-	 * Entry into service date (Ημερομηνία ανάληψης υπηρεσίας)
-	 */
-	@Basic
-	@Column(name = "ENTRY_INTO_SERVICE_DATE")
-	private Date entryIntoServiceDate;
-	
-	/**
-	 * Permanent Employee Act (Πράξη Μονιμοποίησης)
-	 */
-	@Basic
-	@Column(name = "PERMANENT_EMPLOYEE_ACT", length = 8)
-	private String permanentEmployeeAct;
-	
-	/**
-	 * Permanent Empoloyee Act Date (Ημερομηνία Πράξης Μονιμοποίησης)
-	 */
-	@Basic
-	@Column(name = "PERMANENT_EMPLOYEE_ACT_DATE")
-	private Date permanentEmployeeActDate;
 
 	/**
 	 * Has a Master's Degree (Κατοχή Μεταπτυχιακού Διπλώματος)
@@ -130,12 +87,7 @@ public class EmployeeInfo extends BaseIDModel {
 	@Column(name = "NAT_SCH_PUB_ADMIN_DATE")
 	private Date natSchPubAdminDate;
 	
-	/**
-	 * Is Recently Hired (Νεοδιορισμένος)
-	 */
-	@Basic
-	@Column(name = "IS_RECENTLY_HIRED")
-	private Boolean isRecentlyHired;
+
 
 	
 	/**
@@ -194,6 +146,19 @@ public class EmployeeInfo extends BaseIDModel {
 	
 	public EmployeeInfo() {
 		super();
+		this.employee = null;
+		this.hasAMasterDegree = false;
+		this.mscDate = null;
+		this.hasAPhD = false;
+		this.phdDate = null;
+		this.isANatSchPubAdminGraduate = false;
+		this.natSchPubAdminDate = null;
+		this.currentRankInfo = null;
+		this.sector = SectorType.PUBLIC_SECTOR;
+		this.sumOfEducationalExperience = 0;
+		this.sumOfTeachingExperience = 0;
+		this.sumOfExperience = 0;
+		this.totalWorkService = 0;
 	}
 	
 	
@@ -201,17 +166,12 @@ public class EmployeeInfo extends BaseIDModel {
 	 * @param employee
 	 * @param gogAppointmentNo
 	 * @param gogAppointmentDate
-	 * @param entryIntoServiceAct
-	 * @param entryIntoServiceDate
-	 * @param permanentEmployeeAct
-	 * @param permanentEmployeeActDate
 	 * @param hasAMasterDegree
 	 * @param mscDate
 	 * @param hasAPhD
 	 * @param phdDate
 	 * @param isANatSchPubAdminGraduate
 	 * @param natSchPubAdminDate
-	 * @param isRecentlyHired
 	 * @param currentRankInfo
 	 * @param sector
 	 * @param sumOfEducationalExperience
@@ -221,8 +181,7 @@ public class EmployeeInfo extends BaseIDModel {
 	 */
 	public EmployeeInfo(Employee employee, String gogAppointmentNo,
 			Date gogAppointmentDate, String entryIntoServiceAct,
-			Date entryIntoServiceDate, String permanentEmployeeAct,
-			Date permanentEmployeeActDate, Boolean hasAMasterDegree,
+			Boolean hasAMasterDegree,
 			Date mscDate, Boolean hasAPhD, Date phdDate,
 			Boolean isANatSchPubAdminGraduate, Date natSchPubAdminDate,
 			Boolean isRecentlyHired, RankInfo currentRankInfo,
@@ -231,19 +190,12 @@ public class EmployeeInfo extends BaseIDModel {
 			Integer totalWorkService) {
 		super();
 		this.employee = employee;
-		this.gogAppointmentNo = gogAppointmentNo;
-		this.gogAppointmentDate = gogAppointmentDate;
-		this.entryIntoServiceAct = entryIntoServiceAct;
-		this.entryIntoServiceDate = entryIntoServiceDate;
-		this.permanentEmployeeAct = permanentEmployeeAct;
-		this.permanentEmployeeActDate = permanentEmployeeActDate;
 		this.hasAMasterDegree = hasAMasterDegree;
 		this.mscDate = mscDate;
 		this.hasAPhD = hasAPhD;
 		this.phdDate = phdDate;
 		this.isANatSchPubAdminGraduate = isANatSchPubAdminGraduate;
 		this.natSchPubAdminDate = natSchPubAdminDate;
-		this.isRecentlyHired = isRecentlyHired;
 		this.currentRankInfo = currentRankInfo;
 		this.sector = sector;
 		this.sumOfEducationalExperience = sumOfEducationalExperience;
@@ -266,58 +218,9 @@ public class EmployeeInfo extends BaseIDModel {
 		this.employee = employee;
 	}
 
-	/**
-	 * @return the gogAppointmentNo
-	 */
-	public String getGogAppointmentNo() {
-		return gogAppointmentNo;
-	}
 
-	/**
-	 * @param gogAppointmentNo the gogAppointmentNo to set
-	 */
-	public void setGogAppointmentNo(String gogAppointmentNo) {
-		this.gogAppointmentNo = gogAppointmentNo;
-	}
 
-	/**
-	 * @return the gogAppointmentDate
-	 */
-	public Date getGogAppointmentDate() {
-		return gogAppointmentDate;
-	}
 
-//	/**
-//	 * @return the gogAppointmentDate
-//	 */
-//	public String getGogAppointmentDateString() {
-//		if(gogAppointmentDate == null)
-//			return "";
-//		else
-//			return DateFormat.getDateInstance(DateFormat.SHORT).format(gogAppointmentDate);
-//	}	
-	
-	
-	/**
-	 * @param gogAppointmentDate the gogAppointmentDate to set
-	 */
-	public void setGogAppointmentDate(Date gogAppointmentDate) {
-		this.gogAppointmentDate = gogAppointmentDate;
-	}
-
-	/**
-	 * @return the entryIntoServiceDate
-	 */
-	public Date getEntryIntoServiceDate() {
-		return entryIntoServiceDate;
-	}
-
-	/**
-	 * @param entryIntoServiceDate the entryIntoServiceDate to set
-	 */
-	public void setEntryIntoServiceDate(Date entryIntoServiceDate) {
-		this.entryIntoServiceDate = entryIntoServiceDate;
-	}
 
 	/**
 	 * @return the hasAMasterDegree
@@ -434,61 +337,6 @@ public class EmployeeInfo extends BaseIDModel {
 		this.natSchPubAdminDate = natSchPubAdminDate;
 	}
 
-	/**
-	 * @return the entryIntoServiceAct
-	 */
-	public String getEntryIntoServiceAct() {
-		return entryIntoServiceAct;
-	}
-
-	/**
-	 * @param entryIntoServiceAct the entryIntoServiceAct to set
-	 */
-	public void setEntryIntoServiceAct(String entryIntoServiceAct) {
-		this.entryIntoServiceAct = entryIntoServiceAct;
-	}
-
-	/**
-	 * @return the permanentEmployeeAct
-	 */
-	public String getPermanentEmployeeAct() {
-		return permanentEmployeeAct;
-	}
-
-	/**
-	 * @param permanentEmployeeAct the permanentEmployeeAct to set
-	 */
-	public void setPermanentEmployeeAct(String permanentEmployeeAct) {
-		this.permanentEmployeeAct = permanentEmployeeAct;
-	}
-
-	/**
-	 * @return the permanentEmployeeActDate
-	 */
-	public Date getPermanentEmployeeActDate() {
-		return permanentEmployeeActDate;
-	}
-
-	/**
-	 * @param permanentEmployeeActDate the permanentEmployeeActDate to set
-	 */
-	public void setPermanentEmployeeActDate(Date permanentEmployeeActDate) {
-		this.permanentEmployeeActDate = permanentEmployeeActDate;
-	}
-
-	/**
-	 * @return the isRecentlyHired
-	 */
-	public Boolean getIsRecentlyHired() {
-		return isRecentlyHired;
-	}
-
-	/**
-	 * @param isRecentlyHired the isRecentlyHired to set
-	 */
-	public void setIsRecentlyHired(Boolean isRecentlyHired) {
-		this.isRecentlyHired = isRecentlyHired;
-	}
 
 	public void setSector(SectorType sector) {
 		this.sector = sector;
@@ -624,17 +472,10 @@ public class EmployeeInfo extends BaseIDModel {
 	 */
 	@Override
 	public String toString() {
-		return "EmployeeInfo [gogAppointmentNo=" + gogAppointmentNo
-				+ ", gogAppointmentDate=" + gogAppointmentDate
-				+ ", entryIntoServiceAct=" + entryIntoServiceAct
-				+ ", entryIntoServiceDate=" + entryIntoServiceDate
-				+ ", permanentEmployeeAct=" + permanentEmployeeAct
-				+ ", permanentEmployeeActDate=" + permanentEmployeeActDate
-				+ ", hasAMasterDegree=" + hasAMasterDegree + ", mscDate="
+		return "EmployeeInfo [hasAMasterDegree=" + hasAMasterDegree + ", mscDate="
 				+ mscDate + ", hasAPhD=" + hasAPhD + ", phdDate=" + phdDate
 				+ ", isANatSchPubAdminGraduate=" + isANatSchPubAdminGraduate
 				+ ", natSchPubAdminDate=" + natSchPubAdminDate
-				+ ", isRecentlyHired=" + isRecentlyHired + ", currentRankInfo="
 				+ currentRankInfo + ", sector=" + sector
 				+ ", sumOfEducationalExperience=" + sumOfEducationalExperience
 				+ ", sumOfTeachingExperience=" + sumOfTeachingExperience

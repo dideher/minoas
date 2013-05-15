@@ -42,7 +42,6 @@ public class RankInfoHome extends MinoasEntityHome<RankInfo> {
 	@Override
 	@Factory(value = "rankInfo", scope = ScopeType.PAGE)
 	public RankInfo getInstance() {
-		// TODO Auto-generated method stub
 		RankInfo rnkInfo = (RankInfo) super.getInstance();
 		return rnkInfo;
 	}

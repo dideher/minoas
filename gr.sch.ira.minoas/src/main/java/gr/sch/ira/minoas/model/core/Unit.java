@@ -79,7 +79,6 @@ public class Unit extends AbstractArchivableEntity implements Comparable<Unit> {
 	 * 
 	 */
 	public Unit() {
-		// TODO Auto-generated constructor stub
 	}
 
 	/**

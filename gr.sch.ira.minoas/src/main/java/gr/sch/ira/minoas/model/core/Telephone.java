@@ -41,7 +41,6 @@ public class Telephone extends BaseIDModel {
 	 * 
 	 */
 	public Telephone() {
-		// TODO Auto-generated constructor stub
 	}
 
 	/**

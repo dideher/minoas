@@ -63,7 +63,6 @@ public class Specialization extends BaseModel {
 	 * 
 	 */
 	public Specialization() {
-		// TODO Auto-generated constructor stub
 	}
 
 	/**

@@ -41,7 +41,6 @@ public class SpecialAssigmentHome extends MinoasEntityHome<SpecialAssigment> {
 	@Override
 	@Factory(value = "specialAssigment", scope = ScopeType.PAGE)
 	public SpecialAssigment getInstance() {
-		// TODO Auto-generated method stub
 		return (SpecialAssigment) super.getInstance();
 	}
 

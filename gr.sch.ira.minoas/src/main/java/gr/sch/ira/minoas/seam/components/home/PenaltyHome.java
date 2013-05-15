@@ -38,7 +38,6 @@ public class PenaltyHome extends MinoasEntityHome<Penalty> {
 	@Override
 	@Factory(value = "penalty", scope = ScopeType.PAGE)
 	public Penalty getInstance() {
-		// TODO Auto-generated method stub
 		return (Penalty) super.getInstance();
 	}
 

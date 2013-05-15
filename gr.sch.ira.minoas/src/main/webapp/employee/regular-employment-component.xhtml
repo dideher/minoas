@@ -21,7 +21,7 @@
 
 			<s:decorate template="/layout/doubleLineEdit.xhtml">
 				<ui:define name="label">
-					<h:outputText value="ΑΜ : " />
+					<h:outputText value="ΑΜ: " />
 				</ui:define>
 				<h:inputText value="#{regularEmployeeInfo.registryID}"
 					styleClass="fieldValueText" size="7" maxlength="7" required="false" />
@@ -29,26 +29,28 @@
 
 			<s:decorate template="/layout/doubleLineEdit.xhtml">
 				<ui:define name="label">
-					<h:outputText value="Αριθμός ΦΕΚ Διορισμού : " />
+					<h:outputText value="Αριθμός ΦΕΚ Διορισμού: " />
 				</ui:define>
-				<h:inputText value="#{regularEmployeeInfo.appointmentGOF}"
+				<h:inputText value="#{regularEmployeeInfo.appointmentGOG}"
 					styleClass="fieldValueText" size="8" maxlength="8" required="false" />
 			</s:decorate>
 
 			<s:decorate template="/layout/doubleLineEdit.xhtml">
 				<ui:define name="label">
-					<h:outputText value="Ημ/νια ΦΕΚ Διορισμού : " />
+					<h:outputText value="Ημ/νια ΦΕΚ Διορισμού: " />
 				</ui:define>
 				<rich:calendar datePattern="dd-MM-yyyy" style="width:50px"
 					inputSize="10" enableManualInput="true" styleClass="fieldValueText"
-					required="false" value="#{regularEmployeeInfo.appointmentGOFDate}">
+					required="false" value="#{regularEmployeeInfo.appointmentGOGDate}">
 				</rich:calendar>
 			</s:decorate>
+			
+			<h:outputText value="" />
 
 			<s:decorate id="sourceTargetDecoration"
 				template="/layout/doubleLineEdit.xhtml">
 				<ui:define name="label">
-					<h:outputText value="Μονάδα Οργανικής" />
+					<h:outputText value="Μονάδα Οργανικής: " />
 				</ui:define>
 
 				<h:inputText id="sourceTarget" styleClass="fieldValueText"
@@ -73,14 +75,34 @@
 
 			<s:decorate template="/layout/doubleLineEdit.xhtml">
 				<ui:define name="label">
-					<h:outputText value="Προσωρινή Οργανική ;" />
+					<h:outputText value="Πράξη Ανάληψης Υπηρεσίας: " />
+				</ui:define>
+				<h:inputText value="#{employment.entryIntoServiceAct}"
+					styleClass="fieldValueText" size="8" maxlength="8" required="false" />
+			</s:decorate>
+
+			<s:decorate template="/layout/doubleLineEdit.xhtml">
+				<ui:define name="label">
+					<h:outputText value="Ημ/νια Πράξης Ανάληψης : " />
+				</ui:define>
+				<rich:calendar datePattern="dd-MM-yyyy" style="width:50px"
+					inputSize="10" enableManualInput="true" styleClass="fieldValueText"
+					required="false" value="#{employment.entryIntoServiceDate}">
+				</rich:calendar>
+			</s:decorate>
+
+
+
+			<s:decorate template="/layout/doubleLineEdit.xhtml">
+				<ui:define name="label">
+					<h:outputText value="Προσωρινή Οργανική: " />
 				</ui:define>
 				<h:selectBooleanCheckbox value="#{employment.temporar}" />
 			</s:decorate>
 
 			<s:decorate template="/layout/doubleLineEdit.xhtml">
 				<ui:define name="label">
-					<h:outputText value="Ημ/νια Ανάληψης Υπηρεσίας : " />
+					<h:outputText value="Παρουσία στο Σχολείο από: " />
 				</ui:define>
 				<rich:calendar datePattern="dd-MM-yyyy" style="width:50px"
 					enableManualInput="true" styleClass="fieldValueText" inputSize="10"
@@ -90,7 +112,7 @@
 
 			<s:decorate template="/layout/doubleLineEdit.xhtml">
 				<ui:define name="label">
-					<h:outputText value="Υποχρεωτικό Ωράριο : " />
+					<h:outputText value="Υποχρεωτικό Ωράριο: " />
 				</ui:define>
 				<h:inputText styleClass="fieldValueText"
 					value="#{employment.mandatoryWorkingHours}" size="3" maxlength="3"
@@ -99,7 +121,7 @@
 
 			<s:decorate template="/layout/doubleLineEdit.xhtml">
 				<ui:define name="label">
-					<h:outputText value="Πραγματικό Ωράριο : " />
+					<h:outputText value="Πραγματικό Ωράριο: " />
 				</ui:define>
 				<h:inputText value="#{employment.finalWorkingHours}" size="3"
 					styleClass="fieldValueText" maxlength="3" required="true" />
