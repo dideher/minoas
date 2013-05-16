@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<page login-required="true" xmlns="http://jboss.com/products/seam/pages"
- xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.1.xsd">
+<page login-required="true" xmlns="http://jboss.org/schema/seam/pages"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.org/schema/seam/pages http://jboss.org/schema/seam/pages-2.3.xsd">
  <description>Εισαγωγή Θητείας</description>
  <begin-conversation flush-mode="manual" join="true"/>
  <param name="add_new_service_allocation_from"/>
