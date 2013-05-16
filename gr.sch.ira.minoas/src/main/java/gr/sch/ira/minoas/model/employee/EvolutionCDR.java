@@ -13,16 +13,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 /**
  * @author <a href="mailto:gand@sch.gr">Yorgos Adreadakis</a>
  *
  */
 @Entity
 @Table(name = "EVOLUTION_CDR")
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+
 public class EvolutionCDR extends BaseIDModel {
 	/**
 	 * Comment for <code>serialVersionUID</code>

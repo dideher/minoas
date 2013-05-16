@@ -14,15 +14,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 /**
  * @author <a href="mailto:gand@sch.gr">Yorgos Andreadakis</a>
  */
 @Entity
 @Table(name = "PENALTY")
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+
 public class Penalty extends BaseIDDeleteAwareModel {
 
 	/**

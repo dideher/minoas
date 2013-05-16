@@ -20,9 +20,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 
 /**
  * This class represents a special assigment. Every assigment is binded to a concrete
@@ -33,7 +30,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  */
 @Entity
 @Table(name = "SPECIAL_ASSIGMENT")
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+
 public class SpecialAssigment extends BaseIDDeleteAwareModel {
 
 	/**

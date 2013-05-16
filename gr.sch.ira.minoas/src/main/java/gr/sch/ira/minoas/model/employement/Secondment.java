@@ -30,8 +30,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.apache.commons.lang.time.DateUtils;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 
 /**
@@ -40,7 +38,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  */
 @Entity
 @Table(name = "SECONDMENT")
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+
 public class Secondment extends BaseIDDeleteAwareModel implements Cloneable {
 
 	/**

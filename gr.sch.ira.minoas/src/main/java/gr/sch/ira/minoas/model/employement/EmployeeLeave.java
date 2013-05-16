@@ -22,8 +22,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.apache.commons.lang.time.DateUtils;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
@@ -31,7 +29,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  */
 @Entity
 @Table(name = "EMPLOYEE_LEAVES")
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+
 public class EmployeeLeave extends BaseIDDeleteAwareModel {
 
 	/**

@@ -9,12 +9,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 @Entity
 @Table(name = "EMPLOYEE_EXCLUSION")
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+
 public class EmployeeExclusion extends BaseIDModel {
     
     /**

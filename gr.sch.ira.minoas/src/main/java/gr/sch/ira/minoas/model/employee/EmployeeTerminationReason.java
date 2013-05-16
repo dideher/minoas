@@ -6,9 +6,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 /*
  * 
  *
@@ -36,7 +33,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
 @Table(name = "EMPLOYEE_TERMINATION_REASON_TYPE")
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+
 public class EmployeeTerminationReason extends BaseIDModel {
     
 

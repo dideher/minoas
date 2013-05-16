@@ -13,9 +13,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 
 
 /**
@@ -25,7 +22,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "DISPOSAL_UNIT", uniqueConstraints = { @UniqueConstraint(columnNames = { "UNIT_ID",
 		"DISPOSAL_TARGET_TYPE" }) })
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+
 public class DisposalUnit extends BaseIDModel {
 
 	/**

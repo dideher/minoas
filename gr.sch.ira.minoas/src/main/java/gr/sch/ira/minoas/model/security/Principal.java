@@ -22,8 +22,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.jboss.seam.annotations.Name;
 
 /**
@@ -34,7 +32,7 @@ import org.jboss.seam.annotations.Name;
 @Table(name = "PRINCIPAL")
 @Name("principal")
 @Entity
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+
 public class Principal extends BaseIDModel {
 
 	/**

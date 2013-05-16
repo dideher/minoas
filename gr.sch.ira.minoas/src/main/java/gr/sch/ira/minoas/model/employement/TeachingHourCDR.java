@@ -17,12 +17,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 @Entity
 @Table(name = "TEACHING_HOUR_CDR")
-@Cache(usage=CacheConcurrencyStrategy.NONE)
 public class TeachingHourCDR extends BaseIDModel {
 
     /**

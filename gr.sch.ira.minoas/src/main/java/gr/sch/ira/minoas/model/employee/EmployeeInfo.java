@@ -20,16 +20,13 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 /**
  * @author <a href="mailto:gand@sch.gr">Yorgos Andreadakis</a>
  * @version $Id$
  */
 @Entity
 @Table(name = "EMPLOYEE_INFO")
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+
 public class EmployeeInfo extends BaseIDModel {
 	
 	/**

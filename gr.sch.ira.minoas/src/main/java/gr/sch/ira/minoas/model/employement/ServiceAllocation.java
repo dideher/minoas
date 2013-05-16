@@ -22,14 +22,11 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 
 
 @Entity
 @Table(name = "SERVICE_ALLOCATION")
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+
 public class ServiceAllocation extends BaseIDDeleteAwareModel {
 	/**
 	 * 

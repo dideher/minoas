@@ -10,12 +10,9 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 @Entity
 @Table(name = "EMPLOYEE_LEAVE_TYPE")
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+
 public class EmployeeLeaveType extends BaseIDModel {
 
     /**

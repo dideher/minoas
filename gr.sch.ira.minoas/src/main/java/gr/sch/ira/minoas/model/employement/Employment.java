@@ -24,10 +24,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
-
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 
 /**
@@ -39,7 +35,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  */
 @Entity
 @Table(name = "EMPLOYMENT")
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+
 public class Employment extends BaseIDDeleteAwareModel {
 
 	/**

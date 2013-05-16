@@ -1,9 +1,8 @@
 package gr.sch.ira.minoas.model.employement;
 
-import java.util.Date;
-
 import gr.sch.ira.minoas.model.BaseIDModel;
-import gr.sch.ira.minoas.model.employee.MaritalStatusType;
+
+import java.util.Date;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -14,9 +13,6 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 
 
 /**
@@ -26,7 +22,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
 @Table(name = "NONREGULAR_EMPLOYMENT_INFO")
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+
 public class NonRegularEmploymentInfo extends BaseIDModel {
 
 	/**
