@@ -2,7 +2,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:s="http://jboss.org/schema/seam/taglib"
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:a4j="http://richfaces.org/a4j">
 
@@ -91,10 +91,10 @@
 												<h:column>
 													<h:outputText value="#{_office.title}" />
 												</h:column>
-												<a4j:support ajaxSingle="true" event="onselect">
+												<a4j:ajax ajaxSingle="true" event="onselect">
 													<f:setPropertyActionListener value="#{_office}"
 														target="#{schoolHome.instance.office}" />
-												</a4j:support>
+												</a4j:ajax>
 											</rich:suggestionbox>
 										</a4j:region>
 									</h:inputText>
@@ -119,10 +119,10 @@
 												<h:column>
 													<h:outputText value="#{_schoolGroup.title}" />
 												</h:column>
-												<a4j:support ajaxSingle="true" event="onselect">
+												<a4j:ajax ajaxSingle="true" event="onselect">
 													<f:setPropertyActionListener value="#{_schoolGroup}"
 														target="#{schoolHome.instance.group}" />
-												</a4j:support>
+												</a4j:ajax>
 											</rich:suggestionbox>
 										</a4j:region>
 									</h:inputText>

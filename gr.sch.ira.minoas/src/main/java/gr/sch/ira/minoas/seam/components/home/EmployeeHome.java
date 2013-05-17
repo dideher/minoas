@@ -253,6 +253,7 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 	}
 
 	public void prepareForNewEmployee() {
+		if(true)return;
 		this.clearInstance();
 		hourlyBasedEmployments.clear();
 		regularEmployeeInfoHome.clearInstance();

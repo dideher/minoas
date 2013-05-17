@@ -2,7 +2,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:s="http://jboss.org/schema/seam/taglib"
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:a4j="http://richfaces.org/a4j">
 
@@ -19,7 +19,7 @@
 				<s:selectItems hideNoSelectionLabel="true" var="_leaveType"
 					value="#{leaveTypes}" label="#{messages[_leaveType.key]}" />
 				<s:convertEnum />
-				<a4j:support event="onblur" ajaxSingle="true" bypassUpdates="true" />
+				<a4j:ajax event="onblur" ajaxSingle="true" bypassUpdates="true" />
 			</h:selectOneMenu>
 		</s:decorate>
 
@@ -33,7 +33,7 @@
 				value="#{leave.established}" required="true" inputSize="10"
 				mode="ajax" locale="el_GR" inputClass="fieldValueText"
 				datePattern="dd/MM/yyyy">
-				<a4j:support event="onblur" reRender="establishedDateDecoration"
+				<a4j:ajax event="onblur" reRender="establishedDateDecoration"
 					bypassUpdates="true" ajaxSingle="true" />
 			</rich:calendar>
 		</s:decorate>
@@ -46,7 +46,7 @@
 				mode="ajax" locale="el_GR" inputSize="10" enableManualInput="true"
 				inputClass="fieldValueText" datePattern="dd/MM/yyyy">
 
-				<a4j:support event="onblur" reRender="dueToDateDecoration"
+				<a4j:ajax event="onblur" reRender="dueToDateDecoration"
 					bypassUpdates="true" ajaxSingle="true" />
 			</rich:calendar>
 		</s:decorate>

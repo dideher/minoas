@@ -2,7 +2,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:s="http://jboss.org/schema/seam/taglib"
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:a4j="http://richfaces.org/a4j"
 	xmlns:c="http://java.sun.com/jstl/core">
@@ -44,10 +44,10 @@
 											<h:column>
 												<h:outputText value="#{a_spec.title}" />
 											</h:column>
-											<a4j:support ajaxSingle="true" event="onselect">
+											<a4j:ajax ajaxSingle="true" event="onselect">
 												<f:setPropertyActionListener value="#{a_spec}"
 													target="#{outstandingPermanentTransferCriteria.specializationGroup}" />
-											</a4j:support>
+											</a4j:ajax>
 										</rich:suggestionbox>
 									</h:inputText>
 								</s:decorate>
@@ -86,10 +86,10 @@
 											<h:column>
 												<h:outputText value="#{leaveSourceUnit.title}" />
 											</h:column>
-											<a4j:support ajaxSingle="true" event="onselect">
+											<a4j:ajax ajaxSingle="true" event="onselect">
 												<f:setPropertyActionListener value="#{leaveSourceUnit}"
 													target="#{outstandingPermanentTransferCriteria.sourceUnit}" />
-											</a4j:support>
+											</a4j:ajax>
 										</rich:suggestionbox>
 									</h:inputText>
 								</s:decorate>
@@ -112,10 +112,10 @@
 											<h:column>
 												<h:outputText value="#{leaveSourceUnit.title}" />
 											</h:column>
-											<a4j:support ajaxSingle="true" event="onselect">
+											<a4j:ajax ajaxSingle="true" event="onselect">
 												<f:setPropertyActionListener value="#{leaveSourceUnit}"
 													target="#{outstandingPermanentTransferCriteria.targetUnit}" />
-											</a4j:support>
+											</a4j:ajax>
 										</rich:suggestionbox>
 
 									</h:inputText>
@@ -126,7 +126,7 @@
 
 						</rich:panel>
 
-						<rich:toolBar itemSeparator="line">
+						<rich:toolbar itemSeparator="line">
 							<a4j:commandButton id="searchButton" value="Αναζήτηση"
 								reRender="outstandingPermanentTransfersTable"
 								action="#{outstandingPermanentTransfersReport.generateReport}">
@@ -141,7 +141,7 @@
 								value="Καταχώρηση Νέας Μετάθεσης" />
 							<s:button id="backButton" action="backButton"
 								value="Τέλος Εργασίας" />
-						</rich:toolBar>
+						</rich:toolbar>
 
 						<rich:panel>
 							<f:facet name="header">
@@ -200,7 +200,7 @@
 								</rich:column>
 								<rich:column style="text-align:center">
 									<f:facet name="header">Ενέργεια.</f:facet>
-									<rich:toolBar itemSeparator="line">
+									<rich:toolbar itemSeparator="line">
 										<a4j:commandLink id="cancellink" ajaxSingle="true"
 											rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_PERMANENT_TRANSFERS'))}"
 											reRender="outstandingPermanentTransfersTable"
@@ -226,7 +226,7 @@
 												target="#{permanentTransferHome.id}" />
 										</a4j:commandLink>
 										 -->
-									</rich:toolBar>
+									</rich:toolbar>
 								</rich:column>
 								<f:facet name="footer">
 									<rich:datascroller for="outstandingPermanentTransfersTable"
@@ -278,7 +278,7 @@
 												value="#{permanentTransferTypes}"
 												label="#{messages[_permanentTransferType.key]}">
 											</s:selectItems>
-											<a4j:support event="onchange" ajaxSingle="true"
+											<a4j:ajax event="onchange" ajaxSingle="true"
 												reRender="existingEmployeeSection" />
 										</h:selectOneMenu>
 
@@ -332,10 +332,10 @@
 														<h:column>
 															<h:outputText value="#{a_spec.title}" />
 														</h:column>
-														<a4j:support ajaxSingle="true" event="onselect">
+														<a4j:ajax ajaxSingle="true" event="onselect">
 															<f:setPropertyActionListener value="#{a_spec}"
 																target="#{permanentTransferHome.instance.employeeSpecialization}" />
-														</a4j:support>
+														</a4j:ajax>
 													</rich:suggestionbox>
 												</h:inputText>
 											</s:decorate>
@@ -357,10 +357,10 @@
 														<h:column>
 															<h:outputText value="#{leaveSourceUnit.title}" />
 														</h:column>
-														<a4j:support ajaxSingle="true" event="onselect">
+														<a4j:ajax ajaxSingle="true" event="onselect">
 															<f:setPropertyActionListener value="#{leaveSourceUnit}"
 																target="#{permanentTransferHome.instance.sourceUnit}" />
-														</a4j:support>
+														</a4j:ajax>
 													</rich:suggestionbox>
 												</h:inputText>
 											</s:decorate>
@@ -383,10 +383,10 @@
 														<h:column>
 															<h:outputText value="#{leaveSourceUnit.title}" />
 														</h:column>
-														<a4j:support ajaxSingle="true" event="onselect">
+														<a4j:ajax ajaxSingle="true" event="onselect">
 															<f:setPropertyActionListener value="#{leaveSourceUnit}"
 																target="#{permanentTransferHome.instance.targetUnit}" />
-														</a4j:support>
+														</a4j:ajax>
 													</rich:suggestionbox>
 													
 												</h:inputText>
@@ -476,14 +476,14 @@
 															<h:outputText
 																value="#{a_employee.currentEmployment.school.title}" />
 														</rich:column>
-														<a4j:support ajaxSingle="true" event="onselect"
+														<a4j:ajax ajaxSingle="true" event="onselect"
 															bypassUpdates="true"
 															reRender="improvementFrom,employeeSectionID,employeeSection"
 															action="#{permanentTransferHome.updateValueDueToEmployee()}">
 															<f:setPropertyActionListener value="#{a_employee}"
 																target="#{permanentTransferHome.instance.employee}" />
 
-														</a4j:support>
+														</a4j:ajax>
 													</rich:suggestionbox>
 												</h:inputText>
 											</s:decorate>
@@ -517,10 +517,10 @@
 														<h:column>
 															<h:outputText value="#{leaveSourceUnit.title}" />
 														</h:column>
-														<a4j:support ajaxSingle="true" event="onselect">
+														<a4j:ajax ajaxSingle="true" event="onselect">
 															<f:setPropertyActionListener value="#{leaveSourceUnit}"
 																target="#{permanentTransferHome.instance.targetUnit}" />
-														</a4j:support>
+														</a4j:ajax>
 													</rich:suggestionbox>
 												</h:inputText>
 											</s:decorate>
@@ -635,10 +635,10 @@
 												<h:column>
 													<h:outputText value="#{leaveSourceUnit.title}" />
 												</h:column>
-												<a4j:support ajaxSingle="true" event="onselect">
+												<a4j:ajax ajaxSingle="true" event="onselect">
 													<f:setPropertyActionListener value="#{leaveSourceUnit}"
 														target="#{outstandingImprovementHome.instance.targetSchool}" />
-												</a4j:support>
+												</a4j:ajax>
 											</rich:suggestionbox>
 										</h:inputText>
 									</s:decorate>

@@ -2,7 +2,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:s="http://jboss.org/schema/seam/taglib"
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:a4j="http://richfaces.org/a4j">
 
@@ -39,10 +39,10 @@
 													value="#{employeeUtil.prettyFormatForRegularEmployee(a_employee)}" />
 											</h:column>
 
-											<a4j:support ajaxSingle="true" event="onselect">
+											<a4j:ajax ajaxSingle="true" event="onselect">
 												<f:setPropertyActionListener value="#{a_employee}"
 													target="#{employeeMergeRequest.sourceEmployee}" />
-											</a4j:support>
+											</a4j:ajax>
 										
 
 										</rich:suggestionbox>
@@ -67,17 +67,17 @@
 													value="#{employeeUtil.prettyFormatForRegularEmployee(a_employee)}" />
 											</h:column>
 
-											<a4j:support ajaxSingle="true" event="onselect">
+											<a4j:ajax ajaxSingle="true" event="onselect">
 												<f:setPropertyActionListener value="#{a_employee}"
 													target="#{employeeMergeRequest.targetEmployee}" />
-											</a4j:support>
+											</a4j:ajax>
 
 										</rich:suggestionbox>
 									</h:inputText>
 								</s:decorate>
 							</h:panelGrid>
 
-							<rich:toolBar itemSeparator="line">
+							<rich:toolbar itemSeparator="line">
 								<s:button action="backButton" value="Επιστροφή" />
 								<s:button action="endButton" value="Τέλος Ενέργειας" />
 								<a4j:commandButton
@@ -86,7 +86,7 @@
 									onclick="javascript:if(!confirm('Είστε σίγουρος πως θέλετε προχωρήσετε στην συνχώνευση ;')) { return false; }"
 									value="Συνχώνευση Εκπαιδευτικών">
 								</a4j:commandButton>
-							</rich:toolBar>
+							</rich:toolbar>
 
 
 

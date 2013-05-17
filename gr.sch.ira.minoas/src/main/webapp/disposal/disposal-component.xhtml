@@ -3,7 +3,7 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:a4j="http://richfaces.org/a4j"
-	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:s="http://jboss.org/schema/seam/taglib"
 	xmlns:rich="http://richfaces.org/rich">
 
 <ui:component>
@@ -56,7 +56,7 @@
 					value="#{disposalTargetTypes}"
 					label="#{messages[_disposalTargetType.key]}" />
 				<s:convertEnum />
-				<a4j:support event="onblur" reRender="secondmentTargetDecoration"
+				<a4j:ajax event="onblur" reRender="secondmentTargetDecoration"
 					ajaxSingle="true" />
 			</h:selectOneMenu>
 		</s:decorate>
@@ -81,10 +81,10 @@
 						<h:column>
 							<h:outputText value="#{_disposalUnit.title}" />
 						</h:column>
-						<a4j:support ajaxSingle="true" event="onselect">
+						<a4j:ajax ajaxSingle="true" event="onselect">
 							<f:setPropertyActionListener value="#{_disposalUnit}"
 								target="#{disposalHome.instance.disposalUnit}" />
-						</a4j:support>
+						</a4j:ajax>
 					</rich:suggestionbox>
 				</h:inputText>
 			</s:decorate>
@@ -138,7 +138,7 @@
 				value="#{disposalHome.instance.pysdeOrder}" tabindex="6"
 				styleClass="fieldValueText" required="false" size="20"
 				maxlength="25">
-				<a4j:support event="onblur" ajaxSingle="true"
+				<a4j:ajax event="onblur" ajaxSingle="true"
 					reRender="pysdeOrderDecoration" bypassUpdates="true" />
 				<f:validateLength minimum="5" maximum="25" />
 			</h:inputText>
@@ -154,7 +154,7 @@
 				value="#{disposalHome.instance.headMasterOrder}"
 				styleClass="fieldValueText" required="false" size="20"
 				maxlength="25">
-				<a4j:support event="onblur" reRender="headMasterOrderDecoration"
+				<a4j:ajax event="onblur" reRender="headMasterOrderDecoration"
 					bypassUpdates="true" ajaxSingle="true" />
 				<f:validateLength minimum="5" maximum="25" />
 			</h:inputText>
@@ -174,7 +174,7 @@
 				value="#{disposalHome.instance.established}" required="true"
 				inputSize="10" mode="ajax" locale="el_GR"
 				inputClass="fieldValueText" datePattern="dd-MM-yyyy">
-				<a4j:support event="onblur" reRender="establishedDateDecoration"
+				<a4j:ajax event="onblur" reRender="establishedDateDecoration"
 					bypassUpdates="true" ajaxSingle="true" />
 			</rich:calendar>
 		</s:decorate>
@@ -189,7 +189,7 @@
 				enableManualInput="true" inputClass="fieldValueText"
 				datePattern="dd-MM-yyyy">
 
-				<a4j:support event="onblur" reRender="dueToDateDecoration"
+				<a4j:ajax event="onblur" reRender="dueToDateDecoration"
 					bypassUpdates="true" ajaxSingle="true" />
 			</rich:calendar>
 		</s:decorate>

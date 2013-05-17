@@ -2,7 +2,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:s="http://jboss.org/schema/seam/taglib"
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:a4j="http://richfaces.org/a4j">
 
@@ -221,7 +221,7 @@
 										<f:facet name="header">
 											<h:outputText value="Ενέργεια" />
 										</f:facet>
-										<rich:toolBar itemSeparator="line" styleClass="actionBox">
+										<rich:toolbar itemSeparator="line" styleClass="actionBox">
 
 											<a4j:commandButton reRender="updateModalPanelContent"
 												styleClass="btn btn-primary btn-mini" ajaxSingle="true"
@@ -240,7 +240,7 @@
 												<f:setPropertyActionListener value="#{_secondment.id}"
 													target="#{disposalHome.id}" />
 											</a4j:commandButton>
-										</rich:toolBar>
+										</rich:toolbar>
 									</rich:column>
 								</rich:dataTable>
 							</h:panelGrid>
@@ -290,7 +290,7 @@
 				<h:panelGrid columns="1">
 					<a4j:outputPanel id="deleteModalPanelContent" layout="inline">
 						<ui:include src="/components/messages-component.xhtml" />
-						<a4j:form>
+						<h:form>
 
 
 							<s:div styleClass="alert alert-warning">
@@ -326,7 +326,7 @@
 										onclick="#{rich:component('deleteModalPanel')}.hide();return false;" />
 								</h:panelGrid>
 							</s:div>
-						</a4j:form>
+						</h:form>
 					</a4j:outputPanel>
 				</h:panelGrid>
 
@@ -409,7 +409,7 @@
 			</f:facet>
 
 
-			<a4j:form id="createSecondmentForm">
+			<h:form id="createSecondmentForm">
 				<a4j:region>
 
 					<a4j:outputPanel id="createModalPanelContent">
@@ -451,7 +451,7 @@
 						</h:panelGrid>
 					</s:div>
 				</a4j:region>
-			</a4j:form>
+			</h:form>
 
 		</rich:modalPanel>
 

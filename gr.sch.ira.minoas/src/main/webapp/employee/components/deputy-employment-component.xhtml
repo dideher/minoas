@@ -3,7 +3,7 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:a4j="http://richfaces.org/a4j"
-	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:s="http://jboss.org/schema/seam/taglib"
 	xmlns:rich="http://richfaces.org/rich">
 
 
@@ -32,11 +32,11 @@
 							<h:column>
 								<h:outputText value="#{_school.title}" />
 							</h:column>
-							<a4j:support ajaxSingle="true" event="onselect"
+							<a4j:ajax ajaxSingle="true" event="onselect"
 								reRender="deputySchoolUnit">
 								<f:setPropertyActionListener value="#{_school}"
 									target="#{_deputyEmployment.school}" />
-							</a4j:support>
+							</a4j:ajax>
 						</rich:suggestionbox>
 					</h:inputText>
 				</s:decorate>
@@ -52,7 +52,7 @@
 					</ui:define>
 					<h:inputText value="#{_deputyEmployment.mandatoryWorkingHours}"
 						size="3" styleClass="fieldValueText" maxlength="2" required="true" immediate="true">
-						<a4j:support event="onblur" ajaxSingle="true"
+						<a4j:ajax event="onblur" ajaxSingle="true"
 							reRender="deputyWorkingHours" />
 					</h:inputText>
 				</s:decorate>
@@ -63,7 +63,7 @@
 					<rich:calendar datePattern="dd-MM-yyyy" style="width:50px" immediate="true"
 						enableManualInput="true" styleClass="fieldValueText" inputSize="10"
 						required="true" value="${_deputyEmployment.established}">
-						<a4j:support event="onchanged" ajaxSingle="true" reRender="deputyFrom" />
+						<a4j:ajax event="onchanged" ajaxSingle="true" reRender="deputyFrom" />
 					</rich:calendar>
 				</s:decorate>
 				

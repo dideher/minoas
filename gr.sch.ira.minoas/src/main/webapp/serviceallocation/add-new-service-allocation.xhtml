@@ -2,7 +2,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:s="http://jboss.org/schema/seam/taglib"
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:a4j="http://richfaces.org/a4j">
 
@@ -32,13 +32,13 @@
 						</rich:panel>
 					</a4j:outputPanel>
 					<h:panelGroup>
-						<rich:toolBar itemSeparator="line">
+						<rich:toolbar itemSeparator="line">
 							<rich:separator lineType="dashed" height="2" />
 							<a4j:commandLink ajaxSingle="true" id="select-employee"
 								oncomplete="#{rich:component('employee_search_panel')}.show()"
 								value="Επιλογή Εκπαιδευτικού">
 							</a4j:commandLink>
-						</rich:toolBar>
+						</rich:toolbar>
 					</h:panelGroup>
 
 					<a4j:region>
@@ -75,7 +75,7 @@
 												value="#{serviceAllocationTypes}"
 												label="#{messages[_serviceAllocationType.key]}" />
 											<s:convertEnum />
-											<a4j:support event="onblur"
+											<a4j:ajax event="onblur"
 												action="#{serviceAllocationHome.suggestHours()}"
 												reRender="workingHoursOnServicingPosition, workingHoursOnRegularPosition"
 												ajaxSingle="true" />
@@ -99,10 +99,10 @@
 												<h:column>
 													<h:outputText value="#{serviceUnit.title}" />
 												</h:column>
-												<a4j:support ajaxSingle="true" event="onselect">
+												<a4j:ajax ajaxSingle="true" event="onselect">
 													<f:setPropertyActionListener value="#{serviceUnit}"
 														target="#{serviceAllocation.serviceUnit}" />
-												</a4j:support>
+												</a4j:ajax>
 											</rich:suggestionbox>
 										</h:inputText>
 									</s:decorate>
@@ -138,7 +138,7 @@
 											value="#{serviceAllocation.pysdeOrder}"
 											styleClass="fieldValueText" required="false" size="16"
 											maxlength="25">
-											<a4j:support event="onblur" ajaxSingle="true"
+											<a4j:ajax event="onblur" ajaxSingle="true"
 												reRender="pysdeOrderDecoration" bypassUpdates="true" />
 											<f:validateLength minimum="5" maximum="25" />
 										</h:inputText>
@@ -156,7 +156,7 @@
 											value="#{serviceAllocation.established}" required="true"
 											inputSize="10" mode="ajax" locale="el_GR"
 											inputClass="fieldValueText" datePattern="dd-MM-yyyy">
-											<a4j:support event="onblur"
+											<a4j:ajax event="onblur"
 												reRender="establishedDateDecoration" bypassUpdates="true"
 												ajaxSingle="true" />
 										</rich:calendar>
@@ -172,7 +172,7 @@
 											enableManualInput="true" inputClass="fieldValueText"
 											datePattern="dd-MM-yyyy">
 
-											<a4j:support event="onblur" reRender="dueToDateDecoration"
+											<a4j:ajax event="onblur" reRender="dueToDateDecoration"
 												bypassUpdates="true" ajaxSingle="true" />
 										</rich:calendar>
 									</s:decorate>

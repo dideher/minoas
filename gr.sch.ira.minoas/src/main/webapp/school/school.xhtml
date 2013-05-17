@@ -2,7 +2,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:s="http://jboss.org/schema/seam/taglib"
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:a4j="http://richfaces.org/a4j">
 
@@ -132,11 +132,11 @@
 						<f:facet name="label">
 							<h:outputText value="Νεα Τρέχουσα Κατάσταση" />
 						</f:facet>
-						<a4j:support event="ontabenter" eventsQueue="lala2"
+						<a4j:ajax event="ontabenter" eventsQueue="lala2"
 							reRender="school-employments-analysis2"
 							action="#{schoolReport.generateEmploymentsCDRReport}"
 							ajaxSingle="true">
-						</a4j:support>
+						</a4j:ajax>
 
 
 
@@ -153,7 +153,7 @@
 								<h:outputText
 									value="Παρακάτω εμφανίζεται όλο το διδακτικό προσωπικού που προσφέρει ή δεν προσφέρει διδακτικό έργο στην μονάδα. To προσωπικό που εμφανίζεται στην κατάσταση ανήκει οργανικά στην μονάδα ή έχει τοποθετηθεί στην μονάδα με οποιαδήποτε ιδιότητα." />
 								<rich:spacer height="5" />
-								<a4j:form>
+								<h:form>
 									<a4j:outputPanel id="school-employments-analysis2">
 
 										<a4j:repeat var="_group" value="#{schoolGroupedEmployeeCDRs}">
@@ -311,7 +311,7 @@
 											</rich:panel>
 										</a4j:repeat>
 									</a4j:outputPanel>
-								</a4j:form>
+								</h:form>
 							</h:panelGrid>
 						</rich:panel>
 
@@ -324,13 +324,13 @@
 						<f:facet name="label">
 							<h:outputText value="Αναλυτική Τρέχουσα Κατάσταση" />
 						</f:facet>
-						<a4j:support event="ontabenter" ajaxSingle="true"
+						<a4j:ajax event="ontabenter" ajaxSingle="true"
 							eventsQueue="lala2" reRender="detailed-school-status"
 							action="#{schoolReport.generateReport()}">
-						</a4j:support>
+						</a4j:ajax>
 
 						<a4j:outputPanel id="detailed-school-status">
-							<a4j:form>
+							<h:form>
 								<rich:panel>
 									<f:facet name="header">
 										<h:outputText value="Προσωπικό που Υπηρετεί" />
@@ -1022,7 +1022,7 @@
 
 
 								</rich:panel>
-							</a4j:form>
+							</h:form>
 
 						</a4j:outputPanel>
 
@@ -1032,11 +1032,11 @@
 						<f:facet name="label">
 							<h:outputText value="Οργανικά Ανήκωντες" />
 						</f:facet>
-						<a4j:support event="ontabenter" ajaxSingle="true"
+						<a4j:ajax event="ontabenter" ajaxSingle="true"
 							eventsQueue="lala2"
 							reRender="school-regular-employments-component"
 							action="#{schoolReport.lookupRegularEmployments()}">
-						</a4j:support>
+						</a4j:ajax>
 						
 
 							<rich:panel>
@@ -1053,7 +1053,7 @@
 
 									<a4j:outputPanel id="school-regular-employments-component">
 
-<a4j:form>
+<h:form>
 										<a4j:repeat var="_group" value="#{schoolRegularEmployments}">
 											<rich:panel rendered="#{_group.size() gt 0}">
 												<f:facet name="header">
@@ -1198,7 +1198,7 @@
 											</rich:panel>
 
 										</a4j:repeat>
-</a4j:form>
+</h:form>
 									</a4j:outputPanel>
 
 								</h:panelGrid>
@@ -1225,15 +1225,15 @@
 						<f:facet name="label">
 							<h:outputText value="Αναπληρωτές" />
 						</f:facet>
-						<a4j:support event="ontabenter" eventsQueue="lala2"
+						<a4j:ajax event="ontabenter" eventsQueue="lala2"
 							reRender="school-deputy-employments-component" ajaxSingle="true"
 							action="#{schoolReport.lookupDeputyEmployments()}">
-						</a4j:support>
+						</a4j:ajax>
 
 
 						<a4j:outputPanel id="school-deputy-employments-component">
 
-							<a4j:form>
+							<h:form>
 								<rich:panel>
 									<f:facet name="header">
 										<h:outputLabel value="Αναπληρωτές Εκπαιδευτικοί" />
@@ -1313,7 +1313,7 @@
 										</rich:dataTable>
 									</h:panelGrid>
 								</rich:panel>
-							</a4j:form>
+							</h:form>
 						</a4j:outputPanel>
 
 
@@ -1326,12 +1326,12 @@
 						<f:facet name="label">
 							<h:outputText value="Ωρομίσθιοι" />
 						</f:facet>
-						<a4j:support event="ontabenter" eventsQueue="lala2"
+						<a4j:ajax event="ontabenter" eventsQueue="lala2"
 							reRender="school-hourlybased-employments"
 							action="#{schoolReport.lookupHourlyBasedEmployments()}"
 							ajaxSingle="true">
 
-						</a4j:support>
+						</a4j:ajax>
 
 
 						
@@ -1347,7 +1347,7 @@
 										value="Εμφανίζονται οι Ωρομίσθιοι Εκπαιδευτικοί της σχολικής μονάδας, άσχετα αν προσφέρουν στην μονάδα διδακτικές ώρες." />
 									<rich:spacer height="5" />
 									<a4j:outputPanel id="school-hourlybased-employments">
-<a4j:form>
+<h:form>
 										<rich:dataTable id="schoolHourlyEmploymentsTable"
 											var="_schoolHourlyEmployment"
 											value="#{schoolHourlyBasedEmployments}" sortMode="multi"
@@ -1420,7 +1420,7 @@
 													value="#{_schoolHourlyEmployment.employeeSpecialization}" />
 											</rich:column>
 										</rich:dataTable>
-</a4j:form>
+</h:form>
 									</a4j:outputPanel>
 								</h:panelGrid>
 							</rich:panel>
@@ -1433,7 +1433,7 @@
 							<h:outputText value="Τμήματα" />
 						</f:facet>
 
-						<a4j:support event="ontabenter" eventsQueue="lala2"
+						<a4j:ajax event="ontabenter" eventsQueue="lala2"
 							ajaxSingle="true"
 							action="#{schoolReport.lookupHourlyBasedEmployments()}" />
 

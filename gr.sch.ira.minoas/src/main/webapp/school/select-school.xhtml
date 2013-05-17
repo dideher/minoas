@@ -2,7 +2,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:s="http://jboss.org/schema/seam/taglib"
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:a4j="http://richfaces.org/a4j">
 
@@ -29,7 +29,7 @@
 						<h:inputText value="#{schoolSearch.searchString}" size="12"
 							immediate="true" styleClass="input-medium search-query"
 							required="true">
-							<a4j:support event="onchange" eventsQueue="schoolSearch"
+							<a4j:ajax event="onchange" eventsQueue="schoolSearch"
 								reRender="schoolSearchResultOutputPanel"
 								action="#{schoolSearch.find()}" ignoreDupResponses="true" />
 						</h:inputText>
@@ -45,7 +45,7 @@
 							<f:selectItem itemLabel="Όλες οι Περιοχές" itemValue="" />
 							<f:selectItem itemLabel="Α ΗΡΑΚΛΕΙΟΥ" itemValue="Α" />
 							<f:selectItem itemLabel="Β ΗΡΑΚΛΕΙΟΥ" itemValue="Β" />
-							<a4j:support event="onchange" eventsQueue="schoolSearch"
+							<a4j:ajax event="onchange" eventsQueue="schoolSearch"
 								reRender="schoolSearchResultOutputPanel"
 								action="#{schoolSearch.find()}" ignoreDupResponses="true" />
 						</h:selectOneMenu>

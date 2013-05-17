@@ -3,7 +3,7 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:a4j="http://richfaces.org/a4j"
-	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:s="http://jboss.org/schema/seam/taglib"
 	xmlns:rich="http://richfaces.org/rich">
 
 
@@ -25,11 +25,11 @@
 						<h:column>
 							<h:outputText value="#{_school.title}" />
 						</h:column>
-						<a4j:support ajaxSingle="true" event="onselect"
+						<a4j:ajax ajaxSingle="true" event="onselect"
 							reRender="regularSchoolUnit">
 							<f:setPropertyActionListener value="#{_school}"
 								target="#{_regularEmployment.school}" />
-						</a4j:support>
+						</a4j:ajax>
 					</rich:suggestionbox>
 				</h:inputText>
 			</s:decorate>
@@ -49,7 +49,7 @@
 				<rich:calendar datePattern="dd-MM-yyyy" style="width:50px" tabindex="53"
 					enableManualInput="true" styleClass="fieldValueText" inputSize="10"
 					required="true" value="${_regularEmployment.established}">
-					<a4j:support event="onchanged" ajaxSingle="true" reRender="regularFrom" />
+					<a4j:ajax event="onchanged" ajaxSingle="true" reRender="regularFrom" />
 				</rich:calendar>
 			</s:decorate>
 			

@@ -1,5 +1,5 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:s="http://jboss.org/schema/seam/taglib"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:a4j="http://richfaces.org/a4j"
@@ -66,10 +66,10 @@
 												<h:column>
 													<h:outputText value="#{a_spec.title}" />
 												</h:column>
-												<a4j:support ajaxSingle="true" event="onselect">
+												<a4j:ajax ajaxSingle="true" event="onselect">
 													<f:setPropertyActionListener value="#{a_spec}"
 														target="#{employeeCriteria.specialization}" />
-												</a4j:support>
+												</a4j:ajax>
 											</rich:suggestionbox>
 										</h:inputText>
 									</s:decorate>

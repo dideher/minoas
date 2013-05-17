@@ -2,14 +2,14 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:s="http://jboss.org/schema/seam/taglib"
 	xmlns:a4j="http://richfaces.org/a4j"
 	xmlns:rich="http://richfaces.org/rich">
-<head>
+	<h:head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<a4j:loadStyle src="/stylesheet/simple-beauty-stylesheet.css" />
+	<h:outputStylesheet name="/stylesheet/simple-beauty-stylesheet.css"></h:outputStylesheet>
 	<ui:insert name="head" />
-</head>
+</h:head>
 
 
 
@@ -21,8 +21,7 @@
 
 
 
-
-<body>
+<h:body>
 
 
 
@@ -56,9 +55,9 @@
 
 		</s:div>
 
-		<rich:toolBar itemSeparator="line">
+		<rich:toolbar itemSeparator="line">
 
-			<rich:toolBarGroup location="right" >
+			<rich:toolbarGroup location="right" >
 				<h:form id="conveform">
 					<h:outputText value="Τρέχουσες Διαδικασίες : " />
 					<h:selectOneMenu value="#{switcher.conversationIdOrOutcome}">
@@ -66,8 +65,8 @@
 					</h:selectOneMenu>
 					<h:commandButton action="#{switcher.select}" value="Αλλαγή" />
 				</h:form>
-			</rich:toolBarGroup>
-		</rich:toolBar>
+			</rich:toolbarGroup>
+		</rich:toolbar>
 
 
 
@@ -92,10 +91,7 @@
 
 </s:div>
 
-
-
-</body>
-
+</h:body>
 
 
 </html>

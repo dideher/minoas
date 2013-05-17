@@ -2,7 +2,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:s="http://jboss.org/schema/seam/taglib"
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:a4j="http://richfaces.org/a4j">
 
@@ -125,7 +125,7 @@
 											maxPages="20" renderIfSinglePage="false" id="sc1" />
 									</f:facet>
 
-									<a4j:support event="onRowClick" reRender="menuOutputPanel"
+									<a4j:ajax event="onRowClick" reRender="menuOutputPanel"
 										limitToList="true"
 										oncomplete="#{rich:component('menu')}.show(event, {})">
 										<a4j:actionparam name="leaveid" value="#{_leave.id}"
@@ -134,7 +134,7 @@
 										<a4j:actionparam name="leaveLegacyCode"
 											value="#{_leave.employeeLeaveType.legacyCode}"
 											assignTo="#{employeeLeaveHome.tempValueHolder1}" />
-									</a4j:support>
+									</a4j:ajax>
 								</rich:dataTable>
 
 								<a4j:outputPanel id="menuOutputPanel">
@@ -206,7 +206,7 @@
 												style="width:50px" enableManualInput="true"
 												styleClass="fieldValueText" required="true"
 												value="#{employeeLeavesManagement.leaveComputationReferenceDay}">
-												<a4j:support event="onchanged" ajaxSingle="true" />
+												<a4j:ajax event="onchanged" ajaxSingle="true" />
 											</rich:calendar>
 										</s:decorate>
 
@@ -388,14 +388,14 @@
 													<rich:column>
 														<h:outputText value="#{_leaveType.description}" />
 													</rich:column>
-													<a4j:support ajaxSingle="true" event="onselect"
+													<a4j:ajax ajaxSingle="true" event="onselect"
 														reRender="leaveTypeDescriptionDiv,leaveGeneratesCDRsDecoration">
 														<f:setPropertyActionListener value="#{_leaveType}"
 															target="#{employeeLeaveHome.instance.employeeLeaveType}" />
 														<f:setPropertyActionListener
 															target="#{employeeLeaveHome.instance.generatesCDRs}"
 															value="#{_leaveType.generatesCDRs}" />
-													</a4j:support>
+													</a4j:ajax>
 
 												</rich:suggestionbox>
 											</h:inputText>
@@ -428,7 +428,7 @@
 										value="#{employeeLeaveHome.instance.established}"
 										required="true" inputSize="10" mode="ajax" locale="el_GR"
 										inputClass="fieldValueText" datePattern="dd/MM/yyyy">
-										<a4j:support event="onchanged" ajaxSingle="true"
+										<a4j:ajax event="onchanged" ajaxSingle="true"
 											eventsQueue="lalal"
 											action="#{employeeLeavesManagement.silentlyComputeLeaveDuration()}"
 											reRender="leaveDurationPanel" />
@@ -445,7 +445,7 @@
 										mode="ajax" locale="el_GR" inputSize="10"
 										enableManualInput="true" inputClass="fieldValueText"
 										datePattern="dd/MM/yyyy">
-										<a4j:support event="onchanged" ajaxSingle="true"
+										<a4j:ajax event="onchanged" ajaxSingle="true"
 											eventsQueue="lalal"
 											action="#{employeeLeavesManagement.silentlyComputeLeaveDuration()}"
 											reRender="leaveDurationPanel" />
@@ -616,14 +616,14 @@
 													<rich:column>
 														<h:outputText value="#{_leaveType.description}" />
 													</rich:column>
-													<a4j:support ajaxSingle="true" event="onselect"
+													<a4j:ajax ajaxSingle="true" event="onselect"
 														reRender="leaveTypeDescriptionDiv,leaveGeneratesCDRsDecoration">
 														<f:setPropertyActionListener value="#{_leaveType}"
 															target="#{employeeLeaveHome.instance.employeeLeaveType}" />
 														<f:setPropertyActionListener
 															target="#{employeeLeaveHome.instance.generatesCDRs}"
 															value="#{_leaveType.generatesCDRs}" />
-													</a4j:support>
+													</a4j:ajax>
 
 												</rich:suggestionbox>
 											</h:inputText>
@@ -656,7 +656,7 @@
 										value="#{employeeLeaveHome.instance.established}"
 										required="true" inputSize="10" mode="ajax" locale="el_GR"
 										inputClass="fieldValueText" datePattern="dd/MM/yyyy">
-										<a4j:support event="onchanged" ajaxSingle="true"
+										<a4j:ajax event="onchanged" ajaxSingle="true"
 											eventsQueue="lalal"
 											action="#{employeeLeavesManagement.silentlyComputeLeaveDuration()}"
 											reRender="leaveDurationPanel" />
@@ -673,7 +673,7 @@
 										mode="ajax" locale="el_GR" inputSize="10"
 										enableManualInput="true" inputClass="fieldValueText"
 										datePattern="dd/MM/yyyy">
-										<a4j:support event="onchanged" ajaxSingle="true"
+										<a4j:ajax event="onchanged" ajaxSingle="true"
 											eventsQueue="lalal"
 											action="#{employeeLeavesManagement.silentlyComputeLeaveDuration()}"
 											reRender="leaveDurationPanel" />
@@ -827,7 +827,7 @@
 											style="width:50px" enableManualInput="true"
 											styleClass="fieldValueText" required="true"
 											value="#{employeeLeavesManagement.leavePrintoutRequestDate}">
-											<a4j:support event="onchanged" ajaxSingle="true" />
+											<a4j:ajax event="onchanged" ajaxSingle="true" />
 										</rich:calendar>
 									</s:decorate>
 
@@ -839,7 +839,7 @@
 											style="width:50px" enableManualInput="true"
 											styleClass="fieldValueText" required="true"
 											value="#{employeeLeavesManagement.leavePrintoutDate}">
-											<a4j:support event="onchanged" ajaxSingle="true" />
+											<a4j:ajax event="onchanged" ajaxSingle="true" />
 										</rich:calendar>
 									</s:decorate>
 
@@ -979,7 +979,7 @@
 												style="width:50px" enableManualInput="true"
 												styleClass="fieldValueText" required="true"
 												value="#{employeeLeavesManagement.printHelper.fieldDate2}">
-												<a4j:support event="onchanged" ajaxSingle="true" />
+												<a4j:ajax event="onchanged" ajaxSingle="true" />
 											</rich:calendar>
 										</s:decorate>
 
@@ -1041,7 +1041,7 @@
 							<h:outputText
 								value="Εκτύπωση άδειας του/της εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}." />
 								
-								<a4j:form id="printOutForm">
+								<h:form id="printOutForm">
 								
 							<h:panelGrid columns="1">
 								<h:panelGrid columns="3">
@@ -1053,7 +1053,7 @@
 											style="width:50px" enableManualInput="true"
 											styleClass="fieldValueText" required="true" immediate="true"
 											value="#{employeeLeavesManagement.leavePrintoutRequestDate}">
-											<a4j:support event="onchanged" ajaxSingle="true" />
+											<a4j:ajax event="onchanged" ajaxSingle="true" />
 										</rich:calendar>
 									</s:decorate>
 
@@ -1065,7 +1065,7 @@
 											style="width:50px" enableManualInput="true"
 											styleClass="fieldValueText" required="true" immediate="true"
 											value="#{employeeLeavesManagement.leavePrintoutDate}">
-											<a4j:support event="onchanged" ajaxSingle="true" />
+											<a4j:ajax event="onchanged" ajaxSingle="true" />
 										</rich:calendar>
 									</s:decorate>
 
@@ -1232,7 +1232,7 @@
 						<!-- hidden button is programatically 'clicked'  -->
 							<h:commandButton value="Εκτύπωση (hidden)" target="_blank" style="display:none;" id="printLeaveButton"
 							action="#{employeeLeavesManagement.printEmployeeLeaveAction()}" />
-						</a4j:form>
+						</h:form>
 						
 						</a4j:outputPanel>
 					

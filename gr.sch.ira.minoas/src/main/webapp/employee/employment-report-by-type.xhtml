@@ -2,7 +2,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:s="http://jboss.org/schema/seam/taglib"
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:a4j="http://richfaces.org/a4j">
 
@@ -59,7 +59,7 @@
 										value="#{specializationSearchTypes}"
 										label="#{messages[_specializationSearchType.key]}" />
 									<s:convertEnum />
-									<a4j:support event="onchange"
+									<a4j:ajax event="onchange"
 										reRender="specializationTypesOutputPanel" ajaxSingle="true" />
 								</h:selectOneMenu>
 							</s:decorate>
@@ -83,10 +83,10 @@
 												<h:column>
 													<h:outputText value="#{a_spec.title}" />
 												</h:column>
-												<a4j:support ajaxSingle="true" event="onselect">
+												<a4j:ajax ajaxSingle="true" event="onselect">
 													<f:setPropertyActionListener value="#{a_spec}"
 														target="#{employmentCriteria.specializationGroup}" />
-												</a4j:support>
+												</a4j:ajax>
 											</rich:suggestionbox>
 										</h:inputText>
 									</s:decorate>
@@ -111,10 +111,10 @@
 												<h:column>
 													<h:outputText value="#{a_spec.title}" />
 												</h:column>
-												<a4j:support ajaxSingle="true" event="onselect">
+												<a4j:ajax ajaxSingle="true" event="onselect">
 													<f:setPropertyActionListener value="#{a_spec}"
 														target="#{employmentCriteria.specialization}" />
-												</a4j:support>
+												</a4j:ajax>
 											</rich:suggestionbox>
 										</h:inputText>
 									</s:decorate>
@@ -187,7 +187,7 @@
 										<s:selectItems var="dateSearchType" value="#{dateSearchTypes}"
 											label="#{messages[dateSearchType.key]}">
 										</s:selectItems>
-										<a4j:support event="onchange" ajaxSingle="true"
+										<a4j:ajax event="onchange" ajaxSingle="true"
 											reRender="dateSearchFiltersPanel" />
 									</h:selectOneMenu>
 								</s:decorate>
@@ -206,7 +206,7 @@
 														value="#{employmentCriteria.effectiveDate}"
 														required="true" inputSize="10" mode="ajax" locale="el_GR"
 														inputClass="fieldValueText" datePattern="dd-MM-yyyy">
-														<a4j:support event="onblur"
+														<a4j:ajax event="onblur"
 															reRender="establishedDateDecoration" bypassUpdates="true"
 															ajaxSingle="true" />
 													</rich:calendar>
@@ -225,7 +225,7 @@
 															value="#{employmentCriteria.effectiveDateFrom}"
 															required="true" inputSize="10" mode="ajax" locale="el_GR"
 															inputClass="fieldValueText" datePattern="dd-MM-yyyy">
-															<a4j:support event="onblur"
+															<a4j:ajax event="onblur"
 																reRender="establishedDateDecoration"
 																bypassUpdates="true" ajaxSingle="true" />
 														</rich:calendar>
@@ -239,7 +239,7 @@
 															value="#{employmentCriteria.effectiveDateUntil}"
 															required="true" inputSize="10" mode="ajax" locale="el_GR"
 															inputClass="fieldValueText" datePattern="dd-MM-yyyy">
-															<a4j:support event="onblur"
+															<a4j:ajax event="onblur"
 																reRender="establishedDateDecoration"
 																bypassUpdates="true" ajaxSingle="true" />
 														</rich:calendar>
@@ -259,12 +259,12 @@
 
 					</rich:panel>
 
-					<rich:toolBar itemSeparator="line">
+					<rich:toolbar itemSeparator="line">
 
 						<h:commandButton id="searchButton" value="Αναζήτηση"
 							action="#{employmentReport.generateReport}">
 							<s:defaultAction />
-							<a4j:support ajaxSingle="true" event="onclick"
+							<a4j:ajax ajaxSingle="true" event="onclick"
 								reRender="employmentsByTypeTable" />
 						</h:commandButton>
 						<s:button action="#{employmentReport.generatePDFReport}"
@@ -273,7 +273,7 @@
 							value="Εκτύπωση (Excel)" target="new" type="button" />
 						<s:button id="backButton" action="backButton"
 							value="Τέλος Εργασίας" />
-					</rich:toolBar>
+					</rich:toolbar>
 
 					<rich:spacer height="5" />
 					<rich:separator lineType="dashed" height="2" />

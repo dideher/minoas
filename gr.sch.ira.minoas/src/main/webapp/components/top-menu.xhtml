@@ -1,5 +1,5 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:s="http://jboss.org/schema/seam/taglib"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:a4j="http://richfaces.org/a4j"
@@ -8,8 +8,8 @@
 
 <ui:component>
 	
-	<a4j:form id="menuform">
-		<rich:toolBar>
+	<h:form id="menuform">
+		<rich:toolbar>
 
 
 
@@ -87,11 +87,13 @@
 				<rich:menuSeparator />
 				<rich:menuItem submitMode="none"
 					rendered="#{(s:hasRole('ADMIN') or s:hasRole('ADD_EMPLOYEE'))}">
+					<!-- 
 					<s:link value="Εισαγωγή Εκπαιδευτικού"
-						action="#{employeeHome.prepareForNewEmployee}"
+						action="#{employeeHome.prepareForNewEmployee()}"
 						view="/employee/add-new-employee.xhtml">
 						<f:param name="add_new_employee_from" value="/home" />
 					</s:link>
+					 -->
 				</rich:menuItem>
 
 				<rich:menuItem submitMode="none"
@@ -419,14 +421,13 @@
 				</rich:menuItem>
 				
 				<rich:menuItem rendered="#{s:hasRole('ADMIN') or s:hasRole('RENEW_CDRS')}"  submitMode="none">
-					<a4j:htmlCommandLink action="#{teachingHoursCDRManagement.doCalculateCurrentCDRs()}" value="Ανανέωση CDRs">
-					</a4j:htmlCommandLink>
+					<a4j:commandLink action="#{teachingHoursCDRManagement.doCalculateCurrentCDRs()}" value="Ανανέωση CDRs" />
 				</rich:menuItem>
 		
 				<!-- 		
 				<rich:menuItem rendered="#{(s:hasRole('ADMIN'))}"  submitMode="none">
-					<a4j:htmlCommandLink action="#{teachingHoursCDRManagement.doCalculateCDRsInBackground()}" value="Ανανέωση CDRs - Στο υπόβαθρο">
-					</a4j:htmlCommandLink>
+					<a4j:commandLink action="#{teachingHoursCDRManagement.doCalculateCDRsInBackground()}" value="Ανανέωση CDRs - Στο υπόβαθρο">
+					</a4j:commandLink>
 				</rich:menuItem>
 				 -->
 				
@@ -449,15 +450,15 @@
 				</rich:menuGroup>
 				-->
 			</rich:dropDownMenu>
-			<rich:toolBarGroup location="right" itemSeparator="line">
+			<rich:toolbarGroup location="right" itemSeparator="line">
 				<s:link value="Κεντρική Σελίδα" view="/home.xhtml"
 					propagation="none" rendered="#{identity.loggedIn}" />
 				<s:link value="Αποσύνδεση" rendered="#{identity.loggedIn}"
 					action="#{identity.logout}" view="/home.xhtml" />
-			</rich:toolBarGroup>
-		</rich:toolBar>
+			</rich:toolbarGroup>
+		</rich:toolbar>
 		
-	</a4j:form>
+	</h:form>
 	
 </ui:component>
 

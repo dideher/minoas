@@ -2,7 +2,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:s="http://jboss.org/schema/seam/taglib"
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:a4j="http://richfaces.org/a4j">
 
@@ -103,7 +103,7 @@
 											<f:facet name="header">
 												<h:outputText value="Ενέργεια" />
 											</f:facet>
-											<rich:toolBar itemSeparator="line">
+											<rich:toolbar itemSeparator="line">
 												<a4j:commandLink id="updatelink"
 													rendered="#{(s:hasRole('ADMIN') or s:hasRole('MODIFY_WORKEXPERIENCE'))}"
 													reRender="updateWorkExperienceModalPanel"
@@ -127,7 +127,7 @@
 														target="#{workExperienceHome.id}" />
 												</a4j:commandLink>
 
-											</rich:toolBar>
+											</rich:toolbar>
 										</rich:column>
 
 										<f:facet name="footer">
@@ -229,11 +229,11 @@
 													<h:outputText value="#{workExpVar.comment}" />
 												</rich:column>
 	
-												<a4j:support ajaxSingle="true" event="onselect" action="#{workExperiencesManagement.changedEmployeeType()}"
+												<a4j:ajax ajaxSingle="true" event="onselect" action="#{workExperiencesManagement.changedEmployeeType()}"
 													reRender="updateWorkExperienceModalPanelContent" >
 													<f:setPropertyActionListener value="#{workExpVar}"
 														target="#{workExperienceHome.instance.type}" />
-												</a4j:support>
+												</a4j:ajax>
 											</rich:suggestionbox>
 										</h:inputText>
 									</s:decorate>
@@ -283,7 +283,7 @@
 											style="width:50px" enableManualInput="true"
 											styleClass="fieldValueText" required="true"
 											value="#{workExperienceHome.instance.fromDate}">
-											<a4j:support event="onchanged" ajaxSingle="true"
+											<a4j:ajax event="onchanged" ajaxSingle="true"
 												eventsQueue="lalal"
 												action="#{workExperiencesManagement.silentlyComputeDateDifference()}"
 												reRender="updateWorkExperienceModalPanelContent" />
@@ -298,7 +298,7 @@
 											style="width:50px" enableManualInput="true"
 											styleClass="fieldValueText" required="true"
 											value="#{workExperienceHome.instance.toDate}">
-											<a4j:support event="onchanged" ajaxSingle="true"
+											<a4j:ajax event="onchanged" ajaxSingle="true"
 												eventsQueue="lalal"
 												action="#{workExperiencesManagement.silentlyComputeDateDifference()}"
 												reRender="updateWorkExperienceModalPanelContent" />
@@ -519,11 +519,11 @@
 												<h:outputText value="#{workExpVar.comment}" />
 											</rich:column>
 
-											<a4j:support ajaxSingle="true" event="onselect" action="#{workExperiencesManagement.changedEmployeeType()}"
+											<a4j:ajax ajaxSingle="true" event="onselect" action="#{workExperiencesManagement.changedEmployeeType()}"
 												reRender="createWorkExperienceModalPanelContent" >
 												<f:setPropertyActionListener value="#{workExpVar}"
 													target="#{workExperienceHome.instance.type}" />
-											</a4j:support>
+											</a4j:ajax>
 										</rich:suggestionbox>
 									</h:inputText>
 								</s:decorate>
@@ -573,7 +573,7 @@
 										style="width:50px" enableManualInput="true"
 										styleClass="fieldValueText" required="true"
 										value="#{workExperienceHome.instance.fromDate}">
-										<a4j:support event="onchanged" ajaxSingle="true"
+										<a4j:ajax event="onchanged" ajaxSingle="true"
 											eventsQueue="lalal"
 											action="#{workExperiencesManagement.silentlyComputeDateDifference()}"
 											reRender="createWorkExperienceModalPanelContent" />
@@ -588,7 +588,7 @@
 										style="width:50px" enableManualInput="true"
 										styleClass="fieldValueText" required="true"
 										value="#{workExperienceHome.instance.toDate}">
-										<a4j:support event="onchanged" ajaxSingle="true"
+										<a4j:ajax event="onchanged" ajaxSingle="true"
 											eventsQueue="lalal"
 											action="#{workExperiencesManagement.silentlyComputeDateDifference()}"
 											reRender="createWorkExperienceModalPanelContent" />

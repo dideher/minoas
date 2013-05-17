@@ -2,7 +2,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:s="http://jboss.org/schema/seam/taglib"
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:a4j="http://richfaces.org/a4j">
 
@@ -64,11 +64,11 @@
 										<h:column>
 											<h:outputText value="#{a_spec.title}" />
 										</h:column>
-										<a4j:support ajaxSingle="true" event="onselect"
+										<a4j:ajax ajaxSingle="true" event="onselect"
 											reRender="specializationReadOnlyTextDecoration">
 											<f:setPropertyActionListener value="#{a_spec}"
 												target="#{employeeCriteria.specialization}" />
-										</a4j:support>
+										</a4j:ajax>
 									</rich:suggestionbox>
 								</s:decorate>
 
@@ -121,9 +121,9 @@
 									</ui:define>
 									<h:inputText value="#{employeeCriteria.registryNumber}"
 										size="12" styleClass="fieldValueText" />
-									<a4j:support event="onblur">
+									<a4j:ajax event="onblur">
 
-									</a4j:support>
+									</a4j:ajax>
 								</s:decorate>
 
 								<s:decorate template="/layout/doubleLineEdit.xhtml"
@@ -228,14 +228,14 @@
 							<f:facet name="header">
 								<h:outputText value="Ενέργεια" />
 							</f:facet>
-							<rich:toolBar itemSeparator="line">
+							<rich:toolbar itemSeparator="line">
 
 								<a4j:commandLink action="selectEmployee" value="Επιλογή">
 									<f:setPropertyActionListener value="#{employee.id}"
 										target="#{employeeHome.id}" />
 									<s:conversationPropagation type="join" />
 								</a4j:commandLink>
-							</rich:toolBar>
+							</rich:toolbar>
 						</rich:column>
 
 

@@ -2,7 +2,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:s="http://jboss.org/schema/seam/taglib"
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:a4j="http://richfaces.org/a4j">
 
@@ -103,7 +103,7 @@
 										var="_employeeType" value="#{employeeTypes}"
 										label="#{messages[_employeeType.key]}">
 									</s:selectItems>
-									<a4j:support event="onchange" ajaxSingle="true"
+									<a4j:ajax event="onchange" ajaxSingle="true"
 										reRender="employmentPanel" />
 								</h:selectOneMenu>
 							</s:decorate>
@@ -126,10 +126,10 @@
 										<h:column>
 											<h:outputText value="#{a_spec.title}" />
 										</h:column>
-										<a4j:support ajaxSingle="true" event="onselect">
+										<a4j:ajax ajaxSingle="true" event="onselect">
 											<f:setPropertyActionListener value="#{a_spec}"
 												target="#{employee.lastSpecialization}" />
-										</a4j:support>
+										</a4j:ajax>
 									</rich:suggestionbox>
 								</h:inputText>
 							</s:decorate>

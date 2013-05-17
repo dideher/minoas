@@ -2,7 +2,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:s="http://jboss.org/schema/seam/taglib"
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:a4j="http://richfaces.org/a4j">
 
@@ -107,7 +107,7 @@
 											<f:facet name="header">
 												<h:outputText value="Ενέργεια" />
 											</f:facet>
-											<rich:toolBar itemSeparator="line"
+											<rich:toolbar itemSeparator="line"
 												rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYMENT_REGULAR'))}">
 												<a4j:commandLink id="terminatellink" ajaxSingle="true"
 													reRender="terminateEmployeeEmploymentContent"
@@ -132,7 +132,7 @@
 														target="#{employmentHome.id}" />
 												</a4j:commandLink>
 
-												<rich:toolBarGroup location="right" itemSeparator="disc">
+												<rich:toolbarGroup location="right" itemSeparator="disc">
 													<a4j:commandLink id="deletelink"
 														rendered="#{(s:hasRole('ADMIN') or s:hasRole('DELETE_EMPLOYMENT_REGULAR'))}"
 														ajaxSingle="true"
@@ -146,13 +146,13 @@
 															value="#{_regularEmploymentItem.id}"
 															target="#{employmentHome.id}" />
 													</a4j:commandLink>
-												</rich:toolBarGroup>
-											</rich:toolBar>
+												</rich:toolbarGroup>
+											</rich:toolbar>
 										</rich:column>
 									</rich:dataTable>
 
 
-									<rich:toolBar itemSeparator="line">
+									<rich:toolbar itemSeparator="line">
 										<s:button action="backButton" value="Επιστροφή" />
 										<s:button action="endButton" value="Τέλος Ενέργειας" />
 										<a4j:commandButton value="Προσθήκη Νέας Σχέσης"
@@ -161,7 +161,7 @@
 											action="#{employeeEmploymentManagement.prepareForNewRegularEmployment}"
 											oncomplete="if(data == false) Richfaces.showModalPanel('addRegularEmploymentModalPanel');">
 										</a4j:commandButton>
-									</rich:toolBar>
+									</rich:toolbar>
 
 									<h:outputText value="Στον παρακάτω πίνακα εμφανίζονται οι προγενέστερες τοποθετήσεις του εκπαιδευτικού " />
 										<rich:dataTable value="#{oldEmployments}" width="100%"
@@ -327,7 +327,7 @@
 												<h:outputText value="Ενέργεια" />
 											</f:facet>
 
-											<rich:toolBar itemSeparator="line"
+											<rich:toolbar itemSeparator="line"
 												rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYMENT_DEPUTY'))}">
 											
 												<a4j:commandLink id="terminatellink" ajaxSingle="true"
@@ -369,12 +369,12 @@
 															value="#{_deputyEmploymentItem.id}"
 															target="#{employmentHome.id}" />
 													</a4j:commandLink>
-											</rich:toolBar>
+											</rich:toolbar>
 										</rich:column>
 									</rich:dataTable>
 
 
-									<rich:toolBar itemSeparator="line">
+									<rich:toolbar itemSeparator="line">
 										<s:button action="backButton" value="Επιστροφή" />
 										<s:button action="endButton" value="Τέλος Ενέργειας" />
 										<a4j:commandButton value="Προσθήκη Νέας Σχέσης Αναπληρωτή"
@@ -383,7 +383,7 @@
 											action="#{employeeEmploymentManagement.prepareForNewDeputyEmployment}"
 											oncomplete="if(data == false) Richfaces.showModalPanel('addDeputyEmploymentModalPanel');">
 										</a4j:commandButton>
-									</rich:toolBar>
+									</rich:toolbar>
 
 									<h:outputText
 										value="Στον παρακάτω πίνακα εμφανίζονται οι προγενέστερες τοποθετήσεις του αναπληρωτή" />
@@ -550,7 +550,7 @@
 											<f:facet name="header">
 												<h:outputText value="Ενέργεια" />
 											</f:facet>
-											<rich:toolBar itemSeparator="line"
+											<rich:toolbar itemSeparator="line"
 												rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYMENT_HOURLY_BASED'))}">
 												
 												<a4j:commandLink id="cancellink" ajaxSingle="true"
@@ -579,12 +579,12 @@
 														value="#{_hourlyBasedEmploymentItem.nonRegularEmploymentInfo.id}"
 														target="#{nonRegularEmploymentInfoHome.id}" />
 												</a4j:commandLink>
-											</rich:toolBar>
+											</rich:toolbar>
 										</rich:column>
 									</rich:dataTable>
 
 
-									<rich:toolBar itemSeparator="line">
+									<rich:toolbar itemSeparator="line">
 										<s:button action="backButton" value="Επιστροφή" />
 										<s:button action="endButton" value="Τέλος Ενέργειας" />
 										<a4j:commandButton value="Προσθήκη Νέας Σχέσης Ωρομισθίου"
@@ -592,7 +592,7 @@
 											action="#{employeeEmploymentManagement.prepareForNewHourlyBasedEmployment}"
 											oncomplete="#{rich:component('addHourlyEmploymentModalPanel')}.show()">
 										</a4j:commandButton>
-									</rich:toolBar>
+									</rich:toolbar>
 
 									<h:outputText
 										value="Στον παρακάτω πίνακα εμφανίζονται οι προγενέστερες τοποθετήσεις του Ωρομίσθιου." />

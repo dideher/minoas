@@ -2,7 +2,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:s="http://jboss.org/schema/seam/taglib"
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:a4j="http://richfaces.org/a4j">
 
@@ -36,7 +36,7 @@
 					
 					
 
-<a4j:form>
+<h:form>
 			<a4j:region>
 					<a4j:outputPanel id="fastEmployeeOutputPanel">
 						
@@ -51,7 +51,7 @@
 								<h:inputText value="#{employeeHome.instance.lastName}"
 									required="true" styleClass="fieldValueText" 
 									size="15" maxlength="30" immediate="true">
-									<a4j:support eventsQueue="queue" event="onkeyup" ignoreDupResponses="true" requestDelay="500" action="#{employeeManagement.searchForDuplicateEmployees()}" ajaxSingle="true"  reRender="grid" />
+									<a4j:ajax eventsQueue="queue" event="onkeyup" ignoreDupResponses="true" requestDelay="500" action="#{employeeManagement.searchForDuplicateEmployees()}" ajaxSingle="true"  reRender="grid" />
 								</h:inputText>
 								
 							</s:decorate>
@@ -63,7 +63,7 @@
 								<h:inputText value="#{employeeHome.instance.firstName}"
 									required="true" styleClass="fieldValueText" immediate="true"
 									size="15" maxlength="30">
-									<a4j:support eventsQueue="queue" event="onkeyup" ignoreDupResponses="true" requestDelay="500" action="#{employeeManagement.searchForDuplicateEmployees()}" ajaxSingle="true" reRender="grid" />
+									<a4j:ajax eventsQueue="queue" event="onkeyup" ignoreDupResponses="true" requestDelay="500" action="#{employeeManagement.searchForDuplicateEmployees()}" ajaxSingle="true" reRender="grid" />
 								</h:inputText>
 							</s:decorate>
 							
@@ -74,7 +74,7 @@
 								<h:inputText value="#{employeeHome.instance.fatherName}"
 									required="true" styleClass="fieldValueText" immediate="true" 
 									size="15" maxlength="30">
-									<a4j:support eventsQueue="queue" event="onkeyup" ignoreDupResponses="true" requestDelay="500" action="#{employeeManagement.searchForDuplicateEmployees()}" ajaxSingle="true" reRender="grid" />
+									<a4j:ajax eventsQueue="queue" event="onkeyup" ignoreDupResponses="true" requestDelay="500" action="#{employeeManagement.searchForDuplicateEmployees()}" ajaxSingle="true" reRender="grid" />
 								</h:inputText>
 							</s:decorate>
 
@@ -129,10 +129,10 @@
 										<h:column>
 											<h:outputText value="#{_pysde.title}" />
 										</h:column>
-										<a4j:support ajaxSingle="true" event="onselect">
+										<a4j:ajax ajaxSingle="true" event="onselect">
 											<f:setPropertyActionListener value="#{_pysde}"
 												target="#{employeeHome.instance.currentPYSDE}" />
-										</a4j:support>
+										</a4j:ajax>
 									</rich:suggestionbox>
 								</h:inputText>
 							</s:decorate>
@@ -155,10 +155,10 @@
 										<h:column>
 											<h:outputText value="#{a_spec.title}" />
 										</h:column>
-										<a4j:support ajaxSingle="true" event="onselect" eventsQueue="queue"  ignoreDupResponses="true" requestDelay="500" action="#{employeeManagement.searchForDuplicateEmployees()}" reRender="grid">
+										<a4j:ajax ajaxSingle="true" event="onselect" eventsQueue="queue"  ignoreDupResponses="true" requestDelay="500" action="#{employeeManagement.searchForDuplicateEmployees()}" reRender="grid">
 											<f:setPropertyActionListener value="#{a_spec}"
 												target="#{employeeHome.instance.lastSpecialization}" />
-										</a4j:support>
+										</a4j:ajax>
 									</rich:suggestionbox>
 								</h:inputText>
 							</s:decorate>
@@ -189,7 +189,7 @@
 						onclick="#{rich:component('fastEmployeeInsertPanel')}.hide();" />
 				</h:panelGrid>
 				</a4j:region>
-				</a4j:form>
+				</h:form>
 				
 				<a4j:region>
 

@@ -3,7 +3,7 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:a4j="http://richfaces.org/a4j"
-	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:s="http://jboss.org/schema/seam/taglib"
 	xmlns:rich="http://richfaces.org/rich">
 
 <ui:component>
@@ -62,10 +62,10 @@
 						<h:column>
 							<h:outputText value="#{_school.title}" />
 						</h:column>
-						<a4j:support ajaxSingle="true" event="onselect">
+						<a4j:ajax ajaxSingle="true" event="onselect">
 							<f:setPropertyActionListener value="#{_school}"
 								target="#{employment.school}" />
-						</a4j:support>
+						</a4j:ajax>
 					</rich:suggestionbox>
 				</h:inputText>
 			</s:decorate>
@@ -91,9 +91,9 @@
 					<f:selectItem itemLabel="21 Ώρες" itemValue="21" />
 					<f:selectItem itemLabel="22 Ώρες" itemValue="22"/>
 					<f:selectItem itemLabel="28 Ώρες" itemValue="28"/>
-					<a4j:support event="onchange" ajaxSingle="true" rendered="deputyFinalWorkingHours">
+					<a4j:ajax event="onchange" ajaxSingle="true" rendered="deputyFinalWorkingHours">
 						<f:setPropertyActionListener value="#{employment.mandatoryWorkingHours}" target="#{employment.finalWorkingHours}" />
-					</a4j:support>
+					</a4j:ajax>
 				</h:selectOneMenu>
 			</s:decorate>
 

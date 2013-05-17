@@ -2,7 +2,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:s="http://jboss.org/schema/seam/taglib"
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:a4j="http://richfaces.org/a4j">
 
@@ -46,7 +46,7 @@
 								<rich:toolTip for="deletelink" value="Διαγραφή της Ομάδας" />
 								<rich:toolTip for="updatelink" value="Τροποποίηση της Ομάδας" />
 
-								<rich:toolBar itemSeparator="line">
+								<rich:toolbar itemSeparator="line">
 									<a4j:commandLink id="deletelink" reRender="deletePanelContent"
 										oncomplete="#{rich:component('deletePanel')}.show()"
 										value="Διαγραφή">
@@ -66,7 +66,7 @@
 											value="#{_specializationGroup.id}"
 											target="#{specializationGroupHome.id}" />
 									</a4j:commandLink>
-								</rich:toolBar>
+								</rich:toolbar>
 							</rich:column>
 
 							<rich:column breakBefore="true" colspan="2" width="100%">

@@ -2,7 +2,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:s="http://jboss.org/schema/seam/taglib"
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:a4j="http://richfaces.org/a4j">
 
@@ -51,11 +51,11 @@
 												<rich:column>
 													<h:outputText value="#{_leaveType.description}" />
 												</rich:column>
-												<a4j:support ajaxSingle="true" event="onselect"
+												<a4j:ajax ajaxSingle="true" event="onselect"
 													reRender="leaveTypeDescriptionDiv">
 													<f:setPropertyActionListener value="#{_leaveType}"
 														target="#{employeeLeaveCriteria.employeeLeaveType}" />
-												</a4j:support>
+												</a4j:ajax>
 
 											</rich:suggestionbox>
 										</h:inputText>
@@ -97,10 +97,10 @@
 										<h:column>
 											<h:outputText value="#{a_spec.title}" />
 										</h:column>
-										<a4j:support ajaxSingle="true" event="onselect">
+										<a4j:ajax ajaxSingle="true" event="onselect">
 											<f:setPropertyActionListener value="#{a_spec}"
 												target="#{employeeLeaveCriteria.specializationGroup}" />
-										</a4j:support>
+										</a4j:ajax>
 									</rich:suggestionbox>
 								</h:inputText>
 							</s:decorate>
@@ -123,10 +123,10 @@
 										<h:column>
 											<h:outputText value="#{leaveSourceUnit.title}" />
 										</h:column>
-										<a4j:support ajaxSingle="true" event="onselect">
+										<a4j:ajax ajaxSingle="true" event="onselect">
 											<f:setPropertyActionListener value="#{leaveSourceUnit}"
 												target="#{employeeLeaveCriteria.schoolOfIntereset}" />
-										</a4j:support>
+										</a4j:ajax>
 									</rich:suggestionbox>
 								</h:inputText>
 							</s:decorate>
@@ -152,7 +152,7 @@
 									value="#{employeeLeaveCriteria.effectiveDateUntil}"
 									required="true" inputSize="10" mode="ajax" locale="el_GR"
 									inputClass="fieldValueText" datePattern="dd/MM/yyyy">
-									<a4j:support event="onblur"
+									<a4j:ajax event="onblur"
 										reRender="establishedDateDecoration" bypassUpdates="true"
 										ajaxSingle="true" />
 								</rich:calendar>
@@ -172,7 +172,7 @@
 								<h:commandButton id="searchButton" value="Αναζήτηση"
 									action="#{employeeLeavesReport.generateReportEndingLeaves()}">
 									<s:defaultAction />
-									<a4j:support ajaxSingle="true" event="onclick"
+									<a4j:ajax ajaxSingle="true" event="onclick"
 										reRender="leavesByTypeTable" />
 								</h:commandButton>
 								<s:button action="#{employeeLeavesReport.generatePDFReport}"
