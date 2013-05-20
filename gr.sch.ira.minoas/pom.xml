@@ -127,7 +127,7 @@
 						<encoding>UTF-8</encoding>
 					</configuration>
 				</plugin>
-
+				
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-jar-plugin</artifactId>
@@ -148,13 +148,13 @@
 
 	<dependencies>
 
-		
+
 		<dependency>
-            <groupId>org.jboss.spec.javax.servlet</groupId>
-            <artifactId>jboss-servlet-api_3.0_spec</artifactId>
-            <scope>provided</scope>
-        </dependency>
-		
+			<groupId>org.jboss.spec.javax.servlet</groupId>
+			<artifactId>jboss-servlet-api_3.0_spec</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
 		<!-- <dependency> <groupId>javax.el</groupId> <artifactId>el-api</artifactId> 
 			<version>1.0</version> <scope>provided</scope> </dependency> <dependency> 
 			<groupId>javax.servlet</groupId> <artifactId>jstl</artifactId> <version>1.0</version> 
@@ -163,88 +163,83 @@
 		<!-- seam section -->
 
 		<dependency>
-            <groupId>org.jboss.seam</groupId>
-            <artifactId>jboss-seam</artifactId>
-            <type>ejb</type>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.testng</groupId>
-                    <artifactId>testng</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>junit</groupId>
-                    <artifactId>junit</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.jboss.spec.javax.faces</groupId>
-                    <artifactId>jboss-jsf-api_2.1_spec</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>javax.el</groupId>
-                    <artifactId>el-api</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.jboss.spec.javax.faces</groupId>
-            <artifactId>jboss-jsf-api_2.1_spec</artifactId>
-            <scope>provided</scope>
-        </dependency>
+			<groupId>org.jboss.seam</groupId>
+			<artifactId>jboss-seam</artifactId>
+			<type>ejb</type>
+			<exclusions>
+				<exclusion>
+					<groupId>org.testng</groupId>
+					<artifactId>testng</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>junit</groupId>
+					<artifactId>junit</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.jboss.spec.javax.faces</groupId>
+					<artifactId>jboss-jsf-api_2.1_spec</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>javax.el</groupId>
+					<artifactId>el-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 
-        <dependency>
-            <groupId>org.jboss.seam</groupId>
-            <artifactId>jboss-seam-ui</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.jboss.seam</groupId>
-                    <artifactId>jboss-seam</artifactId>
-                </exclusion>                
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.seam</groupId>
-            <artifactId>jboss-seam-debug</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.jboss.seam</groupId>
-                    <artifactId>jboss-seam</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>commons-beanutils</groupId>
-            <artifactId>commons-beanutils</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>commons-collections</groupId>
-                    <artifactId>commons-collections</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        
-        <!-- 
-        <dependency>
-            <groupId>commons-logging</groupId>
-            <artifactId>commons-logging</artifactId>
-        </dependency>
-        
-         -->
-         
-         
-        <dependency>
-            <groupId>org.richfaces.ui</groupId>
-            <artifactId>richfaces-components-ui</artifactId>
-        </dependency>  
-        <dependency>
-            <groupId>org.richfaces.core</groupId>
-            <artifactId>richfaces-core-impl</artifactId>
-        </dependency>    
-        <dependency>
-            <groupId>org.richfaces.core</groupId>
-            <artifactId>richfaces-core-api</artifactId>
-        </dependency> 
-        
+		<dependency>
+			<groupId>org.jboss.spec.javax.faces</groupId>
+			<artifactId>jboss-jsf-api_2.1_spec</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jboss.seam</groupId>
+			<artifactId>jboss-seam-ui</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.jboss.seam</groupId>
+					<artifactId>jboss-seam</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.seam</groupId>
+			<artifactId>jboss-seam-debug</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.jboss.seam</groupId>
+					<artifactId>jboss-seam</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-collections</groupId>
+					<artifactId>commons-collections</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<!-- <dependency> <groupId>commons-logging</groupId> <artifactId>commons-logging</artifactId> 
+			</dependency> -->
+
+
+		<dependency>
+			<groupId>org.richfaces.ui</groupId>
+			<artifactId>richfaces-components-ui</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.richfaces.core</groupId>
+			<artifactId>richfaces-core-impl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.richfaces.core</groupId>
+			<artifactId>richfaces-core-api</artifactId>
+		</dependency>
+
 
 		<!-- <dependency> <groupId>org.jboss.seam</groupId> <artifactId>jboss-seam</artifactId> 
 			</dependency> -->
@@ -308,29 +303,11 @@
 
 		<!-- rich-faces -->
 
-		<!-- 
-
-		<dependency>
-			<groupId>org.richfaces.samples</groupId>
-			<artifactId>laguna</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.richfaces.samples</groupId>
-			<artifactId>glassX</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.richfaces.samples</groupId>
-			<artifactId>darkX</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.richfaces.samples</groupId>
-			<artifactId>themes</artifactId>
-		</dependency>
-		
-		 -->
+		<!-- <dependency> <groupId>org.richfaces.samples</groupId> <artifactId>laguna</artifactId> 
+			</dependency> <dependency> <groupId>org.richfaces.samples</groupId> <artifactId>glassX</artifactId> 
+			</dependency> <dependency> <groupId>org.richfaces.samples</groupId> <artifactId>darkX</artifactId> 
+			</dependency> <dependency> <groupId>org.richfaces.samples</groupId> <artifactId>themes</artifactId> 
+			</dependency> -->
 
 		<!-- jasperreports -->
 		<dependency>
