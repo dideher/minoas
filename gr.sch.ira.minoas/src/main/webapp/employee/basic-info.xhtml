@@ -184,19 +184,18 @@
 					<h:outputText styleClass="fieldValueText" rendered="#{employee.type != 'REGULAR'}" 
 						value="#{employee.currentEmployment.nonRegularEmploymentInfo.diaygeiaNo}"/>
 				
-					<rich:spacer rendered="#{(employee.type == 'REGULAR')}"/>
+					
 					<h:outputLabel styleClass="fieldValueLabel" rendered="#{employee.type == 'DEPUTY'}"
 						value="(Απόφαση Πρόσληψης ΥΠΕΠΘ)-Ημερομηνία: " />
 					<h:outputLabel styleClass="fieldValueLabel" rendered="#{employee.type == 'HOURLYPAID'}"
 						value="(Απόφαση Πρόσληψης Β/θμιας)-Ημερομηνία: " />
-					<rich:spacer rendered="#{(employee.type == 'REGULAR') or ((employee.currentEmployment.nonRegularEmploymentInfo.act eq '') or (employee.currentEmployment.nonRegularEmploymentInfo.actDate eq null))}"/>
+					
 					<h:outputFormat styleClass="fieldValueText" rendered="#{(employee.type != 'REGULAR') and ((employee.currentEmployment.nonRegularEmploymentInfo.act ne '') and (employee.currentEmployment.nonRegularEmploymentInfo.actDate ne null))}"
 						value="(#{employee.currentEmployment.nonRegularEmploymentInfo.act})-{0, date, dd/MM/yyyy}">
 					    <f:param value="#{employee.currentEmployment.nonRegularEmploymentInfo.actDate}" />
 					</h:outputFormat>
 
 					<h:outputLabel styleClass="fieldValueLabel" value="(Πράξη Ανάληψης Υπηρ.)-Ημερομηνία: " />
-					<rich:spacer rendered="#{((employee.currentEmployment.entryIntoServiceAct eq '') or (employee.currentEmployment.entryIntoServiceDate eq null))}"/>
 					<h:outputFormat styleClass="fieldValueText"  rendered="#{((employee.currentEmployment.entryIntoServiceAct ne '') and (employee.currentEmployment.entryIntoServiceDate ne null))}"
 						value="(#{employee.currentEmployment.entryIntoServiceAct})-{0, date, dd/MM/yyyy}">
 					    <f:param value="#{employee.currentEmployment.entryIntoServiceDate}" />
@@ -204,7 +203,6 @@
 					
 					<h:outputLabel styleClass="fieldValueLabel" rendered="#{employee.type == 'DEPUTY'}"
 						value="(Πράξη Πρότασης ΠΥΣΔΕ)-Ημερομηνία: " />
-					<rich:spacer rendered="#{(employee.type == 'DEPUTY') and ((employee.currentEmployment.nonRegularEmploymentInfo.pysdeAct eq '') or (employee.currentEmployment.nonRegularEmploymentInfo.pysdeActDate eq null))}"/>
 					<h:outputFormat styleClass="fieldValueText" rendered="#{(employee.type == 'DEPUTY') and ((employee.currentEmployment.nonRegularEmploymentInfo.pysdeAct ne '') and (employee.currentEmployment.nonRegularEmploymentInfo.pysdeActDate ne null))}" 
 						value="(#{employee.currentEmployment.nonRegularEmploymentInfo.pysdeAct})-{0, date, dd/MM/yyyy}">
 					    <f:param value="#{employee.currentEmployment.nonRegularEmploymentInfo.pysdeActDate}" />
@@ -212,7 +210,6 @@
 					
 					<h:outputLabel styleClass="fieldValueLabel" rendered="#{employee.type == 'DEPUTY'}"
 						value="(Απόφαση Τοποθέτησης)-Ημερομηνία: " />
-					<rich:spacer rendered="#{(employee.type == 'DEPUTY') and ((employee.currentEmployment.nonRegularEmploymentInfo.placementOrder eq '') or (employee.currentEmployment.nonRegularEmploymentInfo.placementOrderDate eq null))}"/>
 					<h:outputFormat styleClass="fieldValueText" rendered="#{(employee.type == 'DEPUTY') and ((employee.currentEmployment.nonRegularEmploymentInfo.placementOrder ne '') and (employee.currentEmployment.nonRegularEmploymentInfo.placementOrderDate ne null))}" 
 						value="(#{employee.currentEmployment.nonRegularEmploymentInfo.placementOrder})-{0, date, dd/MM/yyyy}">
 					    <f:param value="#{employee.currentEmployment.nonRegularEmploymentInfo.placementOrderDate}" />
@@ -220,7 +217,6 @@
 				
 					<h:outputLabel styleClass="fieldValueLabel" rendered="#{employee.type == 'DEPUTY'}"
 						value="(Τροποπ. Απόφασης Τοποθ.)-Ημερομηνία: " />
-					<rich:spacer rendered="#{(employee.type == 'DEPUTY') and ((employee.currentEmployment.nonRegularEmploymentInfo.placementOrderModification eq '') or (employee.currentEmployment.nonRegularEmploymentInfo.placementOrderModificationDate eq null))}"/>
 					<h:outputFormat styleClass="fieldValueText" rendered="#{(employee.type == 'DEPUTY') and ((employee.currentEmployment.nonRegularEmploymentInfo.placementOrderModification ne '') and (employee.currentEmployment.nonRegularEmploymentInfo.placementOrderModificationDate ne null))}" 
 						value="(#{employee.currentEmployment.nonRegularEmploymentInfo.placementOrderModification})-{0, date, dd/MM/yyyy}">
 					    <f:param value="#{employee.currentEmployment.nonRegularEmploymentInfo.placementOrderModificationDate}" />
@@ -228,7 +224,6 @@
 					
 					<h:outputLabel styleClass="fieldValueLabel" rendered="#{employee.type != 'REGULAR'}"
 						value="(Απόφαση Απόλυσης)-Ημερομηνία: " />
-					<rich:spacer rendered="#{(employee.type != 'REGULAR') and ((employee.currentEmployment.nonRegularEmploymentInfo.terminationOrder eq '') or (employee.currentEmployment.nonRegularEmploymentInfo.terminationOrderDate eq null))}"/>
 					<h:outputFormat styleClass="fieldValueText" rendered="#{(employee.type != 'REGULAR') and ((employee.currentEmployment.nonRegularEmploymentInfo.terminationOrder ne '') and (employee.currentEmployment.nonRegularEmploymentInfo.terminationOrderDate ne null))}"
 						value="(#{employee.currentEmployment.nonRegularEmploymentInfo.terminationOrder})-{0, date, dd/MM/yyyy}">
 					    <f:param value="#{employee.currentEmployment.nonRegularEmploymentInfo.terminationOrderDate}" />

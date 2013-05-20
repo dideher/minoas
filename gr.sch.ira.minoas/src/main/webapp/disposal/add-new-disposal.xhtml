@@ -54,20 +54,19 @@
 							</rich:panel>
 						</a4j:outputPanel>
 					</a4j:region>
-					<rich:spacer height="5" />
+					
 					<rich:separator lineType="dashed" height="2" />
-					<rich:spacer height="5" />
-
+					
 					<h:panelGroup>
 						<ui:include src="/components/messages-component.xhtml" />
 						<s:div styleClass="actionButtons">
 							<s:button id="backButton" action="backButton"
 								value="Τέλος Εργασίας" />
-							<rich:spacer width="10" />
+							
 							<h:commandButton action="#{disposalHome.persist()}"
 								onclick="if(!confirm('Να καταχωρηθή η διάθεση ?')) {form.reset(); return false;}"
 								value="Καταχώρηση" id="updateButton" />
-							<rich:spacer width="3" />
+							
 						</s:div>
 					</h:panelGroup>
 				</h:panelGrid>
