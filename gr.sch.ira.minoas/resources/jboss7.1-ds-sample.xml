@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<datasource jta="false" jndi-name="java:/gr.sch.ira.minoasDatasource"
+	pool-name="minoasDS" enabled="true" use-java-context="false" use-ccm="false">
+	<connection-url>jdbc:sqlserver://192.168.2.130:1433;DatabaseName=minoas
+	</connection-url>
+	<driver>sqljdbc4.jar</driver>
+	<pool>
+		<min-pool-size>5</min-pool-size>
+		<max-pool-size>50</max-pool-size>
+		<prefill>false</prefill>
+		<use-strict-min>false</use-strict-min>
+		<flush-strategy>FailingConnectionOnly</flush-strategy>
+	</pool>
+	<security>
+		<user-name>slavikos</user-name>
+		<password>slavikos</password>
+	</security>
+	<validation>
+		<valid-connection-checker
+			class-name="org.jboss.jca.adapters.jdbc.extensions.mssql.MSSQLValidConnectionChecker" />
+	</validation>
+</datasource>
