@@ -18,52 +18,59 @@
 				<h:outputText value="Καρτέλα Σχολικής Μονάδας #{school.title}" />
 			</f:facet>
 			<h:panelGrid columns="1" width="100%">
-			
+
 				<rich:panel>
 					<f:facet name="header">
 						<h:outputText value="Βασικά Στοιχεία" />
 					</f:facet>
 					<h:panelGrid columns="2" width="100%">
-					<ui:include src="/school/basicInfo.xhtml">
-						<ui:param name="activeSchool" value="#{school}" />
-					</ui:include>
-					
-					
-					<rich:panel>
-										<f:facet name="header">
-											<h:outputText value="Τμήματα Γενικής Παιδείας" />
-										</f:facet>
-									<h:panelGrid columns="3">
-										<h:panelGrid columns="1">
-												<h:outputText value="Α' Τάξη " />
-												<h:inputText value="#{school.divisionsOfFirstGrade}" styleClass="fieldValueText" readonly="true" size="2" maxlength="2" />
-										</h:panelGrid>
-										
-										<h:panelGrid columns="1">
-												<h:outputText value="Β' Τάξη : " />
-												<h:inputText value="#{school.divisionsOfSecondGrade}" styleClass="fieldValueText" readonly="true" size="2" maxlength="2" />
-										</h:panelGrid>
-										
-										<h:panelGrid columns="1">
-												<h:outputText value="Γ' Τάξη : "  />
-												<h:inputText value="#{school.divisionsOfThirdGrade}" styleClass="fieldValueText" readonly="true" size="2" maxlength="2" />
-										</h:panelGrid>
-										
-					
-										
-									</h:panelGrid>
-									<s:link value="( Επεξεργασία ...)" styleClass="fieldValueText" rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_SCHOOL_BASIC'))}"
-						view="/school/school-unit-management.xhtml">
-						<f:param name="school_unit_management_from" value="/school" />
-					</s:link>
-									</rich:panel>
+						<ui:include src="/school/basicInfo.xhtml">
+							<ui:param name="activeSchool" value="#{school}" />
+						</ui:include>
+
+
+						<rich:panel>
+							<f:facet name="header">
+								<h:outputText value="Τμήματα Γενικής Παιδείας" />
+							</f:facet>
+							<h:panelGrid columns="3">
+								<h:panelGrid columns="1">
+									<h:outputText value="Α' Τάξη " />
+									<h:inputText value="#{school.divisionsOfFirstGrade}"
+										styleClass="fieldValueText" readonly="true" size="2"
+										maxlength="2" />
+								</h:panelGrid>
+
+								<h:panelGrid columns="1">
+									<h:outputText value="Β' Τάξη : " />
+									<h:inputText value="#{school.divisionsOfSecondGrade}"
+										styleClass="fieldValueText" readonly="true" size="2"
+										maxlength="2" />
+								</h:panelGrid>
+
+								<h:panelGrid columns="1">
+									<h:outputText value="Γ' Τάξη : " />
+									<h:inputText value="#{school.divisionsOfThirdGrade}"
+										styleClass="fieldValueText" readonly="true" size="2"
+										maxlength="2" />
+								</h:panelGrid>
+
+
+
+							</h:panelGrid>
+							<s:link value="( Επεξεργασία ...)" styleClass="fieldValueText"
+								rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_SCHOOL_BASIC'))}"
+								view="/school/school-unit-management.xhtml">
+								<f:param name="school_unit_management_from" value="/school" />
+							</s:link>
+						</rich:panel>
 					</h:panelGrid>
-			
-					
+
+
 				</rich:panel>
-				
-									
-								
+
+
+
 
 				<rich:panel>
 					<f:facet name="header">
@@ -124,920 +131,886 @@
 
 				</rich:panel>
 
+				<h:form>
+					<rich:tabPanel switchType="ajax" selectedTab="defaultTab">
 
-				<rich:tabPanel switchType="ajax" selectedTab="defaultTab">
 
-
-					<rich:tab id="defaultTab">
-						<f:facet name="label">
-							<h:outputText value="Νεα Τρέχουσα Κατάσταση" />
-						</f:facet>
-						<a4j:ajax event="ontabenter" eventsQueue="lala2"
-							reRender="school-employments-analysis2"
-							action="#{schoolReport.generateEmploymentsCDRReport}"
-							ajaxSingle="true">
-						</a4j:ajax>
+						<rich:tab id="defaultTab" header="Νεα Τρέχουσα Κατάσταση" execute="#{schoolReport.generateEmploymentsCDRReport()}">
+							
 
 
 
-						<rich:panel>
-							<f:facet name="header">
-								<h:outputLabel value="Τρέχουσα Κατάσταση" />
-							</f:facet>
+							<rich:panel>
+								<f:facet name="header">
+									<h:outputLabel value="Τρέχουσα Κατάσταση" />
+								</f:facet>
 
 
 
-							<h:panelGrid columns="1" width="100%">
+								<h:panelGrid columns="1" width="100%">
 
-								<rich:spacer height="2" />
-								<h:outputText
-									value="Παρακάτω εμφανίζεται όλο το διδακτικό προσωπικού που προσφέρει ή δεν προσφέρει διδακτικό έργο στην μονάδα. To προσωπικό που εμφανίζεται στην κατάσταση ανήκει οργανικά στην μονάδα ή έχει τοποθετηθεί στην μονάδα με οποιαδήποτε ιδιότητα." />
-								<rich:spacer height="5" />
+									<h:outputText
+										value="Παρακάτω εμφανίζεται όλο το διδακτικό προσωπικού που προσφέρει ή δεν προσφέρει διδακτικό έργο στην μονάδα. To προσωπικό που εμφανίζεται στην κατάσταση ανήκει οργανικά στην μονάδα ή έχει τοποθετηθεί στην μονάδα με οποιαδήποτε ιδιότητα." />
+									<h:form>
+										<a4j:outputPanel id="school-employments-analysis2">
+
+											<a4j:repeat var="_group" value="#{schoolGroupedEmployeeCDRs}">
+												<rich:panel>
+													<f:facet name="header">
+														<h:outputText value="#{_group.groupTitle}" />
+													</f:facet>
+
+													<rich:dataTable var="employeeCDRs"
+														value="#{_group.groupEmployees}" sortMode="multi"
+														border="0" rowKeyVar="_row"
+														onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+														onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+														width="100%">
+
+														<f:facet name="header">
+															<rich:columnGroup>
+																<rich:column style="text-align:center">
+																	<h:outputText styleClass="fieldValueText" value="A/A" />
+																</rich:column>
+																<rich:column style="text-align:center">
+																	<h:outputText value="ΑΜ" />
+																</rich:column>
+																<rich:column>
+																	<h:outputText value="Επώνυμο" />
+																</rich:column>
+																<rich:column>
+																	<h:outputText value="Όνομα" />
+																</rich:column>
+																<rich:column>
+																	<h:outputText value="Όνομα Πατρός" />
+																</rich:column>
+																<rich:column>
+																	<h:outputText value="Ειδ." />
+																</rich:column>
+																<rich:column>
+																	<h:outputText value="Τύπος" />
+																</rich:column>
+																<rich:column style="text-align:right">
+																	<h:outputText value="Υπ. Ωρ." />
+																</rich:column>
+																<rich:column style="text-align:right">
+																	<h:outputText value="Ωρ." />
+																</rich:column>
+																<rich:column style="text-align:right">
+																	<h:outputText value="Σχόλιο" />
+																</rich:column>
+
+															</rich:columnGroup>
+														</f:facet>
+														<rich:column style="text-align:center">
+															<h:outputText styleClass="fieldValueText"
+																value="#{_row+1}" />
+														</rich:column>
+														<rich:column style="text-align:center">
+															<h:outputText
+																value="#{employeeCDRs.employee.employeeCode}" />
+														</rich:column>
+														<rich:column>
+															<a4j:commandLink action="selectEmployee"
+																value="#{employeeCDRs.employee.employeeLastName}">
+																<f:setPropertyActionListener
+																	value="#{employeeCDRs.employee.employeeID}"
+																	target="#{employeeHome.id}" />
+																<s:conversationPropagation type="nested" />
+															</a4j:commandLink>
+														</rich:column>
+														<rich:column>
+															<a4j:commandLink action="selectEmployee"
+																value="#{employeeCDRs.employee.employeeFirstName}">
+																<f:setPropertyActionListener
+																	value="#{employeeCDRs.employee.employeeID}"
+																	target="#{employeeHome.id}" />
+
+																<s:conversationPropagation type="nested" />
+															</a4j:commandLink>
+														</rich:column>
+														<rich:column>
+															<h:outputText
+																value="#{employeeCDRs.employee.employeeFatherName}" />
+														</rich:column>
+
+														<rich:column>
+															<h:outputText
+																value="#{employeeCDRs.employee.employeeSpecializationID}" />
+														</rich:column>
+
+														<rich:column>
+															<h:outputText
+																value="#{messages[employeeCDRs.employee.employeeTypeKey]}" />
+															<f:facet name="footer">
+																<s:div style="text-align:right">
+																	<h:outputText value="Σύνολα : "
+																		style="font-weight:bold;" />
+																</s:div>
+															</f:facet>
+														</rich:column>
+
+														<rich:column style="text-align:right">
+															<h:outputText
+																value="#{employeeCDRs.employee.employeeMandatoryHours}" />
+															<f:facet name="footer">
+																<s:div style="text-align:right">
+																	<h:outputText
+																		value="#{_group.groupMandatoryTeachingHours}"
+																		style="color:green;font-weight:bold;" />
+																</s:div>
+															</f:facet>
+														</rich:column>
+														<rich:column style="text-align:right">
+															<h:outputText styleClass="fieldValueText"
+																value="#{employeeCDRs.totalHours}" />
+															<f:facet name="footer">
+																<s:div style="text-align:right">
+																	<h:outputText
+																		value="#{_group.groupAvailableTeachingHours}"
+																		style="color:green;font-weight:bold; text-align:right" />
+																</s:div>
+															</f:facet>
+														</rich:column>
+														<rich:column style="text-align:left">
+
+															<rich:dataGrid
+																onRowMouseOver="this.style.backgroundColor='#A5F3CB'"
+																width="100%"
+																rendered="#{employeeCDRs.hasCDRsOtherThanEmployment()}"
+																onRowMouseOut="this.style.backgroundColor='#{a4jSkin.rowBackgroundColor}'"
+																value="#{employeeCDRs.employeeCDRS}" var="cdr">
+																<h:outputText value="#{cdr.comment}"
+																	styleClass="fieldValueText" />
+															</rich:dataGrid>
+
+															<f:facet name="footer">
+																<s:div style="text-align:center">
+																	<h:outputText value="Απαιτούμενες ώρες : " />
+																	<h:outputText
+																		value="#{_group.groupRequiredTeachingHours}"
+																		style="color:blue;font-weight:bold; text-align:right" />
+																	<h:outputText value=", Πλ/Κν (+/-) : " />
+																	<h:outputText rendered="#{!_group.hasMissingHours()}"
+																		value="#{_group.missingHours}"
+																		style="color: blue;font-weight:bold;" />
+																	<h:outputText rendered="#{_group.hasMissingHours()}"
+																		value="#{_group.missingHours}"
+																		style="color: red;font-weight:bold;" />
+																</s:div>
+															</f:facet>
+
+														</rich:column>
+
+													</rich:dataTable>
+
+
+
+												</rich:panel>
+											</a4j:repeat>
+										</a4j:outputPanel>
+									</h:form>
+								</h:panelGrid>
+							</rich:panel>
+
+
+
+						</rich:tab>
+
+
+						<rich:tab header="Αναλυτική Τρέχουσα Κατάσταση" execute="#{schoolReport.generateReport()}">
+							
+						
+
+							<a4j:outputPanel id="detailed-school-status">
 								<h:form>
-									<a4j:outputPanel id="school-employments-analysis2">
+									<rich:panel>
+										<f:facet name="header">
+											<h:outputText value="Προσωπικό που Υπηρετεί" />
+										</f:facet>
 
-										<a4j:repeat var="_group" value="#{schoolGroupedEmployeeCDRs}">
+
+										<h:panelGrid columns="1" width="100%">
+											<h:outputText styleClass="fieldValueText"
+												value="Στους παρακάτω πίνακες, εμφανίζεται το προσωπικό που υπηρετεί στην μονάδα και προσφέρει ώρες διδασκαλίας με οποιαδήποτε σχέση." />
+
 											<rich:panel>
 												<f:facet name="header">
-													<h:outputText value="#{_group.groupTitle}" />
+													<h:outputLabel value="Υπηρετεί Οργανικά" />
 												</f:facet>
-												
-												<rich:dataTable var="employeeCDRs" 
-													value="#{_group.groupEmployees}" sortMode="multi"
-													border="0" rowKeyVar="_row"
-													onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
-													onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
-													width="100%">
+												<h:panelGrid columns="1" width="100%">
 
-													<f:facet name="header">
-														<rich:columnGroup>
-															<rich:column style="text-align:center">
-																<h:outputText styleClass="fieldValueText" value="A/A" />
-															</rich:column>
-															<rich:column style="text-align:center">
-																<h:outputText value="ΑΜ" />
-															</rich:column>
-															<rich:column>
-																<h:outputText value="Επώνυμο" />
-															</rich:column>
-															<rich:column>
-																<h:outputText value="Όνομα" />
-															</rich:column>
-															<rich:column>
-																<h:outputText value="Όνομα Πατρός" />
-															</rich:column>
-															<rich:column>
-																<h:outputText value="Ειδ." />
-															</rich:column>
-															<rich:column>
-																<h:outputText value="Τύπος" />
-															</rich:column>
-															<rich:column style="text-align:right">
-																<h:outputText value="Υπ. Ωρ." />
-															</rich:column>
-															<rich:column style="text-align:right">
-																<h:outputText value="Ωρ." />
-															</rich:column>
-															<rich:column style="text-align:right">
-																<h:outputText value="Σχόλιο" />
-															</rich:column>
+													<h:outputText
+														value="Εμφανίζεται το μόνιμο προσωπικό με οργανική θέση, που υπηρετεί στην μονάδα και προσφέρει διδακτικές ώρες." />
 
-														</rich:columnGroup>
-													</f:facet>
-													<rich:column style="text-align:center">
-														<h:outputText styleClass="fieldValueText"
-															value="#{_row+1}" />
-													</rich:column>
-													<rich:column style="text-align:center">
-														<h:outputText
-															value="#{employeeCDRs.employee.employeeCode}" />
-													</rich:column>
-													<rich:column>
-														<a4j:commandLink action="selectEmployee"
-															value="#{employeeCDRs.employee.employeeLastName}">
-															<f:setPropertyActionListener
-																value="#{employeeCDRs.employee.employeeID}"
-																target="#{employeeHome.id}" />
-															 <s:conversationPropagation type="nested" /> 
-														</a4j:commandLink>
-													</rich:column>
-													<rich:column>
-														<a4j:commandLink action="selectEmployee"
-															value="#{employeeCDRs.employee.employeeFirstName}">
-															<f:setPropertyActionListener
-																value="#{employeeCDRs.employee.employeeID}"
-																target="#{employeeHome.id}" />
-															 
-															<s:conversationPropagation type="nested" />
-														</a4j:commandLink>
-													</rich:column>
-													<rich:column>
-														<h:outputText
-															value="#{employeeCDRs.employee.employeeFatherName}" />
-													</rich:column>
 
-													<rich:column>
-														<h:outputText
-															value="#{employeeCDRs.employee.employeeSpecializationID}" />
-													</rich:column>
 
-													<rich:column>
-														<h:outputText
-															value="#{messages[employeeCDRs.employee.employeeTypeKey]}" />
-														<f:facet name="footer">
-															<s:div style="text-align:right">
-																<h:outputText value="Σύνολα : "
-																	style="font-weight:bold;" />
-															</s:div>
-														</f:facet>
-													</rich:column>
+													<rich:dataTable rowKeyVar="_row"
+														id="schoolRegularEmployeesTable"
+														var="_schoolRegularEmployee"
+														value="#{schoolRegularBasedEmployments}" sortMode="multi"
+														border="0"
+														onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+														onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+														width="100%">
+														<rich:column style="text-align:center">
+															<f:facet name="header">A/A</f:facet>
+															<h:outputText styleClass="fieldValueText"
+																value="#{_row+1}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">AM</f:facet>
+															<h:outputText
+																value="#{_schoolRegularEmployee.employeeCode}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Επώνυμο</f:facet>
+															<a4j:commandLink action="selectEmployee"
+																value="#{_schoolRegularEmployee.employeeLastName}">
+																<f:setPropertyActionListener
+																	value="#{_schoolRegularEmployee.id}"
+																	target="#{employeeHome.id}" />
+																<s:conversationPropagation type="nested" />
+															</a4j:commandLink>
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Όνομα</f:facet>
+															<a4j:commandLink action="selectEmployee"
+																value="#{_schoolRegularEmployee.employeeFirstName}">
+																<f:setPropertyActionListener
+																	value="#{_schoolRegularEmployee.id}"
+																	target="#{employeeHome.id}" />
+																<s:conversationPropagation type="nested" />
+															</a4j:commandLink>
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Όνομα Πατρός</f:facet>
 
-													<rich:column style="text-align:right">
-														<h:outputText
-															value="#{employeeCDRs.employee.employeeMandatoryHours}" />
-														<f:facet name="footer">
-															<s:div style="text-align:right">
-																<h:outputText
-																	value="#{_group.groupMandatoryTeachingHours}"
-																	style="color:green;font-weight:bold;" />
-															</s:div>
-														</f:facet>
-													</rich:column>
-													<rich:column style="text-align:right">
-														<h:outputText styleClass="fieldValueText"
-															value="#{employeeCDRs.totalHours}" />
-														<f:facet name="footer">
-															<s:div style="text-align:right">
-																<h:outputText
-																	value="#{_group.groupAvailableTeachingHours}"
-																	style="color:green;font-weight:bold; text-align:right" />
-															</s:div>
-														</f:facet>
-													</rich:column>
-													<rich:column style="text-align:left">
+															<h:outputText
+																value="#{_schoolRegularEmployee.employeeFatherName}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Υπ Ωρ.</f:facet>
+															<h:outputText
+																value="#{_schoolRegularEmployee.employeeMandatoryHours}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Ωράριο</f:facet>
+															<h:outputText
+																value="#{_schoolRegularEmployee.employeeFinalWorkingHours}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Ειδ.</f:facet>
+															<h:outputText
+																value="#{_schoolRegularEmployee.employeeSpecializationID}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Λεκτικό Ειδ.</f:facet>
+															<h:outputText
+																value="#{_schoolRegularEmployee.employeeSpecialization}" />
+														</rich:column>
+													</rich:dataTable>
 
-														<rich:dataGrid
-															onRowMouseOver="this.style.backgroundColor='#A5F3CB'"
-															width="100%"
-															rendered="#{employeeCDRs.hasCDRsOtherThanEmployment()}"
-															onRowMouseOut="this.style.backgroundColor='#{a4jSkin.rowBackgroundColor}'"
-															value="#{employeeCDRs.employeeCDRS}" var="cdr">
-															<h:outputText value="#{cdr.comment}"
-																styleClass="fieldValueText" />
-														</rich:dataGrid>
 
-														<f:facet name="footer">
-															<s:div style="text-align:center">
-																<h:outputText value="Απαιτούμενες ώρες : " />
-																<h:outputText
-																	value="#{_group.groupRequiredTeachingHours}"
-																	style="color:blue;font-weight:bold; text-align:right" />
-																<h:outputText value=", Πλ/Κν (+/-) : " />
-																<h:outputText rendered="#{!_group.hasMissingHours()}"
-																	value="#{_group.missingHours}"
-																	style="color: blue;font-weight:bold;" />
-																<h:outputText rendered="#{_group.hasMissingHours()}"
-																	value="#{_group.missingHours}"
-																	style="color: red;font-weight:bold;" />
-															</s:div>
-														</f:facet>
+												</h:panelGrid>
+											</rich:panel>
 
-													</rich:column>
 
-												</rich:dataTable>
-												
-												
+											<rich:panel>
+												<f:facet name="header">
+													<h:outputLabel value="Υπηρετούν ως Αναπληρωτές" />
+												</f:facet>
+												<h:panelGrid columns="1" width="100%">
+													<h:outputText
+														value="Εμφανίζονται οι αναπληρωτές που υπηρετούν στην μονάδα και προσφέρουν διδακτικές ώρες." />
+
+
+													<h:outputText styleClass="fieldValueText"
+														value="Στην μονάδα δεν υπηρετούν αναπληρωτές"
+														rendered="#{schoolDeputyEmployees.size eq 0}" />
+													<rich:dataTable rowKeyVar="_row"
+														var="_schoolDeputyEmployee"
+														rendered="#{schoolDeputyEmployees.size gt 0}"
+														value="#{schoolDeputyEmployees}" sortMode="multi"
+														border="0"
+														onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+														onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+														width="100%">
+														<rich:column style="text-align:center">
+															<f:facet name="header">A/A</f:facet>
+															<h:outputText styleClass="fieldValueText"
+																value="#{_row+1}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">AM</f:facet>
+															<h:outputText
+																value="#{_schoolDeputyEmployee.employeeCode}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Επώνυμο</f:facet>
+															<a4j:commandLink action="selectEmployee"
+																value="#{_schoolDeputyEmployee.employeeLastName}">
+																<f:setPropertyActionListener
+																	value="#{_schoolDeputyEmployee.id}"
+																	target="#{employeeHome.id}" />
+																<s:conversationPropagation type="nested" />
+															</a4j:commandLink>
+
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Όνομα</f:facet>
+															<a4j:commandLink action="selectEmployee"
+																value="#{_schoolDeputyEmployee.employeeFirstName}">
+																<f:setPropertyActionListener
+																	value="#{_schoolDeputyEmployee.id}"
+																	target="#{employeeHome.id}" />
+																<s:conversationPropagation type="nested" />
+															</a4j:commandLink>
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Όνομα Πατρός</f:facet>
+															<h:outputText
+																value="#{_schoolDeputyEmployee.employeeFatherName}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Υπ Ωρ.</f:facet>
+															<h:outputText
+																value="#{_schoolDeputyEmployee.employeeMandatoryHours}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Ωράριο</f:facet>
+															<h:outputText
+																value="#{_schoolDeputyEmployee.employeeFinalWorkingHours}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Ειδ.</f:facet>
+															<h:outputText
+																value="#{_schoolDeputyEmployee.employeeSpecializationID}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Λεκτικό Ειδ.</f:facet>
+															<h:outputText
+																value="#{_schoolDeputyEmployee.employeeSpecialization}" />
+														</rich:column>
+													</rich:dataTable>
+												</h:panelGrid>
+											</rich:panel>
+
+
+											<rich:panel>
+												<f:facet name="header">
+													<h:outputLabel value="Υπηρετεί Με Απόσπαση" />
+												</f:facet>
+												<h:panelGrid columns="1" width="100%">
+													<h:outputText
+														value="Εμφανίζεται το προσωπικό που υπηρετεί στην μονάδα με απόσπαση και προσφέρει διδακτικές ώρες." />
+
+													<h:outputText styleClass="fieldValueText"
+														value="Στην μονάδα δεν υπηρετούν αποσπασμένοι"
+														rendered="#{incomingSecondments.size eq 0}" />
+
+													<rich:dataTable rowKeyVar="_row"
+														id="schoolSecondmentsTable"
+														rendered="#{incomingSecondments.size gt 0}"
+														var="_schoolSecondment" value="#{incomingSecondments}"
+														sortMode="multi" border="0"
+														onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+														onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+														width="100%">
+														<rich:column style="text-align:center">
+															<f:facet name="header">A/A</f:facet>
+															<h:outputText styleClass="fieldValueText"
+																value="#{_row+1}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">AM</f:facet>
+															<h:outputText value="#{_schoolSecondment.employeeCode}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Επώνυμο</f:facet>
+															<a4j:commandLink action="selectEmployee"
+																value="#{_schoolSecondment.employeeLastName}">
+																<f:setPropertyActionListener
+																	value="#{_schoolSecondment.id}"
+																	target="#{employeeHome.id}" />
+																<s:conversationPropagation type="nested" />
+															</a4j:commandLink>
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Όνομα</f:facet>
+															<a4j:commandLink action="selectEmployee"
+																value="#{_schoolSecondment.employeeFirstName}">
+																<f:setPropertyActionListener
+																	value="#{_schoolSecondment.id}"
+																	target="#{employeeHome.id}" />
+																<s:conversationPropagation type="nested" />
+															</a4j:commandLink>
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Όνομα Πατρός</f:facet>
+															<h:outputText
+																value="#{_schoolSecondment.employeeFatherName}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Tύπος</f:facet>
+															<h:outputText
+																value="#{messages[_schoolSecondment.secondmentTypeKey]}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Ώρες</f:facet>
+															<h:outputText
+																value="#{_schoolSecondment.finalWorkingHours}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Από</f:facet>
+															<h:outputText value="#{_schoolSecondment.sourceUnit}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Ειδ.</f:facet>
+															<h:outputText
+																value="#{_schoolSecondment.employeeSpecializationID}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Λεκτικό Ειδ.</f:facet>
+															<h:outputText
+																value="#{_schoolSecondment.employeeSpecialization}" />
+														</rich:column>
+													</rich:dataTable>
+												</h:panelGrid>
+											</rich:panel>
+
+											<rich:panel>
+												<f:facet name="header">
+													<h:outputLabel value="Υπηρετεί Με Διάθεση" />
+												</f:facet>
+												<h:panelGrid columns="1" width="100%">
+													<h:outputText
+														value="Εμφανίζεται το προσωπικό που υπηρετεί στην μονάδα με διάθεση απο άλλες σχολικές μονάδες και προσφέρει διδακτικές ώρες." />
+
+													<rich:dataTable rowKeyVar="_row" id="schoolDisposalsTable"
+														var="_schoolDisposal" value="#{incomingDisposals}"
+														sortMode="multi" border="0"
+														onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+														onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+														width="100%">
+														<rich:column style="text-align:center">
+															<f:facet name="header">A/A</f:facet>
+															<h:outputText styleClass="fieldValueText"
+																value="#{_row+1}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">AM</f:facet>
+															<h:outputText value="#{_schoolDisposal.employeeCode}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Επώνυμο</f:facet>
+															<a4j:commandLink action="selectEmployee"
+																value="#{_schoolDisposal.employeeLastName}">
+																<f:setPropertyActionListener
+																	value="#{_schoolDisposal.id}"
+																	target="#{employeeHome.id}" />
+																<s:conversationPropagation type="nested" />
+															</a4j:commandLink>
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Όνομα</f:facet>
+															<a4j:commandLink action="selectEmployee"
+																value="#{_schoolDisposal.employeeFirstName}">
+																<f:setPropertyActionListener
+																	value="#{_schoolDisposal.id}"
+																	target="#{employeeHome.id}" />
+																<s:conversationPropagation type="nested" />
+															</a4j:commandLink>
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Όνομα Πατρός</f:facet>
+															<h:outputText
+																value="#{_schoolDisposal.employeeFatherName}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Tύπος</f:facet>
+															<h:outputText
+																value="#{messages[_schoolDisposal.disposalTypeKey]}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Ώρες</f:facet>
+															<h:outputText value="#{_schoolDisposal.hours}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Ημέρες</f:facet>
+															<h:outputText value="#{_schoolDisposal.days}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Από</f:facet>
+															<h:outputText value="#{_schoolDisposal.sourceUnit}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Ειδ.</f:facet>
+															<h:outputText
+																value="#{_schoolDisposal.employeeSpecializationID}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Λεκτικό Ειδ.</f:facet>
+															<h:outputText
+																value="#{_schoolDisposal.employeeSpecialization}" />
+														</rich:column>
+													</rich:dataTable>
+												</h:panelGrid>
 
 											</rich:panel>
-										</a4j:repeat>
-									</a4j:outputPanel>
+
+											<rich:panel>
+												<f:facet name="header">
+													<h:outputLabel value="Υπηρετεί Με Θητεία" />
+												</f:facet>
+												<h:panelGrid columns="1" width="100%">
+													<h:outputText
+														value="Εμφανίζεται το μόνιμο προσωπικό που υπηρετεί στην μονάδα με θητεία και προσφέρει διδακτικές ώρες." />
+
+
+													<rich:dataTable rowKeyVar="_row"
+														id="serviceAllocationDisposalsTable"
+														var="_schoolServiceAllocation"
+														value="#{incomingServiceAllocations}" sortMode="multi"
+														border="0"
+														onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+														onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+														width="100%">
+														<rich:column style="text-align:center">
+															<f:facet name="header">A/A</f:facet>
+															<h:outputText styleClass="fieldValueText"
+																value="#{_row+1}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">AM</f:facet>
+															<h:outputText
+																value="#{_schoolServiceAllocation.employeeCode}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Επώνυμο</f:facet>
+															<a4j:commandLink action="selectEmployee"
+																value="#{_schoolServiceAllocation.employeeLastName}">
+																<f:setPropertyActionListener
+																	value="#{_schoolServiceAllocation.id}"
+																	target="#{employeeHome.id}" />
+																<s:conversationPropagation type="nested" />
+															</a4j:commandLink>
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Όνομα</f:facet>
+															<a4j:commandLink action="selectEmployee"
+																value="#{_schoolServiceAllocation.employeeFirstName}">
+																<f:setPropertyActionListener
+																	value="#{_schoolServiceAllocation.id}"
+																	target="#{employeeHome.id}" />
+																<s:conversationPropagation type="nested" />
+															</a4j:commandLink>
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Όνομα Πατρός</f:facet>
+															<h:outputText
+																value="#{_schoolServiceAllocation.employeeFatherName}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Tύπος</f:facet>
+															<h:outputText
+																value="#{messages[_schoolServiceAllocation.serviceAllocationTypeKey]}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Ώρες</f:facet>
+															<h:outputText
+																value="#{_schoolServiceAllocation.workingHoursOnServicingPosition}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Από</f:facet>
+															<h:outputText
+																value="#{_schoolServiceAllocation.sourceUnit}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Ειδ.</f:facet>
+															<h:outputText
+																value="#{_schoolServiceAllocation.employeeSpecializationID}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Λεκτικό Ειδ.</f:facet>
+															<h:outputText
+																value="#{_schoolServiceAllocation.employeeSpecialization}" />
+														</rich:column>
+													</rich:dataTable>
+												</h:panelGrid>
+											</rich:panel>
+
+										</h:panelGrid>
+
+
+									</rich:panel>
+
+
+
+									<rich:panel>
+										<f:facet name="header">
+											<h:outputText value="Απουσιάζουν" />
+										</f:facet>
+
+										<h:panelGrid columns="1" width="100%">
+											<h:outputText
+												value="Στους παρακάτω πίνακες, εμφανίζεται το προσωπικό που ενω ανήκει οργανικά στην μονάδα ή κατά τα άλλα θα έπρεπε να προσφέρει διδακτικές ώρες, απουσιάζει απο την μονάδα." />
+
+
+											<rich:panel>
+												<f:facet name="header">
+													<h:outputLabel value="Απουσιάζουν Λόγω Απόσπασης" />
+												</f:facet>
+												<h:panelGrid columns="1" width="100%">
+													<h:outputText
+														value="Εμφανίζεται το μόνιμο προσωπικό που κατέχει οργανική θέση στην μονάδα αλλά έχει αποσπαστεί σε άλλη μονάδα." />
+
+													<rich:dataTable rowKeyVar="_row"
+														id="schoolOutgoingSecondmentsTable"
+														var="_schoolSecondment"
+														value="#{schoolOutgoingSecondments}" sortMode="multi"
+														border="0"
+														onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+														onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+														width="100%">
+														<rich:column style="text-align:center">
+															<f:facet name="header">A/A</f:facet>
+															<h:outputText styleClass="fieldValueText"
+																value="#{_row+1}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">AM</f:facet>
+															<h:outputText value="#{_schoolSecondment.employeeCode}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Επώνυμο</f:facet>
+															<a4j:commandLink action="selectEmployee"
+																value="#{_schoolSecondment.employeeLastName}">
+																<f:setPropertyActionListener
+																	value="#{_schoolSecondment.id}"
+																	target="#{employeeHome.id}" />
+																<s:conversationPropagation type="nested" />
+															</a4j:commandLink>
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Όνομα</f:facet>
+															<a4j:commandLink action="selectEmployee"
+																value="#{_schoolSecondment.employeeFirstName}">
+																<f:setPropertyActionListener
+																	value="#{_schoolSecondment.id}"
+																	target="#{employeeHome.id}" />
+																<s:conversationPropagation type="nested" />
+															</a4j:commandLink>
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Όνομα Πατρός</f:facet>
+															<h:outputText
+																value="#{_schoolSecondment.employeeFatherName}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Tύπος</f:facet>
+															<h:outputText
+																value="#{messages[_schoolSecondment.secondmentTypeKey]}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Ώρες</f:facet>
+															<h:outputText
+																value="#{_schoolSecondment.finalWorkingHours}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Στην Μονάδα</f:facet>
+															<h:outputText value="#{_schoolSecondment.targetUnit}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Ειδ.</f:facet>
+															<h:outputText
+																value="#{_schoolSecondment.employeeSpecializationID}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Λεκτικό Ειδ.</f:facet>
+															<h:outputText
+																value="#{_schoolSecondment.employeeSpecialization}" />
+														</rich:column>
+													</rich:dataTable>
+												</h:panelGrid>
+											</rich:panel>
+
+											<rich:panel>
+												<f:facet name="header">
+													<h:outputLabel value="Απουσιάζουν Λόγω Θητείας" />
+												</f:facet>
+												<h:panelGrid columns="1" width="100%">
+													<h:outputText
+														value="Εμφανίζεται το μόνιμο προσωπικό που κατέχει οργανική θέση στην μονάδα, αλλά υπηρετεί με θητεία σε άλλη μονάδα." />
+
+
+													<rich:dataTable rowKeyVar="_row"
+														var="_schoolServiceAllocation"
+														value="#{schoolOutgoingServiceAllocations}"
+														sortMode="multi" border="0"
+														onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+														onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+														width="100%">
+														<rich:column style="text-align:center">
+															<f:facet name="header">A/A</f:facet>
+															<h:outputText styleClass="fieldValueText"
+																value="#{_row+1}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">AM</f:facet>
+															<h:outputText
+																value="#{_schoolServiceAllocation.employeeCode}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Επώνυμο</f:facet>
+															<a4j:commandLink action="selectEmployee"
+																value="#{_schoolServiceAllocation.employeeLastName}">
+																<f:setPropertyActionListener
+																	value="#{_schoolServiceAllocation.id}"
+																	target="#{employeeHome.id}" />
+																<s:conversationPropagation type="nested" />
+															</a4j:commandLink>
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Όνομα</f:facet>
+															<a4j:commandLink action="selectEmployee"
+																value="#{_schoolServiceAllocation.employeeFirstName}">
+																<f:setPropertyActionListener
+																	value="#{_schoolServiceAllocation.id}"
+																	target="#{employeeHome.id}" />
+																<s:conversationPropagation type="nested" />
+															</a4j:commandLink>
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Όνομα Πατρός</f:facet>
+															<h:outputText
+																value="#{_schoolServiceAllocation.employeeFatherName}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Tύπος</f:facet>
+															<h:outputText
+																value="#{messages[_schoolServiceAllocation.serviceAllocationTypeKey]}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Ώρες</f:facet>
+															<h:outputText
+																value="#{_schoolServiceAllocation.workingHoursOnServicingPosition}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Μονάδα Θητείας</f:facet>
+															<h:outputText
+																value="#{_schoolServiceAllocation.servicingUnit}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Ειδ.</f:facet>
+															<h:outputText
+																value="#{_schoolServiceAllocation.employeeSpecializationID}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Λεκτικό Ειδ.</f:facet>
+															<h:outputText
+																value="#{_schoolServiceAllocation.employeeSpecialization}" />
+														</rich:column>
+													</rich:dataTable>
+												</h:panelGrid>
+											</rich:panel>
+
+											<rich:panel>
+												<f:facet name="header">
+													<h:outputLabel value="Απουσιάζουν Λόγω Αδείας" />
+												</f:facet>
+												<h:panelGrid columns="1" width="100%">
+													<h:outputText
+														value="Εμφανίζεται το προσωπικό που υπηρετεί στην μονάδα με οποιαδήποτε σχέση και απουσιάζει λογω μακροχρόνιας άδειας." />
+
+
+													<rich:dataTable rowKeyVar="_row" var="_schoolLeave"
+														value="#{schoolLeaves}" sortMode="multi" border="0"
+														onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+														onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+														width="100%">
+														<rich:column style="text-align:center">
+															<f:facet name="header">A/A</f:facet>
+															<h:outputText styleClass="fieldValueText"
+																value="#{_row+1}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">AM</f:facet>
+															<h:outputText value="#{_schoolLeave.employeeCode}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Επώνυμο</f:facet>
+															<a4j:commandLink action="selectEmployee"
+																value="#{_schoolLeave.employeeLastName}">
+																<f:setPropertyActionListener value="#{_schoolLeave.id}"
+																	target="#{employeeHome.id}" />
+																<s:conversationPropagation type="nested" />
+															</a4j:commandLink>
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Όνομα</f:facet>
+															<a4j:commandLink action="selectEmployee"
+																value="#{_schoolLeave.employeeFirstName}">
+																<f:setPropertyActionListener value="#{_schoolLeave.id}"
+																	target="#{employeeHome.id}" />
+																<s:conversationPropagation type="nested" />
+															</a4j:commandLink>
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Όνομα Πατρός</f:facet>
+															<h:outputText value="#{_schoolLeave.employeeFatherName}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Tύπος</f:facet>
+															<h:outputText
+																value="#{messages[_schoolLeave.leaveTypeKey]}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Από</f:facet>
+															<h:outputText value="#{_schoolLeave.establishedIn}">
+																<s:convertDateTime pattern="dd-MM-yyyy" />
+															</h:outputText>
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Εώς</f:facet>
+															<h:outputText value="#{_schoolLeave.dueTo}">
+																<s:convertDateTime pattern="dd-MM-yyyy" />
+															</h:outputText>
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Ώρες</f:facet>
+															<h:outputText
+																value="#{_schoolLeave.employeeFinalWorkingHours}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Ειδ.</f:facet>
+															<h:outputText
+																value="#{_schoolLeave.employeeSpecializationID}" />
+														</rich:column>
+														<rich:column>
+															<f:facet name="header">Λεκτικό Ειδ.</f:facet>
+															<h:outputText
+																value="#{_schoolLeave.employeeSpecialization}" />
+														</rich:column>
+													</rich:dataTable>
+												</h:panelGrid>
+											</rich:panel>
+										</h:panelGrid>
+
+
+									</rich:panel>
 								</h:form>
-							</h:panelGrid>
-						</rich:panel>
 
+							</a4j:outputPanel>
 
+						</rich:tab>
 
-					</rich:tab>
+						<rich:tab execute="#{schoolReport.lookupRegularEmployments()}">
+							<f:facet name="header">
+								<h:outputText value="Οργανικά Ανήκωντες" />
+							</f:facet>
+							
 
-
-					<rich:tab>
-						<f:facet name="label">
-							<h:outputText value="Αναλυτική Τρέχουσα Κατάσταση" />
-						</f:facet>
-						<a4j:ajax event="ontabenter" ajaxSingle="true"
-							eventsQueue="lala2" reRender="detailed-school-status"
-							action="#{schoolReport.generateReport()}">
-						</a4j:ajax>
-
-						<a4j:outputPanel id="detailed-school-status">
-							<h:form>
-								<rich:panel>
-									<f:facet name="header">
-										<h:outputText value="Προσωπικό που Υπηρετεί" />
-									</f:facet>
-
-
-									<h:panelGrid columns="1" width="100%">
-										<rich:spacer height="2" />
-										<h:outputText styleClass="fieldValueText"
-											value="Στους παρακάτω πίνακες, εμφανίζεται το προσωπικό που υπηρετεί στην μονάδα και προσφέρει ώρες διδασκαλίας με οποιαδήποτε σχέση." />
-										<rich:spacer height="10" />
-
-										<rich:panel>
-											<f:facet name="header">
-												<h:outputLabel value="Υπηρετεί Οργανικά" />
-											</f:facet>
-											<h:panelGrid columns="1" width="100%">
-
-												<rich:spacer height="2" />
-												<h:outputText
-													value="Εμφανίζεται το μόνιμο προσωπικό με οργανική θέση, που υπηρετεί στην μονάδα και προσφέρει διδακτικές ώρες." />
-												<rich:spacer height="5" />
-
-
-
-												<rich:dataTable rowKeyVar="_row"
-													id="schoolRegularEmployeesTable"
-													var="_schoolRegularEmployee"
-													value="#{schoolRegularBasedEmployments}" sortMode="multi"
-													border="0"
-													onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
-													onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
-													width="100%">
-													<rich:column style="text-align:center">
-														<f:facet name="header">A/A</f:facet>
-														<h:outputText styleClass="fieldValueText"
-															value="#{_row+1}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">AM</f:facet>
-														<h:outputText
-															value="#{_schoolRegularEmployee.employeeCode}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Επώνυμο</f:facet>
-														<a4j:commandLink action="selectEmployee"
-															value="#{_schoolRegularEmployee.employeeLastName}">
-															<f:setPropertyActionListener
-																value="#{_schoolRegularEmployee.id}"
-																target="#{employeeHome.id}" />
-															<s:conversationPropagation type="nested" />
-														</a4j:commandLink>
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Όνομα</f:facet>
-														<a4j:commandLink action="selectEmployee"
-															value="#{_schoolRegularEmployee.employeeFirstName}">
-															<f:setPropertyActionListener
-																value="#{_schoolRegularEmployee.id}"
-																target="#{employeeHome.id}" />
-															<s:conversationPropagation type="nested" />
-														</a4j:commandLink>
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Όνομα Πατρός</f:facet>
-
-														<h:outputText
-															value="#{_schoolRegularEmployee.employeeFatherName}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Υπ Ωρ.</f:facet>
-														<h:outputText
-															value="#{_schoolRegularEmployee.employeeMandatoryHours}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Ωράριο</f:facet>
-														<h:outputText
-															value="#{_schoolRegularEmployee.employeeFinalWorkingHours}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Ειδ.</f:facet>
-														<h:outputText
-															value="#{_schoolRegularEmployee.employeeSpecializationID}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Λεκτικό Ειδ.</f:facet>
-														<h:outputText
-															value="#{_schoolRegularEmployee.employeeSpecialization}" />
-													</rich:column>
-												</rich:dataTable>
-
-
-											</h:panelGrid>
-										</rich:panel>
-
-
-										<rich:panel>
-											<f:facet name="header">
-												<h:outputLabel value="Υπηρετούν ως Αναπληρωτές" />
-											</f:facet>
-											<h:panelGrid columns="1" width="100%">
-												<rich:spacer height="5" />
-												<h:outputText
-													value="Εμφανίζονται οι αναπληρωτές που υπηρετούν στην μονάδα και προσφέρουν διδακτικές ώρες." />
-												<rich:spacer height="5" />
-
-
-												<h:outputText styleClass="fieldValueText"
-													value="Στην μονάδα δεν υπηρετούν αναπληρωτές"
-													rendered="#{schoolDeputyEmployees.size eq 0}" />
-												<rich:dataTable rowKeyVar="_row" var="_schoolDeputyEmployee"
-													rendered="#{schoolDeputyEmployees.size gt 0}"
-													value="#{schoolDeputyEmployees}" sortMode="multi"
-													border="0"
-													onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
-													onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
-													width="100%">
-													<rich:column style="text-align:center">
-														<f:facet name="header">A/A</f:facet>
-														<h:outputText styleClass="fieldValueText"
-															value="#{_row+1}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">AM</f:facet>
-														<h:outputText
-															value="#{_schoolDeputyEmployee.employeeCode}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Επώνυμο</f:facet>
-														<a4j:commandLink action="selectEmployee"
-															value="#{_schoolDeputyEmployee.employeeLastName}">
-															<f:setPropertyActionListener
-																value="#{_schoolDeputyEmployee.id}"
-																target="#{employeeHome.id}" />
-															<s:conversationPropagation type="nested" />
-														</a4j:commandLink>
-
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Όνομα</f:facet>
-														<a4j:commandLink action="selectEmployee"
-															value="#{_schoolDeputyEmployee.employeeFirstName}">
-															<f:setPropertyActionListener
-																value="#{_schoolDeputyEmployee.id}"
-																target="#{employeeHome.id}" />
-															<s:conversationPropagation type="nested" />
-														</a4j:commandLink>
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Όνομα Πατρός</f:facet>
-														<h:outputText
-															value="#{_schoolDeputyEmployee.employeeFatherName}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Υπ Ωρ.</f:facet>
-														<h:outputText
-															value="#{_schoolDeputyEmployee.employeeMandatoryHours}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Ωράριο</f:facet>
-														<h:outputText
-															value="#{_schoolDeputyEmployee.employeeFinalWorkingHours}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Ειδ.</f:facet>
-														<h:outputText
-															value="#{_schoolDeputyEmployee.employeeSpecializationID}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Λεκτικό Ειδ.</f:facet>
-														<h:outputText
-															value="#{_schoolDeputyEmployee.employeeSpecialization}" />
-													</rich:column>
-												</rich:dataTable>
-											</h:panelGrid>
-										</rich:panel>
-
-
-										<rich:panel>
-											<f:facet name="header">
-												<h:outputLabel value="Υπηρετεί Με Απόσπαση" />
-											</f:facet>
-											<h:panelGrid columns="1" width="100%">
-												<rich:spacer height="2" />
-												<h:outputText
-													value="Εμφανίζεται το προσωπικό που υπηρετεί στην μονάδα με απόσπαση και προσφέρει διδακτικές ώρες." />
-												<rich:spacer height="5" />
-
-												<h:outputText styleClass="fieldValueText"
-													value="Στην μονάδα δεν υπηρετούν αποσπασμένοι"
-													rendered="#{incomingSecondments.size eq 0}" />
-
-												<rich:dataTable rowKeyVar="_row" id="schoolSecondmentsTable"
-													rendered="#{incomingSecondments.size gt 0}"
-													var="_schoolSecondment" value="#{incomingSecondments}"
-													sortMode="multi" border="0"
-													onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
-													onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
-													width="100%">
-													<rich:column style="text-align:center">
-														<f:facet name="header">A/A</f:facet>
-														<h:outputText styleClass="fieldValueText"
-															value="#{_row+1}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">AM</f:facet>
-														<h:outputText value="#{_schoolSecondment.employeeCode}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Επώνυμο</f:facet>
-														<a4j:commandLink action="selectEmployee"
-															value="#{_schoolSecondment.employeeLastName}">
-															<f:setPropertyActionListener
-																value="#{_schoolSecondment.id}"
-																target="#{employeeHome.id}" />
-															<s:conversationPropagation type="nested" />
-														</a4j:commandLink>
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Όνομα</f:facet>
-														<a4j:commandLink action="selectEmployee"
-															value="#{_schoolSecondment.employeeFirstName}">
-															<f:setPropertyActionListener
-																value="#{_schoolSecondment.id}"
-																target="#{employeeHome.id}" />
-															<s:conversationPropagation type="nested" />
-														</a4j:commandLink>
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Όνομα Πατρός</f:facet>
-														<h:outputText
-															value="#{_schoolSecondment.employeeFatherName}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Tύπος</f:facet>
-														<h:outputText
-															value="#{messages[_schoolSecondment.secondmentTypeKey]}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Ώρες</f:facet>
-														<h:outputText
-															value="#{_schoolSecondment.finalWorkingHours}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Από</f:facet>
-														<h:outputText value="#{_schoolSecondment.sourceUnit}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Ειδ.</f:facet>
-														<h:outputText
-															value="#{_schoolSecondment.employeeSpecializationID}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Λεκτικό Ειδ.</f:facet>
-														<h:outputText
-															value="#{_schoolSecondment.employeeSpecialization}" />
-													</rich:column>
-												</rich:dataTable>
-											</h:panelGrid>
-										</rich:panel>
-
-										<rich:panel>
-											<f:facet name="header">
-												<h:outputLabel value="Υπηρετεί Με Διάθεση" />
-											</f:facet>
-											<h:panelGrid columns="1" width="100%">
-												<rich:spacer height="5" />
-												<h:outputText
-													value="Εμφανίζεται το προσωπικό που υπηρετεί στην μονάδα με διάθεση απο άλλες σχολικές μονάδες και προσφέρει διδακτικές ώρες." />
-												<rich:spacer height="5" />
-
-												<rich:dataTable rowKeyVar="_row" id="schoolDisposalsTable"
-													var="_schoolDisposal" value="#{incomingDisposals}"
-													sortMode="multi" border="0"
-													onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
-													onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
-													width="100%">
-													<rich:column style="text-align:center">
-														<f:facet name="header">A/A</f:facet>
-														<h:outputText styleClass="fieldValueText"
-															value="#{_row+1}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">AM</f:facet>
-														<h:outputText value="#{_schoolDisposal.employeeCode}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Επώνυμο</f:facet>
-														<a4j:commandLink action="selectEmployee"
-															value="#{_schoolDisposal.employeeLastName}">
-															<f:setPropertyActionListener
-																value="#{_schoolDisposal.id}"
-																target="#{employeeHome.id}" />
-															<s:conversationPropagation type="nested" />
-														</a4j:commandLink>
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Όνομα</f:facet>
-														<a4j:commandLink action="selectEmployee"
-															value="#{_schoolDisposal.employeeFirstName}">
-															<f:setPropertyActionListener
-																value="#{_schoolDisposal.id}"
-																target="#{employeeHome.id}" />
-															<s:conversationPropagation type="nested" />
-														</a4j:commandLink>
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Όνομα Πατρός</f:facet>
-														<h:outputText
-															value="#{_schoolDisposal.employeeFatherName}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Tύπος</f:facet>
-														<h:outputText
-															value="#{messages[_schoolDisposal.disposalTypeKey]}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Ώρες</f:facet>
-														<h:outputText value="#{_schoolDisposal.hours}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Ημέρες</f:facet>
-														<h:outputText value="#{_schoolDisposal.days}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Από</f:facet>
-														<h:outputText value="#{_schoolDisposal.sourceUnit}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Ειδ.</f:facet>
-														<h:outputText
-															value="#{_schoolDisposal.employeeSpecializationID}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Λεκτικό Ειδ.</f:facet>
-														<h:outputText
-															value="#{_schoolDisposal.employeeSpecialization}" />
-													</rich:column>
-												</rich:dataTable>
-											</h:panelGrid>
-
-										</rich:panel>
-
-										<rich:panel>
-											<f:facet name="header">
-												<h:outputLabel value="Υπηρετεί Με Θητεία" />
-											</f:facet>
-											<h:panelGrid columns="1" width="100%">
-												<rich:spacer height="2" />
-												<h:outputText
-													value="Εμφανίζεται το μόνιμο προσωπικό που υπηρετεί στην μονάδα με θητεία και προσφέρει διδακτικές ώρες." />
-												<rich:spacer height="5" />
-
-
-												<rich:dataTable rowKeyVar="_row"
-													id="serviceAllocationDisposalsTable"
-													var="_schoolServiceAllocation"
-													value="#{incomingServiceAllocations}" sortMode="multi"
-													border="0"
-													onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
-													onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
-													width="100%">
-													<rich:column style="text-align:center">
-														<f:facet name="header">A/A</f:facet>
-														<h:outputText styleClass="fieldValueText"
-															value="#{_row+1}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">AM</f:facet>
-														<h:outputText
-															value="#{_schoolServiceAllocation.employeeCode}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Επώνυμο</f:facet>
-														<a4j:commandLink action="selectEmployee"
-															value="#{_schoolServiceAllocation.employeeLastName}">
-															<f:setPropertyActionListener
-																value="#{_schoolServiceAllocation.id}"
-																target="#{employeeHome.id}" />
-															<s:conversationPropagation type="nested" />
-														</a4j:commandLink>
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Όνομα</f:facet>
-														<a4j:commandLink action="selectEmployee"
-															value="#{_schoolServiceAllocation.employeeFirstName}">
-															<f:setPropertyActionListener
-																value="#{_schoolServiceAllocation.id}"
-																target="#{employeeHome.id}" />
-															<s:conversationPropagation type="nested" />
-														</a4j:commandLink>
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Όνομα Πατρός</f:facet>
-														<h:outputText
-															value="#{_schoolServiceAllocation.employeeFatherName}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Tύπος</f:facet>
-														<h:outputText
-															value="#{messages[_schoolServiceAllocation.serviceAllocationTypeKey]}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Ώρες</f:facet>
-														<h:outputText
-															value="#{_schoolServiceAllocation.workingHoursOnServicingPosition}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Από</f:facet>
-														<h:outputText
-															value="#{_schoolServiceAllocation.sourceUnit}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Ειδ.</f:facet>
-														<h:outputText
-															value="#{_schoolServiceAllocation.employeeSpecializationID}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Λεκτικό Ειδ.</f:facet>
-														<h:outputText
-															value="#{_schoolServiceAllocation.employeeSpecialization}" />
-													</rich:column>
-												</rich:dataTable>
-											</h:panelGrid>
-										</rich:panel>
-
-									</h:panelGrid>
-
-
-								</rich:panel>
-
-
-								<rich:spacer height="30" />
-
-								<rich:panel>
-									<f:facet name="header">
-										<h:outputText value="Απουσιάζουν" />
-									</f:facet>
-
-									<h:panelGrid columns="1" width="100%">
-										<h:outputText
-											value="Στους παρακάτω πίνακες, εμφανίζεται το προσωπικό που ενω ανήκει οργανικά στην μονάδα ή κατά τα άλλα θα έπρεπε να προσφέρει διδακτικές ώρες, απουσιάζει απο την μονάδα." />
-
-
-										<rich:panel>
-											<f:facet name="header">
-												<h:outputLabel value="Απουσιάζουν Λόγω Απόσπασης" />
-											</f:facet>
-											<h:panelGrid columns="1" width="100%">
-												<rich:spacer height="2" />
-												<h:outputText
-													value="Εμφανίζεται το μόνιμο προσωπικό που κατέχει οργανική θέση στην μονάδα αλλά έχει αποσπαστεί σε άλλη μονάδα." />
-												<rich:spacer height="5" />
-
-												<rich:dataTable rowKeyVar="_row"
-													id="schoolOutgoingSecondmentsTable" var="_schoolSecondment"
-													value="#{schoolOutgoingSecondments}" sortMode="multi"
-													border="0"
-													onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
-													onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
-													width="100%">
-													<rich:column style="text-align:center">
-														<f:facet name="header">A/A</f:facet>
-														<h:outputText styleClass="fieldValueText"
-															value="#{_row+1}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">AM</f:facet>
-														<h:outputText value="#{_schoolSecondment.employeeCode}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Επώνυμο</f:facet>
-														<a4j:commandLink action="selectEmployee"
-															value="#{_schoolSecondment.employeeLastName}">
-															<f:setPropertyActionListener
-																value="#{_schoolSecondment.id}"
-																target="#{employeeHome.id}" />
-															<s:conversationPropagation type="nested" />
-														</a4j:commandLink>
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Όνομα</f:facet>
-														<a4j:commandLink action="selectEmployee"
-															value="#{_schoolSecondment.employeeFirstName}">
-															<f:setPropertyActionListener
-																value="#{_schoolSecondment.id}"
-																target="#{employeeHome.id}" />
-															<s:conversationPropagation type="nested" />
-														</a4j:commandLink>
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Όνομα Πατρός</f:facet>
-														<h:outputText
-															value="#{_schoolSecondment.employeeFatherName}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Tύπος</f:facet>
-														<h:outputText
-															value="#{messages[_schoolSecondment.secondmentTypeKey]}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Ώρες</f:facet>
-														<h:outputText
-															value="#{_schoolSecondment.finalWorkingHours}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Στην Μονάδα</f:facet>
-														<h:outputText value="#{_schoolSecondment.targetUnit}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Ειδ.</f:facet>
-														<h:outputText
-															value="#{_schoolSecondment.employeeSpecializationID}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Λεκτικό Ειδ.</f:facet>
-														<h:outputText
-															value="#{_schoolSecondment.employeeSpecialization}" />
-													</rich:column>
-												</rich:dataTable>
-											</h:panelGrid>
-										</rich:panel>
-
-										<rich:panel>
-											<f:facet name="header">
-												<h:outputLabel value="Απουσιάζουν Λόγω Θητείας" />
-											</f:facet>
-											<h:panelGrid columns="1" width="100%">
-												<rich:spacer height="2" />
-												<h:outputText
-													value="Εμφανίζεται το μόνιμο προσωπικό που κατέχει οργανική θέση στην μονάδα, αλλά υπηρετεί με θητεία σε άλλη μονάδα." />
-												<rich:spacer height="5" />
-
-
-												<rich:dataTable rowKeyVar="_row"
-													var="_schoolServiceAllocation"
-													value="#{schoolOutgoingServiceAllocations}"
-													sortMode="multi" border="0"
-													onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
-													onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
-													width="100%">
-													<rich:column style="text-align:center">
-														<f:facet name="header">A/A</f:facet>
-														<h:outputText styleClass="fieldValueText"
-															value="#{_row+1}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">AM</f:facet>
-														<h:outputText
-															value="#{_schoolServiceAllocation.employeeCode}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Επώνυμο</f:facet>
-														<a4j:commandLink action="selectEmployee"
-															value="#{_schoolServiceAllocation.employeeLastName}">
-															<f:setPropertyActionListener
-																value="#{_schoolServiceAllocation.id}"
-																target="#{employeeHome.id}" />
-															<s:conversationPropagation type="nested" />
-														</a4j:commandLink>
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Όνομα</f:facet>
-														<a4j:commandLink action="selectEmployee"
-															value="#{_schoolServiceAllocation.employeeFirstName}">
-															<f:setPropertyActionListener
-																value="#{_schoolServiceAllocation.id}"
-																target="#{employeeHome.id}" />
-															<s:conversationPropagation type="nested" />
-														</a4j:commandLink>
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Όνομα Πατρός</f:facet>
-														<h:outputText
-															value="#{_schoolServiceAllocation.employeeFatherName}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Tύπος</f:facet>
-														<h:outputText
-															value="#{messages[_schoolServiceAllocation.serviceAllocationTypeKey]}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Ώρες</f:facet>
-														<h:outputText
-															value="#{_schoolServiceAllocation.workingHoursOnServicingPosition}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Μονάδα Θητείας</f:facet>
-														<h:outputText
-															value="#{_schoolServiceAllocation.servicingUnit}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Ειδ.</f:facet>
-														<h:outputText
-															value="#{_schoolServiceAllocation.employeeSpecializationID}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Λεκτικό Ειδ.</f:facet>
-														<h:outputText
-															value="#{_schoolServiceAllocation.employeeSpecialization}" />
-													</rich:column>
-												</rich:dataTable>
-											</h:panelGrid>
-										</rich:panel>
-
-										<rich:panel>
-											<f:facet name="header">
-												<h:outputLabel value="Απουσιάζουν Λόγω Αδείας" />
-											</f:facet>
-											<h:panelGrid columns="1" width="100%">
-												<rich:spacer height="2" />
-												<h:outputText
-													value="Εμφανίζεται το προσωπικό που υπηρετεί στην μονάδα με οποιαδήποτε σχέση και απουσιάζει λογω μακροχρόνιας άδειας." />
-												<rich:spacer height="5" />
-
-
-												<rich:dataTable rowKeyVar="_row" var="_schoolLeave"
-													value="#{schoolLeaves}" sortMode="multi" border="0"
-													onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
-													onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
-													width="100%">
-													<rich:column style="text-align:center">
-														<f:facet name="header">A/A</f:facet>
-														<h:outputText styleClass="fieldValueText"
-															value="#{_row+1}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">AM</f:facet>
-														<h:outputText value="#{_schoolLeave.employeeCode}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Επώνυμο</f:facet>
-														<a4j:commandLink action="selectEmployee"
-															value="#{_schoolLeave.employeeLastName}">
-															<f:setPropertyActionListener value="#{_schoolLeave.id}"
-																target="#{employeeHome.id}" />
-															<s:conversationPropagation type="nested" />
-														</a4j:commandLink>
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Όνομα</f:facet>
-														<a4j:commandLink action="selectEmployee"
-															value="#{_schoolLeave.employeeFirstName}">
-															<f:setPropertyActionListener value="#{_schoolLeave.id}"
-																target="#{employeeHome.id}" />
-															<s:conversationPropagation type="nested" />
-														</a4j:commandLink>
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Όνομα Πατρός</f:facet>
-														<h:outputText value="#{_schoolLeave.employeeFatherName}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Tύπος</f:facet>
-														<h:outputText
-															value="#{messages[_schoolLeave.leaveTypeKey]}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Από</f:facet>
-														<h:outputText value="#{_schoolLeave.establishedIn}">
-															<s:convertDateTime pattern="dd-MM-yyyy" />
-														</h:outputText>
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Εώς</f:facet>
-														<h:outputText value="#{_schoolLeave.dueTo}">
-															<s:convertDateTime pattern="dd-MM-yyyy" />
-														</h:outputText>
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Ώρες</f:facet>
-														<h:outputText
-															value="#{_schoolLeave.employeeFinalWorkingHours}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Ειδ.</f:facet>
-														<h:outputText
-															value="#{_schoolLeave.employeeSpecializationID}" />
-													</rich:column>
-													<rich:column>
-														<f:facet name="header">Λεκτικό Ειδ.</f:facet>
-														<h:outputText
-															value="#{_schoolLeave.employeeSpecialization}" />
-													</rich:column>
-												</rich:dataTable>
-											</h:panelGrid>
-										</rich:panel>
-									</h:panelGrid>
-
-
-								</rich:panel>
-							</h:form>
-
-						</a4j:outputPanel>
-
-					</rich:tab>
-
-					<rich:tab>
-						<f:facet name="label">
-							<h:outputText value="Οργανικά Ανήκωντες" />
-						</f:facet>
-						<a4j:ajax event="ontabenter" ajaxSingle="true"
-							eventsQueue="lala2"
-							reRender="school-regular-employments-component"
-							action="#{schoolReport.lookupRegularEmployments()}">
-						</a4j:ajax>
-						
 
 							<rich:panel>
 								<f:facet name="header">
@@ -1045,412 +1018,374 @@
 								</f:facet>
 								<h:panelGrid columns="1" width="100%">
 
-									<rich:spacer height="2" />
 									<h:outputText
 										value="Εμφανίζεται το μόνιμο προσωπικό με οργανική θέση στην σχολική μονάδα, άσχετα αν προσφέρει στην μονάδα διδακτικές ώρες." />
-									<rich:spacer height="5" />
 
 
 									<a4j:outputPanel id="school-regular-employments-component">
 
-<h:form>
-										<a4j:repeat var="_group" value="#{schoolRegularEmployments}">
-											<rich:panel rendered="#{_group.size() gt 0}">
-												<f:facet name="header">
-													<h:outputText value="#{_group.specializationGroup.title}" />
-												</f:facet>
-
-												<rich:dataTable var="_schoolRegularEmployment"
-													value="#{_group.items}" sortMode="multi" border="0"
-													rowKeyVar="_row"
-													onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
-													onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
-													width="100%">
+										<h:form>
+											<a4j:repeat var="_group" value="#{schoolRegularEmployments}">
+												<rich:panel rendered="#{_group.size() gt 0}">
 													<f:facet name="header">
-														<rich:columnGroup>
-															<rich:column style="text-align:center">
-																<h:outputText styleClass="fieldValueText" value="A/A" />
-															</rich:column>
-															<rich:column style="text-align:center">
-																<h:outputText value="ΑΜ" />
-															</rich:column>
-															<rich:column>
-																<h:outputText value="Επώνυμο" />
-															</rich:column>
-															<rich:column>
-																<h:outputText value="Όνομα" />
-															</rich:column>
-															<rich:column>
-																<h:outputText value="Όνομα Πατρός" />
-															</rich:column>
-															<rich:column>
-																<h:outputText value="Ειδ." />
-															</rich:column>
-															<rich:column>
-																<h:outputText value="Τύπος" />
-															</rich:column>
-															<rich:column style="text-align:right">
-																<h:outputText value="Υπ. Ωρ." />
-															</rich:column>
-															<rich:column style="text-align:right">
-																<h:outputText value="Ωρ." />
-															</rich:column>
-															<rich:column style="text-align:right">
-																<h:outputText value="Σχόλιο" />
-															</rich:column>
-
-														</rich:columnGroup>
+														<h:outputText value="#{_group.specializationGroup.title}" />
 													</f:facet>
-													<rich:column style="text-align:center">
-														<h:outputText styleClass="fieldValueText"
-															value="#{_row+1}" />
-													</rich:column>
-													<rich:column style="text-align:center">
-														<h:outputText
-															value="#{_schoolRegularEmployment.employeeCode}" />
-													</rich:column>
-													<rich:column>
-														<a4j:commandLink action="selectEmployee"
-															value="#{_schoolRegularEmployment.employeeLastName}">
-															<f:setPropertyActionListener
-																value="#{_schoolRegularEmployment.employeeID}"
-																target="#{employeeHome.id}" />
-															<s:conversationPropagation type="nested" />
-														</a4j:commandLink>
-													</rich:column>
-													<rich:column>
-														<a4j:commandLink action="selectEmployee"
-															value="#{_schoolRegularEmployment.employeeFirstName}">
-															<f:setPropertyActionListener
-																value="#{_schoolRegularEmployment.employeeID}"
-																target="#{employeeHome.id}" />
-															<s:conversationPropagation type="nested" />
-														</a4j:commandLink>
-													</rich:column>
-													<rich:column>
-														<h:outputText
-															value="#{_schoolRegularEmployment.employeeFatherName}" />
-													</rich:column>
 
-													<rich:column>
-														<h:outputText
-															value="#{_schoolRegularEmployment.employeeSpecializationID}" />
-													</rich:column>
+													<rich:dataTable var="_schoolRegularEmployment"
+														value="#{_group.items}" sortMode="multi" border="0"
+														rowKeyVar="_row"
+														onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+														onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+														width="100%">
+														<f:facet name="header">
+															<rich:columnGroup>
+																<rich:column style="text-align:center">
+																	<h:outputText styleClass="fieldValueText" value="A/A" />
+																</rich:column>
+																<rich:column style="text-align:center">
+																	<h:outputText value="ΑΜ" />
+																</rich:column>
+																<rich:column>
+																	<h:outputText value="Επώνυμο" />
+																</rich:column>
+																<rich:column>
+																	<h:outputText value="Όνομα" />
+																</rich:column>
+																<rich:column>
+																	<h:outputText value="Όνομα Πατρός" />
+																</rich:column>
+																<rich:column>
+																	<h:outputText value="Ειδ." />
+																</rich:column>
+																<rich:column>
+																	<h:outputText value="Τύπος" />
+																</rich:column>
+																<rich:column style="text-align:right">
+																	<h:outputText value="Υπ. Ωρ." />
+																</rich:column>
+																<rich:column style="text-align:right">
+																	<h:outputText value="Ωρ." />
+																</rich:column>
+																<rich:column style="text-align:right">
+																	<h:outputText value="Σχόλιο" />
+																</rich:column>
 
-													<rich:column>
-														<h:outputText
-															value="#{messages[_schoolRegularEmployment.employeeTypeKey]}" />
-														<f:facet name="footer">
-															<s:div style="text-align:right">
-																<h:outputText value="Σύνολα : "
-																	style="font-weight:bold;" />
-															</s:div>
+															</rich:columnGroup>
 														</f:facet>
-													</rich:column>
+														<rich:column style="text-align:center">
+															<h:outputText styleClass="fieldValueText"
+																value="#{_row+1}" />
+														</rich:column>
+														<rich:column style="text-align:center">
+															<h:outputText
+																value="#{_schoolRegularEmployment.employeeCode}" />
+														</rich:column>
+														<rich:column>
+															<a4j:commandLink action="selectEmployee"
+																value="#{_schoolRegularEmployment.employeeLastName}">
+																<f:setPropertyActionListener
+																	value="#{_schoolRegularEmployment.employeeID}"
+																	target="#{employeeHome.id}" />
+																<s:conversationPropagation type="nested" />
+															</a4j:commandLink>
+														</rich:column>
+														<rich:column>
+															<a4j:commandLink action="selectEmployee"
+																value="#{_schoolRegularEmployment.employeeFirstName}">
+																<f:setPropertyActionListener
+																	value="#{_schoolRegularEmployment.employeeID}"
+																	target="#{employeeHome.id}" />
+																<s:conversationPropagation type="nested" />
+															</a4j:commandLink>
+														</rich:column>
+														<rich:column>
+															<h:outputText
+																value="#{_schoolRegularEmployment.employeeFatherName}" />
+														</rich:column>
 
-													<rich:column style="text-align:right">
-														<h:outputText
-															value="#{_schoolRegularEmployment.employeeMandatoryHours}" />
-														<f:facet name="footer">
-															<s:div style="text-align:right">
-																<h:outputText value="#{_group.mandatoryHours}"
-																	style="color:green;font-weight:bold;" />
-															</s:div>
-														</f:facet>
-													</rich:column>
-													<rich:column style="text-align:right">
-														<h:outputText styleClass="fieldValueText"
-															value="#{_schoolRegularEmployment.employeeFinalWorkingHours}" />
-														<f:facet name="footer">
-															<s:div style="text-align:right">
-																<h:outputText value="#{_group.availableHours}"
-																	style="color:green;font-weight:bold; text-align:right" />
-															</s:div>
-														</f:facet>
-													</rich:column>
-													<rich:column style="text-align:left">
-														<rich:dataGrid
-															onRowMouseOver="this.style.backgroundColor='#A5F3CB'"
-															onRowMouseOut="this.style.backgroundColor='#{a4jSkin.rowBackgroundColor}'"
-															value="#{_schoolRegularEmployment.employmentComments}"
-															var="_employmentComment">
-															<h:outputText value="#{_employmentComment}"
-																styleClass="fieldValueText" />
-														</rich:dataGrid>
-														<f:facet name="footer">
-															<s:div style="text-align:center">
-																<h:outputText value="Απαιτούμενες ώρες : " />
-																<h:outputText value="#{_group.requiredHours}"
-																	style="color:blue;font-weight:bold; text-align:right" />
-																<h:outputText value=", Πλ/Κν (+/-) : " />
-																<h:outputText rendered="#{!_group.hasMissingHours()}"
-																	value="#{_group.missingHours}"
-																	style="color: blue;font-weight:bold;" />
-																<h:outputText rendered="#{_group.hasMissingHours()}"
-																	value="#{_group.missingHours}"
-																	style="color: red;font-weight:bold;" />
-															</s:div>
-														</f:facet>
-													</rich:column>
+														<rich:column>
+															<h:outputText
+																value="#{_schoolRegularEmployment.employeeSpecializationID}" />
+														</rich:column>
+
+														<rich:column>
+															<h:outputText
+																value="#{messages[_schoolRegularEmployment.employeeTypeKey]}" />
+															<f:facet name="footer">
+																<s:div style="text-align:right">
+																	<h:outputText value="Σύνολα : "
+																		style="font-weight:bold;" />
+																</s:div>
+															</f:facet>
+														</rich:column>
+
+														<rich:column style="text-align:right">
+															<h:outputText
+																value="#{_schoolRegularEmployment.employeeMandatoryHours}" />
+															<f:facet name="footer">
+																<s:div style="text-align:right">
+																	<h:outputText value="#{_group.mandatoryHours}"
+																		style="color:green;font-weight:bold;" />
+																</s:div>
+															</f:facet>
+														</rich:column>
+														<rich:column style="text-align:right">
+															<h:outputText styleClass="fieldValueText"
+																value="#{_schoolRegularEmployment.employeeFinalWorkingHours}" />
+															<f:facet name="footer">
+																<s:div style="text-align:right">
+																	<h:outputText value="#{_group.availableHours}"
+																		style="color:green;font-weight:bold; text-align:right" />
+																</s:div>
+															</f:facet>
+														</rich:column>
+														<rich:column style="text-align:left">
+															<rich:dataGrid
+																onRowMouseOver="this.style.backgroundColor='#A5F3CB'"
+																onRowMouseOut="this.style.backgroundColor='#{a4jSkin.rowBackgroundColor}'"
+																value="#{_schoolRegularEmployment.employmentComments}"
+																var="_employmentComment">
+																<h:outputText value="#{_employmentComment}"
+																	styleClass="fieldValueText" />
+															</rich:dataGrid>
+															<f:facet name="footer">
+																<s:div style="text-align:center">
+																	<h:outputText value="Απαιτούμενες ώρες : " />
+																	<h:outputText value="#{_group.requiredHours}"
+																		style="color:blue;font-weight:bold; text-align:right" />
+																	<h:outputText value=", Πλ/Κν (+/-) : " />
+																	<h:outputText rendered="#{!_group.hasMissingHours()}"
+																		value="#{_group.missingHours}"
+																		style="color: blue;font-weight:bold;" />
+																	<h:outputText rendered="#{_group.hasMissingHours()}"
+																		value="#{_group.missingHours}"
+																		style="color: red;font-weight:bold;" />
+																</s:div>
+															</f:facet>
+														</rich:column>
 
 
-												</rich:dataTable>
-											</rich:panel>
+													</rich:dataTable>
+												</rich:panel>
 
-										</a4j:repeat>
-</h:form>
+											</a4j:repeat>
+										</h:form>
 									</a4j:outputPanel>
 
 								</h:panelGrid>
 							</rich:panel>
 
+						</rich:tab>
+
+						<rich:tab execute="#{schoolReport.lookupDeputyEmployments()}">
+							<f:facet name="header">
+								<h:outputText value="Αναπληρωτές" />
+							</f:facet>
+							
+							<a4j:outputPanel id="school-deputy-employments-component">
+
+								<h:form>
+									<rich:panel>
+										<f:facet name="header">
+											<h:outputLabel value="Αναπληρωτές Εκπαιδευτικοί" />
+										</f:facet>
+										<h:panelGrid columns="1" width="100%">
+
+											<h:outputText
+												value="Εμφανίζονται οι Αναπληρωτές Εκπαιδευτικοί της σχολικής μονάδας, άσχετα αν προσφέρουν στην μονάδα διδακτικές ώρες." />
+
+											<rich:dataTable id="schoolDeputyEmploymentsTable"
+												var="_schoolDeputyEmployment"
+												value="#{schoolDeputyEmployments}" sortMode="multi"
+												border="0" rowKeyVar="_row"
+												onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+												onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+												width="100%">
+												<rich:column style="text-align:center">
+													<f:facet name="header">A/A</f:facet>
+													<h:outputText styleClass="fieldValueText" value="#{_row+1}" />
+												</rich:column>
+												<rich:column>
+													<f:facet name="header">Επώνυμο</f:facet>
+													<a4j:commandLink action="selectEmployee"
+														value="#{_schoolDeputyEmployment.employeeLastName}">
+														<f:setPropertyActionListener
+															value="#{_schoolDeputyEmployment.id}"
+															target="#{employeeHome.id}" />
+														<s:conversationPropagation type="nested" />
+													</a4j:commandLink>
+												</rich:column>
+												<rich:column>
+													<f:facet name="header">Όνομα</f:facet>
+													<a4j:commandLink action="selectEmployee"
+														value="#{_schoolDeputyEmployment.employeeFirstName}">
+														<f:setPropertyActionListener
+															value="#{_schoolDeputyEmployment.id}"
+															target="#{employeeHome.id}" />
+														<s:conversationPropagation type="nested" />
+													</a4j:commandLink>
+												</rich:column>
+												<rich:column>
+													<f:facet name="header">Όνομα Πατρός</f:facet>
+													<h:outputText
+														value="#{_schoolDeputyEmployment.employeeFatherName}" />
+												</rich:column>
+												<rich:column style="text-align:center">
+													<f:facet name="header">Από</f:facet>
+													<h:outputText
+														value="#{_schoolDeputyEmployment.employeeEmploymentEstablishedDate}">
+														<s:convertDateTime pattern="dd-MM-yyyy" />
+													</h:outputText>
+												</rich:column>
+
+												<rich:column style="text-align:right">
+													<f:facet name="header">Υπ Ωρ.</f:facet>
+													<h:outputText
+														value="#{_schoolDeputyEmployment.employeeMandatoryHours}" />
+												</rich:column>
+												<rich:column style="text-align:right">
+													<f:facet name="header">Ωράριο</f:facet>
+													<h:outputText
+														value="#{_schoolDeputyEmployment.employeeFinalWorkingHours}" />
+												</rich:column>
+												<rich:column>
+													<f:facet name="header">Ειδ.</f:facet>
+													<h:outputText
+														value="#{_schoolDeputyEmployment.employeeSpecializationID}" />
+												</rich:column>
+												<rich:column>
+													<f:facet name="header">Λεκτικό Ειδ.</f:facet>
+													<h:outputText
+														value="#{_schoolDeputyEmployment.employeeSpecialization}" />
+												</rich:column>
+
+											</rich:dataTable>
+										</h:panelGrid>
+									</rich:panel>
+								</h:form>
+							</a4j:outputPanel>
 
 
 
 
 
+						</rich:tab>
 
-
-
-
-
-
-
-
-
-
-					</rich:tab>
-
-					<rich:tab>
-						<f:facet name="label">
-							<h:outputText value="Αναπληρωτές" />
-						</f:facet>
-						<a4j:ajax event="ontabenter" eventsQueue="lala2"
-							reRender="school-deputy-employments-component" ajaxSingle="true"
-							action="#{schoolReport.lookupDeputyEmployments()}">
-						</a4j:ajax>
-
-
-						<a4j:outputPanel id="school-deputy-employments-component">
-
-							<h:form>
-								<rich:panel>
-									<f:facet name="header">
-										<h:outputLabel value="Αναπληρωτές Εκπαιδευτικοί" />
-									</f:facet>
-									<h:panelGrid columns="1" width="100%">
-
-										<rich:spacer height="2" />
-										<h:outputText
-											value="Εμφανίζονται οι Αναπληρωτές Εκπαιδευτικοί της σχολικής μονάδας, άσχετα αν προσφέρουν στην μονάδα διδακτικές ώρες." />
-										<rich:spacer height="5" />
-
-										<rich:dataTable id="schoolDeputyEmploymentsTable"
-											var="_schoolDeputyEmployment"
-											value="#{schoolDeputyEmployments}" sortMode="multi"
-											border="0" rowKeyVar="_row"
-											onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
-											onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
-											width="100%">
-											<rich:column style="text-align:center">
-												<f:facet name="header">A/A</f:facet>
-												<h:outputText styleClass="fieldValueText" value="#{_row+1}" />
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">Επώνυμο</f:facet>
-												<a4j:commandLink action="selectEmployee"
-													value="#{_schoolDeputyEmployment.employeeLastName}">
-													<f:setPropertyActionListener
-														value="#{_schoolDeputyEmployment.id}"
-														target="#{employeeHome.id}" />
-													<s:conversationPropagation type="nested" />
-												</a4j:commandLink>
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">Όνομα</f:facet>
-												<a4j:commandLink action="selectEmployee"
-													value="#{_schoolDeputyEmployment.employeeFirstName}">
-													<f:setPropertyActionListener
-														value="#{_schoolDeputyEmployment.id}"
-														target="#{employeeHome.id}" />
-													<s:conversationPropagation type="nested" />
-												</a4j:commandLink>
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">Όνομα Πατρός</f:facet>
-												<h:outputText
-													value="#{_schoolDeputyEmployment.employeeFatherName}" />
-											</rich:column>
-											<rich:column style="text-align:center">
-												<f:facet name="header">Από</f:facet>
-												<h:outputText
-													value="#{_schoolDeputyEmployment.employeeEmploymentEstablishedDate}">
-													<s:convertDateTime pattern="dd-MM-yyyy" />
-												</h:outputText>
-											</rich:column>
-
-											<rich:column style="text-align:right">
-												<f:facet name="header">Υπ Ωρ.</f:facet>
-												<h:outputText
-													value="#{_schoolDeputyEmployment.employeeMandatoryHours}" />
-											</rich:column>
-											<rich:column style="text-align:right">
-												<f:facet name="header">Ωράριο</f:facet>
-												<h:outputText
-													value="#{_schoolDeputyEmployment.employeeFinalWorkingHours}" />
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">Ειδ.</f:facet>
-												<h:outputText
-													value="#{_schoolDeputyEmployment.employeeSpecializationID}" />
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">Λεκτικό Ειδ.</f:facet>
-												<h:outputText
-													value="#{_schoolDeputyEmployment.employeeSpecialization}" />
-											</rich:column>
-
-										</rich:dataTable>
-									</h:panelGrid>
-								</rich:panel>
-							</h:form>
-						</a4j:outputPanel>
-
-
-
-
-
-					</rich:tab>
-
-					<rich:tab>
-						<f:facet name="label">
-							<h:outputText value="Ωρομίσθιοι" />
-						</f:facet>
-						<a4j:ajax event="ontabenter" eventsQueue="lala2"
-							reRender="school-hourlybased-employments"
-							action="#{schoolReport.lookupHourlyBasedEmployments()}"
-							ajaxSingle="true">
-
-						</a4j:ajax>
-
-
-						
-
+						<rich:tab execute="#{schoolReport.lookupHourlyBasedEmployments()}">
+							<f:facet name="header">
+								<h:outputText value="Ωρομίσθιοι" />
+							</f:facet>
+							
 							<rich:panel>
 								<f:facet name="header">
 									<h:outputLabel value="Ωρομίσθιοι Εκπαιδευτικοί" />
 								</f:facet>
 								<h:panelGrid columns="1" width="100%">
 
-									<rich:spacer height="2" />
 									<h:outputText
 										value="Εμφανίζονται οι Ωρομίσθιοι Εκπαιδευτικοί της σχολικής μονάδας, άσχετα αν προσφέρουν στην μονάδα διδακτικές ώρες." />
-									<rich:spacer height="5" />
 									<a4j:outputPanel id="school-hourlybased-employments">
-<h:form>
-										<rich:dataTable id="schoolHourlyEmploymentsTable"
-											var="_schoolHourlyEmployment"
-											value="#{schoolHourlyBasedEmployments}" sortMode="multi"
-											border="0" rowKeyVar="_row"
-											onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
-											onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
-											width="100%">
-											<rich:column style="text-align:center">
-												<f:facet name="header">A/A</f:facet>
-												<h:outputText styleClass="fieldValueText" value="#{_row+1}" />
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">Επώνυμο</f:facet>
-												<a4j:commandLink action="selectEmployee"
-													value="#{_schoolHourlyEmployment.employeeLastName}">
-													<f:setPropertyActionListener
-														value="#{_schoolHourlyEmployment.employeeID}"
-														target="#{employeeHome.id}" />
-													<s:conversationPropagation type="nested" />
-												</a4j:commandLink>
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">Όνομα</f:facet>
-												<a4j:commandLink action="selectEmployee"
-													value="#{_schoolHourlyEmployment.employeeFirstName}">
-													<f:setPropertyActionListener
-														value="#{_schoolHourlyEmployment.employeeID}"
-														target="#{employeeHome.id}" />
-													<s:conversationPropagation type="nested" />
-												</a4j:commandLink>
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">Όνομα Πατρός</f:facet>
-												<h:outputText
-													value="#{_schoolHourlyEmployment.employeeFatherName}" />
-											</rich:column>
-											<rich:column style="text-align:center">
-												<f:facet name="header">Από</f:facet>
-												<h:outputText
-													value="#{_schoolHourlyEmployment.employeeEmploymentEstablishedDate}">
-													<s:convertDateTime pattern="dd-MM-yyyy" />
-												</h:outputText>
-											</rich:column>
-											<rich:column style="text-align:center">
-												<f:facet name="header">Εώς</f:facet>
-												<h:outputText
-													value="#{_schoolHourlyEmployment.employeeEmploymentTerminatedDate}">
-													<s:convertDateTime pattern="dd-MM-yyyy" />
-												</h:outputText>
-											</rich:column>
+										<h:form>
+											<rich:dataTable id="schoolHourlyEmploymentsTable"
+												var="_schoolHourlyEmployment"
+												value="#{schoolHourlyBasedEmployments}" sortMode="multi"
+												border="0" rowKeyVar="_row"
+												onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+												onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+												width="100%">
+												<rich:column style="text-align:center">
+													<f:facet name="header">A/A</f:facet>
+													<h:outputText styleClass="fieldValueText" value="#{_row+1}" />
+												</rich:column>
+												<rich:column>
+													<f:facet name="header">Επώνυμο</f:facet>
+													<a4j:commandLink action="selectEmployee"
+														value="#{_schoolHourlyEmployment.employeeLastName}">
+														<f:setPropertyActionListener
+															value="#{_schoolHourlyEmployment.employeeID}"
+															target="#{employeeHome.id}" />
+														<s:conversationPropagation type="nested" />
+													</a4j:commandLink>
+												</rich:column>
+												<rich:column>
+													<f:facet name="header">Όνομα</f:facet>
+													<a4j:commandLink action="selectEmployee"
+														value="#{_schoolHourlyEmployment.employeeFirstName}">
+														<f:setPropertyActionListener
+															value="#{_schoolHourlyEmployment.employeeID}"
+															target="#{employeeHome.id}" />
+														<s:conversationPropagation type="nested" />
+													</a4j:commandLink>
+												</rich:column>
+												<rich:column>
+													<f:facet name="header">Όνομα Πατρός</f:facet>
+													<h:outputText
+														value="#{_schoolHourlyEmployment.employeeFatherName}" />
+												</rich:column>
+												<rich:column style="text-align:center">
+													<f:facet name="header">Από</f:facet>
+													<h:outputText
+														value="#{_schoolHourlyEmployment.employeeEmploymentEstablishedDate}">
+														<s:convertDateTime pattern="dd-MM-yyyy" />
+													</h:outputText>
+												</rich:column>
+												<rich:column style="text-align:center">
+													<f:facet name="header">Εώς</f:facet>
+													<h:outputText
+														value="#{_schoolHourlyEmployment.employeeEmploymentTerminatedDate}">
+														<s:convertDateTime pattern="dd-MM-yyyy" />
+													</h:outputText>
+												</rich:column>
 
-											<rich:column style="text-align:right">
-												<f:facet name="header">Υπ Ωρ.</f:facet>
-												<h:outputText
-													value="#{_schoolHourlyEmployment.employeeMandatoryHours}"></h:outputText>
-											</rich:column>
-											<rich:column style="text-align:right">
-												<f:facet name="header">Ωράριο</f:facet>
-												<h:outputText
-													value="#{_schoolHourlyEmployment.employeeFinalWorkingHours}" />
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">Ειδ.</f:facet>
-												<h:outputText
-													value="#{_schoolHourlyEmployment.employeeSpecializationID}" />
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">Λεκτικό Ειδ.</f:facet>
-												<h:outputText
-													value="#{_schoolHourlyEmployment.employeeSpecialization}" />
-											</rich:column>
-										</rich:dataTable>
-</h:form>
+												<rich:column style="text-align:right">
+													<f:facet name="header">Υπ Ωρ.</f:facet>
+													<h:outputText
+														value="#{_schoolHourlyEmployment.employeeMandatoryHours}"></h:outputText>
+												</rich:column>
+												<rich:column style="text-align:right">
+													<f:facet name="header">Ωράριο</f:facet>
+													<h:outputText
+														value="#{_schoolHourlyEmployment.employeeFinalWorkingHours}" />
+												</rich:column>
+												<rich:column>
+													<f:facet name="header">Ειδ.</f:facet>
+													<h:outputText
+														value="#{_schoolHourlyEmployment.employeeSpecializationID}" />
+												</rich:column>
+												<rich:column>
+													<f:facet name="header">Λεκτικό Ειδ.</f:facet>
+													<h:outputText
+														value="#{_schoolHourlyEmployment.employeeSpecialization}" />
+												</rich:column>
+											</rich:dataTable>
+										</h:form>
 									</a4j:outputPanel>
 								</h:panelGrid>
 							</rich:panel>
 
-						
-					</rich:tab>
 
-					<rich:tab>
-						<f:facet name="label">
-							<h:outputText value="Τμήματα" />
-						</f:facet>
+						</rich:tab>
 
-						<a4j:ajax event="ontabenter" eventsQueue="lala2"
-							ajaxSingle="true"
-							action="#{schoolReport.lookupHourlyBasedEmployments()}" />
+						<rich:tab execute="#{schoolReport.lookupHourlyBasedEmployments()}">
+							<f:facet name="header">
+								<h:outputText value="Τμήματα" />
+							</f:facet>
 
+							
+ 
 
-					</rich:tab>
+						</rich:tab>
 
 
 
-				</rich:tabPanel>
+					</rich:tabPanel>
 
-
+				</h:form>
 
 				<h:panelGroup>
 					<s:div styleClass="actionButtons">
 						<s:button disabled="#{empty from}" action="backButton"
 							value="Επιστροφή" />
-						<rich:spacer width="20" />
 						<s:button action="endButton" value="Τέλος Ενέργειας" />
 					</s:div>
 				</h:panelGroup>
