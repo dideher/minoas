@@ -48,7 +48,9 @@ public class SchoolSearchAction extends BaseSearchAction<School> {
 				"SELECT s FROM School s WHERE ");
 		List<String> paramList = new ArrayList<String>();
 		paramList.add("lower(s.title) LIKE :schoolTitleSearchPattern");
-
+		
+		System.err.println(getSchoolRegion());
+		
 		if (CoreUtils.isNonEmpty(getSchoolRegion())) {
 			paramList.add("s.regionCode = :schoolRegionCode");
 		}
@@ -68,7 +70,7 @@ public class SchoolSearchAction extends BaseSearchAction<School> {
 		query.setParameter("schoolTitleSearchPattern",
 				CoreUtils.getSearchPattern(getSearchString()));
 		if (CoreUtils.isNonEmpty(getSchoolRegion())) {
-			query.setParameter("schoolRegionCode", getSchoolRegion());
+			query.setParameter("schoolRegionCode", getSchoolRegion().charAt(0));
 		}
 
 		return query;
