@@ -76,56 +76,22 @@
 									<ui:define name="label">
 										<h:outputText value="Γραφείο Αρμοδιότητας : " />
 									</ui:define>
-									<h:inputText id="organizationalOffice" required="true"
-										value="#{schoolHome.instance.office}"
-										converter="organizationalOfficeConverter"
-										styleClass="fieldValueText" size="25" maxlength="40">
-										<a4j:region renderRegionOnly="true">
-											<rich:suggestionbox height="100" width="200"
-												eventsQueue="foo" for="organizationalOffice" var="_office"
-												ignoreDupResponses="true"
-												suggestionAction="#{organizationalOfficeSuggester.suggest}">
-												<f:facet name="nothingLabel">
-													<h:outputText value="Άγνωστο Γραφείο" />
-												</f:facet>
-												<h:column>
-													<h:outputText value="#{_office.title}" />
-												</h:column>
-												<a4j:ajax ajaxSingle="true" event="onselect">
-													<f:setPropertyActionListener value="#{_office}"
-														target="#{schoolHome.instance.office}" />
-												</a4j:ajax>
-											</rich:suggestionbox>
-										</a4j:region>
-									</h:inputText>
+									<rich:autocomplete value="#{schoolHome.instance.office}" required="true" immediate="true"
+										converter="organizationalOfficeConverter" var="office"
+										fetchValue="#{office.title}" styleClass="fieldValueText"
+										autocompleteMethod="#{organizationalOfficeSuggester.suggest}"
+										layout="div">
+										#{office.title}
+									</rich:autocomplete>
 								</s:decorate>
-
+								
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
 									<ui:define name="label">
 										<h:outputText value="Ομάδα Σχολικής Μονάδας : " />
 									</ui:define>
-									<h:inputText id="schoolGroup" required="false"
-										value="#{schoolHome.instance.group}"
-										converter="schoolGroupConverter" styleClass="fieldValueText"
-										size="25" maxlength="40">
-										<a4j:region renderRegionOnly="true">
-											<rich:suggestionbox height="100" width="200"
-												eventsQueue="foo" for="schoolGroup" var="_schoolGroup"
-												ignoreDupResponses="true"
-												suggestionAction="#{schoolGroupSuggester.suggest}">
-												<f:facet name="nothingLabel">
-													<h:outputText value="Άγνωστη Σχολική Ομάδα" />
-												</f:facet>
-												<h:column>
-													<h:outputText value="#{_schoolGroup.title}" />
-												</h:column>
-												<a4j:ajax ajaxSingle="true" event="onselect">
-													<f:setPropertyActionListener value="#{_schoolGroup}"
-														target="#{schoolHome.instance.group}" />
-												</a4j:ajax>
-											</rich:suggestionbox>
-										</a4j:region>
-									</h:inputText>
+									<rich:autocomplete var="_schoolGroup" value="#{schoolHome.instance.group}" converter="schoolGroupConverter" autocompleteMethod="#{schoolGroupSuggester.suggest}" immediate="true" required="true" styleClass="fieldValueText" fetchValue="#{_schoolGroup.title}" layout="div">
+									#{_schoolGroup.title}
+									</rich:autocomplete>
 								</s:decorate>
 
 
@@ -153,40 +119,40 @@
 										<f:facet name="header">
 											<h:outputText value="Τμήματα Γενικής Παιδείας" />
 										</f:facet>
-									<h:panelGrid columns="3">
-										<s:decorate template="/layout/doubleLineEdit.xhtml">
-											<ui:define name="label">
-												<h:outputText value="Α' Τάξη" />
-											</ui:define>
-											<h:inputText value="#{schoolHome.instance.divisionsOfFirstGrade}"
-												size="2" required="false" maxlength="2" />
-										</s:decorate>
-										
-										<s:decorate template="/layout/doubleLineEdit.xhtml">
-											<ui:define name="label">
-												<h:outputText value="Β' Τάξη" />
-											</ui:define>
-											<h:inputText value="#{schoolHome.instance.divisionsOfSecondGrade}"
-												size="2" required="false" maxlength="2" />
-										</s:decorate>
-										
-										<s:decorate template="/layout/doubleLineEdit.xhtml">
-											<ui:define name="label">
-												<h:outputText value="Γ' Τάξη" />
-											</ui:define>
-											<h:inputText value="#{schoolHome.instance.divisionsOfThirdGrade}"
-												size="2" required="false" maxlength="2" />
-										</s:decorate>
-										
-									</h:panelGrid>
+										<h:panelGrid columns="3">
+											<s:decorate template="/layout/doubleLineEdit.xhtml">
+												<ui:define name="label">
+													<h:outputText value="Α' Τάξη" />
+												</ui:define>
+												<h:inputText
+													value="#{schoolHome.instance.divisionsOfFirstGrade}"
+													size="2" required="false" maxlength="2" />
+											</s:decorate>
+
+											<s:decorate template="/layout/doubleLineEdit.xhtml">
+												<ui:define name="label">
+													<h:outputText value="Β' Τάξη" />
+												</ui:define>
+												<h:inputText
+													value="#{schoolHome.instance.divisionsOfSecondGrade}"
+													size="2" required="false" maxlength="2" />
+											</s:decorate>
+
+											<s:decorate template="/layout/doubleLineEdit.xhtml">
+												<ui:define name="label">
+													<h:outputText value="Γ' Τάξη" />
+												</ui:define>
+												<h:inputText
+													value="#{schoolHome.instance.divisionsOfThirdGrade}"
+													size="2" required="false" maxlength="2" />
+											</s:decorate>
+
+										</h:panelGrid>
 									</rich:panel>
 								</h:panelGroup>
 
 							</h:panelGrid>
 
-							<h:panelGroup>
-								<rich:separator height="2" lineType="double" />
-							</h:panelGroup>
 							<h:panelGroup>
 
 								<s:div styleClass="actionButtons">
@@ -194,10 +160,7 @@
 										action="#{schoolHome.update}"
 										onclick="if(!confirm('Να καταχωρηθούν οι αλλαγές ?')) {form.reset(); return false;}"
 										value="Τροποποίηση" id="persistButton" />
-									<rich:spacer width="10" />
 
-
-									<rich:spacer width="10" />
 									<s:button action="endButton" value="Τέλος Ενέργειας" />
 
 

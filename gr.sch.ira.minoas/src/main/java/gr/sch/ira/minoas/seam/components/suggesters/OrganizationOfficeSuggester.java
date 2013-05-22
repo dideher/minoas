@@ -26,10 +26,10 @@ public class OrganizationOfficeSuggester extends BaseDatabaseAwareSeamComponent 
 
 	@SuppressWarnings("unchecked")
 	@Transactional
-	public Collection<OrganizationalOffice> suggest(Object unit_search_pattern) {
+	public Collection<OrganizationalOffice> suggest(String unit_search_pattern) {
 		return getEntityManager().createQuery(
 				"SELECT s FROM OrganizationalOffice s WHERE LOWER(s.title) LIKE LOWER(:search_pattern)").setParameter(
-				"search_pattern", CoreUtils.getSearchPattern(String.valueOf(unit_search_pattern))).getResultList();
+				"search_pattern", CoreUtils.getSearchPattern(unit_search_pattern)).getResultList();
 	}
 
 }
