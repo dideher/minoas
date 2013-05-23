@@ -88,6 +88,7 @@
       <property name="hibernate.cache.use_second_level_cache" value="false" />
       <property name="hibernate.cache.use_query_cache" value="false" />
       <property name="hibernate.generate_statistics" value="false" />
+	
       <!--
         <property name="hibernate.cache.use_second_level_cache" value="true" />
         <property name="hibernate.cache.use_query_cache" value="true" />
@@ -117,7 +118,9 @@
         unit, as is the case in JBoss AS 5.
       -->
       <property name="jboss.entity.manager.factory.jndi.name" value="java:/minoasEntityManagerFactory" />
-
+	  <!--  https://docs.jboss.org/author/display/AS7/JPA+Reference+Guide  -->
+	  <property name="jboss.as.jpa.providerModule" value="hibernate3-bundled" />
+	  <property name="jboss.as.jpa.managed" value="false" />
     </properties>
 
   </persistence-unit>
