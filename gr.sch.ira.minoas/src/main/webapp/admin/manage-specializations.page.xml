@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <page login-required="true"
  xmlns="http://jboss.com/products/seam/pages"
- xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.1.xsd">
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
  <description>Διαχείρηση Ειδικοτήτων Εκπαιδευτικών</description>
  <begin-conversation flush-mode="manual" join="true"/>
  <param name="manage_specializations_from"/>
@@ -14,6 +14,6 @@
   </rule>
  </navigation>
  <navigation from-action="backButton">
-  <redirect view-id="#{manage_specializations_from ? '/home' : manage_specializations_from}.xhtml}"/>
+  <redirect view-id="#{manage_specializations_from ? '/home' : manage_specializations_from}.xhtml"/>
  </navigation>
 </page>

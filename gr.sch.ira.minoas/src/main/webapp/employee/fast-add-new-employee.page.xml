@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <page login-required="true" xmlns="http://jboss.com/products/seam/pages"
- xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.1.xsd">
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
  <description>Γρήγορη Εισαγωγή  Εκπαιδευτικού</description>
  <begin-conversation flush-mode="manual" join="true"/>
  <param name="fast_add_new_employee_from"/>
@@ -9,11 +9,11 @@
  <!-- navigation rules -->
  <navigation from-action="#{employeeManagement.addNewEmployeeFromOtherPYSDE()}">
   <rule if-outcome="success">
-   <render view-id="#{fast_add_new_employee_to ? '/home' : fast_add_new_employee_to}.xhtml}"/>
+   <render view-id="#{fast_add_new_employee_to ? '/home' : fast_add_new_employee_to}.xhtml"/>
   </rule>
  </navigation>
  <navigation from-action="backButton">
   <end-conversation/>
-  <redirect view-id="#{fast_add_new_employee_from ? '/home' : fast_add_new_employee_from}.xhtml}"/>
+  <redirect view-id="#{fast_add_new_employee_from ? '/home' : fast_add_new_employee_from}.xhtml"/>
  </navigation>
 </page>
