@@ -364,8 +364,8 @@
 						<f:param name="employees-exclusion_report_from" value="home" />
 					</s:link>
 				</rich:menuItem>
-				<rich:menuItem submitMode="none">
-					<s:link value="Το Ωράριο μου"
+				<rich:menuItem submitMode="none" rendered="#{(s:hasRole('ADMIN'))}">>
+					<s:link value="Το Ωράριο μου" 
 						view="/employee/myWorkAttendance.xhtml">
 						<f:param name="employees-exclusion_report_from" value="home" />
 					</s:link>
