@@ -155,6 +155,8 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 	 */
 	public void prepareForNewOrUpdateEmployeeInfo() {
 		Employee employee = getEmployeeHome().getInstance();
+		employeeInfoHome.clearInstance();
+		rankInfoHome.clearInstance();
 
 		//	If employee HAS EmployeeInfo data
 		if (employee.getEmployeeInfo() != null) {
@@ -188,8 +190,6 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 			employeeInfoHome.getInstance();
 			rankInfoHome.getInstance();
 		}
-		
-		
 			//	If employee HAS RegularEmployeeInfo data
 			if (regularEmployeeInfoHome.isManaged()) {
 				/* 

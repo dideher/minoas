@@ -843,7 +843,7 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
             info("updated employee '#0' ΑΦΜ to '#1'", employee, employee.getVatNumber());
             
             
-            /* fix the current employement field */
+            /* fix the current employment field */
             Employment currentEmployment = employee.getCurrentEmployment();
             if(currentEmployment!=null) {
                 currentEmployment.setSpecialization(employee.getLastSpecialization());
