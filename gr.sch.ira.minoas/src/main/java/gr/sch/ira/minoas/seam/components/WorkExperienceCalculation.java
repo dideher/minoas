@@ -258,7 +258,7 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
             Date gofDate = reinfo.getAppointmentGOGDate();
             Date entryIntoServiceDate = curr_employment.getEntryIntoServiceDate();
             if(gofDate != null && entryIntoServiceDate !=null)
-            	return CoreUtils.datesDifferenceIn360DaysYear(gofDate, entryIntoServiceDate) > 30 ? entryIntoServiceDate : gofDate;
+            	return CoreUtils.datesDifferenceIn360DaysYear(gofDate, entryIntoServiceDate) > 60 ? entryIntoServiceDate : gofDate;
            	else
             	return null;
         } else
