@@ -14,41 +14,49 @@
 					<h:outputText value="Βασικά Στοιχεία" />
 				</f:facet>
 
-				<h:panelGrid columns="6" cellspacing="8">
+				<h:panelGrid columns="4" width="100%">
 					<h:outputLabel styleClass="fieldValueLabel" value="Επώνυμο: " />
 					<h:outputText styleClass="fieldValueText" value="#{employee.lastName}"/>
 					<h:outputLabel styleClass="fieldValueLabel" value="Όνομα: " />
 					<h:outputText styleClass="fieldValueText" value="#{employee.firstName}" />
 					<h:outputLabel styleClass="fieldValueLabel" value="Όνομα Πατρός: " />
 					<h:outputText styleClass="fieldValueText" value="#{employee.fatherName}" />
-					<h:outputLabel styleClass="fieldValueLabel" value="Ειδικότητα: " />
-					<h:outputText styleClass="fieldValueText" value="#{employee.lastSpecialization.id} - #{employee.lastSpecialization.title}" />
-					
-					<h:outputLabel styleClass="fieldValueLabel" value="Ημ/νία Γεννήσεως: " />
-					<h:outputText styleClass="fieldValueText" value="#{employee.dateOfBirth}">
-						<s:convertDateTime type="date" pattern="dd/MM/yyyy" />
-					</h:outputText>
 					<h:outputLabel styleClass="fieldValueLabel" value="Όνομα Μητρός: " />
 					<h:outputText styleClass="fieldValueText" value="#{employee.motherName}" />
+					<rich:spacer height="12px"/>
+					<rich:spacer height="12px"/>
+					<rich:spacer height="12px"/>
+					<rich:spacer height="12px"/>
 					<h:outputLabel styleClass="fieldValueLabel" value="ΑΜ: " />
 					<h:outputText styleClass="fieldValueText" value="#{employeeUtil.getRegistryID(employee)}" />
 					<h:outputLabel styleClass="fieldValueLabel" value="ΑΦΜ: " />
 					<h:outputText styleClass="fieldValueText" value="#{employee.vatNumber}" />
 					<h:outputLabel styleClass="fieldValueLabel" value="Αριθ. Ταυτότητας: " />
 					<h:outputText styleClass="fieldValueText" value="#{employee.idNumber}" />
-					
+					<h:outputLabel styleClass="fieldValueLabel" value="Αριθ. ΙΚΑ: "/>
+					<h:outputText styleClass="fieldValueText" value="#{employee.ikaId}"/>
+					<rich:spacer height="12px"/>
+					<rich:spacer height="12px"/>
+					<rich:spacer height="12px"/>
+					<rich:spacer height="12px"/>
+					<h:outputLabel styleClass="fieldValueLabel" value="Ημ/νία Γεννήσεως: " />
+					<h:outputText styleClass="fieldValueText" value="#{employee.dateOfBirth}">
+						<s:convertDateTime type="date" pattern="dd/MM/yyyy" />
+					</h:outputText>
 					<h:outputLabel styleClass="fieldValueLabel" value="Οικογεν. Κατάσταση: " />
 					<h:outputText styleClass="fieldValueText" value="#{messages[employee.maritalType.key]}" />
 					<h:outputLabel styleClass="fieldValueLabel" value="Αριθμός Τέκνων: " />
 					<h:outputText styleClass="fieldValueText" value="#{employee.numberOfChildren}" />
-					<h:outputLabel styleClass="fieldValueLabel" value="Αριθ. ΙΚΑ: "/>
-					<h:outputText styleClass="fieldValueText" value="#{employee.ikaId}"/>
-					
 					<h:outputLabel styleClass="fieldValueLabel" value="Πολύτεκνος: " />
 					<h:selectBooleanCheckbox value="#{employee.bigFamily}" disabled="true"/>
-					<h:outputLabel value="" />
-					<h:outputText value="" />
+				</h:panelGrid>
+
+				<h:panelGrid columns="2" width="100%">
 					
+					<rich:spacer height="12px"/>
+					<rich:spacer height="12px"/>
+					<h:outputLabel styleClass="fieldValueLabel" value="Ειδικότητα: " />
+					<h:outputText styleClass="fieldValueText" value="#{employee.lastSpecialization.id} - #{employee.lastSpecialization.title}" />
 					<h:outputLabel styleClass="fieldValueLabel" value="Τύπος: " />
 					<h:outputText styleClass="fieldValueText" value="#{messages[employee.type.key]}" />
 					
@@ -74,7 +82,7 @@
 					<h:outputText value="Σπουδές" />
 				</f:facet>
 				
-				<h:panelGrid columns="4" cellspacing="8">
+				<h:panelGrid columns="2" cellspacing="8">
 
 					<h:outputLabel styleClass="fieldValueLabel" 
 						value="Μεταπυχιακό (MSc): " />
@@ -91,20 +99,6 @@
 					</h:panelGroup>
 		
 					<h:outputLabel styleClass="fieldValueLabel"
-						value="Διδακτορικό (PhD): " />
-					<h:panelGroup> 
-						<h:selectBooleanCheckbox disabled="true"
-							value="#{employee.employeeInfo.hasAPhD}" />
-			
-						<h:outputFormat styleClass="fieldValueLabelLeft" value=" (Ημ/νία: {0, date, dd/MM/yyyy})"
-							rendered = "#{employee.employeeInfo.phdDate ne null}"
-							id="PhDDateOutputLabel" onmouseover="#{rich:component('PhDDateTooltip')}.show(event);">
-						    <f:param value="#{employee.employeeInfo.phdDate}" />
-						</h:outputFormat>
-						<rich:toolTip  id="PhDDateTooltip" value="Ημερομηνίες πριν την 1-11-2011 αναφέρονται στην ημερομηνία κατάθεσης του σχετικού τίτλου από την οποία λάμβανε και το σχετικό επίδομα, ενώ ημ/νίες μετά την 1-11-2011 αναφέρονται στην ημερομηνία πράξης του ΠΥΣΔΕ από την οποία ενσωματώνεται στο βαθμό ο χρόνος που αναλογεί." for="PhDDateOutputLabel"/>
-					</h:panelGroup>
-		
-					<h:outputLabel styleClass="fieldValueLabel"
 						value="Ανώτ.Σχολ.Δημ.Διοίκ.: " />
 					<h:panelGroup> 
 						<h:selectBooleanCheckbox disabled="true"
@@ -117,8 +111,21 @@
 						</h:outputFormat>
 						<rich:toolTip  id="natSchPubAdminDateTooltip" value="Ημερομηνίες πριν την 1-11-2011 αναφέρονται στην ημερομηνία κατάθεσης του σχετικού τίτλου από την οποία λάμβανε και το σχετικό επίδομα, ενώ ημ/νίες μετά την 1-11-2011 αναφέρονται στην ημερομηνία πράξης του ΠΥΣΔΕ από την οποία ενσωματώνεται στο βαθμό ο χρόνος που αναλογεί." for="natSchPubAdminDateOutputLabel"/>
 					</h:panelGroup>
+
+					<h:outputLabel styleClass="fieldValueLabel"
+						value="Διδακτορικό (PhD): " />
+					<h:panelGroup> 
+						<h:selectBooleanCheckbox disabled="true"
+							value="#{employee.employeeInfo.hasAPhD}" />
+			
+						<h:outputFormat styleClass="fieldValueLabelLeft" value=" (Ημ/νία: {0, date, dd/MM/yyyy})"
+							rendered = "#{employee.employeeInfo.phdDate ne null}"
+							id="PhDDateOutputLabel" onmouseover="#{rich:component('PhDDateTooltip')}.show(event);">
+						    <f:param value="#{employee.employeeInfo.phdDate}" />
+						</h:outputFormat>
+						<rich:toolTip  id="PhDDateTooltip" value="Ημερομηνίες πριν την 1-11-2011 αναφέρονται στην ημερομηνία κατάθεσης του σχετικού τίτλου από την οποία λάμβανε και το σχετικό επίδομα, ενώ ημ/νίες μετά την 1-11-2011 αναφέρονται στην ημερομηνία πράξης του ΠΥΣΔΕ από την οποία ενσωματώνεται στο βαθμό ο χρόνος που αναλογεί." for="PhDDateOutputLabel"/>
+					</h:panelGroup>
 				</h:panelGrid>
-				
 			</rich:tab>
 
 
@@ -128,7 +135,7 @@
 					<h:outputText value="Στοιχεία Μονίμου" />
 				</f:facet>
 				
-				<h:panelGrid columns="4" cellspacing="8">
+				<h:panelGrid columns="2" cellspacing="8">
 					<h:outputLabel styleClass="fieldValueLabel" value="ΑΜ: " />
 					<h:outputText styleClass="fieldValueText" value="#{employeeUtil.getRegistryID(employee)}" />
 					
