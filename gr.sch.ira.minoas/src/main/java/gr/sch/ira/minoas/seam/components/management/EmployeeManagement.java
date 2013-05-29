@@ -794,12 +794,56 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
         this.employeeCurrentHoursDistributionItems = employeeCurrentHoursDistributionItems;
     }
     
+    protected boolean isVATValid(String vat) {
+        if(vat!=null)
+            return Pattern.matches("\\d{9}", vat);
+        else return false;
+    }
+    
+    protected boolean isRegularRegistryIDValid(String registryID) {
+        if(registryID!=null)
+            return Pattern.matches("\\d{6,7}", registryID);
+        else return false;
+    }
+    
     @Transactional(TransactionPropagationType.REQUIRED)
-    public String updateEmployeeSpecialization() {
+    public String updateEmployeeBasicInfo() {
+    	 /* there is a rare situation (due bugs of the past) to have a regular employee with no regular employee info */
+        if(getEmployeeHome().isManaged() && (!getRegularEmployeeInfoHome().isManaged())) {
+            RegularEmployeeInfo i = new RegularEmployeeInfo();
+            i.setInsertedBy(getPrincipal());
+            i.setInsertedOn(new Date());
+            i.setEmployee(getEmployeeHome().getInstance());
+            i.setRegistryID("1234567");
+            getEntityManager().persist(i);
+            getRegularEmployeeInfoHome().setInstance(i);
+            getEmployeeHome().getInstance().setRegularDetail(i);
+         }
+        
+        if (getEmployeeHome().isManaged() && getRegularEmployeeInfoHome().isManaged()) {
+            Employee employee = getEmployeeHome().getInstance();
+            RegularEmployeeInfo employeeInfo = getRegularEmployeeInfoHome().getInstance();
+            if(employeeInfo.getRegistryID()!= "" && !isRegularRegistryIDValid(employeeInfo.getRegistryID())) {
+                getFacesMessages().add(Severity.ERROR, "Ο αριθμός μητρώου '#0' που εισάγατε, δεν είναι έγκυρος", employeeInfo.getRegistryID());
+                return ACTION_OUTCOME_FAILURE;
+            }
+            info("updated employee '#0' registry ID to '#1'", employee, employeeInfo.getRegistryID());
+            
+        } else {
+            return ACTION_OUTCOME_FAILURE;
+        }
+    	
         if (getEmployeeHome().isManaged()) {
             Employee employee = getEmployeeHome().getInstance();
             
-            /* fix the current employement field */
+            if(employee.getVatNumber() != "" && !isVATValid(employee.getVatNumber())) {
+                getFacesMessages().add(Severity.ERROR, "Το ΑΦΜ '#0' που εισάγατε, δεν είναι έγκυρο", employee.getVatNumber());
+                return ACTION_OUTCOME_FAILURE;
+            }
+            info("updated employee '#0' ΑΦΜ to '#1'", employee, employee.getVatNumber());
+            
+            
+            /* fix the current employment field */
             Employment currentEmployment = employee.getCurrentEmployment();
             if(currentEmployment!=null) {
                 currentEmployment.setSpecialization(employee.getLastSpecialization());
@@ -815,75 +859,18 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
                     em.setSpecialization(employee.getLastSpecialization());
                 }
             }
-            info("updated employee '#0' specialization", employee);
-            getEmployeeHome().update();
-            getEntityManager().flush();
-            return ACTION_OUTCOME_SUCCESS;
+            info("updated employee '#0' specialization to '#1'", employee, employee.getLastSpecialization());
+
         } else {
             return ACTION_OUTCOME_FAILURE;
         }
-    }
-    
-    protected boolean isVATValid(String vat) {
-        if(vat!=null)
-            return Pattern.matches("\\d{9}", vat);
-        else return false;
-    }
-    
-    protected boolean isRegularRegistryIDValid(String registryID) {
-        if(registryID!=null)
-            return Pattern.matches("\\d{6,7}", registryID);
-        else return false;
-    }
-    
-    @Transactional(TransactionPropagationType.REQUIRED)
-    public String updateEmployeeBasicInfo() {
-        if (getEmployeeHome().isManaged()) {
-            Employee employee = getEmployeeHome().getInstance();
-            if(!isVATValid(employee.getVatNumber())) {
-                getFacesMessages().add(Severity.ERROR, "Το ΑΦΜ '#0' που εισάγατε, δεν είναι έγκυρο", employee.getVatNumber());
-                return ACTION_OUTCOME_FAILURE;
-            }
-            info("updated employee '#0'", employee);
-            getEmployeeHome().update();
-            getEntityManager().flush();
-            return ACTION_OUTCOME_SUCCESS;
-        } else {
-            return ACTION_OUTCOME_FAILURE;
-        }
-    }
-    
-    @Transactional(TransactionPropagationType.REQUIRED)
-    public String updateEmployeeRegularRegistry() {
         
-        /* there is a rare situation (due bugs of the past) to have a regular employee with no regular employee info */
-        if(getEmployeeHome().isManaged() && (!getRegularEmployeeInfoHome().isManaged())) {
-            RegularEmployeeInfo i = new RegularEmployeeInfo();
-            i.setInsertedBy(getPrincipal());
-            i.setInsertedOn(new Date());
-            i.setEmployee(getEmployeeHome().getInstance());
-            i.setRegistryID("1234567");
-            getEntityManager().persist(i);
-            getRegularEmployeeInfoHome().setInstance(i);
-            getEmployeeHome().getInstance().setRegularDetail(i);
-         }
-        
-        if (getEmployeeHome().isManaged() && getRegularEmployeeInfoHome().isManaged()) {
-            Employee employee = getEmployeeHome().getInstance();
-            RegularEmployeeInfo employeeInfo = getRegularEmployeeInfoHome().getInstance();
-            if(!isRegularRegistryIDValid(employeeInfo.getRegistryID())) {
-                getFacesMessages().add(Severity.ERROR, "Ο αριθμός μητρώου '#0' που εισάγατε, δεν είναι έγκυρος", employeeInfo.getRegistryID());
-                return ACTION_OUTCOME_FAILURE;
-            }
-            info("updated employee '#0' registry ID to '#1'", employee, employeeInfo.getRegistryID());
-            getEmployeeHome().update();
-            getRegularEmployeeInfoHome().update();
-            getEntityManager().flush();
-            return ACTION_OUTCOME_SUCCESS;
-        } else {
-            return ACTION_OUTCOME_FAILURE;
-        }
+        getRegularEmployeeInfoHome().update();
+        getEmployeeHome().update();
+        getEntityManager().flush();
+        return ACTION_OUTCOME_SUCCESS;
     }
+    
 
     /**
      * @return the regularEmployeeInfoHome

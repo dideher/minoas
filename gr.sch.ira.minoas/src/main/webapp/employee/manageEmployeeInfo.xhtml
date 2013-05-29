@@ -223,6 +223,10 @@
 												eventsQueue="lalal"
 												action="#{employeeInfoManagement.recalculateTotalWorkService()}"
 												reRender="employeeInfoOutputPanel" />
+											<a4j:support event="oninputblur" ajaxSingle="true"
+												eventsQueue="lala2"
+												action="#{employeeInfoManagement.recalculateTotalWorkService()}"
+												reRender="employeeInfoOutputPanel" />
 										</rich:calendar>
 										
 										<h:outputText styleClass="fieldValueText"
@@ -423,7 +427,7 @@
 
 								</h:panelGrid>
 
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<s:decorate template="/layout/doubleLineEdit.xhtml" rendered="#{employeeInfoHome.instance.currentRankInfo ne null}">
 									<ui:define name="label">
 										<h:outputText styleClass="fieldValueLabel"
 											value="Επίπεδο Εκπ/σης: " />
@@ -439,7 +443,7 @@
 								</s:decorate>
 									
 									
-								<h:panelGrid columns="3">
+								<h:panelGrid columns="3" rendered="#{employeeInfoHome.instance.currentRankInfo ne null}">
 
 									<s:decorate template="/layout/doubleLineEdit.xhtml">
 										<ui:define name="label">
@@ -510,7 +514,7 @@
 
 								</h:panelGrid>
 
-								<h:panelGrid columns="1">
+								<h:panelGrid columns="1" rendered="#{employeeInfoHome.instance.currentRankInfo ne null}">
 									<s:decorate template="/layout/doubleLineEdit.xhtml">
 										<ui:define name="label">
 											<h:outputText styleClass="fieldValueLabelLeft"
