@@ -169,69 +169,75 @@
 							<f:facet name="header">
 								<h:outputText value="ΑΜ" />
 							</f:facet>
-							<h:outputText value="#{employeeUtil.getRegistryID(employee)}" />
+							<h:outputText value="#{employee.employeeCode}" styleClass="fieldValueText"/>
 						</rich:column>
 						<rich:column>
 							<f:facet name="header">
 								<h:outputText value="Επώνυμο" />
 							</f:facet>
-							<h:outputText value="#{employee.lastName}" />
+							<h:outputText value="#{employee.employeeLastName}" />
 						</rich:column>
 
 						<rich:column>
 							<f:facet name="header">
 								<h:outputText value="Όνομα" />
 							</f:facet>
-							<h:outputText value="#{employee.firstName}" />
+							<h:outputText value="#{employee.employeeFirstName}" />
 						</rich:column>
 						<rich:column>
 							<f:facet name="header">
 								<h:outputText value="Όνομα Πατρός" />
 							</f:facet>
-							<h:outputText value="#{employee.fatherName}" />
+							<h:outputText value="#{employee.employeeFatherName}" />
 						</rich:column>
-						<rich:column>
-							<f:facet name="header">
-								<h:outputText value="Όνομα Μητρός" />
-							</f:facet>
-							<h:outputText value="#{employee.motherName}" />
-						</rich:column>
-
+						
 						<rich:column style="text-align:center">
 							<f:facet name="header">
 								<h:outputText value="Ειδ." />
 							</f:facet>
-							<h:outputText value="#{employee.lastSpecialization.id}" />
+							<h:outputText value="#{employee.employeeSpecializationID}" />
 						</rich:column>
-						<rich:column>
+						<rich:column width="5%" style="text-align:center">
 							<f:facet name="header">
 								<h:outputText value="Λεκτικό Ειδικότητας" />
 							</f:facet>
-							<h:outputText value="#{employee.lastSpecialization.title}">
+							<h:outputText value="#{employee.employeeSpecialization}">
 							</h:outputText>
 						</rich:column>
 						<rich:column style="text-align:right">
 							<f:facet name="header">
 								<h:outputText value="Τύπος" />
 							</f:facet>
-							<h:outputText value="#{messages[employee.type.key]}" />
+							<h:outputText value="#{messages[employee.employeeTypeKey]}" />
 						</rich:column>
 						<rich:column style="text-align:center">
 							<f:facet name="header">
-								<h:outputText value="Ημ/νια Γεννήσεως" />
+								<h:outputText value="Οργανική" />
 							</f:facet>
-							<h:outputText value="#{employee.dateOfBirth}">
-								<s:convertDateTime pattern="dd-MM-yyyy" />
-							</h:outputText>
+							<h:outputText value="#{employee.employeeEmploymentUnitTitle}" />
 						</rich:column>
 						<rich:column style="text-align:center">
+							<f:facet name="header">
+								<h:outputText value="Μ.Κ." />
+							</f:facet>
+							<h:outputText value="#{messages[employee.employeeRankKey]}-#{employee.employeeSalaryGrade}" />
+						</rich:column>
+						<rich:column style="text-align:center">
+							<f:facet name="header">
+								<h:outputText value="Ετ.Γεν." />
+							</f:facet>
+							<h:outputText value="#{employee.employeeBirthday}">
+								<s:convertDateTime pattern="yyyy" />
+							</h:outputText>
+						</rich:column>
+						<rich:column width="5%">
 							<f:facet name="header">
 								<h:outputText value="Ενέργεια" />
 							</f:facet>
 							<rich:toolBar itemSeparator="line">
 
 								<a4j:commandLink action="selectEmployee" value="Επιλογή">
-									<f:setPropertyActionListener value="#{employee.id}"
+									<f:setPropertyActionListener value="#{employee.employeeID}"
 										target="#{employeeHome.id}" />
 									<s:conversationPropagation type="join" />
 								</a4j:commandLink>

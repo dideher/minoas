@@ -1,10 +1,14 @@
 package gr.sch.ira.minoas.seam.components.actions;
 
 import gr.sch.ira.minoas.model.employee.Employee;
+import gr.sch.ira.minoas.model.employee.EmployeeInfo;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.criteria.EmployeeCriteria;
+import gr.sch.ira.minoas.seam.components.reports.resource.EmployeeReportItem;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.Query;
 
@@ -26,9 +30,17 @@ public class SearchEmployeeAction extends BaseDatabaseAwareSeamComponent {
     private EmployeeCriteria employeeCriteria;
 
     @DataModel
-    private Collection<Employee> foundEmployees;
+    private Collection<EmployeeReportItem> foundEmployees;
 
-    public String searchEmployeesAction() {
+    public Collection<EmployeeReportItem> getFoundEmployees() {
+		return foundEmployees;
+	}
+
+	public void setFoundEmployees(Collection<EmployeeReportItem> foundEmployees) {
+		this.foundEmployees = foundEmployees;
+	}
+
+	public String searchEmployeesAction() {
         long started = System.currentTimeMillis();
         StringBuffer sql = new StringBuffer();
         sql.append("SELECT e FROM Employee e WHERE e.active IS :active ");
@@ -77,7 +89,19 @@ public class SearchEmployeeAction extends BaseDatabaseAwareSeamComponent {
             if (isNonEmpty(employeeCriteria.getRegistryNumber())) {
                 q.setParameter("registryID", employeeCriteria.getRegistryNumber());
             }
-            foundEmployees = q.getResultList();
+            
+            List<Employee> employees = (List<Employee>)q.getResultList();
+            foundEmployees = new ArrayList<EmployeeReportItem>(employees.size());
+            for(Employee e : employees) {
+            	EmployeeReportItem item = new EmployeeReportItem(e);
+            	EmployeeInfo i = e.getEmployeeInfo();
+            	if(i!=null) { 
+            		// if the employee has an employeeInfo proceed and update the employee report item with 
+            		// the corresponding rank info.
+            		item.populateWithRankInfo(i.getCurrentRankInfo());
+            	}
+            	foundEmployees.add(item);
+            }
             info("searchEmployeeAction: found '#0' employees in totally '#1' ms", foundEmployees.size(),
                     (System.currentTimeMillis() - started));
             return ACTION_OUTCOME_SUCCESS;
