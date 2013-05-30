@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <page login-required="true" xmlns="http://jboss.com/products/seam/pages"
- xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.1.xsd">
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
   <begin-conversation join="true" flush-mode="manual"/> 
   <description>Διαχείρηση Αδειών του/της #{employeeUtil.prettyFormat(employee)}</description>
   
@@ -32,7 +32,7 @@
   </navigation>
   
   <navigation from-action="backButton">
-    <redirect view-id="#{empty leave_management_from ? '/home' : leave_management_from}.xhtml}" />
+    <redirect view-id="#{empty leave_management_from ? '/home' : leave_management_from}.xhtml" />
   </navigation>
   
 </page>

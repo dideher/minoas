@@ -258,7 +258,7 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
             Date gofDate = reinfo.getAppointmentGOGDate();
             Date entryIntoServiceDate = curr_employment.getEntryIntoServiceDate();
             if(gofDate != null && entryIntoServiceDate !=null)
-            	return CoreUtils.datesDifferenceIn360DaysYear(gofDate, entryIntoServiceDate) > 30 ? entryIntoServiceDate : gofDate;
+            	return CoreUtils.datesDifferenceIn360DaysYear(gofDate, entryIntoServiceDate) > 60 ? entryIntoServiceDate : gofDate;
            	else
             	return null;
         } else
@@ -340,13 +340,13 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
          * http://edu.klimaka.gr/leitoyrgia-sxoleivn/anakoinvseis/539-school-diafora-vrario-ergasia-symplhrvsh-orariou.html
          */
         if (years >= 0 && years <= 6)
-            return 21;
+            return 23;
         else if (years >= 7 && years <= 12)
-            return 19;
+            return 21;
         else if (years >= 13 && years <= 20)
-            return 18;
+            return 20;
         else if (years >= 20)
-            return 16;
+            return 18;
         else
             throw new RuntimeException(String.format(
                     "failed to compute mandatory work hours for experience '%d' and type '%s'",

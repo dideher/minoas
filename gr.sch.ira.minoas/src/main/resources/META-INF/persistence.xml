@@ -88,6 +88,7 @@
       <property name="hibernate.cache.use_second_level_cache" value="false" />
       <property name="hibernate.cache.use_query_cache" value="false" />
       <property name="hibernate.generate_statistics" value="false" />
+	
       <!--
         <property name="hibernate.cache.use_second_level_cache" value="true" />
         <property name="hibernate.cache.use_query_cache" value="true" />
@@ -117,39 +118,13 @@
         unit, as is the case in JBoss AS 5.
       -->
       <property name="jboss.entity.manager.factory.jndi.name" value="java:/minoasEntityManagerFactory" />
-
+	  <!--  https://docs.jboss.org/author/display/AS7/JPA+Reference+Guide  -->
+	  <property name="jboss.as.jpa.providerModule" value="hibernate3-bundled" />
+	  <property name="jboss.as.jpa.managed" value="false" />
     </properties>
 
   </persistence-unit>
   
-  <persistence-unit name="spanoudakisDB" transaction-type="RESOURCE_LOCAL">
-    <provider>org.hibernate.ejb.HibernatePersistence</provider>
-    <jta-data-source>java:/gr.sch.ira.spanoudakisDatasource</jta-data-source>
-    <exclude-unlisted-classes>true</exclude-unlisted-classes>
-    
-    <properties>
-      <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect" />
-      <property name="hibernate.default_schema" value="slavikos"/>
-      <property name="hibernate.hbm2ddl.auto" value="validate" />
-      <property name="hibernate.show_sql" value="false" />
-      <property name="hibernate.format_sql" value="true" />
-
-      <!-- simple caching settings -->
-      <property name="hibernate.cache.provider_class" value="net.sf.ehcache.hibernate.SingletonEhCacheProvider" />
-      <!-- caching settings -->
-      <property name="hibernate.cache.use_second_level_cache" value="true" />
-      <property name="hibernate.cache.use_query_cache" value="true" />
-      <property name="hibernate.generate_statistics" value="true" />
-     
-      <property name="hibernate.transaction.manager_lookup_class"
-        value="org.hibernate.transaction.JBossTransactionManagerLookup" />
-      <!--
-        Binds the EntityManagerFactory to JNDI where Seam can look it up. This
-        is only relevant when the container automatically loads the persistence
-        unit, as is the case in JBoss AS 5.
-      -->
-      <property name="jboss.entity.manager.factory.jndi.name" value="java:/spanoudakisEntityManagerFactory" />
-      </properties>
-  </persistence-unit>
+  
 
 </persistence>
