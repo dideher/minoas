@@ -3,12 +3,16 @@ package gr.sch.ira.minoas.seam.components.management;
 import gr.sch.ira.minoas.core.CoreUtils;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeInfo;
+import gr.sch.ira.minoas.model.employee.EmployeeType;
 import gr.sch.ira.minoas.model.employee.RankInfo;
+import gr.sch.ira.minoas.model.employee.RegularEmployeeInfo;
+import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.CoreSearching;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
 import gr.sch.ira.minoas.seam.components.home.EmployeeInfoHome;
 import gr.sch.ira.minoas.seam.components.home.RankInfoHome;
+import gr.sch.ira.minoas.seam.components.home.RegularEmployeeInfoHome;
 
 import java.util.Date;
 
@@ -41,6 +45,10 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 	// create=true : Auto create employeeInfoHome when needed
 	@In(required = true, create = true)
 	EmployeeInfoHome employeeInfoHome;
+	
+	// create=true : Auto create employeeInfoHome when needed
+	@In(required = true, create = true)
+	RegularEmployeeInfoHome regularEmployeeInfoHome;
 
 	// create=true : Auto create rankInfoHome when needed
 	@In(required = true, create = true)
@@ -147,6 +155,8 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 	 */
 	public void prepareForNewOrUpdateEmployeeInfo() {
 		Employee employee = getEmployeeHome().getInstance();
+		employeeInfoHome.clearInstance();
+		rankInfoHome.clearInstance();
 
 		//	If employee HAS EmployeeInfo data
 		if (employee.getEmployeeInfo() != null) {
@@ -161,6 +171,15 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 			}
 		}
 		
+		//	If employee HAS RegularEmployeeInfo data
+		if (employee.getRegularEmployeeInfo() != null) {
+			
+			//	Set RegularEmployeeInfoHome with the Employee's RegularEmployeeInfo data
+			regularEmployeeInfoHome.setId(employee.getRegularEmployeeInfo().getId());
+		}
+		
+		
+		
 		//	If employee HAS EmployeeInfo data
 		if (employeeInfoHome.isManaged()) {
 			/* 
@@ -171,6 +190,15 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 			employeeInfoHome.getInstance();
 			rankInfoHome.getInstance();
 		}
+			//	If employee HAS RegularEmployeeInfo data
+			if (regularEmployeeInfoHome.isManaged()) {
+				/* 
+				 * we are updating an existing RegularEmployeeInfo, thus do nothing 
+				 * */
+			} else {	//	If employee HAS NO RegularEmployeeInfo data
+				/* Create new regular employee info home objects. (see the create=true directives at line 50)*/
+				regularEmployeeInfoHome.getInstance();
+			}
 	}
 
 	public void cancelInsertOrUpdateEmployeeInfo() {
@@ -183,6 +211,7 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 
 			Employee employee = getEmployeeHome().getInstance();
 			EmployeeInfo employeeInfo = employeeInfoHome.getInstance();
+			RegularEmployeeInfo regularEmployeeInfo = regularEmployeeInfoHome.getInstance();
 			RankInfo rInfo = rankInfoHome.getInstance();
 
 			//	If a user sets a date but forgets to check the corresponding checkbox, assume that he set the date by mistake and clear it.
@@ -212,6 +241,25 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 				return ACTION_OUTCOME_FAILURE;
 			}
 
+			
+			if (regularEmployeeInfoHome.isManaged()) {
+				//	Apply changes to the existing regularEmployeeInfoHome data
+				regularEmployeeInfoHome.update();
+			} else {
+				//	set the employee to the newly created employeeInfo object
+				regularEmployeeInfo.setEmployee(employee);
+				//	save the newly created employeeInfo object
+				regularEmployeeInfoHome.persist();
+				
+				//	set the newly created employeeInfo & regularEmployeeInfo as at the respective employee
+				employee.setRegularEmployeeInfo(regularEmployeeInfo);
+				
+				//	Save
+				getEntityManager().flush();
+			}
+			
+			
+			
 			//	If employee HAS EmployeeInfo data, then he is changing existing data
 			if (employeeInfoHome.isManaged()) {
 				info("trying to update employee info #0", employeeInfoHome);
@@ -231,6 +279,7 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 				employeeInfo.setEmployee(employee);
 				//	save the newly created employeeInfo object
 				employeeInfoHome.persist();
+				
 				//	set the employeeInfo to the newly created rankInfo object
 				rInfo.setEmployeeInfo(employeeInfo);
 				//	save the newly created rankInfo object
@@ -241,7 +290,7 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 
 				//	set the newly created employeeInfo as at the respective employee
 				employee.setEmployeeInfo(employeeInfo);
-
+				
 				//	Save
 				getEntityManager().flush();
 
@@ -322,16 +371,42 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 	 * totalWorkService = Ημ/νία Διορισμού + Συνολική Υπηρεσία + Συνολική Προϋπηρεσία
 	 */
 	public void recalculateTotalWorkService() {
-		EmployeeInfo employeeInfo = employeeHome.getInstance().getEmployeeInfo();
-		int totalWorkService = 0;
-		if (totalWorkServiceCalculationDate != null
-				&& employeeInfo.getGogAppointmentDate() != null)
-			totalWorkService = CoreUtils.datesDifferenceIn360DaysYear(
-					employeeInfo.getEntryIntoServiceDate(),
-					totalWorkServiceCalculationDate)
-					+ getSumOfExperience();
-		if (totalWorkService != 0)
-			setTotalCalculatedServiceInDays(totalWorkService);
+		//EmployeeInfo employeeInfo = employeeHome.getInstance().getEmployeeInfo();
+		Employee employee = employeeHome.getInstance();
+		if (employee.getType() == EmployeeType.REGULAR) {
+			RegularEmployeeInfo regularEmployeeInfo = employee.getRegularEmployeeInfo();
+			Employment employment = employee.getCurrentEmployment();
+			int totalWorkService = 0;
+			if (totalWorkServiceCalculationDate != null
+					&& regularEmployeeInfo.getAppointmentGOGDate() != null)
+				totalWorkService = CoreUtils.datesDifferenceIn360DaysYear(
+						employment.getEntryIntoServiceDate(),
+						totalWorkServiceCalculationDate)
+						+ getSumOfExperience();
+			if (totalWorkService != 0)
+				setTotalCalculatedServiceInDays(totalWorkService);
+		} else if (employee.getType() == EmployeeType.DEPUTY || employee.getType() == EmployeeType.HOURLYPAID) {
+			
+			
+			
+			// Total Work Service Recalculation for DEPUTY and HOURLY PAID pending!!!!
+			
+			
+//			Employment employment = employee.getCurrentEmployment();
+//			int totalWorkService = 0;
+//			if (totalWorkServiceCalculationDate != null
+//					&& regularEmployeeInfo.getGogAppointmentDate() != null)
+//				totalWorkService = CoreUtils.datesDifferenceIn360DaysYear(
+//						employment.getEntryIntoServiceDate(),
+//						totalWorkServiceCalculationDate)
+//						+ getSumOfExperience();
+//			if (totalWorkService != 0)
+//				setTotalCalculatedServiceInDays(totalWorkService);
+			
+			
+		}
+		
+		
 	}
 
 	/**

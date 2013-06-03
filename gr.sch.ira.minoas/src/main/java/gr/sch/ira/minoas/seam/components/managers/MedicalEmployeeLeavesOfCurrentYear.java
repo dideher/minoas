@@ -57,7 +57,11 @@ public class MedicalEmployeeLeavesOfCurrentYear extends BaseDatabaseAwareSeamCom
         Collection<EmployeeLeave> leaves = getCoreSearching().getEmployeeLeaves(employeeHome.getInstance(), startOfYear, endOfYear, leaveTypes);
         int count = 0;
         for(EmployeeLeave l : leaves) {
-            count+=l.getEffectiveNumberOfDays();
+        	try {
+        		count+=l.getEffectiveNumberOfDays();
+        	} catch(NullPointerException npe) {
+        		// ignore
+        	}
         }
         this.medicalEmployeeLeavesOfCurrentYear = count;
     }

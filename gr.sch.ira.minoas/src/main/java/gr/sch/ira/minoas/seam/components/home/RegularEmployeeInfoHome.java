@@ -3,6 +3,7 @@ package gr.sch.ira.minoas.seam.components.home;
 import gr.sch.ira.minoas.model.employee.RegularEmployeeInfo;
 
 import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.AutoCreate;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
@@ -14,6 +15,7 @@ import org.jboss.seam.annotations.Transactional;
  */
 @Name("regularEmployeeInfoHome")
 @Scope(ScopeType.CONVERSATION)
+@AutoCreate
 public class RegularEmployeeInfoHome extends MinoasEntityHome<RegularEmployeeInfo> {
 
 	/**

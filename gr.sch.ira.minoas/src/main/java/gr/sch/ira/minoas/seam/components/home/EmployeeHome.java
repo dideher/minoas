@@ -1,11 +1,12 @@
 package gr.sch.ira.minoas.seam.components.home;
 
 import gr.sch.ira.minoas.model.employee.Employee;
+import gr.sch.ira.minoas.model.employee.EmployeeInfo;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
 import gr.sch.ira.minoas.model.employee.RegularEmployeeInfo;
-import gr.sch.ira.minoas.model.employement.DeputyEmploymentInfo;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
+import gr.sch.ira.minoas.model.employement.NonRegularEmploymentInfo;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.ServiceAllocation;
 
@@ -37,11 +38,14 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 	private static final long serialVersionUID = 1L;
 
 	@In(create = true)
-	private DeputyEmploymentInfoHome deputyEmploymentInfoHome;
+	private NonRegularEmploymentInfoHome nonRegularEmploymentInfoHome;
 
 	@In(create = true)
 	private EmploymentHome employmentHome;
-
+	
+	@In(create = true)
+	private EmployeeInfoHome employeeInfoHome;
+	
 	@DataModel(value = "hourlyBasedEmployments")
 	private Collection<Employment> hourlyBasedEmployments = new ArrayList<Employment>();
 
@@ -55,20 +59,25 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 	private ServiceAllocationHome serviceAllocationHome;
 
 	
+	protected String tempValueHolder1; /* used as a holder value in forms */ 
+	
+	
+	
 
 	@Transactional
 	public String addNewEmployeeInLocalPYSDE() {
 
 		if (isManaged() || employmentHome.isManaged() || regularEmployeeInfoHome.isManaged()
-				|| deputyEmploymentInfoHome.isManaged()) {
+				|| nonRegularEmploymentInfoHome.isManaged()) {
 			throw new RuntimeException(
-					"employee home or employment home or employeeRegularInfo or deputyEmploymentInfoHome is managed.");
+					"employee home or employment home or employeeRegularInfo or nonRegularEmploymentInfoHome is managed.");
 		}
 
 		RegularEmployeeInfo info = null;
-		DeputyEmploymentInfo deputyEmploymentInfo = null;
+		NonRegularEmploymentInfo nonRegularEmploymentInfo = null;
 		Employee new_employee = getInstance();
 		Employment employment = employmentHome.getInstance();
+		EmployeeInfo eInfo = employeeInfoHome.getInstance(); 
 
 		Employee test_employee = getCoreSearching().getEmployeeOfTypeByVatNumber(getEntityManager(),
 				new_employee.getType(), new_employee.getVatNumber());
@@ -76,7 +85,7 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 			getFacesMessages().add(
 					Severity.ERROR,
 					"Το ΑΦΜ '" + new_employee.getVatNumber()
-							+ "' που εισάγατε είναι ήδει σε χρήση απο τον εκπαιδευτικό '"
+							+ "' που εισάγατε είναι ήδη σε χρήση απο τον εκπαιδευτικό '"
 							+ test_employee.toPrettyString()+"').");
 			return null;
 		}
@@ -96,7 +105,18 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 		}
 
 		getEntityManager().persist(new_employee);
-
+		
+		
+		//
+		//	Add an EmployeeInfo row in the database for all types of Employees
+		//	EmployeeInfo will be later filled using the 'Διαχείριση Στοιχείων Μισθοδοσίας' UI
+		//
+		eInfo.setEmployee(new_employee);
+		eInfo.setInsertedBy(getPrincipal());
+		eInfo.setInsertedOn(new Date());
+		getEntityManager().persist(eInfo);
+		new_employee.setEmployeeInfo(eInfo);
+		
 		employment.setEmployee(new_employee);
 		employment.setActive(Boolean.TRUE);
 		employment.setInsertedBy(getPrincipal());
@@ -115,22 +135,34 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 		}
 
 		if (new_employee.getType() == EmployeeType.DEPUTY) {
+			nonRegularEmploymentInfo = nonRegularEmploymentInfoHome.getInstance();
+			nonRegularEmploymentInfo.setEmployment(employment);
+			nonRegularEmploymentInfo.setInsertedBy(getPrincipal());
+			getEntityManager().persist(nonRegularEmploymentInfo);
+			
+			employment.setNonRegularEmploymentInfo(nonRegularEmploymentInfo);
+			
 			new_employee.setCurrentEmployment(employment);
 			getEntityManager().persist(employment);
 
-			deputyEmploymentInfo = new DeputyEmploymentInfo();
-			deputyEmploymentInfo.setEmployment(employment);
-			deputyEmploymentInfo.setInsertedBy(getPrincipal());
-			getEntityManager().persist(deputyEmploymentInfo);
+
 		}
 
 		if (new_employee.getType() == EmployeeType.HOURLYPAID) {
 			for (Employment hemployment : getHourlyBasedEmployments()) {
+				//
+				//	Copy Mandatory working hours to Final working hours
+				//	This will be deprecated in the future
+				//
+				hemployment.setFinalWorkingHours(hemployment.getMandatoryWorkingHours());
+				getEntityManager().persist(hemployment.getNonRegularEmploymentInfo());
+				
 				hemployment.setEmployee(new_employee);
 				hemployment.setActive(Boolean.TRUE);
 				hemployment.setInsertedBy(getPrincipal());
 				hemployment.setSchoolYear(getCoreSearching().getActiveSchoolYear(getEntityManager()));
 				hemployment.setSpecialization(new_employee.getLastSpecialization());
+				new_employee.setCurrentEmployment(hemployment);
 				getEntityManager().persist(hemployment);
 			}
 		}
@@ -146,9 +178,14 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 		e.setType(EmploymentType.HOURLYBASED);
 		e.setEstablished(new Date());
 		e.setFinalWorkingHours(11);
-		e.setMandatoryWorkingHours(21);
+		//e.setMandatoryWorkingHours(21);
+		
+		NonRegularEmploymentInfo nrei = new NonRegularEmploymentInfo();
+		nrei.setInsertedBy(getPrincipal());
+		
+		e.setNonRegularEmploymentInfo(nrei);
+		
 		getHourlyBasedEmployments().add(e);
-
 	}
 
 	/**
@@ -162,10 +199,10 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 	}
 
 	/**
-	 * @return the deputyEmploymentInfoHome
+	 * @return the nonRegularEmploymentInfoHome
 	 */
-	public DeputyEmploymentInfoHome getDeputyEmploymentInfoHome() {
-		return deputyEmploymentInfoHome;
+	public NonRegularEmploymentInfoHome getNonRegularEmploymentInfoHome() {
+		return nonRegularEmploymentInfoHome;
 	}
 
 	/**
@@ -217,16 +254,29 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 
 	public void prepareForNewEmployee() {
 		this.clearInstance();
+		hourlyBasedEmployments.clear();
 		regularEmployeeInfoHome.clearInstance();
 		employmentHome.clearInstance();
-		deputyEmploymentInfoHome.clearInstance();
+		nonRegularEmploymentInfoHome.clearInstance();
 		employmentHome.getInstance().setEstablished(
 				getCoreSearching().getActiveSchoolYear(getEntityManager()).getSchoolYearStart());
 		employmentHome.getInstance().setFinalWorkingHours(21);
 		employmentHome.getInstance().setMandatoryWorkingHours(21);
+		//employmentHome.getInstance().setNonRegularEmploymentInfo(nonRegularEmploymentInfoHome.getInstance());
 		addNewHourlyBasedEmploymentItem();
 	}
 
+    
+	/**
+     * @see gr.sch.ira.minoas.seam.components.home.MinoasEntityHome#clearInstance()
+     */
+    @Override
+    public void clearInstance() {
+        super.clearInstance();
+        setTempValueHolder1(null);
+    }
+	
+	
 	/**
 	 * @see gr.sch.ira.minoas.seam.components.home.MinoasEntityHome#remove()
 	 */
@@ -240,6 +290,8 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 			if (employee.getType() == EmployeeType.REGULAR) {
 				getEntityManager().remove(employee.getRegularDetail());
 			}
+			
+			getEntityManager().remove(employee.getEmployeeInfo());
 			return super.remove();
 		}
 		return null;
@@ -250,10 +302,10 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 	}
 
 	/**
-	 * @param deputyEmploymentInfoHome the deputyEmploymentInfoHome to set
+	 * @param nonRegularEmploymentInfoHome the nonRegularEmploymentInfoHome to set
 	 */
-	public void setDeputyEmploymentInfoHome(DeputyEmploymentInfoHome deputyEmploymentInfoHome) {
-		this.deputyEmploymentInfoHome = deputyEmploymentInfoHome;
+	public void setNonRegularEmploymentInfoHome(NonRegularEmploymentInfoHome nonRegularEmploymentInfoHome) {
+		this.nonRegularEmploymentInfoHome = nonRegularEmploymentInfoHome;
 	}
 
 	/**
@@ -330,4 +382,17 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
         return getInstance().isHourlyPaidEmployee();
     }
 
+    /**
+     * @return the tempValueHolder1
+     */
+    public String getTempValueHolder1() {
+        return tempValueHolder1;
+    }
+
+    /**
+     * @param tempValueHolder1 the tempValueHolder1 to set
+     */
+    public void setTempValueHolder1(String tempValueHolder1) {
+        this.tempValueHolder1 = tempValueHolder1;
+    }
 }

@@ -407,7 +407,7 @@ public class SchoolReport extends BaseReport {
         return sb.toString();
     }
 
-    public SchoolUniversalEmploymentItem constructDeputyEmploymentInfoItem(Employment employment) {
+    public SchoolUniversalEmploymentItem constructNonRegularEmploymentInfoItem(Employment employment) {
         Date today = DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH);
         SchoolUniversalEmploymentItem item = new SchoolUniversalEmploymentItem(employment);
 

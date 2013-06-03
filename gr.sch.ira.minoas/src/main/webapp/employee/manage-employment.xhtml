@@ -20,35 +20,245 @@
 			<ui:include src="/components/messages-component.xhtml" />
 
 			<h:panelGrid columns="1">
-
-
 				<rich:panel>
 					<f:facet name="header">
 						<h:outputText value="Βασικά Στοιχεία" />
 					</f:facet>
 
-					<ui:include src="/components/employee/basicInfo.xhtml" />
-
-
-
-
+					<ui:include src="/employee/basic-info.xhtml">
+						<ui:param name="employee" value="#{employee}" />
+					</ui:include>
 				</rich:panel>
 
 				<h:form>
 					<a4j:outputPanel id="employmentPanel">
 
 						<s:div id="employmentPanelDiv">
-							<s:div rendered="#{employee.type == 'REGULAR'}"
-								id="regularEmploymentDiv">
+							<s:div rendered="#{employee.type == 'REGULAR'}" id="regularEmploymentDiv">
 
 								<h:panelGrid>
+									<rich:dataTable value="#{schoolYearEmployments}" width="100%"
+										var="_regularEmploymentItem">
+										<f:facet name="header">
+											<h:outputText value="Τοποθετήσεις Μονίμου Εκπαιδευτικού - Τρέχουσα Σχολική Χρονία" />
+										</f:facet>
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Σχολική Μονάδα" />
+											</f:facet>
+											<h:outputText value="#{_regularEmploymentItem.school.title}" />
 
+										</rich:column>
+
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Ώρες Διδασκαλίας" />
+											</f:facet>
+											<h:outputText
+												value="#{_regularEmploymentItem.finalWorkingHours}" size="3"
+												styleClass="fieldValueText" maxlength="3" />
+										</rich:column>
+
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Από" />
+											</f:facet>
+											<h:outputText value="${_regularEmploymentItem.established}">
+												<s:convertDateTime type="date" pattern="dd-MM-yyyy"/>
+											</h:outputText>
+										</rich:column>
+
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Έως" />
+											</f:facet>
+											<h:outputText value="${_regularEmploymentItem.terminated}">
+												<s:convertDateTime pattern="dd-MM-yyyy" />
+											</h:outputText>
+										</rich:column>
+
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Πράξη Ανάληψης" />
+											</f:facet>
+											<h:outputText
+												value="${_regularEmploymentItem.entryIntoServiceAct}">
+											</h:outputText>
+										</rich:column>
+
+										<rich:column width="1">
+											<f:facet name="header">
+												<h:outputText value="Ημ/νία Πράξης"/>
+											</f:facet>
+											<h:outputText
+												value="${_regularEmploymentItem.entryIntoServiceDate}">
+												<s:convertDateTime pattern="dd-MM-yyyy" />
+											</h:outputText>
+										</rich:column>
+										
+										<rich:column width="10">
+											<f:facet name="header">
+												<h:outputText value="Σχόλια" />
+											</f:facet>	
+											<h:outputText value="${_regularEmploymentItem.comments}"/>
+										</rich:column>
+
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Ενέργεια" />
+											</f:facet>
+											<rich:toolBar itemSeparator="line"
+												rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYMENT_REGULAR'))}">
+												<a4j:commandLink id="terminatellink" ajaxSingle="true"
+													reRender="terminateEmployeeEmploymentContent"
+													oncomplete="#{rich:component('terminateEmploymentModalPanel')}.show();"
+													value="Τερματισμός"
+													onclick="javascript:if(!confirm('Είστε σίγουρος πως θέλετε να τερματίσετε την εγγραφή ;')) { return false; }">
+													<h:graphicImage value="/img/icons/euro.png" width="12"
+														height="12" style="border:0" />
+													<f:setPropertyActionListener
+														value="#{_regularEmploymentItem.id}"
+														target="#{employmentHome.id}" />
+												</a4j:commandLink>
+
+												<a4j:commandLink id="updatelink"
+													reRender="updateEmployeeEmploymentContent"
+													oncomplete="#{rich:component('updateEmploymentModalPanel')}.show()"
+													value="Τροποποίηση">
+													<h:graphicImage value="/img/icons/edit.png" width="12"
+														height="12" style="border:0" />
+													<f:setPropertyActionListener
+														value="#{_regularEmploymentItem.id}"
+														target="#{employmentHome.id}" />
+												</a4j:commandLink>
+
+												<rich:toolBarGroup location="right" itemSeparator="disc">
+													<a4j:commandLink id="deletelink"
+														rendered="#{(s:hasRole('ADMIN') or s:hasRole('DELETE_EMPLOYMENT_REGULAR'))}"
+														ajaxSingle="true"
+														reRender="deleteEmployeeEmploymentContent"
+														oncomplete="#{rich:component('deleteEmploymentModalPanel')}.show();"
+														value="Διαγραφή"
+														onclick="javascript:if(!confirm('Είστε σίγουρος πως θέλετε να διαγράψετε την εγγραφή ;')) { return false; }">
+														<h:graphicImage value="/img/icons/delete.png" width="12"
+															height="12" style="border:0" />
+														<f:setPropertyActionListener
+															value="#{_regularEmploymentItem.id}"
+															target="#{employmentHome.id}" />
+													</a4j:commandLink>
+												</rich:toolBarGroup>
+											</rich:toolBar>
+										</rich:column>
+									</rich:dataTable>
+
+
+									<rich:toolBar itemSeparator="line">
+										<s:button action="backButton" value="Επιστροφή" />
+										<s:button action="endButton" value="Τέλος Ενέργειας" />
+										<a4j:commandButton value="Προσθήκη Νέας Σχέσης"
+											reRender="addDeputyEmployeeEmploymentContent"
+											data="#{facesContext.maximumSeverity.ordinal ge 2}"
+											action="#{employeeEmploymentManagement.prepareForNewRegularEmployment}"
+											oncomplete="if(data == false) Richfaces.showModalPanel('addRegularEmploymentModalPanel');">
+										</a4j:commandButton>
+									</rich:toolBar>
+
+									<h:outputText value="Στον παρακάτω πίνακα εμφανίζονται οι προγενέστερες τοποθετήσεις του εκπαιδευτικού " />
+										<rich:dataTable value="#{oldEmployments}" width="100%"
+											var="_regularEmploymentItem">	
+											<f:facet name="header">
+												<h:outputText
+													value="Προγενέστερες Τοποθετήσεις Εκπαιδευτικού" />
+											</f:facet>
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="Σχολικό Έτος" />
+												</f:facet>
+												<h:outputText
+													value="#{_regularEmploymentItem.schoolYear.description}" />
+											</rich:column>
+
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="Σχολική Μονάδα" />
+												</f:facet>
+												<h:outputText value="#{_regularEmploymentItem.school.title}" />
+	
+											</rich:column>
+	
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="Ώρες Διδασκαλίας" />
+												</f:facet>
+												<h:outputText
+													value="#{_regularEmploymentItem.finalWorkingHours}" size="3"
+													styleClass="fieldValueText" maxlength="3" />
+											</rich:column>
+	
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="Από" />
+												</f:facet>
+												<h:outputText value="${_regularEmploymentItem.established}">
+													<s:convertDateTime pattern="dd-MM-yyyy" />
+												</h:outputText>
+											</rich:column>
+
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="Έως" />
+												</f:facet>
+												<h:outputText value="${_regularEmploymentItem.terminated}">
+													<s:convertDateTime pattern="dd-MM-yyyy" />
+												</h:outputText>
+											</rich:column>
+	
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="Πράξη Ανάληψης" />
+												</f:facet>
+												<h:outputText
+													value="${_regularEmploymentItem.entryIntoServiceAct}">
+												</h:outputText>
+											</rich:column>
+	
+											<rich:column width="1">
+												<f:facet name="header">
+													<h:outputText value="Ημ/νία Πράξης"/>
+												</f:facet>
+												<h:outputText
+													value="${_regularEmploymentItem.entryIntoServiceDate}">
+													<s:convertDateTime pattern="dd-MM-yyyy" />
+												</h:outputText>
+											</rich:column>
+											
+											<rich:column width="10">
+												<f:facet name="header">
+													<h:outputText value="Σχόλια" />
+												</f:facet>	
+												<h:outputText value="${_regularEmploymentItem.comments}"/>
+											</rich:column>
+										</rich:dataTable>
+									</h:panelGrid>
+
+
+
+
+
+
+
+
+							</s:div>
+
+							<s:div rendered="#{employee.type == 'DEPUTY'}"
+								id="DeputyEmploymentDiv">
+
+								<h:panelGrid>
 									<rich:dataTable value="#{schoolYearEmployments}" width="100%"
 										var="_deputyEmploymentItem">
 										<f:facet name="header">
 											<h:outputText
-												value="Τοποθετήσεις Μονίμου Εκπαιδευτικού - Τρέχουσα Σχολική Χρονία" />
-
+												value="Τοποθετήσεις Αναπληρωτή - Τρέχουσα Σχολική Χρονιά" />
 										</f:facet>
 										<rich:column>
 											<f:facet name="header">
@@ -70,10 +280,9 @@
 										<rich:column>
 											<f:facet name="header">
 												<h:outputText value="Από" />
-
 											</f:facet>
 											<h:outputText value="${_deputyEmploymentItem.established}">
-												<f:convertDateTime pattern="dd-MM-yyyy" />
+												<s:convertDateTime pattern="dd-MM-yyyy" />
 											</h:outputText>
 										</rich:column>
 
@@ -82,10 +291,36 @@
 												<h:outputText value="Έως" />
 											</f:facet>
 											<h:outputText value="${_deputyEmploymentItem.terminated}">
-												<f:convertDateTime pattern="dd-MM-yyyy" />
+												<s:convertDateTime pattern="dd-MM-yyyy" />
 											</h:outputText>
 										</rich:column>
 
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Πράξη Ανάληψης" />
+											</f:facet>
+											<h:outputText
+												value="${_deputyEmploymentItem.entryIntoServiceAct}">
+											</h:outputText>
+										</rich:column>
+
+										<rich:column width="1">
+											<f:facet name="header">
+												<h:outputText value="Ημ/νία Πράξης"/>
+											</f:facet>
+											<h:outputText
+												value="${_deputyEmploymentItem.entryIntoServiceDate}">
+												<s:convertDateTime pattern="dd-MM-yyyy" />
+											</h:outputText>
+										</rich:column>
+										
+
+										<rich:column width="10">
+											<f:facet name="header">
+												<h:outputText value="Σχόλια" />
+											</f:facet>	
+											<h:outputText value="${_deputyEmploymentItem.comments}"/>
+										</rich:column>
 
 										<rich:column>
 											<f:facet name="header">
@@ -93,7 +328,8 @@
 											</f:facet>
 
 											<rich:toolBar itemSeparator="line"
-												rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYMENT_REGULAR'))}">
+												rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYMENT_DEPUTY'))}">
+											
 												<a4j:commandLink id="terminatellink" ajaxSingle="true"
 													reRender="terminateEmployeeEmploymentContent"
 													oncomplete="#{rich:component('terminateEmploymentModalPanel')}.show();"
@@ -115,190 +351,9 @@
 													<f:setPropertyActionListener
 														value="#{_deputyEmploymentItem.id}"
 														target="#{employmentHome.id}" />
-												</a4j:commandLink>
-
-												<rich:toolBarGroup location="right" itemSeparator="disc">
-													<a4j:commandLink id="deletelink"
-														rendered="#{(s:hasRole('ADMIN') or s:hasRole('DELETE_EMPLOYMENT_REGULAR'))}"
-														ajaxSingle="true"
-														reRender="deleteEmployeeEmploymentContent"
-														oncomplete="#{rich:component('deleteEmploymentModalPanel')}.show();"
-														value="Διαγραφή"
-														onclick="javascript:if(!confirm('Είστε σίγουρος πως θέλετε να διαγράψετε την εγγραφή ;')) { return false; }">
-														<h:graphicImage value="/img/icons/delete.png" width="12"
-															height="12" style="border:0" />
-														<f:setPropertyActionListener
-															value="#{_deputyEmploymentItem.id}"
-															target="#{employmentHome.id}" />
-													</a4j:commandLink>
-												</rich:toolBarGroup>
-											</rich:toolBar>
-										</rich:column>
-									</rich:dataTable>
-
-
-									<rich:toolBar itemSeparator="line">
-										<s:button action="backButton" value="Επιστροφή" />
-										<s:button action="endButton" value="Τέλος Ενέργειας" />
-										<a4j:commandButton value="Προσθήκη Νέας Σχέσης"
-											reRender="addDeputyEmployeeEmploymentContent"
-											data="#{facesContext.maximumSeverity.ordinal ge 2}"
-											action="#{employeeEmploymentManagement.prepareForNewRegularEmployment}"
-											oncomplete="if(data == false) Richfaces.showModalPanel('addRegularEmploymentModalPanel');">
-										</a4j:commandButton>
-									</rich:toolBar>
-
-									<h:outputText
-										value="Στον παρακάτω πίνακα εμφανίζονται οι προγενέστερες τοποθετήσεις του εκπαιδευτικού " />
-
-									<rich:dataTable value="#{oldEmployments}" width="100%"
-										var="_deputyEmploymentItem">
-										<f:facet name="header">
-											<h:outputText
-												value="Προγενέστερες Τοποθετήσεις Εκπαιδευτικού" />
-
-										</f:facet>
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Σχολικό Έτος" />
-											</f:facet>
-											<h:outputText
-												value="#{_deputyEmploymentItem.schoolYear.description}" />
-										</rich:column>
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Σχολική Μονάδα" />
-											</f:facet>
-											<h:outputText value="#{_deputyEmploymentItem.school.title}" />
-
-										</rich:column>
-
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Ώρες Διδασκαλίας" />
-											</f:facet>
-											<h:outputText
-												value="#{_deputyEmploymentItem.finalWorkingHours}" size="3"
-												styleClass="fieldValueText" maxlength="3" />
-										</rich:column>
-
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Από" />
-
-											</f:facet>
-											<h:outputText value="${_deputyEmploymentItem.established}">
-												<f:convertDateTime pattern="dd-MM-yyyy" />
-											</h:outputText>
-										</rich:column>
-
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Έως" />
-											</f:facet>
-											<h:outputText value="${_deputyEmploymentItem.terminated}">
-												<f:convertDateTime pattern="dd-MM-yyyy" />
-											</h:outputText>
-										</rich:column>
-
-
-
-
-									</rich:dataTable>
-
-
-								</h:panelGrid>
-
-
-
-
-
-
-
-
-							</s:div>
-
-							<s:div rendered="#{employee.type == 'DEPUTY'}"
-								id="DeputyEmploymentDiv">
-
-								<h:panelGrid>
-
-									<rich:dataTable value="#{schoolYearEmployments}" width="100%"
-										var="_deputyEmploymentItem">
-										<f:facet name="header">
-											<h:outputText
-												value="Τοποθετήσεις Αναπληρωτή - Τρέχουσα Σχολική Χρονιά" />
-
-										</f:facet>
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Σχολική Μονάδα" />
-											</f:facet>
-											<h:outputText value="#{_deputyEmploymentItem.school.title}" />
-
-										</rich:column>
-
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Ώρες Διδασκαλίας" />
-											</f:facet>
-											<h:outputText
-												value="#{_deputyEmploymentItem.finalWorkingHours}" size="3"
-												styleClass="fieldValueText" maxlength="3" />
-										</rich:column>
-
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Από" />
-
-											</f:facet>
-											<h:outputText value="${_deputyEmploymentItem.established}">
-												<f:convertDateTime pattern="dd-MM-yyyy" />
-											</h:outputText>
-										</rich:column>
-
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Έως" />
-											</f:facet>
-											<h:outputText value="${_deputyEmploymentItem.terminated}">
-												<f:convertDateTime pattern="dd-MM-yyyy" />
-											</h:outputText>
-										</rich:column>
-
-
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Ενέργεια" />
-											</f:facet>
-
-											<rich:toolBar itemSeparator="line">
-											
-											<a4j:commandLink id="terminatellink" ajaxSingle="true"
-													reRender="terminateEmployeeEmploymentContent"
-													oncomplete="#{rich:component('terminateEmploymentModalPanel')}.show();"
-													value="Τερματισμός"
-													onclick="javascript:if(!confirm('Είστε σίγουρος πως θέλετε να τερματίσετε την εγγραφή ;')) { return false; }">
-													<h:graphicImage value="/img/icons/euro.png" width="12"
-														height="12" style="border:0" />
 													<f:setPropertyActionListener
-														value="#{_deputyEmploymentItem.id}"
-														target="#{employmentHome.id}" />
-												</a4j:commandLink>
-												
-												
-												
-												
-
-												<a4j:commandLink id="updatelink"
-													reRender="updateEmployeeEmploymentContent"
-													oncomplete="#{rich:component('updateEmploymentModalPanel')}.show()"
-													value="Τροποποίηση">
-													<h:graphicImage value="/img/icons/edit.png" width="12"
-														height="12" style="border:0" />
-													<f:setPropertyActionListener
-														value="#{_deputyEmploymentItem.id}"
-														target="#{employmentHome.id}" />
+														value="#{_deputyEmploymentItem.nonRegularEmploymentInfo.id}"
+														target="#{nonRegularEmploymentInfoHome.id}" />
 												</a4j:commandLink>
 												
 												<a4j:commandLink id="deletelink"
@@ -328,7 +383,6 @@
 											action="#{employeeEmploymentManagement.prepareForNewDeputyEmployment}"
 											oncomplete="if(data == false) Richfaces.showModalPanel('addDeputyEmploymentModalPanel');">
 										</a4j:commandButton>
-
 									</rich:toolBar>
 
 									<h:outputText
@@ -338,7 +392,6 @@
 										var="_deputyEmploymentItem">
 										<f:facet name="header">
 											<h:outputText value="Προγενέστερες Τοποθετήσεις Ωρομίσθιου" />
-
 										</f:facet>
 										<rich:column>
 											<f:facet name="header">
@@ -352,7 +405,6 @@
 												<h:outputText value="Σχολική Μονάδα" />
 											</f:facet>
 											<h:outputText value="#{_deputyEmploymentItem.school.title}" />
-
 										</rich:column>
 
 										<rich:column>
@@ -367,10 +419,9 @@
 										<rich:column>
 											<f:facet name="header">
 												<h:outputText value="Από" />
-
 											</f:facet>
 											<h:outputText value="${_deputyEmploymentItem.established}">
-												<f:convertDateTime pattern="dd-MM-yyyy" />
+												<s:convertDateTime pattern="dd-MM-yyyy" />
 											</h:outputText>
 										</rich:column>
 
@@ -379,21 +430,38 @@
 												<h:outputText value="Εώς" />
 											</f:facet>
 											<h:outputText value="${_deputyEmploymentItem.terminated}">
-												<f:convertDateTime pattern="dd-MM-yyyy" />
+												<s:convertDateTime pattern="dd-MM-yyyy" />
 											</h:outputText>
 										</rich:column>
 
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Πράξη Ανάληψης" />
+											</f:facet>
+											<h:outputText
+												value="${_deputyEmploymentItem.entryIntoServiceAct}">
+											</h:outputText>
+										</rich:column>
 
-
-
+										<rich:column width="1">
+											<f:facet name="header">
+												<h:outputText value="Ημ/νία Πράξης"/>
+											</f:facet>
+											<h:outputText
+												value="${_deputyEmploymentItem.entryIntoServiceDate}">
+												<s:convertDateTime pattern="dd-MM-yyyy" />
+											</h:outputText>
+										</rich:column>
+										
+										<rich:column width="10">
+											<f:facet name="header">
+												<h:outputText value="Σχόλια" />
+											</f:facet>	
+											<h:outputText value="${_deputyEmploymentItem.comments}"/>
+										</rich:column>
 									</rich:dataTable>
-
 								</h:panelGrid>
-
-
-
 							</s:div>
-
 
 							<s:div rendered="#{employee.type == 'HOURLYPAID'}"
 								id="hourlyEmploymentDiv">
@@ -403,15 +471,14 @@
 										<f:facet name="header">
 											<h:outputText
 												value="Τοποθετήσεις Ωρομίσθιου - Τρέχουσα Σχολική Χρονιά" />
-
 										</f:facet>
+
 										<rich:column>
 											<f:facet name="header">
 												<h:outputText value="Σχολική Μονάδα" />
 											</f:facet>
 											<h:outputText
 												value="#{_hourlyBasedEmploymentItem.school.title}" />
-
 										</rich:column>
 
 										<rich:column>
@@ -426,11 +493,10 @@
 										<rich:column>
 											<f:facet name="header">
 												<h:outputText value="Από" />
-
 											</f:facet>
 											<h:outputText
 												value="${_hourlyBasedEmploymentItem.established}">
-												<f:convertDateTime pattern="dd-MM-yyyy" />
+												<s:convertDateTime pattern="dd-MM-yyyy" />
 											</h:outputText>
 										</rich:column>
 
@@ -440,10 +506,29 @@
 											</f:facet>
 											<h:outputText
 												value="${_hourlyBasedEmploymentItem.terminated}">
-												<f:convertDateTime pattern="dd-MM-yyyy" />
+												<s:convertDateTime pattern="dd-MM-yyyy" />
 											</h:outputText>
 										</rich:column>
 
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Πράξη Ανάληψης" />
+											</f:facet>
+											<h:outputText
+												value="${_hourlyBasedEmploymentItem.entryIntoServiceAct}">
+											</h:outputText>
+										</rich:column>
+
+										<rich:column width="1">
+											<f:facet name="header">
+												<h:outputText value="Ημ/νία Πράξης"/>
+											</f:facet>
+											<h:outputText
+												value="${_hourlyBasedEmploymentItem.entryIntoServiceDate}">
+												<s:convertDateTime pattern="dd-MM-yyyy" />
+											</h:outputText>
+										</rich:column>
+										
 										<rich:column>
 											<f:facet name="header">
 												<h:outputText value="Κατοίκον;" />
@@ -453,14 +538,23 @@
 											<h:outputText value="Οχι"
 												rendered="#{!(_hourlyBasedEmploymentItem.homeBased)}" />
 										</rich:column>
+										
+										<rich:column width="10">
+											<f:facet name="header">
+												<h:outputText value="Σχόλια" />
+											</f:facet>	
+											<h:outputText value="${_hourlyBasedEmploymentItem.comments}"/>
+										</rich:column>
 
 										<rich:column>
 											<f:facet name="header">
 												<h:outputText value="Ενέργεια" />
 											</f:facet>
-
-											<rich:toolBar itemSeparator="line">
+											<rich:toolBar itemSeparator="line"
+												rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYMENT_HOURLY_BASED'))}">
+												
 												<a4j:commandLink id="cancellink" ajaxSingle="true"
+													rendered="#{(s:hasRole('ADMIN') or s:hasRole('DELETE_EMPLOYMENT_HOURLY_BASED'))}"
 													reRender="deleteEmployeeEmploymentContent"
 													oncomplete="#{rich:component('deleteEmploymentModalPanel')}.show();"
 													value="Διαγραφή"
@@ -481,6 +575,9 @@
 													<f:setPropertyActionListener
 														value="#{_hourlyBasedEmploymentItem.id}"
 														target="#{employmentHome.id}" />
+													<f:setPropertyActionListener
+														value="#{_hourlyBasedEmploymentItem.nonRegularEmploymentInfo.id}"
+														target="#{nonRegularEmploymentInfoHome.id}" />
 												</a4j:commandLink>
 											</rich:toolBar>
 										</rich:column>
@@ -539,7 +636,7 @@
 											</f:facet>
 											<h:outputText
 												value="${_hourlyBasedEmploymentItem.established}">
-												<f:convertDateTime pattern="dd-MM-yyyy" />
+												<s:convertDateTime pattern="dd-MM-yyyy" />
 											</h:outputText>
 										</rich:column>
 
@@ -549,10 +646,29 @@
 											</f:facet>
 											<h:outputText
 												value="${_hourlyBasedEmploymentItem.terminated}">
-												<f:convertDateTime pattern="dd-MM-yyyy" />
+												<s:convertDateTime pattern="dd-MM-yyyy" />
 											</h:outputText>
 										</rich:column>
 
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Πράξη Ανάληψης" />
+											</f:facet>
+											<h:outputText
+												value="${_hourlyBasedEmploymentItem.entryIntoServiceAct}">
+											</h:outputText>
+										</rich:column>
+
+										<rich:column width="1">
+											<f:facet name="header">
+												<h:outputText value="Ημ/νία Πράξης"/>
+											</f:facet>
+											<h:outputText
+												value="${_hourlyBasedEmploymentItem.entryIntoServiceDate}">
+												<s:convertDateTime pattern="dd-MM-yyyy" />
+											</h:outputText>
+										</rich:column>
+										
 										<rich:column>
 											<f:facet name="header">
 												<h:outputText value="Κατοίκον;" />
@@ -562,7 +678,13 @@
 											<h:outputText value="Οχι"
 												rendered="#{!(_hourlyBasedEmploymentItem.homeBased)}" />
 										</rich:column>
-
+										
+										<rich:column width="10">
+											<f:facet name="header">
+												<h:outputText value="Σχόλια" />
+											</f:facet>	
+											<h:outputText value="${_hourlyBasedEmploymentItem.comments}"/>
+										</rich:column>
 
 									</rich:dataTable>
 
@@ -582,7 +704,7 @@
 			width="450">
 			<f:facet name="header">
 				<h:outputText
-					value="Διαγραφή Σχέσεις Εργασίας Εκπαιδευτικού #{employeeUtil.prettyFormat(employeeHome.instance)}"
+					value="Διαγραφή Σχέσης Εργασίας Εκπαιδευτικού #{employeeUtil.prettyFormat(employeeHome.instance)}"
 					style="padding-right:15px;" />
 			</f:facet>
 			<f:facet name="controls">
@@ -684,11 +806,10 @@
 		</rich:modalPanel>
 
 
-		<rich:modalPanel id="updateEmploymentModalPanel" resizeable="true"
-			width="550" height="145">
+		<rich:modalPanel id="updateEmploymentModalPanel" resizeable="false" autosized="true">
 			<f:facet name="header">
 				<h:outputText
-					value="Ανανεώση Σχέσης Εργασίας Εκπαιδευτικού #{employeeUtil.prettyFormat(employeeHome.instance)}"
+					value="Επικαιροποίηση Σχέσης Εργασίας Εκπαιδευτικού #{employeeUtil.prettyFormat(employeeHome.instance)}"
 					style="padding-right:15px;" />
 			</f:facet>
 			<f:facet name="controls">
@@ -711,6 +832,9 @@
 										src="/employee/components/hourly-based-employment-component.xhtml">
 										<ui:param value="#{employmentHome.instance}"
 											name="_hourlybasedEmployment" />
+										<ui:param value="#{nonRegularEmploymentInfoHome.instance}"
+											name="_hourlyNonRegularEmploymentInfo" />
+										<ui:param name="enableSchoolUnitField" value="#{true}" />
 									</ui:include>
 								</s:div>
 
@@ -719,6 +843,9 @@
 										src="/employee/components/deputy-employment-component.xhtml">
 										<ui:param value="#{employmentHome.instance}"
 											name="_deputyEmployment" />
+										<ui:param value="#{nonRegularEmploymentInfoHome.instance}"
+											name="_deputyNonRegularEmploymentInfo" />
+										<ui:param name="enableSchoolUnitField" value="#{true}" />
 									</ui:include>
 								</s:div>
 
@@ -727,6 +854,7 @@
 										src="/employee/components/regular-employment-component.xhtml">
 										<ui:param value="#{employmentHome.instance}"
 											name="_regularEmployment" />
+										<ui:param name="enableSchoolUnitField" value="#{true}" />
 									</ui:include>
 								</s:div>
 
@@ -735,7 +863,7 @@
 						</a4j:outputPanel>
 
 						<h:panelGrid columns="2">
-							<a4j:commandButton value="Ανανέωση Σχέσης"
+							<a4j:commandButton value="Επικαιροποίηση Σχέσης"
 								action="#{employeeEmploymentManagement.updateEmployment}"
 								data="#{facesContext.maximumSeverity.ordinal ge 2}"
 								reRender="employmentPanelDiv"
@@ -752,7 +880,7 @@
 		<rich:modalPanel id="addHourlyEmploymentModalPanel" autosized="true">
 			<f:facet name="header">
 				<h:outputText
-					value="Πρόσθεση Σχέσης Εργασίας Ωρομίσθιου #{employeeUtil.prettyFormat(employeeHome.instance)}"
+					value="Προσθήκη Σχέσης Εργασίας Ωρομίσθιου #{employeeUtil.prettyFormat(employeeHome.instance)}"
 					style="padding-right:15px;" />
 			</f:facet>
 			<f:facet name="controls">
@@ -775,6 +903,8 @@
 										src="/employee/components/hourly-based-employment-component.xhtml">
 										<ui:param value="#{employmentHome.instance}"
 											name="_hourlybasedEmployment" />
+										<ui:param value="#{nonRegularEmploymentInfoHome.instance}"
+											name="_hourlyNonRegularEmploymentInfo" />
 									</ui:include>
 								</s:div>
 
@@ -802,7 +932,7 @@
 		<rich:modalPanel id="addDeputyEmploymentModalPanel" autosized="true">
 			<f:facet name="header">
 				<h:outputText
-					value="Πρόσθεση Σχέσης Εργασίας Αναπληρωτή #{employeeUtil.prettyFormat(employeeHome.instance)}"
+					value="Προσθήκη Σχέσης Εργασίας Αναπληρωτή #{employeeUtil.prettyFormat(employeeHome.instance)}"
 					style="padding-right:15px;" />
 			</f:facet>
 			<f:facet name="controls">
@@ -824,6 +954,8 @@
 									src="/employee/components/deputy-employment-component.xhtml">
 									<ui:param value="#{employmentHome.instance}"
 										name="_deputyEmployment" />
+									<ui:param value="#{nonRegularEmploymentInfoHome.instance}"
+										name="_deputyNonRegularEmploymentInfo" />
 								</ui:include>
 
 							</s:div>
@@ -850,7 +982,7 @@
 		<rich:modalPanel id="addRegularEmploymentModalPanel" autosized="true">
 			<f:facet name="header">
 				<h:outputText
-					value="Πρόσθεση Σχέσης Εργασίας Μονίμου #{employeeUtil.prettyFormat(employeeHome.instance)}"
+					value="Προσθήκη Σχέσης Εργασίας Μονίμου #{employeeUtil.prettyFormat(employeeHome.instance)}"
 					style="padding-right:15px;" />
 			</f:facet>
 			<f:facet name="controls">

@@ -45,7 +45,7 @@ public class Audit extends BaseIDModel {
 	 * 
 	 */
 	public Audit() {
-		// TODO Auto-generated constructor stub
+
 	}
 
 	public Audit(AuditType type, String comment, Principal principal) {

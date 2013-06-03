@@ -26,7 +26,10 @@
 							<f:facet name="header">
 								<h:outputText value="Βασικά Στοιχεία" />
 							</f:facet>
-							<ui:include src="/components/employee/basicInfo.xhtml" />
+							
+							<ui:include src="/employee/basic-info.xhtml">
+								<ui:param name="employee" value="#{employee}" />
+							</ui:include>
 						</rich:panel>
 					</h:panelGrid>
 
@@ -220,6 +223,10 @@
 												eventsQueue="lalal"
 												action="#{employeeInfoManagement.recalculateTotalWorkService()}"
 												reRender="employeeInfoOutputPanel" />
+											<a4j:support event="oninputblur" ajaxSingle="true"
+												eventsQueue="lala2"
+												action="#{employeeInfoManagement.recalculateTotalWorkService()}"
+												reRender="employeeInfoOutputPanel" />
 										</rich:calendar>
 										
 										<h:outputText styleClass="fieldValueText"
@@ -277,15 +284,15 @@
 
 
 								<h:panelGrid columns="3">
-									
-									<h:panelGrid columns="2"> 
+									<rich:spacer rendered="#{employee.type != 'REGULAR'}"/>
+									<h:panelGrid columns="2" rendered="#{employee.type == 'REGULAR'}"> 
 										<s:decorate template="/layout/doubleLineEdit.xhtml">
 											<ui:define name="label">
 												<h:outputText styleClass="fieldValueLabel"
 													value="ΦΕΚ : " />
 											</ui:define>
 											<h:inputText id="gogAppointmentNoFilter" required="true"
-												value="#{employeeInfoHome.instance.gogAppointmentNo}" size="4" maxlength="5"></h:inputText>
+												value="#{regularEmployeeInfoHome.instance.appointmentGOG}" size="4" maxlength="4"></h:inputText>
 										</s:decorate>
 	
 										<s:decorate template="/layout/doubleLineEdit.xhtml">
@@ -296,7 +303,7 @@
 											<rich:calendar inputSize="8" datePattern="dd/MM/yyyy"
 												style="width:50px" enableManualInput="true"
 												styleClass="fieldValueText" required="true"
-												value="#{employeeInfoHome.instance.gogAppointmentDate}">
+											value="#{regularEmployeeInfoHome.instance.appointmentGOGDate}">
 											</rich:calendar>
 										</s:decorate>
 									</h:panelGrid>
@@ -309,7 +316,7 @@
 													value="Πράξη: " />
 											</ui:define>
 											<h:inputText id="entryIntoServiceActFilter" required="true"
-												value="#{employeeInfoHome.instance.entryIntoServiceAct}" size="4" maxlength="5"></h:inputText>
+												value="#{employee.currentEmployment.entryIntoServiceAct}" size="5" maxlength="5"></h:inputText>
 										</s:decorate>
 	
 										<s:decorate template="/layout/doubleLineEdit.xhtml">
@@ -320,19 +327,20 @@
 											<rich:calendar inputSize="8" datePattern="dd/MM/yyyy"
 												style="width:50px" enableManualInput="true"
 												styleClass="fieldValueText" required="true"
-												value="#{employeeInfoHome.instance.entryIntoServiceDate}">
+												value="#{employee.currentEmployment.entryIntoServiceDate}">
 											</rich:calendar>
 										</s:decorate>
 									</h:panelGrid>
 									
-									<h:panelGrid columns="2">
+									<rich:spacer rendered="#{employee.type != 'REGULAR'}"/>
+									<h:panelGrid columns="2" rendered="#{employee.type == 'REGULAR'}">
 										<s:decorate template="/layout/doubleLineEdit.xhtml">
 											<ui:define name="label">
 												<h:outputText styleClass="fieldValueLabel"
 													value="Πράξη: " />
 											</ui:define>
 											<h:inputText id="permanentEmployeeActFilter" 
-												value="#{employeeInfoHome.instance.permanentEmployeeAct}" size="6" maxlength="7"></h:inputText>
+												value="#{regularEmployeeInfoHome.instance.permanentEmployeeAct}" size="8" maxlength="8"></h:inputText>
 										</s:decorate>
 	
 										<s:decorate template="/layout/doubleLineEdit.xhtml">
@@ -343,7 +351,7 @@
 											<rich:calendar inputSize="8" datePattern="dd/MM/yyyy"
 												style="width:50px" enableManualInput="true"
 												styleClass="fieldValueText" 
-												value="#{employeeInfoHome.instance.permanentEmployeeActDate}">
+												value="#{regularEmployeeInfoHome.instance.permanentEmployeeActDate}">
 											</rich:calendar>
 										</s:decorate>
 									</h:panelGrid>
@@ -419,7 +427,7 @@
 
 								</h:panelGrid>
 
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<s:decorate template="/layout/doubleLineEdit.xhtml" rendered="#{employeeInfoHome.instance.currentRankInfo ne null}">
 									<ui:define name="label">
 										<h:outputText styleClass="fieldValueLabel"
 											value="Επίπεδο Εκπ/σης: " />
@@ -435,7 +443,7 @@
 								</s:decorate>
 									
 									
-								<h:panelGrid columns="3">
+								<h:panelGrid columns="3" rendered="#{employeeInfoHome.instance.currentRankInfo ne null}">
 
 									<s:decorate template="/layout/doubleLineEdit.xhtml">
 										<ui:define name="label">
@@ -480,7 +488,7 @@
 										</ui:define>
 										<h:inputText id="salaryGradeFilter" required="true"
 											value="#{rankInfoHome.instance.salaryGrade}"
-											size="1"></h:inputText>
+											size="1" maxlength="1"></h:inputText>
 									</s:decorate>
 
 									<s:decorate template="/layout/doubleLineEdit.xhtml">
@@ -506,7 +514,7 @@
 
 								</h:panelGrid>
 
-								<h:panelGrid columns="1">
+								<h:panelGrid columns="1" rendered="#{employeeInfoHome.instance.currentRankInfo ne null}">
 									<s:decorate template="/layout/doubleLineEdit.xhtml">
 										<ui:define name="label">
 											<h:outputText styleClass="fieldValueLabelLeft"
@@ -638,7 +646,7 @@
 										</ui:define>
 										<h:inputText id="salaryGradeFilter" required="true"
 											value="#{rankInfoHome.instance.salaryGrade}"
-											size="1"></h:inputText>
+											size="1" maxlength="1"></h:inputText>
 									</s:decorate>
 
 									<s:decorate template="/layout/doubleLineEdit.xhtml">

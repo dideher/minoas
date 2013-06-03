@@ -1,6 +1,6 @@
 package gr.sch.ira.minoas.seam.components.home;
 
-import gr.sch.ira.minoas.model.employement.DeputyEmploymentInfo;
+import gr.sch.ira.minoas.model.employement.NonRegularEmploymentInfo;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
@@ -9,12 +9,12 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
 
 /**
- * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
+ * @author <a href="mailto:gand@sch.gr">Yorgos Andreadakis</a>
  * @version $Id$
  */
-@Name("deputyEmploymentInfoHome")
+@Name("nonRegularEmploymentInfoHome")
 @Scope(ScopeType.CONVERSATION)
-public class DeputyEmploymentInfoHome extends MinoasEntityHome<DeputyEmploymentInfo> {
+public class NonRegularEmploymentInfoHome extends MinoasEntityHome<NonRegularEmploymentInfo> {
 
 	/**
 	 * Comment for <code>serialVersionUID</code>
@@ -25,8 +25,8 @@ public class DeputyEmploymentInfoHome extends MinoasEntityHome<DeputyEmploymentI
 	 * @see org.jboss.seam.framework.Home#createInstance()
 	 */
 	@Override
-	protected DeputyEmploymentInfo createInstance() {
-		DeputyEmploymentInfo new_instance = new DeputyEmploymentInfo();
+	protected NonRegularEmploymentInfo createInstance() {
+		NonRegularEmploymentInfo new_instance = new NonRegularEmploymentInfo();
 		return new_instance;
 	}
 
@@ -34,9 +34,9 @@ public class DeputyEmploymentInfoHome extends MinoasEntityHome<DeputyEmploymentI
 	 * @see org.jboss.seam.framework.Home#getInstance()
 	 */
 	@Override
-	@Factory(value = "deputyEmploymentInfo", scope = ScopeType.PAGE)
-	public DeputyEmploymentInfo getInstance() {
-		return (DeputyEmploymentInfo) super.getInstance();
+	@Factory(value = "nonRegularEmploymentInfo", scope = ScopeType.PAGE)
+	public NonRegularEmploymentInfo getInstance() {
+		return (NonRegularEmploymentInfo) super.getInstance();
 
 	}
 
