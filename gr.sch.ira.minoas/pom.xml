@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<version>development-SNAPSHOT</version>
+	<version>1.3.0</version>
 	<groupId>gr.sch.ira.minoas</groupId>
 	<artifactId>minoas</artifactId>
 	<packaging>war</packaging>
