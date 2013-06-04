@@ -4,6 +4,7 @@ import gr.sch.ira.minoas.core.CoreUtils;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeInfo;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
+import gr.sch.ira.minoas.model.employee.Evaluation;
 import gr.sch.ira.minoas.model.employee.RankInfo;
 import gr.sch.ira.minoas.model.employee.RegularEmployeeInfo;
 import gr.sch.ira.minoas.model.employement.Employment;
@@ -365,7 +366,62 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 			return ACTION_OUTCOME_FAILURE;
 		}
 	}
+	
+	public void cancelModifyRankInfo() {
+		//	Clear the auto created home object if cancel is pressed when modifying rank info data
+		rankInfoHome.clearInstance();
+	}
 
+	@Transactional
+	public String modifyRankInfo() {
+
+		if (rankInfoHome.isManaged()) {
+			Employee employee = getEmployeeHome().getInstance();
+			RankInfo rinfo = rankInfoHome.getInstance();
+			
+			rankInfoHome.update();
+
+			info("Rank Info #0 for employee #1 has been modified", rinfo, employee);
+			return ACTION_OUTCOME_SUCCESS;
+
+		} else {
+			facesMessages.add(Severity.ERROR,
+					"employee home #0 is not managed.", employeeHome);
+			return ACTION_OUTCOME_FAILURE;
+		}
+	}
+	
+	@Transactional
+    public String deleteRankInfo() {
+        if(rankInfoHome != null && rankInfoHome.isManaged()) {
+            info("trying to delete RankInfo #0", rankInfoHome);
+            RankInfo rInfo = rankInfoHome.getInstance();
+
+    		rInfo.setDeleted(Boolean.TRUE);
+            rInfo.setDeletedOn(new Date());
+            rInfo.setDeletedBy(getPrincipal());
+            rankInfoHome.update();
+            //constructEvaluationHistory();
+            return ACTION_OUTCOME_SUCCESS;	
+            
+        } else {
+            facesMessages.add(Severity.ERROR, "Rank Info home #0 is not managed, thus RankInfo #1 can't be deleted.", rankInfoHome, rankInfoHome.getInstance());
+            return ACTION_OUTCOME_FAILURE;
+        }
+    
+    }
+	
+	/**
+	 * A RankInfo may NOT be deleted if it is the current RankInfo for an employee.
+	 * Με άλλα λόγια δεν μπορούμε να διαγράψουμε τον τρέχοντα Βαθμό και Μισθολογικό κλιμάκιο.
+	 */
+	public boolean deletionOfThisRankInfoIsAllowed(Integer rankInfoId) {
+		if(employeeHome.getInstance().getEmployeeInfo().getCurrentRankInfo().getId() == rankInfoId)
+			return false;
+		else
+			return true;
+		
+	}
 	
 	/**
 	 * totalWorkService = Ημ/νία Διορισμού + Συνολική Υπηρεσία + Συνολική Προϋπηρεσία

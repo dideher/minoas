@@ -1,6 +1,7 @@
 package gr.sch.ira.minoas.model.employee;
 
 import gr.sch.ira.minoas.core.CoreUtils;
+import gr.sch.ira.minoas.model.BaseIDDeleteAwareModel;
 import gr.sch.ira.minoas.model.BaseIDModel;
 import gr.sch.ira.minoas.model.employement.EducationalLevelType;
 
@@ -22,7 +23,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "RANK_INFO")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class RankInfo extends BaseIDModel {
+public class RankInfo extends BaseIDDeleteAwareModel {
 	/**
 	 * 
 	 */
@@ -204,7 +205,7 @@ public class RankInfo extends BaseIDModel {
 
 	/**
 	 * @param comments
-	 *   the comments to set
+	 *            the comments to set
 	 */
 	public void setComments(String comments) {
 		this.comments = comments;
@@ -980,23 +981,25 @@ public class RankInfo extends BaseIDModel {
 		return surplusTimeInRank;
 	}
 
-	
 	/**
-	 * @return Τον πλεονάζοντα χρόνο στο Βαθμό Από τότε που πήρε το Βαθμό έως και σήμερα. 
-	 * Αν υπήρχε ήδη πλεονάζοντας χρόνος στον Βαθμό κατά την απονομή του τελευταίου τότε 
-	 * αυτός αθροίζεται στο διάστημα ημερών (έτος 360 ημερών) από τότε έως σήμερα.  
+	 * @return Τον πλεονάζοντα χρόνο στο Βαθμό Από τότε που πήρε το Βαθμό έως
+	 *         και σήμερα. Αν υπήρχε ήδη πλεονάζοντας χρόνος στον Βαθμό κατά την
+	 *         απονομή του τελευταίου τότε αυτός αθροίζεται στο διάστημα ημερών
+	 *         (έτος 360 ημερών) από τότε έως σήμερα.
 	 */
 	public Integer getSurplusTimeInRankUntilToday() {
-		return CoreUtils.datesDifferenceIn360DaysYear(getLastRankDate(), new Date())+ surplusTimeInRank;
+		return CoreUtils.datesDifferenceIn360DaysYear(getLastRankDate(),
+				new Date()) + surplusTimeInRank;
 	}
-	
+
 	/**
 	 * @return the surplusTimeInRankUntilToday in Year_Month_Day formated string
 	 */
 	public String getSurplusTimeInRankUntilTodayYear_Month_Day() {
-		return CoreUtils.getNoOfDaysInYear_Month_DayFormat(getSurplusTimeInRankUntilToday());
+		return CoreUtils
+				.getNoOfDaysInYear_Month_DayFormat(getSurplusTimeInRankUntilToday());
 	}
-	
+
 	/**
 	 * @return the surplusTimeInRank in Year_Month_Day formated string
 	 */
@@ -1018,28 +1021,33 @@ public class RankInfo extends BaseIDModel {
 	public Integer getSurplusTimeInSalaryGrade() {
 		return surplusTimeInSalaryGrade;
 	}
-	
+
 	/**
-	 * @return Τον πλεονάζοντα χρόνο στο Μ.Κ. Από τότε που πήρε το Μ.Κ. έως και σήμερα. 
-	 * Αν υπήρχε ήδη πλεονάζοντας χρόνος στο Μ.Κ. κατά την απονομή του τελευταίου τότε 
-	 * αυτός αθροίζεται στο διάστημα ημερών (έτος 360 ημερών) από τότε έως σήμερα.  
+	 * @return Τον πλεονάζοντα χρόνο στο Μ.Κ. Από τότε που πήρε το Μ.Κ. έως και
+	 *         σήμερα. Αν υπήρχε ήδη πλεονάζοντας χρόνος στο Μ.Κ. κατά την
+	 *         απονομή του τελευταίου τότε αυτός αθροίζεται στο διάστημα ημερών
+	 *         (έτος 360 ημερών) από τότε έως σήμερα.
 	 */
 	public Integer getSurplusTimeInSalaryGradeUntilToday() {
-		return CoreUtils.datesDifferenceIn360DaysYear(getLastSalaryGradeDate(), new Date())+ surplusTimeInSalaryGrade;
+		return CoreUtils.datesDifferenceIn360DaysYear(getLastSalaryGradeDate(),
+				new Date()) + surplusTimeInSalaryGrade;
 	}
-	
+
 	/**
-	 * @return the surplusTimeInSalaryGradeUntilToday in Year_Month_Day formated string
+	 * @return the surplusTimeInSalaryGradeUntilToday in Year_Month_Day formated
+	 *         string
 	 */
 	public String getSurplusTimeInSalaryGradeUntilTodayYear_Month_Day() {
-		return CoreUtils.getNoOfDaysInYear_Month_DayFormat(getSurplusTimeInSalaryGradeUntilToday());
+		return CoreUtils
+				.getNoOfDaysInYear_Month_DayFormat(getSurplusTimeInSalaryGradeUntilToday());
 	}
 
 	/**
 	 * @return the surplusTimeInSalaryGrade in Year_Month_Day formated string
 	 */
 	public String getSurplusTimeInSalaryGradeYear_Month_Day() {
-		return CoreUtils.getNoOfDaysInYear_Month_DayFormat(surplusTimeInSalaryGrade);
+		return CoreUtils
+				.getNoOfDaysInYear_Month_DayFormat(surplusTimeInSalaryGrade);
 	}
 
 	/**
@@ -1679,8 +1687,6 @@ public class RankInfo extends BaseIDModel {
 		}
 	}
 
-
-
 	// public String toString() {
 	// return "Βαθμός(Μ.Κ.): "+rank+"("+salaryGrade+")";
 	// }
@@ -1691,7 +1697,22 @@ public class RankInfo extends BaseIDModel {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("RankInfo [");
+		builder.append("\nRankInfo [");
+		
+		
+		if (rank != null) {
+			builder.append(CoreUtils.getLocalizedMessage(rank.getKey()));
+			builder.append("(");
+			builder.append(salaryGrade);
+			builder.append(") ");
+		}
+		
+		if (getId() != null) {
+			builder.append("ID=");
+			builder.append(getId());
+			builder.append(", ");
+		}
+		
 		if (employeeInfo != null) {
 			builder.append("employee=");
 			builder.append(employeeInfo.getEmployee());
