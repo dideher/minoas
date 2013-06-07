@@ -143,7 +143,10 @@
 				value="#{employee.employeeInfo.currentRankInfo.surplusTimeInSalaryGradeUntilTodayYear_Month_Day} (#{employee.employeeInfo.currentRankInfo.surplusTimeInSalaryGradeUntilToday} ημ.)" />
 	
 		</h:panelGrid>
-	
+		
+		<ui:include src="/employee/rankInfoHistoryPanelGrid.xhtml">
+			<ui:param name="employee" value="#{employee}" />
+		</ui:include>
 	</ui:component>
 
 </html>

@@ -255,8 +255,7 @@ public class RankInfo extends BaseIDDeleteAwareModel {
 	 *         RankInfo returned may be identical to the one before if
 	 *         hasPossitiveValidationInLast2Years is false.
 	 */
-	public RankInfo promote(Boolean hasPossitiveValidationInLast2Years,
-			Boolean achievedPromotionQuota) {
+	public RankInfo promote(Boolean hasPossitiveValidationInLast2Years, Boolean achievedPromotionQuota) {
 		switch (getEducationalLevel()) {
 		case UNIVERSITY_EDUCATION_LEVEL:
 			switch (rank) {
@@ -1089,9 +1088,7 @@ public class RankInfo extends BaseIDDeleteAwareModel {
 	 * @return Returnw the employee's Rank info (rank & salary grade) after the
 	 *         classification in grade.
 	 */
-	public RankInfo Katataxi(Integer Proyphresia,
-			EducationalLevelType educationalLevel, Boolean hasAMasterDegree,
-			Boolean hasAPhD, Boolean isANatSchPubAdminGraduate) {
+	public RankInfo Katataxi(Integer Proyphresia, EducationalLevelType educationalLevel, Boolean hasAMasterDegree, Boolean hasAPhD, Boolean isANatSchPubAdminGraduate) {
 		setEducationalLevel(educationalLevel);
 
 		if (hasAMasterDegree && (!hasAPhD && !isANatSchPubAdminGraduate)) // Αν
@@ -1358,6 +1355,7 @@ public class RankInfo extends BaseIDDeleteAwareModel {
 		return this;
 	}
 
+
 	/**
 	 * Η ρουτίνα επιστρέφει τον Πλεονάζοντα Χρόνο στο Βαθμό (Α, Β, Γ, Δ, Ε, ΣΤ)
 	 * (σε αριθμό ημερών) κάποιου υπαλλήλου κατά την επανακατάταξή του την
@@ -1383,10 +1381,7 @@ public class RankInfo extends BaseIDDeleteAwareModel {
 	 * @return Returns the employee's surplus time in his rank after his
 	 *         classification on 1/11/2011
 	 */
-	public Integer SurplusTimeInRankAfterClassification(
-			Integer SynolYphrGiaKatatx, EducationalLevelType educationalLevel,
-			Boolean hasAMasterDegree, Boolean hasAPhD,
-			Boolean isANatSchPubAdminGraduate) {
+	public Integer SurplusTimeInRankAfterClassification(Integer SynolYphrGiaKatatx, EducationalLevelType educationalLevel, Boolean hasAMasterDegree, Boolean hasAPhD, Boolean isANatSchPubAdminGraduate) {
 		RankInfo rankInfo = Katataxi(SynolYphrGiaKatatx, educationalLevel,
 				hasAMasterDegree, hasAPhD, isANatSchPubAdminGraduate);
 
@@ -1484,10 +1479,7 @@ public class RankInfo extends BaseIDDeleteAwareModel {
 	 * @return Returns the employee's surplus time in his salary grade after his
 	 *         classification on 1/11/2011
 	 */
-	public Integer SurplusTimeInSalaryGradeAfterClassification(
-			Integer synolYphrGiaKatatx, EducationalLevelType educationalLevel,
-			Boolean hasAMasterDegree, Boolean hasAPhD,
-			Boolean isANatSchPubAdminGraduate) {
+	public Integer SurplusTimeInSalaryGradeAfterClassification(Integer synolYphrGiaKatatx, EducationalLevelType educationalLevel, Boolean hasAMasterDegree, Boolean hasAPhD, Boolean isANatSchPubAdminGraduate) {
 
 		switch (educationalLevel) {
 		case UNIVERSITY_EDUCATION_LEVEL:
@@ -1687,9 +1679,8 @@ public class RankInfo extends BaseIDDeleteAwareModel {
 		}
 	}
 
-	// public String toString() {
-	// return "Βαθμός(Μ.Κ.): "+rank+"("+salaryGrade+")";
-	// }
+
+
 
 	/**
 	 * @see java.lang.Object#toString()
