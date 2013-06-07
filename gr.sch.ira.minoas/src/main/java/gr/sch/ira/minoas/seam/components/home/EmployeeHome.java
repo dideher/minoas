@@ -291,7 +291,9 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 				getEntityManager().remove(employee.getRegularDetail());
 			}
 			
-			getEntityManager().remove(employee.getEmployeeInfo());
+			if(employee.getEmployeeInfo()!=null) {
+				getEntityManager().remove(employee.getEmployeeInfo());
+			}
 			return super.remove();
 		}
 		return null;
