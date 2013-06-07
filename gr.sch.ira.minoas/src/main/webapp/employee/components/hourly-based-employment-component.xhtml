@@ -152,7 +152,7 @@
 						<h:outputText value="Πράξη Πρότασης ΠΥΣΔΕ: " />
 					</ui:define>
 					<h:inputText value="#{_hourlyNonRegularEmploymentInfo.pysdeAct}" immediate="true"
-						size="15" styleClass="fieldValueText" maxlength="30" required="true"/>
+						size="15" styleClass="fieldValueText" maxlength="30" required="false"/>
 				</s:decorate>
 				<s:decorate template="/layout/doubleLineEdit.xhtml" id="hourlyBasedPysdeActDateId">
 					<ui:define name="label">
@@ -160,7 +160,7 @@
 					</ui:define>
 					<rich:calendar id="hourlyBasedPysdeActCalendar" datePattern="dd-MM-yyyy"
 						style="width:50px" enableManualInput="true" immediate="true"
-						styleClass="fieldValueText" inputSize="10" required="true"
+						styleClass="fieldValueText" inputSize="10" required="false"
 						value="${_hourlyNonRegularEmploymentInfo.pysdeActDate}">
 					</rich:calendar>
 				</s:decorate>
