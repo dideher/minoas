@@ -1,5 +1,6 @@
 package gr.sch.ira.minoas.seam.components.management;
 
+import gr.sch.ira.minoas.model.core.PYSDE;
 import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employement.Disposal;
@@ -387,6 +388,18 @@ public class EmployeeSecondmentsManagement extends BaseDatabaseAwareSeamComponen
             secondment.setSourcePYSDE(employment.getSchool().getPysde());
             secondment.setMandatoryWorkingHours(employment.getMandatoryWorkingHours());
             secondment.setFinalWorkingHours(employment.getFinalWorkingHours());
+        } else {
+        	/* check if the employee is not an employee of our PYSDE */
+        	Employee employee = employeeHome.getInstance();
+        	if(!employee.getCurrentPYSDE().isLocalPYSDE()) {
+        		PYSDE currentPYSDE = employee.getCurrentPYSDE();
+        		secondment.setSourceUnit(currentPYSDE.getRepresentedByUnit());
+                secondment.setSourcePYSDE(currentPYSDE);
+                secondment.setMandatoryWorkingHours(21);
+                secondment.setFinalWorkingHours(21);
+        	}
+        	
+        	
         }
 
     }

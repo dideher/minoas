@@ -656,20 +656,21 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
             new_employee.setComment(String.format("Εισαγωγή εκπαιδευτικού απο άλλο ΠΥΣΔΕ '%s' κατά την σχολική χρονία '%s'.", new_employee.getCurrentPYSDE().getTitle(), currentYear));
             employeeHome.persist();
             
-            Employment newEmployment = employmentHome.getInstance();
-            
-            newEmployment.setActive(Boolean.TRUE);
-            newEmployment.setEmployee(new_employee);
-            newEmployment.setEstablished(new Date());
-            newEmployment.setFinalWorkingHours(21);
-            newEmployment.setMandatoryWorkingHours(21);
-            newEmployment.setSchoolYear(currentYear);
-            newEmployment.setSchool(getEntityManager().find(School.class, getCoreSearching().getLocalPYSDE(getEntityManager()).getRepresentedByUnit().getId()));
-            newEmployment.setSpecialization(new_employee.getLastSpecialization());
-            newEmployment.setType(EmploymentType.REGULAR);
-            newEmployment.setEmployee(new_employee);
-            new_employee.setCurrentEmployment(newEmployment);
-            employmentHome.persist();
+//            Employment newEmployment = employmentHome.getInstance();
+//            
+//            newEmployment.setActive(Boolean.TRUE);
+//            newEmployment.setEmployee(new_employee);
+//            newEmployment.setEstablished(new Date());
+//            newEmployment.setFinalWorkingHours(21);
+//            newEmployment.setMandatoryWorkingHours(21);
+//            newEmployment.setSchoolYear(currentYear);
+//           
+//            newEmployment.setSchool(getEntityManager().find(School.class, getCoreSearching().getLocalPYSDE(getEntityManager()).getRepresentedByUnit().getId()));
+//            newEmployment.setSpecialization(new_employee.getLastSpecialization());
+//            newEmployment.setType(EmploymentType.REGULAR);
+//            newEmployment.setEmployee(new_employee);
+//            new_employee.setCurrentEmployment(newEmployment);
+//            employmentHome.persist();
             
             RegularEmployeeInfo empInfo = regularEmployeeInfoHome.getInstance();
             new_employee.setRegularDetail(empInfo);
