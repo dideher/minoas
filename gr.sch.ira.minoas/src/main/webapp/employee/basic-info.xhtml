@@ -14,7 +14,7 @@
 					<h:outputText value="Βασικά Στοιχεία" />
 				</f:facet>
 
-				<h:panelGrid columns="4" width="100%">
+				<h:panelGrid columns="4" width="100%" cellpadding="4px">
 					<h:outputLabel styleClass="fieldValueLabel" value="Επώνυμο: " />
 					<h:outputText styleClass="fieldValueText" value="#{employee.lastName}"/>
 					<h:outputLabel styleClass="fieldValueLabel" value="Όνομα: " />
@@ -51,7 +51,7 @@
 					<h:selectBooleanCheckbox value="#{employee.bigFamily}" disabled="true"/>
 				</h:panelGrid>
 
-				<h:panelGrid columns="2" width="100%">
+				<h:panelGrid columns="2" width="100%" cellpadding="4px">
 					
 					<rich:spacer height="12px"/>
 					<rich:spacer height="12px"/>
@@ -70,7 +70,7 @@
 					<h:outputText value="Σχόλια" />
 				</f:facet>
 				
-				<h:panelGrid columns="2" cellspacing="2">
+				<h:panelGrid columns="2" cellspacing="2" cellpadding="4px">
 					<h:outputLabel styleClass="fieldValueLabel" value="Σχόλια Εργαζομένου: "/>
 					<h:outputText value="#{employee.comment}" styleClass="fieldValueText"/>
 				</h:panelGrid>
@@ -82,7 +82,7 @@
 					<h:outputText value="Σπουδές" />
 				</f:facet>
 				
-				<h:panelGrid columns="2" cellspacing="8">
+				<h:panelGrid columns="2" cellspacing="8" cellpadding="4px">
 
 					<h:outputLabel styleClass="fieldValueLabel" 
 						value="Μεταπυχιακό (MSc): " />
@@ -135,7 +135,7 @@
 					<h:outputText value="Στοιχεία Μονίμου" />
 				</f:facet>
 				
-				<h:panelGrid columns="2" cellspacing="8">
+				<h:panelGrid columns="2" cellspacing="8" cellpadding="4px">
 					<h:outputLabel styleClass="fieldValueLabel" value="ΑΜ: " />
 					<h:outputText styleClass="fieldValueText" value="#{employeeUtil.getRegistryID(employee)}" />
 					
@@ -175,7 +175,7 @@
 					<h:outputText value="Στοιχεία Εργασίας" />
 				</f:facet>
 				
-				<h:panelGrid columns="2" cellspacing="2">
+				<h:panelGrid columns="2" cellspacing="2" cellpadding="4px">
 					<h:outputLabel styleClass="fieldValueLabel" rendered="#{employee.type == 'DEPUTY'}" 
 						value="Πίνακας Επιλογής: "/>
 					<h:outputText styleClass="fieldValueText" rendered="#{employee.type == 'DEPUTY'}" 
