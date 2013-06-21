@@ -340,7 +340,7 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
         System.err.println(getEmployeeHome().getInstance().getType());
         return getEntityManager()
                 .createQuery(
-                        "SELECT s FROM EmployeeLeaveType s WHERE (LOWER(s.description) LIKE LOWER(:search_pattern) OR (s.legacyCode LIKE :search_pattern2)) AND s.suitableForEmployeeType=:employeeType ORDER BY s.legacyCode")
+                        "SELECT s FROM EmployeeLeaveType s WHERE (s.active IS NULL OR s.active IS TRUE) AND (LOWER(s.description) LIKE LOWER(:search_pattern) OR (s.legacyCode LIKE :search_pattern2)) AND s.suitableForEmployeeType=:employeeType ORDER BY s.legacyCode")
                 .setParameter("search_pattern", CoreUtils.getSearchPattern(String.valueOf(search_pattern)))
                 .setParameter("search_pattern2", CoreUtils.getSearchPattern(String.valueOf(search_pattern)))
                 .setParameter("employeeType", employeeHome.getInstance().getType()).getResultList();

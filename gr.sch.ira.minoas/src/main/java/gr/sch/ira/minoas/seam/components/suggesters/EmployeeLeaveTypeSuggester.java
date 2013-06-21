@@ -28,7 +28,7 @@ public class EmployeeLeaveTypeSuggester extends BaseSuggester {
 	@Transactional
 	public Collection<EmployeeLeaveType> suggest(Object search_pattern) {
 		return getEntityManager()
-                .createQuery("SELECT s FROM EmployeeLeaveType s WHERE LOWER(s.description) LIKE LOWER(:search_pattern) OR (s.legacyCode LIKE :search_pattern2) ORDER BY s.legacyCode" ).setParameter(
+                .createQuery("SELECT s FROM EmployeeLeaveType s WHERE (s.active IS TRUE OR s.active IS NULL) AND LOWER(s.description) LIKE LOWER(:search_pattern) OR (s.legacyCode LIKE :search_pattern2) ORDER BY s.legacyCode" ).setParameter(
                         "search_pattern", CoreUtils.getSearchPattern(String.valueOf(search_pattern))).setParameter(
                                 "search_pattern2", CoreUtils.getSearchPattern(String.valueOf(search_pattern)))
                 .getResultList();
