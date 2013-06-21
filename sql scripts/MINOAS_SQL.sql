@@ -292,6 +292,14 @@ INSERT INTO minoas..MINOAS_UNIT_GATEGORIES(CATEGORY_ID, UNIT_ID)
 
 SELECT * FROM UNIT
 
+##############################################
+# ΤΥΠΟΙ ΑΔΕΙΩΝ
+# (ΕΠΙΠΛΕΟΝ ΚΩΔΙΚΟΙ - ΟΙ ΑΡΧΙΚΟΙ ΕΧΟΥΝ ΜΕΤΑΦΕΡΘΕΙ)
+##############################################
+
+INSERT INTO EMPLOYEE_LEAVE_TYPE(VERSION, DESCRIPTION, GENERATES_CDRS, LEGACY_CODE, EMPLOYEE_TYPE, IS_ACTIVE)
+    VALUES(0,'Ανευ Αποδοχών', 0, '44', 'REGULAR', 1)
+
 
 ##############################################
 # ΤΥΠΟΙ ΤΕΡΜΑΤΙΣΜΟΥ ΥΠΗΡΕΣΙΩΝ
