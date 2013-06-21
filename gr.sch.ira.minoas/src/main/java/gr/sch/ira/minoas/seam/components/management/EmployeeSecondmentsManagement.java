@@ -124,12 +124,6 @@ public class EmployeeSecondmentsManagement extends BaseDatabaseAwareSeamComponen
     }
     
     public String cancelSecondmentModificationAction() {
-        System.err.println("lalal : " + secondmentHome.getInstance());
-        try {
-            System.err.println("pysde : " + secondmentHome.getInstance().getPysdeOrder());
-        } catch(Exception ex) {
-            
-        }
         if(secondmentHome.isManaged()) {
             secondmentHome.revert();
         } else {

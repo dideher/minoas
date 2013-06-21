@@ -95,11 +95,6 @@ public class EmployeeDisposalsManagement extends BaseDatabaseAwareSeamComponent 
     }
 
     public String cancelDisposalModificationAction() {
-        try {
-            System.err.println("pysde : " + disposalHome.getInstance().getPysdeOrder());
-        } catch (Exception ex) {
-
-        }
         if (disposalHome.isManaged()) {
             disposalHome.revert();
         } else {

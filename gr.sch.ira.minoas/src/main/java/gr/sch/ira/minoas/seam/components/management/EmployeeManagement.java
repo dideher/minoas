@@ -594,8 +594,6 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
     public void searchForDuplicateEmployees() {
         Employee employee = employeeHome.getInstance();
         
-        System.err.println("jflgkjfdlkdfgj : "+actionVariation);
-        
         if (employee.getLastName() != null && employee.getLastName().length() > 4 && employee.getFirstName() != null &&
                 employee.getFirstName().length() > 2) {
             String lastName = CoreUtils.getSearchPattern(employee.getLastName());

@@ -337,7 +337,6 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
     @SuppressWarnings("unchecked")
     @Transactional
     public Collection<EmployeeLeaveType> suggestLeaveTypesBasedOnSelectedEmployee(Object search_pattern) {
-        System.err.println(getEmployeeHome().getInstance().getType());
         return getEntityManager()
                 .createQuery(
                         "SELECT s FROM EmployeeLeaveType s WHERE (s.active IS NULL OR s.active IS TRUE) AND (LOWER(s.description) LIKE LOWER(:search_pattern) OR (s.legacyCode LIKE :search_pattern2)) AND s.suitableForEmployeeType=:employeeType ORDER BY s.legacyCode")

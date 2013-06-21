@@ -219,7 +219,6 @@ public class EmployeeLeavesReport extends BaseReport {
 		
 		if (employeeLeaveType != null) {
 			q.setParameter("leaveType", employeeLeaveType);
-			System.err.println(employeeLeaveType.getDescription());
 		}
 		if (school != null) {
 			q.setParameter("school", school);
