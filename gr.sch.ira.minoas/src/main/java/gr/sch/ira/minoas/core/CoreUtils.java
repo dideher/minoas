@@ -86,66 +86,153 @@ public abstract class CoreUtils {
     }
 
     
-    /**
-     * @param dateFrom: The start date of the period. 
-     * @param dateTo: The end date of the period. 
-     * @return the days difference between two dates in a 360 days year (12 * 30 days). Returns NEGATIVE value if start date is AFTER end date.
-     */
+//    /**
+//     * @param dateFrom: The start date of the period. 
+//     * @param dateTo: The end date of the period. 
+//     * @return the days difference between two dates in a 360 days year (12 * 30 days). Returns NEGATIVE value if start date is AFTER end date.
+//     */
+//    public static int get360DaysYearDiff(Date dateFrom, Date dateTo) {
+//    	if(dateFrom == null || dateTo == null)
+//    		return 0;
+//        Calendar startingDate = getStartingDate(dateFrom);
+//        Calendar endingDate = getEndingDateAccordingToStartingDate(dateTo, startingDate);
+//        long startingDay = startingDate.get(Calendar.MONTH) * 30 + startingDate.get(Calendar.DAY_OF_MONTH);
+//        long endingDay = (endingDate.get(Calendar.YEAR) - startingDate.get(Calendar.YEAR)) * 360
+//                + endingDate.get(Calendar.MONTH) * 30 + endingDate.get(Calendar.DAY_OF_MONTH);
+//        return ((int)(endingDay - startingDay));
+//    }
+    
+//    /**
+//     * @param dateFrom: The start date of the period. 
+//     * @param dateTo: The end date of the period. 
+//     * @return the days difference between two dates in a 360 days year (12 * 30 days). Returns NEGATIVE value if start date is AFTER end date.
+//     */
+//    public static int get360DaysYearDiffInclusive(Date dateFrom, Date dateTo) {
+//    	if(dateFrom == null || dateTo == null)
+//    		return 0;
+//        Calendar startingDate = getStartingDate(dateFrom);
+//        Calendar endingDate = getEndingDateAccordingToStartingDate(dateTo, startingDate);
+//        long startingDay = startingDate.get(Calendar.MONTH) * 30 + startingDate.get(Calendar.DAY_OF_MONTH);
+//        long endingDay = (endingDate.get(Calendar.YEAR) - startingDate.get(Calendar.YEAR)) * 360
+//                + endingDate.get(Calendar.MONTH) * 30 + endingDate.get(Calendar.DAY_OF_MONTH);
+//        return ((int)(endingDay - startingDay))+1;
+//    }
+    
+//    /**
+//     * @param dateFrom: The start date of the period. 
+//     * @param dateTo: The end date of the period. 
+//     * @return the days difference between two dates in a 360 days year (12 * 30 days). Returns NEGATIVE value if start date is AFTER end date.
+//     */
+//    public static int get360DaysYearDiffSpanoudakis(Date dateFrom, Date dateTo) {
+//    	Calendar startCal = new GregorianCalendar();
+//    	startCal.setTime(dateFrom);
+//    	Calendar endCal = new GregorianCalendar();
+//    	endCal.setTime(dateTo);
+//    	
+//    	int start = startCal.get(Calendar.DAY_OF_MONTH)+ startCal.get(Calendar.MONTH) * 30 + startCal.get(Calendar.YEAR) * 360;
+//    	int end = endCal.get(Calendar.DAY_OF_MONTH)+ endCal.get(Calendar.MONTH) * 30 + endCal.get(Calendar.YEAR) * 360;
+//
+//    	return end - start;
+//    }
+    
+
+	/**
+	 * http://support.sas.com/documentation/cdl/en/lrdict/64316/HTML/default/viewer.htm#a000530603.htm
+	 * 
+	 * @param dateFrom: The start date of the period. 
+	 * @param dateTo: The end date of the period. 
+	 * @return the days difference between two dates in a 360 days year (12 * 30 days). Returns NEGATIVE value if start date is AFTER end date.
+	*/
     public static int get360DaysYearDiff(Date dateFrom, Date dateTo) {
-    	if(dateFrom == null || dateTo == null)
-    		return 0;
-        Calendar startingDate = getStartingDate(dateFrom);
-        Calendar endingDate = getEndingDateAccordingToStartingDate(dateTo, startingDate);
-        long startingDay = startingDate.get(Calendar.MONTH) * 30 + startingDate.get(Calendar.DAY_OF_MONTH);
-        long endingDay = (endingDate.get(Calendar.YEAR) - startingDate.get(Calendar.YEAR)) * 360
-                + endingDate.get(Calendar.MONTH) * 30 + endingDate.get(Calendar.DAY_OF_MONTH);
-        return ((int)(endingDay - startingDay));
+	    if(dateFrom == null || dateTo == null)
+	    	return 0;
+	    
+	    Calendar calFrom = Calendar.getInstance();
+	    calFrom.setTime(dateFrom);
+	    Calendar calTo = Calendar.getInstance();
+	    calTo.setTime(dateTo);
+	    
+	    int y1 = calFrom.get(Calendar.YEAR);
+	    int y2 = calTo.get(Calendar.YEAR);
+	    int m1 = calFrom.get(Calendar.MONTH)+1;
+	    int m2 = calTo.get(Calendar.MONTH)+1;
+	    int d1 = calFrom.get(Calendar.DAY_OF_MONTH);
+	    int d2 = calTo.get(Calendar.DAY_OF_MONTH);
+	
+	    /* according to 30E/360 (http://en.wikipedia.org/wiki/Day_count_convention#30E.2F360) :
+    	 * If D1 is 31, then change D1 to 30.
+    	 * If D2 is 31, then change D2 to 30. 
+    	 */
+	    d1 = (d1 == 31) ? 30 : d1;
+	    d2 = (d2 == 31) ? 30 : d2;
+	    
+	    return ((y2-y1) * 360) + ((m2-m1) * 30) + (d2-d1);
     }
+
+
+	/**
+	 * http://support.sas.com/documentation/cdl/en/lrdict/64316/HTML/default/viewer.htm#a000530603.htm
+	 * 
+	 * @param dateFrom: The start date of the period. 
+	 * @param dateTo: The end date of the period.
+	 * @param inclusive: Whether or not to include the upper day limit (dateTo).
+	 * @return the days difference between two dates in a 360 days year (12 * 30 days). Returns NEGATIVE value if start date is AFTER end date.
+	*/
+    public static int datesDifferenceIn360DaysYear(Date dateFrom, Date dateTo, boolean inclusive) {
+		if(!inclusive) {
+			return get360DaysYearDiff(dateFrom, dateTo);
+		} else {
+			Calendar calTo = Calendar.getInstance();
+			calTo.setTime(dateTo);
+			calTo.add(Calendar.DAY_OF_MONTH, 1);
+		
+			return get360DaysYearDiff(dateFrom, calTo.getTime());
+		}
+	}
     
-    
-    private static Calendar getCalendar(Date date) {
-        Calendar processedDate = new GregorianCalendar();
-        processedDate.setTime(date);
-        return processedDate;
-    }
-
-    private static Calendar getStartingDate(Date date) {
-        Calendar startingDate = getCalendar(date);
-        if (isLastDayOfMonth(startingDate)) {
-            startingDate.set(Calendar.DAY_OF_MONTH, 30);
-        }
-        return startingDate;
-    }
-
-    private static Calendar getEndingDateAccordingToStartingDate(Date date, Calendar startingDate) {
-        Calendar endingDate = getCalendar(date);
-        if (isLastDayOfMonth(endingDate)) {
-            if (startingDate.get(Calendar.DATE) < 30) {
-                endingDate = getFirstDayOfNextMonth(endingDate);
-            }
-        }
-        return endingDate;
-    }
-
-    private static boolean isLastDayOfMonth(Calendar date) {
-        Calendar clone = (Calendar) date.clone();
-        clone.add(java.util.Calendar.MONTH, 1);
-        clone.add(java.util.Calendar.DAY_OF_MONTH, -1);
-        int lastDayOfMonth = clone.get(Calendar.DAY_OF_MONTH);
-        return date.get(Calendar.DAY_OF_MONTH) == lastDayOfMonth;
-    }
-
-    private static Calendar getFirstDayOfNextMonth(Calendar date) {
-        Calendar newDate = (Calendar) date.clone();
-        if (date.get(Calendar.MONTH) < Calendar.DECEMBER) {
-            newDate.set(Calendar.MONTH, date.get(Calendar.MONTH) + 1);
-        } else {
-            newDate.set(Calendar.MONTH, 1);
-            newDate.set(Calendar.YEAR, date.get(Calendar.YEAR) + 1);
-        }
-        newDate.set(Calendar.DATE, 1);
-        return newDate;
-    }
+//    private static Calendar getCalendar(Date date) {
+//        Calendar processedDate = new GregorianCalendar();
+//        processedDate.setTime(date);
+//        return processedDate;
+//    }
+//
+//    private static Calendar getStartingDate(Date date) {
+//        Calendar startingDate = getCalendar(date);
+//        if (isLastDayOfMonth(startingDate)) {
+//            startingDate.set(Calendar.DAY_OF_MONTH, 30);
+//        }
+//        return startingDate;
+//    }
+//
+//    private static Calendar getEndingDateAccordingToStartingDate(Date date, Calendar startingDate) {
+//        Calendar endingDate = getCalendar(date);
+//        if (isLastDayOfMonth(endingDate)) {
+//            if (startingDate.get(Calendar.DATE) < 30) {
+//                endingDate = getFirstDayOfNextMonth(endingDate);
+//            }
+//        }
+//        return endingDate;
+//    }
+//
+//    private static boolean isLastDayOfMonth(Calendar date) {
+//        Calendar clone = (Calendar) date.clone();
+//        clone.add(java.util.Calendar.MONTH, 1);
+//        clone.add(java.util.Calendar.DAY_OF_MONTH, -1);
+//        int lastDayOfMonth = clone.get(Calendar.DAY_OF_MONTH);
+//        return date.get(Calendar.DAY_OF_MONTH) == lastDayOfMonth;
+//    }
+//
+//    private static Calendar getFirstDayOfNextMonth(Calendar date) {
+//        Calendar newDate = (Calendar) date.clone();
+//        if (date.get(Calendar.MONTH) < Calendar.DECEMBER) {
+//            newDate.set(Calendar.MONTH, date.get(Calendar.MONTH) + 1);
+//        } else {
+//            newDate.set(Calendar.MONTH, 1);
+//            newDate.set(Calendar.YEAR, date.get(Calendar.YEAR) + 1);
+//        }
+//        newDate.set(Calendar.DATE, 1);
+//        return newDate;
+//    }
 
 	/**
 	 * Μετατροπή Αριθμού Ημερών σε -> Έτη - Μήνες - Ημέρες
@@ -206,7 +293,7 @@ public abstract class CoreUtils {
 			estimatedDate.setTime(org.apache.commons.lang.time.DateUtils.addDays(estimatedDate.getTime(), xDays));
 
 			for(int effort = 1 ; effort < efforts ; effort++) {
-				int difference  = gr.sch.ira.minoas.core.CoreUtils.get360DaysYearDiff(estimatedDate.getTime(), startDate);
+				int difference  = gr.sch.ira.minoas.core.CoreUtils.datesDifferenceIn360DaysYear(estimatedDate.getTime(), startDate, false);
 
 				if(Math.abs(difference) <= Math.abs(noOfDaysOffset)) {
 					if(Math.abs(difference) < Math.abs(noOfDaysOffset))
@@ -220,9 +307,11 @@ public abstract class CoreUtils {
 			estimatedDate.setTime(org.apache.commons.lang.time.DateUtils.addDays(estimatedDate.getTime(), xDays));
 
 			for(int effort = 1 ; effort < efforts ; effort++) {
-				int difference  = gr.sch.ira.minoas.core.CoreUtils.get360DaysYearDiff(estimatedDate.getTime(), startDate);
+				int difference  = gr.sch.ira.minoas.core.CoreUtils.datesDifferenceIn360DaysYear(estimatedDate.getTime(), startDate, false);
 
 				if(Math.abs(difference) >= Math.abs(noOfDaysOffset)) {
+					if(Math.abs(difference) > Math.abs(noOfDaysOffset))
+						estimatedDate.add(java.util.Calendar.DAY_OF_YEAR, -1);
 					return estimatedDate.getTime();	
 				}
 				estimatedDate.add(java.util.Calendar.DAY_OF_YEAR, 1);
