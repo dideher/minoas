@@ -3,7 +3,8 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:s="http://jboss.com/products/seam/taglib"
-      xmlns:rich="http://richfaces.org/rich">
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:a4j="http://richfaces.org/a4j">
 
 	<ui:component>
 	
@@ -16,9 +17,13 @@
 
 				<h:panelGrid columns="4" width="100%">
 					<h:outputLabel styleClass="fieldValueLabel" value="Επώνυμο: " />
-					<h:outputText styleClass="fieldValueText" value="#{employee.lastName}"/>
+					<s:link styleClass="fieldValueText" value="#{employee.lastName}"  view="/employee/employee.xhtml">
+						<s:conversationPropagation type="join" />
+					</s:link>
 					<h:outputLabel styleClass="fieldValueLabel" value="Όνομα: " />
-					<h:outputText styleClass="fieldValueText" value="#{employee.firstName}" />
+					<s:link styleClass="fieldValueText" value="#{employee.firstName}"  view="/employee/employee.xhtml">
+						<s:conversationPropagation type="join" />
+					</s:link>
 					<h:outputLabel styleClass="fieldValueLabel" value="Όνομα Πατρός: " />
 					<h:outputText styleClass="fieldValueText" value="#{employee.fatherName}" />
 					<h:outputLabel styleClass="fieldValueLabel" value="Όνομα Μητρός: " />
