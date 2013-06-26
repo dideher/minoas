@@ -1,9 +1,11 @@
 package gr.sch.ira.minoas.model.employee;
 
 import gr.sch.ira.minoas.core.CoreUtils;
+import gr.sch.ira.minoas.model.BaseIDDeleteAwareModel;
 import gr.sch.ira.minoas.model.BaseIDModel;
 import gr.sch.ira.minoas.model.employement.EducationalLevelType;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.persistence.Basic;
@@ -16,13 +18,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.apache.commons.collections.set.CompositeSet.SetMutator;
+import org.apache.commons.lang.time.DateUtils;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
 @Table(name = "RANK_INFO")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class RankInfo extends BaseIDModel {
+public class RankInfo extends BaseIDDeleteAwareModel {
 	/**
 	 * 
 	 */
@@ -204,7 +208,7 @@ public class RankInfo extends BaseIDModel {
 
 	/**
 	 * @param comments
-	 *   the comments to set
+	 *            the comments to set
 	 */
 	public void setComments(String comments) {
 		this.comments = comments;
@@ -233,6 +237,13 @@ public class RankInfo extends BaseIDModel {
 		this.rank = rankInfo.getRank();
 		this.salaryGrade = rankInfo.getSalaryGrade();
 		this.educationalLevel = rankInfo.getEducationalLevel();
+		//this.comments = rankInfo.getComments();
+		this.employeeInfo = rankInfo.getEmployeeInfo();
+		this.lastRankDate = rankInfo.getLastRankDate();
+		this.lastSalaryGradeDate = rankInfo.getLastSalaryGradeDate();
+		this.surplusTimeInRank = rankInfo.getSurplusTimeInRank();
+		this.surplusTimeInSalaryGrade = rankInfo.getSurplusTimeInSalaryGrade();
+
 	}
 
 	/**
@@ -254,8 +265,7 @@ public class RankInfo extends BaseIDModel {
 	 *         RankInfo returned may be identical to the one before if
 	 *         hasPossitiveValidationInLast2Years is false.
 	 */
-	public RankInfo promote(Boolean hasPossitiveValidationInLast2Years,
-			Boolean achievedPromotionQuota) {
+	public RankInfo promote(Boolean hasPossitiveValidationInLast2Years, Boolean achievedPromotionQuota) {
 		switch (getEducationalLevel()) {
 		case UNIVERSITY_EDUCATION_LEVEL:
 			switch (rank) {
@@ -847,10 +857,8 @@ public class RankInfo extends BaseIDModel {
 	 * 
 	 */
 	public void resetRankInfo() {
-		setRank(RankType.RANK_ST);
-		setLastRankDate(new Date());
-		setSalaryGrade(0);
-		setLastSalaryGradeDate(new Date());
+		setRank(RankType.RANK_ST, new Date());
+		setSalaryGrade(0, new Date());
 		setEducationalLevel(null);
 		setSurplusTimeInRank(0);
 		setSurplusTimeInSalaryGrade(0);
@@ -860,18 +868,15 @@ public class RankInfo extends BaseIDModel {
 	 * Reset Rank (Βαθμός) to ΣΤ along with the Salary Grade to 0
 	 */
 	public void resetRank() {
-		setRank(RankType.RANK_ST);
-		setLastRankDate(new Date());
-		setSalaryGrade(0);
-		setLastSalaryGradeDate(new Date());
-
+		setRank(RankType.RANK_ST, new Date());
+		setSalaryGrade(0, new Date());
 	}
 
 	/**
 	 * Reset Salary Grade (Μισθολογικό Κλιμάκιο) to 0
 	 */
 	public void resetSalaryGrade() {
-		setSalaryGrade(0);
+		setSalaryGrade(0, new Date());
 	}
 
 	/**
@@ -897,6 +902,17 @@ public class RankInfo extends BaseIDModel {
 	public void setRank(RankType rank) {
 		this.rank = rank;
 	}
+	
+	/**
+	 * @param rank
+	 *            the rank to set
+	 * @param rankDateChange
+	 *            the rankDateChange to set
+	 */
+	public void setRank(RankType rank, Date rankDateChange) {
+		this.rank = rank;
+		this.lastRankDate = rankDateChange;
+	}
 
 	/**
 	 * @return the salaryGrade
@@ -911,6 +927,31 @@ public class RankInfo extends BaseIDModel {
 	 */
 	public void setSalaryGrade(int salaryGrade) {
 		this.salaryGrade = salaryGrade;
+	}
+	
+	/**
+	 * @param salaryGrade
+	 *            the salaryGrade to set
+	 * @param salaryGradeDateChange
+	 *            the salaryGradeDateChange to set
+	 */
+	public void setSalaryGrade(int salaryGrade, Date salaryGradeDateChange) {
+		this.salaryGrade = salaryGrade;
+		this.lastSalaryGradeDate = salaryGradeDateChange;
+	}
+	
+	/**
+	 * @param salaryGrade
+	 *            the salaryGrade to set
+	 * @param salaryGradeDateChange
+	 *            the salaryGradeDateChange to set
+	 * @param newSurplusTimeInSalaryGrade
+	 *            the newSurplusTimeInSalaryGrade to set
+	 */
+	public void setSalaryGrade(int salaryGrade, Date salaryGradeDateChange, Integer newSurplusTimeInSalaryGrade) {
+		this.salaryGrade = salaryGrade;
+		this.lastSalaryGradeDate = salaryGradeDateChange;
+		this.surplusTimeInSalaryGrade = newSurplusTimeInSalaryGrade; 
 	}
 
 	/**
@@ -980,23 +1021,25 @@ public class RankInfo extends BaseIDModel {
 		return surplusTimeInRank;
 	}
 
-	
 	/**
-	 * @return Τον πλεονάζοντα χρόνο στο Βαθμό Από τότε που πήρε το Βαθμό έως και σήμερα. 
-	 * Αν υπήρχε ήδη πλεονάζοντας χρόνος στον Βαθμό κατά την απονομή του τελευταίου τότε 
-	 * αυτός αθροίζεται στο διάστημα ημερών (έτος 360 ημερών) από τότε έως σήμερα.  
+	 * @return Τον πλεονάζοντα χρόνο στο Βαθμό Από τότε που πήρε το Βαθμό έως
+	 *         και σήμερα. Αν υπήρχε ήδη πλεονάζοντας χρόνος στον Βαθμό κατά την
+	 *         απονομή του τελευταίου τότε αυτός αθροίζεται στο διάστημα ημερών
+	 *         (έτος 360 ημερών) από τότε έως σήμερα.
 	 */
 	public Integer getSurplusTimeInRankUntilToday() {
-		return CoreUtils.datesDifferenceIn360DaysYear(getLastRankDate(), new Date())+ surplusTimeInRank;
+		return CoreUtils.datesDifferenceIn360DaysYear(getLastRankDate(),
+				new Date()) + surplusTimeInRank;
 	}
-	
+
 	/**
 	 * @return the surplusTimeInRankUntilToday in Year_Month_Day formated string
 	 */
 	public String getSurplusTimeInRankUntilTodayYear_Month_Day() {
-		return CoreUtils.getNoOfDaysInYear_Month_DayFormat(getSurplusTimeInRankUntilToday());
+		return CoreUtils
+				.getNoOfDaysInYear_Month_DayFormat(getSurplusTimeInRankUntilToday());
 	}
-	
+
 	/**
 	 * @return the surplusTimeInRank in Year_Month_Day formated string
 	 */
@@ -1018,28 +1061,33 @@ public class RankInfo extends BaseIDModel {
 	public Integer getSurplusTimeInSalaryGrade() {
 		return surplusTimeInSalaryGrade;
 	}
-	
+
 	/**
-	 * @return Τον πλεονάζοντα χρόνο στο Μ.Κ. Από τότε που πήρε το Μ.Κ. έως και σήμερα. 
-	 * Αν υπήρχε ήδη πλεονάζοντας χρόνος στο Μ.Κ. κατά την απονομή του τελευταίου τότε 
-	 * αυτός αθροίζεται στο διάστημα ημερών (έτος 360 ημερών) από τότε έως σήμερα.  
+	 * @return Τον πλεονάζοντα χρόνο στο Μ.Κ. Από τότε που πήρε το Μ.Κ. έως και
+	 *         σήμερα. Αν υπήρχε ήδη πλεονάζοντας χρόνος στο Μ.Κ. κατά την
+	 *         απονομή του τελευταίου τότε αυτός αθροίζεται στο διάστημα ημερών
+	 *         (έτος 360 ημερών) από τότε έως σήμερα.
 	 */
 	public Integer getSurplusTimeInSalaryGradeUntilToday() {
-		return CoreUtils.datesDifferenceIn360DaysYear(getLastSalaryGradeDate(), new Date())+ surplusTimeInSalaryGrade;
+		return CoreUtils.datesDifferenceIn360DaysYear(getLastSalaryGradeDate(),
+				new Date()) + surplusTimeInSalaryGrade;
 	}
-	
+
 	/**
-	 * @return the surplusTimeInSalaryGradeUntilToday in Year_Month_Day formated string
+	 * @return the surplusTimeInSalaryGradeUntilToday in Year_Month_Day formated
+	 *         string
 	 */
 	public String getSurplusTimeInSalaryGradeUntilTodayYear_Month_Day() {
-		return CoreUtils.getNoOfDaysInYear_Month_DayFormat(getSurplusTimeInSalaryGradeUntilToday());
+		return CoreUtils
+				.getNoOfDaysInYear_Month_DayFormat(getSurplusTimeInSalaryGradeUntilToday());
 	}
 
 	/**
 	 * @return the surplusTimeInSalaryGrade in Year_Month_Day formated string
 	 */
 	public String getSurplusTimeInSalaryGradeYear_Month_Day() {
-		return CoreUtils.getNoOfDaysInYear_Month_DayFormat(surplusTimeInSalaryGrade);
+		return CoreUtils
+				.getNoOfDaysInYear_Month_DayFormat(surplusTimeInSalaryGrade);
 	}
 
 	/**
@@ -1078,12 +1126,10 @@ public class RankInfo extends BaseIDModel {
 	 * @param isANatSchPubAdminGraduate
 	 *            True if the employee is a National School of Public
 	 *            Administration (Α.Σ.Δ.Δ.) graduate
-	 * @return Returnw the employee's Rank info (rank & salary grade) after the
+	 * @return Returns the employee's Rank info (rank & salary grade) after the
 	 *         classification in grade.
 	 */
-	public RankInfo Katataxi(Integer Proyphresia,
-			EducationalLevelType educationalLevel, Boolean hasAMasterDegree,
-			Boolean hasAPhD, Boolean isANatSchPubAdminGraduate) {
+	public RankInfo Katataxi(Integer Proyphresia, EducationalLevelType educationalLevel, Boolean hasAMasterDegree, Boolean hasAPhD, Boolean isANatSchPubAdminGraduate) {
 		setEducationalLevel(educationalLevel);
 
 		if (hasAMasterDegree && (!hasAPhD && !isANatSchPubAdminGraduate)) // Αν
@@ -1350,6 +1396,7 @@ public class RankInfo extends BaseIDModel {
 		return this;
 	}
 
+
 	/**
 	 * Η ρουτίνα επιστρέφει τον Πλεονάζοντα Χρόνο στο Βαθμό (Α, Β, Γ, Δ, Ε, ΣΤ)
 	 * (σε αριθμό ημερών) κάποιου υπαλλήλου κατά την επανακατάταξή του την
@@ -1375,10 +1422,7 @@ public class RankInfo extends BaseIDModel {
 	 * @return Returns the employee's surplus time in his rank after his
 	 *         classification on 1/11/2011
 	 */
-	public Integer SurplusTimeInRankAfterClassification(
-			Integer SynolYphrGiaKatatx, EducationalLevelType educationalLevel,
-			Boolean hasAMasterDegree, Boolean hasAPhD,
-			Boolean isANatSchPubAdminGraduate) {
+	public Integer SurplusTimeInRankAfterClassification(Integer SynolYphrGiaKatatx, EducationalLevelType educationalLevel, Boolean hasAMasterDegree, Boolean hasAPhD, Boolean isANatSchPubAdminGraduate) {
 		RankInfo rankInfo = Katataxi(SynolYphrGiaKatatx, educationalLevel,
 				hasAMasterDegree, hasAPhD, isANatSchPubAdminGraduate);
 
@@ -1476,10 +1520,7 @@ public class RankInfo extends BaseIDModel {
 	 * @return Returns the employee's surplus time in his salary grade after his
 	 *         classification on 1/11/2011
 	 */
-	public Integer SurplusTimeInSalaryGradeAfterClassification(
-			Integer synolYphrGiaKatatx, EducationalLevelType educationalLevel,
-			Boolean hasAMasterDegree, Boolean hasAPhD,
-			Boolean isANatSchPubAdminGraduate) {
+	public Integer SurplusTimeInSalaryGradeAfterClassification(Integer synolYphrGiaKatatx, EducationalLevelType educationalLevel, Boolean hasAMasterDegree, Boolean hasAPhD, Boolean isANatSchPubAdminGraduate) {
 
 		switch (educationalLevel) {
 		case UNIVERSITY_EDUCATION_LEVEL:
@@ -1680,10 +1721,17 @@ public class RankInfo extends BaseIDModel {
 	}
 
 
+	public String prettyToString() {
+		StringBuilder builder = new StringBuilder();
+		if (rank != null) {
+			builder.append(CoreUtils.getLocalizedMessage(rank.getKey()));
+			builder.append("(");
+			builder.append(salaryGrade);
+			builder.append(") ");
+		}
+		return builder.toString();
+	}
 
-	// public String toString() {
-	// return "Βαθμός(Μ.Κ.): "+rank+"("+salaryGrade+")";
-	// }
 
 	/**
 	 * @see java.lang.Object#toString()
@@ -1691,7 +1739,22 @@ public class RankInfo extends BaseIDModel {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("RankInfo [");
+		builder.append("\nRankInfo [");
+		
+		
+		if (rank != null) {
+			builder.append(rank.getKey());
+			builder.append("(");
+			builder.append(salaryGrade);
+			builder.append(") ");
+		}
+		
+		if (getId() != null) {
+			builder.append("ID=");
+			builder.append(getId());
+			builder.append(", ");
+		}
+		
 		if (employeeInfo != null) {
 			builder.append("employee=");
 			builder.append(employeeInfo.getEmployee());
@@ -1740,5 +1803,503 @@ public class RankInfo extends BaseIDModel {
 		builder.append("]");
 		return builder.toString();
 	}
+
+
+	
+	
+	
+	
+	/**
+	 * Η ρουτίνα επιστρέφει τον Βαθμό (Α, Β, Γ, Δ, Ε, ΣΤ) και το ΜΚ (0, 1, 2, 3,
+	 * 4, 5, 6) κάποιου υπαλλήλου ανάλογα την Katigoria του (ΥΕ, ΔΕ, ΤΕ, ΠΕ) αν
+	 * έχει η όχι Μεταπτυχιακό, Διδακτορικό ή Α.Σ.Δ.Δ., και τον ExcessTimeInRank
+	 * (Πλεονάζοντα Χρόνο στον Βαθμό) σε αριθμό ημερών.
+	 * 
+	 * @param ExcessTimeInRank
+	 *            The employee's excess time (in number of days) in the current Rank
+	 * @return Returns the employee's Rank info (rank & salary grade) after the
+	 *         classification in grade.
+	 */
+	public RankInfo RecalculateRankInfo() {
+		Integer ExcessTimeInRank = getSurplusTimeInRankUntilToday();
+		RankInfo newRankInfo = new RankInfo(this); 
+		switch (newRankInfo.getEducationalLevel()) {
+			case UNIVERSITY_EDUCATION_LEVEL:
+				switch(newRankInfo.getRank()) {
+					case RANK_ST:
+						if(ExcessTimeInRank >=0 && ExcessTimeInRank <= 720) {
+							newRankInfo.setSalaryGrade(0);
+							newRankInfo.setSalaryGrade(0, CoreUtils.getDateInXDays360(new Date(), 0-ExcessTimeInRank), 0);
+						} else if(ExcessTimeInRank > 720) {
+							newRankInfo.setSalaryGrade(0, CoreUtils.getDateInXDays360(new Date(), 0-ExcessTimeInRank), 0);
+						}
+					break;
+					case RANK_E:
+						if(ExcessTimeInRank >= 0 && ExcessTimeInRank <= 720) {
+							newRankInfo.setSalaryGrade(0, CoreUtils.getDateInXDays360(new Date(), 0-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 721 && ExcessTimeInRank <= 1440) {
+							newRankInfo.setSalaryGrade(1, CoreUtils.getDateInXDays360(new Date(), 721-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 1441 && ExcessTimeInRank <= 2160) {
+							newRankInfo.setSalaryGrade(2, CoreUtils.getDateInXDays360(new Date(), 1441-ExcessTimeInRank), 0);
+						}	
+						else if(ExcessTimeInRank > 2160) {
+							newRankInfo.setSalaryGrade(2, CoreUtils.getDateInXDays360(new Date(), 2160-ExcessTimeInRank), 0);
+						}
+						break;
+					case RANK_D:
+						if(ExcessTimeInRank >= 0 && ExcessTimeInRank <= 720) {
+							newRankInfo.setSalaryGrade(0, CoreUtils.getDateInXDays360(new Date(), 0-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 721 && ExcessTimeInRank <= 1440) {
+							newRankInfo.setSalaryGrade(1, CoreUtils.getDateInXDays360(new Date(), 721-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 1441 && ExcessTimeInRank <= 2160) {
+							newRankInfo.setSalaryGrade(2, CoreUtils.getDateInXDays360(new Date(), 1441-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 2161 && ExcessTimeInRank <= 2880) {
+							newRankInfo.setSalaryGrade(3, CoreUtils.getDateInXDays360(new Date(), 2161-ExcessTimeInRank), 0);
+						}	
+						else if(ExcessTimeInRank > 2880) {
+							newRankInfo.setSalaryGrade(3, CoreUtils.getDateInXDays360(new Date(), 2880-ExcessTimeInRank), 0);
+						}
+						break;
+					case RANK_C:
+						if(ExcessTimeInRank >= 0 && ExcessTimeInRank <= 720) {
+							newRankInfo.setSalaryGrade(0, CoreUtils.getDateInXDays360(new Date(), 0-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 721 && ExcessTimeInRank <= 1440) {
+							newRankInfo.setSalaryGrade(1, CoreUtils.getDateInXDays360(new Date(), 721-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 1441 && ExcessTimeInRank <= 2160) {
+							newRankInfo.setSalaryGrade(2, CoreUtils.getDateInXDays360(new Date(), 1441-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 2161 && ExcessTimeInRank <= 2880) {
+							newRankInfo.setSalaryGrade(3, CoreUtils.getDateInXDays360(new Date(), 2161-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 2881 && ExcessTimeInRank <= 3600) {
+							newRankInfo.setSalaryGrade(4, CoreUtils.getDateInXDays360(new Date(), 2881-ExcessTimeInRank), 0);
+						}
+						else if(ExcessTimeInRank > 3600) {
+							newRankInfo.setSalaryGrade(4, CoreUtils.getDateInXDays360(new Date(), 3600-ExcessTimeInRank), 0);
+						}
+						break;
+					case RANK_B:
+						if(ExcessTimeInRank >= 0 && ExcessTimeInRank <= 1080) {
+							newRankInfo.setSalaryGrade(0, CoreUtils.getDateInXDays360(new Date(), 0-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 1081 && ExcessTimeInRank <= 2160) {
+							newRankInfo.setSalaryGrade(1, CoreUtils.getDateInXDays360(new Date(), 1081-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 2161 && ExcessTimeInRank <= 3240) {
+							newRankInfo.setSalaryGrade(2, CoreUtils.getDateInXDays360(new Date(), 2161-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 3241 && ExcessTimeInRank <= 4320) {
+							newRankInfo.setSalaryGrade(3, CoreUtils.getDateInXDays360(new Date(), 3241-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 4321 && ExcessTimeInRank <= 5400) {
+							newRankInfo.setSalaryGrade(4, CoreUtils.getDateInXDays360(new Date(), 4321-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 5401 && ExcessTimeInRank <= 6480) {
+							newRankInfo.setSalaryGrade(5, CoreUtils.getDateInXDays360(new Date(), 5401-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 6481 && ExcessTimeInRank <= 7560) {
+							newRankInfo.setSalaryGrade(6, CoreUtils.getDateInXDays360(new Date(), 6481-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 7561 && ExcessTimeInRank <= 8640) {
+							newRankInfo.setSalaryGrade(7, CoreUtils.getDateInXDays360(new Date(), 7561-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 8641 && ExcessTimeInRank <= 9720) {
+							newRankInfo.setSalaryGrade(8, CoreUtils.getDateInXDays360(new Date(), 8641-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank > 9720) {
+							newRankInfo.setSalaryGrade(8, CoreUtils.getDateInXDays360(new Date(), 9720-ExcessTimeInRank), 0);
+						}
+						break;
+					case RANK_A:
+						if(ExcessTimeInRank >= 0 && ExcessTimeInRank <= 1080) {
+							newRankInfo.setSalaryGrade(0, CoreUtils.getDateInXDays360(new Date(), 0-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 1081 && ExcessTimeInRank <= 2160) {
+							newRankInfo.setSalaryGrade(1, CoreUtils.getDateInXDays360(new Date(), 1081-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 2161 && ExcessTimeInRank <= 3240) {
+							newRankInfo.setSalaryGrade(2, CoreUtils.getDateInXDays360(new Date(), 2161-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 3241 && ExcessTimeInRank <= 4320) {
+							newRankInfo.setSalaryGrade(3, CoreUtils.getDateInXDays360(new Date(), 3241-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 4321 && ExcessTimeInRank <= 5400) {
+							newRankInfo.setSalaryGrade(4, CoreUtils.getDateInXDays360(new Date(), 4321-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 5401 && ExcessTimeInRank <= 6480) {
+							newRankInfo.setSalaryGrade(5, CoreUtils.getDateInXDays360(new Date(), 5401-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 6481 && ExcessTimeInRank <= 7560) {
+							newRankInfo.setSalaryGrade(6, CoreUtils.getDateInXDays360(new Date(), 6481-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 7561 && ExcessTimeInRank <= 8640) {
+							newRankInfo.setSalaryGrade(7, CoreUtils.getDateInXDays360(new Date(), 7561-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 8641 && ExcessTimeInRank <= 9720) {
+							newRankInfo.setSalaryGrade(8, CoreUtils.getDateInXDays360(new Date(), 8641-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank > 9720) {
+							newRankInfo.setSalaryGrade(8, CoreUtils.getDateInXDays360(new Date(), 9720-ExcessTimeInRank), 0);
+						}
+						break;
+					default:
+						break;
+				}
+				break; // End UNIVERSITY_EDUCATION_LEVEL case
+				
+				
+			case TECHNOLOGIGAL_EDUCATION_LEVEL:
+				switch(newRankInfo.getRank()) {
+					case RANK_ST:
+						if(ExcessTimeInRank >=0 && ExcessTimeInRank <= 720) {
+							newRankInfo.setSalaryGrade(0, CoreUtils.getDateInXDays360(new Date(), 0-ExcessTimeInRank), 0);
+						} else if(ExcessTimeInRank > 720) {
+							newRankInfo.setSalaryGrade(0, CoreUtils.getDateInXDays360(new Date(), 0-ExcessTimeInRank), 0);
+						}
+					break;
+					case RANK_E:
+						if(ExcessTimeInRank >= 0 && ExcessTimeInRank <= 720) {
+							newRankInfo.setSalaryGrade(0, CoreUtils.getDateInXDays360(new Date(), 0-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 721 && ExcessTimeInRank <= 1440) {
+							newRankInfo.setSalaryGrade(1, CoreUtils.getDateInXDays360(new Date(), 721-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 1441 && ExcessTimeInRank <= 2160) {
+							newRankInfo.setSalaryGrade(2, CoreUtils.getDateInXDays360(new Date(), 1441-ExcessTimeInRank), 0);
+						}	
+						else if(ExcessTimeInRank > 2160) {
+							newRankInfo.setSalaryGrade(2, CoreUtils.getDateInXDays360(new Date(), 2160-ExcessTimeInRank), 0);
+						}
+						break;
+					case RANK_D:
+						if(ExcessTimeInRank >= 0 && ExcessTimeInRank <= 720) {
+							newRankInfo.setSalaryGrade(0, CoreUtils.getDateInXDays360(new Date(), 0-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 721 && ExcessTimeInRank <= 1440) {
+							newRankInfo.setSalaryGrade(1, CoreUtils.getDateInXDays360(new Date(), 721-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 1441 && ExcessTimeInRank <= 2160) {
+							newRankInfo.setSalaryGrade(2, CoreUtils.getDateInXDays360(new Date(), 1441-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 2161 && ExcessTimeInRank <= 2880) {
+							newRankInfo.setSalaryGrade(3, CoreUtils.getDateInXDays360(new Date(), 2161-ExcessTimeInRank), 0);
+						}	
+						else if(ExcessTimeInRank > 2880) {
+							newRankInfo.setSalaryGrade(3, CoreUtils.getDateInXDays360(new Date(), 2880-ExcessTimeInRank), 0);
+						}
+						break;
+					case RANK_C:
+						if(ExcessTimeInRank >= 0 && ExcessTimeInRank <= 720) {
+							newRankInfo.setSalaryGrade(0, CoreUtils.getDateInXDays360(new Date(), 0-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 721 && ExcessTimeInRank <= 1440) {
+							newRankInfo.setSalaryGrade(1, CoreUtils.getDateInXDays360(new Date(), 721-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 1441 && ExcessTimeInRank <= 2160) {
+							newRankInfo.setSalaryGrade(2, CoreUtils.getDateInXDays360(new Date(), 1441-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 2161 && ExcessTimeInRank <= 2880) {
+							newRankInfo.setSalaryGrade(3, CoreUtils.getDateInXDays360(new Date(), 2161-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 2881 && ExcessTimeInRank <= 3600) {
+							newRankInfo.setSalaryGrade(4, CoreUtils.getDateInXDays360(new Date(), 2881-ExcessTimeInRank), 0);
+						}
+						else if(ExcessTimeInRank > 3600) {
+							newRankInfo.setSalaryGrade(4, CoreUtils.getDateInXDays360(new Date(), 3600-ExcessTimeInRank), 0);
+						}
+						break;
+					case RANK_B:
+						if(ExcessTimeInRank >= 0 && ExcessTimeInRank <= 1080) {
+							newRankInfo.setSalaryGrade(0, CoreUtils.getDateInXDays360(new Date(), 0-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 1081 && ExcessTimeInRank <= 2160) {
+							newRankInfo.setSalaryGrade(1, CoreUtils.getDateInXDays360(new Date(), 1081-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 2161 && ExcessTimeInRank <= 3240) {
+							newRankInfo.setSalaryGrade(2, CoreUtils.getDateInXDays360(new Date(), 2161-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 3241 && ExcessTimeInRank <= 4320) {
+							newRankInfo.setSalaryGrade(3, CoreUtils.getDateInXDays360(new Date(), 3241-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 4321 && ExcessTimeInRank <= 5400) {
+							newRankInfo.setSalaryGrade(4, CoreUtils.getDateInXDays360(new Date(), 4321-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 5401 && ExcessTimeInRank <= 6480) {
+							newRankInfo.setSalaryGrade(5, CoreUtils.getDateInXDays360(new Date(), 5401-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 6481 && ExcessTimeInRank <= 7560) {
+							newRankInfo.setSalaryGrade(6, CoreUtils.getDateInXDays360(new Date(), 6481-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 7561 && ExcessTimeInRank <= 8640) {
+							newRankInfo.setSalaryGrade(7, CoreUtils.getDateInXDays360(new Date(), 7561-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 8641 && ExcessTimeInRank <= 9720) {
+							newRankInfo.setSalaryGrade(8, CoreUtils.getDateInXDays360(new Date(), 8641-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank > 9720) {
+							newRankInfo.setSalaryGrade(8, CoreUtils.getDateInXDays360(new Date(), 9720-ExcessTimeInRank), 0);
+						}
+						break;
+					case RANK_A:
+						if(ExcessTimeInRank >= 0 && ExcessTimeInRank <= 1080) {
+							newRankInfo.setSalaryGrade(0, CoreUtils.getDateInXDays360(new Date(), 0-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 1081 && ExcessTimeInRank <= 2160) {
+							newRankInfo.setSalaryGrade(1, CoreUtils.getDateInXDays360(new Date(), 1081-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 2161 && ExcessTimeInRank <= 3240) {
+							newRankInfo.setSalaryGrade(2, CoreUtils.getDateInXDays360(new Date(), 2161-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 3241 && ExcessTimeInRank <= 4320) {
+							newRankInfo.setSalaryGrade(3, CoreUtils.getDateInXDays360(new Date(), 3241-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 4321 && ExcessTimeInRank <= 5400) {
+							newRankInfo.setSalaryGrade(4, CoreUtils.getDateInXDays360(new Date(), 4321-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 5401 && ExcessTimeInRank <= 6480) {
+							newRankInfo.setSalaryGrade(5, CoreUtils.getDateInXDays360(new Date(), 5401-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 6481 && ExcessTimeInRank <= 7560) {
+							newRankInfo.setSalaryGrade(6, CoreUtils.getDateInXDays360(new Date(), 6481-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 7561 && ExcessTimeInRank <= 8640) {
+							newRankInfo.setSalaryGrade(7, CoreUtils.getDateInXDays360(new Date(), 7561-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 8641 && ExcessTimeInRank <= 9720) {
+							newRankInfo.setSalaryGrade(8, CoreUtils.getDateInXDays360(new Date(), 8641-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank > 9720) {
+							newRankInfo.setSalaryGrade(8, CoreUtils.getDateInXDays360(new Date(), 9720-ExcessTimeInRank), 0);
+						}
+						break;
+					default:
+						break;
+				}
+				break; // End TECHNOLOGIGAL_EDUCATION_LEVEL case
+
+			case SECONDARY_EDUCATION_LEVEL:
+				switch(newRankInfo.getRank()) {
+					case RANK_ST:
+						if(ExcessTimeInRank >=0 && ExcessTimeInRank <= 720) {
+							newRankInfo.setSalaryGrade(0, CoreUtils.getDateInXDays360(new Date(), 0-ExcessTimeInRank), 0);
+						} else if(ExcessTimeInRank > 720) {
+							newRankInfo.setSalaryGrade(0, CoreUtils.getDateInXDays360(new Date(), 0-ExcessTimeInRank), 0);
+						}
+					break;
+					case RANK_E:
+						if(ExcessTimeInRank >= 0 && ExcessTimeInRank <= 720) {
+							newRankInfo.setSalaryGrade(0, CoreUtils.getDateInXDays360(new Date(), 0-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 721 && ExcessTimeInRank <= 1440) {
+							newRankInfo.setSalaryGrade(1, CoreUtils.getDateInXDays360(new Date(), 721-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 1441 && ExcessTimeInRank <= 2160) {
+							newRankInfo.setSalaryGrade(2, CoreUtils.getDateInXDays360(new Date(), 1441-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 2161 && ExcessTimeInRank <= 2880) {
+							newRankInfo.setSalaryGrade(3, CoreUtils.getDateInXDays360(new Date(), 2161-ExcessTimeInRank), 0);
+						}
+						else if(ExcessTimeInRank > 2880) {
+							newRankInfo.setSalaryGrade(3, CoreUtils.getDateInXDays360(new Date(), 2880-ExcessTimeInRank), 0);
+						}
+						break;
+					case RANK_D:
+						if(ExcessTimeInRank >= 0 && ExcessTimeInRank <= 720) {
+							newRankInfo.setSalaryGrade(0, CoreUtils.getDateInXDays360(new Date(), 0-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 721 && ExcessTimeInRank <= 1440) {
+							newRankInfo.setSalaryGrade(1, CoreUtils.getDateInXDays360(new Date(), 721-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 1441 && ExcessTimeInRank <= 2160) {
+							newRankInfo.setSalaryGrade(2, CoreUtils.getDateInXDays360(new Date(), 1441-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 2161 && ExcessTimeInRank <= 2880) {
+							newRankInfo.setSalaryGrade(3, CoreUtils.getDateInXDays360(new Date(), 2161-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 2881 && ExcessTimeInRank <= 3600) {
+							newRankInfo.setSalaryGrade(4, CoreUtils.getDateInXDays360(new Date(), 2881-ExcessTimeInRank), 0);
+						}
+						else if(ExcessTimeInRank > 3600) {
+							newRankInfo.setSalaryGrade(4, CoreUtils.getDateInXDays360(new Date(), 3600-ExcessTimeInRank), 0);
+						}
+						break;
+					case RANK_C:
+						if(ExcessTimeInRank >= 0 && ExcessTimeInRank <= 720) {
+							newRankInfo.setSalaryGrade(0, CoreUtils.getDateInXDays360(new Date(), 0-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 721 && ExcessTimeInRank <= 1440) {
+							newRankInfo.setSalaryGrade(1, CoreUtils.getDateInXDays360(new Date(), 721-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 1441 && ExcessTimeInRank <= 2160) {
+							newRankInfo.setSalaryGrade(2, CoreUtils.getDateInXDays360(new Date(), 1441-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 2161 && ExcessTimeInRank <= 2880) {
+							newRankInfo.setSalaryGrade(3, CoreUtils.getDateInXDays360(new Date(), 2161-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 2881 && ExcessTimeInRank <= 3600) {
+							newRankInfo.setSalaryGrade(4, CoreUtils.getDateInXDays360(new Date(), 2881-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 3601 && ExcessTimeInRank <= 4320) {
+							newRankInfo.setSalaryGrade(5, CoreUtils.getDateInXDays360(new Date(), 3601-ExcessTimeInRank), 0);
+						}
+						else if(ExcessTimeInRank > 4320) {
+							newRankInfo.setSalaryGrade(5, CoreUtils.getDateInXDays360(new Date(), 4320-ExcessTimeInRank), 0);
+						}
+						break;
+					case RANK_B:
+						if(ExcessTimeInRank >= 0 && ExcessTimeInRank <= 1080) {
+							newRankInfo.setSalaryGrade(0, CoreUtils.getDateInXDays360(new Date(), 0-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 1081 && ExcessTimeInRank <= 2160) {
+							newRankInfo.setSalaryGrade(1, CoreUtils.getDateInXDays360(new Date(), 1081-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 2161 && ExcessTimeInRank <= 3240) {
+							newRankInfo.setSalaryGrade(2, CoreUtils.getDateInXDays360(new Date(), 2161-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 3241 && ExcessTimeInRank <= 4320) {
+							newRankInfo.setSalaryGrade(3, CoreUtils.getDateInXDays360(new Date(), 3241-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 4321 && ExcessTimeInRank <= 5400) {
+							newRankInfo.setSalaryGrade(4, CoreUtils.getDateInXDays360(new Date(), 4321-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 5401 && ExcessTimeInRank <= 6480) {
+							newRankInfo.setSalaryGrade(5, CoreUtils.getDateInXDays360(new Date(), 5401-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 6481 && ExcessTimeInRank <= 7560) {
+							newRankInfo.setSalaryGrade(6, CoreUtils.getDateInXDays360(new Date(), 6481-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 7561 && ExcessTimeInRank <= 8640) {
+							newRankInfo.setSalaryGrade(7, CoreUtils.getDateInXDays360(new Date(), 7561-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 8641 && ExcessTimeInRank <= 9720) {
+							newRankInfo.setSalaryGrade(8, CoreUtils.getDateInXDays360(new Date(), 8641-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank > 9720) {
+							newRankInfo.setSalaryGrade(8, CoreUtils.getDateInXDays360(new Date(), 9720-ExcessTimeInRank), 0);
+						}
+						break;
+					default:
+						break;
+				}
+				break; // End SECONDARY_EDUCATION_LEVEL case
+			
+			case COMPULSORY_EDUCATION_LEVEL:
+				switch(newRankInfo.getRank()) {
+					case RANK_ST:
+						if(ExcessTimeInRank >=0 && ExcessTimeInRank <= 720) {
+							newRankInfo.setSalaryGrade(0, CoreUtils.getDateInXDays360(new Date(), 0-ExcessTimeInRank), 0);
+						} else if(ExcessTimeInRank > 720) {
+							newRankInfo.setSalaryGrade(0, CoreUtils.getDateInXDays360(new Date(), 0-ExcessTimeInRank), 0);
+						}
+					break;
+					case RANK_E:
+						if(ExcessTimeInRank >= 0 && ExcessTimeInRank <= 720) {
+							newRankInfo.setSalaryGrade(0, CoreUtils.getDateInXDays360(new Date(), 0-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 721 && ExcessTimeInRank <= 1440) {
+							newRankInfo.setSalaryGrade(1, CoreUtils.getDateInXDays360(new Date(), 721-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 1441 && ExcessTimeInRank <= 2160) {
+							newRankInfo.setSalaryGrade(2, CoreUtils.getDateInXDays360(new Date(), 1441-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 2161 && ExcessTimeInRank <= 2880) {
+							newRankInfo.setSalaryGrade(3, CoreUtils.getDateInXDays360(new Date(), 2161-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 2881 && ExcessTimeInRank <= 3600) {
+							newRankInfo.setSalaryGrade(4, CoreUtils.getDateInXDays360(new Date(), 2881-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 3601 && ExcessTimeInRank <= 4320) {
+							newRankInfo.setSalaryGrade(5, CoreUtils.getDateInXDays360(new Date(), 3601-ExcessTimeInRank), 0);
+						}
+						else if(ExcessTimeInRank > 4320) {
+							newRankInfo.setSalaryGrade(5, CoreUtils.getDateInXDays360(new Date(), 4320-ExcessTimeInRank), 0);
+						}
+						break;
+					case RANK_D:
+						if(ExcessTimeInRank >= 0 && ExcessTimeInRank <= 720) {
+							newRankInfo.setSalaryGrade(0, CoreUtils.getDateInXDays360(new Date(), 0-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 721 && ExcessTimeInRank <= 1440) {
+							newRankInfo.setSalaryGrade(1, CoreUtils.getDateInXDays360(new Date(), 721-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 1441 && ExcessTimeInRank <= 2160) {
+							newRankInfo.setSalaryGrade(2, CoreUtils.getDateInXDays360(new Date(), 1441-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 2161 && ExcessTimeInRank <= 2880) {
+							newRankInfo.setSalaryGrade(3, CoreUtils.getDateInXDays360(new Date(), 2161-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 2881 && ExcessTimeInRank <= 3600) {
+							newRankInfo.setSalaryGrade(4, CoreUtils.getDateInXDays360(new Date(), 2881-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 3601 && ExcessTimeInRank <= 4320) {
+							newRankInfo.setSalaryGrade(5, CoreUtils.getDateInXDays360(new Date(), 3601-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 4321 && ExcessTimeInRank <= 5040) {
+							newRankInfo.setSalaryGrade(6, CoreUtils.getDateInXDays360(new Date(), 4321-ExcessTimeInRank), 0);
+						}
+						else if(ExcessTimeInRank > 5040) {
+							newRankInfo.setSalaryGrade(6, CoreUtils.getDateInXDays360(new Date(), 5040-ExcessTimeInRank), 0);
+						}
+						break;
+					case RANK_C:
+						if(ExcessTimeInRank >= 0 && ExcessTimeInRank <= 720) {
+							newRankInfo.setSalaryGrade(0, CoreUtils.getDateInXDays360(new Date(), 0-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 721 && ExcessTimeInRank <= 1440) {
+							newRankInfo.setSalaryGrade(1, CoreUtils.getDateInXDays360(new Date(), 721-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 1441 && ExcessTimeInRank <= 2160) {
+							newRankInfo.setSalaryGrade(2, CoreUtils.getDateInXDays360(new Date(), 1441-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 2161 && ExcessTimeInRank <= 2880) {
+							newRankInfo.setSalaryGrade(3, CoreUtils.getDateInXDays360(new Date(), 2161-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 2881 && ExcessTimeInRank <= 3600) {
+							newRankInfo.setSalaryGrade(4, CoreUtils.getDateInXDays360(new Date(), 2881-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 3601 && ExcessTimeInRank <= 4320) {
+							newRankInfo.setSalaryGrade(5, CoreUtils.getDateInXDays360(new Date(), 3601-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 4321 && ExcessTimeInRank <= 5040) {
+							newRankInfo.setSalaryGrade(6, CoreUtils.getDateInXDays360(new Date(), 4321-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 5041 && ExcessTimeInRank <= 5760) {
+							newRankInfo.setSalaryGrade(7, CoreUtils.getDateInXDays360(new Date(), 5041-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank >= 5761 && ExcessTimeInRank <= 6480) {
+							newRankInfo.setSalaryGrade(8, CoreUtils.getDateInXDays360(new Date(), 5761-ExcessTimeInRank), 0);
+						} else 
+						if(ExcessTimeInRank > 6480) {
+							newRankInfo.setSalaryGrade(8, CoreUtils.getDateInXDays360(new Date(), 6480-ExcessTimeInRank), 0);
+						}
+						break;
+					default:
+						break;
+				}
+				break; // End COMPULSORY_EDUCATION_LEVEL case
+				
+			default:
+				break;
+		}
+		
+		if(this.rank.equals(newRankInfo.rank) && this.salaryGrade == newRankInfo.salaryGrade)
+			return this;
+		else
+			return newRankInfo;
+	}
+
+	
+	
+	
+	
+
+
 
 }
