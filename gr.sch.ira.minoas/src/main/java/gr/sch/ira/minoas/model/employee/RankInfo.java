@@ -1821,7 +1821,7 @@ public class RankInfo extends BaseIDDeleteAwareModel {
 	 *         classification in grade.
 	 */
 	public RankInfo RecalculateRankInfo() {
-		Integer ExcessTimeInRank = getSurplusTimeInRankUntilToday();
+		Integer ExcessTimeInRank = getSurplusTimeInRankUntilToday()+1;
 		RankInfo newRankInfo = new RankInfo(this); 
 		switch (newRankInfo.getEducationalLevel()) {
 			case UNIVERSITY_EDUCATION_LEVEL:
