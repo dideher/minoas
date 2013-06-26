@@ -2295,11 +2295,4 @@ public class RankInfo extends BaseIDDeleteAwareModel {
 			return newRankInfo;
 	}
 
-	
-	
-	
-	
-
-
-
 }
