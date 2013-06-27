@@ -20,6 +20,7 @@ import gr.sch.ira.minoas.model.employee.PartTimeEmployment;
 import gr.sch.ira.minoas.model.employee.Penalty;
 import gr.sch.ira.minoas.model.employee.PenaltyType;
 import gr.sch.ira.minoas.model.employee.Person;
+import gr.sch.ira.minoas.model.employee.RankInfo;
 import gr.sch.ira.minoas.model.employee.RankType;
 import gr.sch.ira.minoas.model.employement.Disposal;
 import gr.sch.ira.minoas.model.employement.DisposalTargetType;
@@ -1644,6 +1645,37 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         return returnValue != null ? returnValue : new Long(0);
     } 
     
+//    @SuppressWarnings("unchecked")
+//    @Transactional(TransactionPropagationType.REQUIRED)
+//    public Collection<RankInfo> getCurrentRankInfosForActiveEmployees(Employee employee) {
+//        Collection<RankInfo> result = null;
+//        info("searching current rank infos for all active employees.");
+//        result = entityManager.createQuery(
+//            "select ri " + 
+//            "from Employee e, EmployeeInfo ei, RankInfo ri, Employment em" +
+//            " where ri.employeeInfo = ei and ei.employee = e" +
+//            " and em.employee = e" +
+//            " and ei.currentRankInfo = ri" +
+//            " and em.active IS TRUE and ei.employee=:employee").setParameter("employee", employee).getResultList();
+//        info("found totally '#0' current rank infos for active employees.", result.size());
+//        return result;
+//    }
     
+    
+    @SuppressWarnings("unchecked")
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public Collection<RankInfo> getCurrentRankInfosForActiveEmployees(Employee employee) {
+        Collection<RankInfo> result = null;
+        info("searching current rank infos for all active employees.");
+        result = entityManager.createQuery(
+            "select ri " + 
+            "from Employee e, EmployeeInfo ei, RankInfo ri, Employment em" +
+            " where ri.employeeInfo = ei and ei.employee = e" +
+            " and em.employee = e" +
+            " and ei.currentRankInfo = ri" +
+            " and em.active IS TRUE").getResultList();
+        info("found totally '#0' current rank infos for active employees.", result.size());
+        return result;
+    }
 
 }

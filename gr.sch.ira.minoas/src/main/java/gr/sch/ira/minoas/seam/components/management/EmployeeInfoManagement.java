@@ -4,6 +4,7 @@ import gr.sch.ira.minoas.core.CoreUtils;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeInfo;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
+import gr.sch.ira.minoas.model.employee.Evaluation;
 import gr.sch.ira.minoas.model.employee.RankInfo;
 import gr.sch.ira.minoas.model.employee.RegularEmployeeInfo;
 import gr.sch.ira.minoas.model.employement.EmployeeLeave;
@@ -385,7 +386,6 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 
 			info("Rank Info #0 for employee #1 has been modified", rinfo, employee);
 			return ACTION_OUTCOME_SUCCESS;
-
 		} else {
 			facesMessages.add(Severity.ERROR,
 					"employee home #0 is not managed.", employeeHome);
@@ -561,8 +561,14 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 			java.text.DateFormat df = java.text.SimpleDateFormat.getDateInstance(java.text.SimpleDateFormat.SHORT);
 			
 			if(!rankInfo.getRank().equals(recalculatedRankInfo.getRank()) || rankInfo.getSalaryGrade()!=recalculatedRankInfo.getSalaryGrade()) {
+				RegularEmployeeInfo reinfo = rankInfo.getEmployeeInfo().getEmployee().getRegularEmployeeInfo();
+				String AM = new String();
+				if (reinfo!= null) {
+					AM = reinfo.getRegistryID();
+				}
 				
-				System.out.println("|"+rankInfo.getEmployeeInfo().getEmployee().getLastName() + 
+				System.out.println("|"+ AM +
+						"|"+rankInfo.getEmployeeInfo().getEmployee().getLastName() + 
 						"|" + rankInfo.getEmployeeInfo().getEmployee().getFirstName() + 
 						"|" + rankInfo.getEmployeeInfo().getEmployee().getFatherName() +
 						"|" + rankInfo.prettyToString() + 
@@ -577,24 +583,24 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 						"|Πλεονάζ. Χρόνος στο Μ.Κ. σήμερα|" + recalculatedRankInfo.getSurplusTimeInSalaryGradeUntilTodayYear_Month_Day() + "|"+recalculatedRankInfo.getSurplusTimeInSalaryGradeUntilToday() + "|"
 						);
 				
-				EmployeeInfo eInfo = rankInfo.getEmployeeInfo();
-				Employee employee = eInfo.getEmployee();
-
-				// set InsertedBy to Minoas user username
-				recalculatedRankInfo.setInsertedBy(null);
-				// set InsertedOn to today's date
-				recalculatedRankInfo.setInsertedOn(new Date());
-				
-				//	save the new RankInfo
-				getEntityManager().persist(recalculatedRankInfo);
-				
-				//	set the newly created rankInfo as current at the respective employeeInfo
-				//	NOTE: that method setCurrentRankInfo(rInfo) also adds rInfo to the Collection of RankInfos within EmployeeInfo !!!!
-				eInfo.setCurrentRankInfo(recalculatedRankInfo);
-
-				// Save
-				getEntityManager().flush();
-				info("Rank Info #0 for employee #1 has been inserted", recalculatedRankInfo, employee);
+//				EmployeeInfo eInfo = rankInfo.getEmployeeInfo();
+//				Employee employee = eInfo.getEmployee();
+//
+//				// set InsertedBy to Minoas user username
+//				recalculatedRankInfo.setInsertedBy(null);
+//				// set InsertedOn to today's date
+//				recalculatedRankInfo.setInsertedOn(new Date());
+//				
+//				//	save the new RankInfo
+//				getEntityManager().persist(recalculatedRankInfo);
+//				
+//				//	set the newly created rankInfo as current at the respective employeeInfo
+//				//	NOTE: that method setCurrentRankInfo(rInfo) also adds rInfo to the Collection of RankInfos within EmployeeInfo !!!!
+//				eInfo.setCurrentRankInfo(recalculatedRankInfo);
+//
+//				// Save
+//				getEntityManager().flush();
+//				info("Rank Info #0 for employee #1 has been inserted", recalculatedRankInfo, employee);
 
 			}
 		}

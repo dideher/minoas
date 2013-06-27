@@ -107,14 +107,7 @@
 											height="12" style="border:0" />
 									</a4j:commandLink>
 									
-									<a4j:commandLink id="Recalculate_Rank_Infos_link"
-										rendered="#{(employee.employeeInfo != null) and ((s:hasRole('ADMIN') or s:hasRole('INSERT_RANK_INFO')))}"
-										action="#{employeeInfoManagement.recalculateRankInfos()}"
-										reRender="insertRankInfoOutputPanel" immediate="true"
-										value="Recalculate Rank Infos" styleClass="rich-toolbar-item">
-										<h:graphicImage value="/img/icons/edit.png" width="12"
-											height="12" style="border:0" />
-									</a4j:commandLink>
+
 
 								</h:panelGrid>
 								
@@ -130,87 +123,6 @@
 						<rich:tabPanel mode="ajax">
 
 							<rich:tab id="tab1">
-								<f:facet name="label">
-									<h:outputText value="Ιστορικό Βαθμολογικής Εξέλιξης" />
-								</f:facet>
-
-								<h:panelGrid columns="1" width="100%">
-									<h:outputText
-										value="Στον παρακάτω πίνακα εμφανίζεται η βαθμολογική εξέλιξη του/της εκπαιδευτικού." />
-
-									<h:form id="rankInfoHistoryForm">
-										<rich:dataTable id="rankInfoList"
-											value="#{employee.employeeInfo.rankInfos}" var="_rankInfo"
-											rows="10" border="0"
-											onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
-											onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
-											width="100%">
-											<f:facet name="header">
-												<h:outputLabel
-													value="Ιστορικό βαθμολογικής εξέλιξης Εκπαιδευτικού" />
-											</f:facet>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Βαθμός" />
-												</f:facet>
-												<h:outputText value="#{messages[_rankInfo.rank.key]}" />
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Ημ/νια Χορήγησης Βαθμού" />
-												</f:facet>
-												<h:outputText value="#{_rankInfo.lastRankDate}">
-													<s:convertDateTime pattern="dd-MM-yyyy" />
-												</h:outputText>
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Πλεονάζων Χρόνος στο Βαθμό" />
-												</f:facet>
-												<h:outputText
-													value="#{_rankInfo.surplusTimeInRankYear_Month_Day} (#{_rankInfo.surplusTimeInRank} ημ.)" />
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Μ.Κ." />
-												</f:facet>
-												<h:outputText value="#{_rankInfo.salaryGrade}" />
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Ημ/νια Χορήγησης Μ.Κ." />
-												</f:facet>
-												<h:outputText value="#{_rankInfo.lastSalaryGradeDate}">
-													<s:convertDateTime pattern="dd-MM-yyyy" />
-												</h:outputText>
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Πλεονάζων Χρόνος στο Μ.Κ." />
-												</f:facet>
-												<h:outputText
-													value="#{_rankInfo.surplusTimeInSalaryGradeYear_Month_Day} (#{_rankInfo.surplusTimeInSalaryGrade} ημ.)" />
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Επίπεδο Εκπαίδευσης" />
-												</f:facet>
-												<h:outputText
-													value="#{messages[_rankInfo.educationalLevel.key]}" />
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Σχόλια" />
-												</f:facet>
-												<h:outputText value="#{_rankInfo.comments}" />
-											</rich:column>
-										</rich:dataTable>
-									</h:form>
-								</h:panelGrid>
-							</rich:tab>
-
-
-							<rich:tab id="tab2">
 								<f:facet name="label">
 									<h:outputText value="Προ-Υπηρεσία" />
 								</f:facet>
@@ -582,15 +494,12 @@
 				<a4j:region>
 					<h:panelGrid columns="3">
 						<h:form>
-
-
 							<a4j:outputPanel id="insertRankInfoOutputPanel" layout="inline">
 								<h:outputText
 									value="Με την παρακάτω φόρμα, μπορείτε να εισάγετε ένα νέο βαθμό και/ή Μ.Κ. για τον/την εκπαιδευτικό #{employeeUtil.prettyFormat(employee)}." />
 								<rich:messages style="color:red;"></rich:messages>
 
 								<h:panelGrid columns="1">
-								
 									<s:decorate template="/layout/doubleLineEdit.xhtml">
 										<ui:define name="label">
 											<h:outputText styleClass="fieldValueLabel"
@@ -608,10 +517,6 @@
 								</h:panelGrid>
 								
 								<h:panelGrid columns="3">
-								
-
-									
-
 									<s:decorate template="/layout/doubleLineEdit.xhtml">
 										<ui:define name="label">
 											<h:outputText styleClass="fieldValueLabel" value="Βαθμός: " />
@@ -678,12 +583,9 @@
 										<h:inputText id="salaryGradeFilter" required="true"
 											value="#{rankInfoHome.instance.surplusTimeInSalaryGrade}"></h:inputText>
 									</s:decorate>
-									
-									
 								</h:panelGrid>
 								
 								<h:panelGrid columns="1">
-
 									<s:decorate template="/layout/doubleLineEdit.xhtml">
 										<ui:define name="label">
 											<h:outputText value="Σχόλια" />
@@ -712,6 +614,196 @@
 			</rich:modalPanel>
 		</a4j:region>
 
+
+
+
+		<!-- *********************************************** -->
+		<!-- **         Modify RankInfo modal panel       ** -->
+		<!-- *********************************************** -->
+		<a4j:region>
+			<rich:modalPanel id="modifyRankInfoModalPanel" autosized="true"
+				width="500">
+				<f:facet name="header">
+					<h:outputText value="Τροποποίηση Βαθμού / Μ.Κ."
+						style="padding-right:15px;" />
+				</f:facet>
+				<f:facet name="controls">
+					<h:panelGroup>
+						<h:graphicImage value="/img/modal/close.png" styleClass="hidelink"
+							width="18" height="18" id="hidelink_RankInfoModification" />
+						<rich:componentControl for="modifyRankInfoModalPanel"
+							attachTo="hidelink_RankInfoModification" operation="hide"
+							event="onclick" />
+					</h:panelGroup>
+				</f:facet>
+
+				<a4j:region>
+					<h:panelGrid columns="3">
+						<h:form>
+							<a4j:outputPanel id="modifyRankInfoOutputPanel" layout="inline">
+								<h:outputText
+									value="Με την παρακάτω φόρμα, μπορείτε να τροποποιήσετε ένα βαθμό και/ή Μ.Κ. για τον/την εκπαιδευτικό #{employeeUtil.prettyFormat(employee)}." />
+								<rich:messages style="color:red;"></rich:messages>
+
+								<h:panelGrid columns="1">
+									<s:decorate template="/layout/doubleLineEdit.xhtml">
+										<ui:define name="label">
+											<h:outputText styleClass="fieldValueLabel"
+												value="Επίπεδο Εκπ/σης: " />
+										</ui:define>
+										<h:selectOneMenu id="Rank"
+											value="#{rankInfoHome.instance.educationalLevel}"
+											required="true">
+											<s:selectItems hideNoSelectionLabel="false"
+												var="_educationalLevel" value="#{educationalLevelTypes}"
+												label="#{messages[_educationalLevel.key]}" />
+											<s:convertEnum />
+										</h:selectOneMenu>
+									</s:decorate>
+								</h:panelGrid>
+								
+								<h:panelGrid columns="3">
+									<s:decorate template="/layout/doubleLineEdit.xhtml">
+										<ui:define name="label">
+											<h:outputText styleClass="fieldValueLabel" value="Βαθμός: " />
+										</ui:define>
+										<h:selectOneMenu id="Rank"
+											value="#{rankInfoHome.instance.rank}"
+											required="true">
+											<s:selectItems hideNoSelectionLabel="false" var="_rankType"
+												value="#{rankTypes}" label="#{messages[_rankType.key]}" />
+											<s:convertEnum />
+										</h:selectOneMenu>
+									</s:decorate>
+
+									<s:decorate template="/layout/doubleLineEdit.xhtml">
+										<ui:define name="label">
+											<h:outputText styleClass="fieldValueLabel"
+												value="Ημ/νία Απόδοσης Βαθμού: " />
+										</ui:define>
+										<rich:calendar inputSize="8" datePattern="dd/MM/yyyy"
+											style="width:50px" enableManualInput="true"
+											styleClass="fieldValueText" required="true"
+											value="#{rankInfoHome.instance.lastRankDate}">
+										</rich:calendar>
+									</s:decorate>
+
+									<s:decorate template="/layout/doubleLineEdit.xhtml">
+										<ui:define name="label">
+											<h:outputText styleClass="fieldValueLabel"
+												value="Πλεονάζων Χρόνος στο Βαθμό: " />
+										</ui:define>
+										<h:inputText id="salaryGradeFilter" required="true"
+											value="#{rankInfoHome.instance.surplusTimeInRank}"></h:inputText>
+									</s:decorate>
+
+									<s:decorate template="/layout/doubleLineEdit.xhtml">
+										<ui:define name="label">
+											<h:outputText styleClass="fieldValueLabel"
+												value="Μισθ. Κλιμάκιο: " />
+										</ui:define>
+										<h:inputText id="salaryGradeFilter" required="true"
+											value="#{rankInfoHome.instance.salaryGrade}"
+											size="1" maxlength="1"></h:inputText>
+									</s:decorate>
+
+									<s:decorate template="/layout/doubleLineEdit.xhtml">
+										<ui:define name="label">
+											<h:outputText styleClass="fieldValueLabel"
+												value="Ημ/νία Απόδοσης Μ.Κ.: " />
+										</ui:define>
+										<rich:calendar inputSize="8" datePattern="dd/MM/yyyy"
+											style="width:50px" enableManualInput="true"
+											styleClass="fieldValueText" required="true"
+											value="#{rankInfoHome.instance.lastSalaryGradeDate}">
+										</rich:calendar>
+									</s:decorate>
+
+									<s:decorate template="/layout/doubleLineEdit.xhtml">
+										<ui:define name="label">
+											<h:outputText styleClass="fieldValueLabel"
+												value="Πλεονάζων Χρόνος στο Μ.Κ.: " />
+										</ui:define>
+										<h:inputText id="salaryGradeFilter" required="true"
+											value="#{rankInfoHome.instance.surplusTimeInSalaryGrade}"></h:inputText>
+									</s:decorate>
+								</h:panelGrid>
+								
+								<h:panelGrid columns="1">
+									<s:decorate template="/layout/doubleLineEdit.xhtml">
+										<ui:define name="label">
+											<h:outputText value="Σχόλια" />
+										</ui:define>
+										<h:inputTextarea value="#{rankInfoHome.instance.comments}" cols="64" styleClass="fieldValueText" />
+									</s:decorate>
+								</h:panelGrid>
+							
+							</a4j:outputPanel>
+																		
+							<h:panelGrid columns="2">
+								<a4j:commandButton value="Τροποποίηση Βαθμού/Μ.Κ.!"
+									action="#{employeeInfoManagement.modifyRankInfo()}"
+									data="#{facesContext.maximumSeverity.ordinal ge 2}"
+									oncomplete="if(data == false) Richfaces.hideModalPanel('modifyRankInfoModalPanel');"
+									reRender="employeeInfoOutputPanel" />
+								<a4j:commandButton value="Επιστροφή .."
+									action="#{employeeInfoManagement.cancelModifyRankInfo()}"
+									reRender="employeeInfoOutputPanel"
+									oncomplete="#{rich:component('modifyRankInfoModalPanel')}.hide();" />
+							</h:panelGrid>
+
+						</h:form>
+					</h:panelGrid>
+				</a4j:region>
+			</rich:modalPanel>
+		</a4j:region>
+
+
+		<!-- *********************************************** -->
+		<!-- **         Delete RankInfo modal panel       ** -->
+		<!-- *********************************************** -->
+		<a4j:region>
+			<rich:modalPanel id="deleteRankInfoModalPanel" autosized="true"
+				width="450">
+				<f:facet name="header">
+					<h:outputText value="Διαγραφή Βαθμού/ΜΚ"
+						style="padding-right:15px;" />
+				</f:facet>
+				<f:facet name="controls">
+					<h:panelGroup>
+						<h:graphicImage value="/img/modal/close.png" styleClass="hidelink"
+							width="18" height="18" id="hidelink_deleterankinfo" />
+						<rich:componentControl for="deleteRankInfoModalPanel"
+							attachTo="hidelink_deleterankinfo" operation="hide"
+							event="onclick" />
+					</h:panelGroup>
+				</f:facet>
+				
+					<h:panelGrid columns="1">
+						<h:form>
+							<a4j:outputPanel id="deleteRankInfoModalPanelContent"
+								layout="inline">
+								<h:outputText
+									value="Είστε σίγουρος/ρη για την διαγραφή του επιλεγμένου #{messages[rankInfoHome.instance.rank.key]} (#{rankInfoHome.instance.salaryGrade}) του/της εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}?" />
+								<rich:messages style="color:red;"></rich:messages>
+							</a4j:outputPanel>
+	
+							<h:panelGrid columns="2">
+	
+								<a4j:commandButton value="Διαγραφή Βαθμού/ΜΚ !"
+									action="#{employeeInfoManagement.deleteRankInfo()}"
+									data="#{facesContext.maximumSeverity.ordinal ge 2}"
+									oncomplete="if(data == false) Richfaces.hideModalPanel('deleteRankInfoModalPanel');"
+									reRender="employeeInfoOutputPanel" />
+								<a4j:commandButton value="Επιστροφή .."
+									reRender="employeeInfoOutputPanel"
+									oncomplete="#{rich:component('deleteRankInfoModalPanel')}.hide();" />
+							</h:panelGrid>
+						</h:form>
+					</h:panelGrid>
+				
+			</rich:modalPanel>
+		</a4j:region>
 
 
 	</ui:define>

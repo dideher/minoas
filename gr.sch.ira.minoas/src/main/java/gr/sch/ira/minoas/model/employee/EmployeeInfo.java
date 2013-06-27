@@ -7,6 +7,7 @@ import gr.sch.ira.minoas.model.employement.EducationalLevelType;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -270,6 +271,21 @@ public class EmployeeInfo extends BaseIDModel {
 	public Collection<RankInfo> getRankInfos() {
 		return rankInfos;
 	}
+	
+	/**
+	 * @return the rankInfos
+	 */
+	public Collection<RankInfo> getNonDeletedRankInfos() {
+		Collection<RankInfo> nonDeletedRankInfos = new ArrayList<RankInfo>();
+		for (Iterator<RankInfo> iter = rankInfos.iterator(); iter.hasNext();) {
+			RankInfo rInfo = (RankInfo) iter.next();
+			if(rInfo!= null && (rInfo.getDeleted()== null || !rInfo.getDeleted())) {
+				nonDeletedRankInfos.add(rInfo);
+			}
+		}
+		return nonDeletedRankInfos;
+	}
+	
 
 	/**
 	 * @param rankInfo the rankInfos to set
