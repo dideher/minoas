@@ -7,6 +7,7 @@ import gr.sch.ira.minoas.model.employement.EducationalLevelType;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -910,7 +911,15 @@ public class RankInfo extends BaseIDDeleteAwareModel {
 	 *            the rankDateChange to set
 	 */
 	public void setRank(RankType rank, Date rankDateChange) {
-		this.rank = rank;
+		setRank(rank);
+		
+		Calendar rankDateChangeCal = new GregorianCalendar();
+		rankDateChangeCal.setTime(rankDateChange);
+		if(rankDateChangeCal.get(Calendar.DAY_OF_MONTH) == 31) {
+			rankDateChangeCal.set(Calendar.DAY_OF_MONTH,  30);
+			rankDateChange = rankDateChangeCal.getTime();
+		}
+		
 		this.lastRankDate = rankDateChange;
 	}
 
@@ -936,7 +945,15 @@ public class RankInfo extends BaseIDDeleteAwareModel {
 	 *            the salaryGradeDateChange to set
 	 */
 	public void setSalaryGrade(int salaryGrade, Date salaryGradeDateChange) {
-		this.salaryGrade = salaryGrade;
+		setSalaryGrade(salaryGrade);
+		
+		Calendar salaryGradeDateChangeCal = new GregorianCalendar();
+		salaryGradeDateChangeCal.setTime(salaryGradeDateChange);
+		if(salaryGradeDateChangeCal.get(Calendar.DAY_OF_MONTH) == 31) {
+			salaryGradeDateChangeCal.set(Calendar.DAY_OF_MONTH,  30);
+			salaryGradeDateChange = salaryGradeDateChangeCal.getTime();
+		}
+		
 		this.lastSalaryGradeDate = salaryGradeDateChange;
 	}
 	
@@ -949,8 +966,7 @@ public class RankInfo extends BaseIDDeleteAwareModel {
 	 *            the newSurplusTimeInSalaryGrade to set
 	 */
 	public void setSalaryGrade(int salaryGrade, Date salaryGradeDateChange, Integer newSurplusTimeInSalaryGrade) {
-		this.salaryGrade = salaryGrade;
-		this.lastSalaryGradeDate = salaryGradeDateChange;
+		setSalaryGrade(salaryGrade, salaryGradeDateChange);
 		this.surplusTimeInSalaryGrade = newSurplusTimeInSalaryGrade; 
 	}
 

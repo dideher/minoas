@@ -107,14 +107,7 @@
 											height="12" style="border:0" />
 									</a4j:commandLink>
 									
-									<a4j:commandLink id="Recalculate_Rank_Infos_link"
-										rendered="#{(employee.employeeInfo != null) and ((s:hasRole('ADMIN') or s:hasRole('INSERT_RANK_INFO')))}"
-										action="#{employeeInfoManagement.recalculateRankInfos()}"
-										reRender="insertRankInfoOutputPanel" immediate="true"
-										value="Recalculate Rank Infos" styleClass="rich-toolbar-item">
-										<h:graphicImage value="/img/icons/edit.png" width="12"
-											height="12" style="border:0" />
-									</a4j:commandLink>
+
 
 								</h:panelGrid>
 								
