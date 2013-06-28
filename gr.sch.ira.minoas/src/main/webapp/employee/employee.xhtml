@@ -1136,7 +1136,8 @@
 										required="false" maxlength="10" size="10" />
 								</s:decorate>
 								
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<rich:spacer rendered="#{!employeeHome.instance.isRegularEmployee()}"/>
+								<s:decorate template="/layout/doubleLineEdit.xhtml" rendered="#{employeeHome.instance.isRegularEmployee()}">
 									<ui:define name="label">
 										<h:outputText value="ΑΜ" />
 									</ui:define>
