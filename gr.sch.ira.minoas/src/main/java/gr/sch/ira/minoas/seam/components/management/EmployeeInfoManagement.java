@@ -557,7 +557,7 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 		for (Iterator<RankInfo> rInfoItrtr = rankInfos.iterator(); rInfoItrtr.hasNext();) {
 			RankInfo rankInfo = (RankInfo) rInfoItrtr.next();
 			
-			RankInfo recalculatedRankInfo = rankInfo.RecalculateRankInfo();
+			RankInfo recalculatedRankInfo = CoreUtils.RecalculateRankInfo(rankInfo);
 			
 			java.text.DateFormat df = java.text.SimpleDateFormat.getDateInstance(java.text.SimpleDateFormat.SHORT);
 			
