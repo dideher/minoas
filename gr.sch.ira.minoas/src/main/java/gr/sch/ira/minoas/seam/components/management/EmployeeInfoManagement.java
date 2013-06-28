@@ -552,7 +552,7 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 
 	
 	public void recalculateRankInfos() {
-		Collection<RankInfo> rankInfos = getCoreSearching().getCurrentRankInfosForActiveEmployees(employeeHome.getInstance());
+		Collection<RankInfo> rankInfos = null;
 		for (Iterator<RankInfo> rInfoItrtr = rankInfos.iterator(); rInfoItrtr.hasNext();) {
 			RankInfo rankInfo = (RankInfo) rInfoItrtr.next();
 			
