@@ -3,7 +3,8 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:s="http://jboss.com/products/seam/taglib"
-      xmlns:rich="http://richfaces.org/rich">
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:a4j="http://richfaces.org/a4j">
 
 	<ui:component>
 	
@@ -16,9 +17,13 @@
 
 				<h:panelGrid columns="4" width="100%" cellpadding="4px">
 					<h:outputLabel styleClass="fieldValueLabel" value="Επώνυμο: " />
-					<h:outputText styleClass="fieldValueText" value="#{employee.lastName}"/>
+					<s:link styleClass="fieldValueText" value="#{employee.lastName}"  view="/employee/employee.xhtml">
+						<s:conversationPropagation type="join" />
+					</s:link>
 					<h:outputLabel styleClass="fieldValueLabel" value="Όνομα: " />
-					<h:outputText styleClass="fieldValueText" value="#{employee.firstName}" />
+					<s:link styleClass="fieldValueText" value="#{employee.firstName}"  view="/employee/employee.xhtml">
+						<s:conversationPropagation type="join" />
+					</s:link>
 					<h:outputLabel styleClass="fieldValueLabel" value="Όνομα Πατρός: " />
 					<h:outputText styleClass="fieldValueText" value="#{employee.fatherName}" />
 					<h:outputLabel styleClass="fieldValueLabel" value="Όνομα Μητρός: " />
@@ -60,8 +65,9 @@
 					<h:outputLabel styleClass="fieldValueLabel" value="Τύπος: " />
 					<h:outputText styleClass="fieldValueText" value="#{messages[employee.type.key]}" />
 					
-					
 				</h:panelGrid>
+				
+				
 
 			</rich:tab>
 
@@ -159,11 +165,16 @@
 					<h:outputLabel styleClass="fieldValueLabel" rendered="#{employee.type == 'REGULAR'}"
 						value="(Πράξη Μονιμοποίησης)-Ημερομηνία: " />
 					<ui:remove> <!-- TODO Review this as Employee my not be only Regular but also NonRegular --> </ui:remove>
-					<h:outputFormat styleClass="fieldValueText" value="(#{employee.regularEmployeeInfo.permanentEmployeeAct})-{0, date, dd/MM/yyyy}"
-						rendered="#{(employee.type == 'REGULAR') and ((employee.regularEmployeeInfo.permanentEmployeeAct ne '') and (employee.regularEmployeeInfo.permanentEmployeeActDate ne null))}">
-					    <f:param value="#{employee.regularEmployeeInfo.permanentEmployeeActDate}" />
-					</h:outputFormat>
-
+					<s:div>
+						<h:outputFormat styleClass="fieldValueText" value="(#{employee.regularEmployeeInfo.permanentEmployeeAct})-{0, date, dd/MM/yyyy}"
+							rendered="#{(employee.type == 'REGULAR') and ((employee.regularEmployeeInfo.permanentEmployeeAct ne '') and (employee.regularEmployeeInfo.permanentEmployeeActDate ne null))}">
+					    	<f:param value="#{employee.regularEmployeeInfo.permanentEmployeeActDate}" />
+						</h:outputFormat>
+					</s:div>
+					<h:outputLabel styleClass="fieldValueLabel" value="Οργανική: "/>
+					<s:div>
+						<h:outputText styleClass="fieldValueText" value="#{employee.getRegularSchoolTitle()}" rendered="#{employee.isRegularEmployee()}" />
+					</s:div>
 					
 				</h:panelGrid>
 									

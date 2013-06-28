@@ -57,7 +57,9 @@
 					<a4j:commandButton styleClass="btn btn-primary" value="Αναζήτηση"
 						action="#{schoolSearch.find()}" eventsQueue="schoolSearch"
 						reRender="schoolSearchResultOutputPanel" limitToList="true"
-						ignoreDupResponses="true" />
+						ignoreDupResponses="true">
+							<s:defaultAction />
+					</a4j:commandButton>
 
 					<a4j:commandButton styleClass="btn btn-default" value="Καθαρισμός"
 						action="#{schoolSearch.reset()}" eventsQueue="schoolSearch"

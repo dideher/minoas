@@ -922,6 +922,7 @@ public class RankInfo extends BaseIDDeleteAwareModel {
 		
 		this.lastRankDate = rankDateChange;
 	}
+	
 
 	/**
 	 * @return the salaryGrade

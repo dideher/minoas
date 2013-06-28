@@ -34,6 +34,10 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 
+/**
+ * @author slavikos
+ *
+ */
 @Entity
 @Table(name = "EMPLOYEE")
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
@@ -641,6 +645,26 @@ public class Employee extends Person {
 	 */
 	public void setIkaId(String ikaId) {
 		this.ikaId = ikaId;
+	}
+	
+	
+	/**
+	 * Returns, if possible, the employees regular employment school title. This
+	 * operation can be called safelly.
+	 * 
+	 * @return The emplouyee's regular employment school title or null
+	 */
+	public String getRegularSchoolTitle() {
+		if(isRegularEmployee()) {
+			Employment em = getCurrentEmployment();
+			if(em != null) {
+				try {
+					return em.getSchool().getTitle();
+				} catch(Exception ex) {
+					return null;
+				}
+			} else return null;
+		} else return null;
 	}
 	
 

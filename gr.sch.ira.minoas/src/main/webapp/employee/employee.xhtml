@@ -634,6 +634,14 @@
 													<h:outputText value="#{_secondment.dueTo}">
 														<s:convertDateTime pattern="dd-MM-yyyy" />
 													</h:outputText>
+												</rich:column> 
+												
+												<rich:column>
+													<f:facet name="header">
+														<h:outputText value="Σχόλιο" />
+													</f:facet>
+													<h:outputText value="#{_secondment.comment}" />
+														
 												</rich:column>
 
 												<rich:column>

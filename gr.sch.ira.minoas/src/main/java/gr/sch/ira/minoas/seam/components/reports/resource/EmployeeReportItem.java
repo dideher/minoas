@@ -1,6 +1,9 @@
 package gr.sch.ira.minoas.seam.components.reports.resource;
 
+import gr.sch.ira.minoas.model.core.PYSDE;
+import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.employee.Employee;
+import gr.sch.ira.minoas.model.employee.RankInfo;
 import gr.sch.ira.minoas.model.employement.Employment;
 
 import java.util.Date;
@@ -13,13 +16,15 @@ public class EmployeeReportItem extends BaseIDReportItem {
 
 	private Date employeeBirthday;
 	
-	private Integer employeeID;
-
 	private String employeeCode;
 
 	private Date employeeEmploymentEstablishedDate;
 
 	private Date employeeEmploymentTerminatedDate;
+
+	private String employeeEmploymentUnitId;
+
+	private String employeeEmploymentUnitTitle;
 
 	private String employeeFatherName;
 
@@ -29,6 +34,8 @@ public class EmployeeReportItem extends BaseIDReportItem {
 
 	private Boolean employeeHasBigFamily;
 
+	private Integer employeeID;
+
 	private Boolean employeeIsSpecialCategory;
 
 	private String employeeLastName;
@@ -37,14 +44,18 @@ public class EmployeeReportItem extends BaseIDReportItem {
 
 	private String employeeMotherName;
 
-	private String employeeSpecialization;
+	private String employeeRankKey;
 
+	private Integer employeeSalaryGrade;
+	
+	private String employeeSpecialization;
+	
 	private String employeeSpecializationID;
 
 	private String employeeType;
 
 	private String employeeTypeKey;
-
+	
 	/**
 	 * 
 	 */
@@ -78,6 +89,20 @@ public class EmployeeReportItem extends BaseIDReportItem {
 				this.employeeMandatoryHours = employment.getMandatoryWorkingHours();
 				this.employeeEmploymentEstablishedDate = employment.getEstablished();
 				this.employeeEmploymentTerminatedDate = employment.getTerminated();
+				School school = employment.getSchool();
+				if(school!=null) {
+					this.employeeEmploymentUnitId = school.getId();
+					this.employeeEmploymentUnitTitle = school.getTitle();
+				}
+			} else {
+				/* the employee has not current employment */
+				PYSDE pysde = employee.getCurrentPYSDE();
+				if(pysde!=null && employee.isRegularEmployee()) {
+					this.employeeEmploymentUnitTitle = pysde.getTitle();
+					if(pysde.getRepresentedByUnit()!=null) {
+						this.employeeEmploymentUnitId = pysde.getRepresentedByUnit().getId();
+					}
+				}
 			}
 		}
 	}
@@ -88,14 +113,15 @@ public class EmployeeReportItem extends BaseIDReportItem {
 	public Date getEmployeeBirthday() {
 		return employeeBirthday;
 	}
-
+	
 	/**
 	 * @return the employeeCode
 	 */
 	public String getEmployeeCode() {
 		return employeeCode;
 	}
-
+	
+	
 	/**
 	 * @return the employeeEmploymentEstablishedDate
 	 */
@@ -108,6 +134,14 @@ public class EmployeeReportItem extends BaseIDReportItem {
 	 */
 	public Date getEmployeeEmploymentTerminatedDate() {
 		return employeeEmploymentTerminatedDate;
+	}
+
+	public String getEmployeeEmploymentUnitId() {
+		return employeeEmploymentUnitId;
+	}
+
+	public String getEmployeeEmploymentUnitTitle() {
+		return employeeEmploymentUnitTitle;
 	}
 
 	/**
@@ -139,6 +173,13 @@ public class EmployeeReportItem extends BaseIDReportItem {
 	}
 
 	/**
+     * @return the employeeID
+     */
+    public Integer getEmployeeID() {
+        return employeeID;
+    }
+
+	/**
 	 * @return the employeeIsSpecialCategory
 	 */
 	public Boolean getEmployeeIsSpecialCategory() {
@@ -164,6 +205,14 @@ public class EmployeeReportItem extends BaseIDReportItem {
 	 */
 	public String getEmployeeMotherName() {
 		return employeeMotherName;
+	}
+
+	public String getEmployeeRankKey() {
+		return employeeRankKey;
+	}
+
+	public Integer getEmployeeSalaryGrade() {
+		return employeeSalaryGrade;
 	}
 
 	/**
@@ -195,6 +244,17 @@ public class EmployeeReportItem extends BaseIDReportItem {
 	}
 
 	/**
+     * Populate the instance with a rankInfo. More info #gh-139. 
+     * @param rankInfo
+     */
+    public void populateWithRankInfo(RankInfo rankInfo) {
+    	if(rankInfo!=null) {
+    		this.employeeRankKey = rankInfo.getRank() != null ? rankInfo.getRank().getKey() : null;
+    		this.employeeSalaryGrade = rankInfo.getSalaryGrade();
+    	}
+    }
+
+	/**
 	 * @param birthday the birthday to set
 	 */
 	public void setEmployeeBirthday(Date birthday) {
@@ -220,6 +280,14 @@ public class EmployeeReportItem extends BaseIDReportItem {
 	 */
 	public void setEmployeeEmploymentTerminatedDate(Date employeeEmploymentTerminatedDate) {
 		this.employeeEmploymentTerminatedDate = employeeEmploymentTerminatedDate;
+	}
+
+	public void setEmployeeEmploymentUnitId(String employeeEmploymentUnitId) {
+		this.employeeEmploymentUnitId = employeeEmploymentUnitId;
+	}
+
+	public void setEmployeeEmploymentUnitTitle(String employeeEmploymentUnitTitle) {
+		this.employeeEmploymentUnitTitle = employeeEmploymentUnitTitle;
 	}
 
 	/**
@@ -251,6 +319,13 @@ public class EmployeeReportItem extends BaseIDReportItem {
 	}
 
 	/**
+     * @param employeeID the employeeID to set
+     */
+    public void setEmployeeID(Integer employeeID) {
+        this.employeeID = employeeID;
+    }
+
+	/**
 	 * @param employeeIsSpecialCategory the employeeIsSpecialCategory to set
 	 */
 	public void setEmployeeIsSpecialCategory(Boolean employeeIsSpecialCategory) {
@@ -278,26 +353,36 @@ public class EmployeeReportItem extends BaseIDReportItem {
 		this.employeeMotherName = motherName;
 	}
 
-	/**
+	public void setEmployeeRankKey(String employeeRankKey) {
+		this.employeeRankKey = employeeRankKey;
+	}
+
+    public void setEmployeeSalaryGrade(Integer employeeSalaryGrade) {
+		this.employeeSalaryGrade = employeeSalaryGrade;
+	}
+
+    /**
 	 * @param specialization the specialization to set
 	 */
 	public void setEmployeeSpecialization(String specialization) {
 		this.employeeSpecialization = specialization;
 	}
 
-	/**
+    /**
 	 * @param specializationCode the specializationCode to set
 	 */
 	public void setEmployeeSpecializationID(String specializationCode) {
 		this.employeeSpecializationID = specializationCode;
 	}
-
-	/**
+    
+    /**
 	 * @param employeeType the employeeType to set
 	 */
 	public void setEmployeeType(String employeeType) {
 		this.employeeType = employeeType;
 	}
+
+	
 
 	/**
 	 * @param employeeTypeKey the employeeTypeKey to set
@@ -306,7 +391,7 @@ public class EmployeeReportItem extends BaseIDReportItem {
 		this.employeeTypeKey = employeeTypeKey;
 	}
 
-    /**
+	/**
      * @see java.lang.Object#toString()
      */
     @Override
@@ -314,20 +399,6 @@ public class EmployeeReportItem extends BaseIDReportItem {
         return "EmployeeReportItem [employeeCode=" + employeeCode + ", employeeFatherName=" + employeeFatherName +
                 ", employeeFirstName=" + employeeFirstName + ", employeeLastName=" + employeeLastName +
                 ", employeeSpecializationID=" + employeeSpecializationID + ", employeeTypeKey=" + employeeTypeKey + "]";
-    }
-
-    /**
-     * @return the employeeID
-     */
-    public Integer getEmployeeID() {
-        return employeeID;
-    }
-
-    /**
-     * @param employeeID the employeeID to set
-     */
-    public void setEmployeeID(Integer employeeID) {
-        this.employeeID = employeeID;
     }
 
 }

@@ -13,10 +13,10 @@
 
 <ui:composition template="/layout/simple-beauty-template.xhtml">
 	<ui:define name="body">
-	
-	
+
+
 		<ui:include src="/components/wait-modal-panel.xhtml" />
-		
+
 		<rich:panel>
 			<f:facet name="header">
 				<h:outputText
@@ -26,42 +26,94 @@
 			<ui:include src="/components/messages-component.xhtml" />
 
 			<h:form>
-				<h:panelGrid columns="1" width="100%">
 
-					<h:panelGrid columns="2" width="100%">
-						<rich:panel id="basicEmployeeInfoPanel">
+				<h:panelGrid columns="2" width="100%">
+
+					<h:panelGroup>
+						<h:panelGrid columns="1">
+							<rich:panel id="basicEmployeeInfoPanel" style="width: 600px">
+								<f:facet name="header">
+									<h:outputText value="Βασικά Στοιχεία" />
+								</f:facet>
+								<ui:include src="/employee/basic-info.xhtml">
+									<ui:param name="employee" value="#{employee}" />
+								</ui:include>
+							</rich:panel>
+							
+							<s:div styleClass="actionBox">
+								<a4j:commandButton value="Νέα Απόσπαση"
+									styleClass="btn btn-primary"
+									action="#{employeeSecondmentsManagement.prepareForNewSecondment()}"
+									oncomplete="#{rich:component('createModalPanel')}.show()"
+									reRender="createModalPanelContent" limitToList="true">
+								</a4j:commandButton>
+
+								<s:button value="Επιστροφή" styleClass="btn btn-default"
+									action="backButton" />
+
+								<s:button value="Τέλος Ενέργειας" styleClass="btn btn-default"
+									action="endButton" />
+							</s:div>
+						</h:panelGrid>
+
+					</h:panelGroup>
+
+					<h:panelGroup>
+
+						<rich:dataTable id="employeeCurrentStatusTable"
+							value="#{employeeCurrentStatusItems}" var="_item" rows="15"
+							border="0" onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+							onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+							width="100%">
 							<f:facet name="header">
-								<h:outputText value="Βασικά Στοιχεία" />
+								<h:outputLabel value="Τρέχουσα Κατάσταση Εκπαιδευτικού" />
 							</f:facet>
-							<ui:include src="/employee/basic-info.xhtml">
+
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Σχολική Μονάδα" />
+								</f:facet>
+								<h:outputText value="#{_item.schoolUnit}" />
+							</rich:column>
+
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Τύπος" />
+								</f:facet>
+								<h:outputText value="#{messages[_item.cdrTypeKey]}" />
+							</rich:column>
+
+
+
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Σχόλιο" />
+								</f:facet>
+								<h:outputText value="#{_item.comment}" />
+							</rich:column>
+
+
+						</rich:dataTable>
+
+
+						<rich:panel id="workExperienceInfoPanel">
+							<f:facet name="header">
+								<h:outputText value="Στοιχεία Υπηρεσίας" />
+							</f:facet>
+
+							<ui:include
+								src="/components/employee/workExperienceAndServiceInfo.xhtml">
 								<ui:param name="employee" value="#{employee}" />
 							</ui:include>
 						</rich:panel>
 
-						<rich:panelMenu mode="ajax">
-
-							<rich:panelMenuGroup label="Ενέργειες" expanded="true">
-								<rich:panelMenuItem mode="server" action="backButton"
-									label="Επιστροφή" hoverClass="panelMenuItemHover" />
-
-								<rich:panelMenuItem mode="server" action="endButton"
-									label="Τέλος Ενέργειας" hoverClass="panelMenuItemHover" />
-
-								<rich:panelMenuItem mode="ajax"
-									disabled="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_SECONDMENT'))}"
-									action="#{employeeSecondmentsManagement.prepareForNewSecondment()}"
-									reRender="createModalPanelContent"  limitToList="true" 
-									oncomplete="#{rich:component('createModalPanel')}.show()"
-									label="Νέα Απόσπαση" hoverClass="panelMenuItemHover">
-								</rich:panelMenuItem>
-
-							</rich:panelMenuGroup>
 
 
-						</rich:panelMenu>
-			
-					</h:panelGrid>
+					</h:panelGroup>
+				</h:panelGrid>
 
+
+				<h:panelGrid columns="1" width="100%">
 
 					<rich:panel>
 						<f:facet name="header">
@@ -396,13 +448,13 @@
 				</h:panelGrid>
 			</a4j:region>
 		</rich:modalPanel>
-		
+
 		<!-- *************************************************************************************************************** -->
 		<!-- *************************************************************************************************************** -->
 		<!-- Create Secondment -->
 		<!-- *************************************************************************************************************** -->
 		<!-- *************************************************************************************************************** -->
-		
+
 		<rich:modalPanel id="createModalPanel" autosized="true" width="450">
 			<f:facet name="header">
 				<h:outputText value="Καταχώρηση Νέας Απόσπασης"
@@ -417,215 +469,222 @@
 				</h:panelGroup>
 			</f:facet>
 
-			
-				<a4j:form id="createSecondmentForm">
+
+			<a4j:form id="createSecondmentForm">
 				<a4j:region>
 					<a4j:outputPanel id="createModalPanelContent">
-						
+
 						<ui:include src="/components/messages-component.xhtml" />
-						
+
 						<h:outputText
-								value="Συμπληρώστε τα στοιχεία της παρακάτω φόρμας για να εισάγεται νέα απόσπαση για τον εκπαιδευτικό " />
-							<h:outputText styleClass="fieldValueText"
-								value="#{employeeUtil.prettyFormat(employeeHome.instance)}" />
-						
-
-							<h:panelGrid columns="4">
-
-								<s:decorate id="sourceUnit"
-									template="/layout/doubleLineEdit.xhtml">
-									<ui:define name="label">
-										<h:outputText value="Σχολική Μονάδα Οργανικής" />
-									</ui:define>
-
-									<h:inputText value="#{secondmentHome.instance.sourceUnit}" tabindex="1"
-										required="true" id="schoolTarget" styleClass="fieldValueText"
-										converter="unitConverter" size="20" maxlength="22"
-										readonly="true">
-									</h:inputText>
-								</s:decorate>
-
-								<s:decorate id="secondmentTypeDecoration"
-									template="/layout/doubleLineEdit.xhtml">
-									<ui:define name="label">
-										<h:outputText value="Τύπος Απόσπασης" />
-									</ui:define>
-
-									<h:selectOneMenu id="secondmentType" tabindex="1"
-										value="#{secondmentHome.instance.secondmentType}" required="true">
-										<s:selectItems hideNoSelectionLabel="true"
-											var="_secondmentType" value="#{secondmentTypes}"
-											label="#{messages[_secondmentType.key]}" />
-										<s:convertEnum />
-										<a4j:support event="onblur"
-											reRender="secondmentTargetDecoration" ajaxSingle="true" />
-									</h:selectOneMenu>
-								</s:decorate>
-
-								<s:decorate id="secondmentTargetDecoration"
-									template="/layout/doubleLineEdit.xhtml">
-									<ui:define name="label">
-										<h:outputText value="Μονάδα Απόσπασης" />
-									</ui:define>
-									
-								
-									<h:inputText required="true" id="secondmentTargetField" value="#{secondmentHome.tempValueHolder1}"
-										styleClass="fieldValueText" tabindex="2">
-										
-									</h:inputText>
-									<rich:suggestionbox for="secondmentTargetField"
-											var="secondmentUnit" 
-											suggestionAction="#{secondmentAwareUnitSuggester.suggest}">
-											<f:facet name="nothingLabel">
-												<h:outputText value="Άγνωστη Μονάδα Απόσπασης" />
-											</f:facet>
-											<h:column>
-												<h:outputText value="#{secondmentUnit.title}" />
-											</h:column>
-											<a4j:support ajaxSingle="true" event="onselect">
-												<f:setPropertyActionListener value="#{secondmentUnit}"
-													target="#{secondmentHome.instance.targetUnit}" />
-											</a4j:support>
-										</rich:suggestionbox>
-								</s:decorate>
-								
-
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
-									<ui:define name="label">
-										<h:outputText value="Με Αίτηση του ;" />
-									</ui:define>
-									<h:selectBooleanCheckbox tabindex="3"
-										value="#{secondmentHome.instance.employeeRequested}" />
-								</s:decorate>
-
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
-									<ui:define name="label">
-										<h:outputText value="Υποχρεωτικό Ωράριο : " />
-									</ui:define>
-									<h:inputText value="#{secondmentHome.instance.mandatoryWorkingHours}"
-										tabindex="4" size="3" maxlength="3" readonly="true"
-										required="true" />
-								</s:decorate>
-
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
-									<ui:define name="label">
-										<h:outputText value="Ωράριο Απόσπασης : " />
-									</ui:define>
-									<h:inputText value="#{secondmentHome.instance.finalWorkingHours}" size="3"
-										tabindex="5" maxlength="3" required="true" immediate="true"/>
-								</s:decorate>
-
-								<s:decorate id="pysdeOrderDecoration"
-									template="/layout/doubleLineEdit.xhtml">
-									<ui:define name="label">
-										<h:outputText value="Απόφαση ΠΥΣΔΕ" />
-									</ui:define>
-									<h:inputText id="pysdeOrder" value="#{secondmentHome.instance.pysdeOrder}"
-										tabindex="6" styleClass="fieldValueText" required="false"
-										size="16" maxlength="25">
-										<a4j:support event="onblur" ajaxSingle="true"
-											reRender="pysdeOrderDecoration" bypassUpdates="true" />
-										<f:validateLength minimum="5" maximum="25" />
-									</h:inputText>
-								</s:decorate>
+							value="Συμπληρώστε τα στοιχεία της παρακάτω φόρμας για να εισάγεται νέα απόσπαση για τον εκπαιδευτικό " />
+						<h:outputText styleClass="fieldValueText"
+							value="#{employeeUtil.prettyFormat(employeeHome.instance)}" />
 
 
-								<s:decorate id="headMasterOrderDecoration"
-									template="/layout/doubleLineEdit.xhtml">
-									<ui:define name="label">
-										<h:outputText value="Απόφαση Διευθυντή" />
-									</ui:define>
-									<h:inputText id="headMasterOrder" tabindex="7"
-										value="#{secondmentHome.instance.headMasterOrder}"
-										styleClass="fieldValueText" required="false" size="16"
-										maxlength="25">
-										<a4j:support event="onblur"
-											reRender="headMasterOrderDecoration" bypassUpdates="true"
-											ajaxSingle="true" />
-										<f:validateLength minimum="5" maximum="25" />
-									</h:inputText>
-								</s:decorate>
+						<h:panelGrid columns="4">
 
-								<s:decorate id="ministerialOrderDecoration"
-									template="/layout/doubleLineEdit.xhtml">
-									<ui:define name="label">
-										<h:outputText value="Υπουργική Απόφαση" />
-									</ui:define>
-									<h:inputText id="ministerialOrder" tabindex="8"
-										value="#{secondmentHome.instance.ministerialOrder}" required="false"
-										size="16" maxlength="25" styleClass="fieldValueText">
-										<a4j:support event="onblur"
-											reRender="ministerialOrderDecoration" bypassUpdates="true"
-											ajaxSingle="true" />
-										<f:validateLength minimum="5" maximum="25" />
-									</h:inputText>
-								</s:decorate>
+							<s:decorate id="sourceUnit"
+								template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Σχολική Μονάδα Οργανικής" />
+								</ui:define>
 
-								<s:decorate id="establishedDateDecoration"
-									template="/layout/doubleLineEdit.xhtml">
-									<ui:define name="label">
-										<h:outputText value="Έναρξη Απόσπασης" />
-									</ui:define>
-									<rich:calendar id="establishedDate" enableManualInput="true"
-										value="#{secondmentHome.instance.established}" required="true"
-										inputSize="10" mode="ajax" locale="el_GR"
-										inputClass="fieldValueText" datePattern="dd-MM-yyyy">
-										<a4j:support event="onblur"
-											reRender="establishedDateDecoration" bypassUpdates="true"
-											ajaxSingle="true" />
-									</rich:calendar>
-								</s:decorate>
-								<s:decorate id="dueToDateDecoration"
-									template="/layout/doubleLineEdit.xhtml">
-									<ui:define name="label">
-										<h:outputText value="Λήξη Απόσπασης" />
-									</ui:define>
-									<rich:calendar id="dueToDate" value="#{secondmentHome.instance.dueTo}"
-										required="true" mode="ajax" locale="el_GR" inputSize="10"
-										enableManualInput="true" inputClass="fieldValueText"
-										datePattern="dd-MM-yyyy">
+								<h:inputText value="#{secondmentHome.instance.sourceUnit}"
+									tabindex="1" required="true" id="schoolTarget"
+									styleClass="fieldValueText" converter="unitConverter" size="20"
+									maxlength="22" readonly="true">
+								</h:inputText>
+							</s:decorate>
 
-										<a4j:support event="onblur" reRender="dueToDateDecoration"
-											bypassUpdates="true" ajaxSingle="true" />
-									</rich:calendar>
-								</s:decorate>
+							<s:decorate id="secondmentTypeDecoration"
+								template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Τύπος Απόσπασης" />
+								</ui:define>
 
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
-									<ui:define name="label">
-										<h:outputText value="Σχόλιο" />
-									</ui:define>
-									<h:inputTextarea value="#{secondmentHome.instance.comment}" />
-								</s:decorate>
+								<h:selectOneMenu id="secondmentType" tabindex="1"
+									value="#{secondmentHome.instance.secondmentType}"
+									required="true">
+									<s:selectItems hideNoSelectionLabel="true"
+										var="_secondmentType" value="#{secondmentTypes}"
+										label="#{messages[_secondmentType.key]}" />
+									<s:convertEnum />
+									<a4j:support event="onblur"
+										reRender="secondmentTargetDecoration" ajaxSingle="true" />
+								</h:selectOneMenu>
+							</s:decorate>
 
-							</h:panelGrid>
-							
-							
-							
-					
+							<s:decorate id="secondmentTargetDecoration"
+								template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Μονάδα Απόσπασης" />
+								</ui:define>
+
+
+								<h:inputText required="true" id="secondmentTargetField"
+									value="#{secondmentHome.tempValueHolder1}"
+									styleClass="fieldValueText" tabindex="2">
+
+								</h:inputText>
+								<rich:suggestionbox for="secondmentTargetField"
+									var="secondmentUnit"
+									suggestionAction="#{secondmentAwareUnitSuggester.suggest}">
+									<f:facet name="nothingLabel">
+										<h:outputText value="Άγνωστη Μονάδα Απόσπασης" />
+									</f:facet>
+									<h:column>
+										<h:outputText value="#{secondmentUnit.title}" />
+									</h:column>
+									<a4j:support ajaxSingle="true" event="onselect">
+										<f:setPropertyActionListener value="#{secondmentUnit}"
+											target="#{secondmentHome.instance.targetUnit}" />
+									</a4j:support>
+								</rich:suggestionbox>
+							</s:decorate>
+
+
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Με Αίτηση του ;" />
+								</ui:define>
+								<h:selectBooleanCheckbox tabindex="3"
+									value="#{secondmentHome.instance.employeeRequested}" />
+							</s:decorate>
+
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Υποχρεωτικό Ωράριο : " />
+								</ui:define>
+								<h:inputText
+									value="#{secondmentHome.instance.mandatoryWorkingHours}"
+									tabindex="4" size="3" maxlength="3" readonly="true"
+									required="true" />
+							</s:decorate>
+
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Ωράριο Απόσπασης : " />
+								</ui:define>
+								<h:inputText
+									value="#{secondmentHome.instance.finalWorkingHours}" size="3"
+									tabindex="5" maxlength="3" required="true" immediate="true" />
+							</s:decorate>
+
+							<s:decorate id="pysdeOrderDecoration"
+								template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Απόφαση ΠΥΣΔΕ" />
+								</ui:define>
+								<h:inputText id="pysdeOrder"
+									value="#{secondmentHome.instance.pysdeOrder}" tabindex="6"
+									styleClass="fieldValueText" required="false" size="16"
+									maxlength="25">
+									<a4j:support event="onblur" ajaxSingle="true"
+										reRender="pysdeOrderDecoration" bypassUpdates="true" />
+									<f:validateLength minimum="5" maximum="25" />
+								</h:inputText>
+							</s:decorate>
+
+
+							<s:decorate id="headMasterOrderDecoration"
+								template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Απόφαση Διευθυντή" />
+								</ui:define>
+								<h:inputText id="headMasterOrder" tabindex="7"
+									value="#{secondmentHome.instance.headMasterOrder}"
+									styleClass="fieldValueText" required="false" size="16"
+									maxlength="25">
+									<a4j:support event="onblur"
+										reRender="headMasterOrderDecoration" bypassUpdates="true"
+										ajaxSingle="true" />
+									<f:validateLength minimum="5" maximum="25" />
+								</h:inputText>
+							</s:decorate>
+
+							<s:decorate id="ministerialOrderDecoration"
+								template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Υπουργική Απόφαση" />
+								</ui:define>
+								<h:inputText id="ministerialOrder" tabindex="8"
+									value="#{secondmentHome.instance.ministerialOrder}"
+									required="false" size="16" maxlength="25"
+									styleClass="fieldValueText">
+									<a4j:support event="onblur"
+										reRender="ministerialOrderDecoration" bypassUpdates="true"
+										ajaxSingle="true" />
+									<f:validateLength minimum="5" maximum="25" />
+								</h:inputText>
+							</s:decorate>
+
+							<s:decorate id="establishedDateDecoration"
+								template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Έναρξη Απόσπασης" />
+								</ui:define>
+								<rich:calendar id="establishedDate" enableManualInput="true"
+									value="#{secondmentHome.instance.established}" required="true"
+									inputSize="10" mode="ajax" locale="el_GR"
+									inputClass="fieldValueText" datePattern="dd-MM-yyyy">
+									<a4j:support event="onblur"
+										reRender="establishedDateDecoration" bypassUpdates="true"
+										ajaxSingle="true" />
+								</rich:calendar>
+							</s:decorate>
+							<s:decorate id="dueToDateDecoration"
+								template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Λήξη Απόσπασης" />
+								</ui:define>
+								<rich:calendar id="dueToDate"
+									value="#{secondmentHome.instance.dueTo}" required="true"
+									mode="ajax" locale="el_GR" inputSize="10"
+									enableManualInput="true" inputClass="fieldValueText"
+									datePattern="dd-MM-yyyy">
+
+									<a4j:support event="onblur" reRender="dueToDateDecoration"
+										bypassUpdates="true" ajaxSingle="true" />
+								</rich:calendar>
+							</s:decorate>
+
+							<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Σχόλιο" />
+								</ui:define>
+								<h:inputTextarea value="#{secondmentHome.instance.comment}" />
+							</s:decorate>
+
+						</h:panelGrid>
+
+
+
+
 					</a4j:outputPanel>
 
 					<h:panelGrid columns="2">
-						
-					
+
+
 						<a4j:commandButton value="Καταχώρηση Απόσπασης !"
 							action="#{employeeSecondmentsManagement.addEmployeeSecondmentAction()}"
 							data="#{facesContext.maximumSeverity.ordinal ge 2}"
 							oncomplete="if(data == false) { createSecondmentForm.reset() ; Richfaces.hideModalPanel('createModalPanel'); }"
 							reRender="createModalPanelContent, secondmentsTable" />
-						<a4j:commandButton value="Επιστροφή .." 
-							oncomplete="{ Richfaces.hideModalPanel('createModalPanel'); }" 
+						<a4j:commandButton value="Επιστροφή .."
+							oncomplete="{ Richfaces.hideModalPanel('createModalPanel'); }"
 							reRender="createModalPanelContent, secondmentsTable"
 							action="#{employeeSecondmentsManagement.cancelSecondmentModificationAction() }">
 						</a4j:commandButton>
-						
-					</h:panelGrid>
-					</a4j:region>
-				</a4j:form>
-			
-		</rich:modalPanel>
-	
 
-		
+					</h:panelGrid>
+				</a4j:region>
+			</a4j:form>
+
+		</rich:modalPanel>
+
+
+
 
 	</ui:define>
 </ui:composition>

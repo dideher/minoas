@@ -386,7 +386,6 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 
 			info("Rank Info #0 for employee #1 has been modified", rinfo, employee);
 			return ACTION_OUTCOME_SUCCESS;
-
 		} else {
 			facesMessages.add(Severity.ERROR,
 					"employee home #0 is not managed.", employeeHome);
@@ -553,7 +552,7 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 
 	
 	public void recalculateRankInfos() {
-		Collection<RankInfo> rankInfos = getCoreSearching().getCurrentRankInfosForActiveEmployees(employeeHome.getInstance());
+		Collection<RankInfo> rankInfos = null;
 		for (Iterator<RankInfo> rInfoItrtr = rankInfos.iterator(); rInfoItrtr.hasNext();) {
 			RankInfo rankInfo = (RankInfo) rInfoItrtr.next();
 			
