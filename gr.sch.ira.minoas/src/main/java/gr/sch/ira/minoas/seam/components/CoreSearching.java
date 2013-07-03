@@ -527,52 +527,6 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         info("found totally '#0' employments for regular employee '#1'.", result.size(), employee);
         return result;
     }
-
-//    @SuppressWarnings("unchecked")
-//    @Transactional(TransactionPropagationType.REQUIRED)
-//    @Deprecated
-//    public Collection<Leave> getEmployeeLeaves(Person employee) {
-//        Collection<Leave> result = null;
-//        info("searching employee's '#0' leaves.", employee);
-//        result = entityManager.createQuery(
-//                "SELECT s from Leave s WHERE s.active IS TRUE AND s.employee=:employee ORDER BY s.established")
-//                .setParameter("employee", employee).getResultList();
-//        info("found totally '#0' leave(s) for employee '#1'.", result.size(), employee);
-//        return result;
-//    }
-
-//    @SuppressWarnings("unchecked")
-//    @Transactional(TransactionPropagationType.REQUIRED)
-//    public Collection<Leave> getEmployeeLeaveHistory(Person employee) {
-//        Collection<Leave> result = null;
-//        info("searching employee's '#0' leaves.", employee);
-//        result = entityManager.createQuery(
-//                "SELECT s from Leave s WHERE s.active IS FALSE AND s.employee=:employee ORDER BY s.established")
-//                .setParameter("employee", employee).getResultList();
-//        info("found totally '#0' leave(s) in employee's '#1' history.", result.size(), employee);
-//        return result;
-//    }
-//    
-//    
-//    public Collection<Leave> getEmployeeLeaveHistoryWithCurrentActive(Person employee) {
-//        Collection<Leave> result = null;
-//        info("searching employee's '#0' leaves.", employee);
-//        result = entityManager.createQuery(
-//                "SELECT s from Leave s WHERE ((s.active IS FALSE AND s.autoCanceled IS TRUE) OR (s.active IS TRUE)) AND s.employee=:employee ORDER BY s.established")
-//                .setParameter("employee", employee).getResultList();
-//        info("found totally '#0' leave(s) in employee's '#1' history.", result.size(), employee);
-//        return result;
-//    }
-
-//    @Deprecated
-//    public Collection<Leave> getEmployeeLeaves(Person employee) {
-//        Collection<Leave> result = null;
-//        result = entityManager
-//                .createQuery(
-//                        "SELECT s from Leave s WHERE (s.deleted IS FALSE OR s.deleted IS NULL) AND s.employee=:employee ORDER BY s.established DESC")
-//                .setParameter("employee", employee).getResultList();
-//        return result;
-//    }
     
     public Collection<EmployeeLeave> getEmployeeLeaves2(Person employee) {
         Collection<EmployeeLeave> result = null;
