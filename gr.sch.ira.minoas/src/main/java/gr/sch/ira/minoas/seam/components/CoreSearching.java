@@ -537,6 +537,15 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         return result;
     }
     
+    public Collection<EmployeeLeave> getEmployeeLeaves2(Person employee, Date periodStart, Date periodEnd) {
+        Collection<EmployeeLeave> result = null;
+        result = entityManager
+                .createQuery(
+                        "SELECT s from EmployeeLeave s WHERE (s.deleted IS FALSE OR s.deleted IS NULL) AND  NOT (s.established > :periodEnd OR s.dueTo < :periodStart)   AND s.employee=:employee ORDER BY s.established DESC")
+                .setParameter("employee", employee).setParameter("periodStart", periodStart).setParameter("periodEnd", periodEnd).getResultList();
+        return result;
+    }
+    
     public Collection<EmployeeLeave> getEmployeeLeaves(Person employee, Date established, Date dueTo) {
         Collection<EmployeeLeave> result = null;
         result = entityManager
