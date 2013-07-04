@@ -3,7 +3,9 @@
  */
 package gr.sch.ira.minoas.core;
 
+import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.RankInfo;
+import gr.sch.ira.minoas.seam.components.WorkExperienceCalculation;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -13,6 +15,7 @@ import java.util.ResourceBundle;
 import javax.faces.context.FacesContext;
 
 import org.apache.commons.lang.time.DateUtils;
+import org.jboss.seam.annotations.In;
 import org.jboss.seam.core.SeamResourceBundle;
 
 /**
@@ -335,8 +338,12 @@ public abstract class CoreUtils {
 	 * @return Returns the employee's Rank info (rank & salary grade) after the
 	 *         classification in grade.
 	 */
-	public static RankInfo RecalculateRankInfo(RankInfo currentRankInfo) {
-		Integer ExcessTimeInRank = currentRankInfo.getSurplusTimeInRankUntilToday()+1;
+	public static RankInfo RecalculateRankInfo(RankInfo currentRankInfo, Employee employee, WorkExperienceCalculation workExperienceCalculation) {
+		Integer unPaidDays = workExperienceCalculation.calculateEmployeeUnPaidDays(employee, currentRankInfo.getLastRankDate(), new Date());
+		if(unPaidDays > 0)
+			System.out.println("FOUND!!!");
+		// Πάρε τον πλεονάζοντα χρόνο στον ΒΑΘΜΟ
+		Integer ExcessTimeInRank = (currentRankInfo.getSurplusTimeInRankUntilToday()+1) - unPaidDays;
 		RankInfo newRankInfo = new RankInfo(currentRankInfo); 
 		switch (newRankInfo.getEducationalLevel()) {
 			case UNIVERSITY_EDUCATION_LEVEL:

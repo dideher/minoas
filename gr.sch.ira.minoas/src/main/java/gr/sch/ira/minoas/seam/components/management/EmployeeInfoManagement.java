@@ -11,6 +11,8 @@ import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.CoreSearching;
+import gr.sch.ira.minoas.seam.components.RankInfoCalculation;
+import gr.sch.ira.minoas.seam.components.WorkExperienceCalculation;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
 import gr.sch.ira.minoas.seam.components.home.EmployeeInfoHome;
 import gr.sch.ira.minoas.seam.components.home.RankInfoHome;
@@ -57,6 +59,9 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 	// create=true : Auto create rankInfoHome when needed
 	@In(required = true, create = true)
 	RankInfoHome rankInfoHome;
+	
+	@In(required=true, create=true)
+	private RankInfoCalculation rankInfoCalculation;
 
 	private Date totalWorkServiceCalculationDate;
 	private int totalCalculatedServiceInDays;
@@ -549,65 +554,9 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 		return CoreUtils
 				.getNoOfDaysInYear_Month_DayFormat(getTotalServiceIncludingWorkExperience());
 	}
-
 	
-	public void recalculateRankInfos() {
-		Collection<RankInfo> rankInfos = null;
-		for (Iterator<RankInfo> rInfoItrtr = rankInfos.iterator(); rInfoItrtr.hasNext();) {
-			RankInfo rankInfo = (RankInfo) rInfoItrtr.next();
-			
-			RankInfo recalculatedRankInfo = CoreUtils.RecalculateRankInfo(rankInfo);
-			
-			java.text.DateFormat df = java.text.SimpleDateFormat.getDateInstance(java.text.SimpleDateFormat.SHORT);
-			
-			if(!rankInfo.getRank().equals(recalculatedRankInfo.getRank()) || rankInfo.getSalaryGrade()!=recalculatedRankInfo.getSalaryGrade()) {
-				RegularEmployeeInfo reinfo = rankInfo.getEmployeeInfo().getEmployee().getRegularEmployeeInfo();
-				String AM = new String();
-				if (reinfo!= null) {
-					AM = reinfo.getRegistryID();
-				}
-				
-				System.out.println("|"+ AM +
-						"|"+rankInfo.getEmployeeInfo().getEmployee().getLastName() + 
-						"|" + rankInfo.getEmployeeInfo().getEmployee().getFirstName() + 
-						"|" + rankInfo.getEmployeeInfo().getEmployee().getFatherName() +
-						"|" + rankInfo.prettyToString() + 
-						"|Πλεονάζ. Χρόνος στο βαθμό την|" + df.format(rankInfo.getLastRankDate()) + "|" + rankInfo.getSurplusTimeInRankYear_Month_Day() + "|"+rankInfo.getSurplusTimeInRank() + "|" +
-						"|Πλεονάζ. Χρόνος στο βαθμό σήμερα|" + rankInfo.getSurplusTimeInRankUntilTodayYear_Month_Day() + "|"+rankInfo.getSurplusTimeInRankUntilToday() + "|" +
-						"|Πλεονάζ. Χρόνος στο Μ.Κ. την|" + df.format(rankInfo.getLastSalaryGradeDate()) + "|" + rankInfo.getSurplusTimeInSalaryGradeYear_Month_Day() + "|"+rankInfo.getSurplusTimeInSalaryGrade() + "|" +
-						"|Πλεονάζ. Χρόνος στο Μ.Κ. σήμερα|" + rankInfo.getSurplusTimeInSalaryGradeUntilTodayYear_Month_Day() + "|"+rankInfo.getSurplusTimeInSalaryGradeUntilToday() + "|" +
-						"|πάει στο|" + recalculatedRankInfo.prettyToString() + 
-						"|Πλεονάζ. Χρόνος στο βαθμό την|" + df.format(recalculatedRankInfo.getLastRankDate()) + "|" + recalculatedRankInfo.getSurplusTimeInRankYear_Month_Day() + "|"+recalculatedRankInfo.getSurplusTimeInRank() + "|" +
-						"|Πλεονάζ. Χρόνος στο βαθμό σήμερα|" + recalculatedRankInfo.getSurplusTimeInRankUntilTodayYear_Month_Day() + "|"+recalculatedRankInfo.getSurplusTimeInRankUntilToday() + "|" +
-						"|Πλεονάζ. Χρόνος στο Μ.Κ. την|" + df.format(recalculatedRankInfo.getLastSalaryGradeDate()) + "|" + recalculatedRankInfo.getSurplusTimeInSalaryGradeYear_Month_Day() + "|"+recalculatedRankInfo.getSurplusTimeInSalaryGrade() + "|" +
-						"|Πλεονάζ. Χρόνος στο Μ.Κ. σήμερα|" + recalculatedRankInfo.getSurplusTimeInSalaryGradeUntilTodayYear_Month_Day() + "|"+recalculatedRankInfo.getSurplusTimeInSalaryGradeUntilToday() + "|"
-						);
-				
-//				EmployeeInfo eInfo = rankInfo.getEmployeeInfo();
-//				Employee employee = eInfo.getEmployee();
-//
-//				// set InsertedBy to Minoas user username
-//				recalculatedRankInfo.setInsertedBy(null);
-//				// set InsertedOn to today's date
-//				recalculatedRankInfo.setInsertedOn(new Date());
-//				
-//				//	save the new RankInfo
-//				getEntityManager().persist(recalculatedRankInfo);
-//				
-//				//	set the newly created rankInfo as current at the respective employeeInfo
-//				//	NOTE: that method setCurrentRankInfo(rInfo) also adds rInfo to the Collection of RankInfos within EmployeeInfo !!!!
-//				eInfo.setCurrentRankInfo(recalculatedRankInfo);
-//
-//				// Save
-//				getEntityManager().flush();
-//				info("Rank Info #0 for employee #1 has been inserted", recalculatedRankInfo, employee);
-
-			}
-		}
-//		gr.sch.ira.minoas.model.employee.RankInfo rankInfo = new gr.sch.ira.minoas.model.employee.RankInfo(gr.sch.ira.minoas.model.employee.RankType.RANK_D, 1, gr.sch.ira.minoas.model.employement.EducationalLevelType.UNIVERSITY_EDUCATION_LEVEL);
-//		System.out.println(rankInfo);
-//		rankInfo.RecalculateRankInfo(2002);
-//		System.out.println(rankInfo);
+	public void test() {
+		rankInfoCalculation.recalculateRankInfos();
 	}
 	
 }

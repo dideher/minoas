@@ -1741,7 +1741,7 @@ public class RankInfo extends BaseIDDeleteAwareModel {
 	public String prettyToString() {
 		StringBuilder builder = new StringBuilder();
 		if (rank != null) {
-			builder.append(CoreUtils.getLocalizedMessage(rank.getKey()));
+			builder.append(rank.getKey());
 			builder.append("(");
 			builder.append(salaryGrade);
 			builder.append(") ");

@@ -1664,7 +1664,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     
     @SuppressWarnings("unchecked")
     @Transactional(TransactionPropagationType.REQUIRED)
-    public Collection<RankInfo> getCurrentRankInfosForActiveEmployees(Employee employee) {
+    public Collection<RankInfo> getCurrentRankInfosForActiveEmployees() {
         Collection<RankInfo> result = null;
         info("searching current rank infos for all active employees.");
         result = entityManager.createQuery(

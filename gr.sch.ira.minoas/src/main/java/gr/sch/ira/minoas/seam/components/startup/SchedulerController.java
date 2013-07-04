@@ -4,6 +4,7 @@ import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.async.DisposalCleanupProcessor;
 import gr.sch.ira.minoas.seam.components.async.LeaveActivactionProcessor;
 import gr.sch.ira.minoas.seam.components.async.LeaveCleanupProcessor;
+import gr.sch.ira.minoas.seam.components.async.RankInfoUpdaterProcessor;
 import gr.sch.ira.minoas.seam.components.async.RegularEmployeeServiceUpdaterProcessor;
 import gr.sch.ira.minoas.seam.components.async.SecondmentActivactionProcessor;
 import gr.sch.ira.minoas.seam.components.async.SecondmentCleanupProcessor;
@@ -41,6 +42,8 @@ public class SchedulerController extends BaseDatabaseAwareSeamComponent {
     
     private static final long ACTIVATION_TASK_INTERVAL = 1200000;
     
+    private static final long RANK_INFO_SYNC_INTERVAL = 1440000;
+    
     
     
     
@@ -74,6 +77,8 @@ public class SchedulerController extends BaseDatabaseAwareSeamComponent {
     @In(create=true, value="regularEmployeeServiceUpdaterProcessor")
     private RegularEmployeeServiceUpdaterProcessor regularEmployeeServiceUpdaterProcessor;
     
+    @In(create=true, value="rankInfoUpdaterProcessor")
+    private RankInfoUpdaterProcessor rankInfoUpdaterProcessor;
     
     @In(create=true, value="basicUsageReport")
     private BasicUsageReport basicUsageReportProcessor;
@@ -87,6 +92,7 @@ public class SchedulerController extends BaseDatabaseAwareSeamComponent {
     //private QuartzTriggerHandle serviceAllocationActivationProcessorHandler;
     //private QuartzTriggerHandle disposalActivationProcessorHandler;
     private QuartzTriggerHandle regularEmployeeServiceUpdaterProcessorHandler;
+    private QuartzTriggerHandle rankInfoUpdaterProcessorHandler;
     private QuartzTriggerHandle basicUsageReportProcessorHandler;
     private QuartzTriggerHandle pensionsScannerProcessorHandler;
     
@@ -98,55 +104,60 @@ public class SchedulerController extends BaseDatabaseAwareSeamComponent {
    
     public void scheduleJobs() {
         try {
-        info("creating schedule object");
-        if(secondmentCleanupProcessor!=null) {
-            secondmentCleanupProcessorHandler = secondmentCleanupProcessor.scheduleSecondmentCleanup(new Date(), SECONDMENT_CLEANUP_INTERVAL, null);
-            info("scheduled #0", secondmentCleanupProcessorHandler.getTrigger().getFullName());
-        }
-        if(leaveCleanupProcessor!=null) {
-            leaveCleanupProcessorHandler = leaveCleanupProcessor.scheduleSecondmentCleanup(new Date(), LEAVE_CLEANUP_INTERVAL, null);
-            info("scheduled #0", leaveCleanupProcessorHandler.getTrigger().getFullName());
-        }
+	        info("creating schedule object");
+	        if(secondmentCleanupProcessor!=null) {
+	            secondmentCleanupProcessorHandler = secondmentCleanupProcessor.scheduleSecondmentCleanup(new Date(), SECONDMENT_CLEANUP_INTERVAL, null);
+	            info("scheduled #0", secondmentCleanupProcessorHandler.getTrigger().getFullName());
+	        }
+	        if(leaveCleanupProcessor!=null) {
+	            leaveCleanupProcessorHandler = leaveCleanupProcessor.scheduleSecondmentCleanup(new Date(), LEAVE_CLEANUP_INTERVAL, null);
+	            info("scheduled #0", leaveCleanupProcessorHandler.getTrigger().getFullName());
+	        }
+	        
+	        if(disposalCleanupProcessor!=null) {
+	            disposalCleanupProcessorHandler = disposalCleanupProcessor.scheduleSecondmentCleanup(new Date(), DISPOSAL_CLEANUP_INTERVAL, null);
+	            info("scheduled #0", disposalCleanupProcessorHandler.getTrigger().getFullName());
+	        }
+	        
+	        if(serviceAllocationCleanupProcessor!=null) {
+	            serviceAllocationCleanupProcessorHandler = serviceAllocationCleanupProcessor.scheduleSecondmentCleanup(new Date(), SERVICE_ALLOCATION_CLEANUP_INTERVAL, null);
+	            info("scheduled #0", serviceAllocationCleanupProcessorHandler.getTrigger().getFullName());
+	        }
+	        
+	        if(leaveActivationProcessor!=null) {
+	            leaveActivationProcessorHandler = leaveActivationProcessor.scheduleSecondmentCleanup(new Date(), ACTIVATION_TASK_INTERVAL, null);
+	            info("scheduled #0", leaveActivationProcessorHandler.getTrigger().getFullName());
+	        }
+	        
+	        if(secondmentActivationProcessor!=null) {
+	            secondmentActivationProcessorHandler = secondmentActivationProcessor.scheduleSecondmentActivation(new Date(), ACTIVATION_TASK_INTERVAL, null);
+	            info("scheduled #0", secondmentActivationProcessorHandler.getTrigger().getFullName());
+	        }
+	        
+//	        if(serviceAllocationActivationProcessor!=null) {
+//	            serviceAllocationActivationProcessorHandler = serviceAllocationActivationProcessor.scheduleServiceAllocationActivation(new Date(), ACTIVATION_TASK_INTERVAL, null);
+//	            info("scheduled #0", serviceAllocationActivationProcessorHandler.getTrigger().getFullName());
+//	        }
+//	        
+//	        if(disposalActivationProcessor!=null) {
+//	            disposalActivationProcessorHandler = disposalActivationProcessor.scheduleDisposalActivation(new Date(), ACTIVATION_TASK_INTERVAL, null);
+//	            info("scheduled #0", disposalActivationProcessorHandler.getTrigger().getFullName());
+//	        }
+	        
+	        if(basicUsageReportProcessor!=null) {
+	            basicUsageReportProcessorHandler = basicUsageReportProcessor.scheduleReportGeneration(new Date(), BASIC_USAGE_REPORT_INTERVAL, null);
+	            info("scheduled #0", basicUsageReportProcessorHandler.getTrigger().getFullName());
+	        }
+	        
+	        if(regularEmployeeServiceUpdaterProcessor!=null) {
+	            regularEmployeeServiceUpdaterProcessorHandler = regularEmployeeServiceUpdaterProcessor.schedule(new Date(), REGULAR_EMPLOYEE_SERVICE_SYNC_INTERVAL, null);
+	            info("scheduled #0", regularEmployeeServiceUpdaterProcessorHandler.getTrigger().getFullName());
+	        }
         
-        if(disposalCleanupProcessor!=null) {
-            disposalCleanupProcessorHandler = disposalCleanupProcessor.scheduleSecondmentCleanup(new Date(), DISPOSAL_CLEANUP_INTERVAL, null);
-            info("scheduled #0", disposalCleanupProcessorHandler.getTrigger().getFullName());
-        }
-        
-        if(serviceAllocationCleanupProcessor!=null) {
-            serviceAllocationCleanupProcessorHandler = serviceAllocationCleanupProcessor.scheduleSecondmentCleanup(new Date(), SERVICE_ALLOCATION_CLEANUP_INTERVAL, null);
-            info("scheduled #0", serviceAllocationCleanupProcessorHandler.getTrigger().getFullName());
-        }
-        
-        if(leaveActivationProcessor!=null) {
-            leaveActivationProcessorHandler = leaveActivationProcessor.scheduleSecondmentCleanup(new Date(), ACTIVATION_TASK_INTERVAL, null);
-            info("scheduled #0", leaveActivationProcessorHandler.getTrigger().getFullName());
-        }
-        
-        if(secondmentActivationProcessor!=null) {
-            secondmentActivationProcessorHandler = secondmentActivationProcessor.scheduleSecondmentActivation(new Date(), ACTIVATION_TASK_INTERVAL, null);
-            info("scheduled #0", secondmentActivationProcessorHandler.getTrigger().getFullName());
-        }
-        
-//        if(serviceAllocationActivationProcessor!=null) {
-//            serviceAllocationActivationProcessorHandler = serviceAllocationActivationProcessor.scheduleServiceAllocationActivation(new Date(), ACTIVATION_TASK_INTERVAL, null);
-//            info("scheduled #0", serviceAllocationActivationProcessorHandler.getTrigger().getFullName());
-//        }
-//        
-//        if(disposalActivationProcessor!=null) {
-//            disposalActivationProcessorHandler = disposalActivationProcessor.scheduleDisposalActivation(new Date(), ACTIVATION_TASK_INTERVAL, null);
-//            info("scheduled #0", disposalActivationProcessorHandler.getTrigger().getFullName());
-//        }
-        
-        if(basicUsageReportProcessor!=null) {
-            basicUsageReportProcessorHandler = basicUsageReportProcessor.scheduleReportGeneration(new Date(), BASIC_USAGE_REPORT_INTERVAL, null);
-            info("scheduled #0", basicUsageReportProcessorHandler.getTrigger().getFullName());
-        }
-        
-        if(regularEmployeeServiceUpdaterProcessor!=null) {
-            regularEmployeeServiceUpdaterProcessorHandler = regularEmployeeServiceUpdaterProcessor.schedule(new Date(), REGULAR_EMPLOYEE_SERVICE_SYNC_INTERVAL, null);
-            info("scheduled #0", regularEmployeeServiceUpdaterProcessorHandler.getTrigger().getFullName());
-        }
+	        if(rankInfoUpdaterProcessor!=null) {
+	        	rankInfoUpdaterProcessorHandler = rankInfoUpdaterProcessor.schedule(new Date(), RANK_INFO_SYNC_INTERVAL, null);
+	            info("scheduled #0", rankInfoUpdaterProcessorHandler.getTrigger().getFullName());
+	        }
         
         } catch(Exception ex) {
             error("failed to schedule jobs due to an exception #0", ex, ex.getMessage());
