@@ -289,7 +289,16 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
     
     public Integer calculateEmployeeUnPaidDays(Employee employee, Date dateFrom, Date dateTo) {
     	List<String> legacyCodes = Arrays.asList("32", "33", "34", "44");
-        Collection<EmployeeLeave> leaves = coreSearching.getEmployeeLeaves2(employee);
+        
+//        Calendar cal = Calendar.getInstance();
+//        cal.set(Calendar.DAY_OF_MONTH, 01);
+//        cal.set(Calendar.MONTH, Calendar.NOVEMBER);
+//        cal.set(Calendar.YEAR, 2011);
+//        
+//        dateFrom = DateUtils.truncate(cal.getTime(), Calendar.DAY_OF_MONTH);
+        
+        Collection<EmployeeLeave> leaves = coreSearching.getEmployeeLeaves2(employee, dateFrom, dateTo);
+        int daysToTrim = 0;
         
         /* Interate over the employee's leaves (of the given type) and construct a hash with key the leave's year and value
          * the sum of leave days (360 per year) during this year. Take extra care for leaves spanning across several years. 
@@ -298,6 +307,17 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
         for(EmployeeLeave leave : leaves) {
         	String legacyCode = leave.getEmployeeLeaveType().getLegacyCode();
         	if(legacyCodes.contains(legacyCode)) {
+        		System.err.println(leave);
+        		if(leave.getEstablished().before(dateFrom)) {
+        			daysToTrim += CoreUtils.datesDifferenceIn360DaysYear(leave.getEstablished(), dateFrom);
+        			//System.err.println(daysToTrim);
+        		}
+        		
+        		if(leave.getDueTo().after(dateTo)) {
+        			daysToTrim += CoreUtils.datesDifferenceIn360DaysYear(dateTo, leave.getDueTo());
+        			//System.err.println(daysToTrim);
+        		}
+        		
         		Calendar leaveStart = Calendar.getInstance();
         		leaveStart.setTime(leave.getEstablished());
         		Calendar leaveStop = Calendar.getInstance();
@@ -361,8 +381,9 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
         	Integer duration = daysOfLeavePerYearHash.get(year);
         	totalDaysWithoutPayment+= duration > 30 ? duration - 30 : 0;
         }
-        //System.err.println(totalDaysWithoutPayment);
-        return totalDaysWithoutPayment;
+//        System.err.println(daysOfLeavePerYearHash);
+//        System.err.println(totalDaysWithoutPayment);
+        return totalDaysWithoutPayment-daysToTrim;
     }
     
     /**

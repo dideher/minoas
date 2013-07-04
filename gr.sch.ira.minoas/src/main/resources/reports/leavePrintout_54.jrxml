@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="leavePrintout" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="20" bottomMargin="20" whenResourceMissingType="Key">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="leavePrintout" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="20" bottomMargin="20" whenResourceMissingType="Key" uuid="81450231-a3da-45ff-819b-623fb70e1e9d">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -114,42 +114,37 @@
 	<title>
 		<band height="802" splitType="Stretch">
 			<staticText>
-				<reportElement style="bigHeadlineText" x="1" y="52" width="262" height="17"/>
+				<reportElement uuid="eddd658e-62ac-4350-911c-5eed1723e120" style="bigHeadlineText" x="1" y="52" width="262" height="17"/>
 				<textElement textAlignment="Center">
 					<font size="11"/>
 				</textElement>
 				<text><![CDATA[ΕΛΛΗΝΙΚΗ ΔΗΜΟΚΡΑΤΙΑ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="headlineText" x="1" y="69" width="262" height="15"/>
+				<reportElement uuid="2b0a458b-6335-4a68-a77b-bb0472d8d7ee" style="headlineText" x="1" y="69" width="262" height="15"/>
 				<textElement textAlignment="Center">
 					<font size="10"/>
 				</textElement>
 				<text><![CDATA[ΥΠΟΥΡΓΕΙΟ ΠΑΙΔΕΙΑΣ ΚΑΙ ΘΡΗΣΚΕΥΜΑΤΩΝ]]></text>
 			</staticText>
-			<staticText>
-				<reportElement style="boldText" x="1" y="83" width="262" height="26"/>
-				<textElement textAlignment="Center"/>
-				<text><![CDATA[ΠΟΛΙΤΙΣΜΟΥ ΚΑΙ ΑΘΛΗΤΙΣΜΟΥ]]></text>
-			</staticText>
 			<image hAlign="Center" vAlign="Middle">
-				<reportElement x="108" y="0" width="48" height="48"/>
+				<reportElement uuid="9d44df47-5630-478a-8fc7-1d9f7da512b7" x="108" y="0" width="48" height="48"/>
 				<imageExpression><![CDATA["reports/greekflagsima.jpg"]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement style="boldText" x="2" y="239" width="513" height="14"/>
+				<reportElement uuid="a592ca6a-2248-422f-a698-d261f7cb9d23" style="boldText" x="2" y="239" width="513" height="14"/>
 				<textElement>
 					<font isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[ΘΕΜΑ : Χορήγηση κανονικής άδειας απουσίας]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="normalText" x="0" y="263" width="199" height="20"/>
+				<reportElement uuid="d124a113-c714-4841-b3b2-8e6ae73591fc" style="normalText" x="0" y="263" width="199" height="20"/>
 				<textElement/>
 				<text><![CDATA[Έχοντας υπόψη :]]></text>
 			</staticText>
 			<textField>
-				<reportElement style="normalText" x="0" y="288" width="515" height="177"/>
+				<reportElement uuid="0d86b013-0ade-4d17-947c-2ae99f482ef1" style="normalText" x="0" y="288" width="515" height="177"/>
 				<textElement textAlignment="Justified" markup="styled"/>
 				<textFieldExpression><![CDATA["1. Τις διατάξεις των άρθρων 2,48 και 49 του Ν.3528/07 (ΦΕΚ 26/9.2.2007 τ.Α)<br/><br/>"+
 "2. Την εγκύκλιο ∆Ι∆Α∆/Φ.35.14/916/οικ. 4084/15.2.2007 του ΥΠ.ΕΣ.∆.∆.Α<br/><br/>"+
@@ -157,14 +152,14 @@
 "4. Την απο <b>"+$V{DATE_FORMATTER}.format($P{leaveRequestDate})+"</b> αίτηση του/της <b>"+$P{employeeSurname}+" "+$P{employeeName}+"</b> του "+$P{employeeFatherName}+" δ/κού υπαλλήλου ή αποσπασμένου σε διοικητική θέση εκπαιδευτικού λειτουργού κλάδου <b>"+$P{employeeSpecializationCode}+"</b>.<br/><br/>"]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement style="boldText" x="138" y="476" width="279" height="20"/>
+				<reportElement uuid="c20df555-f56d-4f6b-af9b-197b44ae3d4e" style="boldText" x="138" y="476" width="279" height="20"/>
 				<textElement textAlignment="Center">
 					<font isItalic="false" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[Α Π Ο Φ Α Σ Ι Ζ Ο Υ Μ Ε]]></text>
 			</staticText>
 			<textField>
-				<reportElement style="normalText" x="2" y="506" width="513" height="140"/>
+				<reportElement uuid="13e0af4f-fb16-4d8a-8636-ca1ac14f2080" style="normalText" x="2" y="506" width="513" height="140"/>
 				<textElement textAlignment="Justified" markup="styled">
 					<paragraph lineSpacing="1_1_2"/>
 				</textElement>
@@ -175,19 +170,19 @@
 "."]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement style="normalText" x="4" y="109" width="179" height="35"/>
+				<reportElement uuid="74569ea4-ed7d-49b2-8587-2d37cc598fb8" style="normalText" x="4" y="109" width="179" height="35"/>
 				<textElement textAlignment="Center"/>
 				<text><![CDATA[ΠΕΡΙΦΕΡΕΙΑΚΗ Δ/ΝΣΗ Π/ΘΜΙΑΣ
 ΚΑΙ Δ/ΘΜΙΑΣ ΕΚΠ/ΣΗΣ ΚΡΗΤΗΣ
 Δ/ΝΣΗ ΔΕΥΤ/ΘΜΙΑΣ ΕΚΠ/ΣΗΣ Ν.ΗΡΑΚΛΕΙΟΥ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="normalText" x="2" y="154" width="330" height="15"/>
+				<reportElement uuid="bf4bb3b4-e474-4030-a884-32229a3e8a47" style="normalText" x="2" y="154" width="330" height="15"/>
 				<textElement textAlignment="Left"/>
 				<text><![CDATA[ΤΜΗΜΑ ΔΙΟΙΚΗΤΙΚΩΝ ΘΕΜΑΤΩΝ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="normalText" x="2" y="169" width="80" height="60"/>
+				<reportElement uuid="5a14f105-4f6e-485e-a350-aacfc23a2e93" style="normalText" x="2" y="169" width="80" height="60"/>
 				<textElement textAlignment="Left"/>
 				<text><![CDATA[Ταχ. Διεύθυνση
 Ταχ. Κωδικός
@@ -196,27 +191,27 @@
 E-mail]]></text>
 			</staticText>
 			<textField>
-				<reportElement style="normalText" x="359" y="52" width="155" height="20"/>
+				<reportElement uuid="807f3c50-0db2-415b-9918-39e0fc765fee" style="normalText" x="359" y="52" width="155" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA["Ηράκλειο "+$V{DATE_FORMATTER}.format($P{printDate})]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="normalText" x="359" y="72" width="155" height="12"/>
+				<reportElement uuid="8ac1b3e8-948e-45dd-b77a-e2d0f101f76d" style="normalText" x="359" y="72" width="155" height="12"/>
 				<textElement textAlignment="Left" markup="none"/>
 				<textFieldExpression><![CDATA["Αρθμ.Πρωτ. ΔΕΑΦ/"+$P{referenceNumber}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="boldText" x="287" y="743" width="178" height="20"/>
+				<reportElement uuid="97c6728d-3f1c-4e0e-b9a5-b54be7511b33" style="boldText" x="287" y="743" width="178" height="20"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$P{signatureName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="boldText" x="220" y="662" width="313" height="20"/>
+				<reportElement uuid="858e36a6-2763-45fb-bf1e-37bce9dc860e" style="boldText" x="220" y="662" width="313" height="20"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$P{signatureTitle}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="normalText" x="84" y="169" width="250" height="60"/>
+				<reportElement uuid="d5bedcb3-e928-4003-aad2-50e99aa56e1b" style="normalText" x="84" y="169" width="250" height="60"/>
 				<textElement textAlignment="Left" markup="styled"/>
 				<textFieldExpression><![CDATA[": Μονοφατσίου 8<br/>" +
 ": 712 01<br/>"+
@@ -225,21 +220,21 @@ E-mail]]></text>
 ": "+"mail@dide.ira.sch.gr"]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement style="boldText" x="0" y="658" width="100" height="20"/>
+				<reportElement uuid="e4052604-280f-4548-8221-9065d4107f5f" style="boldText" x="0" y="658" width="100" height="20"/>
 				<textElement>
 					<font isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[ΚΟΙΝΟΠΟΙΗΣΗ]]></text>
 			</staticText>
 			<textField>
-				<reportElement style="normalText" x="2" y="687" width="184" height="114"/>
+				<reportElement uuid="460bc9c5-5ad6-45d1-8b77-3a6d3fc1c3db" style="normalText" x="2" y="687" width="184" height="114"/>
 				<textElement markup="styled">
 					<paragraph lineSpacing="1_1_2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{notificationList}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="108" y="0" width="407" height="15"/>
+				<reportElement uuid="8e79e816-a45d-41d1-b9bc-88598088f9b7" x="108" y="0" width="407" height="15"/>
 				<textElement textAlignment="Right" rotation="None">
 					<font size="7"/>
 				</textElement>
