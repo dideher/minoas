@@ -10,9 +10,6 @@
 	
 	<a4j:form id="menuform">
 		<rich:toolBar>
-
-
-
 			<rich:dropDownMenu disabled="#{!(identity.loggedIn)}">
 				<f:facet name="label">
 					<h:panelGroup>
@@ -285,15 +282,24 @@
 					</rich:menuGroup>
 				</rich:menuGroup>
 				
-				<rich:menuItem submitMode="none"
-					rendered="#{(s:hasRole('ADMIN') or s:hasRole('VIEW_EMPLOYEE_INFO'))}">
-					          
-					<s:link value="Διαχείριση Στοιχείων Μισθοδοσίας" 
-						view="/employee/select-employee.xhtml">
-						<f:param name="from" value="/home" />
-						<f:param name="to" value="/employee/manageEmployeeInfo" />
-					</s:link>
-				</rich:menuItem>
+				
+				<rich:menuGroup value="Στοιχεία Μισθοδοσίας">
+					<rich:menuItem submitMode="none" rendered="#{(s:hasRole('ADMIN') or s:hasRole('VIEW_EMPLOYEE_INFO'))}">
+						<s:link value="Διαχείριση Στοιχείων Μισθοδοσίας" 
+							view="/employee/select-employee.xhtml">
+							<f:param name="from" value="/home" />
+							<f:param name="to" value="/employee/manageEmployeeInfo" />
+						</s:link>
+					</rich:menuItem>
+					
+					<rich:menuItem submitMode="none" rendered="#{(s:hasRole('ADMIN'))}">
+						<s:link value="Αναζήτηση Βαθμών/ΜΚ" view="/admin/rankInfo-report.xhtml">
+							<f:param name="rankInfo_report_from" value="home" />
+						</s:link>
+					</rich:menuItem>
+				</rich:menuGroup>
+				
+				
 				
 				<rich:menuSeparator />
 				
@@ -346,11 +352,7 @@
 						<h:outputText value="Βοηθήματα" />
 					</h:panelGroup>
 				</f:facet>
-				<rich:menuItem submitMode="none">
-					<s:link value="Ιστορικό Ενεργειών" view="/admin/audit-report.xhtml">
-						<f:param name="audit_report_from" value="home" />
-					</s:link>
-				</rich:menuItem>
+
 				<rich:menuItem submitMode="none">
 					<s:link value="Λίστα Εξαιρέσεων Εκπαιδευτικών"
 						view="/employee/employees-exclusion-report.xhtml">
@@ -387,7 +389,7 @@
 					</s:link>
 				</rich:menuItem>
 				<rich:menuItem submitMode="none" rendered="#{(s:hasRole('ADMIN'))}">
-					<s:link value="Ιστορικό Ενεργείων" view="/admin/audit-report.xhtml">
+					<s:link value="Ιστορικό Ενεργειών" view="/admin/audit-report.xhtml">
 						<f:param name="audit_report_from" value="home" />
 					</s:link>
 				</rich:menuItem>

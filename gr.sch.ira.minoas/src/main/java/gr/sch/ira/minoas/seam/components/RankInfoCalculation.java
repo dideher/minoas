@@ -42,7 +42,7 @@ public class RankInfoCalculation extends BaseDatabaseAwareSeamComponent {
 		Date today = new Date();
 	    info("We will recalculate current RegularInfos as of today (#0)", today);
 		Collection<RankInfo> rankInfos = coreSearching.getCurrentRankInfosForActiveEmployees();
-		info("found totally '#0' current RegularInfos that we will update.", rankInfos.size());
+		info("found totally '#0' current RankInfos that we will examine and check if they need to change.", rankInfos.size());
 		int iterations = 0;
 		for (Iterator<RankInfo> rInfoItrtr = rankInfos.iterator(); rInfoItrtr.hasNext();) {
 			RankInfo rankInfo = (RankInfo) rInfoItrtr.next();
@@ -76,14 +76,14 @@ public class RankInfoCalculation extends BaseDatabaseAwareSeamComponent {
 							"|Πλεονάζ. Χρόνος στο βαθμό σήμερα|" + recalculatedRankInfo.getSurplusTimeInRankUntilTodayYear_Month_Day() + "|"+recalculatedRankInfo.getSurplusTimeInRankUntilToday() + "|" +
 							"|Πλεονάζ. Χρόνος στο Μ.Κ. την|" + df.format(recalculatedRankInfo.getLastSalaryGradeDate()) + "|" + recalculatedRankInfo.getSurplusTimeInSalaryGradeYear_Month_Day() + "|"+recalculatedRankInfo.getSurplusTimeInSalaryGrade() + "|" +
 							"|Πλεονάζ. Χρόνος στο Μ.Κ. σήμερα|" + recalculatedRankInfo.getSurplusTimeInSalaryGradeUntilTodayYear_Month_Day() + "|"+recalculatedRankInfo.getSurplusTimeInSalaryGradeUntilToday() + "|");
-					
-					
-
-//	
+	
 //					// set InsertedBy to Minoas user username
 //					recalculatedRankInfo.setInsertedBy(null);
 //					// set InsertedOn to today's date
 //					recalculatedRankInfo.setInsertedOn(new Date());
+//					
+//					// Link the new RankInfo with the previous one
+//					recalculatedRankInfo.setPreviousRankInfo(rankInfo);
 //					
 //					//	save the new RankInfo
 //					getEntityManager().persist(recalculatedRankInfo);
@@ -95,9 +95,13 @@ public class RankInfoCalculation extends BaseDatabaseAwareSeamComponent {
 //					// Save (flush) every 100 rows
 //					if(iterations % 100 == 0) {
 //						getEntityManager().flush();
-//						info("Rank Info #0 for employee #1 has been inserted", recalculatedRankInfo, employee);
 //		            }
+//					info("Rank Info #0 for employee #1 has been inserted", recalculatedRankInfo, employee);
 
+				} else {
+					info("Recalculated RankInfo ("+recalculatedRankInfo.prettyToString()+") matches the current. Skipping RankInfo for emplooyee: " + rankInfo.getEmployeeInfo().getEmployee().getLastName() + 
+							" " + rankInfo.getEmployeeInfo().getEmployee().getFirstName() + 
+							" " + rankInfo.getEmployeeInfo().getEmployee().getFatherName());
 				}
 		    } catch(Exception ex) {
 	            error(String.format("failed to update employee '%s' RankInfo due to an exception.", rankInfo.getEmployeeInfo().getEmployee()), ex);

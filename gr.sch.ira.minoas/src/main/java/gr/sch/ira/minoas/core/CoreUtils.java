@@ -339,9 +339,12 @@ public abstract class CoreUtils {
 	 *         classification in grade.
 	 */
 	public static RankInfo RecalculateRankInfo(RankInfo currentRankInfo, Employee employee, WorkExperienceCalculation workExperienceCalculation) {
-		Integer unPaidDays = workExperienceCalculation.calculateEmployeeUnPaidDays(employee, currentRankInfo.getLastRankDate(), new Date());
-		if(unPaidDays > 0)
-			System.out.println("FOUND!!!");
+		java.util.Calendar today = new java.util.GregorianCalendar();
+//		today.set(2011, 11, 30);
+		
+		Integer unPaidDays = workExperienceCalculation.calculateEmployeeUnPaidDays(employee, currentRankInfo.getLastRankDate(), today.getTime());
+//		if(unPaidDays > 0)
+//			System.out.println("FOUND!!!");
 		// Πάρε τον πλεονάζοντα χρόνο στον ΒΑΘΜΟ
 		Integer ExcessTimeInRank = (currentRankInfo.getSurplusTimeInRankUntilToday()+1) - unPaidDays;
 		RankInfo newRankInfo = new RankInfo(currentRankInfo); 

@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -17,6 +18,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.apache.commons.collections.set.CompositeSet.SetMutator;
@@ -39,6 +41,17 @@ public class RankInfo extends BaseIDDeleteAwareModel {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "EMPLOYEE_INFO_ID", nullable = false)
 	private EmployeeInfo employeeInfo;
+	
+	
+	/**
+	 * Join RankInfo with its previous RankInfo
+	 */
+	//@Basic
+	//@Column(name = "PREVIOUS_RANK_INFO_ID", nullable = true, updatable = true)
+	@OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
+	@JoinColumn(name = "PREVIOUS_RANK_INFO_ID", nullable = true)
+	private RankInfo previousRankInfo;
+	
 
 	/**
 	 * Εναρκτήριο Μ.Κ. για όλους τους βαθμούς και όλα τα επίπεδα σπουδών
@@ -1113,6 +1126,20 @@ public class RankInfo extends BaseIDDeleteAwareModel {
 	 */
 	public void setSurplusTimeInSalaryGrade(Integer surplusTimeInSalaryGrade) {
 		this.surplusTimeInSalaryGrade = surplusTimeInSalaryGrade;
+	}
+	
+	/**
+	 * @return the previousRankInfo
+	 */
+	public RankInfo getPreviousRankInfo() {
+		return previousRankInfo;
+	}
+
+	/**
+	 * @param previousRankInfo the previousRankInfo to set
+	 */
+	public void setPreviousRankInfo(RankInfo previousRankInfo) {
+		this.previousRankInfo = previousRankInfo;
 	}
 
 	/**

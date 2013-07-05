@@ -1,0 +1,104 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich">
+
+<ui:component>
+	<rich:dataTable id="rankInfosResultTable" value="#{rankInfos}" var="_rInfo" rows="100">
+		
+		<rich:column>
+			<f:facet name="header">
+				<h:outputText value="ΑΜ" />
+			</f:facet>
+			<h:outputText value="#{_rInfo.employeeInfo.employee.regularEmployeeInfo.registryID}" />
+		</rich:column>
+		
+		<rich:column>
+			<f:facet name="header">
+				<h:outputText value="Επίθετο" />
+			</f:facet>
+			<h:outputText value="#{_rInfo.employeeInfo.employee.lastName}" />
+		</rich:column>
+		
+		<rich:column>
+			<f:facet name="header">
+				<h:outputText value="Όνομα" />
+			</f:facet>
+			<h:outputText value="#{_rInfo.employeeInfo.employee.firstName}" />
+		</rich:column>
+		
+		<rich:column>
+			<f:facet name="header">
+				<h:outputText value="Πατρώνυμο" />
+			</f:facet>
+			<h:outputText value="#{_rInfo.employeeInfo.employee.fatherName}" />
+		</rich:column>
+		
+		<rich:column>
+			<f:facet name="header">
+				<h:outputText value="Οργανική" />
+			</f:facet>
+			<h:outputText value="#{_rInfo.employeeInfo.employee.currentEmployment.school}" />
+		</rich:column>
+		
+		<rich:column>
+			<f:facet name="header">
+				<h:outputText value="Τρέχων Βαθμός/ΜΚ" />
+			</f:facet>
+			<h:outputFormat value="{0}({1,date,dd/MM/yyyy})/ {2}({3,date,dd/MM/yyyy})">
+			    <f:param value="#{messages[_rInfo.rank.key]}" />
+			    <f:param value="#{_rInfo.lastRankDate}" />
+			    <f:param value="#{_rInfo.salaryGrade}" />
+			    <f:param value="#{_rInfo.lastSalaryGradeDate}" />
+			</h:outputFormat>
+		</rich:column>
+
+	
+		<rich:column>
+			<f:facet name="header">
+				<h:outputText value="Προηγ. Βαθμός/ΜΚ" />
+			</f:facet>
+			<h:outputFormat value="{0}({1,date,dd/MM/yyyy})/ {2}({3,date,dd/MM/yyyy})">
+			    <f:param value="#{messages[_rInfo.previousRankInfo.rank.key]}" />
+			    <f:param value="#{_rInfo.previousRankInfo.lastRankDate}" />
+			    <f:param value="#{_rInfo.previousRankInfo.salaryGrade}" />
+			    <f:param value="#{_rInfo.previousRankInfo.lastSalaryGradeDate}" />
+			</h:outputFormat>
+		</rich:column>
+		
+
+		<rich:column>
+			<f:facet name="header">
+				<h:outputText value="Χρήστης" />
+			</f:facet>
+			<h:outputText value="#{_rInfo.insertedBy.realName}" id="realname">
+				<rich:toolTip for="realname">
+					<h:outputText value="#{_rInfo.insertedBy.username}" />
+				</rich:toolTip>
+			</h:outputText>
+		</rich:column>
+		
+		<rich:column>
+			<f:facet name="header">
+				<h:outputText value="Σχόλιο" />
+			</f:facet>
+			<h:outputText value="#{_rInfo.comments}" />
+		</rich:column>
+
+		<f:facet name="footer">
+			<rich:datascroller for="rankInfosResultTable">
+				<f:facet name="first">
+					<h:outputText value="Πρώτη" />
+				</f:facet>
+				<f:facet name="last">
+					<h:outputText value="Τελευταία" />
+				</f:facet>
+			</rich:datascroller>
+		</f:facet>
+	</rich:dataTable>
+</ui:component>
+
+
+</html>

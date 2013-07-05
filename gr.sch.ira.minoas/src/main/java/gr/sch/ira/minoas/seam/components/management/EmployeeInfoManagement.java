@@ -352,6 +352,9 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 			// set InsertedOn to today's date
 			rinfo.setInsertedOn(new Date());
 
+			// Link the new RankInfo with the previous one
+			rinfo.setPreviousRankInfo(employeeInfo.getCurrentRankInfo());
+			
 			//	set EmployeeInfo to the new RankInfo
 			rinfo.setEmployeeInfo(employeeInfo);
 			//	save the new RankInfo

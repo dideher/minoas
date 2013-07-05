@@ -1,0 +1,144 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+
+<ui:composition template="/layout/simple-beauty-template.xhtml">
+	<ui:define name="body">
+
+		<h:form id="form1">
+			<rich:panel>
+				<f:facet name="header">
+					<h:outputText value="Προβολή τρεχόντων Βαθμών / ΜΚ σε συγκεκριμένη περίοδο" />
+				</f:facet>
+
+				<h:panelGrid columns="1" rowClasses="vertTop">
+
+					<rich:panel>
+						<f:facet name="header">
+							<h:outputText value="Φίλτρα Αναζήτησης Βαθμών / ΜΚ" />
+						</f:facet>
+						<a4j:outputPanel id="filterSection">
+							<h:panelGrid columns="8">
+									
+								
+								<s:decorate template="/layout/doubleLineEdit.xhtml" rendered="#{s:hasRole('ADMIN')}">
+									<ui:define name="label">
+										<h:outputText value="ΑΜ" />
+									</ui:define>
+
+									<h:inputText id="registryIdFilter" styleClass="fieldValueText"
+										size="10" value="#{rankInfoCriteria.registryId}" required="false">
+									</h:inputText>
+								</s:decorate>	
+								
+								
+								<s:decorate template="/layout/doubleLineEdit.xhtml" rendered="#{s:hasRole('ADMIN')}">
+									<ui:define name="label">
+										<h:outputText value="Επώνυμο" />
+									</ui:define>
+
+									<h:inputText id="lastNameFilter" styleClass="fieldValueText"
+										size="25" value="#{rankInfoCriteria.lastName}" required="false">
+									</h:inputText>
+								</s:decorate>	
+									
+									
+									
+									
+								<s:decorate id="effectiveRankDateDecoration"
+									template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Βαθμός Από" />
+									</ui:define>
+									<rich:calendar enableManualInput="true"
+										value="#{rankInfoCriteria.effectiveRankDateFrom}" required="false"
+										inputSize="10" mode="ajax" locale="el_GR"
+										inputClass="fieldValueText" datePattern="dd/MM/yyyy">
+										<a4j:support event="onblur" bypassUpdates="true"
+											ajaxSingle="true" />
+									</rich:calendar>
+								</s:decorate>
+
+								<s:decorate id="effectiveRankDateUntilDecoration"
+									template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Βαθμός έως" />
+									</ui:define>
+									<rich:calendar enableManualInput="true"
+										value="#{rankInfoCriteria.effectiveRankDateUntil}" required="false"
+										inputSize="10" mode="ajax" locale="el_GR"
+										inputClass="fieldValueText" datePattern="dd/MM/yyyy">
+										<a4j:support event="onblur" bypassUpdates="true"
+											ajaxSingle="true" />
+									</rich:calendar>
+								</s:decorate>
+								
+								<s:decorate id="effectiveSalaryGradeDateDecoration"
+									template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="ΜΚ Από" />
+									</ui:define>
+									<rich:calendar enableManualInput="true"
+										value="#{rankInfoCriteria.effectiveSalaryGradeDateFrom}" required="false"
+										inputSize="10" mode="ajax" locale="el_GR"
+										inputClass="fieldValueText" datePattern="dd/MM/yyyy">
+										<a4j:support event="onblur" bypassUpdates="true"
+											ajaxSingle="true" />
+									</rich:calendar>
+								</s:decorate>
+
+								<s:decorate id="effectiveSalaryGradeDateUntilDecoration"
+									template="/layout/doubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="ΜΚ έως" />
+									</ui:define>
+									<rich:calendar enableManualInput="true"
+										value="#{rankInfoCriteria.effectiveSalaryGradeDateUntil}" required="false"
+										inputSize="10" mode="ajax" locale="el_GR"
+										inputClass="fieldValueText" datePattern="dd/MM/yyyy">
+										<a4j:support event="onblur" bypassUpdates="true"
+											ajaxSingle="true" />
+									</rich:calendar>
+								</s:decorate>
+
+								<a4j:commandButton id="searchRankInfosEvents"
+									reRender="filterSection,rankInfosReportTableInclude"
+									action="#{rankInfosReport.generateReport()}" value="Αναζήτηση">
+								</a4j:commandButton>
+
+								<s:button id="revertButton" value="Τέλος Εργασίας"
+									view="/home.xhtml" propagation="end" />
+
+
+
+
+							</h:panelGrid>
+						</a4j:outputPanel>
+					</rich:panel>
+					
+					<a4j:include viewId="/components/messages-component.xhtml" ajaxRendered="true" />
+					
+					
+					<h:outputText value="Προβολή τρεχόντων Βαθμών / ΜΚ" />
+					<a4j:outputPanel>
+						<a4j:include rendered="#{rankInfosReportData!=null}"
+							id="rankInfosReportTableInclude"
+							viewId="/components/rankInfo/rankInfosReport-result-table.xhtml">
+							<ui:param name="rankInfos" value="#{rankInfosReportData}" />
+						</a4j:include>
+					</a4j:outputPanel>
+
+					
+
+				</h:panelGrid>
+
+			</rich:panel>
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

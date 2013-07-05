@@ -307,7 +307,7 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
         for(EmployeeLeave leave : leaves) {
         	String legacyCode = leave.getEmployeeLeaveType().getLegacyCode();
         	if(legacyCodes.contains(legacyCode)) {
-        		System.err.println(leave);
+//        		System.err.println(leave);
         		if(leave.getEstablished().before(dateFrom)) {
         			daysToTrim += CoreUtils.datesDifferenceIn360DaysYear(leave.getEstablished(), dateFrom);
         			//System.err.println(daysToTrim);
