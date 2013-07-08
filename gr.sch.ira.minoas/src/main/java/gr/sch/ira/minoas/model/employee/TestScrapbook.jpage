@@ -1,0 +1,71 @@
+
+gr.sch.ira.minoas.model.employee.RankInfo rankInfo = new gr.sch.ira.minoas.model.employee.RankInfo(gr.sch.ira.minoas.model.employee.RankType.RANK_D, 1, gr.sch.ira.minoas.model.employement.EducationalLevelType.UNIVERSITY_EDUCATION_LEVEL);
+System.out.println(rankInfo);
+rankInfo.RecalculateRankInfo(2002);
+System.out.println(rankInfo);
+
+
+gr.sch.ira.minoas.seam.components.RankInfoCalculation rankInfoCalculation = new gr.sch.ira.minoas.seam.components.RankInfoCalculation();
+rankInfoCalculation.recalculateRankInfos();int noOfDays = -122;java.text.DateFormat df = java.text.SimpleDateFormat.getDateInstance(java.text.SimpleDateFormat.SHORT);java.util.Calendar processedDate = new java.util.GregorianCalendar();
+//processedDate.set(2065, 4, 19);
+java.util.Calendar today = new java.util.GregorianCalendar();
+//today.set(2065, 4, 19);
+System.out.println("Today : "+df.format(today.getTime()));
+System.out.println(df.format(today.getTime())+" - " + noOfDays+" days = "+df.format(org.apache.commons.lang.time.DateUtils.addDays(processedDate.getTime(), noOfDays))+"(Normal Date)");
+//processedDate.add(java.util.Calendar.YEAR, -((noOfDays/30)/12));
+//processedDate.add(java.util.Calendar.MONTH, -((noOfDays/30)%12));
+//processedDate.add(java.util.Calendar.DAY_OF_YEAR, -(noOfDays%30));
+//System.out.println(df.format(today.getTime())+" - " + noOfDays+" days = "+df.format(processedDate.getTime())+"(360days Date)");
+System.out.println("New 360 days date : "+df.format(gr.sch.ira.minoas.core.CoreUtils.getDateInXDays360(today.getTime(), noOfDays)));
+System.out.println("New Gand 360 days date : "+df.format(gr.sch.ira.minoas.core.CoreUtils.getDateInXDays360Gand(today.getTime(), noOfDays)));
+
+
+
+
+
+int noOfDays = -3;
+java.text.DateFormat df = java.text.SimpleDateFormat.getDateInstance(java.text.SimpleDateFormat.SHORT);
+java.util.Calendar today = new java.util.GregorianCalendar();System.out.println("New Gand 360 days date : "+df.format(gr.sch.ira.minoas.core.CoreUtils.getDateInXDays360(today.getTime(), noOfDays)));
+
+java.util.Calendar date1 = new java.util.GregorianCalendar();
+java.util.Calendar date2 = new java.util.GregorianCalendar();
+date1.set(1997, 1, 1);
+date2.set(1997, 7, 31);
+System.out.println(gr.sch.ira.minoas.core.CoreUtils.get360DaysYearDiff(date1.getTime(), date2.getTime()));
+System.out.println(gr.sch.ira.minoas.core.CoreUtils.get360DaysYearDiffSpanoudakis(date1.getTime(), date2.getTime()));
+
+
+
+java.text.DateFormat df = java.text.SimpleDateFormat.getDateInstance(java.text.SimpleDateFormat.SHORT);java.util.Calendar date1 = new java.util.GregorianCalendar();
+System.out.println(df.format(gr.sch.ira.minoas.core.CoreUtils.getDateInXDays360(date1.getTime(), 35)));
+
+
+
+int noOfDays = -122;
+System.out.println((noOfDays%30));
+java.text.DateFormat df = java.text.SimpleDateFormat.getDateInstance(java.text.SimpleDateFormat.SHORT);
+java.util.Calendar today = new java.util.GregorianCalendar();
+today.add(java.util.Calendar.MONTH, (noOfDays/30));
+today.add(java.util.Calendar.DAY_OF_MONTH, (noOfDays%30));
+System.out.println("Extra New Gand 360 days date : "+df.format(today.getTime()));
+
+
+
+
+java.util.Calendar cal1 = java.util.Calendar.getInstance();
+cal1.set(2012, 2, 1); //year is as expected, month is zero based, date is as expected
+java.util.Date dt1 = cal1.getTime();
+java.util.Calendar cal2 = java.util.Calendar.getInstance();
+cal2.set(2012, 4, 31); //year is as expected, month is zero based, date is as expected
+java.util.Date dt2 = cal2.getTime();
+System.out.println(gr.sch.ira.minoas.core.CoreUtils.datesDifferenceIn360DaysYear(dt1, dt2)); 
+
+
+System.out.println(DateUtils.addDays(processedDate.getTime(), noOfDaysOffset));	
+
+
+System.out.println(=TRUNC(TRUNC(562/30;0)/12;0))
+
+System.out.println(562%30)			days
+System.out.println((562/30)%12)		months
+System.out.println((562/30)/12)		years

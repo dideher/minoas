@@ -1,5 +1,6 @@
 package gr.sch.ira.minoas.seam.components.reports.resource;
 
+import gr.sch.ira.minoas.model.core.PYSDE;
 import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.RankInfo;
@@ -92,6 +93,15 @@ public class EmployeeReportItem extends BaseIDReportItem {
 				if(school!=null) {
 					this.employeeEmploymentUnitId = school.getId();
 					this.employeeEmploymentUnitTitle = school.getTitle();
+				}
+			} else {
+				/* the employee has not current employment */
+				PYSDE pysde = employee.getCurrentPYSDE();
+				if(pysde!=null && employee.isRegularEmployee()) {
+					this.employeeEmploymentUnitTitle = pysde.getTitle();
+					if(pysde.getRepresentedByUnit()!=null) {
+						this.employeeEmploymentUnitId = pysde.getRepresentedByUnit().getId();
+					}
 				}
 			}
 		}

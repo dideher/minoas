@@ -7,7 +7,7 @@
       xmlns:a4j="http://richfaces.org/a4j">
 
 	<ui:component>
-		<h:panelGrid columns="6" >
+		<h:panelGrid columns="6" cellpadding="4px">
 			<h:outputLabel styleClass="fieldValueLabel" rendered="#{employee.type == 'REGULAR'}"
 				value="ΦΕΚ Διορισμού: " />
 			<ui:remove> <!-- TODO Review this as Employee my not be only Regular but also NonRegular --> </ui:remove> 
@@ -91,6 +91,11 @@
 				<rich:toolTip  id="natSchPubAdminDateTooltip2" value="Ημερομηνίες πριν την 1-11-2011 αναφέρονται στην ημερομηνία κατάθεσης του σχετικού τίτλου από την οποία λάμβανε και το σχετικό επίδομα, ενώ ημ/νίες μετά την 1-11-2011 αναφέρονται στην ημερομηνία πράξης του ΠΥΣΔΕ από την οποία ενσωματώνεται στο βαθμό ο χρόνος που αναλογεί." for="natSchPubAdminDateOutputLabel"/>
 			</h:panelGroup>
 
+		</h:panelGrid>
+		
+		<rich:spacer height="20px"/>
+		
+		<h:panelGrid columns="6" cellpadding="6px" >	
 
 			<h:outputLabel styleClass="fieldValueLabel" value="Βαθμός: " />
 			<h:outputText styleClass="fieldValueText"
@@ -143,7 +148,10 @@
 				value="#{employee.employeeInfo.currentRankInfo.surplusTimeInSalaryGradeUntilTodayYear_Month_Day} (#{employee.employeeInfo.currentRankInfo.surplusTimeInSalaryGradeUntilToday} ημ.)" />
 	
 		</h:panelGrid>
-	
+		
+		<ui:include src="/employee/rankInfoHistoryPanelGrid.xhtml">
+			<ui:param name="employee" value="#{employee}" />
+		</ui:include>
 	</ui:component>
 
 </html>

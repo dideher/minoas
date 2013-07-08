@@ -4,17 +4,23 @@ import gr.sch.ira.minoas.core.CoreUtils;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeInfo;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
+import gr.sch.ira.minoas.model.employee.Evaluation;
 import gr.sch.ira.minoas.model.employee.RankInfo;
 import gr.sch.ira.minoas.model.employee.RegularEmployeeInfo;
+import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.CoreSearching;
+import gr.sch.ira.minoas.seam.components.RankInfoCalculation;
+import gr.sch.ira.minoas.seam.components.WorkExperienceCalculation;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
 import gr.sch.ira.minoas.seam.components.home.EmployeeInfoHome;
 import gr.sch.ira.minoas.seam.components.home.RankInfoHome;
 import gr.sch.ira.minoas.seam.components.home.RegularEmployeeInfoHome;
 
+import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
@@ -53,6 +59,9 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 	// create=true : Auto create rankInfoHome when needed
 	@In(required = true, create = true)
 	RankInfoHome rankInfoHome;
+	
+	@In(required=true, create=true)
+	private RankInfoCalculation rankInfoCalculation;
 
 	private Date totalWorkServiceCalculationDate;
 	private int totalCalculatedServiceInDays;
@@ -343,6 +352,9 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 			// set InsertedOn to today's date
 			rinfo.setInsertedOn(new Date());
 
+			// Link the new RankInfo with the previous one
+			rinfo.setPreviousRankInfo(employeeInfo.getCurrentRankInfo());
+			
 			//	set EmployeeInfo to the new RankInfo
 			rinfo.setEmployeeInfo(employeeInfo);
 			//	save the new RankInfo
@@ -365,7 +377,61 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 			return ACTION_OUTCOME_FAILURE;
 		}
 	}
+	
+	public void cancelModifyRankInfo() {
+		//	Clear the auto created home object if cancel is pressed when modifying rank info data
+		rankInfoHome.clearInstance();
+	}
 
+	@Transactional
+	public String modifyRankInfo() {
+
+		if (rankInfoHome.isManaged()) {
+			Employee employee = getEmployeeHome().getInstance();
+			RankInfo rinfo = rankInfoHome.getInstance();
+			
+			rankInfoHome.update();
+
+			info("Rank Info #0 for employee #1 has been modified", rinfo, employee);
+			return ACTION_OUTCOME_SUCCESS;
+		} else {
+			facesMessages.add(Severity.ERROR,
+					"employee home #0 is not managed.", employeeHome);
+			return ACTION_OUTCOME_FAILURE;
+		}
+	}
+	
+	@Transactional
+    public String deleteRankInfo() {
+        if(rankInfoHome != null && rankInfoHome.isManaged()) {
+            info("trying to delete RankInfo #0", rankInfoHome);
+            RankInfo rInfo = rankInfoHome.getInstance();
+
+    		rInfo.setDeleted(Boolean.TRUE);
+            rInfo.setDeletedOn(new Date());
+            rInfo.setDeletedBy(getPrincipal());
+            rankInfoHome.update();
+            //constructEvaluationHistory();
+            return ACTION_OUTCOME_SUCCESS;	
+            
+        } else {
+            facesMessages.add(Severity.ERROR, "Rank Info home #0 is not managed, thus RankInfo #1 can't be deleted.", rankInfoHome, rankInfoHome.getInstance());
+            return ACTION_OUTCOME_FAILURE;
+        }
+    
+    }
+	
+	/**
+	 * A RankInfo may NOT be deleted if it is the current RankInfo for an employee.
+	 * Με άλλα λόγια δεν μπορούμε να διαγράψουμε τον τρέχοντα Βαθμό και Μισθολογικό κλιμάκιο.
+	 */
+	public boolean deletionOfThisRankInfoIsAllowed(Integer rankInfoId) {
+		if(employeeHome.getInstance().getEmployeeInfo().getCurrentRankInfo().getId() == rankInfoId)
+			return false;
+		else
+			return true;
+		
+	}
 	
 	/**
 	 * totalWorkService = Ημ/νία Διορισμού + Συνολική Υπηρεσία + Συνολική Προϋπηρεσία
@@ -491,5 +557,9 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 		return CoreUtils
 				.getNoOfDaysInYear_Month_DayFormat(getTotalServiceIncludingWorkExperience());
 	}
-
+	
+	public void test() {
+		rankInfoCalculation.recalculateRankInfos();
+	}
+	
 }

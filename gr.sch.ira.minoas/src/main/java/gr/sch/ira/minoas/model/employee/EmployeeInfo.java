@@ -7,6 +7,7 @@ import gr.sch.ira.minoas.model.employement.EducationalLevelType;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -38,25 +39,25 @@ public class EmployeeInfo extends BaseIDModel {
 	private static final long serialVersionUID = 1L;
 
 	/**
+	 * Current Rank Information (Στοιχεία Τρέχοντος Βαθμού και Μισθολογικού Κλιμακίου)
+	 */
+	@OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
+	@JoinColumn(name = "CURRENT_RANK_INFO_ID", nullable = true)
+	private RankInfo currentRankInfo;
+
+	/**
 	 * Join EmploeeInfo with its respective Employee
 	 */
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "EMPLOYEE_ID", nullable = false)
 	private Employee employee;
-
+	
 	/**
 	 * Has a Master's Degree (Κατοχή Μεταπτυχιακού Διπλώματος)
 	 */
 	@Basic
 	@Column(name = "HAS_A_MASTER_DEGREE")
 	private Boolean hasAMasterDegree;
-	
-	/**
-	 * Master's Degree Date (Ημερομηνία Μεταπτυχιακού Διπλώματος)
-	 */
-	@Basic
-	@Column(name = "MSC_DATE")
-	private Date mscDate;
 
 	/**
 	 * Has a PhD Degree (Κατοχή Διδακτορικού)
@@ -66,18 +67,18 @@ public class EmployeeInfo extends BaseIDModel {
 	private Boolean hasAPhD;
 	
 	/**
-	 * PhD Degree Date (Ημερομηνία Διδακτορικού)
-	 */
-	@Basic
-	@Column(name = "PHD_DATE")
-	private Date phdDate;
-
-	/**
 	 * Is a National School for Public Administration Graduate (Απόφοιτος της Σχολής Δημόσιας Διοίκησης)
 	 */
 	@Basic
 	@Column(name = "IS_A_NAT_SCH_PUB_ADMIN_GRADUATE")
 	private Boolean isANatSchPubAdminGraduate;
+
+	/**
+	 * Master's Degree Date (Ημερομηνία Μεταπτυχιακού Διπλώματος)
+	 */
+	@Basic
+	@Column(name = "MSC_DATE")
+	private Date mscDate;
 	
 
 	/**
@@ -91,19 +92,19 @@ public class EmployeeInfo extends BaseIDModel {
 
 	
 	/**
+	 * PhD Degree Date (Ημερομηνία Διδακτορικού)
+	 */
+	@Basic
+	@Column(name = "PHD_DATE")
+	private Date phdDate;
+	
+	
+	/**
 	 * Rank Information (Στοιχεία Βαθμού και Μισθολογικού Κλιμακίου)
 	 */
 	@OneToMany(mappedBy="employeeInfo")
 	//private RankInfo rankInfo;
 	private Collection<RankInfo> rankInfos = new ArrayList<RankInfo>();
-	
-	
-	/**
-	 * Current Rank Information (Στοιχεία Τρέχοντος Βαθμού και Μισθολογικού Κλιμακίου)
-	 */
-	@OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
-	@JoinColumn(name = "CURRENT_RANK_INFO_ID", nullable = true)
-	private RankInfo currentRankInfo;
 	
 	
 	/**
@@ -115,18 +116,21 @@ public class EmployeeInfo extends BaseIDModel {
 
 	
 	/**
+	 * Total days while the employee was on an unpaid leave. Days are calculated on a 360year basic and
+	 * for each year 30 days are deducted as a gratis (this is the law). 
+	 * 
+	 * In Greek : Ημέρες άδειας κατά τις οποίες ο εργαζόμενος ήταν σε άδεια ανευ αποδοχών.
+	 */
+	@Basic
+	@Column(name = "SUM_OF_UNPAID_LEAVES", nullable=true)
+	private Integer sumOfDaysDuringUnpaidLeaves;
+	
+	/**
 	 * Sum of Educational Experience (Άθροισμα Εκπαιδευτικής Προϋπηρεσίας)
 	 */
 	@Basic
 	@Column(name = "SUM_OF_EDUCATIONAL_EXPERIENCE")
 	private Integer sumOfEducationalExperience;
-	
-	/**
-	 * Sum of Teaching Experience (Άθροισμα Διδακτικής Προϋπηρεσίας)
-	 */
-	@Basic
-	@Column(name = "SUM_OF_TEACHING_EXPERIENCE")
-	private Integer sumOfTeachingExperience;
 	
 	/**
 	 * Sum of Any Type Of Working Experience (Άθροισμα Προϋπηρεσίας Οποιουδήποτε Τύπου)
@@ -135,6 +139,13 @@ public class EmployeeInfo extends BaseIDModel {
 	@Column(name = "SUM_OF_EXPERIENCE")
 	private Integer sumOfExperience;
 
+	/**
+	 * Sum of Teaching Experience (Άθροισμα Διδακτικής Προϋπηρεσίας)
+	 */
+	@Basic
+	@Column(name = "SUM_OF_TEACHING_EXPERIENCE")
+	private Integer sumOfTeachingExperience;
+	
 	/**
 	 * Total Work Service in days (Does NOT include prior work experience)
 	 * Συνολική Υπηρεσία από την ημ/νία διορισμού έως σήμερα (δεν συμπεριλαμβάνει προϋπηρεσίες)
@@ -160,8 +171,8 @@ public class EmployeeInfo extends BaseIDModel {
 		this.sumOfExperience = 0;
 		this.totalWorkService = 0;
 	}
-	
-	
+
+
 	/**
 	 * @param employee
 	 * @param gogAppointmentNo
@@ -204,23 +215,21 @@ public class EmployeeInfo extends BaseIDModel {
 		this.totalWorkService = totalWorkService;
 	}
 
+
+	/**
+	 * @return the currentRankInfo
+	 */
+	public RankInfo getCurrentRankInfo() {
+		return currentRankInfo;
+	}
+	
+	
 	/**
 	 * @return the employee
 	 */
 	public Employee getEmployee() {
 		return employee;
 	}
-
-	/**
-	 * @param employee the employee to set
-	 */
-	public void setEmployee(Employee employee) {
-		this.employee = employee;
-	}
-
-
-
-
 
 	/**
 	 * @return the hasAMasterDegree
@@ -230,69 +239,33 @@ public class EmployeeInfo extends BaseIDModel {
 	}
 
 	/**
-	 * @param hasAMasterDegree the hasAMasterDegree to set
-	 */
-	public void setHasAMasterDegree(Boolean hasAMasterDegree) {
-		this.hasAMasterDegree = hasAMasterDegree;
-	}
-
-	/**
 	 * @return the hasAPhD
 	 */
 	public Boolean getHasAPhD() {
 		return hasAPhD;
 	}
 
+	
 	/**
-	 * @param hasAPhD the hasAPhD to set
+	 * @return the rankInfos
 	 */
-	public void setHasAPhD(Boolean hasAPhD) {
-		this.hasAPhD = hasAPhD;
+	public Collection<RankInfo> getNonDeletedRankInfos() {
+		Collection<RankInfo> nonDeletedRankInfos = new ArrayList<RankInfo>();
+		for (Iterator<RankInfo> iter = rankInfos.iterator(); iter.hasNext();) {
+			RankInfo rInfo = (RankInfo) iter.next();
+			if(rInfo!= null && (rInfo.getDeleted()== null || !rInfo.getDeleted())) {
+				nonDeletedRankInfos.add(rInfo);
+			}
+		}
+		return nonDeletedRankInfos;
 	}
+	
 
 	/**
 	 * @return the isANatSchPubAdminGraduate
 	 */
 	public Boolean getIsANatSchPubAdminGraduate() {
 		return isANatSchPubAdminGraduate;
-	}
-
-	/**
-	 * @param isANatSchPubAdminGraduate the isANatSchPubAdminGraduate to set
-	 */
-	public void setIsANatSchPubAdminGraduate(Boolean isANatSchPubAdminGraduate) {
-		this.isANatSchPubAdminGraduate = isANatSchPubAdminGraduate;
-	}
-
-	/**
-	 * @return the rankInfos
-	 */
-	public Collection<RankInfo> getRankInfos() {
-		return rankInfos;
-	}
-
-	/**
-	 * @param rankInfo the rankInfos to set
-	 */
-	public void setRankInfos(Collection<RankInfo> rankInfos) {
-		this.rankInfos = rankInfos;
-	}
-
-	/**
-	 * @return the currentRankInfo
-	 */
-	public RankInfo getCurrentRankInfo() {
-		return currentRankInfo;
-	}
-
-	/**
-	 * @param currentRankInfo the currentRankInfo to set
-	 */
-	public void setCurrentRankInfo(RankInfo currentRankInfo) {
-		this.currentRankInfo = currentRankInfo;
-		if(currentRankInfo != null && !rankInfos.contains(currentRankInfo)) {
-			rankInfos.add(currentRankInfo);
-		}
 	}
 
 	/**
@@ -303,10 +276,10 @@ public class EmployeeInfo extends BaseIDModel {
 	}
 
 	/**
-	 * @param mscDate the mscDate to set
+	 * @return the natSchPubAdminDate
 	 */
-	public void setMscDate(Date mscDate) {
-		this.mscDate = mscDate;
+	public Date getNatSchPubAdminDate() {
+		return natSchPubAdminDate;
 	}
 
 	/**
@@ -317,33 +290,18 @@ public class EmployeeInfo extends BaseIDModel {
 	}
 
 	/**
-	 * @param phdDate the phdDate to set
+	 * @return the rankInfos
 	 */
-	public void setPhdDate(Date phdDate) {
-		this.phdDate = phdDate;
-	}
-
-	/**
-	 * @return the natSchPubAdminDate
-	 */
-	public Date getNatSchPubAdminDate() {
-		return natSchPubAdminDate;
-	}
-
-	/**
-	 * @param natSchPubAdminDate the natSchPubAdminDate to set
-	 */
-	public void setNatSchPubAdminDate(Date natSchPubAdminDate) {
-		this.natSchPubAdminDate = natSchPubAdminDate;
-	}
-
-
-	public void setSector(SectorType sector) {
-		this.sector = sector;
+	public Collection<RankInfo> getRankInfos() {
+		return rankInfos;
 	}
 
 	public SectorType getSector() {
 		return sector;
+	}
+
+	public Integer getSumOfDaysDuringUnpaidLeaves() {
+		return sumOfDaysDuringUnpaidLeaves;
 	}
 
 	/**
@@ -362,12 +320,19 @@ public class EmployeeInfo extends BaseIDModel {
 		else
 			return CoreUtils.getNoOfDaysInYear_Month_DayFormat(sumOfEducationalExperience);
 	}
-	
+
 	/**
-	 * @param sumOfEducationalExperience the sumOfEducationalExperience to set
+	 * @return the sumOfExperience
 	 */
-	public void setSumOfEducationalExperience(Integer sumOfEducationalExperience) {
-		this.sumOfEducationalExperience = sumOfEducationalExperience;
+	public Integer getSumOfExperience() {
+		return sumOfExperience;
+	}
+
+	/**
+	 * @return the sumOfExperience as a Year_Month_Day string
+	 */
+	public String getSumOfExperienceYear_Month_Day() {
+		return CoreUtils.getNoOfDaysInYear_Month_DayFormat(sumOfExperience);
 	}
 
 	/**
@@ -383,34 +348,6 @@ public class EmployeeInfo extends BaseIDModel {
 	public String getSumOfTeachingExperienceYear_Month_Day() {
 		return CoreUtils.getNoOfDaysInYear_Month_DayFormat(sumOfTeachingExperience);
 	}
-	
-	/**
-	 * @param sumOfTeachingExperience the sumOfTeachingExperience to set
-	 */
-	public void setSumOfTeachingExperience(Integer sumOfTeachingExperience) {
-		this.sumOfTeachingExperience = sumOfTeachingExperience;
-	}
-
-	/**
-	 * @return the sumOfExperience
-	 */
-	public Integer getSumOfExperience() {
-		return sumOfExperience;
-	}
-
-	/**
-	 * @return the sumOfExperience as a Year_Month_Day string
-	 */
-	public String getSumOfExperienceYear_Month_Day() {
-		return CoreUtils.getNoOfDaysInYear_Month_DayFormat(sumOfExperience);
-	}
-	
-	/**
-	 * @param sumOfExperience the sumOfExperience to set
-	 */
-	public void setSumOfExperience(Integer sumOfExperience) {
-		this.sumOfExperience = sumOfExperience;
-	}
 
 	/**
 	 * @return the totalWorkService
@@ -425,13 +362,6 @@ public class EmployeeInfo extends BaseIDModel {
 	public String getTotalWorkServiceYear_Month_Day() {
 		return CoreUtils.getNoOfDaysInYear_Month_DayFormat(totalWorkService);
 	}
-	
-	/**
-	 * @param totalWorkService the totalWorkService to set
-	 */
-	public void setTotalWorkService(Integer totalWorkService) {
-		this.totalWorkService = totalWorkService;
-	}
 
 	/**
 	 * Check if EmployeeInfo currently has a RankInfo assigned to it.
@@ -444,7 +374,8 @@ public class EmployeeInfo extends BaseIDModel {
 		else
 			return true;
 	}
-	
+
+
 	/**
 	 * Reset EmployeeInfo and initialize its attributes
 	 * 
@@ -464,6 +395,108 @@ public class EmployeeInfo extends BaseIDModel {
 		setHasAMasterDegree(false);
 		setHasAPhD(false);
 		
+	}
+
+	/**
+	 * @param currentRankInfo the currentRankInfo to set
+	 */
+	public void setCurrentRankInfo(RankInfo currentRankInfo) {
+		this.currentRankInfo = currentRankInfo;
+		if(currentRankInfo != null && !rankInfos.contains(currentRankInfo)) {
+			rankInfos.add(currentRankInfo);
+		}
+	}
+
+	/**
+	 * @param employee the employee to set
+	 */
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
+	}
+
+	/**
+	 * @param hasAMasterDegree the hasAMasterDegree to set
+	 */
+	public void setHasAMasterDegree(Boolean hasAMasterDegree) {
+		this.hasAMasterDegree = hasAMasterDegree;
+	}
+	
+	/**
+	 * @param hasAPhD the hasAPhD to set
+	 */
+	public void setHasAPhD(Boolean hasAPhD) {
+		this.hasAPhD = hasAPhD;
+	}
+
+	/**
+	 * @param isANatSchPubAdminGraduate the isANatSchPubAdminGraduate to set
+	 */
+	public void setIsANatSchPubAdminGraduate(Boolean isANatSchPubAdminGraduate) {
+		this.isANatSchPubAdminGraduate = isANatSchPubAdminGraduate;
+	}
+
+	/**
+	 * @param mscDate the mscDate to set
+	 */
+	public void setMscDate(Date mscDate) {
+		this.mscDate = mscDate;
+	}
+	
+	/**
+	 * @param natSchPubAdminDate the natSchPubAdminDate to set
+	 */
+	public void setNatSchPubAdminDate(Date natSchPubAdminDate) {
+		this.natSchPubAdminDate = natSchPubAdminDate;
+	}
+
+	/**
+	 * @param phdDate the phdDate to set
+	 */
+	public void setPhdDate(Date phdDate) {
+		this.phdDate = phdDate;
+	}
+
+	/**
+	 * @param rankInfo the rankInfos to set
+	 */
+	public void setRankInfos(Collection<RankInfo> rankInfos) {
+		this.rankInfos = rankInfos;
+	}
+	
+	public void setSector(SectorType sector) {
+		this.sector = sector;
+	}
+
+	public void setSumOfDaysDuringUnpaidLeaves(Integer sumOfDaysDuringUnpaidLeaves) {
+		this.sumOfDaysDuringUnpaidLeaves = sumOfDaysDuringUnpaidLeaves;
+	}
+
+	/**
+	 * @param sumOfEducationalExperience the sumOfEducationalExperience to set
+	 */
+	public void setSumOfEducationalExperience(Integer sumOfEducationalExperience) {
+		this.sumOfEducationalExperience = sumOfEducationalExperience;
+	}
+	
+	/**
+	 * @param sumOfExperience the sumOfExperience to set
+	 */
+	public void setSumOfExperience(Integer sumOfExperience) {
+		this.sumOfExperience = sumOfExperience;
+	}
+
+	/**
+	 * @param sumOfTeachingExperience the sumOfTeachingExperience to set
+	 */
+	public void setSumOfTeachingExperience(Integer sumOfTeachingExperience) {
+		this.sumOfTeachingExperience = sumOfTeachingExperience;
+	}
+	
+	/**
+	 * @param totalWorkService the totalWorkService to set
+	 */
+	public void setTotalWorkService(Integer totalWorkService) {
+		this.totalWorkService = totalWorkService;
 	}
 	
 	

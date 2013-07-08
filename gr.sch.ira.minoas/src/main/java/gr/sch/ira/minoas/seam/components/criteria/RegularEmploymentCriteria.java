@@ -62,7 +62,6 @@ public class RegularEmploymentCriteria {
 	 * @param school the school to set
 	 */
 	public void setSchool(School school) {
-		System.err.println("******** someone set the school : " + school);
 		this.school = school;
 	}
 

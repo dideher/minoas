@@ -24,13 +24,20 @@ public class EmployeeLeaveType extends BaseIDModel {
     private static final long serialVersionUID = 1L;
     
 
+    /**
+     * If not active, then UI should not suggest this leave type
+     */
     @Basic
-    @Column(name = "DESCRIPTION", nullable = true, length = 255)
-    private String description;
+    @Column(name="IS_ACTIVE", nullable=true)
+    private Boolean active = Boolean.TRUE;
     
     @Enumerated(EnumType.STRING)
     @Column(name="BASIC_TYPE", nullable=true)
     private EmployeeBasicLeaveType basicType;
+    
+    @Basic
+    @Column(name = "DESCRIPTION", nullable = true, length = 255)
+    private String description;
     
     @Basic
     @Column(name="GENERATES_CDRS", nullable=true)
@@ -44,32 +51,22 @@ public class EmployeeLeaveType extends BaseIDModel {
     @Column(name="EMPLOYEE_TYPE", nullable=false)
     private EmployeeType suitableForEmployeeType;
    
-    /**
-     * @return the description
-     */
-    public String getDescription() {
-        return description;
-    }
+    public Boolean getActive() {
+		return active;
+	}
 
-    /**
-     * @param description the description to set
-     */
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    /**
+	/**
      * @return the basicType
      */
     public EmployeeBasicLeaveType getBasicType() {
         return basicType;
     }
 
-    /**
-     * @param basicType the basicType to set
+	/**
+     * @return the description
      */
-    public void setBasicType(EmployeeBasicLeaveType basicType) {
-        this.basicType = basicType;
+    public String getDescription() {
+        return description;
     }
 
     /**
@@ -80,13 +77,6 @@ public class EmployeeLeaveType extends BaseIDModel {
     }
 
     /**
-     * @param generatesCDRs the generatesCDRs to set
-     */
-    public void setGeneratesCDRs(Boolean generatesCDRs) {
-        this.generatesCDRs = generatesCDRs;
-    }
-
-    /**
      * @return the legacyCode
      */
     public String getLegacyCode() {
@@ -94,17 +84,42 @@ public class EmployeeLeaveType extends BaseIDModel {
     }
 
     /**
-     * @param legacyCode the legacyCode to set
-     */
-    public void setLegacyCode(String legacyCode) {
-        this.legacyCode = legacyCode;
-    }
-
-    /**
      * @return the suitableForEmployeeType
      */
     public EmployeeType getSuitableForEmployeeType() {
         return suitableForEmployeeType;
+    }
+
+    public void setActive(Boolean active) {
+		this.active = active;
+	}
+
+    /**
+     * @param basicType the basicType to set
+     */
+    public void setBasicType(EmployeeBasicLeaveType basicType) {
+        this.basicType = basicType;
+    }
+
+    /**
+     * @param description the description to set
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
+     * @param generatesCDRs the generatesCDRs to set
+     */
+    public void setGeneratesCDRs(Boolean generatesCDRs) {
+        this.generatesCDRs = generatesCDRs;
+    }
+
+    /**
+     * @param legacyCode the legacyCode to set
+     */
+    public void setLegacyCode(String legacyCode) {
+        this.legacyCode = legacyCode;
     }
 
     /**

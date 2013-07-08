@@ -20,6 +20,7 @@ import gr.sch.ira.minoas.model.employee.PartTimeEmployment;
 import gr.sch.ira.minoas.model.employee.Penalty;
 import gr.sch.ira.minoas.model.employee.PenaltyType;
 import gr.sch.ira.minoas.model.employee.Person;
+import gr.sch.ira.minoas.model.employee.RankInfo;
 import gr.sch.ira.minoas.model.employee.RankType;
 import gr.sch.ira.minoas.model.employement.Disposal;
 import gr.sch.ira.minoas.model.employement.DisposalTargetType;
@@ -527,52 +528,6 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         info("found totally '#0' employments for regular employee '#1'.", result.size(), employee);
         return result;
     }
-
-//    @SuppressWarnings("unchecked")
-//    @Transactional(TransactionPropagationType.REQUIRED)
-//    @Deprecated
-//    public Collection<Leave> getEmployeeLeaves(Person employee) {
-//        Collection<Leave> result = null;
-//        info("searching employee's '#0' leaves.", employee);
-//        result = entityManager.createQuery(
-//                "SELECT s from Leave s WHERE s.active IS TRUE AND s.employee=:employee ORDER BY s.established")
-//                .setParameter("employee", employee).getResultList();
-//        info("found totally '#0' leave(s) for employee '#1'.", result.size(), employee);
-//        return result;
-//    }
-
-//    @SuppressWarnings("unchecked")
-//    @Transactional(TransactionPropagationType.REQUIRED)
-//    public Collection<Leave> getEmployeeLeaveHistory(Person employee) {
-//        Collection<Leave> result = null;
-//        info("searching employee's '#0' leaves.", employee);
-//        result = entityManager.createQuery(
-//                "SELECT s from Leave s WHERE s.active IS FALSE AND s.employee=:employee ORDER BY s.established")
-//                .setParameter("employee", employee).getResultList();
-//        info("found totally '#0' leave(s) in employee's '#1' history.", result.size(), employee);
-//        return result;
-//    }
-//    
-//    
-//    public Collection<Leave> getEmployeeLeaveHistoryWithCurrentActive(Person employee) {
-//        Collection<Leave> result = null;
-//        info("searching employee's '#0' leaves.", employee);
-//        result = entityManager.createQuery(
-//                "SELECT s from Leave s WHERE ((s.active IS FALSE AND s.autoCanceled IS TRUE) OR (s.active IS TRUE)) AND s.employee=:employee ORDER BY s.established")
-//                .setParameter("employee", employee).getResultList();
-//        info("found totally '#0' leave(s) in employee's '#1' history.", result.size(), employee);
-//        return result;
-//    }
-
-//    @Deprecated
-//    public Collection<Leave> getEmployeeLeaves(Person employee) {
-//        Collection<Leave> result = null;
-//        result = entityManager
-//                .createQuery(
-//                        "SELECT s from Leave s WHERE (s.deleted IS FALSE OR s.deleted IS NULL) AND s.employee=:employee ORDER BY s.established DESC")
-//                .setParameter("employee", employee).getResultList();
-//        return result;
-//    }
     
     public Collection<EmployeeLeave> getEmployeeLeaves2(Person employee) {
         Collection<EmployeeLeave> result = null;
@@ -580,6 +535,15 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
                 .createQuery(
                         "SELECT s from EmployeeLeave s WHERE (s.deleted IS FALSE OR s.deleted IS NULL) AND s.employee=:employee ORDER BY s.established DESC")
                 .setParameter("employee", employee).getResultList();
+        return result;
+    }
+    
+    public Collection<EmployeeLeave> getEmployeeLeaves2(Person employee, Date periodStart, Date periodEnd) {
+        Collection<EmployeeLeave> result = null;
+        result = entityManager
+                .createQuery(
+                        "SELECT s from EmployeeLeave s WHERE (s.deleted IS FALSE OR s.deleted IS NULL) AND  NOT (s.established > :periodEnd OR s.dueTo < :periodStart)   AND s.employee=:employee ORDER BY s.established DESC")
+                .setParameter("employee", employee).setParameter("periodStart", periodStart).setParameter("periodEnd", periodEnd).getResultList();
         return result;
     }
     
@@ -1644,6 +1608,37 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         return returnValue != null ? returnValue : new Long(0);
     } 
     
+//    @SuppressWarnings("unchecked")
+//    @Transactional(TransactionPropagationType.REQUIRED)
+//    public Collection<RankInfo> getCurrentRankInfosForActiveEmployees(Employee employee) {
+//        Collection<RankInfo> result = null;
+//        info("searching current rank infos for all active employees.");
+//        result = entityManager.createQuery(
+//            "select ri " + 
+//            "from Employee e, EmployeeInfo ei, RankInfo ri, Employment em" +
+//            " where ri.employeeInfo = ei and ei.employee = e" +
+//            " and em.employee = e" +
+//            " and ei.currentRankInfo = ri" +
+//            " and em.active IS TRUE and ei.employee=:employee").setParameter("employee", employee).getResultList();
+//        info("found totally '#0' current rank infos for active employees.", result.size());
+//        return result;
+//    }
     
+    
+    @SuppressWarnings("unchecked")
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public Collection<RankInfo> getCurrentRankInfosForActiveEmployees() {
+        Collection<RankInfo> result = null;
+        info("searching current rank infos for all active employees.");
+        result = entityManager.createQuery(
+            "select ri " + 
+            "from Employee e, EmployeeInfo ei, RankInfo ri, Employment em" +
+            " where ri.employeeInfo = ei and ei.employee = e" +
+            " and em.employee = e" +
+            " and ei.currentRankInfo = ri" +
+            " and em.active IS TRUE").getResultList();
+        info("found totally '#0' current rank infos for active employees.", result.size());
+        return result;
+    }
 
 }

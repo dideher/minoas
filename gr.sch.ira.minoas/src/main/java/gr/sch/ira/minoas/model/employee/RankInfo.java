@@ -1,12 +1,16 @@
 package gr.sch.ira.minoas.model.employee;
 
 import gr.sch.ira.minoas.core.CoreUtils;
+import gr.sch.ira.minoas.model.BaseIDDeleteAwareModel;
 import gr.sch.ira.minoas.model.BaseIDModel;
 import gr.sch.ira.minoas.model.employement.EducationalLevelType;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -14,15 +18,18 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.apache.commons.collections.set.CompositeSet.SetMutator;
+import org.apache.commons.lang.time.DateUtils;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
 @Table(name = "RANK_INFO")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class RankInfo extends BaseIDModel {
+public class RankInfo extends BaseIDDeleteAwareModel {
 	/**
 	 * 
 	 */
@@ -34,6 +41,17 @@ public class RankInfo extends BaseIDModel {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "EMPLOYEE_INFO_ID", nullable = false)
 	private EmployeeInfo employeeInfo;
+	
+	
+	/**
+	 * Join RankInfo with its previous RankInfo
+	 */
+	//@Basic
+	//@Column(name = "PREVIOUS_RANK_INFO_ID", nullable = true, updatable = true)
+	@OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
+	@JoinColumn(name = "PREVIOUS_RANK_INFO_ID", nullable = true)
+	private RankInfo previousRankInfo;
+	
 
 	/**
 	 * Εναρκτήριο Μ.Κ. για όλους τους βαθμούς και όλα τα επίπεδα σπουδών
@@ -204,7 +222,7 @@ public class RankInfo extends BaseIDModel {
 
 	/**
 	 * @param comments
-	 *   the comments to set
+	 *            the comments to set
 	 */
 	public void setComments(String comments) {
 		this.comments = comments;
@@ -233,6 +251,13 @@ public class RankInfo extends BaseIDModel {
 		this.rank = rankInfo.getRank();
 		this.salaryGrade = rankInfo.getSalaryGrade();
 		this.educationalLevel = rankInfo.getEducationalLevel();
+		//this.comments = rankInfo.getComments();
+		this.employeeInfo = rankInfo.getEmployeeInfo();
+		this.lastRankDate = rankInfo.getLastRankDate();
+		this.lastSalaryGradeDate = rankInfo.getLastSalaryGradeDate();
+		this.surplusTimeInRank = rankInfo.getSurplusTimeInRank();
+		this.surplusTimeInSalaryGrade = rankInfo.getSurplusTimeInSalaryGrade();
+
 	}
 
 	/**
@@ -254,8 +279,7 @@ public class RankInfo extends BaseIDModel {
 	 *         RankInfo returned may be identical to the one before if
 	 *         hasPossitiveValidationInLast2Years is false.
 	 */
-	public RankInfo promote(Boolean hasPossitiveValidationInLast2Years,
-			Boolean achievedPromotionQuota) {
+	public RankInfo promote(Boolean hasPossitiveValidationInLast2Years, Boolean achievedPromotionQuota) {
 		switch (getEducationalLevel()) {
 		case UNIVERSITY_EDUCATION_LEVEL:
 			switch (rank) {
@@ -847,10 +871,8 @@ public class RankInfo extends BaseIDModel {
 	 * 
 	 */
 	public void resetRankInfo() {
-		setRank(RankType.RANK_ST);
-		setLastRankDate(new Date());
-		setSalaryGrade(0);
-		setLastSalaryGradeDate(new Date());
+		setRank(RankType.RANK_ST, new Date());
+		setSalaryGrade(0, new Date());
 		setEducationalLevel(null);
 		setSurplusTimeInRank(0);
 		setSurplusTimeInSalaryGrade(0);
@@ -860,18 +882,15 @@ public class RankInfo extends BaseIDModel {
 	 * Reset Rank (Βαθμός) to ΣΤ along with the Salary Grade to 0
 	 */
 	public void resetRank() {
-		setRank(RankType.RANK_ST);
-		setLastRankDate(new Date());
-		setSalaryGrade(0);
-		setLastSalaryGradeDate(new Date());
-
+		setRank(RankType.RANK_ST, new Date());
+		setSalaryGrade(0, new Date());
 	}
 
 	/**
 	 * Reset Salary Grade (Μισθολογικό Κλιμάκιο) to 0
 	 */
 	public void resetSalaryGrade() {
-		setSalaryGrade(0);
+		setSalaryGrade(0, new Date());
 	}
 
 	/**
@@ -897,6 +916,26 @@ public class RankInfo extends BaseIDModel {
 	public void setRank(RankType rank) {
 		this.rank = rank;
 	}
+	
+	/**
+	 * @param rank
+	 *            the rank to set
+	 * @param rankDateChange
+	 *            the rankDateChange to set
+	 */
+	public void setRank(RankType rank, Date rankDateChange) {
+		setRank(rank);
+		
+		Calendar rankDateChangeCal = new GregorianCalendar();
+		rankDateChangeCal.setTime(rankDateChange);
+		if(rankDateChangeCal.get(Calendar.DAY_OF_MONTH) == 31) {
+			rankDateChangeCal.set(Calendar.DAY_OF_MONTH,  30);
+			rankDateChange = rankDateChangeCal.getTime();
+		}
+		
+		this.lastRankDate = rankDateChange;
+	}
+	
 
 	/**
 	 * @return the salaryGrade
@@ -911,6 +950,38 @@ public class RankInfo extends BaseIDModel {
 	 */
 	public void setSalaryGrade(int salaryGrade) {
 		this.salaryGrade = salaryGrade;
+	}
+	
+	/**
+	 * @param salaryGrade
+	 *            the salaryGrade to set
+	 * @param salaryGradeDateChange
+	 *            the salaryGradeDateChange to set
+	 */
+	public void setSalaryGrade(int salaryGrade, Date salaryGradeDateChange) {
+		setSalaryGrade(salaryGrade);
+		
+		Calendar salaryGradeDateChangeCal = new GregorianCalendar();
+		salaryGradeDateChangeCal.setTime(salaryGradeDateChange);
+		if(salaryGradeDateChangeCal.get(Calendar.DAY_OF_MONTH) == 31) {
+			salaryGradeDateChangeCal.set(Calendar.DAY_OF_MONTH,  30);
+			salaryGradeDateChange = salaryGradeDateChangeCal.getTime();
+		}
+		
+		this.lastSalaryGradeDate = salaryGradeDateChange;
+	}
+	
+	/**
+	 * @param salaryGrade
+	 *            the salaryGrade to set
+	 * @param salaryGradeDateChange
+	 *            the salaryGradeDateChange to set
+	 * @param newSurplusTimeInSalaryGrade
+	 *            the newSurplusTimeInSalaryGrade to set
+	 */
+	public void setSalaryGrade(int salaryGrade, Date salaryGradeDateChange, Integer newSurplusTimeInSalaryGrade) {
+		setSalaryGrade(salaryGrade, salaryGradeDateChange);
+		this.surplusTimeInSalaryGrade = newSurplusTimeInSalaryGrade; 
 	}
 
 	/**
@@ -980,23 +1051,25 @@ public class RankInfo extends BaseIDModel {
 		return surplusTimeInRank;
 	}
 
-	
 	/**
-	 * @return Τον πλεονάζοντα χρόνο στο Βαθμό Από τότε που πήρε το Βαθμό έως και σήμερα. 
-	 * Αν υπήρχε ήδη πλεονάζοντας χρόνος στον Βαθμό κατά την απονομή του τελευταίου τότε 
-	 * αυτός αθροίζεται στο διάστημα ημερών (έτος 360 ημερών) από τότε έως σήμερα.  
+	 * @return Τον πλεονάζοντα χρόνο στο Βαθμό Από τότε που πήρε το Βαθμό έως
+	 *         και σήμερα. Αν υπήρχε ήδη πλεονάζοντας χρόνος στον Βαθμό κατά την
+	 *         απονομή του τελευταίου τότε αυτός αθροίζεται στο διάστημα ημερών
+	 *         (έτος 360 ημερών) από τότε έως σήμερα.
 	 */
 	public Integer getSurplusTimeInRankUntilToday() {
-		return CoreUtils.datesDifferenceIn360DaysYear(getLastRankDate(), new Date())+ surplusTimeInRank;
+		return CoreUtils.datesDifferenceIn360DaysYear(getLastRankDate(),
+				new Date()) + surplusTimeInRank;
 	}
-	
+
 	/**
 	 * @return the surplusTimeInRankUntilToday in Year_Month_Day formated string
 	 */
 	public String getSurplusTimeInRankUntilTodayYear_Month_Day() {
-		return CoreUtils.getNoOfDaysInYear_Month_DayFormat(getSurplusTimeInRankUntilToday());
+		return CoreUtils
+				.getNoOfDaysInYear_Month_DayFormat(getSurplusTimeInRankUntilToday());
 	}
-	
+
 	/**
 	 * @return the surplusTimeInRank in Year_Month_Day formated string
 	 */
@@ -1018,28 +1091,33 @@ public class RankInfo extends BaseIDModel {
 	public Integer getSurplusTimeInSalaryGrade() {
 		return surplusTimeInSalaryGrade;
 	}
-	
+
 	/**
-	 * @return Τον πλεονάζοντα χρόνο στο Μ.Κ. Από τότε που πήρε το Μ.Κ. έως και σήμερα. 
-	 * Αν υπήρχε ήδη πλεονάζοντας χρόνος στο Μ.Κ. κατά την απονομή του τελευταίου τότε 
-	 * αυτός αθροίζεται στο διάστημα ημερών (έτος 360 ημερών) από τότε έως σήμερα.  
+	 * @return Τον πλεονάζοντα χρόνο στο Μ.Κ. Από τότε που πήρε το Μ.Κ. έως και
+	 *         σήμερα. Αν υπήρχε ήδη πλεονάζοντας χρόνος στο Μ.Κ. κατά την
+	 *         απονομή του τελευταίου τότε αυτός αθροίζεται στο διάστημα ημερών
+	 *         (έτος 360 ημερών) από τότε έως σήμερα.
 	 */
 	public Integer getSurplusTimeInSalaryGradeUntilToday() {
-		return CoreUtils.datesDifferenceIn360DaysYear(getLastSalaryGradeDate(), new Date())+ surplusTimeInSalaryGrade;
+		return CoreUtils.datesDifferenceIn360DaysYear(getLastSalaryGradeDate(),
+				new Date()) + surplusTimeInSalaryGrade;
 	}
-	
+
 	/**
-	 * @return the surplusTimeInSalaryGradeUntilToday in Year_Month_Day formated string
+	 * @return the surplusTimeInSalaryGradeUntilToday in Year_Month_Day formated
+	 *         string
 	 */
 	public String getSurplusTimeInSalaryGradeUntilTodayYear_Month_Day() {
-		return CoreUtils.getNoOfDaysInYear_Month_DayFormat(getSurplusTimeInSalaryGradeUntilToday());
+		return CoreUtils
+				.getNoOfDaysInYear_Month_DayFormat(getSurplusTimeInSalaryGradeUntilToday());
 	}
 
 	/**
 	 * @return the surplusTimeInSalaryGrade in Year_Month_Day formated string
 	 */
 	public String getSurplusTimeInSalaryGradeYear_Month_Day() {
-		return CoreUtils.getNoOfDaysInYear_Month_DayFormat(surplusTimeInSalaryGrade);
+		return CoreUtils
+				.getNoOfDaysInYear_Month_DayFormat(surplusTimeInSalaryGrade);
 	}
 
 	/**
@@ -1048,6 +1126,20 @@ public class RankInfo extends BaseIDModel {
 	 */
 	public void setSurplusTimeInSalaryGrade(Integer surplusTimeInSalaryGrade) {
 		this.surplusTimeInSalaryGrade = surplusTimeInSalaryGrade;
+	}
+	
+	/**
+	 * @return the previousRankInfo
+	 */
+	public RankInfo getPreviousRankInfo() {
+		return previousRankInfo;
+	}
+
+	/**
+	 * @param previousRankInfo the previousRankInfo to set
+	 */
+	public void setPreviousRankInfo(RankInfo previousRankInfo) {
+		this.previousRankInfo = previousRankInfo;
 	}
 
 	/**
@@ -1078,12 +1170,10 @@ public class RankInfo extends BaseIDModel {
 	 * @param isANatSchPubAdminGraduate
 	 *            True if the employee is a National School of Public
 	 *            Administration (Α.Σ.Δ.Δ.) graduate
-	 * @return Returnw the employee's Rank info (rank & salary grade) after the
+	 * @return Returns the employee's Rank info (rank & salary grade) after the
 	 *         classification in grade.
 	 */
-	public RankInfo Katataxi(Integer Proyphresia,
-			EducationalLevelType educationalLevel, Boolean hasAMasterDegree,
-			Boolean hasAPhD, Boolean isANatSchPubAdminGraduate) {
+	public RankInfo Katataxi(Integer Proyphresia, EducationalLevelType educationalLevel, Boolean hasAMasterDegree, Boolean hasAPhD, Boolean isANatSchPubAdminGraduate) {
 		setEducationalLevel(educationalLevel);
 
 		if (hasAMasterDegree && (!hasAPhD && !isANatSchPubAdminGraduate)) // Αν
@@ -1350,6 +1440,7 @@ public class RankInfo extends BaseIDModel {
 		return this;
 	}
 
+
 	/**
 	 * Η ρουτίνα επιστρέφει τον Πλεονάζοντα Χρόνο στο Βαθμό (Α, Β, Γ, Δ, Ε, ΣΤ)
 	 * (σε αριθμό ημερών) κάποιου υπαλλήλου κατά την επανακατάταξή του την
@@ -1375,10 +1466,7 @@ public class RankInfo extends BaseIDModel {
 	 * @return Returns the employee's surplus time in his rank after his
 	 *         classification on 1/11/2011
 	 */
-	public Integer SurplusTimeInRankAfterClassification(
-			Integer SynolYphrGiaKatatx, EducationalLevelType educationalLevel,
-			Boolean hasAMasterDegree, Boolean hasAPhD,
-			Boolean isANatSchPubAdminGraduate) {
+	public Integer SurplusTimeInRankAfterClassification(Integer SynolYphrGiaKatatx, EducationalLevelType educationalLevel, Boolean hasAMasterDegree, Boolean hasAPhD, Boolean isANatSchPubAdminGraduate) {
 		RankInfo rankInfo = Katataxi(SynolYphrGiaKatatx, educationalLevel,
 				hasAMasterDegree, hasAPhD, isANatSchPubAdminGraduate);
 
@@ -1476,10 +1564,7 @@ public class RankInfo extends BaseIDModel {
 	 * @return Returns the employee's surplus time in his salary grade after his
 	 *         classification on 1/11/2011
 	 */
-	public Integer SurplusTimeInSalaryGradeAfterClassification(
-			Integer synolYphrGiaKatatx, EducationalLevelType educationalLevel,
-			Boolean hasAMasterDegree, Boolean hasAPhD,
-			Boolean isANatSchPubAdminGraduate) {
+	public Integer SurplusTimeInSalaryGradeAfterClassification(Integer synolYphrGiaKatatx, EducationalLevelType educationalLevel, Boolean hasAMasterDegree, Boolean hasAPhD, Boolean isANatSchPubAdminGraduate) {
 
 		switch (educationalLevel) {
 		case UNIVERSITY_EDUCATION_LEVEL:
@@ -1680,10 +1765,17 @@ public class RankInfo extends BaseIDModel {
 	}
 
 
+	public String prettyToString() {
+		StringBuilder builder = new StringBuilder();
+		if (rank != null) {
+			builder.append(rank.getKey());
+			builder.append("(");
+			builder.append(salaryGrade);
+			builder.append(") ");
+		}
+		return builder.toString();
+	}
 
-	// public String toString() {
-	// return "Βαθμός(Μ.Κ.): "+rank+"("+salaryGrade+")";
-	// }
 
 	/**
 	 * @see java.lang.Object#toString()
@@ -1691,7 +1783,22 @@ public class RankInfo extends BaseIDModel {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("RankInfo [");
+		builder.append("\nRankInfo [");
+		
+		
+		if (rank != null) {
+			builder.append(rank.getKey());
+			builder.append("(");
+			builder.append(salaryGrade);
+			builder.append(") ");
+		}
+		
+		if (getId() != null) {
+			builder.append("ID=");
+			builder.append(getId());
+			builder.append(", ");
+		}
+		
 		if (employeeInfo != null) {
 			builder.append("employee=");
 			builder.append(employeeInfo.getEmployee());

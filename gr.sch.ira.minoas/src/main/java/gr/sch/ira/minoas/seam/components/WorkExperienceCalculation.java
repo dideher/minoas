@@ -6,11 +6,16 @@ import gr.sch.ira.minoas.model.employee.EmployeeInfo;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
 import gr.sch.ira.minoas.model.employee.Penalty;
 import gr.sch.ira.minoas.model.employee.RegularEmployeeInfo;
+import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 import gr.sch.ira.minoas.model.employement.Employment;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.jboss.seam.ScopeType;
@@ -52,8 +57,25 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
          * Συνολικός αριθμός ημερών με ποινές
          */
         Integer totalPenaltyDays;
-
+        
         /**
+         * Συνολικός αριθμός ημερών σε άδεια ανεύ αποδοχών
+         */
+        Integer totalUnpaidDays;
+
+        public Integer getTotalUnpaidDays() {
+			return totalUnpaidDays;
+		}
+
+
+
+		public void setTotalUnpaidDays(Integer totalUnpaidDays) {
+			this.totalUnpaidDays = totalUnpaidDays;
+		}
+
+
+
+		/**
 		 * @return the totalServiceInDays
 		 */
 		public Integer getTotalServiceInDays() {
@@ -265,6 +287,105 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
             return null;
     }
     
+    public Integer calculateEmployeeUnPaidDays(Employee employee, Date dateFrom, Date dateTo) {
+    	List<String> legacyCodes = Arrays.asList("32", "33", "34", "44");
+        
+//        Calendar cal = Calendar.getInstance();
+//        cal.set(Calendar.DAY_OF_MONTH, 01);
+//        cal.set(Calendar.MONTH, Calendar.NOVEMBER);
+//        cal.set(Calendar.YEAR, 2011);
+//        
+//        dateFrom = DateUtils.truncate(cal.getTime(), Calendar.DAY_OF_MONTH);
+        
+        Collection<EmployeeLeave> leaves = coreSearching.getEmployeeLeaves2(employee, dateFrom, dateTo);
+        int daysToTrim = 0;
+        
+        /* Interate over the employee's leaves (of the given type) and construct a hash with key the leave's year and value
+         * the sum of leave days (360 per year) during this year. Take extra care for leaves spanning across several years. 
+         */
+        Map<Integer, Integer> daysOfLeavePerYearHash = new HashMap<Integer, Integer>();
+        for(EmployeeLeave leave : leaves) {
+        	String legacyCode = leave.getEmployeeLeaveType().getLegacyCode();
+        	if(legacyCodes.contains(legacyCode)) {
+//        		System.err.println(leave);
+        		if(leave.getEstablished().before(dateFrom)) {
+        			daysToTrim += CoreUtils.datesDifferenceIn360DaysYear(leave.getEstablished(), dateFrom);
+        			//System.err.println(daysToTrim);
+        		}
+        		
+        		if(leave.getDueTo().after(dateTo)) {
+        			daysToTrim += CoreUtils.datesDifferenceIn360DaysYear(dateTo, leave.getDueTo());
+        			//System.err.println(daysToTrim);
+        		}
+        		
+        		Calendar leaveStart = Calendar.getInstance();
+        		leaveStart.setTime(leave.getEstablished());
+        		Calendar leaveStop = Calendar.getInstance();
+        		leaveStop.setTime(leave.getDueTo());
+        		int leaveYearStart = leaveStart.get(Calendar.YEAR);
+        		int leaveYearStop = leaveStop.get(Calendar.YEAR);
+        		if(leaveYearStart != leaveYearStop) {
+        			/* leave spans across years */
+        			for(int yearIndex = leaveYearStart ; yearIndex <= leaveYearStop ; yearIndex++) {
+        				Calendar tempLeaveStart = Calendar.getInstance();
+        				Calendar tempLeaveStop = Calendar.getInstance();
+        				if(leaveYearStart==yearIndex) {
+        					/* this is the section of the leave within the start year */
+        					tempLeaveStart.setTime(leave.getEstablished());
+        					tempLeaveStop.set(Calendar.DAY_OF_MONTH, 31);
+        					tempLeaveStop.set(Calendar.MONTH, Calendar.DECEMBER);
+        					tempLeaveStop.set(Calendar.YEAR, yearIndex);
+        					
+        				} else if(leaveYearStop==yearIndex) {
+        					/* this is the section of the leave during the stop year */
+        					tempLeaveStart.set(Calendar.DAY_OF_MONTH, 1);
+        					tempLeaveStart.set(Calendar.MONTH, Calendar.JANUARY);
+        					tempLeaveStart.set(Calendar.YEAR, yearIndex);
+        					tempLeaveStop.setTime(leave.getDueTo());
+        				} else {
+        					/* this is the section of the leave not during the start or end year */
+        					tempLeaveStart.set(Calendar.DAY_OF_MONTH, 1);
+        					tempLeaveStart.set(Calendar.MONTH, Calendar.JANUARY);
+        					tempLeaveStart.set(Calendar.YEAR, yearIndex);
+        					tempLeaveStop.set(Calendar.DAY_OF_MONTH, 31);
+        					tempLeaveStop.set(Calendar.MONTH, Calendar.DECEMBER);
+        					tempLeaveStop.set(Calendar.YEAR, yearIndex);
+        				}
+        				
+        				int duration = CoreUtils.datesDifferenceIn360DaysYear(tempLeaveStart.getTime(), tempLeaveStop.getTime(), true);
+            			Integer currentYearDuration = daysOfLeavePerYearHash.get(yearIndex);
+            			if(currentYearDuration == null) {
+            				daysOfLeavePerYearHash.put(yearIndex, duration);
+            			} else {
+            				daysOfLeavePerYearHash.put(yearIndex, currentYearDuration+duration);
+            			}
+        				
+        			}
+        			
+        		} else {
+        			/* leave does not span across years */
+        			int duration = CoreUtils.datesDifferenceIn360DaysYear(leaveStart.getTime(), leaveStop.getTime(), true);
+        			Integer currentYearDuration = daysOfLeavePerYearHash.get(leaveYearStart);
+        			if(currentYearDuration == null) {
+        				daysOfLeavePerYearHash.put(leaveYearStart, duration);
+        			} else {
+        				daysOfLeavePerYearHash.put(leaveYearStart, currentYearDuration+duration);
+        			}
+        		}
+        	}
+        }
+        //System.err.println(daysOfLeavePerYearHash);
+        /* at this point we have a Map with duration in days for each year. We will iterate over the years and deduct 30 days for each year */
+        int totalDaysWithoutPayment = 0; // ημέρες άδειας χωρίς αποδοχές
+        for(Integer year : daysOfLeavePerYearHash.keySet()) {
+        	Integer duration = daysOfLeavePerYearHash.get(year);
+        	totalDaysWithoutPayment+= duration > 30 ? duration - 30 : 0;
+        }
+//        System.err.println(daysOfLeavePerYearHash);
+//        System.err.println(totalDaysWithoutPayment);
+        return totalDaysWithoutPayment-daysToTrim;
+    }
+    
     /**
      * Calculates an employee's regular service
      * @param employee
@@ -276,22 +397,28 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
     public EmployeeServiceHelper calculateRegularEmployeeService(Employee employee, Date dateFrom, Date dateTo) {
         
         /* determine employee's total service */
-        int totalServiceRaw = CoreUtils.datesDifferenceIn360DaysYear(dateFrom, dateTo);
+        int totalServiceRaw = CoreUtils.datesDifferenceIn360DaysYear(dateFrom, dateTo, true);
         
         /* handle employee penalties */
         Collection<Penalty> penalties = coreSearching.getPenaltyHistory(employee);
         int totalPenaltyDays = 0;
         for(Penalty p : penalties) {
-            totalPenaltyDays+=CoreUtils.datesDifferenceIn360DaysYear(p.getPenaltyStartDate(), p.getPenaltyEndDate());
+            totalPenaltyDays+=CoreUtils.datesDifferenceIn360DaysYear(p.getPenaltyStartDate(), p.getPenaltyEndDate(), true);
         }
         
+        /* gh-75 - handle employee leaves */
+        int totalDaysWithoutPayment = calculateEmployeeUnPaidDays(employee, dateFrom, dateTo);
+        /* gh-75 - handle employee leaves */
+        
+        
         /* prepare the return value */
-        int totalServiceInDays = totalServiceRaw - totalPenaltyDays;
+        int totalServiceInDays = totalServiceRaw - (totalPenaltyDays + totalDaysWithoutPayment);
         
         EmployeeServiceHelper returnValue = new EmployeeServiceHelper();
         returnValue.setTotalServiceInDays(totalServiceInDays);
         returnValue.setTotalServiceInDaysRaw(totalServiceRaw);
         returnValue.setTotalPenaltyDays(totalPenaltyDays);
+        returnValue.setTotalUnpaidDays(totalDaysWithoutPayment);
         return returnValue;
     }
     
@@ -308,7 +435,8 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
         	employeeInfo.setSumOfTeachingExperience(exp.getTeachingTotal());
         	employeeInfo.setSumOfExperience(exp.getTotal());
         	employeeInfo.setTotalWorkService(serviceHelper.getTotalServiceInDays());
-        
+        	employeeInfo.setSumOfDaysDuringUnpaidLeaves(serviceHelper.getTotalUnpaidDays());
+        	
         	/* handle working hours */
         	Employment currentEmployment = employee.getCurrentEmployment();
         	if(currentEmployment !=null) {
