@@ -42,7 +42,7 @@ public class SchedulerController extends BaseDatabaseAwareSeamComponent {
     
     private static final long ACTIVATION_TASK_INTERVAL = 1200000;
     
-    private static final long RANK_INFO_SYNC_INTERVAL = 1440000;
+    private static final long RANK_INFO_SYNC_INTERVAL = 86400000;
     
     
     

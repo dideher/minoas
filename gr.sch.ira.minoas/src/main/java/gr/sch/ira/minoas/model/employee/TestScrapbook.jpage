@@ -5,7 +5,8 @@ rankInfo.RecalculateRankInfo(2002);
 System.out.println(rankInfo);
 
 
-int noOfDays = -122;java.text.DateFormat df = java.text.SimpleDateFormat.getDateInstance(java.text.SimpleDateFormat.SHORT);java.util.Calendar processedDate = new java.util.GregorianCalendar();
+gr.sch.ira.minoas.seam.components.RankInfoCalculation rankInfoCalculation = new gr.sch.ira.minoas.seam.components.RankInfoCalculation();
+rankInfoCalculation.recalculateRankInfos();int noOfDays = -122;java.text.DateFormat df = java.text.SimpleDateFormat.getDateInstance(java.text.SimpleDateFormat.SHORT);java.util.Calendar processedDate = new java.util.GregorianCalendar();
 //processedDate.set(2065, 4, 19);
 java.util.Calendar today = new java.util.GregorianCalendar();
 //today.set(2065, 4, 19);
