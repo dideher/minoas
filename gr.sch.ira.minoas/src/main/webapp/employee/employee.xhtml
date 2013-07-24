@@ -772,7 +772,7 @@
 
 
 							<rich:tab
-								rendered="#{employeeServiceAllocationsListQuery.resultCount gt 0}">
+								rendered="#{employeeServiceAllocations.size() gt 0}">
 								<f:facet name="label">
 									<h:outputText value="Ιστορικό Θητείων" />
 								</f:facet>
@@ -781,7 +781,7 @@
 										value="Στον παρακάτω πίνακα εμφανίζεται το ιστορικό όλων των αποσπάσεων του εκπαιδευτικού. Μπορείτε να τροποποιήσεται, αν θέλετε, την ενεργή κατά το τρέχων σχολικό έτος απόσπαση." />
 
 									<rich:dataTable id="employeeSecondmentsList"
-										value="#{employeeServiceAllocationsListQuery.resultList}"
+										value="#{employeeServiceAllocations}"
 										var="_serviceAllocation" rows="10" border="0"
 										onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
 										onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
