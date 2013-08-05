@@ -174,6 +174,7 @@ public class SecurityStartup extends BaseDatabaseAwareSeamComponent {
 		createRole("INSERT_RANK_INFO", "Insert new RankInfo for an Employee", admin);
 		createRole("MODIFY_RANK_INFO", "Modify a RankInfo for an Employee", admin);
 		createRole("DELETE_RANK_INFO", "Delete a RankInfo from an Employee", admin);
+		createRole("SEARCH_RANK_INFO", "Search for RankInfos.", admin);
 		
 		/* Part-time Employment - Διαχείριση Μειωμένων Ωραρίων */
 		createRole("MODIFY_PART_TIME_EMPLOYMENT", "Modify a Part-time Employment", admin);
