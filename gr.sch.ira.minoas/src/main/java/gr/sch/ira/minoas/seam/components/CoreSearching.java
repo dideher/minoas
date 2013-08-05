@@ -1300,8 +1300,17 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
 
     @SuppressWarnings("unchecked")
     public Collection<Specialization> getSpecializations(EntityManager em) {
-        return (Collection<Specialization>) em.createQuery("SELECT s FROM Specialization s ORDER BY s.id ASC")
+        return getSpecializations(em, false);
+    }
+    
+    @SuppressWarnings("unchecked")
+    public Collection<Specialization> getSpecializations(EntityManager em, Boolean includeDisabled) {
+    	if(includeDisabled)
+    		return (Collection<Specialization>) em.createQuery("SELECT s FROM Specialization s ORDER BY s.id ASC")
                 .getResultList();
+    	else
+    		return (Collection<Specialization>) em.createQuery("SELECT s FROM Specialization s WHERE (s.disabled IS FALSE OR s.disabled IS NULL) ORDER BY s.id ASC")
+                    .getResultList();
     }
 
     @Factory(value = "specializationSearchTypes")
