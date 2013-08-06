@@ -28,7 +28,7 @@ public class SpecializationGroupSuggester extends BaseSuggester {
 	public Collection<Specialization> suggest(Object specialization_search_pattern) {
 		return getEntityManager()
 				.createQuery(
-						"SELECT s from Specialization s WHERE lower(s.id) LIKE LOWER(:search_pattern) OR LOWER(s.title) LIKE LOWER(:search_pattern)")
+						"SELECT s from Specialization s WHERE (s.disabled IS FALSE OR s.disabled IS NULL) AND lower(s.id) LIKE LOWER(:search_pattern) OR LOWER(s.title) LIKE LOWER(:search_pattern)")
 				.setParameter("search_pattern",
 						CoreUtils.getSearchPattern(String.valueOf(specialization_search_pattern))).getResultList();
 	}

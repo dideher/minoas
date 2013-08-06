@@ -33,6 +33,11 @@ public class Specialization extends BaseModel {
 	@Column(name = "TITLE", nullable = false, length = 70)
 	private String title;
 	
+	/**
+	 * A flag to denote if this specialization has been disabled.
+	 */
+	private Boolean disabled = Boolean.FALSE;
+	
 	
 	/**
 	 * The public specialization ID that should be used when printing reports, etc.
@@ -142,6 +147,14 @@ public class Specialization extends BaseModel {
     public void setPublicTitle(String publicTitle) {
         this.publicTitle = publicTitle;
     }
+
+	public Boolean getDisabled() {
+		return disabled;
+	}
+
+	public void setDisabled(Boolean disabled) {
+		this.disabled = disabled;
+	}
     
     
 

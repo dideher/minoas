@@ -292,7 +292,7 @@
 						</s:link>
 					</rich:menuItem>
 					
-					<rich:menuItem submitMode="none" rendered="#{(s:hasRole('ADMIN'))}">
+					<rich:menuItem submitMode="none" rendered="#{(s:hasRole('ADMIN') or s:hasRole('SEARCH_RANK_INFO'))}">
 						<s:link value="Αναζήτηση Βαθμών/ΜΚ" view="/admin/rankInfo-report.xhtml">
 							<f:param name="rankInfo_report_from" value="home" />
 						</s:link>
