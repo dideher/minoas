@@ -71,21 +71,29 @@
 
 						</rich:panel>
 
-						<rich:toolBar itemSeparator="line">
+						<s:div styleClass="actionBox">
+
+						
 							<a4j:commandButton id="searchButton" value="Αναζήτηση"
+								styleClass="btn btn-primary"
 								reRender="outstandingImprovementsTable"
 								action="#{outstandingImprovementsReport.generateReport}">
 								<s:defaultAction />
 							</a4j:commandButton>
 
-							<a4j:commandButton rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_IMPROVEMENTS'))}"
+							<a4j:commandButton
+								styleClass="btn btn-success"
+								rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_IMPROVEMENTS'))}"
 								action="#{outstandingImprovementHome.clearInstance}"
 								reRender="createModalPanelContent" immediate="true"
 								oncomplete="#{rich:component('createModalPanel')}.show()"
 								value="Καταχώρηση Νέας Βελτίωσεις" />
 							<s:button id="backButton" action="backButton"
+								styleClass="btn btn-inverse"
 								value="Τέλος Εργασίας" />
-						</rich:toolBar>
+						
+						
+						</s:div>
 
 						<rich:panel>
 							<f:facet name="header">
@@ -143,7 +151,8 @@
 								<rich:column style="text-align:center">
 									<f:facet name="header">Ενέργεια.</f:facet>
 									<rich:toolBar itemSeparator="line">
-										<a4j:commandLink id="cancellink" ajaxSingle="true" rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_IMPROVEMENTS'))}"
+										<a4j:commandLink id="cancellink" ajaxSingle="true"
+											rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_IMPROVEMENTS'))}"
 											reRender="outstandingImprovementsTable"
 											action="#{outstandingImprovementHome.remove}"
 											onclick="if(!confirm('Να διαγραφεί η μελλοντική βελτίωση του εκπαιδευτικού ?')) {form.reset(); return false;}"
@@ -155,7 +164,8 @@
 												target="#{outstandingImprovementHome.id}" />
 										</a4j:commandLink>
 
-										<a4j:commandLink id="updatelink" rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_IMPROVEMENTS'))}"
+										<a4j:commandLink id="updatelink"
+											rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_IMPROVEMENTS'))}"
 											reRender="updateModalPanelContent"
 											oncomplete="#{rich:component('updateModalPanel')}.show()"
 											value="Τροποποίηση">
@@ -168,7 +178,8 @@
 									</rich:toolBar>
 								</rich:column>
 								<f:facet name="footer">
-									<rich:datascroller for="outstandingImprovementsTable" maxPages="40"/>
+									<rich:datascroller for="outstandingImprovementsTable"
+										maxPages="40" />
 								</f:facet>
 
 							</rich:dataTable>
@@ -182,8 +193,7 @@
 
 		<rich:modalPanel id="createModalPanel" autosized="true" width="450">
 			<f:facet name="header">
-				<h:outputText
-					value="Καταχώρηση Nεας Βελτίωσεις Εκπαιδευτικού "
+				<h:outputText value="Καταχώρηση Nεας Βελτίωσεις Εκπαιδευτικού "
 					style="padding-right:15px;" />
 			</f:facet>
 			<f:facet name="controls">
@@ -196,15 +206,22 @@
 			</f:facet>
 			<a4j:region>
 				<h:panelGrid columns="4">
-					<rich:messages style="color:red;"></rich:messages>
+
+
+
 					<h:form>
 						<a4j:outputPanel id="createModalPanelContent" layout="inline">
 							<a4j:region>
-								<h:outputText
-									value="Συμπληρώστε τα στοιχεία της παρακάτω φόρμας για να εισάγεται την μελλοντική βελτίωση του εκπαιδευτικό." />
 
+
+
+								<ui:include src="/components/messages-component.xhtml" />
+								<s:div>
+									<h:outputText
+										value="Συμπληρώστε τα στοιχεία της παρακάτω φόρμας για να εισάγεται την μελλοντική βελτίωση του εκπαιδευτικό." />
+								</s:div>
 								<h:panelGrid columns="2">
-									<s:decorate template="/layout/doubleLineEdit.xhtml"
+									<s:decorate template="/layout/newDoubleLineEdit.xhtml"
 										id="employeeSectionID">
 										<ui:define name="label">
 											<h:outputText value="Μόνιμος Εκπαιδευτικός : " />
@@ -241,7 +258,8 @@
 													<h:outputText
 														value="#{a_employee.currentEmployment.school.title}" />
 												</rich:column>
-												<a4j:support ajaxSingle="true" event="onselect" bypassUpdates="true"
+												<a4j:support ajaxSingle="true" event="onselect"
+													bypassUpdates="true"
 													reRender="improvementFrom,employeeSectionID,employeeSection"
 													action="#{outstandingImprovementHome.updateValueDueToEmployee()}">
 													<f:setPropertyActionListener value="#{a_employee}"
@@ -252,18 +270,18 @@
 										</h:inputText>
 									</s:decorate>
 
-									<s:decorate template="/layout/doubleLineEdit.xhtml"
+									<s:decorate template="/layout/newDoubleLineEdit.xhtml"
 										id="employeeSection">
 										<ui:define name="label">
 											<h:outputText value="Εκπαιδευτικός : " />
 										</ui:define>
 										<h:inputText styleClass="fieldValueText" readonly="true"
-											size="40"
+											required="true" immediate="true" size="40"
 											value="#{employeeUtil.prettyFormat(outstandingImprovementHome.instance.employee)}">
 										</h:inputText>
 									</s:decorate>
 
-									<s:decorate template="/layout/doubleLineEdit.xhtml"
+									<s:decorate template="/layout/newDoubleLineEdit.xhtml"
 										id="improvementFrom">
 										<ui:define name="label">
 											<h:outputText value="Βελτίωση Απο : " />
@@ -275,7 +293,7 @@
 									</s:decorate>
 
 									<s:decorate id="improvementTo"
-										template="/layout/doubleLineEdit.xhtml">
+										template="/layout/newDoubleLineEdit.xhtml">
 										<ui:define name="label">
 											<h:outputText value="Βελτίωση Σε" />
 										</ui:define>
@@ -305,18 +323,23 @@
 							</a4j:region>
 						</a4j:outputPanel>
 
-						<h:panelGrid columns="2">
+						<s:div styleClass="actionBox">
+							<h:panelGrid columns="2">
 
-							<a4j:commandButton value="Καταχώρηση Βελτίωσης !"
-								action="#{outstandingImprovementManagement.createNewImprovement}"
-								data="#{facesContext.maximumSeverity.ordinal ge 2}" reRender="outstandingImprovementsTable"
-								oncomplete="if(data == false) Richfaces.hideModalPanel('createModalPanel');">
-							</a4j:commandButton>
+								<a4j:commandButton value="Καταχώρηση Βελτίωσης !"
+									styleClass="btn btn-small btn-primary"
+									action="#{outstandingImprovementManagement.createNewImprovement}"
+									data="#{facesContext.maximumSeverity.ordinal ge 2}"
+									reRender="outstandingImprovementsTable,createModalPanelContent,employeeSection"
+									oncomplete="if(data == false) Richfaces.hideModalPanel('createModalPanel');">
+								</a4j:commandButton>
 
-							<a4j:commandButton value="Επιστροφή .."
-								action="#{outstandingImprovementHome.clearInstance()}"
-								onclick="#{rich:component('createModalPanel')}.hide();" />
-						</h:panelGrid>
+								<a4j:commandButton value="Επιστροφή .."
+									styleClass="btn btn-small btn-default"
+									action="#{outstandingImprovementHome.clearInstance()}"
+									onclick="#{rich:component('createModalPanel')}.hide();" />
+							</h:panelGrid>
+						</s:div>
 					</h:form>
 				</h:panelGrid>
 			</a4j:region>
@@ -348,7 +371,7 @@
 									value="Συμπληρώστε τα στοιχεία της παρακάτω φόρμας για να εισάγεται την μελλοντική βελτίωση του εκπαιδευτικό." />
 
 								<h:panelGrid columns="2">
-									<s:decorate template="/layout/doubleLineEdit.xhtml"
+									<s:decorate template="/layout/newDoubleLineEdit.xhtml"
 										id="employeeSectionID">
 										<ui:define name="label">
 											<h:outputText value="Μόνιμος Εκπαιδευτικός : " />
@@ -361,7 +384,7 @@
 										</h:inputText>
 									</s:decorate>
 
-									<s:decorate template="/layout/doubleLineEdit.xhtml"
+									<s:decorate template="/layout/newDoubleLineEdit.xhtml"
 										id="employeeSection">
 										<ui:define name="label">
 											<h:outputText value="Εκπαιδευτικός : " />
@@ -372,7 +395,7 @@
 										</h:inputText>
 									</s:decorate>
 
-									<s:decorate template="/layout/doubleLineEdit.xhtml"
+									<s:decorate template="/layout/newDoubleLineEdit.xhtml"
 										id="improvementFrom">
 										<ui:define name="label">
 											<h:outputText value="Βελτίωση Απο : " />
@@ -384,13 +407,14 @@
 									</s:decorate>
 
 									<s:decorate id="improvementTo"
-										template="/layout/doubleLineEdit.xhtml">
+										template="/layout/newDoubleLineEdit.xhtml">
 										<ui:define name="label">
 											<h:outputText value="Βελτίωση Σε" />
 										</ui:define>
 
 										<h:inputText id="schoolTarget" styleClass="fieldValueText"
-											required="true" size="20" value="#{outstandingImprovementHome.instance.targetSchool.title}">
+											required="true" size="20"
+											value="#{outstandingImprovementHome.instance.targetSchool.title}">
 
 											<rich:suggestionbox for="schoolTarget" var="leaveSourceUnit"
 												height="200" width="300"
@@ -416,18 +440,19 @@
 
 
 
-						<h:panelGrid columns="2">
-
-
-
-							<a4j:commandButton value="Ανανέωση Βελτίωσης !"
-								action="#{outstandingImprovementManagement.updateImprovement}"
-								data="#{facesContext.maximumSeverity.ordinal ge 2}"
-								oncomplete="if(data == false) Richfaces.hideModalPanel('updateModalPanel');" />
-							<a4j:commandButton value="Επιστροφή .."
-								action="#{outstandingImprovementHome.revert()}"
-								onclick="#{rich:component('updateModalPanel')}.hide();" />
-						</h:panelGrid>
+						<s:div styleClass="actionBox">
+							<h:panelGrid columns="2">
+								<a4j:commandButton value="Ανανέωση Βελτίωσης !"
+									styleClass="btn btn-small btn-primary"
+									action="#{outstandingImprovementManagement.updateImprovement}"
+									data="#{facesContext.maximumSeverity.ordinal ge 2}"
+									oncomplete="if(data == false) Richfaces.hideModalPanel('updateModalPanel');" />
+								<a4j:commandButton value="Επιστροφή .."
+									styleClass="btn btn-small btn-default"
+									action="#{outstandingImprovementHome.revert()}"
+									onclick="#{rich:component('updateModalPanel')}.hide();" />
+							</h:panelGrid>
+						</s:div>
 					</h:form>
 				</h:panelGrid>
 			</a4j:region>

@@ -62,11 +62,13 @@ public class OutstandingImprovementManagement extends BaseDatabaseAwareSeamCompo
 
 	protected boolean isOutstandingImprovementValid(OutstandingImprovement improvement) {
 		boolean result = true;
-		if (!(improvement.getSourceSchool().getRegionCode().equals(improvement.getTargetSchool().getRegionCode()))) {
-			result = false;
-			facesMessages.add(Severity.ERROR,
-					"Η σχολική μονάδα βελτίωσεις πρέπει να είναι στην ίδια περιοχή με την οργανική.");
-		}
+		/* gh-160 : https://github.com/dideher/minoas/issues/160 */
+//		if (!(improvement.getSourceSchool().getRegionCode().equals(improvement.getTargetSchool().getRegionCode()))) {
+//			result = false;
+//			facesMessages.add(Severity.ERROR,
+//					"Η σχολική μονάδα βελτίωσεις πρέπει να είναι στην ίδια περιοχή με την οργανική.");
+//		}
+		/* gh-160 : https://github.com/dideher/minoas/issues/160 */
 		return result;
 	}
 
