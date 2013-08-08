@@ -25,18 +25,17 @@ import org.jboss.seam.annotations.datamodel.DataModel;
 @Name("outstandingPermanentTransfersReport")
 @Scope(ScopeType.CONVERSATION)
 public class OutstandingPermanentTransfersReport extends BaseReport {
-    
-    /**
-     * Comment for <code>serialVersionUID</code>
-     */
-    private static final long serialVersionUID = 1L;
-    
+
+	/**
+	 * Comment for <code>serialVersionUID</code>
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@DataModel(value = "reportData")
 	private Collection<OutstandingPermanentTransferItem> reportData = null;
 
-	@In(required = true, create=true)
-	private  OutstandingPermanentTransferCriteria outstandingPermanentTransferCriteria;
+	@In(required = true, create = true)
+	private OutstandingPermanentTransferCriteria outstandingPermanentTransferCriteria;
 
 	/**
 	 * 
@@ -46,60 +45,72 @@ public class OutstandingPermanentTransfersReport extends BaseReport {
 
 	public void generateReport() throws Exception {
 
-		Unit sourceUnit = getOutstandingPermanentTransferCriteria().getSourceUnit();
-		Unit targetUnit = getOutstandingPermanentTransferCriteria().getTargetUnit();
-		PermanentTransferType transferType = getOutstandingPermanentTransferCriteria().getTransferType();
-		SpecializationGroup specializationGroup = getOutstandingPermanentTransferCriteria().getSpecializationGroup();
+		Unit sourceUnit = getOutstandingPermanentTransferCriteria()
+				.getSourceUnit();
+		Unit targetUnit = getOutstandingPermanentTransferCriteria()
+				.getTargetUnit();
+		PermanentTransferType transferType = getOutstandingPermanentTransferCriteria()
+				.getTransferType();
+		SpecializationGroup specializationGroup = getOutstandingPermanentTransferCriteria()
+				.getSpecializationGroup();
 
 		StringBuffer sb = new StringBuffer();
 		sb.append("SELECT i FROM PermanentTransfer i WHERE i.isProcessed IS FALSE ");
-		
+
 		if (specializationGroup != null) {
-			sb
-					.append(" AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g=:specializationGroup AND i.employee.lastSpecialization MEMBER OF g.specializations) ");
+			sb.append(" AND EXISTS (SELECT g FROM SpecializationGroup g WHERE g=:specializationGroup AND i.employee.lastSpecialization MEMBER OF g.specializations) ");
 		}
-		
-		if(sourceUnit!=null) {
+
+		if (sourceUnit != null) {
 			sb.append(" AND i.sourceUnit = :sourceUnit");
 		}
-		
-		if(targetUnit!=null) {
+
+		if (targetUnit != null) {
 			sb.append(" AND i.targetUnit = :targetUnit");
 		}
-		
-		if(transferType!=null) {
+
+		if (transferType != null) {
 			sb.append(" AND i.type = :transferType");
+			
+			/* according to the transfer type, set the ordering */
+			switch (transferType) {
+			case FROM_OTHER_PYSDE:
+				sb.append(" ORDER BY i.employeeSurname");
+				break;
+			case TO_OTHER_PYSDE:
+			case WITHIN_PYSDE:
+				sb.append(" ORDER BY i.employee.lastName");
+				break;
+			}
 		}
-		if(transferType == PermanentTransferType.FROM_OTHER_PYSDE) 
-			sb.append(" ORDER BY i.employeeSurname");
-		else
-			sb.append(" ORDER BY i.employee.lastName");
 
 		Query q = getEntityManager().createQuery(sb.toString());
 		if (specializationGroup != null) {
 			q.setParameter("specializationGroup", specializationGroup);
 		}
-		if(sourceUnit!=null) {
+		if (sourceUnit != null) {
 			q.setParameter("sourceUnit", sourceUnit);
 		}
-		
-		if(targetUnit!=null) {
+
+		if (targetUnit != null) {
 			q.setParameter("targetUnit", targetUnit);
 		}
-		
-		if(transferType!=null) {
+
+		if (transferType != null) {
 			q.setParameter("transferType", transferType);
 		}
 		@SuppressWarnings("unchecked")
 		Collection<PermanentTransfer> permanentTransfers = q.getResultList();
-		info("found totally #0 outstanding permanent transfer(s) matching criteria", permanentTransfers.size());
-		reportData = new ArrayList<OutstandingPermanentTransferItem>(permanentTransfers.size());
+		info("found totally #0 outstanding permanent transfer(s) matching criteria",
+				permanentTransfers.size());
+		reportData = new ArrayList<OutstandingPermanentTransferItem>(
+				permanentTransfers.size());
 		for (PermanentTransfer permanentTransfer : permanentTransfers) {
-			reportData.add(new OutstandingPermanentTransferItem(permanentTransfer));
+			reportData.add(new OutstandingPermanentTransferItem(
+					permanentTransfer));
 		}
 	}
 
-	
 	/**
 	 * @return the reportData
 	 */
@@ -108,9 +119,11 @@ public class OutstandingPermanentTransfersReport extends BaseReport {
 	}
 
 	/**
-	 * @param reportData the reportData to set
+	 * @param reportData
+	 *            the reportData to set
 	 */
-	public void setReportData(Collection<OutstandingPermanentTransferItem> reportData) {
+	public void setReportData(
+			Collection<OutstandingPermanentTransferItem> reportData) {
 		this.reportData = reportData;
 	}
 
@@ -122,13 +135,12 @@ public class OutstandingPermanentTransfersReport extends BaseReport {
 	}
 
 	/**
-	 * @param outstandingPermanentTransferCriteria the outstandingPermanentTransferCriteria to set
+	 * @param outstandingPermanentTransferCriteria
+	 *            the outstandingPermanentTransferCriteria to set
 	 */
 	public void setOutstandingPermanentTransferCriteria(
 			OutstandingPermanentTransferCriteria outstandingPermanentTransferCriteria) {
 		this.outstandingPermanentTransferCriteria = outstandingPermanentTransferCriteria;
 	}
-
-	
 
 }
