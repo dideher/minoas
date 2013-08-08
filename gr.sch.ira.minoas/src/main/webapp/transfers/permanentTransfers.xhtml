@@ -28,7 +28,7 @@
 							</f:facet>
 							<h:panelGrid columns="4">
 
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 									<ui:define name="label">
 										<h:outputText value="Ομάδα Ειδικοτήτων : " />
 									</ui:define>
@@ -53,7 +53,7 @@
 								</s:decorate>
 
 
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 									<ui:define name="label">
 										<h:outputText value="Τύπος Μετάθεσης" />
 									</ui:define>
@@ -69,7 +69,7 @@
 								</s:decorate>
 
 								<s:decorate id="transferFrom"
-									template="/layout/doubleLineEdit.xhtml">
+									template="/layout/newDoubleLineEdit.xhtml">
 									<ui:define name="label">
 										<h:outputText value="Μετάθεση Απο" />
 									</ui:define>
@@ -95,7 +95,7 @@
 								</s:decorate>
 
 								<s:decorate id="transferTo"
-									template="/layout/doubleLineEdit.xhtml">
+									template="/layout/newDoubleLineEdit.xhtml">
 									<ui:define name="label">
 										<h:outputText value="Μετάθεση Σε" />
 									</ui:define>
@@ -125,23 +125,28 @@
 							</h:panelGrid>
 
 						</rich:panel>
-
-						<rich:toolBar itemSeparator="line">
+						<s:div styleClass="actionBox">
+						
 							<a4j:commandButton id="searchButton" value="Αναζήτηση"
+								styleClass="btn btn-primary"
 								reRender="outstandingPermanentTransfersTable"
 								action="#{outstandingPermanentTransfersReport.generateReport}">
 								<s:defaultAction />
 							</a4j:commandButton>
 
 							<a4j:commandButton
+								styleClass="btn btn-success"
 								rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_PERMANENT_TRANSFERS'))}"
 								action="#{permanentTransferHome.clearInstance}"
 								reRender="createModalPanelContent" immediate="true"
 								oncomplete="#{rich:component('createModalPanel')}.show()"
 								value="Καταχώρηση Νέας Μετάθεσης" />
+								
 							<s:button id="backButton" action="backButton"
+								styleClass="btn btn-inverse"
 								value="Τέλος Εργασίας" />
-						</rich:toolBar>
+						
+						</s:div>
 
 						<rich:panel>
 							<f:facet name="header">
@@ -257,7 +262,9 @@
 			</f:facet>
 			<a4j:region>
 				<h:panelGrid columns="1">
-					<rich:messages style="color:red;"></rich:messages>
+					
+					<ui:include src="/components/messages-component.xhtml" />
+					
 					<h:form>
 						<a4j:region>
 							<a4j:outputPanel id="createModalPanelContent" layout="inline">
@@ -267,7 +274,7 @@
 
 								<h:panelGrid columns="1">
 
-									<s:decorate template="/layout/doubleLineEdit.xhtml">
+									<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 										<ui:define name="label">
 											<h:outputText value="Τύπος Μετάθεσης : " />
 										</ui:define>
@@ -291,10 +298,10 @@
 								<a4j:outputPanel id="existingEmployeeSection">
 									<s:div
 										rendered="#{permanentTransferHome.instance.type == 'FROM_OTHER_PYSDE'}">
-
+										<rich:separator lineType="dashed" height="1"/>
 
 										<h:panelGrid columns="3">
-											<s:decorate template="/layout/doubleLineEdit.xhtml">
+											<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 												<ui:define name="label">
 													<h:outputText value="AΜΑ Εκπαιδευτικού : " />
 												</ui:define>
@@ -304,7 +311,7 @@
 												</h:inputText>
 											</s:decorate>
 
-											<s:decorate template="/layout/doubleLineEdit.xhtml">
+											<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 												<ui:define name="label">
 													<h:outputText value="ΑΦΜ Εκπαιδευτικού : " />
 												</ui:define>
@@ -314,7 +321,7 @@
 												</h:inputText>
 											</s:decorate>
 
-											<s:decorate template="/layout/doubleLineEdit.xhtml">
+											<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 												<ui:define name="label">
 													<h:outputText value="Ειδικότητα : " />
 												</ui:define>
@@ -340,17 +347,17 @@
 												</h:inputText>
 											</s:decorate>
 
-											<s:decorate template="/layout/doubleLineEdit.xhtml">
+											<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 												<ui:define name="label">
 													<h:outputText value="Μετάθεση Απο" />
 												</ui:define>
 
-												<h:inputText id="sourceUnit" styleClass="fieldValueText"
+												<h:inputText id="sourceUnit" styleClass="fieldValueText" 
 													required="true" size="20">
 
 													<rich:suggestionbox for="sourceUnit" var="leaveSourceUnit"
 														height="200" width="300"
-														suggestionAction="#{permanentTransferAwareUnitSuggester.suggest}">
+														suggestionAction="#{nonLocalPYSDEUnitSuggester.suggest}">
 														<f:facet name="nothingLabel">
 															<h:outputText value="Άγνωστη Σχολική Μονάδα" />
 														</f:facet>
@@ -366,17 +373,17 @@
 											</s:decorate>
 											
 											<s:decorate
-												template="/layout/doubleLineEdit.xhtml">
+												template="/layout/newDoubleLineEdit.xhtml">
 												<ui:define name="label">
 													<h:outputText value="Μετάθεση Σε" />
 												</ui:define>
 
 												<h:inputText id="schoolTarget" styleClass="fieldValueText"
-													required="false" size="20">
+													required="true" size="20">
 
 													<rich:suggestionbox for="schoolTarget"
 														var="leaveSourceUnit" height="200" width="300"
-														suggestionAction="#{permanentTransferAwareUnitSuggester.suggest}">
+														suggestionAction="#{localPYSDEUnitSuggester.suggest}">
 														<f:facet name="nothingLabel">
 															<h:outputText value="Άγνωστη Μονάδα" />
 														</f:facet>
@@ -392,7 +399,7 @@
 												</h:inputText>
 											</s:decorate>
 
-											<s:decorate template="/layout/doubleLineEdit.xhtml">
+											<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 												<ui:define name="label">
 													<h:outputText value="Επώνυμο  : " />
 												</ui:define>
@@ -402,7 +409,7 @@
 												</h:inputText>
 											</s:decorate>
 
-											<s:decorate template="/layout/doubleLineEdit.xhtml">
+											<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 												<ui:define name="label">
 													<h:outputText value="Όνομα  : " />
 												</ui:define>
@@ -412,7 +419,7 @@
 												</h:inputText>
 											</s:decorate>
 
-											<s:decorate template="/layout/doubleLineEdit.xhtml">
+											<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 												<ui:define name="label">
 													<h:outputText value="Όνομα Πατρός  : " />
 												</ui:define>
@@ -422,7 +429,7 @@
 												</h:inputText>
 											</s:decorate>
 
-											<s:decorate template="/layout/doubleLineEdit.xhtml">
+											<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 												<ui:define name="label">
 													<h:outputText value="Όνομα Μητρός  : " />
 												</ui:define>
@@ -436,10 +443,12 @@
 										</h:panelGrid>
 
 									</s:div>
+									
 									<s:div
-										rendered="#{permanentTransferHome.instance.type == 'WITHIN_PYSDE' or permanentTransferHome.instance.type == 'TO_OTHER_PYSDE'}">
+										rendered="#{permanentTransferHome.instance.type == 'WITHIN_PYSDE'}">
+										<rich:separator lineType="dashed" height="1"/>
 										<h:panelGrid columns="2">
-											<s:decorate template="/layout/doubleLineEdit.xhtml"
+											<s:decorate template="/layout/newDoubleLineEdit.xhtml"
 												id="employeeSectionID">
 												<ui:define name="label">
 													<h:outputText value="Μόνιμος Εκπαιδευτικός : " />
@@ -488,19 +497,19 @@
 												</h:inputText>
 											</s:decorate>
 
-											<s:decorate template="/layout/doubleLineEdit.xhtml"
+											<s:decorate template="/layout/newDoubleLineEdit.xhtml"
 												id="employeeSection">
 												<ui:define name="label">
 													<h:outputText value="Εκπαιδευτικός : " />
 												</ui:define>
-												<h:inputText styleClass="fieldValueText" readonly="true"
+												<h:inputText styleClass="fieldValueText" readonly="true" required="true"
 													size="40"
 													value="#{employeeUtil.prettyFormat(permanentTransferHome.instance.employee)}">
 												</h:inputText>
 											</s:decorate>
 
 											<s:decorate id="improvementTo"
-												template="/layout/doubleLineEdit.xhtml">
+												template="/layout/newDoubleLineEdit.xhtml">
 												<ui:define name="label">
 													<h:outputText value="Μετάθεση Σε" />
 												</ui:define>
@@ -510,7 +519,100 @@
 
 													<rich:suggestionbox for="schoolTarget"
 														var="leaveSourceUnit" height="200" width="300"
-														suggestionAction="#{permanentTransferAwareUnitSuggester.suggest}">
+														suggestionAction="#{localPYSDEUnitSuggester.suggest}">
+														<f:facet name="nothingLabel">
+															<h:outputText value="Άγνωστη Σχολική Μονάδα" />
+														</f:facet>
+														<h:column>
+															<h:outputText value="#{leaveSourceUnit.title}" />
+														</h:column>
+														<a4j:support ajaxSingle="true" event="onselect">
+															<f:setPropertyActionListener value="#{leaveSourceUnit}"
+																target="#{permanentTransferHome.instance.targetUnit}" />
+														</a4j:support>
+													</rich:suggestionbox>
+												</h:inputText>
+											</s:decorate>
+
+										</h:panelGrid>
+									</s:div>
+									
+									<s:div
+										rendered="#{permanentTransferHome.instance.type == 'TO_OTHER_PYSDE'}">
+										<rich:separator lineType="dashed" height="1"/>
+										<h:panelGrid columns="2">
+											<s:decorate template="/layout/newDoubleLineEdit.xhtml"
+												id="employeeSectionID2">
+												<ui:define name="label">
+													<h:outputText value="Μόνιμος Εκπαιδευτικός : " />
+												</ui:define>
+												<h:inputText id="regularEmployeeID"
+													value="#{permanentTransferHome.instance.employeeRegistryID}"
+													styleClass="fieldValueText" size="6" maxlength="6">
+
+													<rich:suggestionbox height="300" width="650"
+														for="regularEmployeeID" var="a_employee"
+														fetchValue="#{a_employee.regularDetail.registryID}"
+														suggestionAction="#{regularEmployeeSuggester.suggest}">
+														<f:facet name="nothingLabel">
+															<h:outputText value="Άγνωστος Εκπαιδευτικός" />
+														</f:facet>
+														<rich:column>
+															<h:outputText
+																value="#{a_employee.regularDetail.registryID}" />
+														</rich:column>
+														<rich:column>
+															<h:outputText value="#{a_employee.lastName}" />
+														</rich:column>
+														<rich:column>
+															<h:outputText value="#{a_employee.firstName}" />
+														</rich:column>
+														<rich:column>
+															<h:outputText value="#{a_employee.fatherName}" />
+														</rich:column>
+														<rich:column>
+															<h:outputText
+																value="#{a_employee.lastSpecialization.title}" />
+														</rich:column>
+														<rich:column>
+															<h:outputText
+																value="#{a_employee.currentEmployment.school.title}" />
+														</rich:column>
+														<a4j:support ajaxSingle="true" event="onselect"
+															bypassUpdates="true"
+															reRender="improvementFrom,employeeSectionID2,employeeSection"
+															action="#{permanentTransferHome.updateValueDueToEmployee()}">
+															<f:setPropertyActionListener value="#{a_employee}"
+																target="#{permanentTransferHome.instance.employee}" />
+
+														</a4j:support>
+													</rich:suggestionbox>
+												</h:inputText>
+											</s:decorate>
+
+											<s:decorate template="/layout/newDoubleLineEdit.xhtml"
+												id="employeeSection2">
+												<ui:define name="label">
+													<h:outputText value="Εκπαιδευτικός : " />
+												</ui:define>
+												<h:inputText styleClass="fieldValueText" readonly="true"
+													size="40"
+													value="#{employeeUtil.prettyFormat(permanentTransferHome.instance.employee)}">
+												</h:inputText>
+											</s:decorate>
+
+											<s:decorate id="improvementTo2"
+												template="/layout/newDoubleLineEdit.xhtml">
+												<ui:define name="label">
+													<h:outputText value="Μετάθεση Σε" />
+												</ui:define>
+
+												<h:inputText id="schoolTarget" styleClass="fieldValueText"
+													required="true" size="20">
+
+													<rich:suggestionbox for="schoolTarget"
+														var="leaveSourceUnit" height="200" width="300"
+														suggestionAction="#{nonLocalPYSDEUnitSuggester.suggest}">
 														<f:facet name="nothingLabel">
 															<h:outputText value="Άγνωστη Σχολική Μονάδα" />
 														</f:facet>
@@ -537,136 +639,29 @@
 
 
 						</a4j:region>
+						<s:div styleClass="actionBox">
 						<h:panelGrid columns="2">
 
 							<a4j:commandButton value="Καταχώρηση Μετάθεσης !"
+								styleClass="btn btn-small btn-primary"
 								action="#{permanentTransferManagement.createNewPermanentTransfer()}"
 								data="#{facesContext.maximumSeverity.ordinal ge 2}"
-								reRender="outstandingPermanentTransfersTable"
+								reRender="outstandingPermanentTransfersTable,createModalPanelContent"
 								oncomplete="if(data == false) Richfaces.hideModalPanel('createModalPanel');">
 							</a4j:commandButton>
 
-							<a4j:commandButton value="Επιστροφή .."
+							<a4j:commandButton value="Επιστροφή .." 
+								styleClass="btn btn-small btn-default"
 								action="#{outstandingImprovementHome.clearInstance()}"
 								onclick="#{rich:component('createModalPanel')}.hide();" />
 						</h:panelGrid>
+						</s:div>
 					</h:form>
 				</h:panelGrid>
 			</a4j:region>
 		</rich:modalPanel>
 
-
-
-		<rich:modalPanel id="updateModalPanel" autosized="true" width="450">
-			<f:facet name="header">
-				<h:outputText
-					value="Τροποποίση Βελτίωσεις Εκπαιδευτικού #{employeeUtil.prettyFormat(outstandingImprovementHome.instance.employee)}"
-					style="padding-right:15px;" />
-			</f:facet>
-			<f:facet name="controls">
-				<h:panelGroup>
-					<h:graphicImage value="/img/modal/close.png" styleClass="hidelink"
-						width="18" height="18" id="hidelink5" />
-					<rich:componentControl for="updateModalPanel" attachTo="hidelink5"
-						operation="hide" event="onclick" />
-				</h:panelGroup>
-			</f:facet>
-			<a4j:region>
-				<h:panelGrid columns="4">
-					<rich:messages style="color:red;"></rich:messages>
-					<h:form>
-						<a4j:outputPanel id="updateModalPanelContent" layout="inline">
-							<a4j:region>
-								<h:outputText
-									value="Συμπληρώστε τα στοιχεία της παρακάτω φόρμας για να εισάγεται την μελλοντική βελτίωση του εκπαιδευτικό." />
-
-								<h:panelGrid columns="2">
-									<s:decorate template="/layout/doubleLineEdit.xhtml"
-										id="employeeSectionID">
-										<ui:define name="label">
-											<h:outputText value="Μόνιμος Εκπαιδευτικός : " />
-										</ui:define>
-										<h:inputText id="regularEmployeeID"
-											value="#{outstandingImprovementHome.instance.employeeRegistryID}"
-											styleClass="fieldValueText" size="6" maxlength="6"
-											readonly="true">
-
-										</h:inputText>
-									</s:decorate>
-
-									<s:decorate template="/layout/doubleLineEdit.xhtml"
-										id="employeeSection">
-										<ui:define name="label">
-											<h:outputText value="Εκπαιδευτικός : " />
-										</ui:define>
-										<h:inputText styleClass="fieldValueText" readonly="true"
-											size="40"
-											value="#{employeeUtil.prettyFormat(outstandingImprovementHome.instance.employee)}">
-										</h:inputText>
-									</s:decorate>
-
-									<s:decorate template="/layout/doubleLineEdit.xhtml"
-										id="improvementFrom">
-										<ui:define name="label">
-											<h:outputText value="Βελτίωση Απο : " />
-										</ui:define>
-										<h:inputText styleClass="fieldValueText" readonly="true"
-											size="20"
-											value="#{outstandingImprovementHome.instance.sourceSchool.title} (#{outstandingImprovementHome.instance.sourceSchool.regionCode})">
-										</h:inputText>
-									</s:decorate>
-
-									<s:decorate id="improvementTo"
-										template="/layout/doubleLineEdit.xhtml">
-										<ui:define name="label">
-											<h:outputText value="Βελτίωση Σε" />
-										</ui:define>
-
-										<h:inputText id="schoolTarget" styleClass="fieldValueText"
-											required="true" size="20"
-											value="#{outstandingImprovementHome.instance.targetSchool.title}">
-
-											<rich:suggestionbox for="schoolTarget" var="leaveSourceUnit"
-												height="200" width="300"
-												suggestionAction="#{schoolUnitSuggester.suggest}">
-												<f:facet name="nothingLabel">
-													<h:outputText value="Άγνωστη Σχολική Μονάδα" />
-												</f:facet>
-												<h:column>
-													<h:outputText value="#{leaveSourceUnit.title}" />
-												</h:column>
-												<a4j:support ajaxSingle="true" event="onselect">
-													<f:setPropertyActionListener value="#{leaveSourceUnit}"
-														target="#{outstandingImprovementHome.instance.targetSchool}" />
-												</a4j:support>
-											</rich:suggestionbox>
-										</h:inputText>
-									</s:decorate>
-								</h:panelGrid>
-
-
-							</a4j:region>
-						</a4j:outputPanel>
-
-
-
-						<h:panelGrid columns="2">
-
-
-
-							<a4j:commandButton value="Ανανέωση Βελτίωσης !"
-								action="#{outstandingImprovementManagement.updateImprovement}"
-								data="#{facesContext.maximumSeverity.ordinal ge 2}"
-								oncomplete="if(data == false) Richfaces.hideModalPanel('updateModalPanel');" />
-							<a4j:commandButton value="Επιστροφή .."
-								action="#{outstandingImprovementHome.revert()}"
-								onclick="#{rich:component('updateModalPanel')}.hide();" />
-						</h:panelGrid>
-					</h:form>
-				</h:panelGrid>
-			</a4j:region>
-		</rich:modalPanel>
-
+		
 
 
 
