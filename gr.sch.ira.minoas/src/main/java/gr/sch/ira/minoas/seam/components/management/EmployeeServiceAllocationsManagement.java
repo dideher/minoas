@@ -37,28 +37,13 @@ public class EmployeeServiceAllocationsManagement extends
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private String diposalUnitHelper;
-
 	@In(required = true, create = true)
 	private EmployeeHome employeeHome;
 
-	/**
-	 * @return the employeeHome
-	 */
-	public EmployeeHome getEmployeeHome() {
-		return employeeHome;
-	}
-
-	/**
-	 * @param employeeHome
-	 *            the employeeHome to set
-	 */
-	public void setEmployeeHome(EmployeeHome employeeHome) {
-		this.employeeHome = employeeHome;
-	}
-
 	@In(required = true)
 	private ServiceAllocationHome serviceAllocationHome;
+
+	private String serviceUnitHelper;
 
 	@Transactional
 	@RaiseEvent("serviceAllocationCreated")
@@ -66,31 +51,44 @@ public class EmployeeServiceAllocationsManagement extends
 		if (employeeHome.isManaged()) {
 			Employee employee = employeeHome.getInstance();
 			Employment currentEmployment = employee.getCurrentEmployment();
+			Date today = DateUtils
+					.truncate(new Date(System.currentTimeMillis()),
+							Calendar.DAY_OF_MONTH);
 			ServiceAllocation serviceAllocation = serviceAllocationHome
 					.getInstance();
-			
+
 			/* handle secondments */
-			Collection<Secondment> secondments = getCoreSearching().getEmployeeSecondmentWithinPeriod(getEntityManager(), employee, serviceAllocation.getEstablished(), serviceAllocation.getDueTo());
-			if(secondments != null && secondments.size() > 0) {
-				/* there is an secondment within that period, adjust the source unit and inform the user */
+			Collection<Secondment> secondments = getCoreSearching()
+					.getEmployeeSecondmentWithinPeriod(getEntityManager(),
+							employee, serviceAllocation.getEstablished(),
+							serviceAllocation.getDueTo());
+			if (secondments != null && secondments.size() > 0) {
+				/*
+				 * there is an secondment within that period, adjust the source
+				 * unit and inform the user
+				 */
 				Secondment s = secondments.iterator().next();
 				serviceAllocation.setSourceUnit(s.getTargetUnit());
-				getFacesMessages().add(Severity.WARN, String.format("Ο εκπαιδευτικός την περίοδο της θητείας θα τελεί σε απόσπαση στην μονάδα '%s'. Αλλάξε ανάλογα η μονάδα 'οργανικής' της Θητείας", s));
+				getFacesMessages()
+						.add(Severity.WARN,
+								String.format(
+										"Ο εκπαιδευτικός την περίοδο της θητείας θα τελεί σε απόσπαση στην μονάδα '%s'. Αλλάξε ανάλογα η μονάδα 'οργανικής' της Θητείας",
+										s));
 			}
-			
+
 			/* since source unit has been possibly adjusted perform validation */
 			if (!validateServiceAllocation(serviceAllocation, true)) {
 				return ACTION_OUTCOME_FAILURE;
 			}
-			
+
 			serviceAllocation.setInsertedBy(getPrincipal());
+			serviceAllocation.setActive(serviceAllocationShouldBeActivated(
+					serviceAllocation, today));
 			serviceAllocation.setEmployee(employee);
 			if (currentEmployment != null) {
 				currentEmployment.setServiceAllocation(serviceAllocation);
 				serviceAllocation.setAffectedEmployment(currentEmployment);
 			}
-
-			
 
 			serviceAllocationHome.persist();
 			getEntityManager().flush();
@@ -119,21 +117,6 @@ public class EmployeeServiceAllocationsManagement extends
 			serviceAllocationHome.clearInstance();
 		}
 		return ACTION_OUTCOME_SUCCESS;
-	}
-
-	/*
-	 * this method is being called from the page containing a list of disposals
-	 * and returns the CSS class that should be used by the disposal row
-	 */
-	public String getTableCellClassForDisposal(Disposal disposal) {
-		if (disposal.isFuture()) {
-			return "rich-table-future-disposal";
-		} else if (disposal.isCurrent()) {
-			return "rich-table-current-disposal";
-		} else if (disposal.isPast()) {
-			return "rich-table-past-disposal";
-		} else
-			return "";
 	}
 
 	@Transactional
@@ -166,6 +149,144 @@ public class EmployeeServiceAllocationsManagement extends
 		}
 	}
 
+	/**
+	 * @return the employeeHome
+	 */
+	public EmployeeHome getEmployeeHome() {
+		return employeeHome;
+	}
+
+	public String getServiceUnitHelper() {
+		return serviceUnitHelper;
+	}
+
+	/*
+	 * this method is being called from the page containing a list of disposals
+	 * and returns the CSS class that should be used by the disposal row
+	 */
+	public String getTableCellClassForDisposal(Disposal disposal) {
+		if (disposal.isFuture()) {
+			return "rich-table-future-disposal";
+		} else if (disposal.isCurrent()) {
+			return "rich-table-current-disposal";
+		} else if (disposal.isPast()) {
+			return "rich-table-past-disposal";
+		} else
+			return "";
+	}
+
+	@Transactional
+	@RaiseEvent("serviceAllocationModified")
+	public String modifyServiceAllocation() {
+		if (serviceAllocationHome.isManaged()) {
+			ServiceAllocation current_serviceAllocation = serviceAllocationHome
+					.getInstance();
+			Employee employee = employeeHome.getInstance();
+			Date today = DateUtils
+					.truncate(new Date(System.currentTimeMillis()),
+							Calendar.DAY_OF_MONTH);
+
+			if (!validateServiceAllocation(current_serviceAllocation, true)) {
+
+				return ACTION_OUTCOME_FAILURE;
+			}
+
+			current_serviceAllocation
+					.setActive(serviceAllocationShouldBeActivated(
+							current_serviceAllocation, today));
+			serviceAllocationHome.update();
+			info("service allocation #0 for employee #1 has been updated",
+					current_serviceAllocation, employee);
+			getEntityManager().flush();
+			return ACTION_OUTCOME_SUCCESS;
+		} else {
+			facesMessages.add(Severity.ERROR,
+					"service allocation home #0 is not managed.",
+					serviceAllocationHome);
+			return ACTION_OUTCOME_FAILURE;
+		}
+
+	}
+
+	/*
+	 * this method is called when the user clicks the
+	 * "add new service allocation"
+	 */
+	public void prepareForNewServiceAllocation() {
+		serviceAllocationHome.clearInstance();
+		Employee employee = employeeHome.getInstance();
+		Employment currentEmployment = employee.getCurrentEmployment();
+		ServiceAllocation serviceAllocation = serviceAllocationHome
+				.getInstance();
+
+		SchoolYear currentSchoolYear = getCoreSearching().getActiveSchoolYear(
+				getEntityManager());
+		Date today = DateUtils.truncate(new Date(System.currentTimeMillis()),
+				Calendar.DAY_OF_MONTH);
+
+		Date dueTo = DateUtils.truncate(
+				currentSchoolYear.getTeachingSchoolYearStop(),
+				Calendar.DAY_OF_MONTH);
+
+		serviceAllocation.setActive(Boolean.TRUE);
+		serviceAllocation.setEstablished(today);
+		serviceAllocation.setDueTo(dueTo);
+		serviceAllocation.setEmployee(employee);
+		serviceAllocation
+				.setServiceAllocationVariationType(ServiceAllocationVariation.WITH_TEACHING);
+
+		if (currentEmployment != null) {
+			serviceAllocation.setSourceUnit(currentEmployment.getSchool());
+		} else {
+			serviceAllocation.setSourceUnit(employee.getCurrentPYSDE()
+					.getRepresentedByUnit());
+		}
+
+		/* reset service unit helper */
+		serviceUnitHelper = null;
+	}
+
+	public void prepareForServiceAllocationModification() {
+		ServiceAllocation serviceAllocation = serviceAllocationHome
+				.getInstance();
+		serviceUnitHelper = serviceAllocation.getServiceUnit() != null ? serviceAllocation
+				.getServiceUnit().getTitle() : null;
+	}
+
+	/**
+	 * Checks if a service allocation should be set active in regards to the
+	 * reference date.
+	 * 
+	 * @param serviceAllocation
+	 * @param referenceDate
+	 * @return
+	 */
+	protected boolean serviceAllocationShouldBeActivated(
+			ServiceAllocation serviceAllocation, Date referenceDate) {
+		Date established = DateUtils.truncate(
+				serviceAllocation.getEstablished(), Calendar.DAY_OF_MONTH);
+		Date dueTo = DateUtils.truncate(serviceAllocation.getDueTo(),
+				Calendar.DAY_OF_MONTH);
+		Date today = DateUtils.truncate(referenceDate, Calendar.DAY_OF_MONTH);
+		if ((established.before(today) || established.equals(today))
+				&& (dueTo.after(today) || dueTo.equals(today))) {
+			return true;
+		} else
+			return false;
+	}
+
+	/**
+	 * @param employeeHome
+	 *            the employeeHome to set
+	 */
+	public void setEmployeeHome(EmployeeHome employeeHome) {
+		this.employeeHome = employeeHome;
+	}
+
+	public void setServiceUnitHelper(String serviceUnitHelper) {
+		this.serviceUnitHelper = serviceUnitHelper;
+	}
+
 	protected boolean validateServiceAllocation(
 			ServiceAllocation serviceAllocation, boolean addMessages) {
 		DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
@@ -180,12 +301,6 @@ public class EmployeeServiceAllocationsManagement extends
 		Integer hoursOnServiceUnit = serviceAllocation
 				.getWorkingHoursOnServicingPosition() != null ? serviceAllocation
 				.getWorkingHoursOnServicingPosition() : 0;
-		School currentSchool = null;
-		try {
-			currentSchool = employee.getCurrentEmployment().getSchool();
-		} catch (Exception ex) {
-			; // ignore
-		}
 
 		if (!employee.getActive()) {
 			if (addMessages)
@@ -231,17 +346,19 @@ public class EmployeeServiceAllocationsManagement extends
 			}
 		}
 
-		/* checks that have to be performed when the source unit is the same as the target unit */ 
+		/*
+		 * checks that have to be performed when the source unit is the same as
+		 * the target unit
+		 */
 		if (serviceAllocation.getServiceUnit().getId()
 				.equals(serviceAllocation.getSourceUnit().getId())) {
-			if(hoursOnServiceUnit > 0 && hoursOnSourceUnit > 0) {
+			if (hoursOnServiceUnit > 0 && hoursOnSourceUnit > 0) {
 				if (addMessages)
 					facesMessages
 							.add(Severity.ERROR,
 									"Όταν η μονάδα θητείας είναι ίδια με την μονάδα οργανικής, δεν μπορείτε να συμπληρώσετε και τα δυο ωραρία.");
 				return false;
 			}
-			
 
 		}
 
@@ -411,120 +528,6 @@ public class EmployeeServiceAllocationsManagement extends
 		// }
 		return true;
 
-	}
-
-	@Transactional
-	@RaiseEvent("serviceAllocationModified")
-	public String modifyServiceAllocation() {
-		if (serviceAllocationHome.isManaged()) {
-			ServiceAllocation current_serviceAllocation = serviceAllocationHome
-					.getInstance();
-			Employee employee = employeeHome.getInstance();
-			// Employment employment =
-			// current_secondment.getAffectedEmployment();
-			//
-			// SchoolYear currentSchoolYear =
-			// getCoreSearching().getActiveSchoolYear(getEntityManager());
-			//
-			// Date dueTo =
-			// DateUtils.truncate(currentSchoolYear.getTeachingSchoolYearStop(),
-			// Calendar.DAY_OF_MONTH);
-			// Date today = DateUtils.truncate(new
-			// Date(System.currentTimeMillis()), Calendar.DAY_OF_MONTH);
-			//
-			// if (!validateDisposal(current_secondment, true)) {
-			//
-			// return ACTION_OUTCOME_FAILURE;
-			// }
-			//
-			// current_secondment.setActive(disposalShouldBeActivated(current_secondment,
-			// today));
-			// disposalHome.update();
-			// info("disposal #0 for employee #1 has been updated",
-			// current_secondment, employee);
-			// getEntityManager().flush();
-			return ACTION_OUTCOME_SUCCESS;
-		} else {
-			// facesMessages.add(Severity.ERROR,
-			// "employee home #0 or disposal home #1 not managed.",
-			// employeeHome,
-			// disposalHome);
-			return ACTION_OUTCOME_FAILURE;
-		}
-
-	}
-
-	/**
-	 * Checks if a service allocation should be set active in regards to the
-	 * reference date.
-	 * 
-	 * @param serviceAllocation
-	 * @param referenceDate
-	 * @return
-	 */
-	protected boolean serviceAllocationShouldBeActivated(
-			ServiceAllocation serviceAllocation, Date referenceDate) {
-		Date established = DateUtils.truncate(
-				serviceAllocation.getEstablished(), Calendar.DAY_OF_MONTH);
-		Date dueTo = DateUtils.truncate(serviceAllocation.getDueTo(),
-				Calendar.DAY_OF_MONTH);
-		Date today = DateUtils.truncate(referenceDate, Calendar.DAY_OF_MONTH);
-		if ((established.before(today) || established.equals(today))
-				&& (dueTo.after(today) || dueTo.equals(today))) {
-			return true;
-		} else
-			return false;
-	}
-
-	/*
-	 * this method is called when the user clicks the
-	 * "add new service allocation"
-	 */
-	public void prepareForNewServiceAllocation() {
-		serviceAllocationHome.clearInstance();
-		Employee employee = employeeHome.getInstance();
-		Employment currentEmployment = employee.getCurrentEmployment();
-		ServiceAllocation serviceAllocation = serviceAllocationHome
-				.getInstance();
-
-		SchoolYear currentSchoolYear = getCoreSearching().getActiveSchoolYear(
-				getEntityManager());
-		Date today = DateUtils.truncate(new Date(System.currentTimeMillis()),
-				Calendar.DAY_OF_MONTH);
-
-		Date dueTo = DateUtils.truncate(
-				currentSchoolYear.getTeachingSchoolYearStop(),
-				Calendar.DAY_OF_MONTH);
-
-		serviceAllocation.setActive(Boolean.TRUE);
-		serviceAllocation.setEstablished(today);
-		serviceAllocation.setDueTo(dueTo);
-		serviceAllocation.setEmployee(employee);
-		serviceAllocation
-				.setServiceAllocationVariationType(ServiceAllocationVariation.WITH_TEACHING);
-		
-		if (currentEmployment != null) {
-			serviceAllocation.setSourceUnit(currentEmployment.getSchool());
-		} else {
-			serviceAllocation.setSourceUnit(employee.getCurrentPYSDE()
-					.getRepresentedByUnit());
-		}
-
-	}
-
-	/**
-	 * @return the diposalUnitHelper
-	 */
-	public String getDiposalUnitHelper() {
-		return diposalUnitHelper;
-	}
-
-	/**
-	 * @param diposalUnitHelper
-	 *            the diposalUnitHelper to set
-	 */
-	public void setDiposalUnitHelper(String diposalUnitHelper) {
-		this.diposalUnitHelper = diposalUnitHelper;
 	}
 
 }

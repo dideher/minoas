@@ -13,7 +13,6 @@ import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
-import org.jboss.seam.international.StatusMessage.Severity;
 
 /**
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
@@ -40,8 +39,8 @@ public class ServiceAllocationHome extends MinoasEntityHome<ServiceAllocation> {
 		if (employment != null)
 			employment.setServiceAllocation(null);
 		super.update();
-		info("principal '#0' canceled employee #1 current service allocation #1.", getPrincipalName(), employee,
-				currentServiceAllocation);
+		info("principal '#0' canceled employee #1 current service allocation #1.",
+				getPrincipalName(), employee, currentServiceAllocation);
 		clearInstance();
 		return "updated";
 	}
@@ -53,8 +52,10 @@ public class ServiceAllocationHome extends MinoasEntityHome<ServiceAllocation> {
 	protected ServiceAllocation createInstance() {
 		ServiceAllocation instance = new ServiceAllocation();
 		instance.setServiceType(ServiceAllocationType.SCHOOL_HEADMASTER);
-		instance.setEstablished(getCoreSearching().getActiveSchoolYear(getEntityManager()).getSchoolYearStart());
-		instance.setDueTo(getCoreSearching().getActiveSchoolYear(getEntityManager()).getSchoolYearStop());
+		instance.setEstablished(getCoreSearching().getActiveSchoolYear(
+				getEntityManager()).getSchoolYearStart());
+		instance.setDueTo(getCoreSearching().getActiveSchoolYear(
+				getEntityManager()).getSchoolYearStop());
 		instance.setActive(Boolean.TRUE);
 		return instance;
 	}
@@ -88,7 +89,8 @@ public class ServiceAllocationHome extends MinoasEntityHome<ServiceAllocation> {
 
 	@Transactional
 	public String revert() {
-		info("principal #0 is reverting updates to service allocation #1", getPrincipalName(), getInstance());
+		info("principal #0 is reverting updates to service allocation #1",
+				getPrincipalName(), getInstance());
 		getEntityManager().refresh(getInstance());
 		return "reverted";
 	}
@@ -116,45 +118,7 @@ public class ServiceAllocationHome extends MinoasEntityHome<ServiceAllocation> {
 	@Override
 	@Transactional
 	public String update() {
-//		ServiceAllocation currentServiceAllocation = getInstance();
-//		if (!validateSecondment(currentServiceAllocation, true)) {
-//			return VALIDATION_ERROR_OUTCOME;
-//		} else
-			return super.update();
+		return super.update();
 	}
 
-	/*
-	@Transactional
-	public boolean wire() {
-		ServiceAllocation instance = getInstance();
-		if (!isManaged()) {
-			Employee employee = employeeHome != null ? employeeHome
-					.getInstance() : null;
-			Employment currentEmployment = employee != null ? employee
-					.getCurrentEmployment() : null;
-			if (currentEmployment != null) {
-				instance.setSourceUnit(currentEmployment.getSchool());
-			} else {
-				instance.setSourceUnit(employee.getCurrentPYSDE()
-						.getRepresentedByUnit());
-			}
-		}
-		return true;
-	}
-	*/
-
-	protected boolean validateSecondment(ServiceAllocation serviceAllocation, boolean addMessages) {
-
-		/* check if the dates are correct */
-		if (serviceAllocation.getEstablished().after(serviceAllocation.getDueTo())) {
-
-			if (addMessages)
-				facesMessages
-						.add(Severity.ERROR,
-								"Η ημ/νια λήξης της θητείας πρέπει να είναι μεταγενέστερη της έναρξης. Μήπως να κάνεις ένα διάλειμα ;");
-			return false;
-		}
-		return true;
-
-	}
 }

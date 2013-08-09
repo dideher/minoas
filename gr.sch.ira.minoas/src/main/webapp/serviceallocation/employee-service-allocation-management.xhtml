@@ -21,8 +21,8 @@
 			<ui:include src="/components/messages-component.xhtml" />
 
 			<h:form>
-			
-				
+
+
 				<h:panelGrid columns="2">
 					<h:panelGroup>
 						<h:panelGrid columns="1">
@@ -53,9 +53,9 @@
 
 					</h:panelGroup>
 
-					<h:panelGroup>	
-						
-						
+					<h:panelGroup>
+
+
 						<rich:dataTable id="employeeCurrentStatusTable"
 							value="#{employeeCurrentStatusItems}" var="_item" rows="15"
 							border="0" onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
@@ -196,6 +196,7 @@
 												ajaxSingle="true"
 												disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MANAGE_SERVICE_ALLOCATION'))}"
 												oncomplete="#{rich:component('updateModalPanel')}.show()"
+												action="#{employeeServiceAllocationsManagement.prepareForServiceAllocationModification()}"
 												value="Τροποποίηση">
 												<h:graphicImage value="/img/icons/edit.png" width="12"
 													height="12" style="border:0" />
@@ -301,7 +302,7 @@
 										<h:outputText value="Μονάδα Θητείας" />
 									</ui:define>
 
-									<h:inputText required="true" id="serviceUnit" value=" "
+									<h:inputText required="true" id="serviceUnit" value="#{employeeServiceAllocationsManagement.serviceUnitHelper}"
 										styleClass="fieldValueText" size="22" maxlength="30">
 
 
@@ -524,7 +525,7 @@
 		<!-- ****************************************************************** -->
 		<rich:modalPanel id="updateModalPanel" autosized="true" width="450">
 			<f:facet name="header">
-				<h:outputText value="Τροποποίηση Ενεργής Θητείας "
+				<h:outputText value="Τροποποίηση Θητείας "
 					style="padding-right:15px;" />
 			</f:facet>
 			<f:facet name="controls">
@@ -535,14 +536,22 @@
 						operation="hide" event="onclick" />
 				</h:panelGroup>
 			</f:facet>
+
 			<a4j:region>
-				<h:panelGrid columns="1">
-					<h:form>
-						<a4j:outputPanel id="updateModalPanelContent" layout="inline">
+				<a4j:outputPanel id="updateModalPanelContent" layout="inline">
+					<a4j:form>
+
+						<h:panelGrid columns="1">
+
+							<ui:include src="/components/messages-component.xhtml" />
+
 							<h:outputText
-								value="Με την παρακάτω φόρμα, μπορείται να τροποποίησεται την ενεργή θητεία του/της εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}." />
-							<rich:messages style="color:red;"></rich:messages>
+								value="Με την παρακάτω φόρμα, μπορείται να τροποποίησεται την θητεία του/της εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}." />
+
+							<rich:separator lineType="dotted" height="1" />
 							<h:panelGrid columns="4">
+
+
 
 								<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 									<ui:define name="label">
@@ -562,7 +571,7 @@
 										<h:outputText value="Μονάδα Θητείας" />
 									</ui:define>
 
-									<h:inputText required="true" id="serviceUnitTarget" size="22"
+									<h:inputText required="true" id="serviceUnitTarget" size="22" value="#{employeeServiceAllocationsManagement.serviceUnitHelper}"
 										styleClass="fieldValueText" tabindex="1">
 
 										<rich:suggestionbox for="serviceUnitTarget" var="_serviceUnit"
@@ -631,21 +640,25 @@
 								</s:decorate>
 
 							</h:panelGrid>
-						</a4j:outputPanel>
 
-						<h:panelGrid columns="2">
-
-							<a4j:commandButton value="Τροποποίηση Θητείας !"
-								action="#{serviceAllocationHome.update()}"
-								data="#{facesContext.maximumSeverity.ordinal ge 2}"
-								oncomplete="if(data == false) Richfaces.hideModalPanel('updateModalPanel');"
-								reRender="serviceAllocationsOutputPanel" />
-							<a4j:commandButton value="Επιστροφή .."
-								action="#{serviceAllocationHome.revert()}"
-								onclick="#{rich:component('updateModalPanel')}.hide();return false;" />
+							<s:div styleClass="actionBox">
+								<h:panelGrid columns="2">
+									<a4j:commandButton value="Τροποποίηση Θητείας !"
+										action="#{employeeServiceAllocationsManagement.modifyServiceAllocation()}"
+										styleClass="btn btn-primary btn-small"
+										data="#{facesContext.maximumSeverity.ordinal ge 2}"
+										oncomplete="if(data == false) Richfaces.hideModalPanel('updateModalPanel');"
+										reRender="serviceAllocationsOutputPanel,updateModalPanelContent" />
+									<a4j:commandButton value="Επιστροφή"
+										styleClass="btn btn-default btn-small"
+										action="#{employeeSecondmentsManagement.cancelSecondmentModificationAction()}"
+										onclick="#{rich:component('updateModalPanel')}.hide();return false;" />
+								</h:panelGrid>
+							</s:div>
 						</h:panelGrid>
-					</h:form>
-				</h:panelGrid>
+
+					</a4j:form>
+				</a4j:outputPanel>
 			</a4j:region>
 		</rich:modalPanel>
 
