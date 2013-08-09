@@ -208,14 +208,6 @@
 
 				<rich:menuGroup value="Διαχείριση Θητειών">
 					<rich:menuItem submitMode="none"
-						rendered="#{(s:hasRole('ADMIN') or s:hasRole('ADD_SERVICE_ALLOCATION'))}">
-						<s:link value="Εισαγωγή Νέας Θητείας"
-							action="#{serviceAllocationHome.clearInstance()}"
-							view="/serviceallocation/add-new-service-allocation.xhtml">
-							<f:param name="add_new_service_allocation_from" value="/home" />
-						</s:link>
-					</rich:menuItem>
-					<rich:menuItem submitMode="none"
 						rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_SERVICE_ALLOCATION'))}">
 						<s:link value="Διαχείριση Θητείας Εκπαιδευτικού"
 							view="/employee/select-employee.xhtml">
@@ -224,8 +216,6 @@
 								value="/serviceallocation/employee-service-allocation-management" />
 						</s:link>
 					</rich:menuItem>
-					
-					
 					
 					<rich:menuGroup value="Εκτύπωσεις και Σταστικά"
 						rendered="#{(s:hasRole('ADMIN') or s:hasRole('VIEW_SERVICE_ALLOCATION'))}">
