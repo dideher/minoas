@@ -40,13 +40,13 @@ public class ServiceAllocation extends BaseIDDeleteAwareModel {
 	@Column(name = "IS_ACTIVE", nullable = true)
 	private Boolean active;
 	
-	@Basic
-    @Column(name = "IS_AUTOCANCELED", nullable = true)
-    private Boolean autoCanceled;
-
 	@ManyToOne(fetch = FetchType.LAZY, optional = true)
 	@JoinColumn(name = "PARENT_EMPLOYMENT_ID", nullable = true)
 	private Employment affectedEmployment;
+
+	@Basic
+    @Column(name = "IS_AUTOCANCELED", nullable = true)
+    private Boolean autoCanceled;
 
 	@Basic
 	@Column(name = "COMMENT", nullable = true, length = 255)
@@ -70,6 +70,13 @@ public class ServiceAllocation extends BaseIDDeleteAwareModel {
 	@Column(name = "PYSDE_ORDER", nullable = true, length = 25)
 	private String pysdeOrder;
 
+	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.LAZY, mappedBy="serviceAllocation")
+    private Collection<TeachingHourCDR> serviceAllocationCDRs = new ArrayList<TeachingHourCDR>();
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name="VARIATION_TYPE", nullable=true)
+	private ServiceAllocationVariation serviceAllocationVariationType;
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "SERVICE_TYPE")
 	private ServiceAllocationType serviceType;
@@ -85,13 +92,10 @@ public class ServiceAllocation extends BaseIDDeleteAwareModel {
 	@Basic
 	@Column(name = "WORKING_HOURS_ON_REGULAR", nullable = true)
 	private Integer workingHoursOnRegularPosition;
-
+	
 	@Basic
 	@Column(name = "WORKING_HOURS_ON_SERVICE", nullable = true)
 	private Integer workingHoursOnServicingPosition;
-	
-	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.LAZY, mappedBy="serviceAllocation")
-    private Collection<TeachingHourCDR> serviceAllocationCDRs = new ArrayList<TeachingHourCDR>();
 
 	public ServiceAllocation() {
 		super();
@@ -110,6 +114,13 @@ public class ServiceAllocation extends BaseIDDeleteAwareModel {
 	public Employment getAffectedEmployment() {
 		return affectedEmployment;
 	}
+
+	/**
+     * @return the autoCanceled
+     */
+    public Boolean getAutoCanceled() {
+        return autoCanceled;
+    }
 
 	/**
 	 * @return the comment
@@ -144,6 +155,17 @@ public class ServiceAllocation extends BaseIDDeleteAwareModel {
 	 */
 	public String getPysdeOrder() {
 		return pysdeOrder;
+	}
+
+	/**
+     * @return the serviceAllocationCDRs
+     */
+    public Collection<TeachingHourCDR> getServiceAllocationCDRs() {
+        return serviceAllocationCDRs;
+    }
+
+	public ServiceAllocationVariation getServiceAllocationVariationType() {
+		return serviceAllocationVariationType;
 	}
 
 	/**
@@ -196,6 +218,13 @@ public class ServiceAllocation extends BaseIDDeleteAwareModel {
 	}
 
 	/**
+     * @param autoCanceled the autoCanceled to set
+     */
+    public void setAutoCanceled(Boolean autoCanceled) {
+        this.autoCanceled = autoCanceled;
+    }
+
+	/**
 	 * @param comment the comment to set
 	 */
 	public void setComment(String comment) {
@@ -231,27 +260,40 @@ public class ServiceAllocation extends BaseIDDeleteAwareModel {
 	}
 
 	/**
+     * @param serviceAllocationCDRs the serviceAllocationCDRs to set
+     */
+    public void setServiceAllocationCDRs(Collection<TeachingHourCDR> serviceAllocationCDRs) {
+        this.serviceAllocationCDRs = serviceAllocationCDRs;
+    }
+
+	public void setServiceAllocationVariationType(
+			ServiceAllocationVariation serviceAllocationVariationType) {
+		this.serviceAllocationVariationType = serviceAllocationVariationType;
+	}
+
+    
+     /**
 	 * @param serviceType the serviceType to set
 	 */
 	public void setServiceType(ServiceAllocationType serviceType) {
 		this.serviceType = serviceType;
 	}
 
-	/**
+    /**
 	 * @param serviceUnit the serviceUnit to set
 	 */
 	public void setServiceUnit(Unit serviceUnit) {
 		this.serviceUnit = serviceUnit;
 	}
 
-	/**
+    /**
 	 * @param sourceUnit the sourceUnit to set
 	 */
 	public void setSourceUnit(Unit sourceUnit) {
 		this.sourceUnit = sourceUnit;
 	}
 
-	/**
+    /**
 	 * @param workingHoursOnRegularPosition the workingHoursOnRegularPosition to set
 	 */
 	public void setWorkingHoursOnRegularPosition(Integer workingHoursOnRegularPosition) {
@@ -309,33 +351,4 @@ public class ServiceAllocation extends BaseIDDeleteAwareModel {
 		builder.append("]");
 		return builder.toString();
 	}
-
-    
-     /**
-     * @return the serviceAllocationCDRs
-     */
-    public Collection<TeachingHourCDR> getServiceAllocationCDRs() {
-        return serviceAllocationCDRs;
-    }
-
-    /**
-     * @param serviceAllocationCDRs the serviceAllocationCDRs to set
-     */
-    public void setServiceAllocationCDRs(Collection<TeachingHourCDR> serviceAllocationCDRs) {
-        this.serviceAllocationCDRs = serviceAllocationCDRs;
-    }
-
-    /**
-     * @return the autoCanceled
-     */
-    public Boolean getAutoCanceled() {
-        return autoCanceled;
-    }
-
-    /**
-     * @param autoCanceled the autoCanceled to set
-     */
-    public void setAutoCanceled(Boolean autoCanceled) {
-        this.autoCanceled = autoCanceled;
-    }
 }

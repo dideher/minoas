@@ -21,143 +21,114 @@
 			<ui:include src="/components/messages-component.xhtml" />
 
 			<h:form>
+			
+				
+				<h:panelGrid columns="2">
+					<h:panelGroup>
+						<h:panelGrid columns="1">
+							<rich:panel id="basicEmployeeInfoPanel" style="width: 600px">
+								<f:facet name="header">
+									<h:outputText value="Βασικά Στοιχεία" />
+								</f:facet>
+								<ui:include src="/employee/basic-info.xhtml">
+									<ui:param name="employee" value="#{employee}" />
+								</ui:include>
+							</rich:panel>
+
+							<s:div styleClass="actionBox">
+								<a4j:commandButton value="Νέα Θητεία"
+									styleClass="btn btn-primary"
+									action="#{employeeServiceAllocationsManagement.prepareForNewServiceAllocation()}"
+									oncomplete="#{rich:component('createModalPanel')}.show()"
+									reRender="createModalPanelContent" limitToList="true">
+								</a4j:commandButton>
+
+								<s:button value="Επιστροφή" styleClass="btn btn-default"
+									action="backButton" />
+
+								<s:button value="Τέλος Ενέργειας" styleClass="btn btn-default"
+									action="endButton" />
+							</s:div>
+						</h:panelGrid>
+
+					</h:panelGroup>
+
+					<h:panelGroup>	
+						
+						
+						<rich:dataTable id="employeeCurrentStatusTable"
+							value="#{employeeCurrentStatusItems}" var="_item" rows="15"
+							border="0" onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+							onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+							width="100%">
+							<f:facet name="header">
+								<h:outputLabel value="Τρέχουσα Κατάσταση Εκπαιδευτικού" />
+							</f:facet>
+
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Σχολική Μονάδα" />
+								</f:facet>
+								<h:outputText value="#{_item.schoolUnit}" />
+							</rich:column>
+
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Τύπος" />
+								</f:facet>
+								<h:outputText value="#{messages[_item.cdrTypeKey]}" />
+							</rich:column>
+
+
+
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Σχόλιο" />
+								</f:facet>
+								<h:outputText value="#{_item.comment}" />
+							</rich:column>
+
+
+						</rich:dataTable>
+
+
+					</h:panelGroup>
+
+				</h:panelGrid>
+
+
 				<h:panelGrid columns="1">
-					<rich:panel>
-						<f:facet name="header">
-							<h:outputText value="Ενεργή Θητεία" />
-						</f:facet>
-						<h:outputText
-							value="Δεν βρέθηκε καμία ενεργή θητεία για τον εκπαιδευτικό."
-							rendered="#{employeeActiveServiceAllocationListQuery.resultCount==0}" />
 
-						<a4j:outputPanel id="activeServiceAllocation"
-							rendered="#{employeeActiveServiceAllocationListQuery.resultCount!=0}">
-							<h:panelGrid columns="1">
-								<h:outputText
-									value="Στον παραπάνω πίνακα εμφανίζετε η τρέχουσα ενεργή θητεία του Εκπαιδευτικού." />
-								<rich:dataTable
-									value="#{employeeActiveServiceAllocationListQuery.resultList}"
-									var="_serviceAllocation" rows="15" border="0"
-									onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
-									onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
-									width="100%">
-									<f:facet name="header">
-										<h:outputLabel value="Ενεργή Θητεία Εκπαιδευτικού" />
-									</f:facet>
-									<rich:column>
-										<f:facet name="header">
-											<h:outputText value="Οργανική" />
-										</f:facet>
-										<h:outputText value="#{_serviceAllocation.sourceUnit.title}" />
-									</rich:column>
-									<rich:column>
-										<f:facet name="header">
-											<h:outputText value="Τύπος Θητείας" />
-										</f:facet>
-										<h:outputText
-											value="#{messages[_serviceAllocation.serviceType.key]}" />
-									</rich:column>
-									<rich:column>
-										<f:facet name="header">
-											<h:outputText value="Μονάδα Θητείας" />
-										</f:facet>
-										<h:outputText value="#{_serviceAllocation.serviceUnit.title}" />
-									</rich:column>
-									<rich:column>
-										<f:facet name="header">
-											<h:outputText value="Έναρξη" />
-										</f:facet>
-										<h:outputText value="#{_serviceAllocation.established}">
-											<s:convertDateTime pattern="dd-MM-yyyy" />
-										</h:outputText>
-									</rich:column>
-									<rich:column>
-										<f:facet name="header">
-											<h:outputText value="Λήξη" />
-										</f:facet>
-										<h:outputText value="#{_serviceAllocation.dueTo}">
-											<s:convertDateTime pattern="dd-MM-yyyy" />
-										</h:outputText>
-									</rich:column>
-									<rich:column>
-										<f:facet name="header">
-											<h:outputText value="Σχόλιο" />
-										</f:facet>
-										<h:outputText value="#{_serviceAllocation.comment}" />
-									</rich:column>
-
-
-
-									<rich:column>
-										<f:facet name="header">
-											<h:outputText value="Ωρ. Οργανικής" />
-										</f:facet>
-										<h:outputText
-											value="#{_serviceAllocation.workingHoursOnRegularPosition}" />
-									</rich:column>
-
-									<rich:column>
-										<f:facet name="header">
-											<h:outputText value="Ωρ. Θητείας" />
-										</f:facet>
-										<h:outputText
-											value="#{_serviceAllocation.workingHoursOnServicingPosition}" />
-									</rich:column>
-
-									<rich:column>
-										<f:facet name="header">
-											<h:outputText value="Ενέργεια" />
-										</f:facet>
-										<rich:toolBar itemSeparator="line">
-											<a4j:commandLink id="cancellink"
-												reRender="cancelModalPanelContent"
-												oncomplete="#{rich:component('cancelModalPanel')}.show()"
-												value="Ακύρωση">
-												<h:graphicImage value="/img/icons/delete.png" width="12"
-													height="12" style="border:0" />
-												<f:setPropertyActionListener
-													value="#{_serviceAllocation.id}"
-													target="#{serviceAllocationHome.id}" />
-											</a4j:commandLink>
-
-											<a4j:commandLink id="updatelink"
-												reRender="updateModalPanelContent"
-												oncomplete="#{rich:component('updateModalPanel')}.show()"
-												value="Τροποποίηση">
-												<f:setPropertyActionListener
-													value="#{_serviceAllocation.id}"
-													target="#{serviceAllocationHome.id}" />
-											</a4j:commandLink>
-										</rich:toolBar>
-									</rich:column>
-								</rich:dataTable>
-							</h:panelGrid>
-						</a4j:outputPanel>
-					</rich:panel>
 
 					<rich:panel>
 						<f:facet name="header">
 							<h:outputText value="Ιστορικό Θητείων Εκπαιδευτικού" />
 						</f:facet>
 
-						<h:outputText
-							value="Δεν βρέθηκε ιστορικό θητείων για τον εκπαιδευτικό."
-							rendered="#{employeeServiceAllocationsListQuery.resultCount eq 0}" />
-						<a4j:outputPanel id="employmentsTable"
-							rendered="#{employeeServiceAllocationsListQuery.resultCount gt 0}">
-							<h:panelGrid columns="1">
+						<a4j:outputPanel id="serviceAllocationsOutputPanel">
+
+							<s:div rendered="#{employeeServiceAllocations.size() eq 0}">
+								<h:outputText
+									value="Δεν βρέθηκε ιστορικό θητείων για τον εκπαιδευτικό." />
+
+							</s:div>
+
+							<s:div rendered="#{employeeServiceAllocations.size() gt 0}">
 								<h:outputText
 									value="Στον παρακάτω πίνακα εμφανίζεται το ιστορικό όλων των θητειών του εκπαιδευτικού. Μπορείτε να τροποποιήσεται, αν θέλετε, την ενεργή κατά το τρέχων σχολικό έτος απόσπαση." />
 
+
+
 								<rich:dataTable id="employeeSecondmentsList"
-									value="#{employeeServiceAllocationsListQuery.resultList}"
-									var="_serviceAllocation" rows="15" border="0"
+									value="#{employeeServiceAllocations}" var="_serviceAllocation"
+									rows="15" border="0"
 									onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
 									onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
 									width="100%">
 									<f:facet name="header">
 										<h:outputLabel value="Ιστορικό Θητείων Εκπαιδευτικού" />
 									</f:facet>
+
 									<rich:column>
 										<f:facet name="header">
 											<h:outputText value="Οργανική" />
@@ -215,77 +186,342 @@
 										<h:outputText
 											value="#{_serviceAllocation.workingHoursOnServicingPosition}" />
 									</rich:column>
-								</rich:dataTable>
-							</h:panelGrid>
-						</a4j:outputPanel>
-					</rich:panel>
-					<rich:panel>
-						<s:div styleClass="actionButtons">
-							<s:button action="backButton" value="Επιστροφή" />
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText value="Ενέργεια" />
+										</f:facet>
+										<rich:toolBar itemSeparator="line">
 
-							<s:button action="endButton" value="Τέλος Ενέργειας" />
-						</s:div>
+											<a4j:commandLink reRender="updateModalPanelContent"
+												ajaxSingle="true"
+												disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MANAGE_SERVICE_ALLOCATION'))}"
+												oncomplete="#{rich:component('updateModalPanel')}.show()"
+												value="Τροποποίηση">
+												<h:graphicImage value="/img/icons/edit.png" width="12"
+													height="12" style="border:0" />
+												<f:setPropertyActionListener
+													value="#{_serviceAllocation.id}"
+													target="#{serviceAllocationHome.id}" />
+											</a4j:commandLink>
+
+											<a4j:commandLink reRender="deleteModalPanelContent"
+												ajaxSingle="true"
+												disabled="#{!(s:hasRole('ADMIN') or s:hasRole('DELETE_SERVICE_ALLOCATION'))}"
+												oncomplete="#{rich:component('deleteModalPanel')}.show()"
+												value="Διαγραφή">
+												<h:graphicImage value="/img/icons/delete.png" width="12"
+													height="12" style="border:0" />
+												<f:setPropertyActionListener
+													value="#{_serviceAllocation.id}"
+													target="#{serviceAllocationHome.id}" />
+											</a4j:commandLink>
+										</rich:toolBar>
+									</rich:column>
+
+								</rich:dataTable>
+							</s:div>
+						</a4j:outputPanel>
+
+
 					</rich:panel>
+
 				</h:panelGrid>
 			</h:form>
 
 
 		</rich:panel>
 
+		<!-- ****************************************************************** -->
+		<!-- ****************************************************************** -->
+		<!-- Create Service Allocation 										    -->
+		<!-- ****************************************************************** -->
+		<!-- ****************************************************************** -->
 
-		<rich:modalPanel id="cancelModalPanel" autosized="true" width="350">
+		<rich:modalPanel id="createModalPanel" autosized="true" width="350">
 			<f:facet name="header">
-				<h:outputText value="Να ακυρωθή η θητεία ?"
-					style="padding-right:15px;" />
+				<h:outputText value="Καταχώρηση Θητείας" style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<h:graphicImage value="/img/modal/close.png" styleClass="hidelink"
+						width="18" height="18" id="hidelink20" />
+					<rich:componentControl for="createModalPanel" attachTo="hidelink20"
+						operation="hide" event="onclick" />
+				</h:panelGroup>
+			</f:facet>
+			<a4j:region>
+				<a4j:outputPanel id="createModalPanelContent" layout="inline">
+					<a4j:form>
+
+						<h:panelGrid columns="1">
+
+							<ui:include src="/components/messages-component.xhtml" />
+
+							<h:outputText
+								value="Συμπληρώστε την παρακάτω φόρμα για να καταχωρήσετε καινούργια θητεία για τον εκπαιδευτικό." />
+							<rich:separator lineType="dotted" height="1" />
+							<h:panelGrid columns="3">
+
+								<s:decorate id="sourceUnit"
+									template="/layout/newDoubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Σχολική Μονάδα Οργανικής" />
+									</ui:define>
+
+									<h:inputText
+										value="#{serviceAllocationHome.instance.sourceUnit}"
+										tabindex="1" required="true" styleClass="fieldValueText"
+										converter="unitConverter" size="20" maxlength="22"
+										readonly="true">
+									</h:inputText>
+								</s:decorate>
+
+								<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Τύπος Θητείας" />
+									</ui:define>
+
+									<h:selectOneMenu id="serviceAllocationType"
+										value="#{serviceAllocationHome.instance.serviceType}"
+										required="true">
+										<s:selectItems hideNoSelectionLabel="true"
+											var="_serviceAllocationType"
+											value="#{serviceAllocationTypes}"
+											label="#{messages[_serviceAllocationType.key]}" />
+										<s:convertEnum />
+										<a4j:support event="onblur"
+											action="#{serviceAllocationHome.suggestHours()}"
+											reRender="workingHoursOnServicingPosition, workingHoursOnRegularPosition"
+											ajaxSingle="true" />
+									</h:selectOneMenu>
+								</s:decorate>
+
+								<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Μονάδα Θητείας" />
+									</ui:define>
+
+									<h:inputText required="true" id="serviceUnit" value=" "
+										styleClass="fieldValueText" size="22" maxlength="30">
+
+
+										<rich:suggestionbox for="serviceUnit" var="serviceUnit"
+											suggestionAction="#{unitSuggester.suggest}">
+											<f:facet name="nothingLabel">
+												<h:outputText value="Άγνωστη Μονάδα Θητείας" />
+											</f:facet>
+											<h:column>
+												<h:outputText value="#{serviceUnit.title}" />
+											</h:column>
+											<a4j:support ajaxSingle="true" event="onselect">
+												<f:setPropertyActionListener value="#{serviceUnit}"
+													target="#{serviceAllocationHome.instance.serviceUnit}" />
+											</a4j:support>
+										</rich:suggestionbox>
+									</h:inputText>
+								</s:decorate>
+
+
+								<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Ωράριο Στην Οργανική : " />
+									</ui:define>
+									<h:inputText id="workingHoursOnRegularPosition"
+										value="#{serviceAllocationHome.instance.workingHoursOnRegularPosition}"
+										size="3" maxlength="3" required="true" />
+								</s:decorate>
+
+								<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Ωράριο Στην Μονάδα Θητείας : " />
+									</ui:define>
+									<h:inputText
+										value="#{serviceAllocationHome.instance.workingHoursOnServicingPosition}"
+										id="workingHoursOnServicingPosition" size="3" maxlength="3"
+										required="true" />
+								</s:decorate>
+
+
+
+								<s:decorate id="pysdeOrderDecoration"
+									template="/layout/newDoubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Απόφαση ΠΥΣΔΕ" />
+									</ui:define>
+									<h:inputText id="pysdeOrder"
+										value="#{serviceAllocationHome.instance.pysdeOrder}"
+										styleClass="fieldValueText" required="false" size="16"
+										maxlength="25">
+										<a4j:support event="onblur" ajaxSingle="true"
+											reRender="pysdeOrderDecoration" bypassUpdates="true" />
+										<f:validateLength minimum="5" maximum="25" />
+									</h:inputText>
+								</s:decorate>
+
+
+
+
+								<s:decorate id="establishedDateDecoration"
+									template="/layout/newDoubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Έναρξη Θητείας" />
+									</ui:define>
+									<rich:calendar id="establishedDate" enableManualInput="true"
+										value="#{serviceAllocationHome.instance.established}"
+										required="true" inputSize="10" mode="ajax" locale="el_GR"
+										inputClass="fieldValueText" datePattern="dd-MM-yyyy">
+										<a4j:support event="onblur"
+											reRender="establishedDateDecoration" bypassUpdates="true"
+											ajaxSingle="true" />
+									</rich:calendar>
+								</s:decorate>
+								<s:decorate id="dueToDateDecoration"
+									template="/layout/newDoubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Λήξη Θητείας" />
+									</ui:define>
+									<rich:calendar id="dueToDate"
+										value="#{serviceAllocationHome.instance.dueTo}"
+										required="true" mode="ajax" locale="el_GR" inputSize="10"
+										enableManualInput="true" inputClass="fieldValueText"
+										datePattern="dd-MM-yyyy">
+
+										<a4j:support event="onblur" reRender="dueToDateDecoration"
+											bypassUpdates="true" ajaxSingle="true" />
+									</rich:calendar>
+								</s:decorate>
+
+								<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Σχόλιο" />
+									</ui:define>
+									<h:inputTextarea
+										value="#{serviceAllocationHome.instance.comment}" />
+								</s:decorate>
+
+							</h:panelGrid>
+
+
+
+							<h:panelGroup>
+
+
+								<s:div styleClass="actionBox">
+
+									<a4j:commandButton value="Καταχώρηση Θητείας !"
+										styleClass="btn btn-small btn-primary"
+										onclick="if(!confirm('Να καταχωρηθή η θητεία του εκπαιδευτικού ?')) {form.reset(); return false;}"
+										action="#{employeeServiceAllocationsManagement.addEmployeeServiceAllocationAction()}"
+										data="#{facesContext.maximumSeverity.ordinal ge 2}"
+										oncomplete="if(data == false) Richfaces.hideModalPanel('createModalPanel');"
+										reRender="createModalPanelContent, serviceAllocationsOutputPanel" />
+
+									<a4j:commandButton value="Επιστροφή"
+										styleClass="btn btn-small btn-default"
+										oncomplete="{ Richfaces.hideModalPanel('createModalPanel'); }"
+										reRender="serviceAllocationsOutputPanel"
+										action="#{employeeServiceAllocationsManagement.cancelServiceAllocationModificationAction() }">
+									</a4j:commandButton>
+								</s:div>
+							</h:panelGroup>
+						</h:panelGrid>
+					</a4j:form>
+				</a4j:outputPanel>
+			</a4j:region>
+		</rich:modalPanel>
+
+		<!-- ****************************************************************** -->
+		<!-- ****************************************************************** -->
+		<!-- Delete Service Allocation 										    -->
+		<!-- ****************************************************************** -->
+		<!-- ****************************************************************** -->
+		<rich:modalPanel id="deleteModalPanel" autosized="true" width="350">
+			<f:facet name="header">
+				<h:outputText value="Διαγραφή Θητείας" style="padding-right:15px;" />
 			</f:facet>
 			<f:facet name="controls">
 				<h:panelGroup>
 					<h:graphicImage value="/img/modal/close.png" styleClass="hidelink"
 						width="18" height="18" id="hidelink2" />
-					<rich:componentControl for="cancelModalPanel" attachTo="hidelink2"
+					<rich:componentControl for="deleteModalPanel" attachTo="hidelink2"
 						operation="hide" event="onclick" />
 				</h:panelGroup>
 			</f:facet>
-			<h:form>
-				<h:panelGrid columns="1">
-					<a4j:outputPanel id="cancelModalPanelContent" layout="inline">
-						<h:panelGroup>
-							<h:outputText
-								value="Να ακυρωθή η τρέχουσα ενεργή θητεία του εκπαιδευτικού #{employeeUtil.prettyFormat(serviceAllocationtHome.instance.employee)} στην μονάδα " />
-							<h:outputText
-								value="#{serviceAllocationtHome.instance.serviceUnit.title}"
-								styleClass="fieldValueText" />
-							<h:outputText value=" με την ιδιότητα του " />
-							<h:outputText
-								value="#{messages[serviceAllocationHome.instance.serviceType.key]}"
-								styleClass="fieldValueText" />
-							<h:outputText value=" με λήξη την " />
-							<h:outputText value="#{serviceAllocationHome.instance.dueTo}"
-								styleClass="fieldValueText">
-								<s:convertDateTime pattern="dd-MM-yyyy" />
-							</h:outputText>
-							<h:outputText value=" στην μονάδα " />
-							<h:outputText
-								value="#{serviceAllocationHome.instance.serviceUnit.title}"
-								styleClass="fieldValueText" />
+			<a4j:region>
 
-							<h:outputText value=" ;" />
 
-						</h:panelGroup>
-					</a4j:outputPanel>
+				<a4j:outputPanel id="deleteModalPanelContent" layout="inline">
+					<a4j:form>
+						<h:panelGrid columns="1">
+							<ui:include src="/components/messages-component.xhtml" />
+							<h:panelGroup>
+								<s:div>
+									<h:outputText
+										value="Να διαγραφή η θητεία του εκπαιδευτικού #{employeeUtil.prettyFormat(serviceAllocationtHome.instance.employee)} στην μονάδα " />
+									<h:outputText
+										value="#{serviceAllocationtHome.instance.serviceUnit.title}"
+										styleClass="fieldValueText" />
+									<h:outputText value=" με την ιδιότητα του " />
+									<h:outputText
+										value="#{messages[serviceAllocationHome.instance.serviceType.key]}"
+										styleClass="fieldValueText" />
+									<h:outputText value=" με λήξη την " />
+									<h:outputText value="#{serviceAllocationHome.instance.dueTo}"
+										styleClass="fieldValueText">
+										<s:convertDateTime pattern="dd-MM-yyyy" />
+									</h:outputText>
+									<h:outputText value=" στην μονάδα " />
+									<h:outputText
+										value="#{serviceAllocationHome.instance.serviceUnit.title}"
+										styleClass="fieldValueText" />
 
-					<h:panelGrid columns="2">
-						<a4j:commandButton value="Ακύρωση Θητείας !" ajaxSingle="true"
-							action="#{serviceAllocationHome.cancel()}"
-							oncomplete="#{rich:component('cancelModalPanel')}.hide();"
-							reRender="activeServiceAllocation" />
-						<a4j:commandButton value="Επιστροφή .."
-							onclick="#{rich:component('cancelModalPanel')}.hide();return false;" />
-					</h:panelGrid>
-				</h:panelGrid>
-			</h:form>
+									<h:outputText value=" ;" />
+								</s:div>
+
+
+								<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Σχόλιο Διαγραφής" />
+									</ui:define>
+									<h:inputTextarea immediate="true"
+										value="#{serviceAllocationHome.instance.deletedComment}"
+										required="true" cols="50" rows="3" />
+								</s:decorate>
+
+
+							</h:panelGroup>
+
+							<s:div styleClass="actionBox">
+
+								<h:panelGrid columns="2">
+									<a4j:commandButton value="Διαγραφή !"
+										styleClass="btn btn-danger btn-small"
+										data="#{facesContext.maximumSeverity.ordinal ge 2}"
+										limitToList="true"
+										action="#{employeeServiceAllocationsManagement.deleteEmployeeServiceAllocationAction()}"
+										oncomplete="if(data == false) Richfaces.hideModalPanel('deleteModalPanel');"
+										reRender="deleteModalPanelContent,serviceAllocationsOutputPanel" />
+									<a4j:commandButton value="Επιστροφή"
+										styleClass="btn btn-primary btn-small"
+										onclick="#{rich:component('deleteModalPanel')}.hide();return false;" />
+								</h:panelGrid>
+							</s:div>
+						</h:panelGrid>
+					</a4j:form>
+				</a4j:outputPanel>
+
+			</a4j:region>
+
 		</rich:modalPanel>
 
+
+
+
+		<!-- ****************************************************************** -->
+		<!-- ****************************************************************** -->
+		<!-- Update Service Allocation 										    -->
+		<!-- ****************************************************************** -->
+		<!-- ****************************************************************** -->
 		<rich:modalPanel id="updateModalPanel" autosized="true" width="450">
 			<f:facet name="header">
 				<h:outputText value="Τροποποίηση Ενεργής Θητείας "
@@ -308,7 +544,7 @@
 							<rich:messages style="color:red;"></rich:messages>
 							<h:panelGrid columns="4">
 
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 									<ui:define name="label">
 										<h:outputText value="Οργανική" />
 									</ui:define>
@@ -321,13 +557,12 @@
 									</h:inputText>
 								</s:decorate>
 
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 									<ui:define name="label">
 										<h:outputText value="Μονάδα Θητείας" />
 									</ui:define>
 
-									<h:inputText
-										required="true" id="serviceUnitTarget" size="22"
+									<h:inputText required="true" id="serviceUnitTarget" size="22"
 										styleClass="fieldValueText" tabindex="1">
 
 										<rich:suggestionbox for="serviceUnitTarget" var="_serviceUnit"
@@ -347,7 +582,7 @@
 								</s:decorate>
 
 
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 									<ui:define name="label">
 										<h:outputText value="Έναρξη : " />
 									</ui:define>
@@ -358,7 +593,7 @@
 									</rich:calendar>
 								</s:decorate>
 
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 									<ui:define name="label">
 										<h:outputText value="Λήξη : " />
 									</ui:define>
@@ -369,7 +604,7 @@
 									</rich:calendar>
 								</s:decorate>
 
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 									<ui:define name="label">
 										<h:outputText value="Ωρ. Οργανικής : " />
 									</ui:define>
@@ -378,7 +613,7 @@
 										size="3" maxlength="3" required="true" />
 								</s:decorate>
 
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 									<ui:define name="label">
 										<h:outputText value="Ωρ. Θητείας : " />
 									</ui:define>
@@ -387,14 +622,14 @@
 										size="3" maxlength="3" required="true" />
 								</s:decorate>
 
-								<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 									<ui:define name="label">
 										<h:outputText value="Σχόλιο" />
 									</ui:define>
 									<h:inputTextarea
 										value="#{serviceAllocationHome.instance.comment}" />
 								</s:decorate>
-								
+
 							</h:panelGrid>
 						</a4j:outputPanel>
 
@@ -404,8 +639,9 @@
 								action="#{serviceAllocationHome.update()}"
 								data="#{facesContext.maximumSeverity.ordinal ge 2}"
 								oncomplete="if(data == false) Richfaces.hideModalPanel('updateModalPanel');"
-								reRender="activeServiceAllocation" />
-							<a4j:commandButton value="Επιστροφή .." action="#{serviceAllocationHome.revert()}"
+								reRender="serviceAllocationsOutputPanel" />
+							<a4j:commandButton value="Επιστροφή .."
+								action="#{serviceAllocationHome.revert()}"
 								onclick="#{rich:component('updateModalPanel')}.hide();return false;" />
 						</h:panelGrid>
 					</h:form>

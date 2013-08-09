@@ -390,7 +390,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         Collection<ServiceAllocation> result = null;
         result = getEntityManager(em)
                 .createQuery(
-                        "SELECT s FROM ServiceAllocation s WHERE (s.deleted IS FALSE OR s.deleted IS NULL) AND (s.autoCanceled IS FALSE OR s.autoCanceled IS NULL) AND s.employee=:employee ORDER BY s.insertedOn")
+                        "SELECT s FROM ServiceAllocation s WHERE (s.deleted IS FALSE OR s.deleted IS NULL) AND (s.autoCanceled IS FALSE OR s.autoCanceled IS NULL) AND s.employee=:employee ORDER BY s.established DESC")
                 .setParameter("employee", employee).getResultList();
         return result;
     }
