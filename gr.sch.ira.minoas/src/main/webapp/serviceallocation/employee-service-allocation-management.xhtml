@@ -38,6 +38,7 @@
 							<s:div styleClass="actionBox">
 								<a4j:commandButton value="Νέα Θητεία"
 									styleClass="btn btn-primary"
+									rendered="#{(s:hasRole('ADMIN') or s:hasRole('ADD_SERVICE_ALLOCATION'))}"
 									action="#{employeeServiceAllocationsManagement.prepareForNewServiceAllocation()}"
 									oncomplete="#{rich:component('createModalPanel')}.show()"
 									reRender="createModalPanelContent" limitToList="true">
