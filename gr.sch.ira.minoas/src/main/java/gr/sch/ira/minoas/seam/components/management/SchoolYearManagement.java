@@ -427,7 +427,7 @@ public class SchoolYearManagement extends BaseDatabaseAwareSeamComponent {
 										ex.getMessage()));
 			} finally {
 				// rollback the transcation
-				em.getTransaction().setRollbackOnly();
+				//em.getTransaction().setRollbackOnly();
 			}
 		} else {
 			getFacesMessages().add(Severity.ERROR,
