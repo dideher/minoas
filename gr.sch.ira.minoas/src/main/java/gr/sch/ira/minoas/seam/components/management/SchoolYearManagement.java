@@ -240,7 +240,10 @@ public class SchoolYearManagement extends BaseDatabaseAwareSeamComponent {
 					newEmployment.setSpecialization(regularEmployment
 							.getSpecialization());
 					newEmployment.setEmployee(regularEmployment.getEmployee());
-
+					/* gh-130 : https://github.com/dideher/minoas/issues/130 */
+					newEmployment.setEntryIntoServiceAct(regularEmployment.getEntryIntoServiceAct());
+					newEmployment.setEntryIntoServiceDate(regularEmployment.getEntryIntoServiceDate());
+					/* gh-130 : https://github.com/dideher/minoas/issues/130 */
 					regularEmployment.getEmployee().getEmployments()
 							.add(newEmployment);
 					regularEmployment.getEmployee().setCurrentEmployment(
