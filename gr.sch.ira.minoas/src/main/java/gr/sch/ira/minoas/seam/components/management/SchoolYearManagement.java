@@ -6,6 +6,7 @@ import gr.sch.ira.minoas.model.core.Specialization;
 import gr.sch.ira.minoas.model.core.SpecializationGroup;
 import gr.sch.ira.minoas.model.core.TeachingRequirement;
 import gr.sch.ira.minoas.model.employee.Employee;
+import gr.sch.ira.minoas.model.employee.EmployeeInfo;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
 import gr.sch.ira.minoas.model.employee.RegularEmployeeInfo;
 import gr.sch.ira.minoas.model.employement.Employment;
@@ -28,6 +29,7 @@ import java.util.Map;
 
 import javax.persistence.EntityManager;
 
+import org.infinispan.transaction.TransactionLog.LogEntry;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -356,6 +358,13 @@ public class SchoolYearManagement extends BaseDatabaseAwareSeamComponent {
 						newEmployee.setRegularDetail(regular_info);
 						em.persist(regular_info);
 						em.flush();
+						
+						EmployeeInfo employeeInfo = new EmployeeInfo();
+						employeeInfo.setEmployee(newEmployee);
+						employeeInfo.setInsertedOn(new Date());
+						employeeInfo.setInsertedBy(getPrincipal());
+						em.persist(employeeInfo);
+						newEmployee.setEmployeeInfo(employeeInfo);
 
 						Employment newEmployment = new Employment();
 						newEmployment.setActive(Boolean.TRUE);
@@ -403,8 +412,11 @@ public class SchoolYearManagement extends BaseDatabaseAwareSeamComponent {
 
 				em.flush();
 				fetchSchoolYears();
+				
+				
 			} catch (Exception ex) {
 				em.getTransaction().setRollbackOnly();
+				error("failed to upgrade school year due to an exception", ex);
 				getFacesMessages()
 						.add(Severity.ERROR,
 								String.format(
