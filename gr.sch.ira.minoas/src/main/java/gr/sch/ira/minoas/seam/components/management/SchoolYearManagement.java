@@ -412,7 +412,10 @@ public class SchoolYearManagement extends BaseDatabaseAwareSeamComponent {
 				for (SpecialAssigment sa : activeAssigments) {
 					sa.setActive(Boolean.FALSE);
 				}
-
+				
+				sourceSchoolYear.setCurrentSchoolYear(false);
+				targetSchoolYear.setCurrentSchoolYear(true);
+				
 				em.flush();
 				fetchSchoolYears();
 				
