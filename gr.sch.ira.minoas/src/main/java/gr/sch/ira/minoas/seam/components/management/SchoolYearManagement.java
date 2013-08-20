@@ -9,6 +9,8 @@ import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeInfo;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
 import gr.sch.ira.minoas.model.employee.RegularEmployeeInfo;
+import gr.sch.ira.minoas.model.employement.Disposal;
+import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
 import gr.sch.ira.minoas.model.employement.Secondment;
@@ -240,6 +242,7 @@ public class SchoolYearManagement extends BaseDatabaseAwareSeamComponent {
 					newEmployment.setSpecialization(regularEmployment
 							.getSpecialization());
 					newEmployment.setEmployee(regularEmployment.getEmployee());
+					regularEmployment.getEmployee().setLastSpecialization(regularEmployment.getSpecialization());
 					/* gh-130 : https://github.com/dideher/minoas/issues/130 */
 					newEmployment.setEntryIntoServiceAct(regularEmployment.getEntryIntoServiceAct());
 					newEmployment.setEntryIntoServiceDate(regularEmployment.getEntryIntoServiceDate());
@@ -390,6 +393,57 @@ public class SchoolYearManagement extends BaseDatabaseAwareSeamComponent {
 						em.flush();
 
 					} else if (transfer.getType() == PermanentTransferType.TO_OTHER_PYSDE) {
+						
+						Employee e = transfer.getEmployee();
+						
+			            Collection<EmployeeLeave> leaves = getCoreSearching().getEmployeeLeaves2(e);
+			            for(EmployeeLeave l : leaves) {
+			                if(l.getActive()) {
+			                    l.setActive(false);
+			                    l.setAutoCanceled(true);
+			                }
+			            }
+			            
+			            Collection<SpecialAssigment> sa = getCoreSearching().getEmployeeSpecialAssigments(entityManager, e);
+			            for(SpecialAssigment s : sa) {
+			                if(s.getActive()) {
+			                    s.setActive(false);
+			                }
+			            }
+			            
+			            Collection<Secondment> secondments = getCoreSearching().getEmployeeSecondments(e);
+			            for(Secondment s : secondments) {
+			                if(s.isActive()) {
+			                    s.setActive(false);
+			                    s.setAutoCanceled(true);
+			                }
+			            }
+			            
+			            Collection<Disposal> disposals = getCoreSearching().getEmployeeDisposals(entityManager, e);
+			            for(Disposal s : disposals) {
+			                if(s.isActive()) {
+			                    s.setActive(false);
+			                    s.setAutoCanceled(true);
+			                }
+			            }
+			            
+			            Collection<ServiceAllocation> serviceAllocations = getCoreSearching().getEmployeeServiceAllocation(entityManager, e);
+			            for(ServiceAllocation s : serviceAllocations) {
+			                if(s.getActive()) {
+			                    s.setActive(false);
+			                    s.setAutoCanceled(true);
+			                }
+			            }
+			            
+			            Collection<Employment> employments2 = getCoreSearching().getEmployeeEmployments(e);
+			            for(Employment em2 : employments2) {
+			                if(em2.getActive()) {
+			                    em2.setActive(false);
+			                }
+			            }
+						
+						
+						e.setActive(Boolean.FALSE);
 						Employment regularEmployment = transfer.getEmployee()
 								.getCurrentEmployment();
 						regularEmployment.setActive(Boolean.FALSE);
