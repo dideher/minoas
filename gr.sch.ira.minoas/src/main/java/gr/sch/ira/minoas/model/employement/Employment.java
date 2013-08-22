@@ -96,7 +96,7 @@ public class Employment extends BaseIDDeleteAwareModel {
 	private ServiceAllocation serviceAllocation;
 
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "SPECIALIZATION_ID", nullable = false, updatable = false)
+	@JoinColumn(name = "SPECIALIZATION_ID", nullable = false, updatable = true)
 	private Specialization specialization;
 
 	/**

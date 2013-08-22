@@ -221,7 +221,6 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
     @RequestParameter(value="actionVariation")
     private String actionVariation;
   
-
 	@In(required = true, create = true)
 	private EmployeeHome employeeHome;
 	
