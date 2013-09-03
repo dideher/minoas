@@ -455,6 +455,9 @@ public class Employee extends Person {
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("[");
+		sb.append("(");
+		sb.append(getId());
+		sb.append(") ");
 		sb.append(getLastName());
 		sb.append(" ");
 		sb.append(getFirstName());
