@@ -5,7 +5,6 @@ import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
-import gr.sch.ira.minoas.model.employement.NonRegularEmploymentInfo;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.CoreSearching;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
@@ -229,6 +228,10 @@ public class EmployeeEmploymentManagement extends BaseDatabaseAwareSeamComponent
 	@RaiseEvent("employeeEmploymentUpdated")
 	public String updateEmployment() {
 		if (getEmploymentHome().isManaged() && getEmployeeHome().isManaged()) {
+			/* in the form the user specifies the mandatory working hours, pass this to the final working hours as well */
+			Employment employment =  employmentHome.getInstance();
+			employment.setFinalWorkingHours(employment.getMandatoryWorkingHours());
+			/* in the form the user specifies the mandatory working hours, pass this to the final working hours as well */
 			return employmentHome.update();
 		} else {
 			getFacesMessages().add(Severity.ERROR, "employee home or employment home is not managed", (Object[]) null);
@@ -250,7 +253,10 @@ public class EmployeeEmploymentManagement extends BaseDatabaseAwareSeamComponent
 				}
 				
 				String emplHomeResult = employmentHome.persist();
-				
+				/* in the form the user specifies the mandatory working hours, pass this to the final working hours as well */
+				Employment employment =  employmentHome.getInstance();
+				employment.setFinalWorkingHours(employment.getMandatoryWorkingHours());
+				/* in the form the user specifies the mandatory working hours, pass this to the final working hours as well */
 				employeeHome.getInstance().setCurrentEmployment(employmentHome.getInstance());
 				employeeHome.update();
 				initializeEmployeeEmployments();
@@ -336,7 +342,8 @@ public class EmployeeEmploymentManagement extends BaseDatabaseAwareSeamComponent
 				e.setSchoolYear(getCoreSearching().getActiveSchoolYear(getEntityManager()));
 				e.setType(EmploymentType.REGULAR);
 				e.setEstablished(new Date());
-				e.setMandatoryWorkingHours(21);
+				e.setMandatoryWorkingHours(23);
+				e.setFinalWorkingHours(23);
 				e.setSpecialization(getEmployeeHome().getInstance().getLastSpecialization());
 				return "prepared";
 			} else {

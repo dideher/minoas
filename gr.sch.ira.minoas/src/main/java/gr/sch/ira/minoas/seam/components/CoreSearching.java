@@ -198,7 +198,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         debug("trying to featch all  employments for employee '#0'", employee);
         result = entityManager
                 .createQuery(
-                        "SELECT e from Employment e WHERE e.employee=:employee AND e.type=:type AND e.deleted IS FALSE ORDER BY e.schoolYear.title ")
+                        "SELECT e from Employment e WHERE e.employee=:employee AND e.type=:type AND (e.deleted IS FALSE OR e.deleted IS NULL) ORDER BY e.established DESC")
                 .setParameter("employee", employee).setParameter("type", type).getResultList();
         info("found totally '#0' employments for regular employee '#1'.", result.size(), employee);
         return result;

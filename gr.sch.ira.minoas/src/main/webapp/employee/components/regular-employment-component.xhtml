@@ -15,7 +15,7 @@
 					<h:outputText value="Σχολική Μονάδα: " />
 				</ui:define>
 				<h:inputText id="regularSchoolUnitTarget" styleClass="fieldValueText" tabindex="51" 
-					value="#{_regularEmployment.school.title}" required="true" readonly="#{enableSchoolUnitField}">
+					value="#{_regularEmployment.school.title}" required="true" readonly="#{!enableSchoolUnitField}">
 					<rich:suggestionbox for="regularSchoolUnitTarget" var="_school" 
 						height="200" width="300"
 						suggestionAction="#{schoolUnitSuggester.suggest}">
