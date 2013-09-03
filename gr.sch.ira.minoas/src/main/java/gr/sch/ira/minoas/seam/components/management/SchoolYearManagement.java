@@ -280,6 +280,10 @@ public class SchoolYearManagement extends BaseDatabaseAwareSeamComponent {
 					newEmployment.setSchoolYear(targetSchoolYear);
 					newEmployment.setSpecialization(regularEmployment
 							.getSpecialization());
+					/* gh-130 : https://github.com/dideher/minoas/issues/130 */
+					newEmployment.setEntryIntoServiceAct(regularEmployment.getEntryIntoServiceAct());
+					newEmployment.setEntryIntoServiceDate(regularEmployment.getEntryIntoServiceDate());
+					/* gh-130 : https://github.com/dideher/minoas/issues/130 */
 					newEmployment.setEmployee(regularEmployment.getEmployee());
 
 					regularEmployment.getEmployee().getEmployments()
@@ -322,6 +326,10 @@ public class SchoolYearManagement extends BaseDatabaseAwareSeamComponent {
 						newEmployment.setSchoolYear(targetSchoolYear);
 						newEmployment.setSpecialization(regularEmployment
 								.getSpecialization());
+						/* gh-130 : https://github.com/dideher/minoas/issues/130 */
+						newEmployment.setEntryIntoServiceAct(regularEmployment.getEntryIntoServiceAct());
+						newEmployment.setEntryIntoServiceDate(regularEmployment.getEntryIntoServiceDate());
+						/* gh-130 : https://github.com/dideher/minoas/issues/130 */
 						newEmployment.setEmployee(regularEmployment
 								.getEmployee());
 
