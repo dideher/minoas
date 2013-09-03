@@ -94,7 +94,7 @@ public class SchedulerController extends BaseDatabaseAwareSeamComponent {
     private QuartzTriggerHandle regularEmployeeServiceUpdaterProcessorHandler;
     private QuartzTriggerHandle rankInfoUpdaterProcessorHandler;
     private QuartzTriggerHandle basicUsageReportProcessorHandler;
-    private QuartzTriggerHandle pensionsScannerProcessorHandler;
+    
     
 	/**
      * Comment for <code>serialVersionUID</code>
