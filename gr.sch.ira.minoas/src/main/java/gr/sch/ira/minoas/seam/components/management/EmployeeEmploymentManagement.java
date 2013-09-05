@@ -232,7 +232,9 @@ public class EmployeeEmploymentManagement extends BaseDatabaseAwareSeamComponent
 			Employment employment =  employmentHome.getInstance();
 			employment.setFinalWorkingHours(employment.getMandatoryWorkingHours());
 			/* in the form the user specifies the mandatory working hours, pass this to the final working hours as well */
-			return employmentHome.update();
+			employmentHome.update();
+			getEntityManager().flush();
+			return ACTION_OUTCOME_SUCCESS;
 		} else {
 			getFacesMessages().add(Severity.ERROR, "employee home or employment home is not managed", (Object[]) null);
 			return null;
