@@ -302,8 +302,17 @@ public class TeachingHoursCDRManagement extends BaseDatabaseAwareSeamComponent {
                 }
 
                 /* service allocation is always associated with an employment */
-
-                Employment relatedEmployment = serviceAllocation.getAffectedEmployment();
+                Employment relatedEmployment = null;
+                try {
+                	relatedEmployment = serviceAllocation.getEmployee().getCurrentEmployment();
+                } catch(Exception ex) {
+                	warn(String.format("logic error -> failed to extract current employment for employee '%s'", serviceAllocation.getEmployee()));
+                }
+                
+                if(relatedEmployment == null)
+                	serviceAllocation.getAffectedEmployment();
+                
+                serviceAllocation.getEmployee().getCurrentEmployment();
                 if (relatedEmployment != null) {
                     Collection<TeachingHourCDR> employmentsCDRs = getCoreSearching().getTeachingHoursCDRsRelatedToEmployment(getEntityManager(), relatedEmployment, currentSchoolYear);
                     /* Employment should have one only one CDR */
