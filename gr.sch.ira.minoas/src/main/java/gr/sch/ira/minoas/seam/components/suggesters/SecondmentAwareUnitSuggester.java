@@ -8,6 +8,7 @@ import gr.sch.ira.minoas.model.core.Unit;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.SecondmentType;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
+import gr.sch.ira.minoas.seam.components.home.SecondmentHome;
 
 import java.util.Collection;
 
@@ -31,11 +32,12 @@ public class SecondmentAwareUnitSuggester extends BaseDatabaseAwareSeamComponent
 	private static final long serialVersionUID = 1L;
 
 	@In(required = false)
-	private Secondment secondment;
+	private SecondmentHome secondmentHome;
 
 	@SuppressWarnings("unchecked")
 	@Transactional
 	public Collection<Unit> suggest(Object secondmemt_search_pattern) {
+		Secondment secondment = secondmentHome != null ? secondmentHome.getInstance() : null;
 		SecondmentType type = secondment != null ? type = secondment.getSecondmentType() : null;
 		if (type != null) {
 			return getEntityManager()
