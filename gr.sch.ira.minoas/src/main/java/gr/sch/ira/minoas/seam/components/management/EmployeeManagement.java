@@ -446,6 +446,28 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
             
     }
     
+    public void prepareForUpdateEmployee() {
+    	Employee employee = getEmployeeHome().getInstance();
+    	employeeHome.setTempValueHolder1(employee.getLastSpecialization().getId());
+    	//    	If employee HAS RegularEmployeeInfo data
+		if (employee.getRegularEmployeeInfo() != null) {
+			//	Set RegularEmployeeInfoHome with the Employee's RegularEmployeeInfo data
+			regularEmployeeInfoHome.setId(employee.getRegularEmployeeInfo().getId());
+		} else {
+            RegularEmployeeInfo i = new RegularEmployeeInfo();
+            i.setInsertedBy(getPrincipal());
+            i.setInsertedOn(new Date());
+            i.setEmployee(getEmployeeHome().getInstance());
+            i.setRegistryID("1234567");
+            getEntityManager().persist(i);
+            getEntityManager().flush();
+            
+            employee.setRegularEmployeeInfo(i);
+            regularEmployeeInfoHome.setId(i.getId());
+		}
+            
+    }
+    
     
     @Transactional(TransactionPropagationType.REQUIRED)
     public String terminateEmployee() {
@@ -807,7 +829,7 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
     @Transactional(TransactionPropagationType.REQUIRED)
     public String updateEmployeeBasicInfo() {
     	 /* there is a rare situation (due bugs of the past) to have a regular employee with no regular employee info */
-        if(getEmployeeHome().isManaged() && (!getRegularEmployeeInfoHome().isManaged())) {
+        if(getEmployeeHome().isManaged() && (getRegularEmployeeInfoHome().getInstance() == null)) {
             RegularEmployeeInfo i = new RegularEmployeeInfo();
             i.setInsertedBy(getPrincipal());
             i.setInsertedOn(new Date());
@@ -818,7 +840,7 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
             getEmployeeHome().getInstance().setRegularDetail(i);
          }
         
-        if (getEmployeeHome().isManaged() && getRegularEmployeeInfoHome().isManaged()) {
+        if (getEmployeeHome().isManaged() && (getRegularEmployeeInfoHome().getInstance() != null)) {
             Employee employee = getEmployeeHome().getInstance();
             RegularEmployeeInfo employeeInfo = getRegularEmployeeInfoHome().getInstance();
             if(employeeInfo.getRegistryID()!= "" && !isRegularRegistryIDValid(employeeInfo.getRegistryID())) {

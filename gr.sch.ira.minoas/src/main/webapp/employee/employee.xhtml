@@ -228,7 +228,7 @@
 						<rich:toolBar itemSeparator="line">
 							<a4j:commandLink id="updateBasicInfolink"
 								reRender="updateBasicInfoModalPanelContent"
-								action="#{employeeHome.setTempValueHolder1(employee.lastSpecialization.id)}"
+								action="#{employeeManagement.prepareForUpdateEmployee()}"
 								rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE_BASIC_INFO'))}"
 								oncomplete="#{rich:component('updateBasicInfoModalPanel')}.show()"
 								value="Τροποποίηση Στοιχείων">
