@@ -9,6 +9,8 @@ import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.ServiceAllocation;
 import gr.sch.ira.minoas.model.employement.WorkExperience;
+import gr.sch.ira.minoas.model.transfers.OutstandingImprovement;
+import gr.sch.ira.minoas.model.transfers.PermanentTransfer;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -80,6 +82,12 @@ public class Employee extends Person {
 	
 	@OneToMany(mappedBy = "employee", fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
 	private Set<Employment> employments;
+	
+	@OneToMany(fetch=FetchType.LAZY,cascade={CascadeType.ALL}, mappedBy="employee")
+	private Collection<OutstandingImprovement> οutstandingImprovement =  new ArrayList<OutstandingImprovement>();
+	
+	@OneToMany(fetch=FetchType.LAZY,cascade={CascadeType.ALL}, mappedBy="employee")
+	private Collection<PermanentTransfer> permanentTransfer =  new ArrayList<PermanentTransfer>();
 	
 	@OneToMany(fetch=FetchType.LAZY,cascade={CascadeType.ALL}, mappedBy="employee")
 	private Collection<WorkExperience> workExperience =  new ArrayList<WorkExperience>();
@@ -511,6 +519,35 @@ public class Employee extends Person {
     public void setWorkExperience(Collection<WorkExperience> workExperience) {
         this.workExperience = workExperience;
     }
+    
+	/**
+	 * @return the οutstandingImprovement
+	 */
+	public Collection<OutstandingImprovement> getΟutstandingImprovement() {
+		return οutstandingImprovement;
+	}
+
+	/**
+	 * @param οutstandingImprovement the οutstandingImprovement to set
+	 */
+	public void setΟutstandingImprovement(
+			Collection<OutstandingImprovement> οutstandingImprovement) {
+		this.οutstandingImprovement = οutstandingImprovement;
+	}
+
+	/**
+	 * @return the permanentTransfer
+	 */
+	public Collection<PermanentTransfer> getPermanentTransfer() {
+		return permanentTransfer;
+	}
+
+	/**
+	 * @param permanentTransfer the permanentTransfer to set
+	 */
+	public void setPermanentTransfer(Collection<PermanentTransfer> permanentTransfer) {
+		this.permanentTransfer = permanentTransfer;
+	}
 
 	/**
 	 * @return the employeeInfo
@@ -653,7 +690,7 @@ public class Employee extends Person {
 	
 	/**
 	 * Returns, if possible, the employees regular employment school title. This
-	 * operation can be called safelly.
+	 * operation can be called safely.
 	 * 
 	 * @return The emplouyee's regular employment school title or null
 	 */
