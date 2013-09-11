@@ -210,7 +210,7 @@ public class EmployeeSecondmentsManagement extends BaseDatabaseAwareSeamComponen
             if (addMessages)
                 facesMessages
                         .add(Severity.ERROR,
-                                "Η μονάδα αποσπάσης πρέπει να είναι διαφορετική απο την τρέχουσα οργανική του εκπαιδευτικού. Καφέ ήπιες ;");
+                                "Η μονάδα αποσπάσης πρέπει να είναι διαφορετική από την τρέχουσα οργανική του εκπαιδευτικού. Καφέ ήπιες ;");
             return false;
         }
         
@@ -224,7 +224,7 @@ public class EmployeeSecondmentsManagement extends BaseDatabaseAwareSeamComponen
                 String dto = df.format(d.getDueTo());
                 
                 facesMessages
-                        .add(Severity.ERROR,String.format("Η απόσπαση δεν μπορεί να καταχωρηθεί γίατι για τον εκπαιδευτικό υπάρχει ήδη καταχωρημένη διάθεση στην μονάδα '%s' απο '%s' εως '%s'.", dunit, dfrom, dto));
+                        .add(Severity.ERROR,String.format("Η απόσπαση δεν μπορεί να καταχωρηθεί γίατι για τον εκπαιδευτικό υπάρχει ήδη καταχωρημένη διάθεση στην μονάδα '%s' από '%s' εως '%s'.", dunit, dfrom, dto));
                 facesMessages.add(Severity.INFO,"Εαν η απόσπαση πρέπει να καταχωρηθεί, ακυρώστε πρώτα την διάθεση.");
             }
             return false;
@@ -240,7 +240,7 @@ public class EmployeeSecondmentsManagement extends BaseDatabaseAwareSeamComponen
                 String dto = df.format(d.getDueTo());
                 
                 facesMessages
-                        .add(Severity.ERROR,String.format("Η απόσπαση δεν μπορεί να καταχωρηθεί γίατι για τον εκπαιδευτικό υπάρχει ήδη καταχωρημένη θητεία στην μονάδα '%s' απο '%s' εως '%s'.", dunit, dfrom, dto));
+                        .add(Severity.ERROR,String.format("Η απόσπαση δεν μπορεί να καταχωρηθεί γίατι για τον εκπαιδευτικό υπάρχει ήδη καταχωρημένη θητεία στην μονάδα '%s' από '%s' εως '%s'.", dunit, dfrom, dto));
                 facesMessages.add(Severity.INFO,"Εαν η απόσπαση πρέπει να καταχωρηθεί, ακυρώστε πρώτα την θητεία.");
             }
             return false;
@@ -272,7 +272,7 @@ public class EmployeeSecondmentsManagement extends BaseDatabaseAwareSeamComponen
                 if (addMessages)
                     facesMessages
                             .add(Severity.ERROR,
-                                    "Η ημ/νια έναρξης της απόσπασης πρέπει να είναι μεταγενέστερη της λήξης της προηγούμενης απόσπασης.");
+                                    "Η ημ/νία έναρξης της απόσπασης πρέπει να είναι μεταγενέστερη της λήξης της προηγούμενης απόσπασης.");
                 return false;
             }
 

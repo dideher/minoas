@@ -26,10 +26,10 @@
 							id="exclusionDiv" styleClass="clean-warning">
 							<h:outputText
 								value="Προσοχή ! Ο εκπαιδευτικός #{employeeUtil.prettyFormat(employee)} βρίσκεται στην λίστα των εξαιρέσεων! " />
-							<a4j:commandLink value="Αφαίρεση απο την Λίστα Εξαιρέσεων"
+							<a4j:commandLink value="Αφαίρεση από την Λίστα Εξαιρέσεων"
 								reRender="lala"
 								action="#{employeeManagement.removeEmployeeFromExclusionList()}"
-								onclick="if(!confirm('Να αφαιρεθεί ο εκπαιδευτικός απο λίστα εξαιρέσεων ;')) {form.reset(); return false;}">
+								onclick="if(!confirm('Να αφαιρεθεί ο εκπαιδευτικός από λίστα εξαιρέσεων ;')) {form.reset(); return false;}">
 								<f:setPropertyActionListener value="#{employee.exclusion.id}"
 									target="#{employeeExclusionHome.id}" />
 							</a4j:commandLink>
@@ -261,7 +261,7 @@
 								</rich:menuItem>
 								<rich:menuItem submitMode="none"
 									rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_LEAVE'))}">
-									<s:link value="Διαχείρηση Αδειών Εκπαιδευτικού"
+									<s:link value="Διαχείριση Αδειών Εκπαιδευτικού"
 										propagation="join"
 										view="/leave/employee-leave-management.xhtml">
 										<f:param name="leave_management_from"
@@ -270,7 +270,7 @@
 								</rich:menuItem>
 								<rich:menuItem submitMode="none"
 									rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_SERVICE_ALLOCATION'))}">
-									<s:link value="Διαχείρηση Θητείας Εκπαιδευτικού"
+									<s:link value="Διαχείριση Θητείας Εκπαιδευτικού"
 										propagation="join"
 										view="/serviceallocation/employee-service-allocation-management.xhtml">
 										<f:param name="service_allocation_management_from"
@@ -279,7 +279,7 @@
 								</rich:menuItem>
 								<rich:menuItem submitMode="none"
 									rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_SECONDMENT'))}">
-									<s:link value="Διαχείρηση Απόσπασης Εκπαιδευτικού"
+									<s:link value="Διαχείριση Απόσπασης Εκπαιδευτικού"
 										propagation="join"
 										view="/secondment/secondment-employment-management.xhtml">
 										<f:param name="secondment_management_from"
@@ -323,7 +323,7 @@
 								<rich:menuItem submitMode="none"
 									rendered="#{(s:hasRole('ADMIN'))}">
 									<h:commandLink value="Διαγραφή Εκπαιδευτικού !!!!"
-										onclick="if(!confirm('Να διαγραφή ο εκπαιδευτικός ? Προσοχή!!!! Η Διαδικασία δεν είναι αναστρέψιμη.')) {form.reset(); return false;}"
+										onclick="if(!confirm('Να διαγραφεί ο εκπαιδευτικός ? Προσοχή!!!! Η Διαδικασία δεν είναι αναστρέψιμη.')) {form.reset(); return false;}"
 										action="#{employeeHome.remove()}" />
 								</rich:menuItem>
 
@@ -364,7 +364,7 @@
 											</f:facet>
 											<rich:column>
 												<f:facet name="header">
-													<h:outputText value="Σχολική Χρονία" />
+													<h:outputText value="Σχολική Χρονιά" />
 												</f:facet>
 												<h:outputText value="#{_employment.schoolYear.title}" />
 											</rich:column>
@@ -376,7 +376,7 @@
 											</rich:column>
 											<rich:column>
 												<f:facet name="header">
-													<h:outputText value="Ημ/νια Έναρξης" />
+													<h:outputText value="Ημ/νία Έναρξης" />
 												</f:facet>
 												<h:outputText value="#{_employment.established}">
 													<s:convertDateTime pattern="dd-MM-yyyy" />
@@ -384,7 +384,7 @@
 											</rich:column>
 											<rich:column>
 												<f:facet name="header">
-													<h:outputText value="Ημ/νια Λήξης" />
+													<h:outputText value="Ημ/νία Λήξης" />
 												</f:facet>
 												<h:outputText value="#{_employment.terminated}">
 													<s:convertDateTime pattern="dd-MM-yyyy" />
@@ -442,7 +442,7 @@
 											</f:facet>
 											<rich:column>
 												<f:facet name="header">
-													<h:outputText value="Σχολική Χρονία" />
+													<h:outputText value="Σχολική Χρονιά" />
 												</f:facet>
 												<h:outputText value="#{_employment.schoolYear.title}" />
 											</rich:column>
@@ -454,7 +454,7 @@
 											</rich:column>
 											<rich:column>
 												<f:facet name="header">
-													<h:outputText value="Ημ/νια Έναρξης" />
+													<h:outputText value="Ημ/νία Έναρξης" />
 												</f:facet>
 												<h:outputText value="#{_employment.established}">
 													<s:convertDateTime pattern="dd-MM-yyyy" />
@@ -462,7 +462,7 @@
 											</rich:column>
 											<rich:column>
 												<f:facet name="header">
-													<h:outputText value="Ημ/νια Λήξης" />
+													<h:outputText value="Ημ/νία Λήξης" />
 												</f:facet>
 												<h:outputText value="#{_employment.terminated}">
 													<s:convertDateTime pattern="dd-MM-yyyy" />
@@ -521,7 +521,7 @@
 											</f:facet>
 											<rich:column>
 												<f:facet name="header">
-													<h:outputText value="Σχολική Χρονία" />
+													<h:outputText value="Σχολική Χρονιά" />
 												</f:facet>
 												<h:outputText value="#{_employment.schoolYear.title}" />
 											</rich:column>
@@ -533,7 +533,7 @@
 											</rich:column>
 											<rich:column>
 												<f:facet name="header">
-													<h:outputText value="Ημ/νια Έναρξης" />
+													<h:outputText value="Ημ/νία Έναρξης" />
 												</f:facet>
 												<h:outputText value="#{_employment.established}">
 													<s:convertDateTime pattern="dd-MM-yyyy" />
@@ -541,7 +541,7 @@
 											</rich:column>
 											<rich:column>
 												<f:facet name="header">
-													<h:outputText value="Ημ/νια Λήξης" />
+													<h:outputText value="Ημ/νία Λήξης" />
 												</f:facet>
 												<h:outputText value="#{_employment.terminated}">
 													<s:convertDateTime pattern="dd-MM-yyyy" />
@@ -603,7 +603,7 @@
 												</f:facet>
 												<rich:column>
 													<f:facet name="header">
-														<h:outputText value="Σχ. Χρονία" />
+														<h:outputText value="Σχ. Χρονιά" />
 													</f:facet>
 													<h:outputText value="#{_secondment.schoolYear.title}" />
 												</rich:column>
@@ -648,9 +648,9 @@
 													<f:facet name="header">
 														<h:outputText value="Με Αίτηση Του" />
 													</f:facet>
-													<h:outputText value="Ναί"
+													<h:outputText value="Ναι"
 														rendered="#{_secondment.employeeRequested}" />
-													<h:outputText value="Οχι"
+													<h:outputText value="Όχι"
 														rendered="#{!_secondment.employeeRequested}" />
 												</rich:column>
 
@@ -778,7 +778,7 @@
 								</f:facet>
 								<h:panelGrid columns="1" width="100%">
 									<h:outputText
-										value="Στον παρακάτω πίνακα εμφανίζεται το ιστορικό όλων των αποσπάσεων του εκπαιδευτικού. Μπορείτε να τροποποιήσεται, αν θέλετε, την ενεργή κατά το τρέχων σχολικό έτος απόσπαση." />
+										value="Στον παρακάτω πίνακα εμφανίζεται το ιστορικό όλων των αποσπάσεων του εκπαιδευτικού. Μπορείτε να τροποποιήσετε, αν θέλετε, την ενεργή κατά το τρέχων σχολικό έτος απόσπαση." />
 
 									<rich:dataTable id="employeeSecondmentsList"
 										value="#{employeeServiceAllocations}"
@@ -911,9 +911,9 @@
 										</rich:column>
 										<rich:column>
 											<f:facet name="header">
-												<h:outputText value="Σχολίο Οργανικής">
+												<h:outputText value="Σχολείο Οργανικής">
 													<rich:toolTip
-														value="Εμφανίζεται το Σχολίο της Οργανικής του Εκπαιδευτικού κατά την καταχώρηση της Άδειας." />
+														value="Εμφανίζεται το Σχολείο της Οργανικής του Εκπαιδευτικού κατά την καταχώρηση της Άδειας." />
 												</h:outputText>
 											</f:facet>
 											<h:outputText value="#{_leave.regularUnit}" />
@@ -1052,7 +1052,7 @@
 							<ui:include src="/components/messages-component.xhtml" />
 
 							<h:outputText
-								value="Με την παρακάτω φόρμα, μπορείται να τροποποίησετε τα βασικά στοιχεία του/της εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}." />
+								value="Με την παρακάτω φόρμα, μπορείτε να τροποποίησετε τα βασικά στοιχεία του/της εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}." />
 							<h:panelGrid columns="3">
 
 
@@ -1111,7 +1111,7 @@
 
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
 									<ui:define name="label">
-										<h:outputText value="Ημ/νια Γεννήσεως : " />
+										<h:outputText value="Ημ/νία Γεννήσεως : " />
 									</ui:define>
 									<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
 										style="width:50px" enableManualInput="true"
@@ -1236,7 +1236,7 @@
 				<h:panelGrid columns="1">
 
 					<h:outputText style="font-style:italic; font-size:12px;"
-						value="Με την παρακάτω φόρμα μπορείται να τερματίσεται την υπηρεσία του εργαζόμενου #{employeeUtil.prettyFormat(employee)}." />
+						value="Με την παρακάτω φόρμα μπορείτε να τερματίσετε την υπηρεσία του εργαζόμενου #{employeeUtil.prettyFormat(employee)}." />
 
 					<a4j:outputPanel id="terminateEmployeeModalPanelContent">
 
@@ -1285,7 +1285,7 @@
 
 										<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 											<ui:define name="label">
-												<h:outputText value="Ημ/νια Τερματισμού : " />
+												<h:outputText value="Ημ/νία Τερματισμού : " />
 											</ui:define>
 											<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
 												style="width:50px" enableManualInput="true"
@@ -1358,7 +1358,7 @@
 				<h:panelGrid columns="1">
 
 					<h:outputText style="font-style:italic; font-size:12px;"
-						value="Με την παρακάτω φόρμα, μπορείται να εισάγετε ειδική ασχολία του εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}." />
+						value="Με την παρακάτω φόρμα, μπορείτε να εισάγετε ειδική ασχολία του εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}." />
 
 					<a4j:outputPanel id="addSpecialAssigmentModalPanelContent">
 

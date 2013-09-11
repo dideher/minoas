@@ -457,7 +457,7 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
 //            if (addMessages)
 //                facesMessages
 //                        .add(Severity.ERROR,
-//                                "H ημ/νία έναρξης είναι μεταγενέστερη της ημ/νιας λήξης της άδειας. Μάλλον πρέπει να κάνεις ενα διάλειμα.");
+//                                "H ημ/νία έναρξης είναι μεταγενέστερη της ημ/νίας λήξης της άδειας. Μάλλον πρέπει να κάνεις ενα διάλειμα.");
 //            return false;
 //        }
 //
@@ -479,7 +479,7 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
 //                if (addMessages)
 //                    facesMessages
 //                            .add(Severity.ERROR,
-//                                    "Η ημ/νία έναρξης της άδειας πρέπει να είναι μεταγενέστερη της ημ/νιας λήξης της προηγούμενης άδειας.");
+//                                    "Η ημ/νία έναρξης της άδειας πρέπει να είναι μεταγενέστερη της ημ/νίας λήξης της προηγούμενης άδειας.");
 //                return false;
 //            }
 //
@@ -963,7 +963,7 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
 
         info("computeLeaveDuration: established -> '#0', due to -> '#1'", established, dueTo);
         if (established == null || dueTo == null) {
-            facesMessages.add(Severity.ERROR, "Πρέπει πρώτα να συμπληρώσετε την ημ/νια έναρξης και λήξεις της άδειας");
+            facesMessages.add(Severity.ERROR, "Πρέπει πρώτα να συμπληρώσετε την ημ/νία έναρξης και λήξεις της άδειας");
             return;
         }
 
@@ -972,7 +972,7 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
 
             facesMessages
                     .add(Severity.ERROR,
-                            "H ημ/νία έναρξης είναι μεταγενέστερη της ημ/νιας λήξης της άδειας. Μάλλον πρέπει να κάνεις ενα διάλειμα.");
+                            "H ημ/νία έναρξης είναι μεταγενέστερη της ημ/νίας λήξης της άδειας. Μάλλον πρέπει να κάνεις ενα διάλειμα.");
             return;
         }
         setLeaveDurarionInDaysHelper(CoreUtils.getDatesDifference(established, dueTo));
@@ -1005,7 +1005,7 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
             if (addMessages)
                 facesMessages
                         .add(Severity.ERROR,
-                                "H ημ/νία έναρξης είναι μεταγενέστερη της ημ/νιας λήξης της άδειας. Μάλλον πρέπει να κάνεις ενα διάλειμα.");
+                                "H ημ/νία έναρξης είναι μεταγενέστερη της ημ/νίας λήξης της άδειας. Μάλλον πρέπει να κάνεις ενα διάλειμα.");
             return false;
         }
 
@@ -1027,7 +1027,7 @@ public class EmployeeLeavesManagement extends BaseDatabaseAwareSeamComponent {
                 if (addMessages)
                     facesMessages
                             .add(Severity.ERROR,
-                                    "Η ημ/νία έναρξης της άδειας πρέπει να είναι μεταγενέστερη της ημ/νιας λήξης της προηγούμενης άδειας.");
+                                    "Η ημ/νία έναρξης της άδειας πρέπει να είναι μεταγενέστερη της ημ/νίας λήξης της προηγούμενης άδειας.");
                 return false;
             }
 

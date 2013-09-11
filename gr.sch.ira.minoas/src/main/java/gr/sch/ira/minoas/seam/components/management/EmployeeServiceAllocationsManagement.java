@@ -322,7 +322,7 @@ public class EmployeeServiceAllocationsManagement extends
 			if (addMessages)
 				facesMessages
 						.add(Severity.ERROR,
-								"Προσοχή, δεν έχει ορισθεί η μονάδα οργανικής / τρέχουσας θέσεις.");
+								"Προσοχή, δεν έχει ορισθεί η μονάδα οργανικής / τρέχουσας θέσης.");
 			return false;
 		}
 
@@ -356,7 +356,7 @@ public class EmployeeServiceAllocationsManagement extends
 				if (addMessages)
 					facesMessages
 							.add(Severity.ERROR,
-									"Όταν η μονάδα θητείας είναι ίδια με την μονάδα οργανικής, δεν μπορείτε να συμπληρώσετε και τα δυο ωραρία.");
+									"Όταν η μονάδα θητείας είναι ίδια με την μονάδα οργανικής, δεν μπορείτε να συμπληρώσετε και τα δυο ωράρια.");
 				return false;
 			}
 
@@ -402,7 +402,7 @@ public class EmployeeServiceAllocationsManagement extends
 				facesMessages
 						.add(Severity.ERROR,
 								String.format(
-										"Η θητεία δεν μπορεί να καταχωρηθεί γίατι για τον εκπαιδευτικό υπάρχει ήδη καταχωρημένη διάθεση στην μονάδα '%s' απο '%s' εως '%s'.",
+										"Η θητεία δεν μπορεί να καταχωρηθεί γίατι για τον εκπαιδευτικό υπάρχει ήδη καταχωρημένη διάθεση στην μονάδα '%s' από '%s' εως '%s'.",
 										dunit, dfrom, dto));
 				facesMessages
 						.add(Severity.INFO,
@@ -429,7 +429,7 @@ public class EmployeeServiceAllocationsManagement extends
 		// facesMessages
 		// .add(Severity.ERROR,
 		// String.format(
-		// "Η διάθεση δεν μπορεί να καταχωρηθεί γίατι για τον εκπαιδευτικό υπάρχει ήδη καταχωρημένη θητεία στην μονάδα '%s' απο '%s' εως '%s'.",
+		// "Η διάθεση δεν μπορεί να καταχωρηθεί γίατι για τον εκπαιδευτικό υπάρχει ήδη καταχωρημένη θητεία στην μονάδα '%s' από '%s' εως '%s'.",
 		// dunit, dfrom, dto));
 		// facesMessages.add(Severity.INFO,
 		// "Εαν η διάθεση πρέπει να καταχωρηθεί, ακυρώστε πρώτα την θητεία.");
@@ -501,7 +501,7 @@ public class EmployeeServiceAllocationsManagement extends
 		// if (addMessages)
 		// facesMessages
 		// .add(Severity.ERROR,
-		// "Η ημ/νια έναρξης της θητείας πρέπει να είναι μεταγενέστερη της λήξης της προηγούμενης θητείας.");
+		// "Η ημ/νία έναρξης της θητείας πρέπει να είναι μεταγενέστερη της λήξης της προηγούμενης θητείας.");
 		// return false;
 		// }
 		//

@@ -20,7 +20,7 @@
 		<rich:panel>
 			<f:facet name="header">
 				<h:outputText
-					value="Διαχείρηση Αποσπάσεων του/της #{employeeUtil.prettyFormat(employee)}" />
+					value="Διαχείριση Αποσπάσεων του/της #{employeeUtil.prettyFormat(employee)}" />
 			</f:facet>
 
 			<ui:include src="/components/messages-component.xhtml" />
@@ -142,7 +142,7 @@
 									<rich:column
 										styleClass="#{employeeSecondmentsManagement.getTableCellClassForSecondment(_secondment)}">
 										<f:facet name="header">
-											<h:outputText value="Σχ. Χρονία" />
+											<h:outputText value="Σχ. Χρονιά" />
 										</f:facet>
 										<h:outputText value="#{_secondment.schoolYear.title}" />
 									</rich:column>
@@ -274,7 +274,7 @@
 						<a4j:form>
 							<h:panelGroup>
 								<h:outputText
-									value="Να διαγραφή η απόσπαση του εκπαιδευτικού #{employeeUtil.prettyFormat(secondmentHome.instance.employee)} στην μονάδα " />
+									value="Να διαγραφεί η απόσπαση του εκπαιδευτικού #{employeeUtil.prettyFormat(secondmentHome.instance.employee)} στην μονάδα " />
 								<h:outputText
 									value="#{secondmentHome.instance.targetUnit.title}"
 									styleClass="fieldValueText" />
@@ -286,7 +286,7 @@
 								<h:outputText value=" ;" />
 								<p>
 									<h:outputText
-										value="Προσοχή ! Αν θέλετε να τερματίσεται μια απόσπαση, τότε κάντε τροποποίηση των ημερομηνίων λήξης της απόσπασης και ΟΧΙ διαγραφή."
+										value="Προσοχή ! Αν θέλετε να τερματίσετε μια απόσπαση, τότε κάντε τροποποίηση των ημερομηνίων λήξης της απόσπασης και ΟΧΙ διαγραφή."
 										styleClass="fieldValueText" />
 								</p>
 
@@ -338,7 +338,7 @@
 					<h:form>
 						<a4j:outputPanel id="updateModalPanelContent" layout="inline">
 							<h:outputText
-								value="Με την παρακάτω φόρμα, μπορείται να τροποποίησεται την  απόσπαση του/της εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}." />
+								value="Με την παρακάτω φόρμα, μπορείτε να τροποποίησετε την  απόσπαση του/της εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}." />
 
 							<ui:include src="/components/messages-component.xhtml" />
 
@@ -477,7 +477,7 @@
 						<ui:include src="/components/messages-component.xhtml" />
 
 						<h:outputText
-							value="Συμπληρώστε τα στοιχεία της παρακάτω φόρμας για να εισάγεται νέα απόσπαση για τον εκπαιδευτικό " />
+							value="Συμπληρώστε τα στοιχεία της παρακάτω φόρμας για να εισάγετε νέα απόσπαση για τον εκπαιδευτικό " />
 						<h:outputText styleClass="fieldValueText"
 							value="#{employeeUtil.prettyFormat(employeeHome.instance)}" />
 

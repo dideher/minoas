@@ -227,7 +227,7 @@ public class EmployeeDisposalsManagement extends BaseDatabaseAwareSeamComponent 
 //                String dto = df.format(d.getDueTo());
 //                
 //                facesMessages
-//                        .add(Severity.ERROR,String.format("Η διάθεση δεν μπορεί να καταχωρηθεί γίατι για τον εκπαιδευτικό υπάρχει ήδη καταχωρημένη διάθεση στην μονάδα '%s' απο '%s' εως '%s'.", dunit, dfrom, dto));
+//                        .add(Severity.ERROR,String.format("Η διάθεση δεν μπορεί να καταχωρηθεί γίατι για τον εκπαιδευτικό υπάρχει ήδη καταχωρημένη διάθεση στην μονάδα '%s' από '%s' εως '%s'.", dunit, dfrom, dto));
 //                facesMessages.add(Severity.INFO,"Εαν η απόσπαση πρέπει να καταχωρηθεί, ακυρώστε πρώτα την διάθεση.");
 //            }
 //            return false;
@@ -247,9 +247,9 @@ public class EmployeeDisposalsManagement extends BaseDatabaseAwareSeamComponent 
                 facesMessages
                         .add(Severity.ERROR,
                                 String.format(
-                                        "Η διάθεση δεν μπορεί να καταχωρηθεί γίατι για τον εκπαιδευτικό υπάρχει ήδη καταχωρημένη θητεία στην μονάδα '%s' απο '%s' εως '%s'.",
+                                        "Η διάθεση δεν μπορεί να καταχωρηθεί γίατι για τον εκπαιδευτικό υπάρχει ήδη καταχωρημένη θητεία στην μονάδα '%s' από '%s' εως '%s'.",
                                         dunit, dfrom, dto));
-                facesMessages.add(Severity.INFO, "Εαν η διάθεση πρέπει να καταχωρηθεί, ακυρώστε πρώτα την θητεία.");
+                facesMessages.add(Severity.INFO, "Εάν η διάθεση πρέπει να καταχωρηθεί, ακυρώστε πρώτα την θητεία.");
             }
             return false;
         }
@@ -277,7 +277,7 @@ public class EmployeeDisposalsManagement extends BaseDatabaseAwareSeamComponent 
                 if (addMessages)
                     facesMessages
                             .add(Severity.ERROR,
-                                    "Η ημ/νια έναρξης της διάθεσης πρέπει να είναι μεταγενέστερη της λήξης της προηγούμενης διάθεσης.");
+                                    "Η ημ/νία έναρξης της διάθεσης πρέπει να είναι μεταγενέστερη της λήξης της προηγούμενης διάθεσης.");
                 return false;
             }
 

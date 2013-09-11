@@ -66,7 +66,7 @@ public class OutstandingImprovementManagement extends BaseDatabaseAwareSeamCompo
 //		if (!(improvement.getSourceSchool().getRegionCode().equals(improvement.getTargetSchool().getRegionCode()))) {
 //			result = false;
 //			facesMessages.add(Severity.ERROR,
-//					"Η σχολική μονάδα βελτίωσεις πρέπει να είναι στην ίδια περιοχή με την οργανική.");
+//					"Η σχολική μονάδα βελτίωσης πρέπει να είναι στην ίδια περιοχή με την οργανική.");
 //		}
 		/* gh-160 : https://github.com/dideher/minoas/issues/160 */
 		return result;

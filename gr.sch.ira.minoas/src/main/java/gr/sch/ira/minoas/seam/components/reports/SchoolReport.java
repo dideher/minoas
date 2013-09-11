@@ -356,15 +356,15 @@ public class SchoolReport extends BaseReport {
 
     private String constructComment(Disposal disposal) {
         StringBuffer sb = new StringBuffer();
-        sb.append("Διάθεση απο τις ");
+        sb.append("Διάθεση από τις ");
         sb.append(this.dateFormat.format(disposal.getEstablished()));
-        sb.append(" εως και ");
+        sb.append(" έως και ");
         sb.append(this.dateFormat.format(disposal.getDueTo()));
         sb.append(" στο/σε ");
         sb.append(disposal.getDisposalUnit().getTitle());
         sb.append(" για ");
         sb.append(disposal.getHours());
-        sb.append(" ωρες και ");
+        sb.append(" ώρες και ");
         sb.append(disposal.getDays());
         sb.append(" ημέρες. ");
         return sb.toString();
@@ -375,7 +375,7 @@ public class SchoolReport extends BaseReport {
         StringBuffer sb = new StringBuffer();
         sb.append("Άδεια τύπου ");
         sb.append(leave.getEmployeeLeaveType().getDescription());
-        sb.append(" απο τις ");
+        sb.append(" από τις ");
         sb.append(this.dateFormat.format(leave.getEstablished()));
         sb.append(" εως και ");
         sb.append(this.dateFormat.format(leave.getDueTo()));
@@ -385,7 +385,7 @@ public class SchoolReport extends BaseReport {
 
     private String constructComment(Secondment secondment) {
         StringBuffer sb = new StringBuffer();
-        sb.append("Αποσπάση απο τις ");
+        sb.append("Αποσπάση από τις ");
         sb.append(this.dateFormat.format(secondment.getEstablished()));
         sb.append(" στο/σε ");
         sb.append(secondment.getTargetUnit().getTitle());
@@ -397,9 +397,9 @@ public class SchoolReport extends BaseReport {
         StringBuffer sb = new StringBuffer();
         sb.append("Θητεία τύπου ");
         sb.append(getLocalizedMessage(serviceAllocation.getServiceType().getKey()));
-        sb.append(" απο τις ");
+        sb.append(" από τις ");
         sb.append(this.dateFormat.format(serviceAllocation.getEstablished()));
-        sb.append(" εως και ");
+        sb.append(" έως και ");
         sb.append(this.dateFormat.format(serviceAllocation.getDueTo()));
         sb.append(" στο/σε ");
         sb.append(serviceAllocation.getServiceUnit().getTitle());

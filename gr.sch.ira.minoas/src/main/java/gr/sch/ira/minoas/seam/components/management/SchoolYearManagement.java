@@ -488,7 +488,7 @@ public class SchoolYearManagement extends BaseDatabaseAwareSeamComponent {
 				getFacesMessages()
 						.add(Severity.ERROR,
 								String.format(
-										"Η διαδικασία αλλάγης σχολικής χρονία απέτυχε λόγω '%s' σφάλματος",
+										"Η διαδικασία αλλαγής σχολικής χρονιά απέτυχε λόγω '%s' σφάλματος",
 										ex.getMessage()));
 			} finally {
 				// rollback the transcation

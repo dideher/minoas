@@ -400,7 +400,7 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
 			
 			/* employees must not be same */
 			if(sourceEmployeeHome.getId().equals(targetEmployeeHome.getId())) {
-				facesMessages.add(Severity.ERROR, "Δεν μπορείτε να συνχωνεύσεται τον εκπαιδευτικό στον εαυτό του. Kάντε ενα διάλλειμα για καφε και τσιγάρο.");
+				facesMessages.add(Severity.ERROR, "Δεν μπορείτε να συγχωνεύσετε τον εκπαιδευτικό στον εαυτό του. Kάντε ενα διάλειμα για καφέ και τσιγάρο.");
 				return ACTION_OUTCOME_FAILURE;
 			}
 			return ACTION_OUTCOME_SUCCESS;
@@ -476,7 +476,7 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
         if (getEmployeeHome().isManaged() && getEmployeeHome().getInstance().getActive()) {
             Employee e = getEmployeeHome().getInstance();
             if(e.getTerminationDate() == null || e.getTerminationReason() == null) {
-                facesMessages.add(Severity.ERROR, "Πρέπει να συμπληρώσετε την αιτία και την ημ/νια τερματισμού.", getEmployeeHome());
+                facesMessages.add(Severity.ERROR, "Πρέπει να συμπληρώσετε την αιτία και την ημ/νία τερματισμού.", getEmployeeHome());
                 
                 return ACTION_OUTCOME_FAILURE;
             }
@@ -672,7 +672,7 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
             Employee new_employee = employeeHome.getInstance();
             new_employee.setType(EmployeeType.REGULAR);
             new_employee.setActive(Boolean.TRUE);
-            new_employee.setComment(String.format("Εισαγωγή εκπαιδευτικού απο άλλο ΠΥΣΔΕ '%s' κατά την σχολική χρονία '%s'.", new_employee.getCurrentPYSDE().getTitle(), currentYear));
+            new_employee.setComment(String.format("Εισαγωγή εκπαιδευτικού από άλλο ΠΥΣΔΕ '%s' κατά την σχολική χρονιά '%s'.", new_employee.getCurrentPYSDE().getTitle(), currentYear));
             employeeHome.persist();
             
 //            Employment newEmployment = employmentHome.getInstance();
@@ -698,7 +698,7 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
             
             regularEmployeeInfoHome.persist();
             
-            facesMessages.add(Severity.INFO, String.format("Η καταχώρηση του εκπαιδευτικού '%s %s του %s απο το ΠΥΣΔΕ '%s' έγινε επιτυχώς' ",new_employee.getLastName(), new_employee.getFirstName(), new_employee.getFatherName(), new_employee.getCurrentPYSDE().getTitle()));
+            facesMessages.add(Severity.INFO, String.format("Η καταχώρηση του εκπαιδευτικού '%s %s του %s από το ΠΥΣΔΕ '%s' έγινε επιτυχώς' ",new_employee.getLastName(), new_employee.getFirstName(), new_employee.getFatherName(), new_employee.getCurrentPYSDE().getTitle()));
             return ACTION_OUTCOME_SUCCESS;
             
         } else {

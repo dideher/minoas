@@ -114,7 +114,7 @@ public class EmployeeWorkAttendaceController extends
 			workevent.setOccuredOn(insertedDate);
 			workevent.setInsertedBy(principalObject);
 			workevent
-					.setComment("Αυτόματη εισαγωγή κατά την έξοδο απο το σύστημα.");
+					.setComment("Αυτόματη εισαγωγή κατά την έξοδο από το σύστημα.");
 			getEntityManager().persist(workevent);
 		}
 		getEntityManager().flush();

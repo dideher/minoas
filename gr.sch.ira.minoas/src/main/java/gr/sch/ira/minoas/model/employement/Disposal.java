@@ -339,7 +339,7 @@ public class Disposal extends BaseIDDeleteAwareModel {
 		StringBuffer sb = new StringBuffer();
 		sb.append("[ Διάθεση : ");
 		sb.append(getEmployee());
-		sb.append(" εκπαιδευτικόυ ");
+		sb.append(" εκπαιδευτικού ");
 		sb.append(" στην μονάδα  ");
 		sb.append(getDisposalUnit());
 		

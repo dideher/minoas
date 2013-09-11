@@ -55,7 +55,7 @@ public class PermanentTransferManagement extends BaseDatabaseAwareSeamComponent 
 		if (!(improvement.getSourceSchool().getRegionCode().equals(improvement.getTargetSchool().getRegionCode()))) {
 			result = false;
 			facesMessages.add(Severity.ERROR,
-					"Η σχολική μονάδα βελτίωσεις πρέπει να είναι στην ίδια περιοχή με την οργανική.");
+					"Η σχολική μονάδα βελτίωσης πρέπει να είναι στην ίδια περιοχή με την οργανική.");
 		}
 		*/
 		return result;

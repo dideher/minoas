@@ -85,7 +85,7 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 			getFacesMessages().add(
 					Severity.ERROR,
 					"Το ΑΦΜ '" + new_employee.getVatNumber()
-							+ "' που εισάγατε είναι ήδη σε χρήση απο τον εκπαιδευτικό '"
+							+ "' που εισάγατε είναι ήδη σε χρήση από τον εκπαιδευτικό '"
 							+ test_employee.toPrettyString()+"').");
 			return null;
 		}
