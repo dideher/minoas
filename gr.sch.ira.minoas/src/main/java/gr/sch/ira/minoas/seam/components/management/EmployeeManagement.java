@@ -468,6 +468,70 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
             
     }
     
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public String unTerminateEmployee() {
+    	if (getEmployeeHome().isManaged() && getEmployeeHome().getInstance().getActive() != null && getEmployeeHome().getInstance().getActive() == false) {
+    		Employee e = getEmployeeHome().getInstance();
+    		e.setTerminationReason(null);
+    		e.setTerminationOptionalComment(null);
+    		e.setTerminationDate(null);
+    		e.setActive(true);
+    		Employment em = e.getCurrentEmployment();
+    		if(em != null) {
+    			if(em.getSchoolYear().isCurrentSchoolYear()) {
+    				/* previously disabled employment is still in the current school year, 
+    				 * so just enabled it 
+    				 */
+    				em.setActive(Boolean.TRUE);
+    			} else {
+    				/* we need to create a new employment */
+    				SchoolYear current_year = getCoreSearching().getActiveSchoolYear(getEntityManager());
+    				Employment newEmployment = new Employment();
+					newEmployment.setActive(Boolean.TRUE);
+					newEmployment.setEstablished(current_year
+							.getSchoolYearStart());
+					newEmployment.setFinalWorkingHours(em
+							.getFinalWorkingHours());
+					newEmployment.setMandatoryWorkingHours(em
+							.getMandatoryWorkingHours());
+					newEmployment.setType(em.getType());
+					newEmployment.setSchool(em.getSchool());
+					newEmployment.setSchoolYear(current_year);
+					newEmployment.setSpecialization(em
+							.getSpecialization());
+					newEmployment.setEmployee(em.getEmployee());
+					em.getEmployee().setLastSpecialization(em.getSpecialization());
+					/* gh-130 : https://github.com/dideher/minoas/issues/130 */
+					newEmployment.setEntryIntoServiceAct(em.getEntryIntoServiceAct());
+					newEmployment.setEntryIntoServiceDate(em.getEntryIntoServiceDate());
+					/* gh-130 : https://github.com/dideher/minoas/issues/130 */
+					em.getEmployee().getEmployments()
+							.add(newEmployment);
+					em.getEmployee().setCurrentEmployment(
+							newEmployment);
+					em.setTerminated(em.getSchoolYear()
+							.getSchoolYearStop());
+					em.setActive(Boolean.FALSE);
+					em.setSupersededBy(newEmployment);
+					getEntityManager().persist(newEmployment);
+    			}
+    		}
+            getEmployeeHome().update();
+            
+            constructEmployeeCurrentHoursDistributionReport();
+            constructEmployeeCurrentStatusReport();
+            constructEmployeeLeavesHistory();
+            constructEmployeeWorkExperienceHistory();
+            constructSpecialAssigmentItems();
+            
+            getEntityManager().flush();
+            
+            facesMessages.add(Severity.INFO, "Ο εκπαιδευτικός έχει ενεργοποιηθεί και πάλι. Τυχόν οργανικές, θητείες, αποσπάσεις, κτλ, θα πρέπει να τις επεξεργαστείτε ξεχωριστά. ", getEmployeeHome());
+            
+            return ACTION_OUTCOME_SUCCESS;
+    	}
+    	return null;
+    }
     
     @Transactional(TransactionPropagationType.REQUIRED)
     public String terminateEmployee() {

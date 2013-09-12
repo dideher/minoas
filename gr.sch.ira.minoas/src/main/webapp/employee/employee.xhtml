@@ -322,9 +322,8 @@
 									rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE_TERMINATE')) and (employeeHome.instance.active eq false)}">
 									<a4j:commandLink value="Αναίρεση Τερματισμού Εκπαιδευτικού"
 										reRender="terminateEmployeeModalPanelContent" 
-										action="#{employeeManagement.prepareForEmployeeTermination()}"
-										oncomplete="#{rich:component('terminateEmployeeModalPanel')}.show()"
-										onclick="if(!confirm('Να τερματιστεί ο εκπαιδευτικός ? Προσοχή!!!! Η Διαδικασία δεν είναι αναστρέψιμη.')) {form.reset(); return false;}" />
+										action="#{employeeManagement.unTerminateEmployee()}"
+										onclick="if(!confirm('Να αναιρεθεί ο τερματιμός του εκπαιδευτικού ? Προσοχή!!!! Η Διαδικασία δεν είναι αναστρέψιμη.')) {form.reset(); return false;}" />
 								</rich:menuItem>
 								
 								
