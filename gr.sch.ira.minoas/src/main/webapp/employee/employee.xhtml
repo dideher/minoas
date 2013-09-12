@@ -239,7 +239,7 @@
 							<a4j:commandLink id="addEmployeeSpecialAssigmentLink"
 								reRender="addSpecialAssigmentModalPanelContent"
 								action="#{employeeManagement.prepareForNewSpecialAssigment()}"
-								rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE'))}"
+								rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE')) and employeeHome.instance.active eq true}"
 								oncomplete="#{rich:component('addSpecialAssigmentModalPanel')}.show()"
 								value="Εισαγωγή Ειδικής Ασχολίας">
 								<h:graphicImage value="/img/icons/edit.png" width="12"
@@ -252,7 +252,7 @@
 
 							<rich:dropDownMenu value="Διαχείριση Εργαζόμενου">
 								<rich:menuItem submitMode="none"
-									rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYMENT'))}">
+									rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYMENT')) and employeeHome.instance.active eq true}">
 									<s:link value="Διαχείριση Σχέσης Εργασίας" propagation="join"
 										view="/employee/manage-employment.xhtml">
 										<f:param name="employment_management_from"
@@ -260,7 +260,7 @@
 									</s:link>
 								</rich:menuItem>
 								<rich:menuItem submitMode="none"
-									rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_LEAVE'))}">
+									rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_LEAVE')) and employeeHome.instance.active eq true}">
 									<s:link value="Διαχείριση Αδειών Εκπαιδευτικού"
 										propagation="join"
 										view="/leave/employee-leave-management.xhtml">
@@ -269,7 +269,7 @@
 									</s:link>
 								</rich:menuItem>
 								<rich:menuItem submitMode="none"
-									rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_SERVICE_ALLOCATION'))}">
+									rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_SERVICE_ALLOCATION')) and employeeHome.instance.active eq true}">
 									<s:link value="Διαχείριση Θητείας Εκπαιδευτικού"
 										propagation="join"
 										view="/serviceallocation/employee-service-allocation-management.xhtml">
@@ -278,7 +278,7 @@
 									</s:link>
 								</rich:menuItem>
 								<rich:menuItem submitMode="none"
-									rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_SECONDMENT'))}">
+									rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_SECONDMENT')) and employeeHome.instance.active eq true}">
 									<s:link value="Διαχείριση Απόσπασης Εκπαιδευτικού"
 										propagation="join"
 										view="/secondment/secondment-employment-management.xhtml">
@@ -288,7 +288,7 @@
 								</rich:menuItem>
 
 								<rich:menuItem submitMode="none"
-									rendered="#{(s:hasRole('ADMIN') or s:hasRole('VIEW_EMPLOYEE_INFO'))}">
+									rendered="#{(s:hasRole('ADMIN') or s:hasRole('VIEW_EMPLOYEE_INFO')) and employeeHome.instance.active eq true}">
 									          
 									<s:link value="Διαχείριση Στοιχείων Μισθοδοσίας" 
 										view="/employee/manageEmployeeInfo.xhtml">
@@ -298,7 +298,7 @@
 								</rich:menuItem>
 
 								<rich:menuItem submitMode="ajax"
-									rendered="#{(s:hasRole('ADMIN')) and (!employeeHome.isInExclusionList())}">
+									rendered="#{(s:hasRole('ADMIN')) and (!employeeHome.isInExclusionList()) and employeeHome.instance.active eq true}">
 									<a4j:commandLink value="Αποστολή στην Λίστα Εξαιρέσεων"
 										ajaxSingle="true"
 										action="#{employeeManagement.addEmployeeToExclusionList}"
@@ -310,13 +310,24 @@
 								<rich:menuSeparator />
 
 								<rich:menuItem submitMode="none"
-									rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE_TERMINATE'))}">
+									rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE_TERMINATE')) and employeeHome.instance.active eq true}">
 									<a4j:commandLink value="Τερματισμός Υπηρεσίας Εκπαιδευτικού"
 										reRender="terminateEmployeeModalPanelContent" 
 										action="#{employeeManagement.prepareForEmployeeTermination()}"
 										oncomplete="#{rich:component('terminateEmployeeModalPanel')}.show()"
 										onclick="if(!confirm('Να τερματιστεί ο εκπαιδευτικός ? Προσοχή!!!! Η Διαδικασία δεν είναι αναστρέψιμη.')) {form.reset(); return false;}" />
 								</rich:menuItem>
+								
+								<rich:menuItem submitMode="none"
+									rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE_TERMINATE')) and (employeeHome.instance.active eq false)}">
+									<a4j:commandLink value="Αναίρεση Τερματισμού Εκπαιδευτικού"
+										reRender="terminateEmployeeModalPanelContent" 
+										action="#{employeeManagement.prepareForEmployeeTermination()}"
+										oncomplete="#{rich:component('terminateEmployeeModalPanel')}.show()"
+										onclick="if(!confirm('Να τερματιστεί ο εκπαιδευτικός ? Προσοχή!!!! Η Διαδικασία δεν είναι αναστρέψιμη.')) {form.reset(); return false;}" />
+								</rich:menuItem>
+								
+								
 
 								<rich:menuSeparator />
 
@@ -332,7 +343,7 @@
 
 						</rich:toolBar>
 					</h:form>
-
+					
 				</s:div>
 
 
