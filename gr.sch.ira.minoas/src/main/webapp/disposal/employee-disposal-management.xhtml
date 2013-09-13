@@ -19,7 +19,7 @@
 		<rich:panel>
 			<f:facet name="header">
 				<h:outputText
-					value="Διαχείρηση Διαθέσεων του/της #{employeeUtil.prettyFormat(employee)}" />
+					value="Διαχείριση Διαθέσεων του/της #{employeeUtil.prettyFormat(employee)}" />
 			</f:facet>
 
 			<ui:include src="/components/messages-component.xhtml" />
@@ -275,7 +275,7 @@
 
 				<p class="well well-small">
 					<h:outputText
-						value="Να διαγραφή η διάθεση του εκπαιδευτικού #{employeeUtil.prettyFormat(disposalHome.instance.employee)} στην μονάδα " />
+						value="Να διαγραφεί η διάθεση του εκπαιδευτικού #{employeeUtil.prettyFormat(disposalHome.instance.employee)} στην μονάδα " />
 					<h:outputText value="#{disposalHome.instance.disposalUnit.title}"
 						styleClass="fieldValueText" />
 					<h:outputText value=" με λήξη την " />
@@ -296,7 +296,7 @@
 							<s:div styleClass="alert alert-warning">
 
 								<h:outputText
-									value="Προσοχή ! Αν θέλετε να τερματίσεται μια διάθεση τότε κάντε τροποποίηση των ημερομηνίων λήξης της διάθεσης και ΟΧΙ διαγραφή."
+									value="Προσοχή ! Αν θέλετε να τερματίσετε μια διάθεση τότε κάντε τροποποίηση των ημερομηνίων λήξης της διάθεσης και ΟΧΙ διαγραφή."
 									styleClass="fieldValueText" />
 
 							</s:div>
@@ -357,7 +357,7 @@
 
 						<p class="well well-small">
 							<h:outputText
-								value="Με την παρακάτω φόρμα, μπορείται να τροποποίησεται την διάθεση του/της εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}." />
+								value="Με την παρακάτω φόρμα, μπορείτε να τροποποίησετε την διάθεση του/της εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}." />
 						</p>
 
 						<ui:include src="/disposal/disposal-component.xhtml">
@@ -416,7 +416,7 @@
 						<ui:include src="/components/messages-component.xhtml" />
 						<p class="well well-small">
 							<h:outputText
-								value="Συμπληρώστε τα στοιχεία της παρακάτω φόρμας για να εισάγεται νέα απόσπαση για τον εκπαιδευτικό " />
+								value="Συμπληρώστε τα στοιχεία της παρακάτω φόρμας για να εισάγετε νέα απόσπαση για τον εκπαιδευτικό " />
 
 							<h:outputText styleClass="fieldValueText"
 								value="#{employeeUtil.prettyFormat(employeeHome.instance)}" />

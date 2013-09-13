@@ -55,7 +55,7 @@
 				<rich:menuGroup value="Εκτύπωσεις και Στατιστικά"
 					rendered="#{(s:hasRole('ADMIN') or s:hasRole('VIEW_SCHOOL_REPORT'))}">
 					<rich:menuItem submitMode="none">
-						<s:link value="Διδακτικά Κενά - Πλεονάσματα Ανα Ειδικότητα"
+						<s:link value="Διδακτικά Κενά - Πλεονάσματα Ανά Ειδικότητα"
 							view="/school/teaching-void-analysis-report.xhtml">
 							<f:param name="teaching-void-analysis-report_from"
 								value="/home" />
@@ -113,7 +113,7 @@
 					<rich:menuGroup value="Εκτύπωσεις και Στατιστικά">
 						<rich:menuItem submitMode="none"
 							rendered="#{(s:hasRole('ADMIN') or s:hasRole('VIEW_LEAVE'))}">
-							<s:link value="Άδειες Ανα Τύπο" 
+							<s:link value="Άδειες Ανά Τύπο" 
 								view="/leave/leave-report-by-type.xhtml">
 								<f:param name="leaves_report_by_type_from" value="/home" />
 							</s:link>
@@ -197,7 +197,7 @@
 					<rich:menuGroup value="Εκτύπωσεις και Στατιστικά"
 						rendered="#{(s:hasRole('ADMIN') or s:hasRole('VIEW_DISPOSAL'))}">
 						<rich:menuItem submitMode="none">
-							<s:link value="Διαθέσεις Ανα Τύπο"
+							<s:link value="Διαθέσεις Ανά Τύπο"
 								view="/disposal/report-by-type.xhtml">
 								<f:param name="from" value="/home" />
 							</s:link>
@@ -208,14 +208,6 @@
 
 				<rich:menuGroup value="Διαχείριση Θητειών">
 					<rich:menuItem submitMode="none"
-						rendered="#{(s:hasRole('ADMIN') or s:hasRole('ADD_SERVICE_ALLOCATION'))}">
-						<s:link value="Εισαγωγή Νέας Θητείας"
-							action="#{serviceAllocationHome.clearInstance()}"
-							view="/serviceallocation/add-new-service-allocation.xhtml">
-							<f:param name="add_new_service_allocation_from" value="/home" />
-						</s:link>
-					</rich:menuItem>
-					<rich:menuItem submitMode="none"
 						rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_SERVICE_ALLOCATION'))}">
 						<s:link value="Διαχείριση Θητείας Εκπαιδευτικού"
 							view="/employee/select-employee.xhtml">
@@ -224,8 +216,6 @@
 								value="/serviceallocation/employee-service-allocation-management" />
 						</s:link>
 					</rich:menuItem>
-					
-					
 					
 					<rich:menuGroup value="Εκτύπωσεις και Σταστικά"
 						rendered="#{(s:hasRole('ADMIN') or s:hasRole('VIEW_SERVICE_ALLOCATION'))}">
@@ -246,7 +236,7 @@
 					<rich:menuItem submitMode="none"
 						rendered="#{(s:hasRole('ADMIN') or s:hasRole('ADD_SECONDMENT'))}">
 
-						<s:link value="Εισαγωγή Νέας Απόσπασης απο άλλο ΠΥΣΔΕ" action="#{employeeManagement.prepareForNewEmployee()}" 
+						<s:link value="Εισαγωγή Νέας Απόσπασης από άλλο ΠΥΣΔΕ" action="#{employeeManagement.prepareForNewEmployee()}" 
 							view="/employee/fast-add-new-employee.xhtml">
 							<f:param name="fast_add_new_employee_from" value="/home" />
 							<f:param name="actionVariation" value="secondment" /> 

@@ -14,7 +14,7 @@
 	<ui:define name="body">
 		<rich:panel>
 			<f:facet name="header">
-				<h:outputText value="Λίστα Εκπαιδευτικών Ανα Τύπο" />
+				<h:outputText value="Λίστα Εκπαιδευτικών Ανά Τύπο" />
 			</f:facet>
 
 
@@ -24,7 +24,7 @@
 
 					<rich:panel>
 						<f:facet name="header">
-							<h:outputText value="Στοιχεία-Φιλτρά Εκπαιδευτικών   bfsmnbfmdsnbfsmdnb" />
+							<h:outputText value="Στοιχεία-Φίλτρα Εκπαιδευτικών" />
 						</f:facet>
 
 						<ui:include src="/components/messages-component.xhtml" />
@@ -339,7 +339,7 @@
 
 				<rich:column>
 					<f:facet name="header">
-						<h:outputText value="Ημ/νια Αν. Υπ/σίας" />
+						<h:outputText value="Ημ/νία Αν. Υπ/σίας" />
 					</f:facet>
 					<h:outputText
 						value="#{_employee.employeeEmploymentEstablishedDate}">
@@ -349,7 +349,7 @@
 
 				<rich:column>
 					<f:facet name="header">
-						<h:outputText value="Ημ/νια Γεν." />
+						<h:outputText value="Ημ/νία Γεν." />
 					</f:facet>
 					<h:outputText value="#{_employee.employeeBirthday}">
 						<s:convertDateTime pattern="dd-MM-yyyy" />

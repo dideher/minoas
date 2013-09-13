@@ -41,7 +41,7 @@ public class EmployeeMergeManagement extends BaseDatabaseAwareSeamComponent {
 			
 			/* employees must not be same */
 			if(sourceEmployeeHome.getId().equals(targetEmployeeHome.getId())) {
-				facesMessages.add(Severity.ERROR, "Δεν μπορείτε να συνχωνεύσεται τον εκπαιδευτικό στον εαυτό του. Kάντε ενα διάλλειμα για καφε και τσιγάρο.");
+				facesMessages.add(Severity.ERROR, "Δεν μπορείτε να συνχωνεύσετε τον εκπαιδευτικό στον εαυτό του. Kάντε ενα διάλλειμα για καφέ και τσιγάρο.");
 				return ACTION_OUTCOME_FAILURE;
 			}
 			return ACTION_OUTCOME_SUCCESS;

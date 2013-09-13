@@ -86,7 +86,7 @@
 
 							<s:decorate template="/layout/doubleLineEdit.xhtml">
 								<ui:define name="label">
-									<h:outputText value="Ημ/νια Γεννήσεως : " />
+									<h:outputText value="Ημ/νία Γεννήσεως : " />
 								</ui:define>
 								<rich:calendar datePattern="dd-MM-yyyy" style="width:50px"
 									enableManualInput="true" styleClass="fieldValueText"
@@ -185,7 +185,7 @@
 						<s:div styleClass="actionButtons">
 
 							<h:commandButton action="#{employeeHome.addNewEmployeeInLocalPYSDE()}"
-								onclick="if(!confirm('Να καταχωρηθή ο νέος Εκπαιδευτικός ?')) {form.reset(); return false;}"
+								onclick="if(!confirm('Να καταχωρηθεί ο νέος Εκπαιδευτικός ?')) {form.reset(); return false;}"
 								value="Καταχώρηση" id="persistButton" />
 							<rich:spacer width="10" />
 

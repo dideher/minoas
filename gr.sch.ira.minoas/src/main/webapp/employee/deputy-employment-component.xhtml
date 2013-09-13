@@ -7,7 +7,7 @@
 	xmlns:rich="http://richfaces.org/rich">
 
 <ui:component>
-	<h:outputText styleClass="fieldValueText" value="Δεν έχεται το δικαίωμα καταχώρησης αυτού του τύπου εκπαιδευτικού." rendered="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_EMPLOYEE_DEPUTY'))}" />
+	<h:outputText styleClass="fieldValueText" value="Δεν έχετε το δικαίωμα καταχώρησης αυτού του τύπου εκπαιδευτικού." rendered="#{!(s:hasRole('ADMIN') or s:hasRole('ADD_EMPLOYEE_DEPUTY'))}" />
 	<rich:panel rendered="#{(s:hasRole('ADMIN') or s:hasRole('ADD_EMPLOYEE_DEPUTY'))}">
 	
 		<f:facet name="header">
@@ -75,7 +75,7 @@
 
 			<s:decorate template="/layout/doubleLineEdit.xhtml">
 				<ui:define name="label">
-					<h:outputText value="Ημ/νια Ανάληψης Υπηρεσίας : " />
+					<h:outputText value="Ημ/νία Ανάληψης Υπηρεσίας : " />
 				</ui:define>
 				<rich:calendar datePattern="dd-MM-yyyy" style="width:50px"
 					enableManualInput="true" styleClass="fieldValueText" inputSize="10"

@@ -9,7 +9,7 @@
 	<rich:dataTable id="auditResultTable" value="#{audits}" var="_audit" rows="20">
 		<rich:column>
 			<f:facet name="header">
-				<h:outputText value="Ημ/νια Ενέργείας" />
+				<h:outputText value="Ημ/νία Ενέργείας" />
 			</f:facet>
 			<h:outputText value="#{_audit.insertedOn}">
 				<s:convertDateTime pattern="dd/MM/yyyy HH:mm"/>

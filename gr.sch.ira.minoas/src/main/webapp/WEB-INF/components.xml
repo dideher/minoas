@@ -210,22 +210,6 @@
   
    	<component name="exampleServiceAllocation" class="gr.sch.ira.minoas.model.employement.ServiceAllocation" />
    	
-     <!-- The active secondment of an employee -->
-   <framework:entity-query name="employeeActiveServiceAllocationListQuery" scope="page">
-    <framework:ejbql>SELECT s FROM ServiceAllocation s WHERE s.active IS TRUE</framework:ejbql>
-    <framework:restrictions>
-      <value>s.employee = #{employeeHome.instance}</value>
-    </framework:restrictions> 
-   </framework:entity-query>
-   
-   <!--  All employee's secondments -->
-   <framework:entity-query name="employeeServiceAllocationsListQuery" max-results="200" scope="page">
-    <framework:ejbql>SELECT s FROM ServiceAllocation s</framework:ejbql>
-    <framework:order>s.established desc</framework:order>
-    <framework:restrictions>
-      <value>s.employee = #{employeeHome.instance}</value>
-    </framework:restrictions> 
-   </framework:entity-query>
    
    <framework:entity-query name="schoolServiceAllocationListQuery" max-results="200" scope="page">
     <framework:ejbql>SELECT s FROM ServiceAllocation s INNER JOIN FETCH s.employee WHERE s.active IS TRUE AND s.employee.active IS TRUE</framework:ejbql>

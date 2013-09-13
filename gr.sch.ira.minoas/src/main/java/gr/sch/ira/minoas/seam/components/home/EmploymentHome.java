@@ -104,7 +104,7 @@ public class EmploymentHome extends MinoasEntityHome<Employment> {
 			if (!newEmploymentEstablished.after(currentEmploymentEstablished)) {
 				facesMessages
 						.add(Severity.ERROR,
-								"H ημ/νια ανάληψης υπηρεσίας πρέπει να είναι μεταγενέστερη. Μάλλον πρέπει να κάνεις ενα διάλειμα.");
+								"H ημ/νία ανάληψης υπηρεσίας πρέπει να είναι μεταγενέστερη. Μάλλον πρέπει να κάνεις ενα διάλειμα.");
 				return null;
 			}
 

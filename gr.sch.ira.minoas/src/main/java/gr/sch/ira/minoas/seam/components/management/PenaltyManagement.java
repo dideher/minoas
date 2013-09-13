@@ -159,7 +159,7 @@ public class PenaltyManagement extends BaseDatabaseAwareSeamComponent {
             if (addMessages)
                 facesMessages
                         .add(Severity.ERROR,
-                                "H ημ/νία έναρξης της ποινής είναι μεταγενέστερη της ημ/νιας λήξης της.");
+                                "H ημ/νία έναρξης της ποινής είναι μεταγενέστερη της ημ/νίας λήξης της.");
             return false;
         }
 
@@ -181,7 +181,7 @@ public class PenaltyManagement extends BaseDatabaseAwareSeamComponent {
                 if (addMessages)
                     facesMessages
                             .add(Severity.ERROR,
-                                    "Η ημ/νία έναρξης της ποινής πρέπει να είναι μεταγενέστερη της ημ/νιας λήξης προηγούμενης ποινής.");
+                                    "Η ημ/νία έναρξης της ποινής πρέπει να είναι μεταγενέστερη της ημ/νίας λήξης προηγούμενης ποινής.");
                 return false;
             }
 

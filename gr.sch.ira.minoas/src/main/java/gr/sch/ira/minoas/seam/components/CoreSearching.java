@@ -198,7 +198,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         debug("trying to featch all  employments for employee '#0'", employee);
         result = entityManager
                 .createQuery(
-                        "SELECT e from Employment e WHERE e.employee=:employee AND e.type=:type AND e.deleted IS FALSE ORDER BY e.schoolYear.title ")
+                        "SELECT e from Employment e WHERE e.employee=:employee AND e.type=:type AND (e.deleted IS FALSE OR e.deleted IS NULL) ORDER BY e.established DESC")
                 .setParameter("employee", employee).setParameter("type", type).getResultList();
         info("found totally '#0' employments for regular employee '#1'.", result.size(), employee);
         return result;
@@ -390,7 +390,7 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         Collection<ServiceAllocation> result = null;
         result = getEntityManager(em)
                 .createQuery(
-                        "SELECT s FROM ServiceAllocation s WHERE (s.deleted IS FALSE OR s.deleted IS NULL) AND (s.autoCanceled IS FALSE OR s.autoCanceled IS NULL) AND s.employee=:employee ORDER BY s.insertedOn")
+                        "SELECT s FROM ServiceAllocation s WHERE (s.deleted IS FALSE OR s.deleted IS NULL) AND (s.autoCanceled IS FALSE OR s.autoCanceled IS NULL) AND s.employee=:employee ORDER BY s.established DESC")
                 .setParameter("employee", employee).getResultList();
         return result;
     }

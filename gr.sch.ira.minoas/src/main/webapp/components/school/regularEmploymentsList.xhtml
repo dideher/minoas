@@ -18,7 +18,7 @@
 			width="100%">
 			<f:facet name="header">
 				<h:outputText
-					value="Λιστά Μόνιμων Καθηγητών που κατέχουν Οργανική Θέση στην Μονάδα ..." />
+					value="Λίστα Μόνιμων Καθηγητών που κατέχουν Οργανική Θέση στην Μονάδα ..." />
 			</f:facet>
 			<rich:column>
 				<f:facet name="header"></f:facet>
@@ -67,12 +67,12 @@
 					rendered="#{employmentUtil.hasSecondment(regularEmployment)}">
 					<rich:effect event="onmouseout" type="Opacity"
 						params="duration:0.8,from:1.0,to:0.3" />
-					<h:outputText value="Ενεργή απόσπαση απο " />
+					<h:outputText value="Ενεργή απόσπαση από " />
 					<h:outputText styleClass="fieldValueText"
 						value="#{regularEmployment.secondment.established}">
 						<s:convertDateTime type="date" pattern="dd-MM-yyyy" />
 					</h:outputText>
-					<h:outputText value=" εως και " />
+					<h:outputText value=" έως και " />
 					<h:outputText styleClass="fieldValueText"
 						value="#{regularEmployment.secondment.dueTo}">
 						<s:convertDateTime type="date" pattern="dd-MM-yyyy" />

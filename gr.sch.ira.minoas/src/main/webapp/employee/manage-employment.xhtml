@@ -14,7 +14,7 @@
 	<ui:define name="body">
 		<rich:panel>
 			<f:facet name="header">
-				<h:outputText value="Διαχείρηση Σχέσεων Εργασίας Εκπαιδευτικού" />
+				<h:outputText value="Διαχείριση Σχέσεων Εργασίας Εκπαιδευτικού" />
 			</f:facet>
 
 			<ui:include src="/components/messages-component.xhtml" />
@@ -40,7 +40,7 @@
 									<rich:dataTable value="#{schoolYearEmployments}" width="100%"
 										var="_regularEmploymentItem">
 										<f:facet name="header">
-											<h:outputText value="Τοποθετήσεις Μονίμου Εκπαιδευτικού - Τρέχουσα Σχολική Χρονία" />
+											<h:outputText value="Τοποθετήσεις Μονίμου Εκπαιδευτικού - Τρέχουσα Σχολική Χρονιά" />
 										</f:facet>
 										<rich:column>
 											<f:facet name="header">
@@ -55,7 +55,7 @@
 												<h:outputText value="Ώρες Διδασκαλίας" />
 											</f:facet>
 											<h:outputText
-												value="#{_regularEmploymentItem.finalWorkingHours}" size="3"
+												value="#{_regularEmploymentItem.mandatoryWorkingHours}" size="3"
 												styleClass="fieldValueText" maxlength="3" />
 										</rich:column>
 
@@ -156,7 +156,7 @@
 										<s:button action="backButton" value="Επιστροφή" />
 										<s:button action="endButton" value="Τέλος Ενέργειας" />
 										<a4j:commandButton value="Προσθήκη Νέας Σχέσης"
-											reRender="addDeputyEmployeeEmploymentContent"
+											reRender="addRegularEmployeeEmploymentContent"
 											data="#{facesContext.maximumSeverity.ordinal ge 2}"
 											action="#{employeeEmploymentManagement.prepareForNewRegularEmployment}"
 											oncomplete="if(data == false) Richfaces.showModalPanel('addRegularEmploymentModalPanel');">
@@ -191,7 +191,7 @@
 													<h:outputText value="Ώρες Διδασκαλίας" />
 												</f:facet>
 												<h:outputText
-													value="#{_regularEmploymentItem.finalWorkingHours}" size="3"
+													value="#{_regularEmploymentItem.mandatoryWorkingHours}" size="3"
 													styleClass="fieldValueText" maxlength="3" />
 											</rich:column>
 	
@@ -558,7 +558,7 @@
 													reRender="deleteEmployeeEmploymentContent"
 													oncomplete="#{rich:component('deleteEmploymentModalPanel')}.show();"
 													value="Διαγραφή"
-													onclick="javascript:if(!confirm('Είστε σίγουρος πως θέλετε να διαγράψετε την εγραφή ;')) { return false; }">
+													onclick="javascript:if(!confirm('Είστε σίγουρος πως θέλετε να διαγράψετε την εγγραφή ;')) { return false; }">
 													<h:graphicImage value="/img/icons/delete.png" width="12"
 														height="12" style="border:0" />
 													<f:setPropertyActionListener
@@ -774,11 +774,11 @@
 						<a4j:outputPanel layout="inline">
 							<s:div id="terminateEmployeeEmploymentContent">
 								<h:outputText
-									value="Συμπληρώστε την ημ/νια τερματισμού της σχέσης" />
+									value="Συμπληρώστε την ημ/νία τερματισμού της σχέσης" />
 
 								<s:decorate template="/layout/doubleLineEdit.xhtml" id="until">
 									<ui:define name="label">
-										<h:outputText value="Ημ/νια Τερματισμού Σχέσης Εργασίας : " />
+										<h:outputText value="Ημ/νία Τερματισμού Σχέσης Εργασίας : " />
 									</ui:define>
 									<rich:calendar id="untilCalendar" datePattern="dd-MM-yyyy"
 										style="width:50px" enableManualInput="true"
@@ -834,7 +834,7 @@
 											name="_hourlybasedEmployment" />
 										<ui:param value="#{nonRegularEmploymentInfoHome.instance}"
 											name="_hourlyNonRegularEmploymentInfo" />
-										<ui:param name="enableSchoolUnitField" value="#{true}" />
+										<ui:param name="enableSchoolUnitField" value="#{false}" />
 									</ui:include>
 								</s:div>
 
@@ -845,7 +845,7 @@
 											name="_deputyEmployment" />
 										<ui:param value="#{nonRegularEmploymentInfoHome.instance}"
 											name="_deputyNonRegularEmploymentInfo" />
-										<ui:param name="enableSchoolUnitField" value="#{true}" />
+										<ui:param name="enableSchoolUnitField" value="#{false}" />
 									</ui:include>
 								</s:div>
 
@@ -854,7 +854,7 @@
 										src="/employee/components/regular-employment-component.xhtml">
 										<ui:param value="#{employmentHome.instance}"
 											name="_regularEmployment" />
-										<ui:param name="enableSchoolUnitField" value="#{true}" />
+										<ui:param name="enableSchoolUnitField" value="#{false}" />
 									</ui:include>
 								</s:div>
 
@@ -1019,7 +1019,7 @@
 								oncomplete="if(data == false) Richfaces.hideModalPanel('addRegularEmploymentModalPanel');" />
 							<a4j:commandButton value="Επιστροφή .."
 								action="#{employmentHome.revert}" reRender="employmentPanelDiv"
-								onclick="#{rich:component('addDeputyEmploymentModalPanel')}.hide();" />
+								onclick="#{rich:component('addRegularEmploymentModalPanel')}.hide();" />
 						</h:panelGrid>
 					</h:form>
 				</h:panelGrid>

@@ -165,7 +165,7 @@
 
 							<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 								<ui:define name="label">
-									<h:outputText value="Ημ/νια Γέννησης : " />
+									<h:outputText value="Ημ/νία Γέννησης : " />
 								</ui:define>
 								<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
 									style="width:50px" enableManualInput="true" immediate="true"
@@ -202,7 +202,7 @@
       	<s:div styleClass="clean-warning" rendered="#{duplicateEmployeeList.rowCount gt 0}">
       	
       	<h:panelGrid columns="1" width="100%">
-      	<h:outputText  value="Τα στοιχεία του εκπαιδευτικού που εισάγατε είναι παραπλήσια με τα στοιχεία των παρακάτων εκπαιδευτικών. Ελένξτε ότι ο εκπαιδευτικός που προσπαθείτε να εισάγεται δεν είναι ήδη καταχωρήμενος." />
+      	<h:outputText  value="Τα στοιχεία του εκπαιδευτικού που εισάγατε είναι παραπλήσια με τα στοιχεία των παρακάτων εκπαιδευτικών. Ελένξτε ότι ο εκπαιδευτικός που προσπαθείτε να εισάγετε δεν είναι ήδη καταχωρήμενος." />
       	<rich:dataTable value="#{employeeManagement.duplicateEmployeeList}" var="_employee">
       		<rich:column>
       			<f:facet name="header">
@@ -249,7 +249,7 @@
       		</rich:column>
       		<rich:column>
       			<f:facet name="header">
-      				<h:outputText value="Ημ/νια Γένν." />
+      				<h:outputText value="Ημ/νία Γένν." />
       			</f:facet>
       			<h:outputText value="#{_employee.employeeBirthday}">
       				<s:convertDateTime type="date" pattern="dd-MM-yyyy"/>

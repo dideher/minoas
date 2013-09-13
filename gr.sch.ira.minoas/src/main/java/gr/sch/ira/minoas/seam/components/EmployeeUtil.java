@@ -83,7 +83,7 @@ public class EmployeeUtil extends BaseSeamComponent {
 	public String prettyFormatTerminationDate(Employee employee) {
 	    if (employee != null) {
 	        DateFormat df = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT);
-	        return employee.getTerminationDate() != null ? df.format(employee.getTerminationDate()) : "άγνωστη ημ/νια";
+	        return employee.getTerminationDate() != null ? df.format(employee.getTerminationDate()) : "άγνωστη ημ/νία";
         } else return null;
 	}
 	

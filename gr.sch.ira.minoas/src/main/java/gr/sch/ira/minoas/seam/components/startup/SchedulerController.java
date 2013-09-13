@@ -36,7 +36,6 @@ public class SchedulerController extends BaseDatabaseAwareSeamComponent {
     
     private static final long BASIC_USAGE_REPORT_INTERVAL = 2400000;
     
-    private static final long PENSION_SYNC_INTERVAL = 8400000;
     
     private static final long REGULAR_EMPLOYEE_SERVICE_SYNC_INTERVAL = 60000;
     
@@ -94,7 +93,7 @@ public class SchedulerController extends BaseDatabaseAwareSeamComponent {
     private QuartzTriggerHandle regularEmployeeServiceUpdaterProcessorHandler;
     private QuartzTriggerHandle rankInfoUpdaterProcessorHandler;
     private QuartzTriggerHandle basicUsageReportProcessorHandler;
-    private QuartzTriggerHandle pensionsScannerProcessorHandler;
+    
     
 	/**
      * Comment for <code>serialVersionUID</code>

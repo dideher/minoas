@@ -14,7 +14,7 @@
 	<ui:define name="body">
 		<rich:panel>
 			<f:facet name="header">
-				<h:outputText value="Λίστα Σχέσεων Εργασίας Ανα Τύπο" />
+				<h:outputText value="Λίστα Σχέσεων Εργασίας Ανά Τύπο" />
 			</f:facet>
 
 			
@@ -24,7 +24,7 @@
 					<rich:panel>
 						<f:facet name="header">
 							<h:outputText
-								value="Στοιχεία-Φιλτρά Σχέσεων Εργασίας" />
+								value="Στοιχεία-Φίλτρα Σχέσεων Εργασίας" />
 						</f:facet>
 
 						<ui:include src="/components/messages-component.xhtml" />
@@ -94,7 +94,7 @@
 									<s:decorate template="/layout/doubleLineEdit.xhtml"
 										rendered="#{employmentCriteria.specializationSearchType eq 'SPECIALIZATION'}">
 										<ui:define name="label">
-											<h:outputText value="Ειδικοτήτα : " />
+											<h:outputText value="Ειδικότητα : " />
 										</ui:define>
 										<h:inputText id="specializationFilter"
 											styleClass="fieldValueText" size="30">
@@ -367,7 +367,7 @@
 
 				<rich:column>
 					<f:facet name="header">
-						<h:outputText value="Ημ/νια Αν. Υπ/σίας" />
+						<h:outputText value="Ημ/νία Αν. Υπ/σίας" />
 					</f:facet>
 					<h:outputText
 						value="#{_employment.employeeEmploymentEstablishedDate}">

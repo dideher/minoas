@@ -65,7 +65,7 @@
 								value="Τέλος Εργασίας" />
 							<rich:spacer width="10" />
 							<h:commandButton action="#{disposalHome.persist()}"
-								onclick="if(!confirm('Να καταχωρηθή η διάθεση ?')) {form.reset(); return false;}"
+								onclick="if(!confirm('Να καταχωρηθεί η διάθεση ?')) {form.reset(); return false;}"
 								value="Καταχώρηση" id="updateButton" />
 							<rich:spacer width="3" />
 						</s:div>
@@ -98,7 +98,7 @@
 
 						<h:panelGrid columns="1">
 							<h:outputText
-								value="Με την παρακάτω φόρμα μπορείτε να εισάγεται γρήγορα εναν καινούργιο εκπαιδευτικό (μόνο μόνιμο) με οργανική σε άλλο ΠΥΣΔΕ." />
+								value="Με την παρακάτω φόρμα μπορείτε να εισάγετε γρήγορα εναν καινούργιο εκπαιδευτικό (μόνο μόνιμο) με οργανική σε άλλο ΠΥΣΔΕ." />
 						</h:panelGrid>
 						<h:panelGrid columns="4">
 
@@ -204,7 +204,7 @@
 
 							<s:decorate template="/layout/doubleLineEdit.xhtml">
 								<ui:define name="label">
-									<h:outputText value="Ημ/νια Γέννησης : " />
+									<h:outputText value="Ημ/νία Γέννησης : " />
 								</ui:define>
 								<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
 									style="width:50px" enableManualInput="true"

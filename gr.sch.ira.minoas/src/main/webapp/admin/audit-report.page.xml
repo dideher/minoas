@@ -14,7 +14,7 @@
  		<rule if-outcome="duplicateValue">
  			<redirect view-id="/admin/manage-principals.xhtml">
  				<message severity="ERROR">
- 					Το όνομα χρήστη που εισάγετε είναι ήδη σε χρήση απο άλλον χρήστη.
+ 					Το όνομα χρήστη που εισάγετε είναι ήδη σε χρήση από άλλον χρήστη.
  				</message>
  			</redirect>
  		</rule>

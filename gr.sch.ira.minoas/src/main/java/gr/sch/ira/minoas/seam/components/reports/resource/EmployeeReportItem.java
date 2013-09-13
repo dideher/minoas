@@ -85,8 +85,8 @@ public class EmployeeReportItem extends BaseIDReportItem {
 
 			if (employee.getCurrentEmployment() != null) {
 				Employment employment = employee.getCurrentEmployment();
-				this.employeeFinalWorkingHours = employment.getFinalWorkingHours();
-				this.employeeMandatoryHours = employment.getMandatoryWorkingHours();
+				this.employeeFinalWorkingHours = employment.getFinalWorkingHours() != null ? employment.getFinalWorkingHours() : 0;
+				this.employeeMandatoryHours = employment.getMandatoryWorkingHours() != null ? employment.getMandatoryWorkingHours() : 0;
 				this.employeeEmploymentEstablishedDate = employment.getEstablished();
 				this.employeeEmploymentTerminatedDate = employment.getTerminated();
 				School school = employment.getSchool();

@@ -6,8 +6,11 @@ import gr.sch.ira.minoas.model.core.Specialization;
 import gr.sch.ira.minoas.model.core.SpecializationGroup;
 import gr.sch.ira.minoas.model.core.TeachingRequirement;
 import gr.sch.ira.minoas.model.employee.Employee;
+import gr.sch.ira.minoas.model.employee.EmployeeInfo;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
 import gr.sch.ira.minoas.model.employee.RegularEmployeeInfo;
+import gr.sch.ira.minoas.model.employement.Disposal;
+import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.EmploymentType;
 import gr.sch.ira.minoas.model.employement.Secondment;
@@ -28,6 +31,7 @@ import java.util.Map;
 
 import javax.persistence.EntityManager;
 
+import org.infinispan.transaction.TransactionLog.LogEntry;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -40,347 +44,512 @@ import org.jboss.seam.international.StatusMessage.Severity;
 @Scope(ScopeType.CONVERSATION)
 public class SchoolYearManagement extends BaseDatabaseAwareSeamComponent {
 
-    /**
-     * Comment for <code>serialVersionUID</code>
-     */
-    private static final long serialVersionUID = 1L;
+	/**
+	 * Comment for <code>serialVersionUID</code>
+	 */
+	private static final long serialVersionUID = 1L;
 
-    @DataModel
-    private Collection<SchoolYear> schoolYears;
+	@DataModel
+	private Collection<SchoolYear> schoolYears;
 
-    @In(required = true, create = true)
-    private SchoolYearHome schoolYearHome;
+	@In(required = true, create = true)
+	private SchoolYearHome schoolYearHome;
 
-    @In(required = true, create = true)
-    private CoreSearching coreSearching;
+	@In(required = true, create = true)
+	private CoreSearching coreSearching;
 
-    private String newSchoolYearYear;
+	private String newSchoolYearYear;
 
-    @Transactional
-    public String createNewSchoolYear() {
-        if (!getSchoolYearHome().isManaged()) {
-            info("creating new school year #0", getNewSchoolYearYear());
-            int schoolYearInt = Integer.parseInt(getNewSchoolYearYear());
-            SchoolYear instance = getSchoolYearHome().getInstance();
-            instance.setDescription("Σχολικό Έτος " + schoolYearInt + "-" + (schoolYearInt + 1));
-            instance.setTitle(schoolYearInt + "-" + (schoolYearInt + 1));
-            instance.setYear(new Integer(schoolYearInt));
-            instance.setCurrentSchoolYear(false);
-            String result = getSchoolYearHome().persist();
-            fetchSchoolYears();
-            return result;
-        } else {
-            getFacesMessages().add(Severity.ERROR, "school year home is managed", (Object[]) null);
-            return null;
-        }
-    }
+	@Transactional
+	public String createNewSchoolYear() {
+		if (!getSchoolYearHome().isManaged()) {
+			info("creating new school year #0", getNewSchoolYearYear());
+			int schoolYearInt = Integer.parseInt(getNewSchoolYearYear());
+			SchoolYear instance = getSchoolYearHome().getInstance();
+			instance.setDescription("Σχολικό Έτος " + schoolYearInt + "-"
+					+ (schoolYearInt + 1));
+			instance.setTitle(schoolYearInt + "-" + (schoolYearInt + 1));
+			instance.setYear(new Integer(schoolYearInt));
+			instance.setCurrentSchoolYear(false);
+			String result = getSchoolYearHome().persist();
+			fetchSchoolYears();
+			return result;
+		} else {
+			getFacesMessages().add(Severity.ERROR,
+					"school year home is managed", (Object[]) null);
+			return null;
+		}
+	}
 
-    @Transactional
-    public void doUpgrade() {
-        if (getSchoolYearHome().isManaged()) {
+	@Transactional
+	public void doUpgrade() {
+		if (getSchoolYearHome().isManaged()) {
 
-            EntityManager em = getEntityManager();
-            SchoolYear sourceSchoolYear = coreSearching.getActiveSchoolYear(em);
-            SchoolYear targetSchoolYear = getSchoolYearHome().getInstance();
-            info("upgrading school year #0 to #1", sourceSchoolYear, targetSchoolYear);
+			EntityManager em = getEntityManager();
+			try {
+				SchoolYear sourceSchoolYear = coreSearching
+						.getActiveSchoolYear(em);
+				SchoolYear targetSchoolYear = getSchoolYearHome().getInstance();
+				info("upgrading school year #0 to #1", sourceSchoolYear,
+						targetSchoolYear);
 
-            Collection<SpecializationGroup> groups = coreSearching.getSpecializationGroups(sourceSchoolYear, em);
-            /* key oldGroup -> value is new Group */
-            Map<SpecializationGroup, SpecializationGroup> oldSpecializationMap = new HashMap<SpecializationGroup, SpecializationGroup>(
-                    groups.size());
-            info("upgrading/handling specialization groups.");
-            for (SpecializationGroup group : groups) {
-                SpecializationGroup newGroup = new SpecializationGroup();
-                newGroup.setInsertedBy(group.getInsertedBy());
-                newGroup.setSchoolYear(targetSchoolYear);
-                for (Specialization specialization : group.getSpecializations()) {
-                    newGroup.getSpecializations().add(specialization);
+				Collection<SpecializationGroup> groups = coreSearching
+						.getSpecializationGroups(sourceSchoolYear, em);
+				/* key oldGroup -> value is new Group */
+				Map<SpecializationGroup, SpecializationGroup> oldSpecializationMap = new HashMap<SpecializationGroup, SpecializationGroup>(
+						groups.size());
+				info("upgrading/handling specialization groups.");
+				for (SpecializationGroup group : groups) {
+					SpecializationGroup newGroup = new SpecializationGroup();
+					newGroup.setInsertedBy(group.getInsertedBy());
+					newGroup.setSchoolYear(targetSchoolYear);
+					for (Specialization specialization : group
+							.getSpecializations()) {
+						newGroup.getSpecializations().add(specialization);
 
-                }
-                newGroup.setTitle(group.getTitle());
-                em.persist(newGroup);
-                oldSpecializationMap.put(group, newGroup);
-            }
+					}
+					newGroup.setTitle(group.getTitle());
+					em.persist(newGroup);
+					oldSpecializationMap.put(group, newGroup);
+				}
 
-            em.flush();
+				em.flush();
 
-            info("upgrading/handling teaching requirement.");
-            Collection<TeachingRequirement> teachingRequirements = coreSearching.getTeachingRequirement(em,
-                    sourceSchoolYear);
-            info("found #0 teaching requirment(s) for upgrading/handling.", teachingRequirements.size());
-            for (TeachingRequirement requirement : teachingRequirements) {
-                TeachingRequirement newRequirement = new TeachingRequirement();
-                newRequirement.setInsertedBy(null);
-                newRequirement.setComment(requirement.getComment());
-                newRequirement.setHours(requirement.getHours());
-                newRequirement.setSchoolYear(targetSchoolYear);
-                newRequirement.setSpecialization(oldSpecializationMap.get(requirement.getSpecialization()));
-                newRequirement.setSchool(requirement.getSchool());
-                em.persist(newRequirement);
-            }
+				info("upgrading/handling teaching requirement.");
+				Collection<TeachingRequirement> teachingRequirements = coreSearching
+						.getTeachingRequirement(em, sourceSchoolYear);
+				info("found #0 teaching requirment(s) for upgrading/handling.",
+						teachingRequirements.size());
+				for (TeachingRequirement requirement : teachingRequirements) {
+					TeachingRequirement newRequirement = new TeachingRequirement();
+					newRequirement.setInsertedBy(null);
+					newRequirement.setComment(requirement.getComment());
+					newRequirement.setHours(requirement.getHours());
+					newRequirement.setSchoolYear(targetSchoolYear);
+					newRequirement.setSpecialization(oldSpecializationMap
+							.get(requirement.getSpecialization()));
+					newRequirement.setSchool(requirement.getSchool());
+					em.persist(newRequirement);
+				}
 
-            info("upgrading/handling hourly employment(s).");
-            /* handle hourly based employments -> not upgraded */
-            Collection<Employment> employments = coreSearching.getEmploymentsOfType(EmploymentType.HOURLYBASED,
-                    sourceSchoolYear);
-            info("found #0 hourly employment(s) for upgrading/handling.", employments.size());
-            for (Employment hourlyEmployment : employments) {
-                Employee e = hourlyEmployment.getEmployee();
-                if (e.getCurrentEmployment() != null) {
-                    e.setCurrentEmployment(null);
-                    info("hourly employment #0 is no longer marked as current for employee #1", hourlyEmployment, e);
-                }
-            }
+				info("upgrading/handling hourly employment(s).");
+				/* handle hourly based employments -> not upgraded */
+				Collection<Employment> employments = coreSearching
+						.getEmploymentsOfType(EmploymentType.HOURLYBASED,
+								sourceSchoolYear);
+				info("found #0 hourly employment(s) for upgrading/handling.",
+						employments.size());
+				for (Employment hourlyEmployment : employments) {
+					Employee e = hourlyEmployment.getEmployee();
+					if (e.getCurrentEmployment() != null) {
+						e.setCurrentEmployment(null);
+						info("hourly employment #0 is no longer marked as current for employee #1",
+								hourlyEmployment, e);
+					}
+				}
 
-            info("upgrading/handling deputy employment(s).");
-            /* handle deputy based employments -> not upgraded */
-            employments = coreSearching.getEmploymentsOfType(EmploymentType.DEPUTY, sourceSchoolYear);
-            info("found #0 deputy employment(s) for upgrading/handling.", employments.size());
-            for (Employment deputyEmployment : employments) {
-                Employee e = deputyEmployment.getEmployee();
-                if (e.getCurrentEmployment() != null) {
-                    e.setCurrentEmployment(null);
-                    deputyEmployment.setTerminated(sourceSchoolYear.getTeachingSchoolYearStop());
-                    info("deputy employment #0 is no longer marked as current for employee #1", deputyEmployment, e);
-                }
-            }
+				info("upgrading/handling deputy employment(s).");
+				/* handle deputy based employments -> not upgraded */
+				employments = coreSearching.getEmploymentsOfType(
+						EmploymentType.DEPUTY, sourceSchoolYear);
+				info("found #0 deputy employment(s) for upgrading/handling.",
+						employments.size());
+				for (Employment deputyEmployment : employments) {
+					Employee e = deputyEmployment.getEmployee();
+					if (e.getCurrentEmployment() != null) {
+						e.setCurrentEmployment(null);
+						deputyEmployment.setTerminated(sourceSchoolYear
+								.getTeachingSchoolYearStop());
+						info("deputy employment #0 is no longer marked as current for employee #1",
+								deputyEmployment, e);
+					}
+				}
 
-            /* handle service allocations */
-            info("upgrading/handling service allocation(s).");
-            Collection<ServiceAllocation> activeServiceAllocations = coreSearching.getActiveServiceAllocations(em);
-            info("found #0 active service allocations.", activeServiceAllocations.size());
-            Date serviceAllocationDueDate = targetSchoolYear.getSchoolYearStart();
-            for (ServiceAllocation serviceAllocation : activeServiceAllocations) {
-                if (serviceAllocation.getDueTo().before(serviceAllocationDueDate) ||
-                        serviceAllocation.getDueTo().equals(serviceAllocationDueDate)) {
-                    // service allocation should be marked as not-active
-                    info("service allocation #0 with due date #1, will be marked as not active.", serviceAllocation,
-                            serviceAllocation.getDueTo());
-                    serviceAllocation.setActive(false);
-                }
-            }
-            /* handle secondments */
-            info("upgrading/handling secondment(s).");
-            Collection<Secondment> activeSecondments = coreSearching.getActiveSecondments(em);
-            info("found #0 active secondment(s).", activeSecondments.size());
-            Date secondmentDueDate = targetSchoolYear.getSchoolYearStart();
-            for (Secondment secondment : activeSecondments) {
-                if (secondment.getDueTo().before(secondmentDueDate) || secondment.getDueTo().equals(secondmentDueDate)) {
-                    // service allocation should be marked as not-active
-                    info("secondment #0 with due date #1, will be marked as not active.", secondment,
-                            secondment.getDueTo());
-                    secondment.setActive(false);
-                }
-            }
+				/* handle service allocations */
+				info("upgrading/handling service allocation(s).");
+				Collection<ServiceAllocation> activeServiceAllocations = coreSearching
+						.getActiveServiceAllocations(em);
+				info("found #0 active service allocations.",
+						activeServiceAllocations.size());
+				Date serviceAllocationDueDate = targetSchoolYear
+						.getSchoolYearStart();
+				for (ServiceAllocation serviceAllocation : activeServiceAllocations) {
+					if (serviceAllocation.getDueTo().before(
+							serviceAllocationDueDate)
+							|| serviceAllocation.getDueTo().equals(
+									serviceAllocationDueDate)) {
+						// service allocation should be marked as not-active
+						info("service allocation #0 with due date #1, will be marked as not active.",
+								serviceAllocation, serviceAllocation.getDueTo());
+						serviceAllocation.setActive(false);
+					}
+				}
+				/* handle secondments */
+				info("upgrading/handling secondment(s).");
+				Collection<Secondment> activeSecondments = coreSearching
+						.getActiveSecondments(em);
+				info("found #0 active secondment(s).", activeSecondments.size());
+				Date secondmentDueDate = targetSchoolYear.getSchoolYearStart();
+				for (Secondment secondment : activeSecondments) {
+					if (secondment.getDueTo().before(secondmentDueDate)
+							|| secondment.getDueTo().equals(secondmentDueDate)) {
+						// service allocation should be marked as not-active
+						info("secondment #0 with due date #1, will be marked as not active.",
+								secondment, secondment.getDueTo());
+						secondment.setActive(false);
+					}
+				}
 
-            /* handle regular employments */
-            info("upgrading/handling regular employment(s).");
+				/* handle regular employments */
+				info("upgrading/handling regular employment(s).");
 
-            /* before handling regular employments, we need to exclude employments that are
-             * associated with outstaning improvements & transfers
-             */
-            Collection<Employee> excludeEmployees = new ArrayList<Employee>(100);
+				/*
+				 * before handling regular employments, we need to exclude
+				 * employments that are associated with outstaning improvements
+				 * & transfers
+				 */
+				Collection<Employee> excludeEmployees = new ArrayList<Employee>(
+						100);
 
-            Collection<Employee> e1 = coreSearching.getEmployeesWithUnProcessedOutstandingImprovements(em,
-                    sourceSchoolYear);
-            Collection<Employee> e2 = coreSearching.getEmployeesWithUnProcessedPermanentTransfers(em, sourceSchoolYear);
-            if (e1 != null)
-                excludeEmployees.addAll(e1);
-            if (e2 != null)
-                excludeEmployees.addAll(e2);
+				Collection<Employee> e1 = coreSearching
+						.getEmployeesWithUnProcessedOutstandingImprovements(em,
+								sourceSchoolYear);
+				Collection<Employee> e2 = coreSearching
+						.getEmployeesWithUnProcessedPermanentTransfers(em,
+								sourceSchoolYear);
+				if (e1 != null)
+					excludeEmployees.addAll(e1);
+				if (e2 != null)
+					excludeEmployees.addAll(e2);
 
-            employments = coreSearching
-                    .getEmploymentsOfType(EmploymentType.REGULAR, sourceSchoolYear, excludeEmployees);
-            info("found #0 regular employment(s) for upgrading/handling.", employments.size());
-            for (Employment regularEmployment : employments) {
-                Employment newEmployment = new Employment();
-                newEmployment.setActive(Boolean.TRUE);
-                newEmployment.setEstablished(targetSchoolYear.getSchoolYearStart());
-                newEmployment.setFinalWorkingHours(regularEmployment.getFinalWorkingHours());
-                newEmployment.setMandatoryWorkingHours(regularEmployment.getMandatoryWorkingHours());
-                newEmployment.setType(regularEmployment.getType());
-                newEmployment.setSchool(regularEmployment.getSchool());
-                newEmployment.setSchoolYear(targetSchoolYear);
-                newEmployment.setSpecialization(regularEmployment.getSpecialization());
-                newEmployment.setEmployee(regularEmployment.getEmployee());
+				employments = coreSearching.getEmploymentsOfType(
+						EmploymentType.REGULAR, sourceSchoolYear,
+						excludeEmployees);
+				info("found #0 regular employment(s) for upgrading/handling.",
+						employments.size());
+				for (Employment regularEmployment : employments) {
+					Employment newEmployment = new Employment();
+					newEmployment.setActive(Boolean.TRUE);
+					newEmployment.setEstablished(targetSchoolYear
+							.getSchoolYearStart());
+					newEmployment.setFinalWorkingHours(regularEmployment
+							.getFinalWorkingHours());
+					newEmployment.setMandatoryWorkingHours(regularEmployment
+							.getMandatoryWorkingHours());
+					newEmployment.setType(regularEmployment.getType());
+					newEmployment.setSchool(regularEmployment.getSchool());
+					newEmployment.setSchoolYear(targetSchoolYear);
+					newEmployment.setSpecialization(regularEmployment
+							.getSpecialization());
+					newEmployment.setEmployee(regularEmployment.getEmployee());
+					regularEmployment.getEmployee().setLastSpecialization(regularEmployment.getSpecialization());
+					/* gh-130 : https://github.com/dideher/minoas/issues/130 */
+					newEmployment.setEntryIntoServiceAct(regularEmployment.getEntryIntoServiceAct());
+					newEmployment.setEntryIntoServiceDate(regularEmployment.getEntryIntoServiceDate());
+					/* gh-130 : https://github.com/dideher/minoas/issues/130 */
+					regularEmployment.getEmployee().getEmployments()
+							.add(newEmployment);
+					regularEmployment.getEmployee().setCurrentEmployment(
+							newEmployment);
+					regularEmployment.setTerminated(sourceSchoolYear
+							.getSchoolYearStop());
+					regularEmployment.setActive(Boolean.FALSE);
+					regularEmployment.setSupersededBy(newEmployment);
+					em.persist(newEmployment);
+				}
 
-                regularEmployment.getEmployee().getEmployments().add(newEmployment);
-                regularEmployment.getEmployee().setCurrentEmployment(newEmployment);
-                regularEmployment.setTerminated(sourceSchoolYear.getSchoolYearStop());
-                regularEmployment.setActive(Boolean.FALSE);
-                regularEmployment.setSupersededBy(newEmployment);
-                em.persist(newEmployment);
-            }
+				/* now handle the improvements */
+				Collection<OutstandingImprovement> improvements = coreSearching
+						.getUnProcessedOutstandingImprovements(em,
+								sourceSchoolYear);
+				info("found #0 improvements for upgrading/handling.",
+						improvements.size());
+				for (OutstandingImprovement improvement : improvements) {
+					Employment regularEmployment = improvement.getEmployee()
+							.getCurrentEmployment();
+					Employment newEmployment = new Employment();
+					newEmployment.setActive(Boolean.TRUE);
+					newEmployment.setEstablished(targetSchoolYear
+							.getSchoolYearStart());
+					newEmployment.setFinalWorkingHours(regularEmployment
+							.getFinalWorkingHours());
+					newEmployment.setMandatoryWorkingHours(regularEmployment
+							.getMandatoryWorkingHours());
+					newEmployment.setType(regularEmployment.getType());
+					newEmployment.setSchool(improvement.getTargetSchool());
+					newEmployment.setSchoolYear(targetSchoolYear);
+					newEmployment.setSpecialization(regularEmployment
+							.getSpecialization());
+					/* gh-130 : https://github.com/dideher/minoas/issues/130 */
+					newEmployment.setEntryIntoServiceAct(regularEmployment.getEntryIntoServiceAct());
+					newEmployment.setEntryIntoServiceDate(regularEmployment.getEntryIntoServiceDate());
+					/* gh-130 : https://github.com/dideher/minoas/issues/130 */
+					newEmployment.setEmployee(regularEmployment.getEmployee());
 
-            /* now handle the improvements */
-            Collection<OutstandingImprovement> improvements = coreSearching.getUnProcessedOutstandingImprovements(em,
-                    sourceSchoolYear);
-            info("found #0 improvements for upgrading/handling.", improvements.size());
-            for (OutstandingImprovement improvement : improvements) {
-                Employment regularEmployment = improvement.getEmployee().getCurrentEmployment();
-                Employment newEmployment = new Employment();
-                newEmployment.setActive(Boolean.TRUE);
-                newEmployment.setEstablished(targetSchoolYear.getSchoolYearStart());
-                newEmployment.setFinalWorkingHours(regularEmployment.getFinalWorkingHours());
-                newEmployment.setMandatoryWorkingHours(regularEmployment.getMandatoryWorkingHours());
-                newEmployment.setType(regularEmployment.getType());
-                newEmployment.setSchool(improvement.getTargetSchool());
-                newEmployment.setSchoolYear(targetSchoolYear);
-                newEmployment.setSpecialization(regularEmployment.getSpecialization());
-                newEmployment.setEmployee(regularEmployment.getEmployee());
+					regularEmployment.getEmployee().getEmployments()
+							.add(newEmployment);
+					regularEmployment.getEmployee().setCurrentEmployment(
+							newEmployment);
+					regularEmployment.setTerminated(sourceSchoolYear
+							.getSchoolYearStop());
+					regularEmployment.setActive(Boolean.FALSE);
+					regularEmployment.setSupersededBy(newEmployment);
 
-                regularEmployment.getEmployee().getEmployments().add(newEmployment);
-                regularEmployment.getEmployee().setCurrentEmployment(newEmployment);
-                regularEmployment.setTerminated(sourceSchoolYear.getSchoolYearStop());
-                regularEmployment.setActive(Boolean.FALSE);
-                regularEmployment.setSupersededBy(newEmployment);
+					improvement.setIsProcessed(Boolean.TRUE);
+					em.persist(newEmployment);
+				}
 
-                improvement.setIsProcessed(Boolean.TRUE);
-                em.persist(newEmployment);
-            }
+				/* now handle transfers */
+				Collection<PermanentTransfer> transfers = coreSearching
+						.getgetUnProcessedPermanentTransfers(em,
+								sourceSchoolYear);
+				info("found #0 transfers for upgrading/handling.",
+						transfers.size());
+				for (PermanentTransfer transfer : transfers) {
+					if (transfer.getEmployee() != null
+							&& transfer.getType() == PermanentTransferType.WITHIN_PYSDE) {
+						Employment regularEmployment = transfer.getEmployee()
+								.getCurrentEmployment();
+						Employment newEmployment = new Employment();
+						newEmployment.setActive(Boolean.TRUE);
+						newEmployment.setEstablished(targetSchoolYear
+								.getSchoolYearStart());
+						newEmployment.setFinalWorkingHours(regularEmployment
+								.getFinalWorkingHours());
+						newEmployment
+								.setMandatoryWorkingHours(regularEmployment
+										.getMandatoryWorkingHours());
+						newEmployment.setType(regularEmployment.getType());
 
-            /* now handle transfers */
-            Collection<PermanentTransfer> transfers = coreSearching.getgetUnProcessedPermanentTransfers(em,
-                    sourceSchoolYear);
-            info("found #0 transfers for upgrading/handling.", transfers.size());
-            for (PermanentTransfer transfer : transfers) {
-                if (transfer.getEmployee() != null && transfer.getType() == PermanentTransferType.WITHIN_PYSDE) {
-                    Employment regularEmployment = transfer.getEmployee().getCurrentEmployment();
-                    Employment newEmployment = new Employment();
-                    newEmployment.setActive(Boolean.TRUE);
-                    newEmployment.setEstablished(targetSchoolYear.getSchoolYearStart());
-                    newEmployment.setFinalWorkingHours(regularEmployment.getFinalWorkingHours());
-                    newEmployment.setMandatoryWorkingHours(regularEmployment.getMandatoryWorkingHours());
-                    newEmployment.setType(regularEmployment.getType());
+						newEmployment.setSchool(em.find(School.class, transfer
+								.getTargetUnit().getId()));
+						newEmployment.setSchoolYear(targetSchoolYear);
+						newEmployment.setSpecialization(regularEmployment
+								.getSpecialization());
+						/* gh-130 : https://github.com/dideher/minoas/issues/130 */
+						newEmployment.setEntryIntoServiceAct(regularEmployment.getEntryIntoServiceAct());
+						newEmployment.setEntryIntoServiceDate(regularEmployment.getEntryIntoServiceDate());
+						/* gh-130 : https://github.com/dideher/minoas/issues/130 */
+						newEmployment.setEmployee(regularEmployment
+								.getEmployee());
 
-                    newEmployment.setSchool(em.find(School.class, transfer.getTargetUnit().getId()));
-                    newEmployment.setSchoolYear(targetSchoolYear);
-                    newEmployment.setSpecialization(regularEmployment.getSpecialization());
-                    newEmployment.setEmployee(regularEmployment.getEmployee());
+						regularEmployment.getEmployee().getEmployments()
+								.add(newEmployment);
+						regularEmployment.getEmployee().setCurrentEmployment(
+								newEmployment);
+						regularEmployment.setTerminated(sourceSchoolYear
+								.getSchoolYearStop());
+						regularEmployment.setActive(Boolean.FALSE);
+						regularEmployment.setSupersededBy(newEmployment);
 
-                    regularEmployment.getEmployee().getEmployments().add(newEmployment);
-                    regularEmployment.getEmployee().setCurrentEmployment(newEmployment);
-                    regularEmployment.setTerminated(sourceSchoolYear.getSchoolYearStop());
-                    regularEmployment.setActive(Boolean.FALSE);
-                    regularEmployment.setSupersededBy(newEmployment);
+						transfer.setIsProcessed(Boolean.TRUE);
+						em.persist(newEmployment);
+					} else if (transfer.getType() == PermanentTransferType.FROM_OTHER_PYSDE) {
+						Employee newEmployee = new Employee();
+						newEmployee
+								.setComment("ΑΥΤΟΜΑΤΗ ΕΙΣΑΓΩΓΗ ΑΠΟ ΤΟΝ ΜΙΝΩΑ ΛΟΓΟ ΜΕΤΑΘΕΣΗΣ ΑΠΟ ΑΛΛΟ ΠΥΣΔΕ ΤΟ ΣΧ. ΕΤΟΣ '"
+										+ targetSchoolYear.getYear() + "'");
+						newEmployee.setActive(Boolean.TRUE);
+						newEmployee.setCurrentPYSDE(coreSearching
+								.getLocalPYSDE(em));
+						newEmployee.setFatherName(transfer
+								.getEmployeeFatherName());
+						newEmployee.setFirstName(transfer.getEmployeeName());
+						newEmployee.setLastName(transfer.getEmployeeSurname());
+						newEmployee.setMotherName(transfer
+								.getEmployeeMotherName());
+						newEmployee.setLastSpecialization(transfer
+								.getEmployeeSpecialization());
+						newEmployee.setVatNumber(transfer.getEmployeeAFM());
+						newEmployee.setType(EmployeeType.REGULAR);
+						em.persist(newEmployee);
+						em.flush();
 
-                    transfer.setIsProcessed(Boolean.TRUE);
-                    em.persist(newEmployment);
-                } else if (transfer.getType() == PermanentTransferType.FROM_OTHER_PYSDE) {
-                    Employee newEmployee = new Employee();
-                    newEmployee
-                            .setComment("ΑΥΤΟΜΑΤΗ ΕΙΣΑΓΩΓΗ ΑΠΟ ΤΟΝ ΜΙΝΩΑ ΛΟΓΟ ΜΕΤΑΘΕΣΗΣ ΑΠΟ ΑΛΛΟ ΠΥΣΔΕ ΤΟ ΣΧ. ΕΤΟΣ '" +
-                                    targetSchoolYear.getYear() + "'");
-                    newEmployee.setActive(Boolean.TRUE);
-                    newEmployee.setCurrentPYSDE(coreSearching.getLocalPYSDE(em));
-                    newEmployee.setFatherName(transfer.getEmployeeFatherName());
-                    newEmployee.setFirstName(transfer.getEmployeeName());
-                    newEmployee.setLastName(transfer.getEmployeeSurname());
-                    newEmployee.setMotherName(transfer.getEmployeeMotherName());
-                    newEmployee.setLastSpecialization(transfer.getEmployeeSpecialization());
-                    newEmployee.setVatNumber(transfer.getEmployeeAFM());
-                    newEmployee.setType(EmployeeType.REGULAR);
-                    em.persist(newEmployee);
-                    em.flush();
+						RegularEmployeeInfo regular_info = new RegularEmployeeInfo();
+						regular_info.setEmployee(newEmployee);
+						regular_info.setRegistryID(transfer
+								.getEmployeeRegistryID());
+						newEmployee.setRegularDetail(regular_info);
+						em.persist(regular_info);
+						em.flush();
+						
+						EmployeeInfo employeeInfo = new EmployeeInfo();
+						employeeInfo.setEmployee(newEmployee);
+						employeeInfo.setInsertedOn(new Date());
+						employeeInfo.setInsertedBy(getPrincipal());
+						em.persist(employeeInfo);
+						newEmployee.setEmployeeInfo(employeeInfo);
 
-                    RegularEmployeeInfo regular_info = new RegularEmployeeInfo();
-                    regular_info.setEmployee(newEmployee);
-                    regular_info.setRegistryID(transfer.getEmployeeRegistryID());
-                    newEmployee.setRegularDetail(regular_info);
-                    em.persist(regular_info);
-                    em.flush();
+						Employment newEmployment = new Employment();
+						newEmployment.setActive(Boolean.TRUE);
+						newEmployment.setEstablished(targetSchoolYear
+								.getSchoolYearStart());
+						newEmployment.setFinalWorkingHours(21);
+						newEmployment.setMandatoryWorkingHours(21);
+						newEmployment.setType(EmploymentType.REGULAR);
 
-                    Employment newEmployment = new Employment();
-                    newEmployment.setActive(Boolean.TRUE);
-                    newEmployment.setEstablished(targetSchoolYear.getSchoolYearStart());
-                    newEmployment.setFinalWorkingHours(21);
-                    newEmployment.setMandatoryWorkingHours(21);
-                    newEmployment.setType(EmploymentType.REGULAR);
+						newEmployment.setSchool(em.find(School.class, transfer
+								.getTargetUnit().getId()));
+						newEmployment.setSchoolYear(targetSchoolYear);
+						newEmployment.setSpecialization(transfer
+								.getEmployeeSpecialization());
+						newEmployment.setEmployee(newEmployee);
+						em.persist(newEmployment);
+						em.flush();
+						newEmployee.setCurrentEmployment(newEmployment);
+						transfer.setIsProcessed(Boolean.TRUE);
+						em.flush();
 
-                    newEmployment.setSchool(em.find(School.class, transfer.getTargetUnit().getId()));
-                    newEmployment.setSchoolYear(targetSchoolYear);
-                    newEmployment.setSpecialization(transfer.getEmployeeSpecialization());
-                    newEmployment.setEmployee(newEmployee);
-                    em.persist(newEmployment);
-                    em.flush();
-                    newEmployee.setCurrentEmployment(newEmployment);
-                    transfer.setIsProcessed(Boolean.TRUE);
-                    em.flush();
+					} else if (transfer.getType() == PermanentTransferType.TO_OTHER_PYSDE) {
+						
+						Employee e = transfer.getEmployee();
+						
+			            Collection<EmployeeLeave> leaves = getCoreSearching().getEmployeeLeaves2(e);
+			            for(EmployeeLeave l : leaves) {
+			                if(l.getActive()) {
+			                    l.setActive(false);
+			                    l.setAutoCanceled(true);
+			                }
+			            }
+			            
+			            Collection<SpecialAssigment> sa = getCoreSearching().getEmployeeSpecialAssigments(entityManager, e);
+			            for(SpecialAssigment s : sa) {
+			                if(s.getActive()) {
+			                    s.setActive(false);
+			                }
+			            }
+			            
+			            Collection<Secondment> secondments = getCoreSearching().getEmployeeSecondments(e);
+			            for(Secondment s : secondments) {
+			                if(s.isActive()) {
+			                    s.setActive(false);
+			                    s.setAutoCanceled(true);
+			                }
+			            }
+			            
+			            Collection<Disposal> disposals = getCoreSearching().getEmployeeDisposals(entityManager, e);
+			            for(Disposal s : disposals) {
+			                if(s.isActive()) {
+			                    s.setActive(false);
+			                    s.setAutoCanceled(true);
+			                }
+			            }
+			            
+			            Collection<ServiceAllocation> serviceAllocations = getCoreSearching().getEmployeeServiceAllocation(entityManager, e);
+			            for(ServiceAllocation s : serviceAllocations) {
+			                if(s.getActive()) {
+			                    s.setActive(false);
+			                    s.setAutoCanceled(true);
+			                }
+			            }
+			            
+			            Collection<Employment> employments2 = getCoreSearching().getEmployeeEmployments(e);
+			            for(Employment em2 : employments2) {
+			                if(em2.getActive()) {
+			                    em2.setActive(false);
+			                }
+			            }
+						
+						
+						e.setActive(Boolean.FALSE);
+						Employment regularEmployment = transfer.getEmployee()
+								.getCurrentEmployment();
+						regularEmployment.setActive(Boolean.FALSE);
+						regularEmployment.setTerminated(transfer
+								.getSchoolYear().getSchoolYearStop());
+						transfer.getEmployee().setCurrentEmployment(null);
+						transfer.setIsProcessed(Boolean.TRUE);
+						em.flush();
+					}
 
-                } else if (transfer.getType() == PermanentTransferType.TO_OTHER_PYSDE) {
-                    Employment regularEmployment = transfer.getEmployee().getCurrentEmployment();
-                    regularEmployment.setActive(Boolean.FALSE);
-                    regularEmployment.setTerminated(transfer.getSchoolYear().getSchoolYearStop());
-                    transfer.getEmployee().setCurrentEmployment(null);
-                    transfer.setIsProcessed(Boolean.TRUE);
-                    em.flush();
-                }
+				}
 
-            }
+				/* end hanling of transfers */
 
-            /* end hanling of transfers */
+				/* handle special assigments */
+				Collection<SpecialAssigment> activeAssigments = coreSearching
+						.getActiveSpecialAssigments(getEntityManager());
+				info("found #0 special assigments for handling.",
+						activeAssigments.size());
+				for (SpecialAssigment sa : activeAssigments) {
+					sa.setActive(Boolean.FALSE);
+				}
+				
+				sourceSchoolYear.setCurrentSchoolYear(false);
+				targetSchoolYear.setCurrentSchoolYear(true);
+				
+				em.flush();
+				fetchSchoolYears();
+				
+				
+			} catch (Exception ex) {
+				em.getTransaction().setRollbackOnly();
+				error("failed to upgrade school year due to an exception", ex);
+				getFacesMessages()
+						.add(Severity.ERROR,
+								String.format(
+										"Η διαδικασία αλλαγής σχολικής χρονιά απέτυχε λόγω '%s' σφάλματος",
+										ex.getMessage()));
+			} finally {
+				// rollback the transcation
+				//em.getTransaction().setRollbackOnly();
+			}
+		} else {
+			getFacesMessages().add(Severity.ERROR,
+					"school year home is NOT managed", (Object[]) null);
+			return;
+		}
 
-            /* handle special assigments */
-            Collection<SpecialAssigment> activeAssigments = coreSearching.getActiveSpecialAssigments(getEntityManager());
-            info("found #0 special assigments for handling.", activeAssigments.size());
-            for (SpecialAssigment sa : activeAssigments) {
-              sa.setActive(Boolean.FALSE);  
-            }
-            
-            em.flush();
-            fetchSchoolYears();
-        } else {
-            getFacesMessages().add(Severity.ERROR, "school year home is NOT managed", (Object[]) null);
-            return;
-        }
+	}
 
-    }
+	public void fetchSchoolYears() {
+		this.schoolYears = coreSearching.getSchoolYears(getEntityManager());
+	}
 
-    public void fetchSchoolYears() {
-        this.schoolYears = coreSearching.getSchoolYears(getEntityManager());
-    }
+	/**
+	 * @return the schoolYears
+	 */
 
-    /**
-     * @return the schoolYears
-     */
+	public Collection<SchoolYear> getSchoolYears() {
+		return schoolYears;
+	}
 
-    public Collection<SchoolYear> getSchoolYears() {
-        return schoolYears;
-    }
+	/**
+	 * @param schoolYears
+	 *            the schoolYears to set
+	 */
+	public void setSchoolYears(Collection<SchoolYear> schoolYears) {
+		this.schoolYears = schoolYears;
+	}
 
-    /**
-     * @param schoolYears the schoolYears to set
-     */
-    public void setSchoolYears(Collection<SchoolYear> schoolYears) {
-        this.schoolYears = schoolYears;
-    }
+	/**
+	 * @return the newSchoolYearYear
+	 */
+	public String getNewSchoolYearYear() {
+		return newSchoolYearYear;
+	}
 
-    /**
-     * @return the newSchoolYearYear
-     */
-    public String getNewSchoolYearYear() {
-        return newSchoolYearYear;
-    }
+	/**
+	 * @param newSchoolYearYear
+	 *            the newSchoolYearYear to set
+	 */
+	public void setNewSchoolYearYear(String newSchoolYearYear) {
+		this.newSchoolYearYear = newSchoolYearYear;
+	}
 
-    /**
-     * @param newSchoolYearYear the newSchoolYearYear to set
-     */
-    public void setNewSchoolYearYear(String newSchoolYearYear) {
-        this.newSchoolYearYear = newSchoolYearYear;
-    }
+	/**
+	 * @return the schoolYearHome
+	 */
+	public SchoolYearHome getSchoolYearHome() {
+		return schoolYearHome;
+	}
 
-    /**
-     * @return the schoolYearHome
-     */
-    public SchoolYearHome getSchoolYearHome() {
-        return schoolYearHome;
-    }
-
-    /**
-     * @param schoolYearHome the schoolYearHome to set
-     */
-    public void setSchoolYearHome(SchoolYearHome schoolYearHome) {
-        this.schoolYearHome = schoolYearHome;
-    }
+	/**
+	 * @param schoolYearHome
+	 *            the schoolYearHome to set
+	 */
+	public void setSchoolYearHome(SchoolYearHome schoolYearHome) {
+		this.schoolYearHome = schoolYearHome;
+	}
 
 }

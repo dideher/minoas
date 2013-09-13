@@ -174,7 +174,7 @@ public class PartTimeEmploymentManagement extends BaseDatabaseAwareSeamComponent
             if (addMessages)
                 facesMessages
                         .add(Severity.ERROR,
-                                "H ημ/νία έναρξης της περιόδου είναι μεταγενέστερη της ημ/νιας λήξης της.");
+                                "H ημ/νία έναρξης της περιόδου είναι μεταγενέστερη της ημ/νίας λήξης της.");
             return false;
         }
 
@@ -196,7 +196,7 @@ public class PartTimeEmploymentManagement extends BaseDatabaseAwareSeamComponent
                 if (addMessages)
                     facesMessages
                             .add(Severity.ERROR,
-                                    "Η ημ/νία έναρξης της περιόδου πρέπει να είναι μεταγενέστερη της ημ/νιας λήξης προηγούμενης περιόδου.");
+                                    "Η ημ/νία έναρξης της περιόδου πρέπει να είναι μεταγενέστερη της ημ/νίας λήξης προηγούμενης περιόδου.");
                 return false;
             }
 

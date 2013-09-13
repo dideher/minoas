@@ -221,7 +221,6 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
     @RequestParameter(value="actionVariation")
     private String actionVariation;
   
-
 	@In(required = true, create = true)
 	private EmployeeHome employeeHome;
 	
@@ -401,7 +400,7 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
 			
 			/* employees must not be same */
 			if(sourceEmployeeHome.getId().equals(targetEmployeeHome.getId())) {
-				facesMessages.add(Severity.ERROR, "Δεν μπορείτε να συνχωνεύσεται τον εκπαιδευτικό στον εαυτό του. Kάντε ενα διάλλειμα για καφε και τσιγάρο.");
+				facesMessages.add(Severity.ERROR, "Δεν μπορείτε να συγχωνεύσετε τον εκπαιδευτικό στον εαυτό του. Kάντε ενα διάλειμα για καφέ και τσιγάρο.");
 				return ACTION_OUTCOME_FAILURE;
 			}
 			return ACTION_OUTCOME_SUCCESS;
@@ -447,6 +446,92 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
             
     }
     
+    public void prepareForUpdateEmployee() {
+    	Employee employee = getEmployeeHome().getInstance();
+    	employeeHome.setTempValueHolder1(employee.getLastSpecialization().getId());
+    	//    	If employee HAS RegularEmployeeInfo data
+		if (employee.getRegularEmployeeInfo() != null) {
+			//	Set RegularEmployeeInfoHome with the Employee's RegularEmployeeInfo data
+			regularEmployeeInfoHome.setId(employee.getRegularEmployeeInfo().getId());
+		} else {
+            RegularEmployeeInfo i = new RegularEmployeeInfo();
+            i.setInsertedBy(getPrincipal());
+            i.setInsertedOn(new Date());
+            i.setEmployee(getEmployeeHome().getInstance());
+            i.setRegistryID("1234567");
+            getEntityManager().persist(i);
+            getEntityManager().flush();
+            
+            employee.setRegularEmployeeInfo(i);
+            regularEmployeeInfoHome.setId(i.getId());
+		}
+            
+    }
+    
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public String unTerminateEmployee() {
+    	if (getEmployeeHome().isManaged() && getEmployeeHome().getInstance().getActive() != null && getEmployeeHome().getInstance().getActive() == false) {
+    		Employee e = getEmployeeHome().getInstance();
+    		e.setTerminationReason(null);
+    		e.setTerminationOptionalComment(null);
+    		e.setTerminationDate(null);
+    		e.setActive(true);
+    		Employment em = e.getCurrentEmployment();
+    		if(em != null) {
+    			if(em.getSchoolYear().isCurrentSchoolYear()) {
+    				/* previously disabled employment is still in the current school year, 
+    				 * so just enabled it 
+    				 */
+    				em.setActive(Boolean.TRUE);
+    			} else {
+    				/* we need to create a new employment */
+    				SchoolYear current_year = getCoreSearching().getActiveSchoolYear(getEntityManager());
+    				Employment newEmployment = new Employment();
+					newEmployment.setActive(Boolean.TRUE);
+					newEmployment.setEstablished(current_year
+							.getSchoolYearStart());
+					newEmployment.setFinalWorkingHours(em
+							.getFinalWorkingHours());
+					newEmployment.setMandatoryWorkingHours(em
+							.getMandatoryWorkingHours());
+					newEmployment.setType(em.getType());
+					newEmployment.setSchool(em.getSchool());
+					newEmployment.setSchoolYear(current_year);
+					newEmployment.setSpecialization(em
+							.getSpecialization());
+					newEmployment.setEmployee(em.getEmployee());
+					em.getEmployee().setLastSpecialization(em.getSpecialization());
+					/* gh-130 : https://github.com/dideher/minoas/issues/130 */
+					newEmployment.setEntryIntoServiceAct(em.getEntryIntoServiceAct());
+					newEmployment.setEntryIntoServiceDate(em.getEntryIntoServiceDate());
+					/* gh-130 : https://github.com/dideher/minoas/issues/130 */
+					em.getEmployee().getEmployments()
+							.add(newEmployment);
+					em.getEmployee().setCurrentEmployment(
+							newEmployment);
+					em.setTerminated(em.getSchoolYear()
+							.getSchoolYearStop());
+					em.setActive(Boolean.FALSE);
+					em.setSupersededBy(newEmployment);
+					getEntityManager().persist(newEmployment);
+    			}
+    		}
+            getEmployeeHome().update();
+            
+            constructEmployeeCurrentHoursDistributionReport();
+            constructEmployeeCurrentStatusReport();
+            constructEmployeeLeavesHistory();
+            constructEmployeeWorkExperienceHistory();
+            constructSpecialAssigmentItems();
+            
+            getEntityManager().flush();
+            
+            facesMessages.add(Severity.INFO, "Ο εκπαιδευτικός έχει ενεργοποιηθεί και πάλι. Τυχόν οργανικές, θητείες, αποσπάσεις, κτλ, θα πρέπει να τις επεξεργαστείτε ξεχωριστά. ", getEmployeeHome());
+            
+            return ACTION_OUTCOME_SUCCESS;
+    	}
+    	return null;
+    }
     
     @Transactional(TransactionPropagationType.REQUIRED)
     public String terminateEmployee() {
@@ -455,7 +540,7 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
         if (getEmployeeHome().isManaged() && getEmployeeHome().getInstance().getActive()) {
             Employee e = getEmployeeHome().getInstance();
             if(e.getTerminationDate() == null || e.getTerminationReason() == null) {
-                facesMessages.add(Severity.ERROR, "Πρέπει να συμπληρώσετε την αιτία και την ημ/νια τερματισμού.", getEmployeeHome());
+                facesMessages.add(Severity.ERROR, "Πρέπει να συμπληρώσετε την αιτία και την ημ/νία τερματισμού.", getEmployeeHome());
                 
                 return ACTION_OUTCOME_FAILURE;
             }
@@ -651,7 +736,7 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
             Employee new_employee = employeeHome.getInstance();
             new_employee.setType(EmployeeType.REGULAR);
             new_employee.setActive(Boolean.TRUE);
-            new_employee.setComment(String.format("Εισαγωγή εκπαιδευτικού απο άλλο ΠΥΣΔΕ '%s' κατά την σχολική χρονία '%s'.", new_employee.getCurrentPYSDE().getTitle(), currentYear));
+            new_employee.setComment(String.format("Εισαγωγή εκπαιδευτικού από άλλο ΠΥΣΔΕ '%s' κατά την σχολική χρονιά '%s'.", new_employee.getCurrentPYSDE().getTitle(), currentYear));
             employeeHome.persist();
             
 //            Employment newEmployment = employmentHome.getInstance();
@@ -677,7 +762,7 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
             
             regularEmployeeInfoHome.persist();
             
-            facesMessages.add(Severity.INFO, String.format("Η καταχώρηση του εκπαιδευτικού '%s %s του %s απο το ΠΥΣΔΕ '%s' έγινε επιτυχώς' ",new_employee.getLastName(), new_employee.getFirstName(), new_employee.getFatherName(), new_employee.getCurrentPYSDE().getTitle()));
+            facesMessages.add(Severity.INFO, String.format("Η καταχώρηση του εκπαιδευτικού '%s %s του %s από το ΠΥΣΔΕ '%s' έγινε επιτυχώς' ",new_employee.getLastName(), new_employee.getFirstName(), new_employee.getFatherName(), new_employee.getCurrentPYSDE().getTitle()));
             return ACTION_OUTCOME_SUCCESS;
             
         } else {
@@ -808,7 +893,7 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
     @Transactional(TransactionPropagationType.REQUIRED)
     public String updateEmployeeBasicInfo() {
     	 /* there is a rare situation (due bugs of the past) to have a regular employee with no regular employee info */
-        if(getEmployeeHome().isManaged() && (!getRegularEmployeeInfoHome().isManaged())) {
+        if(getEmployeeHome().isManaged() && (getRegularEmployeeInfoHome().getInstance() == null)) {
             RegularEmployeeInfo i = new RegularEmployeeInfo();
             i.setInsertedBy(getPrincipal());
             i.setInsertedOn(new Date());
@@ -819,7 +904,7 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
             getEmployeeHome().getInstance().setRegularDetail(i);
          }
         
-        if (getEmployeeHome().isManaged() && getRegularEmployeeInfoHome().isManaged()) {
+        if (getEmployeeHome().isManaged() && (getRegularEmployeeInfoHome().getInstance() != null)) {
             Employee employee = getEmployeeHome().getInstance();
             RegularEmployeeInfo employeeInfo = getRegularEmployeeInfoHome().getInstance();
             if(employeeInfo.getRegistryID()!= "" && !isRegularRegistryIDValid(employeeInfo.getRegistryID())) {

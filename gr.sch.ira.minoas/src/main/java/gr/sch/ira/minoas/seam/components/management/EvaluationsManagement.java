@@ -159,7 +159,7 @@ public class EvaluationsManagement extends BaseDatabaseAwareSeamComponent {
             if (addMessages)
                 facesMessages
                         .add(Severity.ERROR,
-                                "H ημ/νία έναρξης της περιόδου αξιολόγησης είναι μεταγενέστερη της ημ/νιας λήξης της.");
+                                "H ημ/νία έναρξης της περιόδου αξιολόγησης είναι μεταγενέστερη της ημ/νίας λήξης της.");
             return false;
         }
 
@@ -181,7 +181,7 @@ public class EvaluationsManagement extends BaseDatabaseAwareSeamComponent {
                 if (addMessages)
                     facesMessages
                             .add(Severity.ERROR,
-                                    "Η ημ/νία έναρξης της περιόδου αξιολόγησης πρέπει να είναι μεταγενέστερη της ημ/νιας λήξης προηγούμενης περιόδου αξιολόγησης.");
+                                    "Η ημ/νία έναρξης της περιόδου αξιολόγησης πρέπει να είναι μεταγενέστερη της ημ/νίας λήξης προηγούμενης περιόδου αξιολόγησης.");
                 return false;
             }
 
