@@ -16,6 +16,24 @@ INSERT INTO minoas..SPECIALIZATION(SPECIALIZATION_ID, TITLE) VALUES('ΚΑΛΧ', 
 INSERT INTO minoas..SPECIALIZATION(SPECIALIZATION_ID, TITLE) VALUES('ΚΑΛΚΘ','Κινηματογράφος - Θέατρο')
 INSERT INTO minoas..SPECIALIZATION(SPECIALIZATION_ID, TITLE) VALUES('ΠΕ1714','Μουσικής Τεχνολογίας')
 
+INSERT INTO minoas..SPECIALIZATION(SPECIALIZATION_ID, TITLE) VALUES('ΠΕΔΙ01','ΠΕ Διοικητικός')
+INSERT INTO minoas..SPECIALIZATION(SPECIALIZATION_ID, TITLE) VALUES('ΠΕΔΙ02','ΠΕ Μηχανικών')
+INSERT INTO minoas..SPECIALIZATION(SPECIALIZATION_ID, TITLE) VALUES('ΠΕΔΙ03','ΠΕ Πληροφορικής')
+INSERT INTO minoas..SPECIALIZATION(SPECIALIZATION_ID, TITLE) VALUES('ΠΕΔΙ04','ΠΕ Γεωτεχνικών')
+INSERT INTO minoas..SPECIALIZATION(SPECIALIZATION_ID, TITLE) VALUES('ΠΕΔΙ05','ΠΕ Περιβάλλοντος')
+INSERT INTO minoas..SPECIALIZATION(SPECIALIZATION_ID, TITLE) VALUES('ΠΕΔΙ06','ΠΕ Μεταφραστών - Διερμηνέων')
+INSERT INTO minoas..SPECIALIZATION(SPECIALIZATION_ID, TITLE) VALUES('ΠΕΔΙ07','ΠΕ Βιβλιοθηκονόμων')
+INSERT INTO minoas..SPECIALIZATION(SPECIALIZATION_ID, TITLE) VALUES('ΠΕΔΙ08','ΠΕ Ιατρών')
+INSERT INTO minoas..SPECIALIZATION(SPECIALIZATION_ID, TITLE) VALUES('ΤΕΔΙ01','ΤΕ Διοικητικός - Λογιστικός')
+INSERT INTO minoas..SPECIALIZATION(SPECIALIZATION_ID, TITLE) VALUES('ΤΕΔΙ02','ΤΕ Πληροφορικής')
+INSERT INTO minoas..SPECIALIZATION(SPECIALIZATION_ID, TITLE) VALUES('ΤΕΔΙ03','ΤΕ Μηχανικών')
+INSERT INTO minoas..SPECIALIZATION(SPECIALIZATION_ID, TITLE) VALUES('ΤΕΔΙ04','ΤΕ Γραφικών Τεχνών και Καλλ. Σπουδών')
+
+
+
+
+
+
 ##############################################
 # ΠΥΣΔΕ
 ##############################################
