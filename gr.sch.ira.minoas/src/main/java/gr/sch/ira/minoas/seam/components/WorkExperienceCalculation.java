@@ -9,12 +9,15 @@ import gr.sch.ira.minoas.model.employee.RegularEmployeeInfo;
 import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 import gr.sch.ira.minoas.model.employement.Employment;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.lang.time.DateUtils;
@@ -292,8 +295,7 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
 
 		Collection<EmployeeLeave> leaves = coreSearching.getEmployeeLeaves2(
 				employee, dateFrom, dateTo);
-		int daysToTrim = 0;
-
+		
 		/*
 		 * Interate over the employee's leaves (of the given type) and construct
 		 * a hash with key the leave's year and value the sum of leave days (360
@@ -301,20 +303,25 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
 		 * across several years.
 		 */
 		Map<Integer, Integer> daysOfLeavePerYearHash = new HashMap<Integer, Integer>();
+		int duration = 0;
+		int daysToTrim = 0; // we use the variable to store the number of days needed to trim from an leave (ie a leave which is due to in the past)
 		for (EmployeeLeave leave : leaves) {
+			
+			duration = 0;
+			daysToTrim = 0;
 			String legacyCode = leave.getEmployeeLeaveType().getLegacyCode();
 			if (legacyCodes.contains(legacyCode)) {
 				// System.err.println(leave);
 				if (leave.getEstablished().before(dateFrom)) {
 					daysToTrim += CoreUtils.datesDifferenceIn360DaysYear(
 							leave.getEstablished(), dateFrom);
-					// System.err.println(daysToTrim);
+					//System.err.println(daysToTrim);
 				}
 
 				if (leave.getDueTo().after(dateTo)) {
 					daysToTrim += CoreUtils.datesDifferenceIn360DaysYear(
 							dateTo, leave.getDueTo());
-					// System.err.println(daysToTrim);
+					//System.err.println(daysToTrim);
 				}
 
 				Calendar leaveStart = Calendar.getInstance();
@@ -364,32 +371,29 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
 							tempLeaveStop.set(Calendar.YEAR, yearIndex);
 						}
 
-						int duration = CoreUtils.datesDifferenceIn360DaysYear(
+						duration = CoreUtils.datesDifferenceIn360DaysYear(
 								tempLeaveStart.getTime(),
 								tempLeaveStop.getTime(), true);
-						Integer currentYearDuration = daysOfLeavePerYearHash
-								.get(yearIndex);
-						if (currentYearDuration == null) {
-							daysOfLeavePerYearHash.put(yearIndex, duration);
-						} else {
-							daysOfLeavePerYearHash.put(yearIndex,
-									currentYearDuration + duration);
 						}
-
-					}
 
 				} else {
 					/* leave does not span across years */
-					int duration = CoreUtils.datesDifferenceIn360DaysYear(
+					duration = CoreUtils.datesDifferenceIn360DaysYear(
 							leaveStart.getTime(), leaveStop.getTime(), true);
-					Integer currentYearDuration = daysOfLeavePerYearHash
-							.get(leaveYearStart);
-					if (currentYearDuration == null) {
-						daysOfLeavePerYearHash.put(leaveYearStart, duration);
-					} else {
-						daysOfLeavePerYearHash.put(leaveYearStart,
-								currentYearDuration + duration);
-					}
+					
+				}
+				
+				/* from the duration of the leave, trim days if required */
+				duration = duration - daysToTrim;
+				
+				
+				Integer currentYearDuration = daysOfLeavePerYearHash
+						.get(leaveYearStart);
+				if (currentYearDuration == null) {
+					daysOfLeavePerYearHash.put(leaveYearStart, duration);
+				} else {
+					daysOfLeavePerYearHash.put(leaveYearStart,
+							currentYearDuration + duration);
 				}
 			}
 		}
@@ -400,11 +404,11 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
 		 */
 		int totalDaysWithoutPayment = 0; // ημέρες άδειας χωρίς αποδοχές
 		for (Integer year : daysOfLeavePerYearHash.keySet()) {
-			Integer duration = daysOfLeavePerYearHash.get(year);
-			totalDaysWithoutPayment += duration > 30 ? duration - 30 : 0;
+			Integer _duration = daysOfLeavePerYearHash.get(year);
+			totalDaysWithoutPayment += _duration > 30 ? _duration - 30 : 0;
 		}
-		// System.err.println(daysOfLeavePerYearHash);
-		// System.err.println(totalDaysWithoutPayment);
+		//System.err.println(daysOfLeavePerYearHash);
+		//System.err.println(totalDaysWithoutPayment);
 		return totalDaysWithoutPayment - daysToTrim;
 	}
 
@@ -419,10 +423,13 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
 	@Transactional(TransactionPropagationType.REQUIRED)
 	public EmployeeServiceHelper calculateRegularEmployeeService(
 			Employee employee, Date dateFrom, Date dateTo) {
+		
+		//DateFormat df = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, new Locale("el", "gr"));
 
 		/* determine employee's total service */
 		int totalServiceRaw = CoreUtils.datesDifferenceIn360DaysYear(dateFrom,
 				dateTo, true);
+		//System.err.println(String.format("Employee '%s' service from '%s' to '%s' is '%d' day(s).", employee, df.format(DateUtils.truncate(dateFrom, Calendar.HOUR)), df.format(DateUtils.truncate(dateTo, Calendar.HOUR)), totalServiceRaw));
 
 		/* handle employee penalties */
 		Collection<Penalty> penalties = coreSearching
