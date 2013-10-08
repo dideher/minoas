@@ -1,7 +1,6 @@
 package gr.sch.ira.minoas.seam.components.management;
 
 import gr.sch.ira.minoas.core.CoreUtils;
-import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.core.SchoolYear;
 import gr.sch.ira.minoas.model.core.Specialization;
 import gr.sch.ira.minoas.model.core.Unit;
@@ -12,7 +11,6 @@ import gr.sch.ira.minoas.model.employee.RegularEmployeeInfo;
 import gr.sch.ira.minoas.model.employement.Disposal;
 import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 import gr.sch.ira.minoas.model.employement.Employment;
-import gr.sch.ira.minoas.model.employement.EmploymentType;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.ServiceAllocation;
 import gr.sch.ira.minoas.model.employement.SpecialAssigment;
@@ -446,6 +444,13 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
             
     }
     
+    public void prepareForEmployeeTransfer() {
+    	Employee e = employeeHome.getInstance();
+        if(e!=null && e.getActive() == true) {
+        	
+        }
+    }
+    
     public void prepareForUpdateEmployee() {
     	Employee employee = getEmployeeHome().getInstance();
     	employeeHome.setTempValueHolder1(employee.getLastSpecialization().getId());
@@ -533,6 +538,20 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
     	return null;
     }
     
+    
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public String transferEmployee() {
+    	if (getEmployeeHome().isManaged() && getEmployeeHome().getInstance().getActive()) {
+            Employee e = getEmployeeHome().getInstance();
+            
+            return ACTION_OUTCOME_SUCCESS;
+    	} else {
+            facesMessages.add(Severity.ERROR, "Employee #0 is not managed or not active", getEmployeeHome());
+            return ACTION_OUTCOME_FAILURE;
+        }
+        
+    }
+    
     @Transactional(TransactionPropagationType.REQUIRED)
     public String terminateEmployee() {
         
@@ -610,12 +629,14 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
             
             getEntityManager().flush();
             
+            return ACTION_OUTCOME_SUCCESS;
+            
         } else {
             facesMessages.add(Severity.ERROR, "Employee #0 is not managed or not active", getEmployeeHome());
             return ACTION_OUTCOME_FAILURE;
         }
         
-        return ACTION_OUTCOME_FAILURE;
+     
     }
     
    
@@ -801,11 +822,7 @@ public class EmployeeManagement extends BaseDatabaseAwareSeamComponent {
 	    return ACTION_OUTCOME_FAILURE;
     }
 	
-	@Transactional
-	public String transferEmployee() {
-		Employment newEmployment = new Employment();
-		return null;
-	}
+	
 
 	/**
 	 * @return the employeeExclusionHome

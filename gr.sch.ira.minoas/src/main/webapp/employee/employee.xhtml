@@ -308,6 +308,15 @@
 								</rich:menuItem>
 
 								<rich:menuSeparator />
+								
+								<rich:menuItem submitMode="none"
+									rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE_TRANSFER')) and employeeHome.instance.active eq true}">
+									<a4j:commandLink value="Μετάταξη Εκπαιδευτικού"
+										reRender="transferEmployeeModalPanelContent" 
+										action="#{employeeManagement.prepareForEmployeeTransfer()}"
+										oncomplete="#{rich:component('transferEmployeeModalPanel')}.show()"/>
+								</rich:menuItem>
+								
 
 								<rich:menuItem submitMode="none"
 									rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE_TERMINATE')) and employeeHome.instance.active eq true}">
@@ -1219,6 +1228,127 @@
 			</a4j:region>
 		</rich:modalPanel>
 
+		<!-- ***********************************  -->
+		<!-- EMPLOYEE Transfer				  -->
+		<!-- ***********************************  -->
+		
+		<rich:modalPanel id="transferEmployeeModalPanel" autosized="true"
+			width="400">
+			<f:facet name="header">
+				<h:outputText value="Μετάταξη Εκπαιδευτικού"
+					style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<h:graphicImage value="/img/modal/close.png" styleClass="hidelink" 
+						width="18" height="18" id="hidelink102">
+						<a4j:support event="onclick" action="#{employeeHome.revert()}" />
+						<rich:componentControl for="transferEmployeeModalPanel" 
+							attachTo="hidelink102" operation="hide" event="onclick" />
+					</h:graphicImage>
+
+				</h:panelGroup>
+			</f:facet>
+			<a4j:region>
+
+				<h:panelGrid columns="1">
+
+					<h:outputText style="font-style:italic; font-size:12px;"
+						value="Με την παρακάτω φόρμα μπορείτε να μετατάξετε τον εργαζόμενου #{employeeUtil.prettyFormat(employee)}." />
+
+					<a4j:outputPanel id="transferEmployeeModalPanelContent">
+
+
+						<a4j:form id="transferEmployeeForm">
+
+							<ui:include src="/components/messages-component.xhtml" />
+
+							<h:panelGrid columns="1" width="100%">
+
+								<h:panelGroup>
+									<h:panelGrid columns="2">
+
+
+
+										<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+											<ui:define name="label">
+												<h:outputText value="Αιτία Τερματισμού Υπηρεσίας" />
+											</ui:define>
+
+
+											<h:inputText id="value" styleClass="fieldValueText" size="30"
+												required="true"
+												value="#{employeeManagement.inputTextFieldHelper1}"
+												immediate="true" />
+
+											<rich:suggestionbox height="100" width="350" for="value"
+												var="a_spec" id="specializationSuggester"
+												suggestionAction="#{employeeTerminationReasonTypeSuggester.suggest}">
+												<f:facet name="nothingLabel">
+													<h:outputText value="Άγνωστος λόγος τερματισμού" />
+												</f:facet>
+												<h:column>
+													<h:outputText value="#{a_spec.description}" />
+												</h:column>
+												<a4j:support ajaxSingle="true" event="onselect">
+													<f:setPropertyActionListener value="#{a_spec}"
+														target="#{employeeHome.instance.terminationReason}" />
+												</a4j:support>
+											</rich:suggestionbox>
+
+
+
+										</s:decorate>
+
+
+										<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+											<ui:define name="label">
+												<h:outputText value="Ημ/νία Μετάταξης : " />
+											</ui:define>
+											<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
+												style="width:50px" enableManualInput="true"
+												styleClass="fieldValueText" required="true" immediate="true"
+												value="#{employeeHome.instance.terminationDate}">
+											</rich:calendar>
+										</s:decorate>
+
+
+
+
+									</h:panelGrid>
+								</h:panelGroup>
+
+								<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+									<ui:define name="label">
+										<h:outputText value="Προαιρετικό Σχόλιο" />
+									</ui:define>
+									<h:inputTextarea rows="3" cols="80"
+										value="#{employeeHome.instance.terminationOptionalComment}"
+										required="false" styleClass="fieldValueText" />
+								</s:decorate>
+
+							</h:panelGrid>
+
+							<h:panelGrid columns="2">
+
+								<a4j:commandButton value="Τερματισμός Υπηρεσίας !"
+									action="#{employeeManagement.terminateEmployee()}"
+									limitToList="false"
+									data="#{facesContext.maximumSeverity.ordinal ge 2}"
+									oncomplete="if(data == false)  #{rich:component('transferEmployeeModalPanel')}.hide();"
+									reRender="transferEmployeeModalPanelContent,rootPanel,inactive-employee-panel" />
+								<a4j:commandButton value="Επιστροφή .."
+									action="#{employeeHome.revert()}"
+									reRender="transferEmployeeModalPanelContent"
+									oncomplete="#{rich:component('transferEmployeeModalPanel')}.hide();" />
+							</h:panelGrid>
+						</a4j:form>
+					</a4j:outputPanel>
+				</h:panelGrid>
+			</a4j:region>
+		</rich:modalPanel>
+		
+		
 
 		<!-- ***********************************  -->
 		<!-- TERMINATE EMPLOYEE					  -->
