@@ -254,47 +254,35 @@ public class EmployeeDisposalsManagement extends BaseDatabaseAwareSeamComponent 
             return false;
         }
 
-        Collection<Disposal> current_disposal = getCoreSearching().getAllEmployeeDisposals(employeeHome.getInstance());
-        for (Disposal current_secondment : current_disposal) {
-            if (current_secondment.getId().equals(disposal.getId()))
+        Collection<Disposal> employee_disposals = getCoreSearching().getAllEmployeeDisposals(employeeHome.getInstance());
+        for (Disposal current_disposal : employee_disposals) {
+            if (current_disposal.getId().equals(disposal.getId()))
                 continue;
-            Date current_established = DateUtils.truncate(current_secondment.getEstablished(), Calendar.DAY_OF_MONTH);
-            Date current_dueTo = DateUtils.truncate(current_secondment.getDueTo(), Calendar.DAY_OF_MONTH);
-            if (DateUtils.isSameDay(established, current_established) || DateUtils.isSameDay(dueTo, current_dueTo)) {
-                if (addMessages)
-                    facesMessages
-                            .add(Severity.ERROR,
-                                    String.format(
-                                            "Για τον εκπαιδευτικό υπάρχει ήδη καταχωρημένη διάθεση από '%s' εώς και '%s' στην μονάδα '%s' η οποία έχει τις ίδιες ημ/νιες με αυτή που προσπαθείτε να εισάγετε.",
-                                            df.format(current_secondment.getEstablished()), df
-                                                    .format(current_secondment.getDueTo()), current_secondment
-                                                    .getDisposalUnit().getTitle()));
-                return false;
-            }
-
-            if (DateUtils.isSameDay(established, current_dueTo)) {
-
-                if (addMessages)
-                    facesMessages
-                            .add(Severity.ERROR,
-                                    "Η ημ/νία έναρξης της διάθεσης πρέπει να είναι μεταγενέστερη της λήξης της προηγούμενης διάθεσης.");
-                return false;
-            }
-
+            Date current_established = DateUtils.truncate(current_disposal.getEstablished(), Calendar.DAY_OF_MONTH);
+            Date current_dueTo = DateUtils.truncate(current_disposal.getDueTo(), Calendar.DAY_OF_MONTH);
+            
+           
             if ((established.before(current_established) && dueTo.after(current_established)) ||
                     (established.after(current_established) && dueTo.before(current_dueTo)) ||
                     (established.before(current_dueTo) && dueTo.after(current_dueTo))) {
-                if (addMessages)
-                    facesMessages
-                            .add(Severity.ERROR,
+            	/* we have a disposal that has has intersection with dates of the current disposal. Allow this only if the disposal in the same school year and 
+            	 * in different school unit */
+            	if((current_disposal.getSchoolYear().getId() == disposal.getSchoolYear().getId()) && (!current_disposal.getDisposalUnit().getId().equals(disposal.getDisposalUnit().getId()))) {
+            		/* school year is same and disposal unit is different, so allow ! */
+            		continue;
+            	} else {
+            		if (addMessages)
+            			facesMessages
+                            	.add(Severity.ERROR,
                                     String.format(
-                                            "Για τον εκπαιδευτικό υπάρχει ήδη καταχωρημένη απόσπαση από '%s' εώς και '%s' στην μονάδα '%s' η οποία έχει επικάλυψη με την απόσπαση από '%s' εως και '%s' στην μονάδα '%s' που προσπαθείτε να εισάγετε.",
-                                            df.format(current_secondment.getEstablished()), df
-                                                    .format(current_secondment.getDueTo()), current_secondment
+                                            "Για τον εκπαιδευτικό υπάρχει ήδη η καταχωρημένη διάθεση από '%s' εώς και '%s' στην μονάδα '%s' η οποία έχει επικάλυψη με την διάθεση από '%s' εως και '%s' στην μονάδα '%s' που προσπαθείτε να εισάγετε.",
+                                            df.format(current_disposal.getEstablished()), df
+                                                    .format(current_disposal.getDueTo()), current_disposal
                                                     .getDisposalUnit().getTitle(),
                                             df.format(disposal.getEstablished()), df.format(disposal.getDueTo()),
                                             disposal.getDisposalUnit().getTitle()));
                 return false;
+            	}
             }
 
         }
