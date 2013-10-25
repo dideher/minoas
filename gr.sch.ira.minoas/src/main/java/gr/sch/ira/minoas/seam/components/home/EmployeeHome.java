@@ -9,10 +9,13 @@ import gr.sch.ira.minoas.model.employement.EmploymentType;
 import gr.sch.ira.minoas.model.employement.NonRegularEmploymentInfo;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.ServiceAllocation;
+import gr.sch.ira.minoas.model.transfers.EmployeeTypeTransfer;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+
+import javax.persistence.NoResultException;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
@@ -290,7 +293,14 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 			if (employee.getType() == EmployeeType.REGULAR) {
 				getEntityManager().remove(employee.getRegularDetail());
 			}
-			
+			try {
+				EmployeeTypeTransfer t = (EmployeeTypeTransfer)getEntityManager().createQuery("SELECT t FROM EmployeeTypeTransfer t WHERE t.newEmployee=:employee OR t.employee=:employee")
+					.setParameter("employee", employee).getSingleResult();
+				info("employee #1 has been involved with employee type transfer '#0'", t, employee);
+				getEntityManager().remove(t);
+			} catch(NoResultException nre) {
+				; // nothing to worry about, the employee to be deleted has never been involved with a type transfer.
+			}
 			if(employee.getEmployeeInfo()!=null) {
 				getEntityManager().remove(employee.getEmployeeInfo());
 			}
