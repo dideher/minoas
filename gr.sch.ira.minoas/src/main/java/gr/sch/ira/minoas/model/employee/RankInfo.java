@@ -251,13 +251,12 @@ public class RankInfo extends BaseIDDeleteAwareModel {
 		this.rank = rankInfo.getRank();
 		this.salaryGrade = rankInfo.getSalaryGrade();
 		this.educationalLevel = rankInfo.getEducationalLevel();
-		//this.comments = rankInfo.getComments();
+		this.comments = rankInfo.getComments();
 		this.employeeInfo = rankInfo.getEmployeeInfo();
 		this.lastRankDate = rankInfo.getLastRankDate();
 		this.lastSalaryGradeDate = rankInfo.getLastSalaryGradeDate();
 		this.surplusTimeInRank = rankInfo.getSurplusTimeInRank();
 		this.surplusTimeInSalaryGrade = rankInfo.getSurplusTimeInSalaryGrade();
-
 	}
 
 	/**
