@@ -56,41 +56,70 @@ public class EmployeeLeave extends BaseIDDeleteAwareModel {
 	@Temporal(TemporalType.DATE)
 	private Date dueTo;
 
+	@Basic
+	@Column(name="EFFECTIVE_DAYS_COUNT", nullable=true)
+	private Integer effectiveNumberOfDays;
+
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "EMPLOYEE_ID", nullable = false)
 	private Employee employee;
-
-	@Basic
-	@Column(name = "ESTABLISHED", nullable = false)
-	@Temporal(TemporalType.DATE)
-	private Date established;
 
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="EMPLOYEE_LEAVE_TYPE_ID", nullable=true)
 	private EmployeeLeaveType employeeLeaveType;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "REGULAR_SCHOOL_ID", nullable = true)
-	private School regularSchool;
-	
-	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.LAZY, mappedBy="leave")
-    private Collection<TeachingHourCDR> leaveCDRs = new ArrayList<TeachingHourCDR>();
-	
 	@Basic
-	@Column(name="EFFECTIVE_DAYS_COUNT", nullable=true)
-	private Integer effectiveNumberOfDays;
-	
-	@Basic
-    @Column(name="DAYS_COUNT", nullable=true)
-    private Integer numberOfDays;
+	@Column(name = "ESTABLISHED", nullable = false)
+	@Temporal(TemporalType.DATE)
+	private Date established;
 	
 	@Basic
     @Column(name="GENERATES_CDRS", nullable=true)
     private Boolean generatesCDRs = Boolean.FALSE;
 	
+	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.LAZY, mappedBy="leave")
+    private Collection<TeachingHourCDR> leaveCDRs = new ArrayList<TeachingHourCDR>();
+	
+	@Basic
+    @Column(name="DAYS_COUNT", nullable=true)
+    private Integer numberOfDays;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "REGULAR_SCHOOL_ID", nullable = true)
+	private School regularSchool;
+	
 	public EmployeeLeave() {
 		super();
+	}
+	
+	/**
+	 * Constructor to be used when cloning an EmployeeLeave. Note, the cloning is simple and no
+	 * complex referenced beans are cloned as well.
+	 * 
+	 * @param e
+	 */
+	public EmployeeLeave(EmployeeLeave e) {
+		this();
+		if(e != null) {
+			this.setId(e.getId());
+			this.setActive(e.getActive());
+			this.setAutoCanceled(e.getAutoCanceled());
+			this.setComment(e.getComment());
+			this.setDeleted(e.getDeleted());
+			this.setDeletedBy(e.getDeletedBy());
+			this.setDeletedComment(e.getDeletedComment());
+			this.setDeletedOn(e.getDeletedOn());
+			this.setDueTo(e.getDueTo());
+			this.setEffectiveNumberOfDays(e.getEffectiveNumberOfDays());
+			this.setEmployeeLeaveType(e.getEmployeeLeaveType());
+			this.setEstablished(e.getEstablished());
+			this.setGeneratesCDRs(e.getGeneratesCDRs());
+			this.setInsertedBy(e.getInsertedBy());
+			this.setInsertedOn(e.getInsertedOn());
+			this.setNumberOfDays(e.getNumberOfDays());
+			this.setRegularSchool(e.getRegularSchool());
+		}
 	}
 
 	/**
@@ -99,6 +128,13 @@ public class EmployeeLeave extends BaseIDDeleteAwareModel {
 	public Boolean getActive() {
 		return active;
 	}
+
+	/**
+     * @return the autoCanceled
+     */
+    public Boolean getAutoCanceled() {
+        return autoCanceled;
+    }
 
 	/**
 	 * @return the comment
@@ -115,11 +151,25 @@ public class EmployeeLeave extends BaseIDDeleteAwareModel {
 	}
 
 	/**
+     * @return the effectiveNumberOfDays
+     */
+    public Integer getEffectiveNumberOfDays() {
+        return effectiveNumberOfDays;
+    }
+
+	/**
 	 * @return the employee
 	 */
 	public Employee getEmployee() {
 		return employee;
 	}
+
+	/**
+     * @return the employeeLeaveType
+     */
+    public EmployeeLeaveType getEmployeeLeaveType() {
+        return employeeLeaveType;
+    }
 
 	/**
 	 * @return the established
@@ -129,57 +179,138 @@ public class EmployeeLeave extends BaseIDDeleteAwareModel {
 	}
 
 	/**
+     * @return the generatesCDRs
+     */
+    public Boolean getGeneratesCDRs() {
+        return generatesCDRs;
+    }
+
+	/**
+     * @return the leaveCDRs
+     */
+    public Collection<TeachingHourCDR> getLeaveCDRs() {
+        return leaveCDRs;
+    }
+
+	/**
+     * @return the numberOfDays
+     */
+    public Integer getNumberOfDays() {
+        return numberOfDays;
+    }
+
+	
+
+	/**
 	 * @return the regularSchool
 	 */
 	public School getRegularSchool() {
 		return regularSchool;
 	}
 
-	/**
+	public boolean isCurrent() {
+        Date currentDate = DateUtils.truncate(new Date(),  Calendar.DAY_OF_MONTH);
+        Date established = DateUtils.truncate(getEstablished(),  Calendar.DAY_OF_MONTH);
+        Date dueTo = DateUtils.truncate(getDueTo(),  Calendar.DAY_OF_MONTH);
+        return  getActive() && ( (established.before(currentDate) || established.equals(currentDate)) && (dueTo.after(currentDate) || dueTo.equals(currentDate)));
+    }
+
+   
+    public boolean isFuture() {
+        Date currentDate = DateUtils.truncate(new Date(),  Calendar.DAY_OF_MONTH);
+        return DateUtils.truncate(getEstablished(),  Calendar.DAY_OF_MONTH).after(currentDate); 
+    }
+
+    public boolean isPast() {
+        Date currentDate = DateUtils.truncate(new Date(),  Calendar.DAY_OF_MONTH);
+        return DateUtils.truncate(getEstablished(),  Calendar.DAY_OF_MONTH).before(currentDate);
+    }
+
+    /**
 	 * @param active the active to set
 	 */
 	public void setActive(Boolean active) {
 		this.active = active;
 	}
 
-	/**
+    /**
+     * @param autoCanceled the autoCanceled to set
+     */
+    public void setAutoCanceled(Boolean autoCanceled) {
+        this.autoCanceled = autoCanceled;
+    }
+
+    /**
 	 * @param comment the comment to set
 	 */
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
 
-	/**
+    /**
 	 * @param dueTo the dueTo to set
 	 */
 	public void setDueTo(Date dueTo) {
 		this.dueTo = dueTo;
 	}
 
-	/**
+    /**
+     * @param effectiveNumberOfDays the effectiveNumberOfDays to set
+     */
+    public void setEffectiveNumberOfDays(Integer effectiveNumberOfDays) {
+        this.effectiveNumberOfDays = effectiveNumberOfDays;
+    }
+
+    /**
 	 * @param employee the employee to set
 	 */
 	public void setEmployee(Employee employee) {
 		this.employee = employee;
 	}
-
-	/**
+    
+    /**
+     * @param employeeLeaveType the employeeLeaveType to set
+     */
+    public void setEmployeeLeaveType(EmployeeLeaveType employeeLeaveType) {
+        this.employeeLeaveType = employeeLeaveType;
+    }
+    
+    /**
 	 * @param established the established to set
 	 */
 	public void setEstablished(Date established) {
 		this.established = established;
 	}
+    
+    /**
+     * @param generatesCDRs the generatesCDRs to set
+     */
+    public void setGeneratesCDRs(Boolean generatesCDRs) {
+        this.generatesCDRs = generatesCDRs;
+    }
 
-	
+    /**
+     * @param leaveCDRs the leaveCDRs to set
+     */
+    public void setLeaveCDRs(Collection<TeachingHourCDR> leaveCDRs) {
+        this.leaveCDRs = leaveCDRs;
+    }
 
-	/**
+    /**
+     * @param numberOfDays the numberOfDays to set
+     */
+    public void setNumberOfDays(Integer numberOfDays) {
+        this.numberOfDays = numberOfDays;
+    }
+
+    /**
 	 * @param regularSchool the regularSchool to set
 	 */
 	public void setRegularSchool(School regularSchool) {
 		this.regularSchool = regularSchool;
 	}
 
-	/**
+    /**
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -209,107 +340,5 @@ public class EmployeeLeave extends BaseIDDeleteAwareModel {
 		builder.append("]");
 		return builder.toString();
 	}
-
-   
-    /**
-     * @return the autoCanceled
-     */
-    public Boolean getAutoCanceled() {
-        return autoCanceled;
-    }
-
-    /**
-     * @param autoCanceled the autoCanceled to set
-     */
-    public void setAutoCanceled(Boolean autoCanceled) {
-        this.autoCanceled = autoCanceled;
-    }
-
-    /**
-     * @return the employeeLeaveType
-     */
-    public EmployeeLeaveType getEmployeeLeaveType() {
-        return employeeLeaveType;
-    }
-
-    /**
-     * @param employeeLeaveType the employeeLeaveType to set
-     */
-    public void setEmployeeLeaveType(EmployeeLeaveType employeeLeaveType) {
-        this.employeeLeaveType = employeeLeaveType;
-    }
-
-    /**
-     * @return the generatesCDRs
-     */
-    public Boolean getGeneratesCDRs() {
-        return generatesCDRs;
-    }
-
-    /**
-     * @param generatesCDRs the generatesCDRs to set
-     */
-    public void setGeneratesCDRs(Boolean generatesCDRs) {
-        this.generatesCDRs = generatesCDRs;
-    }
-
-    /**
-     * @return the effectiveNumberOfDays
-     */
-    public Integer getEffectiveNumberOfDays() {
-        return effectiveNumberOfDays;
-    }
-
-    /**
-     * @param effectiveNumberOfDays the effectiveNumberOfDays to set
-     */
-    public void setEffectiveNumberOfDays(Integer effectiveNumberOfDays) {
-        this.effectiveNumberOfDays = effectiveNumberOfDays;
-    }
-    
-    public boolean isFuture() {
-        Date currentDate = DateUtils.truncate(new Date(),  Calendar.DAY_OF_MONTH);
-        return DateUtils.truncate(getEstablished(),  Calendar.DAY_OF_MONTH).after(currentDate); 
-    }
-    
-    public boolean isCurrent() {
-        Date currentDate = DateUtils.truncate(new Date(),  Calendar.DAY_OF_MONTH);
-        Date established = DateUtils.truncate(getEstablished(),  Calendar.DAY_OF_MONTH);
-        Date dueTo = DateUtils.truncate(getDueTo(),  Calendar.DAY_OF_MONTH);
-        return  getActive() && ( (established.before(currentDate) || established.equals(currentDate)) && (dueTo.after(currentDate) || dueTo.equals(currentDate)));
-    }
-    
-    public boolean isPast() {
-        Date currentDate = DateUtils.truncate(new Date(),  Calendar.DAY_OF_MONTH);
-        return DateUtils.truncate(getEstablished(),  Calendar.DAY_OF_MONTH).before(currentDate);
-    }
-
-    /**
-     * @return the numberOfDays
-     */
-    public Integer getNumberOfDays() {
-        return numberOfDays;
-    }
-
-    /**
-     * @param numberOfDays the numberOfDays to set
-     */
-    public void setNumberOfDays(Integer numberOfDays) {
-        this.numberOfDays = numberOfDays;
-    }
-
-    /**
-     * @return the leaveCDRs
-     */
-    public Collection<TeachingHourCDR> getLeaveCDRs() {
-        return leaveCDRs;
-    }
-
-    /**
-     * @param leaveCDRs the leaveCDRs to set
-     */
-    public void setLeaveCDRs(Collection<TeachingHourCDR> leaveCDRs) {
-        this.leaveCDRs = leaveCDRs;
-    }
 
 }
