@@ -11,7 +11,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
@@ -36,7 +39,7 @@ public class EmployeeSuitableSpecialization extends BaseIDModel {
 	@Column(name = "EMPLOYEE_TYPE")
 	private EmployeeType employeeType;
 
-	@Basic
+	@OneToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name = "SPECIALIZATION_ID", nullable = false)
 	private Specialization suitableSpecialization;
 
