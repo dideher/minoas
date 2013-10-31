@@ -348,6 +348,7 @@ public abstract class CoreUtils {
 		// Πάρε τον πλεονάζοντα χρόνο στον ΒΑΘΜΟ
 		Integer ExcessTimeInRank = (currentRankInfo.getSurplusTimeInRankUntilToday()+1) - unPaidDays;
 		RankInfo newRankInfo = new RankInfo(currentRankInfo); 
+		newRankInfo.setComments(null);
 		switch (newRankInfo.getEducationalLevel()) {
 			case UNIVERSITY_EDUCATION_LEVEL:
 				switch(newRankInfo.getRank()) {

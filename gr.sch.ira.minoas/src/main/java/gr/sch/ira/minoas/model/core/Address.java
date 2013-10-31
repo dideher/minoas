@@ -61,7 +61,28 @@ public class Address extends BaseIDModel {
 	 * 
 	 */
 	public Address() {
-
+		super();
+	}
+	
+	/**
+	 * Constructor to be used when cloning an Address. Note, the cloning is simple and no
+	 * complex referenced beans are cloned as well.
+	 * @param a
+	 */
+	public Address(Address a) {
+		this();
+		if (a != null) {
+			this.setId(a.getId());
+			this.setAddress(a.getAddress());
+			this.setAddressAdditional(a.getAddressAdditional());
+			this.setCity(a.getCity());
+			this.setInsertedBy(a.getInsertedBy());
+			this.setInsertedOn(a.getInsertedOn());
+			this.setLatitude(a.getLatitude());
+			this.setLongitude(a.getLongitude());
+			this.setNumber(a.getNumber());
+			this.setPostCode(a.getPostCode());
+		}
 	}
 
 	/**

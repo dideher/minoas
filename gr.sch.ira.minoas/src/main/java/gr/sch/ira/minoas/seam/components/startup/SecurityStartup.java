@@ -95,6 +95,7 @@ public class SecurityStartup extends BaseDatabaseAwareSeamComponent {
 		/* Employee Management */
 		createRole("MANAGE_EMPLOYEE", "Manage Employee", admin);
 		createRole("MANAGE_EMPLOYEE_TERMINATE", "Terminate Employee", admin);
+		createRole("MANAGE_EMPLOYEE_TRANSFER", "Transfer Employee", admin);
 		
         createRole("MANAGE_EMPLOYEE_BASIC_INFO", "Manage Employee's Basic Info", admin);
         createRole("MANAGE_EMPLOYEE_SPECIALIZATION", "Manage Employee's Specialization", admin);
@@ -137,6 +138,7 @@ public class SecurityStartup extends BaseDatabaseAwareSeamComponent {
 		createRole("ADD_DISPOSAL", "Add New Disposal", admin);
 		createRole("MANAGE_DISPOSAL", "Manage Disposal", admin);
 		createRole("VIEW_DISPOSAL", "View Disposal", admin);
+		createRole("DELETE_DISPOSAL", "Delete Disposal", admin);
 		/* Reports */
 		createRole("VIEW_SCHOOL_REPORT", "View School Oriented Reports", admin);
 
