@@ -1,11 +1,7 @@
 package gr.sch.ira.minoas.seam.components.async;
 
-import gr.sch.ira.minoas.core.CoreUtils;
 import gr.sch.ira.minoas.model.employee.Employee;
-import gr.sch.ira.minoas.model.employee.EmployeeInfo;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
-import gr.sch.ira.minoas.model.employee.RankInfo;
-import gr.sch.ira.minoas.model.employee.RegularEmployeeInfo;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.RankInfoCalculation;
 import gr.sch.ira.minoas.seam.components.WorkExperienceCalculation;
@@ -31,10 +27,10 @@ import org.jboss.seam.async.QuartzTriggerHandle;
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * @version $Id$
  */
-@Name("regularEmployeeServiceUpdaterProcessor")
+@Name("dailyEmployeeDataUpdaterProcessor")
 @Scope(ScopeType.APPLICATION)
 @AutoCreate
-public class RegularEmployeeServiceUpdaterProcessor extends BaseDatabaseAwareSeamComponent {
+public class DailyEmployeeDataUpdaterProcessor extends BaseDatabaseAwareSeamComponent {
 
 
     @In(required=true, create=true)
@@ -51,7 +47,7 @@ public class RegularEmployeeServiceUpdaterProcessor extends BaseDatabaseAwareSea
 	/**
 	 * 
 	 */
-	public RegularEmployeeServiceUpdaterProcessor() {
+	public DailyEmployeeDataUpdaterProcessor() {
 	}
 
 	@Asynchronous
