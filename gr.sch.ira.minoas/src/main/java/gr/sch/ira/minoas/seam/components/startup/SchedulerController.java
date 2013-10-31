@@ -4,7 +4,6 @@ import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.async.DisposalCleanupProcessor;
 import gr.sch.ira.minoas.seam.components.async.LeaveActivactionProcessor;
 import gr.sch.ira.minoas.seam.components.async.LeaveCleanupProcessor;
-import gr.sch.ira.minoas.seam.components.async.RankInfoUpdaterProcessor;
 import gr.sch.ira.minoas.seam.components.async.RegularEmployeeServiceUpdaterProcessor;
 import gr.sch.ira.minoas.seam.components.async.SecondmentActivactionProcessor;
 import gr.sch.ira.minoas.seam.components.async.SecondmentCleanupProcessor;
@@ -76,9 +75,6 @@ public class SchedulerController extends BaseDatabaseAwareSeamComponent {
     @In(create=true, value="regularEmployeeServiceUpdaterProcessor")
     private RegularEmployeeServiceUpdaterProcessor regularEmployeeServiceUpdaterProcessor;
     
-    @In(create=true, value="rankInfoUpdaterProcessor")
-    private RankInfoUpdaterProcessor rankInfoUpdaterProcessor;
-    
     @In(create=true, value="basicUsageReport")
     private BasicUsageReport basicUsageReportProcessor;
     
@@ -91,7 +87,6 @@ public class SchedulerController extends BaseDatabaseAwareSeamComponent {
     //private QuartzTriggerHandle serviceAllocationActivationProcessorHandler;
     //private QuartzTriggerHandle disposalActivationProcessorHandler;
     private QuartzTriggerHandle regularEmployeeServiceUpdaterProcessorHandler;
-    private QuartzTriggerHandle rankInfoUpdaterProcessorHandler;
     private QuartzTriggerHandle basicUsageReportProcessorHandler;
     
     
@@ -151,11 +146,6 @@ public class SchedulerController extends BaseDatabaseAwareSeamComponent {
 	        if(regularEmployeeServiceUpdaterProcessor!=null) {
 	            regularEmployeeServiceUpdaterProcessorHandler = regularEmployeeServiceUpdaterProcessor.schedule(new Date(), REGULAR_EMPLOYEE_SERVICE_SYNC_INTERVAL, null);
 	            info("scheduled #0", regularEmployeeServiceUpdaterProcessorHandler.getTrigger().getFullName());
-	        }
-        
-	        if(rankInfoUpdaterProcessor!=null) {
-	        	rankInfoUpdaterProcessorHandler = rankInfoUpdaterProcessor.schedule(new Date(), RANK_INFO_SYNC_INTERVAL, null);
-	            info("scheduled #0", rankInfoUpdaterProcessorHandler.getTrigger().getFullName());
 	        }
         
         } catch(Exception ex) {

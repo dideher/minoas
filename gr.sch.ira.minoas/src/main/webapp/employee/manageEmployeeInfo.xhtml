@@ -86,35 +86,28 @@
 									<h:outputLabel value="" />
 									<h:outputLabel value="" />
 									<h:outputLabel value="" />
-									<h:outputLabel value="" />
-									<a4j:commandLink id="insertlink"
-										rendered="#{((s:hasRole('ADMIN') or s:hasRole('MODIFY_EMPLOYEE_INFO')))}"
+									
+									<a4j:commandButton id="insertlink"
+										disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MODIFY_EMPLOYEE_INFO'))}"
 										action="#{employeeInfoManagement.prepareForNewOrUpdateEmployeeInfo()}"
 										reRender="insertEmployeeInfoModalPanel"
 										oncomplete="#{rich:component('insertEmployeeInfoModalPanel')}.show()"
-										value="Αλλαγή Μισθολ. Στοιχείων" styleClass="rich-toolbar-item">
-										<h:graphicImage value="/img/icons/edit.png" width="12"
-											height="12" style="border:0" />
-									</a4j:commandLink>
+										immediate="true" value="Αλλαγή Μισθολ. Στοιχείων">
+									</a4j:commandButton>
 									
-									<a4j:commandLink id="insert_rankinfo_link"
-										rendered="#{(employee.employeeInfo != null) and ((s:hasRole('ADMIN') or s:hasRole('INSERT_RANK_INFO')))}"
+									<a4j:commandButton id="insert_rankinfo_button"
+										disabled="#{(employee.employeeInfo == null) or !(s:hasRole('ADMIN') or s:hasRole('INSERT_RANK_INFO'))}"
 										action="#{employeeInfoManagement.prepareNewRankInfo()}"
-										reRender="insertRankInfoOutputPanel" immediate="true"
+										reRender="insertRankInfoOutputPanel" 
 										oncomplete="#{rich:component('insertRankInfoModalPanel')}.show()"
-										value="Εισαγωγή Βαθμού/ΜΚ" styleClass="rich-toolbar-item">
-										<h:graphicImage value="/img/icons/edit.png" width="12"
-											height="12" style="border:0" />
-									</a4j:commandLink>
+										immediate="true" value="Εισαγωγή Βαθμού/ΜΚ">
+									</a4j:commandButton>
 
-									<a4j:commandLink id="Recalculate_Rank_Infos_link"
-										rendered="#{(employee.employeeInfo != null) and (s:hasRole('ADMIN'))}"
-										action="#{employeeInfoManagement.test()}"
-										reRender="insertRankInfoOutputPanel" immediate="true"
-										value="Recalculate Rank Infos" styleClass="rich-toolbar-item">
-										<h:graphicImage value="/img/icons/edit.png" width="12"
-											height="12" style="border:0" />
-									</a4j:commandLink>
+									<a4j:commandButton id="Recalculate_Rank_Infos_button"
+										disabled="#{(employee.employeeInfo == null) or !(s:hasRole('ADMIN') or s:hasRole('MANUAL_RANKINFO_CALCULATION'))}"
+										action="#{employeeInfoManagement.recalculateRankInfo()}"
+										immediate="true" value="Επικαιροποιήση Βαθμού/ΜΚ">
+									</a4j:commandButton>
 									
 								</h:panelGrid>
 								

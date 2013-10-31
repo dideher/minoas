@@ -205,6 +205,7 @@ public class RankInfo extends BaseIDDeleteAwareModel {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "EDUCATIONAL_LEVEL", nullable = false, updatable = true)
 	private EducationalLevelType educationalLevel;
+	
 
 	/**
 	 * Comments (Σχόλια)
@@ -227,7 +228,7 @@ public class RankInfo extends BaseIDDeleteAwareModel {
 	public void setComments(String comments) {
 		this.comments = comments;
 	}
-
+	
 	/**
 	 * @param rank
 	 * @param salaryGrade
