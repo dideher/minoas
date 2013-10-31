@@ -9,12 +9,13 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
-@Table(name = "EMPLOYEE_LEAVE_TYPE")
+@Table(name = "EMPLOYEE_LEAVE_TYPE", uniqueConstraints = { @UniqueConstraint(columnNames = { "LEGACY_CODE", "EMPLOYEE_TYPE" }) })
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class EmployeeLeaveType extends BaseIDModel {
 
@@ -44,7 +45,7 @@ public class EmployeeLeaveType extends BaseIDModel {
     private Boolean generatesCDRs = Boolean.FALSE;
     
     @Basic
-    @Column(name="LEGACY_CODE", nullable=false, unique=true)
+    @Column(name="LEGACY_CODE", nullable=false)
     private String legacyCode;
     
     @Enumerated(EnumType.STRING)
