@@ -102,8 +102,7 @@ public class EmployeeInfo extends BaseIDModel {
 	/**
 	 * Rank Information (Στοιχεία Βαθμού και Μισθολογικού Κλιμακίου)
 	 */
-	@OneToMany(mappedBy="employeeInfo")
-	//private RankInfo rankInfo;
+	@OneToMany(mappedBy="employeeInfo", fetch=FetchType.LAZY, cascade={CascadeType.ALL})
 	private Collection<RankInfo> rankInfos = new ArrayList<RankInfo>();
 	
 	

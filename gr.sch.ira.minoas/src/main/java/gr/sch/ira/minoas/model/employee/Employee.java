@@ -75,7 +75,7 @@ public class Employee extends Person {
 	@Column(name = "EDUCATIONAL_LEVEL_TYPE", length = 2, nullable = true)
 	private EducationalLevelType educationalLevelType;
 	
-	@OneToOne(mappedBy="employee")
+	@OneToOne(mappedBy="employee", fetch=FetchType.LAZY, cascade = {CascadeType.ALL})
 	private EmployeeInfo employeeInfo;
 	
 	@OneToMany(mappedBy = "employee", fetch = FetchType.LAZY, cascade = { CascadeType.ALL })

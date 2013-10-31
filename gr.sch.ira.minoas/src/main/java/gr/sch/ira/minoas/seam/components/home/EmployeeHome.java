@@ -301,9 +301,6 @@ public class EmployeeHome extends MinoasEntityHome<Employee> {
 			} catch(NoResultException nre) {
 				; // nothing to worry about, the employee to be deleted has never been involved with a type transfer.
 			}
-			if(employee.getEmployeeInfo()!=null) {
-				getEntityManager().remove(employee.getEmployeeInfo());
-			}
 			return super.remove();
 		}
 		return null;
