@@ -4,23 +4,18 @@ import gr.sch.ira.minoas.core.CoreUtils;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeInfo;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
-import gr.sch.ira.minoas.model.employee.Evaluation;
 import gr.sch.ira.minoas.model.employee.RankInfo;
 import gr.sch.ira.minoas.model.employee.RegularEmployeeInfo;
-import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.CoreSearching;
 import gr.sch.ira.minoas.seam.components.RankInfoCalculation;
-import gr.sch.ira.minoas.seam.components.WorkExperienceCalculation;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
 import gr.sch.ira.minoas.seam.components.home.EmployeeInfoHome;
 import gr.sch.ira.minoas.seam.components.home.RankInfoHome;
 import gr.sch.ira.minoas.seam.components.home.RegularEmployeeInfoHome;
 
-import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
@@ -62,7 +57,7 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 	
 	@In(required=true, create=true)
 	private RankInfoCalculation rankInfoCalculation;
-
+	
 	private Date totalWorkServiceCalculationDate;
 	private int totalCalculatedServiceInDays;
 
@@ -557,9 +552,35 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 		return CoreUtils
 				.getNoOfDaysInYear_Month_DayFormat(getTotalServiceIncludingWorkExperience());
 	}
+
 	
-	public void test() {
-		rankInfoCalculation.recalculateRankInfos();
+	/**
+	 * Manual επανυπολογισμός του Βαθμού/ΜΚ κάποιου employee  
+	 */
+	public String recalculateRankInfo() {
+		
+		try {
+            if (employeeHome.isManaged()) {
+                Employee employee = employeeHome.getInstance();
+                EmployeeInfo employeeInfo = employee.getEmployeeInfo();
+                if(employeeInfo!=null) {
+                	rankInfoCalculation.recalculateRankInfo(employee);
+                	info("Ο τρέχοντας Βαθμός/ΜΚ για τον εκπ/κό #0 είναι πλέον, Βαθμός: #1, ΜΚ : #2", employee,employeeInfo.getCurrentRankInfo().getRank(), employeeInfo.getCurrentRankInfo().getSalaryGrade());
+                    getEntityManager().flush();
+                    return ACTION_OUTCOME_SUCCESS;
+                } else {
+                    facesMessages.add(Severity.ERROR, "Ο υπάλληλος δεν έχει EMPLOYEE_INFO");
+                    return ACTION_OUTCOME_FAILURE;
+                }
+            } else {
+                facesMessages.add(Severity.ERROR, "employeehome is not managed.");
+                return ACTION_OUTCOME_FAILURE;
+            }
+        } catch (Exception ex) {
+            error(ex);
+            facesMessages.add(Severity.ERROR, String.format("Αποτυχία ενημέρωσης, λόγω '%s'", ex.getMessage()));
+            return ACTION_OUTCOME_FAILURE;
+        }
 	}
 	
 }
