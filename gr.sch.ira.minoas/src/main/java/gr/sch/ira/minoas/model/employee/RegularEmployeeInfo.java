@@ -35,7 +35,7 @@ public class RegularEmployeeInfo extends BaseIDModel {
 	 * Greek Official Gazette Αppointment Number (Αριθμός ΦΕΚ Διορισμού)
 	 */
 	@Basic
-	@Column(name = "GOG_APPOINTMENT_NO", length = 4)
+	@Column(name = "GOG_APPOINTMENT_NO", length = 8)
 	private String appointmentGOG;
 	
 	/**
@@ -83,7 +83,7 @@ public class RegularEmployeeInfo extends BaseIDModel {
 	 * Αφορά υπάλληλο που ήταν πχ Μόνιμος Εκπ/σος και μετατάχθηκε σε Διοικητικός
 	 */
 	@Basic
-	@Column(name = "TRAN_GOG_APPOINTMENT_NO", length = 4)
+	@Column(name = "TRAN_GOG_APPOINTMENT_NO", length = 8)
 	private String transferAppointmentGOG;
 	
 	/**

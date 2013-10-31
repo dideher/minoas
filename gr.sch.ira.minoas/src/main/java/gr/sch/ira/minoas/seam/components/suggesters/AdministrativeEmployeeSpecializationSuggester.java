@@ -5,7 +5,7 @@ package gr.sch.ira.minoas.seam.components.suggesters;
 
 import gr.sch.ira.minoas.core.CoreUtils;
 import gr.sch.ira.minoas.model.core.Specialization;
-import gr.sch.ira.minoas.model.employement.EmploymentType;
+import gr.sch.ira.minoas.model.employee.EmployeeType;
 
 
 import java.util.Collection;
@@ -35,7 +35,7 @@ public class AdministrativeEmployeeSpecializationSuggester extends BaseSuggester
 	public Collection<Specialization> suggest(Object specialization_search_pattern) {
 		return getEntityManager().createQuery(
 				"SELECT s from Specialization s WHERE (s.disabled IS FALSE OR s.disabled IS NULL) AND s.id IN (SELECT es.suitableSpecialization.id FROM EmployeeSuitableSpecialization es WHERE es.employeeType=:employeeType) AND (lower(s.id) LIKE LOWER(:search_pattern) OR LOWER(s.title) LIKE LOWER(:search_pattern))").setParameter(
-				"search_pattern", CoreUtils.getSearchPattern(String.valueOf(specialization_search_pattern))).setParameter("employeeType", EmploymentType.ADMINISTRATIVE)
+				"search_pattern", CoreUtils.getSearchPattern(String.valueOf(specialization_search_pattern))).setParameter("employeeType", EmployeeType.ADMINISTRATIVE)
 				.getResultList();
 	}
 

@@ -203,6 +203,24 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         info("found totally '#0' employments for regular employee '#1'.", result.size(), employee);
         return result;
     }
+    
+    /**
+     * @param employee
+     * @param type
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public Collection<Employment> getAllEmployeeEmployments(Person employee) {
+        List<Employment> result;
+        debug("trying to featch all  employments for employee '#0'", employee);
+        result = entityManager
+                .createQuery(
+                        "SELECT e from Employment e WHERE e.employee=:employee AND (e.deleted IS FALSE OR e.deleted IS NULL) ORDER BY e.established DESC")
+                .setParameter("employee", employee).getResultList();
+        info("found totally '#0' employments for regular employee '#1'.", result.size(), employee);
+        return result;
+    }
 
     @SuppressWarnings("unchecked")
     public Collection<Secondment> getAllEmployeeSecondments(Person employee) {
@@ -280,7 +298,8 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     public SchoolType[] getAvailableSchoolTypes() {
         return SchoolType.values();
     }
-
+    
+    
     public List<SchoolYear> getAvailableSchoolYears() {
         return getAvailableSchoolYears(null);
     }

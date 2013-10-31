@@ -64,6 +64,7 @@
     <class>gr.sch.ira.minoas.model.employee.WorkAttendanceEvent</class>
     <class>gr.sch.ira.minoas.model.employement.NonRegularEmploymentInfo</class>
     <class>gr.sch.ira.minoas.model.core.EmployeeSuitableSpecialization</class>
+    <class>gr.sch.ira.minoas.model.transfers.EmployeeTypeTransfer</class>
     
     <properties>
       <!--

@@ -37,1013 +37,1022 @@
 					</a4j:outputPanel>
 				</a4j:region>
 			</h:form>
-			
+
 			<a4j:outputPanel id="inactive-employee-panel">
-				<s:div rendered="#{employeeHome.instance.active eq false}" styleClass="clean-warning">
-					<h:outputFormat value="Ο εκπαιδευτικός είναι ανενεργός. Συγκεκριμένα, έχει απενεργοποιηθεί στις ''{0}'' λόγω ''{1}'' με προαιρετικό σχόλιο ''{2}''.">
-						<f:param value="#{employeeUtil.prettyFormatTerminationDate(employeeHome.instance)}" />
-						<f:param value="#{employeeUtil.prettyFormatTerminationReason(employeeHome.instance)}" />
-						<f:param value="#{employeeUtil.prettyFormatTerminationComment(employeeHome.instance)}" />
+				<s:div rendered="#{employeeHome.instance.active eq false}"
+					styleClass="clean-warning">
+					<h:outputFormat
+						value="Ο εκπαιδευτικός είναι ανενεργός. Συγκεκριμένα, έχει απενεργοποιηθεί στις ''{0}'' λόγω ''{1}'' με προαιρετικό σχόλιο ''{2}''.">
+						<f:param
+							value="#{employeeUtil.prettyFormatTerminationDate(employeeHome.instance)}" />
+						<f:param
+							value="#{employeeUtil.prettyFormatTerminationReason(employeeHome.instance)}" />
+						<f:param
+							value="#{employeeUtil.prettyFormatTerminationComment(employeeHome.instance)}" />
 					</h:outputFormat>
 				</s:div>
 			</a4j:outputPanel>
 
 			<a4j:outputPanel id="rootPanel">
-			
 
-			<h:panelGrid columns="1">
 
-				<s:div>
+				<h:panelGrid columns="1">
 
-					<h:panelGrid columns="2">
-						<s:div>
-							<a4j:outputPanel id="employeeAndEmploymentDataOutputPanel">
-								<h:panelGrid columns="1" width="500">
-	
-	
-									<ui:include src="/employee/basic-info.xhtml">
-										<ui:param name="employee" value="#{employee}" />
-									</ui:include>
-	
-									<rich:panel id="workExperienceInfoPanel">
-										<f:facet name="header">
-											<h:outputText value="Στοιχεία Υπηρεσίας" />
-										</f:facet>
-	
-										<ui:include
-											src="/components/employee/workExperienceAndServiceInfo.xhtml">
+					<s:div>
+
+						<h:panelGrid columns="2">
+							<s:div>
+								<a4j:outputPanel id="employeeAndEmploymentDataOutputPanel">
+									<h:panelGrid columns="1" width="500">
+
+
+										<ui:include src="/employee/basic-info.xhtml">
 											<ui:param name="employee" value="#{employee}" />
 										</ui:include>
-									</rich:panel>
 
-								</h:panelGrid>
-							
-							</a4j:outputPanel>
-							
-						</s:div>
-						<s:div>
-							<h:panelGrid columns="1">
-
-								<rich:dataTable id="employeeCurrentStatusTable"
-									value="#{employeeCurrentStatusItems}" var="_item" rows="15"
-									border="0"
-									onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
-									onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
-									width="100%">
-									<f:facet name="header">
-										<h:outputLabel value="Τρέχουσα Κατάσταση Εκπαιδευτικού" />
-									</f:facet>
-
-									<rich:column>
-										<f:facet name="header">
-											<h:outputText value="Σχολική Μονάδα" />
-										</f:facet>
-										<h:outputText value="#{_item.schoolUnit}" />
-									</rich:column>
-
-									<rich:column>
-										<f:facet name="header">
-											<h:outputText value="Τύπος" />
-										</f:facet>
-										<h:outputText value="#{messages[_item.cdrTypeKey]}" />
-									</rich:column>
-
-
-
-									<rich:column>
-										<f:facet name="header">
-											<h:outputText value="Σχόλιο" />
-										</f:facet>
-										<h:outputText value="#{_item.comment}" />
-									</rich:column>
-
-
-								</rich:dataTable>
-
-								<rich:dataTable id="employeeCurrentHoursDistributionTable"
-									value="#{employeeCurrentHoursDistributionItems}" var="_item"
-									rows="15" border="0"
-									onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
-									onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
-									width="100%">
-									<f:facet name="header">
-										<h:outputLabel
-											value="Τρέχουσα Κατανομή Διδακτικών Ωρών Εκπαιδευτικού" />
-									</f:facet>
-
-									<rich:column>
-										<f:facet name="header">
-											<h:outputText value="Σχολική Μονάδα" />
-										</f:facet>
-										<h:outputText value="#{_item.get('school').title}" />
-									</rich:column>
-
-
-									<rich:column style="text-align:center">
-										<f:facet name="header">
-											<h:outputText value="Διδακτικές Ώρες" />
-										</f:facet>
-										<h:outputText value="#{_item.get('unitHours')}"
-											style="color:green;font-weight:bold;" />
-									</rich:column>
-
-
-								</rich:dataTable>
-
-								<a4j:outputPanel id="employeeSpecialAssigmentOutputPanel">
-									<h:form id="employeeSpecialAssigmentTableForm">
-										<rich:dataTable id="employeeSpecialAssigmentTable"
-											rendered="#{employeeSpecialAssigmentItems.rowCount > 0}"
-											value="#{employeeSpecialAssigmentItems}" var="_item"
-											rows="15" border="0"
-											onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
-											onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
-											width="100%">
+										<rich:panel id="workExperienceInfoPanel">
 											<f:facet name="header">
-												<h:outputLabel value="Ειδικές Ασχολίες Εκπαιδευτικού" />
+												<h:outputText value="Στοιχεία Υπηρεσίας" />
 											</f:facet>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Ειδ. Ασχολία" />
-												</f:facet>
-												<h:outputText value="#{_item.specializationGroupTitle}" />
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Μονάδα" />
-												</f:facet>
-												<h:outputText value="#{_item.unitTitle}" />
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Ώρες" />
-												</f:facet>
-												<h:outputText value="#{_item.finalWorkingHours}" />
-											</rich:column>
 
-											<a4j:support event="onRowClick" reRender="menuOutputPanel"
-												limitToList="true"
-												oncomplete="#{rich:component('menu')}.show(event, {})">
-												<a4j:actionparam name="specialAssigmentId"
-													value="#{_item.id}" assignTo="#{specialAssigmentHome.id}"
-													converter="javax.faces.Integer" />
-											</a4j:support>
+											<ui:include
+												src="/components/employee/workExperienceAndServiceInfo.xhtml">
+												<ui:param name="employee" value="#{employee}" />
+											</ui:include>
+										</rich:panel>
 
-										</rich:dataTable>
+									</h:panelGrid>
 
-										<a4j:outputPanel id="menuOutputPanel">
-											<rich:contextMenu styleClass="normal" attached="false"
-												id="menu" submitMode="none">
-												<rich:menuItem icon="/img/icons/edit.png" immediate="true"
-													disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE'))}"
-													submitMode="ajax"
-													reRender="updateSpecialAssigmentModalPanel"
-													value="Επεξεργασία" rendered="false"
-													oncomplete="#{rich:component('updateModalPanel')}.show()">
-												</rich:menuItem>
-
-												<rich:menuSeparator />
-												
-												<rich:menuItem icon="/img/icons/delete.png" immediate="true"
-													disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE'))}"
-													submitMode="ajax" value="Διαγραφή"
-													reRender="employeeSpecialAssigmentOutputPanel"
-													limitToList="true"
-													onclick="if(!confirm('Θα διαγράψετε την ειδική ασχολία. Είστε σίγουρος ;')) {form.reset(); return false;}"
-													action="#{employeeManagement.removeEmployeeSpecialAssigment()}">
-												</rich:menuItem>
-											</rich:contextMenu>
-										</a4j:outputPanel>
-									</h:form>
 								</a4j:outputPanel>
 
-							</h:panelGrid>
-						</s:div>
+							</s:div>
+							<s:div>
+								<h:panelGrid columns="1">
 
-					</h:panelGrid>
+									<rich:dataTable id="employeeCurrentStatusTable"
+										value="#{employeeCurrentStatusItems}" var="_item" rows="15"
+										border="0"
+										onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+										onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+										width="100%">
+										<f:facet name="header">
+											<h:outputLabel value="Τρέχουσα Κατάσταση Εκπαιδευτικού" />
+										</f:facet>
 
-
-					<!-- this the bottom menu -->
-					<h:form id="manageEmployeeSpecialAssigmentForm">
-						<rich:toolBar itemSeparator="line">
-							<a4j:commandLink id="updateBasicInfolink"
-								reRender="updateBasicInfoModalPanelContent"
-								action="#{employeeManagement.prepareForUpdateEmployee()}"
-								rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE_BASIC_INFO'))}"
-								oncomplete="#{rich:component('updateBasicInfoModalPanel')}.show()"
-								value="Τροποποίηση Στοιχείων">
-								<h:graphicImage value="/img/icons/edit.png" width="12"
-									height="12" style="border:0" />
-							</a4j:commandLink>
-
-							<a4j:commandLink id="addEmployeeSpecialAssigmentLink"
-								reRender="addSpecialAssigmentModalPanelContent"
-								action="#{employeeManagement.prepareForNewSpecialAssigment()}"
-								rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE')) and employeeHome.instance.active eq true}"
-								oncomplete="#{rich:component('addSpecialAssigmentModalPanel')}.show()"
-								value="Εισαγωγή Ειδικής Ασχολίας">
-								<h:graphicImage value="/img/icons/edit.png" width="12"
-									height="12" style="border:0" />
-								<f:setPropertyActionListener
-									value="#{employeeHome.instance.regularDetail.id}"
-									target="#{regularEmployeeInfoHome.id}" />
-							</a4j:commandLink>
-
-
-							<rich:dropDownMenu value="Διαχείριση Εργαζόμενου">
-								<rich:menuItem submitMode="none"
-									rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYMENT')) and employeeHome.instance.active eq true}">
-									<s:link value="Διαχείριση Σχέσης Εργασίας" propagation="join"
-										view="/employee/manage-employment.xhtml">
-										<f:param name="employment_management_from"
-											value="/employee/employee" />
-									</s:link>
-								</rich:menuItem>
-								<rich:menuItem submitMode="none"
-									rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_LEAVE')) and employeeHome.instance.active eq true}">
-									<s:link value="Διαχείριση Αδειών Εκπαιδευτικού"
-										propagation="join"
-										view="/leave/employee-leave-management.xhtml">
-										<f:param name="leave_management_from"
-											value="/employee/employee" />
-									</s:link>
-								</rich:menuItem>
-								<rich:menuItem submitMode="none"
-									rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_SERVICE_ALLOCATION')) and employeeHome.instance.active eq true}">
-									<s:link value="Διαχείριση Θητείας Εκπαιδευτικού"
-										propagation="join"
-										view="/serviceallocation/employee-service-allocation-management.xhtml">
-										<f:param name="service_allocation_management_from"
-											value="/employee/employee" />
-									</s:link>
-								</rich:menuItem>
-								<rich:menuItem submitMode="none"
-									rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_SECONDMENT')) and employeeHome.instance.active eq true}">
-									<s:link value="Διαχείριση Απόσπασης Εκπαιδευτικού"
-										propagation="join"
-										view="/secondment/secondment-employment-management.xhtml">
-										<f:param name="secondment_management_from"
-											value="/employee/employee" />
-									</s:link>
-								</rich:menuItem>
-
-								<rich:menuItem submitMode="none"
-									rendered="#{(s:hasRole('ADMIN') or s:hasRole('VIEW_EMPLOYEE_INFO')) and employeeHome.instance.active eq true}">
-									          
-									<s:link value="Διαχείριση Στοιχείων Μισθοδοσίας" 
-										view="/employee/manageEmployeeInfo.xhtml">
-										<f:param name="from" value="/home" />
-										<f:param name="to" value="/employee/manageEmployeeInfo" />
-									</s:link>
-								</rich:menuItem>
-
-								<rich:menuItem submitMode="ajax"
-									rendered="#{(s:hasRole('ADMIN')) and (!employeeHome.isInExclusionList()) and employeeHome.instance.active eq true}">
-									<a4j:commandLink value="Αποστολή στην Λίστα Εξαιρέσεων"
-										ajaxSingle="true"
-										action="#{employeeManagement.addEmployeeToExclusionList}"
-										reRender="lala"
-										onclick="if(!confirm('Να προστεθεί ο εκπαιδευτικός στην λίστα εξαιρέσεων ;')) {form.reset(); return false;}">
-									</a4j:commandLink>
-								</rich:menuItem>
-
-								<rich:menuSeparator />
-								
-								<rich:menuItem submitMode="none"
-									rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE_TRANSFER')) and employeeHome.instance.active eq true}">
-									<a4j:commandLink value="Μετάταξη Εκπαιδευτικού"
-										reRender="transferEmployeeModalPanelContent" 
-										action="#{employeeManagement.prepareForEmployeeTransfer()}"
-										oncomplete="#{rich:component('transferEmployeeModalPanel')}.show()"/>
-								</rich:menuItem>
-								
-
-								<rich:menuItem submitMode="none"
-									rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE_TERMINATE')) and employeeHome.instance.active eq true}">
-									<a4j:commandLink value="Τερματισμός Υπηρεσίας Εκπαιδευτικού"
-										reRender="terminateEmployeeModalPanelContent" 
-										action="#{employeeManagement.prepareForEmployeeTermination()}"
-										oncomplete="#{rich:component('terminateEmployeeModalPanel')}.show()"
-										onclick="if(!confirm('Να τερματιστεί ο εκπαιδευτικός ? Προσοχή!!!! Η Διαδικασία δεν είναι αναστρέψιμη.')) {form.reset(); return false;}" />
-								</rich:menuItem>
-								
-								<rich:menuItem submitMode="none"
-									rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE_TERMINATE')) and (employeeHome.instance.active eq false)}">
-									<a4j:commandLink value="Αναίρεση Τερματισμού Εκπαιδευτικού"
-										reRender="terminateEmployeeModalPanelContent" 
-										action="#{employeeManagement.unTerminateEmployee()}"
-										onclick="if(!confirm('Να αναιρεθεί ο τερματιμός του εκπαιδευτικού ? Προσοχή!!!! Η Διαδικασία δεν είναι αναστρέψιμη.')) {form.reset(); return false;}" />
-								</rich:menuItem>
-								
-								
-
-								<rich:menuSeparator />
-
-								<rich:menuItem submitMode="none"
-									rendered="#{(s:hasRole('ADMIN'))}">
-									<h:commandLink value="Διαγραφή Εκπαιδευτικού !!!!"
-										onclick="if(!confirm('Να διαγραφεί ο εκπαιδευτικός ? Προσοχή!!!! Η Διαδικασία δεν είναι αναστρέψιμη.')) {form.reset(); return false;}"
-										action="#{employeeHome.remove()}" />
-								</rich:menuItem>
-
-
-							</rich:dropDownMenu>
-
-						</rich:toolBar>
-					</h:form>
-					
-				</s:div>
-
-
-				<h:panelGroup>
-					<h:form>
-						<rich:tabPanel mode="Ajax">
-							<rich:tab
-								rendered="#{employeeRegularEmploymentsIncludingDisabledListQuery.resultCount gt 0}">
-								<f:facet name="label">
-									<h:outputText value="Ιστορικό Οργανικών Θέσεων" />
-								</f:facet>
-
-								<h:panelGrid columns="1" width="100%">
-									<h:outputText
-										value="Στον παρακάτω πίνακα εμφανίζεται το ιστορικό των οργανικών θέσεων του εκπαιδευτικού." />
-									<h:form id="regulartEmploymentListForm">
-										<rich:dataTable id="employeeRegularEmploymentList"
-											value="#{employeeRegularEmploymentsListQuery.resultList}"
-											var="_employment" rows="10" border="0"
-											onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
-											onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
-											width="100%">
+										<rich:column>
 											<f:facet name="header">
-												<h:outputLabel
-													value="Ιστορικό Οργανικών Θέσεων Εκπαιδευτικού" />
+												<h:outputText value="Σχολική Μονάδα" />
 											</f:facet>
-											<f:facet name="footer">
-												<rich:datascroller for="employeeRegularEmploymentList"  maxPages="10"></rich:datascroller>
-											</f:facet>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Σχολική Χρονιά" />
-												</f:facet>
-												<h:outputText value="#{_employment.schoolYear.title}" />
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Σχολική Μονάδα" />
-												</f:facet>
-												<h:outputText value="#{_employment.school.title}" />
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Ημ/νία Έναρξης" />
-												</f:facet>
-												<h:outputText value="#{_employment.established}">
-													<s:convertDateTime pattern="dd-MM-yyyy" />
-												</h:outputText>
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Ημ/νία Λήξης" />
-												</f:facet>
-												<h:outputText value="#{_employment.terminated}">
-													<s:convertDateTime pattern="dd-MM-yyyy" />
-												</h:outputText>
-											</rich:column>
+											<h:outputText value="#{_item.schoolUnit}" />
+										</rich:column>
 
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Ειδικότητα" />
-												</f:facet>
-												<h:outputText value="#{_employment.specialization.id}" />
-											</rich:column>
-
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Υποχ. Ωράριο" />
-												</f:facet>
-												<h:outputText value="#{_employment.mandatoryWorkingHours}" />
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Πραγ. Ωράριο" />
-												</f:facet>
-												<h:outputText value="#{_employment.finalWorkingHours}" />
-											</rich:column>
-
-										</rich:dataTable>
-									</h:form>
-								</h:panelGrid>
-							</rich:tab>
-
-							<rich:tab
-								rendered="#{employeeDeputyEmploymentsIncludingDisabledListQuery.resultCount gt 0}">
-								<f:facet name="label">
-									<h:outputText value="Ιστορικό Τοποθετήσεων Αναπληρωτή" />
-								</f:facet>
-
-
-								<h:panelGrid columns="1" width="100%">
-									<h:outputText
-										value="Στον παρακάτω πίνακα εμφανίζεται το ιστορικό των τοποθετήσεων του εκπαιδευτικού ως Αναπληρωτής." />
-									<h:form id="deputytEmploymentListForm">
-										<rich:dataTable id="employeeDeputyEmploymentList"
-											value="#{employeeDeputyEmploymentsListQuery.resultList}"
-											var="_employment" rows="10" border="0"
-											onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
-											onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
-											width="100%">
+										<rich:column>
 											<f:facet name="header">
-												<h:outputLabel
-													value="Ιστορικό Τοποθετήσεων Αναπληρωτή Εκπαιδευτικού" />
+												<h:outputText value="Τύπος" />
 											</f:facet>
-											<f:facet name="footer">
-												<rich:datascroller for="employeeDeputyEmploymentList"  maxPages="10" />
-											</f:facet>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Σχολική Χρονιά" />
-												</f:facet>
-												<h:outputText value="#{_employment.schoolYear.title}" />
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Σχολική Μονάδα" />
-												</f:facet>
-												<h:outputText value="#{_employment.school.title}" />
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Ημ/νία Έναρξης" />
-												</f:facet>
-												<h:outputText value="#{_employment.established}">
-													<s:convertDateTime pattern="dd-MM-yyyy" />
-												</h:outputText>
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Ημ/νία Λήξης" />
-												</f:facet>
-												<h:outputText value="#{_employment.terminated}">
-													<s:convertDateTime pattern="dd-MM-yyyy" />
-												</h:outputText>
-											</rich:column>
-
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Ειδικότητα" />
-												</f:facet>
-												<h:outputText value="#{_employment.specialization.id}" />
-											</rich:column>
-
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Υποχ. Ωράριο" />
-												</f:facet>
-												<h:outputText value="#{_employment.mandatoryWorkingHours}" />
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Πραγ. Ωράριο" />
-												</f:facet>
-												<h:outputText value="#{_employment.finalWorkingHours}" />
-											</rich:column>
-
-										</rich:dataTable>
-									</h:form>
-								</h:panelGrid>
-
-							</rich:tab>
-
-							<rich:tab
-								rendered="#{employeeHourlyBasedEmploymentsIncludingDisabledListQuery.resultCount gt 0}">
-								<f:facet name="label">
-									<h:outputText value="Ιστορικό Προσλήψεων Ωρομίσθιου" />
-								</f:facet>
+											<h:outputText value="#{messages[_item.cdrTypeKey]}" />
+										</rich:column>
 
 
-								<h:panelGrid columns="1" width="100%">
-									<h:outputText
-										value="Στον παρακάτω πίνακα εμφανίζεται το ιστορικό των προσλήψεων του εκπαιδευτικού ως Ωρομίσθιος." />
-									<h:form id="hourlyBasedEmploymentListForm">
-										<rich:dataTable id="employeeHourlyEmploymentList"
-											value="#{employeeHourlyBasedEmploymentsListQuery.resultList}"
-											var="_employment" rows="10" border="0"
-											onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
-											onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
-											width="100%">
+
+										<rich:column>
 											<f:facet name="header">
-												<h:outputLabel
-													value="Ιστορικό Προσλήψεων Ωρομίσθιου Εκπαιδευτικού" />
+												<h:outputText value="Σχόλιο" />
 											</f:facet>
-											<f:facet name="footer">
-												<rich:datascroller for="employeeHourlyEmploymentList"  maxPages="10" />
+											<h:outputText value="#{_item.comment}" />
+										</rich:column>
+
+
+									</rich:dataTable>
+
+									<rich:dataTable id="employeeCurrentHoursDistributionTable"
+										value="#{employeeCurrentHoursDistributionItems}" var="_item"
+										rows="15" border="0"
+										onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+										onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+										width="100%">
+										<f:facet name="header">
+											<h:outputLabel
+												value="Τρέχουσα Κατανομή Διδακτικών Ωρών Εκπαιδευτικού" />
+										</f:facet>
+
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Σχολική Μονάδα" />
 											</f:facet>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Σχολική Χρονιά" />
-												</f:facet>
-												<h:outputText value="#{_employment.schoolYear.title}" />
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Σχολική Μονάδα" />
-												</f:facet>
-												<h:outputText value="#{_employment.school.title}" />
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Ημ/νία Έναρξης" />
-												</f:facet>
-												<h:outputText value="#{_employment.established}">
-													<s:convertDateTime pattern="dd-MM-yyyy" />
-												</h:outputText>
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Ημ/νία Λήξης" />
-												</f:facet>
-												<h:outputText value="#{_employment.terminated}">
-													<s:convertDateTime pattern="dd-MM-yyyy" />
-												</h:outputText>
-											</rich:column>
+											<h:outputText value="#{_item.get('school').title}" />
+										</rich:column>
 
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Ειδικότητα" />
-												</f:facet>
-												<h:outputText value="#{_employment.specialization.id}" />
-											</rich:column>
 
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Υποχ. Ωράριο" />
-												</f:facet>
-												<h:outputText value="#{_employment.mandatoryWorkingHours}" />
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Πραγ. Ωράριο" />
-												</f:facet>
-												<h:outputText value="#{_employment.finalWorkingHours}" />
-											</rich:column>
+										<rich:column style="text-align:center">
+											<f:facet name="header">
+												<h:outputText value="Διδακτικές Ώρες" />
+											</f:facet>
+											<h:outputText value="#{_item.get('unitHours')}"
+												style="color:green;font-weight:bold;" />
+										</rich:column>
 
-										</rich:dataTable>
-									</h:form>
-								</h:panelGrid>
 
-							</rich:tab>
+									</rich:dataTable>
 
-							<rich:tab id="secondmenttab"
-								rendered="#{employeeSecondmentsListQuery.resultCount gt 0}">
-								<f:facet name="label">
-									<h:outputText value="Ιστορικό Αποσπάσεων" />
-								</f:facet>
-								<h:form id="employeeSecondmentListForm">
-
-									<h:panelGrid columns="1" width="100%">
-										<h:panelGroup rendered="#{employeeSecondments.size()==0}">
-											<h:outputText
-												value="Δεν υπάρχουν αποσπάσεις για τον εκπαιδευτικό." />
-										</h:panelGroup>
-										<h:panelGroup rendered="#{employeeSecondments.size() gt 0}">
-											<h:outputText
-												value="Στον παρακάτω πίνακα εμφανίζεται το ιστορικό των αποσπάσεων του εκπαιδευτικού." />
-											<rich:dataTable id="employeeSecondmentsList"
-												value="#{employeeSecondments}" var="_secondment" rows="10"
-												border="0"
+									<a4j:outputPanel id="employeeSpecialAssigmentOutputPanel">
+										<h:form id="employeeSpecialAssigmentTableForm">
+											<rich:dataTable id="employeeSpecialAssigmentTable"
+												rendered="#{employeeSpecialAssigmentItems.rowCount > 0}"
+												value="#{employeeSpecialAssigmentItems}" var="_item"
+												rows="15" border="0"
 												onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
 												onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
 												width="100%">
 												<f:facet name="header">
-													<h:outputLabel value="Ιστορικό Αποσπάσεων Εκπαιδευτικού" />
+													<h:outputLabel value="Ειδικές Ασχολίες Εκπαιδευτικού" />
+												</f:facet>
+												<rich:column>
+													<f:facet name="header">
+														<h:outputText value="Ειδ. Ασχολία" />
+													</f:facet>
+													<h:outputText value="#{_item.specializationGroupTitle}" />
+												</rich:column>
+												<rich:column>
+													<f:facet name="header">
+														<h:outputText value="Μονάδα" />
+													</f:facet>
+													<h:outputText value="#{_item.unitTitle}" />
+												</rich:column>
+												<rich:column>
+													<f:facet name="header">
+														<h:outputText value="Ώρες" />
+													</f:facet>
+													<h:outputText value="#{_item.finalWorkingHours}" />
+												</rich:column>
+
+												<a4j:support event="onRowClick" reRender="menuOutputPanel"
+													limitToList="true"
+													oncomplete="#{rich:component('menu')}.show(event, {})">
+													<a4j:actionparam name="specialAssigmentId"
+														value="#{_item.id}" assignTo="#{specialAssigmentHome.id}"
+														converter="javax.faces.Integer" />
+												</a4j:support>
+
+											</rich:dataTable>
+
+											<a4j:outputPanel id="menuOutputPanel">
+												<rich:contextMenu styleClass="normal" attached="false"
+													id="menu" submitMode="none">
+													<rich:menuItem icon="/img/icons/edit.png" immediate="true"
+														disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE'))}"
+														submitMode="ajax"
+														reRender="updateSpecialAssigmentModalPanel"
+														value="Επεξεργασία" rendered="false"
+														oncomplete="#{rich:component('updateModalPanel')}.show()">
+													</rich:menuItem>
+
+													<rich:menuSeparator />
+
+													<rich:menuItem icon="/img/icons/delete.png"
+														immediate="true"
+														disabled="#{!(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE'))}"
+														submitMode="ajax" value="Διαγραφή"
+														reRender="employeeSpecialAssigmentOutputPanel"
+														limitToList="true"
+														onclick="if(!confirm('Θα διαγράψετε την ειδική ασχολία. Είστε σίγουρος ;')) {form.reset(); return false;}"
+														action="#{employeeManagement.removeEmployeeSpecialAssigment()}">
+													</rich:menuItem>
+												</rich:contextMenu>
+											</a4j:outputPanel>
+										</h:form>
+									</a4j:outputPanel>
+
+								</h:panelGrid>
+							</s:div>
+
+						</h:panelGrid>
+
+
+						<!-- this the bottom menu -->
+						<h:form id="manageEmployeeSpecialAssigmentForm">
+							<rich:toolBar itemSeparator="line">
+								<a4j:commandLink id="updateBasicInfolink"
+									reRender="updateBasicInfoModalPanelContent"
+									action="#{employeeManagement.prepareForUpdateEmployee()}"
+									rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE_BASIC_INFO'))}"
+									oncomplete="#{rich:component('updateBasicInfoModalPanel')}.show()"
+									value="Τροποποίηση Στοιχείων">
+									<h:graphicImage value="/img/icons/edit.png" width="12"
+										height="12" style="border:0" />
+								</a4j:commandLink>
+
+								<a4j:commandLink id="addEmployeeSpecialAssigmentLink"
+									reRender="addSpecialAssigmentModalPanelContent"
+									action="#{employeeManagement.prepareForNewSpecialAssigment()}"
+									rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE')) and employeeHome.instance.active eq true}"
+									oncomplete="#{rich:component('addSpecialAssigmentModalPanel')}.show()"
+									value="Εισαγωγή Ειδικής Ασχολίας">
+									<h:graphicImage value="/img/icons/edit.png" width="12"
+										height="12" style="border:0" />
+									<f:setPropertyActionListener
+										value="#{employeeHome.instance.regularDetail.id}"
+										target="#{regularEmployeeInfoHome.id}" />
+								</a4j:commandLink>
+
+
+								<rich:dropDownMenu value="Διαχείριση Εργαζόμενου">
+									<rich:menuItem submitMode="none"
+										rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYMENT')) and employeeHome.instance.active eq true}">
+										<s:link value="Διαχείριση Σχέσης Εργασίας" propagation="join"
+											view="/employee/manage-employment.xhtml">
+											<f:param name="employment_management_from"
+												value="/employee/employee" />
+										</s:link>
+									</rich:menuItem>
+									<rich:menuItem submitMode="none"
+										rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_LEAVE')) and employeeHome.instance.active eq true}">
+										<s:link value="Διαχείριση Αδειών Εκπαιδευτικού"
+											propagation="join"
+											view="/leave/employee-leave-management.xhtml">
+											<f:param name="leave_management_from"
+												value="/employee/employee" />
+										</s:link>
+									</rich:menuItem>
+									<rich:menuItem submitMode="none"
+										rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_SERVICE_ALLOCATION')) and employeeHome.instance.active eq true}">
+										<s:link value="Διαχείριση Θητείας Εκπαιδευτικού"
+											propagation="join"
+											view="/serviceallocation/employee-service-allocation-management.xhtml">
+											<f:param name="service_allocation_management_from"
+												value="/employee/employee" />
+										</s:link>
+									</rich:menuItem>
+									<rich:menuItem submitMode="none"
+										rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_SECONDMENT')) and employeeHome.instance.active eq true}">
+										<s:link value="Διαχείριση Απόσπασης Εκπαιδευτικού"
+											propagation="join"
+											view="/secondment/secondment-employment-management.xhtml">
+											<f:param name="secondment_management_from"
+												value="/employee/employee" />
+										</s:link>
+									</rich:menuItem>
+
+									<rich:menuItem submitMode="none"
+										rendered="#{(s:hasRole('ADMIN') or s:hasRole('VIEW_EMPLOYEE_INFO')) and employeeHome.instance.active eq true}">
+
+										<s:link value="Διαχείριση Στοιχείων Μισθοδοσίας"
+											view="/employee/manageEmployeeInfo.xhtml">
+											<f:param name="from" value="/home" />
+											<f:param name="to" value="/employee/manageEmployeeInfo" />
+										</s:link>
+									</rich:menuItem>
+
+									<rich:menuItem submitMode="ajax"
+										rendered="#{(s:hasRole('ADMIN')) and (!employeeHome.isInExclusionList()) and employeeHome.instance.active eq true}">
+										<a4j:commandLink value="Αποστολή στην Λίστα Εξαιρέσεων"
+											ajaxSingle="true"
+											action="#{employeeManagement.addEmployeeToExclusionList}"
+											reRender="lala"
+											onclick="if(!confirm('Να προστεθεί ο εκπαιδευτικός στην λίστα εξαιρέσεων ;')) {form.reset(); return false;}">
+										</a4j:commandLink>
+									</rich:menuItem>
+
+									<rich:menuSeparator />
+
+									<rich:menuItem submitMode="none"
+										rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE_TRANSFER')) and employeeHome.instance.active eq true}">
+										<a4j:commandLink value="Μετάταξη Εκπαιδευτικού"
+											reRender="transferEmployeeModalPanelContent"
+											action="#{employeeManagement.prepareForEmployeeTransfer()}"
+											oncomplete="#{rich:component('transferEmployeeModalPanel')}.show()" />
+									</rich:menuItem>
+
+
+									<rich:menuItem submitMode="none"
+										rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE_TERMINATE')) and employeeHome.instance.active eq true}">
+										<a4j:commandLink value="Τερματισμός Υπηρεσίας Εκπαιδευτικού"
+											reRender="terminateEmployeeModalPanelContent"
+											action="#{employeeManagement.prepareForEmployeeTermination()}"
+											oncomplete="#{rich:component('terminateEmployeeModalPanel')}.show()"
+											onclick="if(!confirm('Να τερματιστεί ο εκπαιδευτικός ? Προσοχή!!!! Η Διαδικασία δεν είναι αναστρέψιμη.')) {form.reset(); return false;}" />
+									</rich:menuItem>
+
+									<rich:menuItem submitMode="none"
+										rendered="#{(s:hasRole('ADMIN') or s:hasRole('MANAGE_EMPLOYEE_TERMINATE')) and (employeeHome.instance.active eq false)}">
+										<a4j:commandLink value="Αναίρεση Τερματισμού Εκπαιδευτικού"
+											reRender="terminateEmployeeModalPanelContent"
+											action="#{employeeManagement.unTerminateEmployee()}"
+											onclick="if(!confirm('Να αναιρεθεί ο τερματιμός του εκπαιδευτικού ? Προσοχή!!!! Η Διαδικασία δεν είναι αναστρέψιμη.')) {form.reset(); return false;}" />
+									</rich:menuItem>
+
+
+
+									<rich:menuSeparator />
+
+									<rich:menuItem submitMode="none"
+										rendered="#{(s:hasRole('ADMIN'))}">
+										<h:commandLink value="Διαγραφή Εκπαιδευτικού !!!!"
+											onclick="if(!confirm('Να διαγραφεί ο εκπαιδευτικός ? Προσοχή!!!! Η Διαδικασία δεν είναι αναστρέψιμη.')) {form.reset(); return false;}"
+											action="#{employeeHome.remove()}" />
+									</rich:menuItem>
+
+
+								</rich:dropDownMenu>
+
+							</rich:toolBar>
+						</h:form>
+
+					</s:div>
+
+
+					<h:panelGroup>
+						<h:form>
+							<rich:tabPanel mode="Ajax">
+								<rich:tab
+									rendered="#{employeeRegularEmploymentsIncludingDisabledListQuery.resultCount gt 0}">
+									<f:facet name="label">
+										<h:outputText value="Ιστορικό Οργανικών Θέσεων" />
+									</f:facet>
+
+									<h:panelGrid columns="1" width="100%">
+										<h:outputText
+											value="Στον παρακάτω πίνακα εμφανίζεται το ιστορικό των οργανικών θέσεων του μόνιμου εκπαιδευτικού/διοικητικού" />
+										<h:form id="regulartEmploymentListForm">
+											<rich:dataTable id="employeeRegularEmploymentList"
+												value="#{employeeRegularEmploymentsListQuery.resultList}"
+												var="_employment" rows="10" border="0"
+												onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+												onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+												width="100%">
+												<f:facet name="header">
+													<h:outputLabel
+														value="Ιστορικό Οργανικών Θέσεων Μονίμου" />
 												</f:facet>
 												<f:facet name="footer">
-													<rich:datascroller for="employeeSecondmentsList"  maxPages="10" />
+													<rich:datascroller for="employeeRegularEmploymentList"
+														maxPages="10"></rich:datascroller>
 												</f:facet>
 												<rich:column>
 													<f:facet name="header">
-														<h:outputText value="Σχ. Χρονιά" />
+														<h:outputText value="Σχολική Χρονιά" />
 													</f:facet>
-													<h:outputText value="#{_secondment.schoolYear.title}" />
+													<h:outputText value="#{_employment.schoolYear.title}" />
 												</rich:column>
 												<rich:column>
 													<f:facet name="header">
-														<h:outputText value="Αποσπ. Απο" />
+														<h:outputText value="Σχολική Μονάδα" />
 													</f:facet>
-													<h:outputText value="#{_secondment.sourceUnit.title}" />
+													<h:outputText value="#{_employment.school.title}" />
 												</rich:column>
 												<rich:column>
 													<f:facet name="header">
-														<h:outputText value="Αποσπ. Σε" />
+														<h:outputText value="Ημ/νία Έναρξης" />
 													</f:facet>
-													<h:outputText value="#{_secondment.targetUnit.title}" />
-												</rich:column>
-												<rich:column>
-													<f:facet name="header">
-														<h:outputText value="Απο" />
-													</f:facet>
-													<h:outputText value="#{_secondment.established}">
+													<h:outputText value="#{_employment.established}">
 														<s:convertDateTime pattern="dd-MM-yyyy" />
 													</h:outputText>
 												</rich:column>
 												<rich:column>
 													<f:facet name="header">
-														<h:outputText value="Εώς" />
+														<h:outputText value="Ημ/νία Λήξης" />
 													</f:facet>
-													<h:outputText value="#{_secondment.dueTo}">
+													<h:outputText value="#{_employment.terminated}">
 														<s:convertDateTime pattern="dd-MM-yyyy" />
 													</h:outputText>
-												</rich:column> 
-												
-												<rich:column>
-													<f:facet name="header">
-														<h:outputText value="Σχόλιο" />
-													</f:facet>
-													<h:outputText value="#{_secondment.comment}" />
-														
 												</rich:column>
 
 												<rich:column>
 													<f:facet name="header">
-														<h:outputText value="Με Αίτηση Του" />
+														<h:outputText value="Ειδικότητα" />
 													</f:facet>
-													<h:outputText value="Ναι"
-														rendered="#{_secondment.employeeRequested}" />
-													<h:outputText value="Όχι"
-														rendered="#{!_secondment.employeeRequested}" />
+													<h:outputText value="#{_employment.specialization.id}" />
 												</rich:column>
 
 												<rich:column>
 													<f:facet name="header">
 														<h:outputText value="Υποχ. Ωράριο" />
 													</f:facet>
-													<h:outputText value="#{_secondment.mandatoryWorkingHours}" />
+													<h:outputText value="#{_employment.mandatoryWorkingHours}" />
 												</rich:column>
 												<rich:column>
 													<f:facet name="header">
 														<h:outputText value="Πραγ. Ωράριο" />
 													</f:facet>
-													<h:outputText value="#{_secondment.finalWorkingHours}" />
+													<h:outputText value="#{_employment.finalWorkingHours}" />
 												</rich:column>
 
-												
 											</rich:dataTable>
-										</h:panelGroup>
-
+										</h:form>
 									</h:panelGrid>
-								</h:form>
+								</rich:tab>
 
-							</rich:tab>
-							<rich:tab
-								rendered="#{employeeDisposals.size gt 0}">
-								<f:facet name="label">
-									<h:outputText value="Ιστορικό Διαθέσεων" />
-								</f:facet>
+								<rich:tab
+									rendered="#{employeeDeputyEmploymentsIncludingDisabledListQuery.resultCount gt 0}">
+									<f:facet name="label">
+										<h:outputText value="Ιστορικό Τοποθετήσεων Αναπληρωτή" />
+									</f:facet>
 
-								<h:panelGrid columns="1" width="100%">
-									<h:outputText
-										value="Στον παραπάνω πίνακα εμφανίζονται συνολικά, ανα σχολικό έτος, οι διαθέσεις του Εκπαιδευτικού." />
-									<rich:dataTable id="employeeDisposalList"
-										value="#{employeeDisposals}"
-										var="_disposal" rows="10" border="0"
-										onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
-										onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
-										width="100%">
-										<f:facet name="header">
-											<h:outputLabel value="Ενεργές Διαθέσεις Εκπαιδευτικού" />
-										</f:facet>
-										<f:facet name="footer">
-											<rich:datascroller for="employeeDisposalList"  maxPages="10" />
-										</f:facet>
 
-										<rich:column>
+									<h:panelGrid columns="1" width="100%">
+										<h:outputText
+											value="Στον παρακάτω πίνακα εμφανίζεται το ιστορικό των τοποθετήσεων του εκπαιδευτικού ως Αναπληρωτής." />
+										<h:form id="deputytEmploymentListForm">
+											<rich:dataTable id="employeeDeputyEmploymentList"
+												value="#{employeeDeputyEmploymentsListQuery.resultList}"
+												var="_employment" rows="10" border="0"
+												onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+												onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+												width="100%">
+												<f:facet name="header">
+													<h:outputLabel
+														value="Ιστορικό Τοποθετήσεων Αναπληρωτή Εκπαιδευτικού" />
+												</f:facet>
+												<f:facet name="footer">
+													<rich:datascroller for="employeeDeputyEmploymentList"
+														maxPages="10" />
+												</f:facet>
+												<rich:column>
+													<f:facet name="header">
+														<h:outputText value="Σχολική Χρονιά" />
+													</f:facet>
+													<h:outputText value="#{_employment.schoolYear.title}" />
+												</rich:column>
+												<rich:column>
+													<f:facet name="header">
+														<h:outputText value="Σχολική Μονάδα" />
+													</f:facet>
+													<h:outputText value="#{_employment.school.title}" />
+												</rich:column>
+												<rich:column>
+													<f:facet name="header">
+														<h:outputText value="Ημ/νία Έναρξης" />
+													</f:facet>
+													<h:outputText value="#{_employment.established}">
+														<s:convertDateTime pattern="dd-MM-yyyy" />
+													</h:outputText>
+												</rich:column>
+												<rich:column>
+													<f:facet name="header">
+														<h:outputText value="Ημ/νία Λήξης" />
+													</f:facet>
+													<h:outputText value="#{_employment.terminated}">
+														<s:convertDateTime pattern="dd-MM-yyyy" />
+													</h:outputText>
+												</rich:column>
+
+												<rich:column>
+													<f:facet name="header">
+														<h:outputText value="Ειδικότητα" />
+													</f:facet>
+													<h:outputText value="#{_employment.specialization.id}" />
+												</rich:column>
+
+												<rich:column>
+													<f:facet name="header">
+														<h:outputText value="Υποχ. Ωράριο" />
+													</f:facet>
+													<h:outputText value="#{_employment.mandatoryWorkingHours}" />
+												</rich:column>
+												<rich:column>
+													<f:facet name="header">
+														<h:outputText value="Πραγ. Ωράριο" />
+													</f:facet>
+													<h:outputText value="#{_employment.finalWorkingHours}" />
+												</rich:column>
+
+											</rich:dataTable>
+										</h:form>
+									</h:panelGrid>
+
+								</rich:tab>
+
+								<rich:tab
+									rendered="#{employeeHourlyBasedEmploymentsIncludingDisabledListQuery.resultCount gt 0}">
+									<f:facet name="label">
+										<h:outputText value="Ιστορικό Προσλήψεων Ωρομίσθιου" />
+									</f:facet>
+
+
+									<h:panelGrid columns="1" width="100%">
+										<h:outputText
+											value="Στον παρακάτω πίνακα εμφανίζεται το ιστορικό των προσλήψεων του εκπαιδευτικού ως Ωρομίσθιος." />
+										<h:form id="hourlyBasedEmploymentListForm">
+											<rich:dataTable id="employeeHourlyEmploymentList"
+												value="#{employeeHourlyBasedEmploymentsListQuery.resultList}"
+												var="_employment" rows="10" border="0"
+												onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+												onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+												width="100%">
+												<f:facet name="header">
+													<h:outputLabel
+														value="Ιστορικό Προσλήψεων Ωρομίσθιου Εκπαιδευτικού" />
+												</f:facet>
+												<f:facet name="footer">
+													<rich:datascroller for="employeeHourlyEmploymentList"
+														maxPages="10" />
+												</f:facet>
+												<rich:column>
+													<f:facet name="header">
+														<h:outputText value="Σχολική Χρονιά" />
+													</f:facet>
+													<h:outputText value="#{_employment.schoolYear.title}" />
+												</rich:column>
+												<rich:column>
+													<f:facet name="header">
+														<h:outputText value="Σχολική Μονάδα" />
+													</f:facet>
+													<h:outputText value="#{_employment.school.title}" />
+												</rich:column>
+												<rich:column>
+													<f:facet name="header">
+														<h:outputText value="Ημ/νία Έναρξης" />
+													</f:facet>
+													<h:outputText value="#{_employment.established}">
+														<s:convertDateTime pattern="dd-MM-yyyy" />
+													</h:outputText>
+												</rich:column>
+												<rich:column>
+													<f:facet name="header">
+														<h:outputText value="Ημ/νία Λήξης" />
+													</f:facet>
+													<h:outputText value="#{_employment.terminated}">
+														<s:convertDateTime pattern="dd-MM-yyyy" />
+													</h:outputText>
+												</rich:column>
+
+												<rich:column>
+													<f:facet name="header">
+														<h:outputText value="Ειδικότητα" />
+													</f:facet>
+													<h:outputText value="#{_employment.specialization.id}" />
+												</rich:column>
+
+												<rich:column>
+													<f:facet name="header">
+														<h:outputText value="Υποχ. Ωράριο" />
+													</f:facet>
+													<h:outputText value="#{_employment.mandatoryWorkingHours}" />
+												</rich:column>
+												<rich:column>
+													<f:facet name="header">
+														<h:outputText value="Πραγ. Ωράριο" />
+													</f:facet>
+													<h:outputText value="#{_employment.finalWorkingHours}" />
+												</rich:column>
+
+											</rich:dataTable>
+										</h:form>
+									</h:panelGrid>
+
+								</rich:tab>
+
+								<rich:tab id="secondmenttab"
+									rendered="#{employeeSecondmentsListQuery.resultCount gt 0}">
+									<f:facet name="label">
+										<h:outputText value="Ιστορικό Αποσπάσεων" />
+									</f:facet>
+									<h:form id="employeeSecondmentListForm">
+
+										<h:panelGrid columns="1" width="100%">
+											<h:panelGroup rendered="#{employeeSecondments.size()==0}">
+												<h:outputText
+													value="Δεν υπάρχουν αποσπάσεις για τον εκπαιδευτικό." />
+											</h:panelGroup>
+											<h:panelGroup rendered="#{employeeSecondments.size() gt 0}">
+												<h:outputText
+													value="Στον παρακάτω πίνακα εμφανίζεται το ιστορικό των αποσπάσεων του εκπαιδευτικού." />
+												<rich:dataTable id="employeeSecondmentsList"
+													value="#{employeeSecondments}" var="_secondment" rows="10"
+													border="0"
+													onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+													onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+													width="100%">
+													<f:facet name="header">
+														<h:outputLabel value="Ιστορικό Αποσπάσεων Εκπαιδευτικού" />
+													</f:facet>
+													<f:facet name="footer">
+														<rich:datascroller for="employeeSecondmentsList"
+															maxPages="10" />
+													</f:facet>
+													<rich:column>
+														<f:facet name="header">
+															<h:outputText value="Σχ. Χρονιά" />
+														</f:facet>
+														<h:outputText value="#{_secondment.schoolYear.title}" />
+													</rich:column>
+													<rich:column>
+														<f:facet name="header">
+															<h:outputText value="Αποσπ. Απο" />
+														</f:facet>
+														<h:outputText value="#{_secondment.sourceUnit.title}" />
+													</rich:column>
+													<rich:column>
+														<f:facet name="header">
+															<h:outputText value="Αποσπ. Σε" />
+														</f:facet>
+														<h:outputText value="#{_secondment.targetUnit.title}" />
+													</rich:column>
+													<rich:column>
+														<f:facet name="header">
+															<h:outputText value="Απο" />
+														</f:facet>
+														<h:outputText value="#{_secondment.established}">
+															<s:convertDateTime pattern="dd-MM-yyyy" />
+														</h:outputText>
+													</rich:column>
+													<rich:column>
+														<f:facet name="header">
+															<h:outputText value="Εώς" />
+														</f:facet>
+														<h:outputText value="#{_secondment.dueTo}">
+															<s:convertDateTime pattern="dd-MM-yyyy" />
+														</h:outputText>
+													</rich:column>
+
+													<rich:column>
+														<f:facet name="header">
+															<h:outputText value="Σχόλιο" />
+														</f:facet>
+														<h:outputText value="#{_secondment.comment}" />
+
+													</rich:column>
+
+													<rich:column>
+														<f:facet name="header">
+															<h:outputText value="Με Αίτηση Του" />
+														</f:facet>
+														<h:outputText value="Ναι"
+															rendered="#{_secondment.employeeRequested}" />
+														<h:outputText value="Όχι"
+															rendered="#{!_secondment.employeeRequested}" />
+													</rich:column>
+
+													<rich:column>
+														<f:facet name="header">
+															<h:outputText value="Υποχ. Ωράριο" />
+														</f:facet>
+														<h:outputText value="#{_secondment.mandatoryWorkingHours}" />
+													</rich:column>
+													<rich:column>
+														<f:facet name="header">
+															<h:outputText value="Πραγ. Ωράριο" />
+														</f:facet>
+														<h:outputText value="#{_secondment.finalWorkingHours}" />
+													</rich:column>
+
+
+												</rich:dataTable>
+											</h:panelGroup>
+
+										</h:panelGrid>
+									</h:form>
+
+								</rich:tab>
+								<rich:tab rendered="#{employeeDisposals.size gt 0}">
+									<f:facet name="label">
+										<h:outputText value="Ιστορικό Διαθέσεων" />
+									</f:facet>
+
+									<h:panelGrid columns="1" width="100%">
+										<h:outputText
+											value="Στον παραπάνω πίνακα εμφανίζονται συνολικά, ανα σχολικό έτος, οι διαθέσεις του Εκπαιδευτικού." />
+										<rich:dataTable id="employeeDisposalList"
+											value="#{employeeDisposals}" var="_disposal" rows="10"
+											border="0"
+											onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+											onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+											width="100%">
 											<f:facet name="header">
-												<h:outputText value="Σχ. Έτος">
+												<h:outputLabel value="Ενεργές Διαθέσεις Εκπαιδευτικού" />
+											</f:facet>
+											<f:facet name="footer">
+												<rich:datascroller for="employeeDisposalList" maxPages="10" />
+											</f:facet>
+
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="Σχ. Έτος">
+													</h:outputText>
+												</f:facet>
+												<h:outputText value="#{_disposal.schoolYear.title}" />
+											</rich:column>
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="Διάθεση Απο">
+													</h:outputText>
+												</f:facet>
+												<h:outputText
+													value="#{_disposal.affectedSecondment.targetUnit.title} (Μονάδα Απόσπασης)"
+													rendered="#{_disposal.affectedSecondment ne null}" />
+												<h:outputText
+													value="#{_disposal.affectedEmployment.school.title})"
+													rendered="#{_disposal.affectedEmployment ne null}" />
+											</rich:column>
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="Τύπος Διάθεσης" />
+												</f:facet>
+												<h:outputText value="#{messages[_disposal.type.key]}" />
+											</rich:column>
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="Τύπος Προορισμού" />
+												</f:facet>
+												<h:outputText value="#{messages[_disposal.targetType.key]}" />
+											</rich:column>
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="Μονάδα Διάθεσης" />
+												</f:facet>
+												<h:outputText value="#{_disposal.disposalUnit.title}" />
+											</rich:column>
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="'Ωρες" />
+												</f:facet>
+												<h:outputText value="#{_disposal.hours}" />
+											</rich:column>
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="'Ημέρες" />
+												</f:facet>
+												<h:outputText value="#{_disposal.days}" />
+											</rich:column>
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="Έναρξη" />
+												</f:facet>
+												<h:outputText value="#{_disposal.established}">
+													<s:convertDateTime pattern="dd-MM-yyyy" />
 												</h:outputText>
-											</f:facet>
-											<h:outputText value="#{_disposal.schoolYear.title}" />
-										</rich:column>
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Διάθεση Απο">
+											</rich:column>
+
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="Λήξη" />
+												</f:facet>
+												<h:outputText value="#{_disposal.dueTo}">
+													<s:convertDateTime pattern="dd-MM-yyyy" />
 												</h:outputText>
-											</f:facet>
-											<h:outputText
-												value="#{_disposal.affectedSecondment.targetUnit.title} (Μονάδα Απόσπασης)"
-												rendered="#{_disposal.affectedSecondment ne null}" />
-											<h:outputText
-												value="#{_disposal.affectedEmployment.school.title})"
-												rendered="#{_disposal.affectedEmployment ne null}" />
-										</rich:column>
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Τύπος Διάθεσης" />
-											</f:facet>
-											<h:outputText value="#{messages[_disposal.type.key]}" />
-										</rich:column>
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Τύπος Προορισμού" />
-											</f:facet>
-											<h:outputText value="#{messages[_disposal.targetType.key]}" />
-										</rich:column>
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Μονάδα Διάθεσης" />
-											</f:facet>
-											<h:outputText value="#{_disposal.disposalUnit.title}" />
-										</rich:column>
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="'Ωρες" />
-											</f:facet>
-											<h:outputText value="#{_disposal.hours}" />
-										</rich:column>
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="'Ημέρες" />
-											</f:facet>
-											<h:outputText value="#{_disposal.days}" />
-										</rich:column>
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Έναρξη" />
-											</f:facet>
-											<h:outputText value="#{_disposal.established}">
-												<s:convertDateTime pattern="dd-MM-yyyy" />
-											</h:outputText>
-										</rich:column>
-
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Λήξη" />
-											</f:facet>
-											<h:outputText value="#{_disposal.dueTo}">
-												<s:convertDateTime pattern="dd-MM-yyyy" />
-											</h:outputText>
-										</rich:column>
+											</rich:column>
 
 
-									</rich:dataTable>
-								</h:panelGrid>
+										</rich:dataTable>
+									</h:panelGrid>
 
-							</rich:tab>
-
-
-							<rich:tab
-								rendered="#{employeeServiceAllocations.size() gt 0}">
-								<f:facet name="label">
-									<h:outputText value="Ιστορικό Θητείων" />
-								</f:facet>
-								<h:panelGrid columns="1" width="100%">
-									<h:outputText
-										value="Στον παρακάτω πίνακα εμφανίζεται το ιστορικό όλων των αποσπάσεων του εκπαιδευτικού. Μπορείτε να τροποποιήσετε, αν θέλετε, την ενεργή κατά το τρέχων σχολικό έτος απόσπαση." />
-
-									<rich:dataTable id="employeeSecondmentsList"
-										value="#{employeeServiceAllocations}"
-										var="_serviceAllocation" rows="10" border="0"
-										onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
-										onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
-										width="100%">
-										<f:facet name="header">
-											<h:outputLabel value="Ιστορικό Θητείων Εκπαιδευτικού" />
-										</f:facet>
-										<f:facet name="footer">
-											<rich:datascroller for="employeeSecondmentsList"  maxPages="10" />
-										</f:facet>
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Οργανική" />
-											</f:facet>
-											<h:outputText value="#{_serviceAllocation.sourceUnit.title}" />
-										</rich:column>
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Τύπος Θητείας" />
-											</f:facet>
-											<h:outputText
-												value="#{messages[_serviceAllocation.serviceType.key]}" />
-										</rich:column>
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Μονάδα Θητείας" />
-											</f:facet>
-											<h:outputText value="#{_serviceAllocation.serviceUnit.title}" />
-										</rich:column>
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Έναρξη" />
-											</f:facet>
-											<h:outputText value="#{_serviceAllocation.established}">
-												<s:convertDateTime pattern="dd-MM-yyyy" />
-											</h:outputText>
-										</rich:column>
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Λήξη" />
-											</f:facet>
-											<h:outputText value="#{_serviceAllocation.dueTo}">
-												<s:convertDateTime pattern="dd-MM-yyyy" />
-											</h:outputText>
-										</rich:column>
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Σχόλιο" />
-											</f:facet>
-											<h:outputText value="#{_serviceAllocation.comment}" />
-										</rich:column>
-
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Ωρ. Οργανικής" />
-											</f:facet>
-											<h:outputText
-												value="#{_serviceAllocation.workingHoursOnRegularPosition}" />
-										</rich:column>
-
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Ωρ. Θητείας" />
-											</f:facet>
-											<h:outputText
-												value="#{_serviceAllocation.workingHoursOnServicingPosition}" />
-										</rich:column>
-									</rich:dataTable>
-								</h:panelGrid>
-							</rich:tab>
+								</rich:tab>
 
 
+								<rich:tab rendered="#{employeeServiceAllocations.size() gt 0}">
+									<f:facet name="label">
+										<h:outputText value="Ιστορικό Θητείων" />
+									</f:facet>
+									<h:panelGrid columns="1" width="100%">
+										<h:outputText
+											value="Στον παρακάτω πίνακα εμφανίζεται το ιστορικό όλων των αποσπάσεων του εκπαιδευτικού. Μπορείτε να τροποποιήσετε, αν θέλετε, την ενεργή κατά το τρέχων σχολικό έτος απόσπαση." />
 
-							<rich:tab
-								rendered="#{employeeLeaveItems.rowCount gt 0  and (s:hasRole('ADMIN') or s:hasRole('VIEW_LEAVE'))}">
-								<f:facet name="label">
-									<h:outputText value="Ιστορικό Αδειών" />
-								</f:facet>
-								<h:panelGrid columns="1" width="100%">
-									<h:outputText
-										value="Στον παρακάτω πίνακα εμφανίζεται το ιστορικό των αδειών του εκπαιδευτικού." />
-									<rich:dataTable id="employeeLeavesList"
-										value="#{employeeLeaveItems}" var="_leave" rows="10"
-										border="0"
-										onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
-										onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
-										width="100%">
-										<f:facet name="header">
-											<h:outputLabel value="Ιστορικό Αδειών Εκπαιδευτικού" />
-										</f:facet>
-										<f:facet name="footer">
-											<rich:datascroller for="employeeLeavesList"  maxPages="10"></rich:datascroller>
-										</f:facet>
-										<rich:column>
+										<rich:dataTable id="employeeSecondmentsList"
+											value="#{employeeServiceAllocations}"
+											var="_serviceAllocation" rows="10" border="0"
+											onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+											onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+											width="100%">
 											<f:facet name="header">
-												<h:outputText value="Κωδ." />
+												<h:outputLabel value="Ιστορικό Θητείων Εκπαιδευτικού" />
 											</f:facet>
-											<h:outputText value="#{_leave.leaveTypeKey}" />
-										</rich:column>
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Τύπος Άδειας" />
+											<f:facet name="footer">
+												<rich:datascroller for="employeeSecondmentsList"
+													maxPages="10" />
 											</f:facet>
-											<h:outputText value="#{_leave.leaveType}" />
-										</rich:column>
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Έναρξη" />
-											</f:facet>
-											<h:outputText value="#{_leave.establishedIn}">
-												<s:convertDateTime pattern="dd-MM-yyyy" />
-											</h:outputText>
-										</rich:column>
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Λήξη" />
-											</f:facet>
-											<h:outputText value="#{_leave.dueTo}">
-												<s:convertDateTime pattern="dd-MM-yyyy" />
-											</h:outputText>
-										</rich:column>
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Διάρκεια" />
-											</f:facet>
-											<h:outputText value="#{_leave.leaveEffectiveDuration}" />
-										</rich:column>
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Σχολείο Οργανικής">
-													<rich:toolTip
-														value="Εμφανίζεται το Σχολείο της Οργανικής του Εκπαιδευτικού κατά την καταχώρηση της Άδειας." />
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="Οργανική" />
+												</f:facet>
+												<h:outputText value="#{_serviceAllocation.sourceUnit.title}" />
+											</rich:column>
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="Τύπος Θητείας" />
+												</f:facet>
+												<h:outputText
+													value="#{messages[_serviceAllocation.serviceType.key]}" />
+											</rich:column>
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="Μονάδα Θητείας" />
+												</f:facet>
+												<h:outputText
+													value="#{_serviceAllocation.serviceUnit.title}" />
+											</rich:column>
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="Έναρξη" />
+												</f:facet>
+												<h:outputText value="#{_serviceAllocation.established}">
+													<s:convertDateTime pattern="dd-MM-yyyy" />
 												</h:outputText>
-											</f:facet>
-											<h:outputText value="#{_leave.regularUnit}" />
-										</rich:column>
-										<rich:column>
+											</rich:column>
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="Λήξη" />
+												</f:facet>
+												<h:outputText value="#{_serviceAllocation.dueTo}">
+													<s:convertDateTime pattern="dd-MM-yyyy" />
+												</h:outputText>
+											</rich:column>
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="Σχόλιο" />
+												</f:facet>
+												<h:outputText value="#{_serviceAllocation.comment}" />
+											</rich:column>
+
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="Ωρ. Οργανικής" />
+												</f:facet>
+												<h:outputText
+													value="#{_serviceAllocation.workingHoursOnRegularPosition}" />
+											</rich:column>
+
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="Ωρ. Θητείας" />
+												</f:facet>
+												<h:outputText
+													value="#{_serviceAllocation.workingHoursOnServicingPosition}" />
+											</rich:column>
+										</rich:dataTable>
+									</h:panelGrid>
+								</rich:tab>
+
+
+
+								<rich:tab
+									rendered="#{employeeLeaveItems.rowCount gt 0  and (s:hasRole('ADMIN') or s:hasRole('VIEW_LEAVE'))}">
+									<f:facet name="label">
+										<h:outputText value="Ιστορικό Αδειών" />
+									</f:facet>
+									<h:panelGrid columns="1" width="100%">
+										<h:outputText
+											value="Στον παρακάτω πίνακα εμφανίζεται το ιστορικό των αδειών του εκπαιδευτικού." />
+										<rich:dataTable id="employeeLeavesList"
+											value="#{employeeLeaveItems}" var="_leave" rows="10"
+											border="0"
+											onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+											onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+											width="100%">
 											<f:facet name="header">
-												<h:outputText value="Σχόλιο" />
+												<h:outputLabel value="Ιστορικό Αδειών Εκπαιδευτικού" />
 											</f:facet>
-											<h:outputText value="#{_leave.comment}" />
-										</rich:column>
-									</rich:dataTable>
-								</h:panelGrid>
-							</rich:tab>
+											<f:facet name="footer">
+												<rich:datascroller for="employeeLeavesList" maxPages="10"></rich:datascroller>
+											</f:facet>
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="Κωδ." />
+												</f:facet>
+												<h:outputText value="#{_leave.leaveTypeKey}" />
+											</rich:column>
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="Τύπος Άδειας" />
+												</f:facet>
+												<h:outputText value="#{_leave.leaveType}" />
+											</rich:column>
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="Έναρξη" />
+												</f:facet>
+												<h:outputText value="#{_leave.establishedIn}">
+													<s:convertDateTime pattern="dd-MM-yyyy" />
+												</h:outputText>
+											</rich:column>
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="Λήξη" />
+												</f:facet>
+												<h:outputText value="#{_leave.dueTo}">
+													<s:convertDateTime pattern="dd-MM-yyyy" />
+												</h:outputText>
+											</rich:column>
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="Διάρκεια" />
+												</f:facet>
+												<h:outputText value="#{_leave.leaveEffectiveDuration}" />
+											</rich:column>
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="Σχολείο Οργανικής">
+														<rich:toolTip
+															value="Εμφανίζεται το Σχολείο της Οργανικής του Εκπαιδευτικού κατά την καταχώρηση της Άδειας." />
+													</h:outputText>
+												</f:facet>
+												<h:outputText value="#{_leave.regularUnit}" />
+											</rich:column>
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="Σχόλιο" />
+												</f:facet>
+												<h:outputText value="#{_leave.comment}" />
+											</rich:column>
+										</rich:dataTable>
+									</h:panelGrid>
+								</rich:tab>
 
-							<rich:tab rendered="#{employeeWorkExperienceItems.rowCount gt 0}">
-								<f:facet name="label">
-									<h:outputText value="Ιστορικό Προϋπηρεσιών" />
-								</f:facet>
-								<h:panelGrid columns="1" width="100%">
-									<h:outputText
-										value="Στον παρακάτω πίνακα εμφανίζεται το ιστορικό των προϋπηρεσίων του εκπαιδευτικού." />
-									<rich:dataTable id="employeeWorkExpirenceItemsList"
-										value="#{employeeWorkExperienceItems}"
-										var="_workExperienceItem" rows="10" border="0"
-										onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
-										onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
-										width="100%">
-										<f:facet name="header">
-											<h:outputLabel value="Ιστορικό Προϋπηρεσιών Εκπαιδευτικού" />
-										</f:facet>
-										<f:facet name="footer">
-											<rich:datascroller for="employeeWorkExpirenceItemsList"  maxPages="10" />
-										</f:facet>
-										<rich:column>
+								<rich:tab
+									rendered="#{employeeWorkExperienceItems.rowCount gt 0}">
+									<f:facet name="label">
+										<h:outputText value="Ιστορικό Προϋπηρεσιών" />
+									</f:facet>
+									<h:panelGrid columns="1" width="100%">
+										<h:outputText
+											value="Στον παρακάτω πίνακα εμφανίζεται το ιστορικό των προϋπηρεσίων του εκπαιδευτικού." />
+										<rich:dataTable id="employeeWorkExpirenceItemsList"
+											value="#{employeeWorkExperienceItems}"
+											var="_workExperienceItem" rows="10" border="0"
+											onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
+											onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+											width="100%">
 											<f:facet name="header">
-												<h:outputText value="Τύπος Προϋπηρεσίας" />
+												<h:outputLabel value="Ιστορικό Προϋπηρεσιών Εκπαιδευτικού" />
 											</f:facet>
-											<h:outputText value="#{_workExperienceItem.typeTitle}" />
-										</rich:column>
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Έναρξη" />
+											<f:facet name="footer">
+												<rich:datascroller for="employeeWorkExpirenceItemsList"
+													maxPages="10" />
 											</f:facet>
-											<h:outputText value="#{_workExperienceItem.established}">
-												<s:convertDateTime pattern="dd-MM-yyyy" />
-											</h:outputText>
-										</rich:column>
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Λήξη" />
-											</f:facet>
-											<h:outputText value="#{_workExperienceItem.dueTo}">
-												<s:convertDateTime pattern="dd-MM-yyyy" />
-											</h:outputText>
-										</rich:column>
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="Τύπος Προϋπηρεσίας" />
+												</f:facet>
+												<h:outputText value="#{_workExperienceItem.typeTitle}" />
+											</rich:column>
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="Έναρξη" />
+												</f:facet>
+												<h:outputText value="#{_workExperienceItem.established}">
+													<s:convertDateTime pattern="dd-MM-yyyy" />
+												</h:outputText>
+											</rich:column>
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="Λήξη" />
+												</f:facet>
+												<h:outputText value="#{_workExperienceItem.dueTo}">
+													<s:convertDateTime pattern="dd-MM-yyyy" />
+												</h:outputText>
+											</rich:column>
 
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Ημέρες Προ." />
-											</f:facet>
-											<h:outputText value="#{_workExperienceItem.actualDays}"
-												converter="#{workExperienceConverter}" />
-											<h:outputText
-												value=" (#{_workExperienceItem.actualDays} ημ.)" />
-										</rich:column>
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="Ημέρες Προ." />
+												</f:facet>
+												<h:outputText value="#{_workExperienceItem.actualDays}"
+													converter="#{workExperienceConverter}" />
+												<h:outputText
+													value=" (#{_workExperienceItem.actualDays} ημ.)" />
+											</rich:column>
 
-										<rich:column>
-											<f:facet name="header">
-												<h:outputText value="Σχόλιο" />
-											</f:facet>
-											<h:outputText value="#{_workExperienceItem.comment}" />
-										</rich:column>
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="Σχόλιο" />
+												</f:facet>
+												<h:outputText value="#{_workExperienceItem.comment}" />
+											</rich:column>
 
-									</rich:dataTable>
-								</h:panelGrid>
-							</rich:tab>
-
-
-							<rich:tab rendered="true">
-								<f:facet name="label">
-									<h:outputText value="Στοιχεία Βαθμού/ΜΚ" />
-								</f:facet>
-
-								<ui:include src="/employee/rankAndSalaryGradeInfo.xhtml">
-								</ui:include>
-							</rich:tab>
-
-						</rich:tabPanel>
-
-					</h:form>
-
-				</h:panelGroup>
+										</rich:dataTable>
+									</h:panelGrid>
+								</rich:tab>
 
 
+								<rich:tab rendered="true">
+									<f:facet name="label">
+										<h:outputText value="Στοιχεία Βαθμού/ΜΚ" />
+									</f:facet>
 
-				<h:panelGroup>
-					<h:form>
-						<rich:toolBar id="toolbarMenu">
-							<s:button action="backButton" value="Επιστροφή" />
-							<s:button action="endButton" value="Τέλος Ενέργειας" />
-						</rich:toolBar>
-					</h:form>
-				</h:panelGroup>
+									<ui:include src="/employee/rankAndSalaryGradeInfo.xhtml">
+									</ui:include>
+								</rich:tab>
+
+							</rich:tabPanel>
+
+						</h:form>
+
+					</h:panelGroup>
 
 
-			</h:panelGrid>
-			
+					<s:div styleClass="actionBox">
+						<s:button action="backButton" styleClass="btn btn-primary"
+							value="Επιστροφή" />
+						<s:button action="endButton" styleClass="btn btn-default"
+							value="Τέλος Ενέργειας" />
+					</s:div>
+
+
+				</h:panelGrid>
+
 			</a4j:outputPanel>
 		</rich:panel>
-		
-		
+
+
 
 		<!-- **************************  -->
 		<!-- UPDATE BASIC EMPLOYEE INFO -->
@@ -1099,12 +1108,12 @@
 									<h:inputText value="#{employeeHome.instance.fatherName}"
 										required="true" maxlength="25" size="20" />
 								</s:decorate>
-								
+
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
 									<ui:define name="label">
 										<h:outputText value="Ειδικότητα: " />
 									</ui:define>
-									<h:inputText id="specializationFilter" required="true" 
+									<h:inputText id="specializationFilter" required="true"
 										value="#{employeeHome.tempValueHolder1}"
 										styleClass="fieldValueText" size="25" maxlength="40">
 										<rich:suggestionbox height="100" width="250"
@@ -1154,16 +1163,19 @@
 									<h:inputText value="#{employeeHome.instance.vatNumber}"
 										required="false" maxlength="10" size="10" />
 								</s:decorate>
-								
-								<rich:spacer rendered="#{!employeeHome.instance.isRegularEmployee()}"/>
-								<s:decorate template="/layout/doubleLineEdit.xhtml" rendered="#{employeeHome.instance.isRegularEmployee()}">
+
+								<rich:spacer
+									rendered="#{!employeeHome.instance.isRegularEmployee()}" />
+								<s:decorate template="/layout/doubleLineEdit.xhtml"
+									rendered="#{employeeHome.instance.isRegularEmployee()}">
 									<ui:define name="label">
 										<h:outputText value="ΑΜ" />
 									</ui:define>
-									<h:inputText value="#{employeeHome.instance.regularEmployeeInfo.registryID}"
+									<h:inputText
+										value="#{employeeHome.instance.regularEmployeeInfo.registryID}"
 										required="false" maxlength="7" size="7" />
 								</s:decorate>
-								
+
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
 									<ui:define name="label">
 										<h:outputText value="Αριθμ. Ταυτότητας" />
@@ -1171,19 +1183,20 @@
 									<h:inputText value="#{employeeHome.instance.idNumber}"
 										required="false" maxlength="10" size="10" />
 								</s:decorate>
-								
+
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
 									<ui:define name="label">
 										<h:outputText value="Οικογεν. Κατάσταση: " />
 									</ui:define>
-									<h:selectOneMenu value="#{employee.maritalType}" required="true">
+									<h:selectOneMenu value="#{employee.maritalType}"
+										required="true">
 										<s:selectItems noSelectionLabel="Επιλέξτε Οικογ. Κατάσταση"
 											var="_maritalStatusType" value="#{maritalStatusTypes}"
 											label="#{messages[_maritalStatusType.key]}">
 										</s:selectItems>
 									</h:selectOneMenu>
 								</s:decorate>
-								
+
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
 									<ui:define name="label">
 										<h:outputText value="Αριθμ. Τέκνων" />
@@ -1191,7 +1204,7 @@
 									<h:inputText value="#{employeeHome.instance.numberOfChildren}"
 										required="false" maxlength="3" size="3" />
 								</s:decorate>
-								
+
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
 									<ui:define name="label">
 										<h:outputText value="Αριθμ. ΙΚΑ" />
@@ -1199,12 +1212,13 @@
 									<h:inputText value="#{employeeHome.instance.ikaId}"
 										required="false" maxlength="10" size="10" />
 								</s:decorate>
-								
+
 								<s:decorate template="/layout/doubleLineEdit.xhtml">
 									<ui:define name="label">
 										<h:outputText value="Πολύτεκνος" />
 									</ui:define>
-									<h:selectBooleanCheckbox value="#{employeeHome.instance.bigFamily}" /> 
+									<h:selectBooleanCheckbox
+										value="#{employeeHome.instance.bigFamily}" />
 								</s:decorate>
 
 							</h:panelGrid>
@@ -1231,7 +1245,7 @@
 		<!-- ***********************************  -->
 		<!-- EMPLOYEE Transfer				  -->
 		<!-- ***********************************  -->
-		
+
 		<rich:modalPanel id="transferEmployeeModalPanel" autosized="true"
 			width="400">
 			<f:facet name="header">
@@ -1240,10 +1254,10 @@
 			</f:facet>
 			<f:facet name="controls">
 				<h:panelGroup>
-					<h:graphicImage value="/img/modal/close.png" styleClass="hidelink" 
+					<h:graphicImage value="/img/modal/close.png" styleClass="hidelink"
 						width="18" height="18" id="hidelink102">
 						<a4j:support event="onclick" action="#{employeeHome.revert()}" />
-						<rich:componentControl for="transferEmployeeModalPanel" 
+						<rich:componentControl for="transferEmployeeModalPanel"
 							attachTo="hidelink102" operation="hide" event="onclick" />
 					</h:graphicImage>
 
@@ -1254,7 +1268,7 @@
 				<h:panelGrid columns="1">
 
 					<h:outputText style="font-style:italic; font-size:12px;"
-						value="Με την παρακάτω φόρμα μπορείτε να μετατάξετε τον εργαζόμενου #{employeeUtil.prettyFormat(employee)}." />
+						value="Με την παρακάτω φόρμα μπορείτε να μετατάξετε τον εργαζόμενο #{employeeUtil.prettyFormat(employee)}." />
 
 					<a4j:outputPanel id="transferEmployeeModalPanelContent">
 
@@ -1266,13 +1280,22 @@
 							<h:panelGrid columns="1" width="100%">
 
 								<h:panelGroup>
-									<h:panelGrid columns="2">
-
-
-
+									<h:panelGrid columns="3">
 										<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 											<ui:define name="label">
-												<h:outputText value="Αιτία Τερματισμού Υπηρεσίας" />
+												<h:outputText value="Τύπος Μετάταξης" />
+											</ui:define>
+
+											<h:selectOneRadio value="#{employeeManagement.transferHelper.newEmployeeType}" 
+												immediate="true" 
+												required="true">
+													<s:enumItem enumValue="ADMINISTRATIVE" label="Σε Διοικητικό"></s:enumItem>
+											</h:selectOneRadio>
+										</s:decorate>
+										
+										<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+											<ui:define name="label">
+												<h:outputText value="Νεα Ειδικότητα" />
 											</ui:define>
 
 
@@ -1283,23 +1306,23 @@
 
 											<rich:suggestionbox height="100" width="350" for="value"
 												var="a_spec" id="specializationSuggester"
-												suggestionAction="#{employeeTerminationReasonTypeSuggester.suggest}">
+												suggestionAction="#{administrativeEmployeeSpecializationSuggester.suggest}">
 												<f:facet name="nothingLabel">
-													<h:outputText value="Άγνωστος λόγος τερματισμού" />
+													<h:outputText value="Αγνώστη Ειδικότητα" />
 												</f:facet>
 												<h:column>
-													<h:outputText value="#{a_spec.description}" />
+													<h:outputText value="#{a_spec.id}" />
+												</h:column>
+												<h:column>
+													<h:outputText value="#{a_spec.title}" />
 												</h:column>
 												<a4j:support ajaxSingle="true" event="onselect">
 													<f:setPropertyActionListener value="#{a_spec}"
-														target="#{employeeHome.instance.terminationReason}" />
+														target="#{employeeManagement.transferHelper.newSpecialization}" />
 												</a4j:support>
 											</rich:suggestionbox>
 
-
-
 										</s:decorate>
-
 
 										<s:decorate template="/layout/newDoubleLineEdit.xhtml">
 											<ui:define name="label">
@@ -1308,12 +1331,53 @@
 											<rich:calendar inputSize="10" datePattern="dd/MM/yyyy"
 												style="width:50px" enableManualInput="true"
 												styleClass="fieldValueText" required="true" immediate="true"
-												value="#{employeeHome.instance.terminationDate}">
+												value="#{employeeManagement.transferHelper.transferDate}">
 											</rich:calendar>
 										</s:decorate>
 
-
-
+										<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+											<ui:define name="label">
+												<h:outputText value="ΦΕΚ Μετάταξης : " />
+											</ui:define>
+											<h:inputText
+												value="#{employeeManagement.transferHelper.gofNumber}"
+												tabindex="54" size="15" styleClass="fieldValueText"
+												maxlength="8" required="true" />
+										</s:decorate>
+										
+										<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+											<ui:define name="label">
+												<h:outputText value="Ημ/νία ΦΕΚ Μετάταξης : " />
+											</ui:define>
+											<rich:calendar id="entryIntoServiceCalendar"
+												datePattern="dd/MM/yyyy" style="width:50px"
+												enableManualInput="true" tabindex="55"
+												styleClass="fieldValueText" inputSize="10" required="true"
+												value="#{employeeManagement.transferHelper.gofDate}">
+											</rich:calendar>
+										</s:decorate>
+										
+										<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+											<ui:define name="label">
+												<h:outputText value="Πράξη Ανάληψης Υπηρεσίας: " />
+											</ui:define>
+											<h:inputText
+												value="#{employeeManagement.transferHelper.entryIntoServiceAct}"
+												tabindex="54" size="15" styleClass="fieldValueText"
+												maxlength="5" required="true" />
+										</s:decorate>
+										
+										<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+											<ui:define name="label">
+												<h:outputText value="Ημ/νία Πράξης Ανάληψης: " />
+											</ui:define>
+											<rich:calendar id="entryIntoServiceCalendar"
+												datePattern="dd/MM/yyyy" style="width:50px"
+												enableManualInput="true" tabindex="55"
+												styleClass="fieldValueText" inputSize="10" required="true"
+												value="#{employeeManagement.transferHelper.entryIntoServiceDate}">
+											</rich:calendar>
+										</s:decorate>
 
 									</h:panelGrid>
 								</h:panelGroup>
@@ -1323,32 +1387,38 @@
 										<h:outputText value="Προαιρετικό Σχόλιο" />
 									</ui:define>
 									<h:inputTextarea rows="3" cols="80"
-										value="#{employeeHome.instance.terminationOptionalComment}"
+										value="#{employeeManagement.transferHelper.transferComment}"
 										required="false" styleClass="fieldValueText" />
 								</s:decorate>
 
 							</h:panelGrid>
 
-							<h:panelGrid columns="2">
+							<s:div styleClass="actionBox">
 
-								<a4j:commandButton value="Τερματισμός Υπηρεσίας !"
-									action="#{employeeManagement.terminateEmployee()}"
-									limitToList="false"
-									data="#{facesContext.maximumSeverity.ordinal ge 2}"
-									oncomplete="if(data == false)  #{rich:component('transferEmployeeModalPanel')}.hide();"
-									reRender="transferEmployeeModalPanelContent,rootPanel,inactive-employee-panel" />
-								<a4j:commandButton value="Επιστροφή .."
-									action="#{employeeHome.revert()}"
-									reRender="transferEmployeeModalPanelContent"
-									oncomplete="#{rich:component('transferEmployeeModalPanel')}.hide();" />
-							</h:panelGrid>
+								<h:panelGrid columns="2">
+
+									<a4j:commandButton value="Μετάταξη !"
+										styleClass="btn btn-danger btn-small"
+										action="#{employeeManagement.transferEmployee()}"
+										limitToList="false"
+										data="#{facesContext.maximumSeverity.ordinal ge 2}"
+										oncomplete="if(data == false)  #{rich:component('transferEmployeeModalPanel')}.hide();"
+										reRender="transferEmployeeModalPanelContent,rootPanel,inactive-employee-panel" />
+									<a4j:commandButton value="Επιστροφή .."
+										styleClass="btn btn-primary btn-small"
+										action="#{employeeHome.revert()}"
+										reRender="transferEmployeeModalPanelContent"
+										oncomplete="#{rich:component('transferEmployeeModalPanel')}.hide();" />
+								</h:panelGrid>
+
+							</s:div>
 						</a4j:form>
 					</a4j:outputPanel>
 				</h:panelGrid>
 			</a4j:region>
 		</rich:modalPanel>
-		
-		
+
+
 
 		<!-- ***********************************  -->
 		<!-- TERMINATE EMPLOYEE					  -->
@@ -1362,10 +1432,10 @@
 			</f:facet>
 			<f:facet name="controls">
 				<h:panelGroup>
-					<h:graphicImage value="/img/modal/close.png" styleClass="hidelink" 
+					<h:graphicImage value="/img/modal/close.png" styleClass="hidelink"
 						width="18" height="18" id="hidelink10">
 						<a4j:support event="onclick" action="#{employeeHome.revert()}" />
-						<rich:componentControl for="terminateEmployeeModalPanel" 
+						<rich:componentControl for="terminateEmployeeModalPanel"
 							attachTo="hidelink10" operation="hide" event="onclick" />
 					</h:graphicImage>
 
@@ -1451,19 +1521,23 @@
 
 							</h:panelGrid>
 
-							<h:panelGrid columns="2">
+							<s:div styleClass="actionBox">
+								<h:panelGrid columns="2">
 
-								<a4j:commandButton value="Τερματισμός Υπηρεσίας !"
-									action="#{employeeManagement.terminateEmployee()}"
-									limitToList="false"
-									data="#{facesContext.maximumSeverity.ordinal ge 2}"
-									oncomplete="if(data == false)  #{rich:component('terminateEmployeeModalPanel')}.hide();"
-									reRender="terminateEmployeeModalPanelContent,rootPanel,inactive-employee-panel" />
-								<a4j:commandButton value="Επιστροφή .."
-									action="#{employeeHome.revert()}"
-									reRender="terminateEmployeeModalPanelContent"
-									oncomplete="#{rich:component('terminateEmployeeModalPanel')}.hide();" />
-							</h:panelGrid>
+									<a4j:commandButton value="Τερματισμός Υπηρεσίας !"
+										styleClass="btn btn-danger btn-small"
+										action="#{employeeManagement.terminateEmployee()}"
+										limitToList="false"
+										data="#{facesContext.maximumSeverity.ordinal ge 2}"
+										oncomplete="if(data == false)  #{rich:component('terminateEmployeeModalPanel')}.hide();"
+										reRender="terminateEmployeeModalPanelContent,rootPanel,inactive-employee-panel" />
+									<a4j:commandButton value="Επιστροφή .."
+										styleClass="btn btn-primary btn-small"
+										action="#{employeeHome.revert()}"
+										reRender="terminateEmployeeModalPanelContent"
+										oncomplete="#{rich:component('terminateEmployeeModalPanel')}.hide();" />
+								</h:panelGrid>
+							</s:div>
 						</a4j:form>
 					</a4j:outputPanel>
 				</h:panelGrid>
@@ -1605,18 +1679,22 @@
 
 							</h:panelGrid>
 
-							<h:panelGrid columns="2">
+							<s:div styleClass="actionBox">
+								<h:panelGrid columns="2">
 
-								<a4j:commandButton value="Καταχώρηση Ειδικής Ασχολίας !"
-									action="#{employeeManagement.addEmployeeSpecialAssigment()}"
-									limitToList="true"
-									data="#{facesContext.maximumSeverity.ordinal ge 2}"
-									oncomplete="if(data == false)  #{rich:component('addSpecialAssigmentModalPanel')}.hide();"
-									reRender="addSpecialAssigmentModalPanelContent,employeeSpecialAssigmentOutputPanel,addSpecialAssigmentForm" />
-								<a4j:commandButton value="Επιστροφή .."
-									reRender="addSpecialAssigmentModalPanelContent,employeeSpecialAssigmentOutputPanel"
-									oncomplete="#{rich:component('addSpecialAssigmentModalPanel')}.hide();" />
-							</h:panelGrid>
+									<a4j:commandButton value="Καταχώρηση Ειδικής Ασχολίας !"
+										styleClass="btn btn-small btn-primary"
+										action="#{employeeManagement.addEmployeeSpecialAssigment()}"
+										limitToList="true"
+										data="#{facesContext.maximumSeverity.ordinal ge 2}"
+										oncomplete="if(data == false)  #{rich:component('addSpecialAssigmentModalPanel')}.hide();"
+										reRender="addSpecialAssigmentModalPanelContent,employeeSpecialAssigmentOutputPanel,addSpecialAssigmentForm" />
+									<a4j:commandButton value="Επιστροφή .."
+										styleClass="btn btn-small btn-default"
+										reRender="addSpecialAssigmentModalPanelContent,employeeSpecialAssigmentOutputPanel"
+										oncomplete="#{rich:component('addSpecialAssigmentModalPanel')}.hide();" />
+								</h:panelGrid>
+							</s:div>
 						</a4j:form>
 					</a4j:outputPanel>
 				</h:panelGrid>
