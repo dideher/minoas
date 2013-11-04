@@ -403,6 +403,10 @@ INSERT INTO EMPLOYEE_LEAVE_TYPE(VERSION, DESCRIPTION, GENERATES_CDRS, LEGACY_COD
     VALUES(0,'Ανευ Αποδοχών', 0, '44', 'REGULAR', 1)
 
 
+INSERT INTO EMPLOYEE_LEAVE_TYPE(VERSION, INSERTED_ON, DESCRIPTION, GENERATES_CDRS, LEGACY_CODE, EMPLOYEE_TYPE, IS_ACTIVE)
+    VALUES(0,CURRENT_TIMESTAMP,'Διοικ.Υπαλλήλων', 1, '54', 'ADMINISTRATIVE', 1)
+
+
 ##############################################
 # ΤΥΠΟΙ ΤΕΡΜΑΤΙΣΜΟΥ ΥΠΗΡΕΣΙΩΝ
 ##############################################
