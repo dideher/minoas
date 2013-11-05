@@ -31,7 +31,6 @@ import java.util.Map;
 
 import javax.persistence.EntityManager;
 
-import org.infinispan.transaction.TransactionLog.LogEntry;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;

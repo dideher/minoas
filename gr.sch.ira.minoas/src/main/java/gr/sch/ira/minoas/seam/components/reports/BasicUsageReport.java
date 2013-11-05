@@ -1,7 +1,6 @@
 package gr.sch.ira.minoas.seam.components.reports;
 
 import gr.sch.ira.minoas.model.employee.EmployeeType;
-import gr.sch.ira.minoas.model.employee.MaritalStatusType;
 import gr.sch.ira.minoas.model.employement.SelectionTableType;
 import gr.sch.ira.minoas.model.security.Principal;
 

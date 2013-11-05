@@ -1,6 +1,5 @@
 package gr.sch.ira.minoas.model.employee;
 
-import gr.sch.ira.minoas.model.core.Address;
 import gr.sch.ira.minoas.model.core.PYSDE;
 import gr.sch.ira.minoas.model.core.Specialization;
 import gr.sch.ira.minoas.model.employement.Disposal;
@@ -10,10 +9,8 @@ import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.employement.ServiceAllocation;
 import gr.sch.ira.minoas.model.employement.WorkExperience;
-import gr.sch.ira.minoas.model.transfers.EmployeeTypeTransfer;
 import gr.sch.ira.minoas.model.transfers.OutstandingImprovement;
 import gr.sch.ira.minoas.model.transfers.PermanentTransfer;
-import gr.sch.ira.minoas.seam.components.management.EmployeeManagement.EmployeeTransferHelper;
 
 import java.util.ArrayList;
 import java.util.Collection;

@@ -1,13 +1,11 @@
 package gr.sch.ira.minoas.seam.components.reports;
 
 import gr.sch.ira.minoas.model.core.Audit;
-import gr.sch.ira.minoas.model.security.Principal;
 import gr.sch.ira.minoas.seam.components.criteria.RankInfoCriteria;
 
 import java.util.Collection;
 import java.util.Date;
 
-import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 import org.jboss.seam.ScopeType;

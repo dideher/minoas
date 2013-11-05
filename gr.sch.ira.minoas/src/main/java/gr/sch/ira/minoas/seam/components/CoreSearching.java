@@ -20,7 +20,6 @@ import gr.sch.ira.minoas.model.employee.PartTimeEmployment;
 import gr.sch.ira.minoas.model.employee.Penalty;
 import gr.sch.ira.minoas.model.employee.PenaltyType;
 import gr.sch.ira.minoas.model.employee.Person;
-import gr.sch.ira.minoas.model.employee.RankInfo;
 import gr.sch.ira.minoas.model.employee.RankType;
 import gr.sch.ira.minoas.model.employement.Disposal;
 import gr.sch.ira.minoas.model.employement.DisposalTargetType;

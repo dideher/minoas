@@ -1,5 +1,20 @@
 package gr.sch.ira.minoas.seam.components;
 
+import gr.sch.ira.minoas.core.CoreUtils;
+import gr.sch.ira.minoas.model.core.SchoolYear;
+import gr.sch.ira.minoas.model.core.Specialization;
+import gr.sch.ira.minoas.model.core.Unit;
+import gr.sch.ira.minoas.model.employee.Employee;
+import gr.sch.ira.minoas.model.employement.Disposal;
+import gr.sch.ira.minoas.model.employement.EmployeeLeave;
+import gr.sch.ira.minoas.model.employement.Employment;
+import gr.sch.ira.minoas.model.employement.Secondment;
+import gr.sch.ira.minoas.model.employement.ServiceAllocation;
+import gr.sch.ira.minoas.model.employement.SpecialAssigment;
+import gr.sch.ira.minoas.model.employement.TeachingHourCDR;
+import gr.sch.ira.minoas.model.employement.TeachingHourCDRType;
+import gr.sch.ira.minoas.seam.components.management.TeachingHoursCDRManagement;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -10,22 +25,6 @@ import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-
-import gr.sch.ira.minoas.core.CoreUtils;
-import gr.sch.ira.minoas.model.core.SchoolYear;
-import gr.sch.ira.minoas.model.core.Specialization;
-import gr.sch.ira.minoas.model.core.Unit;
-import gr.sch.ira.minoas.model.employee.Employee;
-import gr.sch.ira.minoas.model.employement.Disposal;
-import gr.sch.ira.minoas.model.employement.EmployeeLeave;
-import gr.sch.ira.minoas.model.employement.Employment;
-import gr.sch.ira.minoas.model.employement.EmploymentType;
-import gr.sch.ira.minoas.model.employement.Secondment;
-import gr.sch.ira.minoas.model.employement.ServiceAllocation;
-import gr.sch.ira.minoas.model.employement.SpecialAssigment;
-import gr.sch.ira.minoas.model.employement.TeachingHourCDR;
-import gr.sch.ira.minoas.model.employement.TeachingHourCDRType;
-import gr.sch.ira.minoas.seam.components.management.TeachingHoursCDRManagement;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.AutoCreate;

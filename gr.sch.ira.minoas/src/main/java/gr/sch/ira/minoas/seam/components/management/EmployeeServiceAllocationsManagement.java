@@ -1,6 +1,5 @@
 package gr.sch.ira.minoas.seam.components.management;
 
-import gr.sch.ira.minoas.model.core.School;
 import gr.sch.ira.minoas.model.core.SchoolYear;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employement.Disposal;
