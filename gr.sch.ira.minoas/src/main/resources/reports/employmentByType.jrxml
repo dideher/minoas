@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Employment By Type" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Employment By Type" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="2795dc7b-5efa-4289-8455-8637983ee9bc">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<style name="Crosstab Data Text" isDefault="false" hAlign="Center"/>
-	<subDataset name="dataset1"/>
+	<style name="Crosstab Data Text" hAlign="Center"/>
+	<subDataset name="dataset1" uuid="1aae040c-3b2a-4702-86bf-cced434c3e2a"/>
 	<parameter name="EMPLOYMENT_TYPE" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -30,23 +30,23 @@
 	<title>
 		<band height="156" splitType="Stretch">
 			<frame>
-				<reportElement mode="Opaque" x="0" y="0" width="555" height="53" backcolor="#CCCCCC"/>
+				<reportElement uuid="f9ac08da-e5a9-4391-be4d-9c4fd7d24249" mode="Opaque" x="0" y="0" width="555" height="53" backcolor="#CCCCCC"/>
 				<staticText>
-					<reportElement x="184" y="0" width="368" height="25" forecolor="#0000FF"/>
+					<reportElement uuid="babd1cdf-333a-4831-8652-7fca230f5b6d" x="184" y="0" width="368" height="25" forecolor="#0000FF"/>
 					<textElement textAlignment="Right">
 						<font size="18" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H"/>
 					</textElement>
 					<text><![CDATA[Ολοκληρωμένο Πληροφοριακό Σύστημα]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="3" y="7" width="134" height="43" forecolor="#FF0000"/>
+					<reportElement uuid="ff6652e7-0556-403f-9a6c-e99df9a93051" x="3" y="7" width="134" height="43" forecolor="#FF0000"/>
 					<textElement>
 						<font size="30" isBold="true" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
 					<text><![CDATA[Μίνωας]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="279" y="25" width="273" height="25" forecolor="#0000FF"/>
+					<reportElement uuid="570877d0-83b8-47d6-baa1-51de4fd6f953" x="279" y="25" width="273" height="25" forecolor="#0000FF"/>
 					<textElement textAlignment="Right">
 						<font size="18" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H"/>
 					</textElement>
@@ -54,80 +54,80 @@
 				</staticText>
 			</frame>
 			<line>
-				<reportElement x="0" y="53" width="555" height="1"/>
+				<reportElement uuid="9bed7f6a-a526-4bcd-a2b2-a7c62f448c02" x="0" y="53" width="555" height="1"/>
 				<graphicElement>
 					<pen lineWidth="3.0" lineStyle="Double"/>
 				</graphicElement>
 			</line>
 			<staticText>
-				<reportElement x="0" y="62" width="555" height="24"/>
+				<reportElement uuid="f208f128-6107-4449-bdff-2673ff1ccab3" x="0" y="62" width="555" height="24"/>
 				<textElement textAlignment="Center">
 					<font size="14" isBold="true" pdfFontName="/fonts/arialb.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Λιστα Εκπαιδευτικών Με Ενεργή Σχέση Εργασίας]]></text>
 			</staticText>
 			<frame>
-				<reportElement x="0" y="86" width="555" height="60"/>
+				<reportElement uuid="a8956822-b4d1-4672-be81-ae4433db02e7" x="0" y="86" width="555" height="60"/>
 				<elementGroup>
 					<staticText>
-						<reportElement x="12" y="10" width="100" height="20"/>
+						<reportElement uuid="8126d84b-986d-4fb4-bb44-497e694ab5b5" x="12" y="10" width="100" height="20"/>
 						<textElement>
 							<font pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 						</textElement>
 						<text><![CDATA[Τύπος Σχέσης]]></text>
 					</staticText>
 					<staticText>
-						<reportElement x="12" y="30" width="100" height="20"/>
+						<reportElement uuid="b1efe8b7-aafb-49ae-8344-35bd03bf33bc" x="12" y="30" width="100" height="20"/>
 						<textElement>
 							<font pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 						</textElement>
 						<text><![CDATA[Ειδικοτήτα / Ομάδα Ειδ.]]></text>
 					</staticText>
 					<textField>
-						<reportElement x="116" y="10" width="152" height="20"/>
+						<reportElement uuid="177658d3-6d3e-44d4-afa3-2d71f905aca6" x="116" y="10" width="152" height="20"/>
 						<textElement>
 							<font pdfFontName="/fonts/arialb.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 						</textElement>
-						<textFieldExpression class="java.lang.String"><![CDATA[$P{EMPLOYMENT_TYPE_FILTER}]]></textFieldExpression>
+						<textFieldExpression><![CDATA[$P{EMPLOYMENT_TYPE_FILTER}]]></textFieldExpression>
 					</textField>
 					<textField>
-						<reportElement x="116" y="30" width="152" height="20"/>
+						<reportElement uuid="df7f7a50-8fa3-4418-a216-5a1f1461f19a" x="116" y="30" width="152" height="20"/>
 						<textElement>
 							<font pdfFontName="/fonts/arialb.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 						</textElement>
-						<textFieldExpression class="java.lang.String"><![CDATA[$P{EMPLOYMENT_SPECIALIZATION_FILTER}]]></textFieldExpression>
+						<textFieldExpression><![CDATA[$P{EMPLOYMENT_SPECIALIZATION_FILTER}]]></textFieldExpression>
 					</textField>
 					<staticText>
-						<reportElement x="270" y="10" width="100" height="20"/>
+						<reportElement uuid="625b9780-3c93-426b-9b71-3365ae006921" x="270" y="10" width="100" height="20"/>
 						<textElement>
 							<font pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 						</textElement>
 						<text><![CDATA[Περιοχή Σχ. Μονάδας]]></text>
 					</staticText>
 					<staticText>
-						<reportElement x="270" y="30" width="100" height="20"/>
+						<reportElement uuid="f43207bf-bfd8-4c02-b945-9b15297b9a9a" x="270" y="30" width="100" height="20"/>
 						<textElement>
 							<font pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 						</textElement>
 						<text><![CDATA[Σχολικό Έτος]]></text>
 					</staticText>
 					<textField>
-						<reportElement x="373" y="10" width="168" height="20"/>
+						<reportElement uuid="d0a33119-df72-4156-8ab1-a862b57b454a" x="373" y="10" width="168" height="20"/>
 						<textElement>
 							<font pdfFontName="/fonts/arialb.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 						</textElement>
-						<textFieldExpression class="java.lang.String"><![CDATA[$P{EMPLOYMENT_SCHOOL_REGION_FILTER}]]></textFieldExpression>
+						<textFieldExpression><![CDATA[$P{EMPLOYMENT_SCHOOL_REGION_FILTER}]]></textFieldExpression>
 					</textField>
 					<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
-						<reportElement x="373" y="30" width="168" height="20"/>
+						<reportElement uuid="8ff8f222-1775-461a-a02b-3d49768bbecd" x="373" y="30" width="168" height="20"/>
 						<textElement>
 							<font pdfFontName="/fonts/arialb.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 						</textElement>
-						<textFieldExpression class="java.lang.String"><![CDATA[$P{EMPLOYMENT_SCHOOL_YEAR_FILTER}]]></textFieldExpression>
+						<textFieldExpression><![CDATA[$P{EMPLOYMENT_SCHOOL_YEAR_FILTER}]]></textFieldExpression>
 					</textField>
 				</elementGroup>
 				<line>
-					<reportElement x="0" y="59" width="555" height="1"/>
+					<reportElement uuid="59fd5a73-9880-43fa-9947-7ddcf11c2046" x="0" y="59" width="555" height="1"/>
 					<graphicElement>
 						<pen lineWidth="1.5" lineStyle="Double"/>
 					</graphicElement>
@@ -141,70 +141,70 @@
 	<columnHeader>
 		<band height="22" splitType="Stretch">
 			<staticText>
-				<reportElement style="Crosstab Data Text" mode="Opaque" x="0" y="0" width="26" height="20" backcolor="#CCCCCC"/>
+				<reportElement uuid="7ec32ceb-9018-4657-8dbf-9e073cec449e" style="Crosstab Data Text" mode="Opaque" x="0" y="0" width="26" height="20" backcolor="#CCCCCC"/>
 				<textElement verticalAlignment="Middle">
 					<font size="9" isBold="true" pdfFontName="/fonts/arialb.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Α/Α]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Crosstab Data Text" mode="Opaque" x="31" y="0" width="150" height="20" backcolor="#CCCCCC"/>
+				<reportElement uuid="35a8ce5e-25f8-4b58-b543-60d15dd3d868" style="Crosstab Data Text" mode="Opaque" x="31" y="0" width="150" height="20" backcolor="#CCCCCC"/>
 				<textElement verticalAlignment="Middle">
 					<font size="9" isBold="true" pdfFontName="/fonts/arialb.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Εκπαιδευτικός]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Crosstab Data Text" mode="Opaque" x="186" y="0" width="39" height="20" backcolor="#CCCCCC"/>
+				<reportElement uuid="6bc4cb8d-39a0-4ba6-ae27-4075b39f7025" style="Crosstab Data Text" mode="Opaque" x="186" y="0" width="39" height="20" backcolor="#CCCCCC"/>
 				<textElement verticalAlignment="Middle">
 					<font size="9" isBold="true" pdfFontName="/fonts/arialb.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Ειδ.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Crosstab Data Text" mode="Opaque" x="230" y="0" width="67" height="20" backcolor="#CCCCCC"/>
+				<reportElement uuid="7dabb6ca-fe10-496e-94cf-75a83e0a53e9" style="Crosstab Data Text" mode="Opaque" x="230" y="0" width="67" height="20" backcolor="#CCCCCC"/>
 				<textElement verticalAlignment="Middle">
 					<font size="9" isBold="true" pdfFontName="/fonts/arialb.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Τύπος Σχέσης]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Crosstab Data Text" mode="Opaque" x="302" y="0" width="110" height="20" backcolor="#CCCCCC"/>
+				<reportElement uuid="173f4e3a-998e-4c48-90f3-8da10ef62da7" style="Crosstab Data Text" mode="Opaque" x="302" y="0" width="110" height="20" backcolor="#CCCCCC"/>
 				<textElement verticalAlignment="Middle">
 					<font size="9" isBold="true" pdfFontName="/fonts/arialb.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Μονάδα]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Crosstab Data Text" mode="Opaque" x="417" y="0" width="22" height="20" backcolor="#CCCCCC"/>
+				<reportElement uuid="35e13d65-6c22-4da2-baf4-aef038fc64a5" style="Crosstab Data Text" mode="Opaque" x="417" y="0" width="22" height="20" backcolor="#CCCCCC"/>
 				<textElement verticalAlignment="Middle">
 					<font size="9" isBold="true" pdfFontName="/fonts/arialb.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Περ.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Crosstab Data Text" mode="Opaque" x="444" y="0" width="24" height="20" backcolor="#CCCCCC"/>
+				<reportElement uuid="6a1cf534-9a57-470f-8342-802da4fadb30" style="Crosstab Data Text" mode="Opaque" x="444" y="0" width="24" height="20" backcolor="#CCCCCC"/>
 				<textElement verticalAlignment="Middle">
 					<font size="9" isBold="true" pdfFontName="/fonts/arialb.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Υπ. Ωρ.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Crosstab Data Text" mode="Opaque" x="473" y="0" width="24" height="20" backcolor="#CCCCCC"/>
+				<reportElement uuid="deed1f6f-8dc3-48ca-aa10-68b85ffce4f8" style="Crosstab Data Text" mode="Opaque" x="473" y="0" width="24" height="20" backcolor="#CCCCCC"/>
 				<textElement verticalAlignment="Middle">
 					<font size="9" isBold="true" pdfFontName="/fonts/arialb.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Πρ.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Crosstab Data Text" mode="Opaque" x="502" y="0" width="50" height="20" backcolor="#CCCCCC"/>
+				<reportElement uuid="806dd5b8-7026-48e0-94d0-fe8c435492a9" style="Crosstab Data Text" mode="Opaque" x="502" y="0" width="50" height="20" backcolor="#CCCCCC"/>
 				<textElement verticalAlignment="Middle">
 					<font size="9" isBold="true" pdfFontName="/fonts/arialb.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Αν. Υπ.]]></text>
 			</staticText>
 			<line>
-				<reportElement positionType="Float" x="0" y="20" width="555" height="1" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true"/>
+				<reportElement uuid="ca670d5c-91ca-4983-a5f6-7cba7264096a" positionType="Float" x="0" y="20" width="555" height="1" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true"/>
 				<graphicElement>
 					<pen lineWidth="1.5" lineStyle="Double"/>
 				</graphicElement>
@@ -214,67 +214,67 @@
 	<detail>
 		<band height="16" splitType="Stretch">
 			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="31" y="0" width="150" height="16" backcolor="#FFFFFF"/>
+				<reportElement uuid="989b0025-f601-4498-b1d5-bef8c4e43704" mode="Opaque" x="31" y="0" width="150" height="16" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left">
 					<font size="9" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{employeeLastName} + " " + $F{employeeFirstName} + " ("+  $F{employeeCode} + ")"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{employeeLastName} + " " + $F{employeeFirstName} + " ("+  $F{employeeCode} + ")"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="473" y="0" width="24" height="16" backcolor="#FFFFFF"/>
+				<reportElement uuid="5bcb4d21-00a9-450f-9e11-a9869b0be8a6" mode="Opaque" x="473" y="0" width="24" height="16" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Center">
 					<font size="9" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H"/>
 				</textElement>
-				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{employeeFinalWorkingHours}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{employeeFinalWorkingHours}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="230" y="0" width="67" height="16" backcolor="#FFFFFF"/>
+				<reportElement uuid="f461d658-e276-4957-bf6d-558ad79f8240" mode="Opaque" x="230" y="0" width="67" height="16" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Right">
 					<font size="9" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{REPORT_PARAMETERS_MAP}.get($F{employeeType})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{REPORT_PARAMETERS_MAP}.get($F{employeeType})]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="186" y="0" width="39" height="16" backcolor="#FFFFFF"/>
+				<reportElement uuid="1ca2144a-6902-4e1b-942d-b7f3deb2c1bc" mode="Opaque" x="186" y="0" width="39" height="16" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Center">
 					<font size="9" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{employmentSpecializationID}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{employmentSpecializationID}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="302" y="0" width="110" height="16" backcolor="#FFFFFF"/>
+				<reportElement uuid="756d39e5-dd87-4f2c-a9a7-2994fab3664a" mode="Opaque" x="302" y="0" width="110" height="16" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Right">
 					<font size="9" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{school}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{school}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="417" y="0" width="22" height="16" backcolor="#FFFFFF"/>
+				<reportElement uuid="4e3d8673-e61e-4ea0-8cde-1619f877f467" mode="Opaque" x="417" y="0" width="22" height="16" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Center">
 					<font size="9" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{schoolRegion}.toString()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{schoolRegion}.toString()]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="444" y="0" width="24" height="16" backcolor="#FFFFFF"/>
+				<reportElement uuid="2cd4afa8-c676-4d2b-bdb8-e5ca86df4754" mode="Opaque" x="444" y="0" width="24" height="16" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Center">
 					<font size="9" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H"/>
 				</textElement>
-				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{employeeMandatoryHours}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{employeeMandatoryHours}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="502" y="0" width="50" height="16" backcolor="#FFFFFF"/>
+				<reportElement uuid="323b6776-dbef-483a-ae86-e349a0a95d90" mode="Opaque" x="502" y="0" width="50" height="16" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Center">
 					<font size="9" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H"/>
 				</textElement>
-				<textFieldExpression class="java.util.Date"><![CDATA[$F{employeeEmploymentEstablishedDate}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{employeeEmploymentEstablishedDate}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="0" y="0" width="26" height="16" backcolor="#FFFFFF"/>
+				<reportElement uuid="4737bddf-500a-4a13-aa7d-43206d742176" mode="Opaque" x="0" y="0" width="26" height="16" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Center">
 					<font size="9" isBold="true" pdfFontName="/fonts/arialb.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.Integer"><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
@@ -284,30 +284,30 @@
 	<pageFooter>
 		<band height="20" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="241" height="20"/>
+				<reportElement uuid="4af4da2b-ccc8-433c-af7d-785975afbba0" x="0" y="0" width="241" height="20"/>
 				<textElement>
 					<font pdfFontName="/fonts/arial.ttf" pdfEncoding="Cp1253" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Εκτύπωση απο τον Μίνωα - Φίλιππος Σλάβικ]]></text>
 			</staticText>
 			<textField pattern="dd/MM/yyyy">
-				<reportElement x="241" y="0" width="97" height="18"/>
+				<reportElement uuid="4e3aa5ee-5962-43ad-ab34-9db2c6b82c84" x="241" y="0" width="97" height="18"/>
 				<textElement textAlignment="Right">
 					<font size="10" pdfFontName="/fonts/arial.ttf" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="423" y="0" width="80" height="20"/>
+				<reportElement uuid="eb0716e6-8058-49b7-9840-9c77ce63ab2c" x="423" y="0" width="80" height="20"/>
 				<textElement textAlignment="Right">
 					<font pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["Σελίδα "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Σελίδα "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Report">
-				<reportElement x="508" y="0" width="40" height="16"/>
+				<reportElement uuid="1f3c253c-75bf-45e1-81aa-4f210b72b305" x="508" y="0" width="40" height="16"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageFooter>
