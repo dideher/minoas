@@ -1,12 +1,12 @@
 package gr.sch.ira.minoas.model.transfers;
 
-import java.util.Date;
-
 import gr.sch.ira.minoas.model.BaseIDDeleteAwareModel;
 import gr.sch.ira.minoas.model.core.Specialization;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
 import gr.sch.ira.minoas.model.employement.Employment;
+
+import java.util.Date;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;

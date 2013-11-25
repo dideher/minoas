@@ -1,10 +1,10 @@
 package gr.sch.ira.minoas.seam.components.startup;
 
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
+import gr.sch.ira.minoas.seam.components.async.DailyEmployeeDataUpdaterProcessor;
 import gr.sch.ira.minoas.seam.components.async.DisposalCleanupProcessor;
 import gr.sch.ira.minoas.seam.components.async.LeaveActivactionProcessor;
 import gr.sch.ira.minoas.seam.components.async.LeaveCleanupProcessor;
-import gr.sch.ira.minoas.seam.components.async.DailyEmployeeDataUpdaterProcessor;
 import gr.sch.ira.minoas.seam.components.async.SecondmentActivactionProcessor;
 import gr.sch.ira.minoas.seam.components.async.SecondmentCleanupProcessor;
 import gr.sch.ira.minoas.seam.components.async.ServiceAllocationCleanupProcessor;

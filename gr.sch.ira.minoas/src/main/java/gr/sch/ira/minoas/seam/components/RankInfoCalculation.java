@@ -6,17 +6,13 @@ import gr.sch.ira.minoas.model.employee.EmployeeInfo;
 import gr.sch.ira.minoas.model.employee.RankInfo;
 import gr.sch.ira.minoas.model.employee.RegularEmployeeInfo;
 
-import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.AutoCreate;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
-import org.jboss.seam.annotations.TransactionPropagationType;
-import org.jboss.seam.annotations.Transactional;
 
 /**
  * @author <a href="mailto:andreadakis@gmail.com">Yorgos Andreadakis</a>

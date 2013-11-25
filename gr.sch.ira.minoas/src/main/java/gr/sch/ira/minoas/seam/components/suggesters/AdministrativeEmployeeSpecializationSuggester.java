@@ -7,7 +7,6 @@ import gr.sch.ira.minoas.core.CoreUtils;
 import gr.sch.ira.minoas.model.core.Specialization;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
 
-
 import java.util.Collection;
 
 import org.jboss.seam.annotations.Name;

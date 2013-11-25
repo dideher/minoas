@@ -9,13 +9,11 @@ import gr.sch.ira.minoas.seam.components.WorkExperienceCalculation;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.ResourceBundle;
 
 import javax.faces.context.FacesContext;
 
 import org.apache.commons.lang.time.DateUtils;
-import org.jboss.seam.annotations.In;
 import org.jboss.seam.core.SeamResourceBundle;
 
 /**

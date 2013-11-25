@@ -9,7 +9,6 @@ import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.printout.PrintoutRecipients;
 import gr.sch.ira.minoas.model.printout.PrintoutSignatures;
 import gr.sch.ira.minoas.model.security.Principal;
-import gr.sch.ira.minoas.seam.components.criteria.RankInfoCriteria;
 import gr.sch.ira.minoas.seam.components.management.EmployeeLeavesManagement.PrintingHelper;
 import gr.sch.ira.minoas.seam.components.reports.resource.EmploymentReportItem;
 import gr.sch.ira.minoas.seam.components.reports.resource.RankInfoReportItem;
