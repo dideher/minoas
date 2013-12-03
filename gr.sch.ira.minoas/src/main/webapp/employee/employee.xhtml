@@ -15,7 +15,7 @@
 		<rich:panel width="100%" headerClass="pagetitle">
 			<f:facet name="header">
 				<h:outputText
-					value="Καρτέλα Εκπαιδευτικού #{employeeUtil.prettyFormat(employee)}" />
+					value="Καρτέλα Εργαζόμενου #{employeeUtil.prettyFormat(employee)}" />
 			</f:facet>
 
 			<ui:include src="/components/messages-component.xhtml" />
@@ -86,7 +86,7 @@
 								</a4j:outputPanel>
 
 							</s:div>
-							<s:div>
+							<s:div rendered="#{!employeeHome.instance.isAdministrative()}">
 								<h:panelGrid columns="1">
 
 									<rich:dataTable id="employeeCurrentStatusTable"

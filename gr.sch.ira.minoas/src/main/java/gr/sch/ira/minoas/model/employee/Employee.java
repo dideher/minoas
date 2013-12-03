@@ -408,6 +408,10 @@ public class Employee extends Person {
 	public boolean isRegularEmployee() {
         return type==EmployeeType.REGULAR;
     }
+	
+	public boolean isAdministrative() {
+		return type==EmployeeType.ADMINISTRATIVE;
+	}
 
 	/**
 	 * @param active the active to set
