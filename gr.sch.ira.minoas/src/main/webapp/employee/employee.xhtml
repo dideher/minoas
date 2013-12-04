@@ -443,7 +443,7 @@
 								</rich:tab>
 
 								<rich:tab
-									rendered="#{employeeDeputyEmploymentsIncludingDisabledListQuery.resultCount gt 0}">
+									rendered="#{employeeDeputyEmployments.size() gt 0}">
 									<f:facet name="label">
 										<h:outputText value="Ιστορικό Τοποθετήσεων Αναπληρωτή" />
 									</f:facet>
@@ -454,7 +454,7 @@
 											value="Στον παρακάτω πίνακα εμφανίζεται το ιστορικό των τοποθετήσεων του εκπαιδευτικού ως Αναπληρωτής." />
 										<h:form id="deputytEmploymentListForm">
 											<rich:dataTable id="employeeDeputyEmploymentList"
-												value="#{employeeDeputyEmploymentsListQuery.resultList}"
+												value="#{employeeDeputyEmployments}"
 												var="_employment" rows="10" border="0"
 												onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
 												onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
