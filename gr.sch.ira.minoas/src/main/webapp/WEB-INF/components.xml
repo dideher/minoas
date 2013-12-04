@@ -157,13 +157,6 @@
     </framework:restrictions> 
    </framework:entity-query>
    
-   <framework:entity-query name="employeeRegularEmploymentsListQuery" max-results="200" scope="page">
-    <framework:ejbql>SELECT e FROM Employment e WHERE (e.type='REGULAR' OR e.type='ADMINISTRATIVE') AND e.deleted IS FALSE</framework:ejbql>
-    <framework:order>e.schoolYear desc, e.established desc, e.id desc</framework:order>
-    <framework:restrictions>
-      <value>e.employee = #{employee}</value>
-    </framework:restrictions> 
-   </framework:entity-query>
    
    <framework:entity-query name="employeeRegularEmploymentsIncludingDisabledListQuery" max-results="200" scope="page">
     <framework:ejbql>SELECT e FROM Employment e WHERE e.type='REGULAR'</framework:ejbql>

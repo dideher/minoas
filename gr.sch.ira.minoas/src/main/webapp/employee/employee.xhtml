@@ -375,14 +375,14 @@
 											value="Στον παρακάτω πίνακα εμφανίζεται το ιστορικό των οργανικών θέσεων του μόνιμου εκπαιδευτικού/διοικητικού" />
 										<h:form id="regulartEmploymentListForm">
 											<rich:dataTable id="employeeRegularEmploymentList"
-												value="#{employeeRegularEmploymentsListQuery.resultList}"
+												value="#{employeeEmployments}"
 												var="_employment" rows="10" border="0"
 												onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
 												onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
 												width="100%">
 												<f:facet name="header">
 													<h:outputLabel
-														value="Ιστορικό Οργανικών Θέσεων Μονίμου" />
+														value="Ιστορικό Οργανικών Θέσεων Μονίμου #########" />
 												</f:facet>
 												<f:facet name="footer">
 													<rich:datascroller for="employeeRegularEmploymentList"
