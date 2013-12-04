@@ -240,15 +240,6 @@
     </framework:restrictions> 
    </framework:entity-query>
    
-   <!--  All employee's secondments -->
-   <framework:entity-query name="employeeSecondmentsListQuery" max-results="200" scope="page">
-    <framework:ejbql>SELECT s FROM Secondment s</framework:ejbql>
-    <framework:order>s.schoolYear desc, s.established desc</framework:order>
-    <framework:restrictions>
-      <value>s.employee = #{employee}</value>
-    </framework:restrictions> 
-   </framework:entity-query>
-   
    <framework:entity-query name="schoolSecondmentsListQuery" max-results="200" scope="page">
     <framework:ejbql>SELECT s FROM Secondment s WHERE s.active IS TRUE</framework:ejbql>
     <framework:order>s.id desc</framework:order>
@@ -328,7 +319,6 @@
    </event>
    
    <event type="org.jboss.seam.afterTransactionSuccess.Secondment">
-      <action execute="#{employeeSecondmentsListQuery.refresh}" />
       <action execute="#{employeeActiveSecondmentListQuery.refresh}" />
    </event>
    
