@@ -79,25 +79,6 @@
     password="test" />
 
   
-  
-   
-
-   <!-- School Components -->   
-   
-  <component name="exampleSchool"
-    class="gr.sch.ira.minoas.model.core.School" scope="conversation" />
- 
-  <framework:entity-query name="schoolList"
-    scope="conversation" max-results="15">
-    <framework:ejbql>SELECT o FROM School o</framework:ejbql>
-    <framework:restrictions>
-
-      <value>lower(o.title) like lower(concat('%', concat(#{exampleSchool.title},'%')))</value>
-      <value>lower(o.regionCode) like lower(concat('%', concat(#{exampleSchool.regionCode},'%')))</value>
-      <value>o.points = #{exampleSchool.points}</value>
-     </framework:restrictions>
-   </framework:entity-query>
-   
    <!-- Teaching Requirement -->
    
    <component name="exampleTeachingRequirement" class="gr.sch.ira.minoas.model.core.TeachingRequirement" scope="conversation" />
