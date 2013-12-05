@@ -110,76 +110,11 @@
    </framework:entity-query>
    
    
-   <!-- Employment Components -->
-  
-   <component name="newRegularEmployment" class="gr.sch.ira.minoas.model.employement.Employment" scope="page">
-    <property name="type">REGULAR</property>
-   </component>
-   
-   
-     
-   <framework:entity-query name="regularEmploymentsListQuery" max-results="200">
-    <framework:ejbql>SELECT e FROM Employment e WHERE e.type='REGULAR'</framework:ejbql>
-    <framework:order>e.specialization.id asc, e.employee.lastName asc</framework:order>
-    <framework:restrictions>
-      <value>e.active = #{regularEmploymentCriteria.onlyActive}</value>
-      <value>e.school = #{regularEmploymentCriteria.school}</value>
-      <value>e.schoolYear.id = #{regularEmploymentCriteria.schoolYear.id}</value>
-    </framework:restrictions> 
-   </framework:entity-query>
-   
-   <framework:entity-query name="deputyEmploymentsListQuery" max-results="200">
-    <framework:ejbql>SELECT e FROM Employment e WHERE e.type='DEPUTY'</framework:ejbql>
-    <framework:order>e.specialization.id asc, e.employee.lastName asc</framework:order>
-    <framework:restrictions>
-      <value>e.active = #{deputyEmploymentCriteria.onlyActive}</value>
-      <value>e.school = #{deputyEmploymentCriteria.school}</value>
-      <value>e.schoolYear.id = #{deputyEmploymentCriteria.schoolYear.id}</value>
-    </framework:restrictions> 
-   </framework:entity-query>
-   
-   
-   <framework:entity-query name="employeeRegularEmploymentsIncludingDisabledListQuery" max-results="200" scope="page">
-    <framework:ejbql>SELECT e FROM Employment e WHERE e.type='REGULAR'</framework:ejbql>
-    <framework:order>e.schoolYear desc, e.established desc, e.id desc</framework:order>
-    <framework:restrictions>
-      <value>e.employee = #{employee}</value>
-    </framework:restrictions> 
-   </framework:entity-query>
-   
-   
-   <framework:entity-query name="employeeHourlyBasedEmploymentsListQuery" max-results="200" scope="page">
-    <framework:ejbql>SELECT e FROM Employment e WHERE e.type='HOURLYBASED' AND e.deleted IS FALSE</framework:ejbql>
-    <framework:order>e.schoolYear desc, e.established desc, e.id desc</framework:order>
-    <framework:restrictions>
-      <value>e.employee = #{employee}</value>
-    </framework:restrictions> 
-   </framework:entity-query>
-   
-   <framework:entity-query name="employeeHourlyBasedEmploymentsIncludingDisabledListQuery" max-results="200" scope="page">
-    <framework:ejbql>SELECT e FROM Employment e WHERE e.type='HOURLYBASED'</framework:ejbql>
-    <framework:order>e.schoolYear desc, e.established desc, e.id desc</framework:order>
-    <framework:restrictions>
-      <value>e.employee = #{employee}</value>
-    </framework:restrictions> 
-   </framework:entity-query>
-   
-   
-    <!-- Service Allocation Components -->
+   <!-- Service Allocation Components -->
   
    	<component name="exampleServiceAllocation" class="gr.sch.ira.minoas.model.employement.ServiceAllocation" />
-   	
-   
-   <framework:entity-query name="schoolServiceAllocationListQuery" max-results="200" scope="page">
-    <framework:ejbql>SELECT s FROM ServiceAllocation s INNER JOIN FETCH s.employee WHERE s.active IS TRUE AND s.employee.active IS TRUE</framework:ejbql>
-    <framework:order>s.employee.lastName asc, s.employee.firstName asc</framework:order>
-    <framework:restrictions>
-        <value>s.serviceUnit = #{schoolHome.instance}</value>
-    </framework:restrictions> 
-   </framework:entity-query>
-   
     
-   	 <framework:entity-query name="serviceAllocationsByTypeListQuery"
+   	<framework:entity-query name="serviceAllocationsByTypeListQuery"
 	max-results="1000" scope="CONVERSATION">
     <framework:ejbql>SELECT s FROM ServiceAllocation s INNER JOIN FETCH s.employee WHERE s.active IS TRUE AND s.employee.active IS TRUE</framework:ejbql>
     <framework:order>s.serviceUnit.title, s.employee.lastName asc, s.employee.firstName asc</framework:order>
@@ -195,38 +130,8 @@
    <component name="exampleSecondment" class="gr.sch.ira.minoas.model.employement.Secondment">
     <property name="employeeRequested">true</property>
    </component>
-   		
+
    
-   <!-- The active secondment of an employee -->
-   <framework:entity-query name="employeeActiveSecondmentListQuery" scope="page">
-    <framework:ejbql>SELECT s FROM Secondment s WHERE s.active IS TRUE</framework:ejbql>
-    <framework:order>s.schoolYear desc, s.established desc</framework:order>
-    <framework:restrictions>
-      <value>s.employee = #{employeeHome.instance}</value>
-    </framework:restrictions> 
-   </framework:entity-query>
-   
-   <framework:entity-query name="schoolSecondmentsListQuery" max-results="200" scope="page">
-    <framework:ejbql>SELECT s FROM Secondment s WHERE s.active IS TRUE</framework:ejbql>
-    <framework:order>s.id desc</framework:order>
-    <framework:restrictions>
-      <value>s.schoolYear = #{activeShoolYear}</value>
-      <value>s.targetUnit = #{school}</value>
-    </framework:restrictions> 
-   </framework:entity-query>
-   
-   <framework:entity-query name="secondmentsByTypeListQuery" max-results="1000" scope="CONVERSATION">
-    <framework:ejbql>SELECT s FROM Secondment s INNER JOIN FETCH s.employee INNER JOIN FETCH s.affectedEmployment WHERE s.active IS TRUE</framework:ejbql>
-    <framework:order>s.affectedEmployment.school.regionCode asc, s.employee.lastSpecialization.id asc, s.employee.lastName asc</framework:order>
-    <framework:restrictions>
-      <value>s.schoolYear.id = #{activeShoolYear.id}</value>
-      <value>s.secondmentType = #{secondmentCriteria.secondmentType}</value>
-      <value>s.targetUnit = #{secondmentCriteria.targetUnit}</value>
-      <value>s.employeeRequested = #{secondmentCriteria.employeeRequested}</value>
-      <value>lower(s.comment) like lower(concat(#{secondmentCriteria.comment},'%') )</value>
-      <value>lower(s.affectedEmployment.school.regionCode) like  lower(concat(#{secondmentCriteria.region},'%') )</value>
-    </framework:restrictions> 
-   </framework:entity-query>
    
    
    <!-- Specialization Components -->
@@ -235,27 +140,6 @@
     <framework:order>s.id asc</framework:order>
    </framework:entity-query>
   
-
- 
-   <!-- Disposal -->
-   
-   <framework:entity-query name="employeeCurrentDisposalsListQuery" max-results="200" scope="page">
-    <framework:ejbql>SELECT d FROM Disposal d WHERE d.active IS TRUE</framework:ejbql>
-    <framework:order>d.established desc</framework:order>
-    <framework:restrictions>
-      <value>d.employee = #{employeeHome.instance}</value>
-      <value>d.schoolYear.id = #{activeShoolYear.id}</value>
-    </framework:restrictions> 
-   </framework:entity-query>
-   
-   <framework:entity-query name="employeeDisposalsListQuery" max-results="200" scope="page">
-    <framework:ejbql>SELECT d FROM Disposal d</framework:ejbql>
-    <framework:order>d.schoolYear, d.established desc</framework:order>
-    <framework:restrictions>
-      <value>d.employee = #{employeeHome.instance}</value>
-    </framework:restrictions> 
-   </framework:entity-query>
-   
    <!-- Principals and Roles -->
    
    <framework:entity-query name="principalsListQuery" max-results="200" scope="page">
@@ -269,31 +153,8 @@
    </framework:entity-query>
    
    <!-- Events -->
-   <event type="org.jboss.seam.afterTransactionSuccess.Employee">
-      <action execute="#{employeeRegularEmploymentsListQuery.refresh}" />
-   </event>
    
-   <event type="org.jboss.seam.afterTransactionSuccess.Employment">
-      <action execute="#{employeeRegularEmploymentsListQuery.refresh}" />
-      <action execute="#{employeeRegularEmploymentsIncludingDisabledListQuery.refresh}" />
-   </event>
-   
-   
-   <event type="org.jboss.seam.afterTransactionSuccess.Disposal">
-      <action execute="#{employeeDisposalsListQuery.refresh}" />
-      <action execute="#{employeeCurrentDisposalsListQuery.refresh}" />
-   </event>
-   
-   <event type="org.jboss.seam.afterTransactionSuccess.Secondment">
-      <action execute="#{employeeActiveSecondmentListQuery.refresh}" />
-   </event>
-   
-   <event type="org.jboss.seam.afterTransactionSuccess.ServiceAllocation">
-      <action execute="#{employeeServiceAllocationsListQuery.refresh}" />
-      <action execute="#{employeeActiveServiceAllocationListQuery.refresh}" />
-   </event>
-   
-    <event type="org.jboss.seam.afterTransactionSuccess.TeachingRequirement">
+   <event type="org.jboss.seam.afterTransactionSuccess.TeachingRequirement">
       <action execute="#{schoolTeachingRequirement.refresh}" />
    </event>
    
@@ -301,9 +162,7 @@
       <action execute="#{principalsListQuery.refresh}" />
    </event>
    
-   <event type="org.jboss.seam.afterTransactionSuccess.Leave">
-   		<action execute="#{employeeLeavesListQuery.refresh}" />
-   </event>
+   
    
       
    

@@ -365,7 +365,7 @@
 						<h:form>
 							<rich:tabPanel mode="Ajax">
 								<rich:tab
-									rendered="#{employeeRegularEmploymentsIncludingDisabledListQuery.resultCount gt 0}">
+									rendered="#{employeeEmployments.size() gt 0}">
 									<f:facet name="label">
 										<h:outputText value="Ιστορικό Οργανικών Θέσεων" />
 									</f:facet>
@@ -382,7 +382,7 @@
 												width="100%">
 												<f:facet name="header">
 													<h:outputLabel
-														value="Ιστορικό Οργανικών Θέσεων Μονίμου #########" />
+														value="Ιστορικό Οργανικών Θέσεων Μονίμου" />
 												</f:facet>
 												<f:facet name="footer">
 													<rich:datascroller for="employeeRegularEmploymentList"
@@ -523,7 +523,7 @@
 								</rich:tab>
 
 								<rich:tab
-									rendered="#{employeeHourlyBasedEmploymentsIncludingDisabledListQuery.resultCount gt 0}">
+									rendered="#{employeeHourlyBasedEmployments.size() gt 0}">
 									<f:facet name="label">
 										<h:outputText value="Ιστορικό Προσλήψεων Ωρομίσθιου" />
 									</f:facet>
@@ -534,7 +534,7 @@
 											value="Στον παρακάτω πίνακα εμφανίζεται το ιστορικό των προσλήψεων του εκπαιδευτικού ως Ωρομίσθιος." />
 										<h:form id="hourlyBasedEmploymentListForm">
 											<rich:dataTable id="employeeHourlyEmploymentList"
-												value="#{employeeHourlyBasedEmploymentsListQuery.resultList}"
+												value="#{employeeHourlyBasedEmployments}"
 												var="_employment" rows="10" border="0"
 												onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
 												onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
