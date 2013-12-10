@@ -63,6 +63,8 @@ public class Specialization extends BaseModel {
 	@Basic
 	@Column(name="IS_VIRTUAL", nullable=true)
 	private Boolean isVirtual = Boolean.FALSE;
+	
+	
 
 	/**
 	 * 

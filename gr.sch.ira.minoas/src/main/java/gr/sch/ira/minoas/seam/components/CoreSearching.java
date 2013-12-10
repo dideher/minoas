@@ -20,7 +20,6 @@ import gr.sch.ira.minoas.model.employee.PartTimeEmployment;
 import gr.sch.ira.minoas.model.employee.Penalty;
 import gr.sch.ira.minoas.model.employee.PenaltyType;
 import gr.sch.ira.minoas.model.employee.Person;
-import gr.sch.ira.minoas.model.employee.RankInfo;
 import gr.sch.ira.minoas.model.employee.RankType;
 import gr.sch.ira.minoas.model.employement.Disposal;
 import gr.sch.ira.minoas.model.employement.DisposalTargetType;
@@ -175,15 +174,27 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         
         Calendar establishedTo = (Calendar)establishedFrom.clone();
         establishedTo.add(Calendar.DAY_OF_MONTH, dayThreshold);
-        
-//        Calendar dueToFrom = Calendar.getInstance();
-//        dueToFrom.setTime(referenceDay);
-//        DateUtils.truncate(dueToFrom, Calendar.DAY_OF_MONTH);
-//        
-//        Calendar dueToTo = (Calendar)dueToFrom.clone();
-//        dueToTo.add(Calendar.DAY_OF_MONTH, dayThreshold);
+
         
         return getEntityManager(em).createQuery("SELECT l FROM EmployeeLeave l WHERE l.active IS FALSE AND (l.deleted IS FALSE OR l.deleted IS NULL) AND l.established BETWEEN :establishedFrom AND :establishedTo").setParameter("establishedFrom",  establishedFrom.getTime()).setParameter("establishedTo",  establishedTo.getTime()).getResultList();
+    }
+    
+    @Transactional(TransactionPropagationType.REQUIRED)
+    @SuppressWarnings("unchecked")
+    public Collection<EmployeeLeave> getEmployeeFutureLeavesThatWillBeActivated(EntityManager em, Employee employee, Date referenceDay, Integer dayThreshold) {
+        Calendar establishedFrom = Calendar.getInstance();
+        establishedFrom.setTime(referenceDay);
+        DateUtils.truncate(establishedFrom, Calendar.DAY_OF_MONTH);
+        
+        Calendar establishedTo = (Calendar)establishedFrom.clone();
+        establishedTo.add(Calendar.DAY_OF_MONTH, dayThreshold);
+
+        
+        return getEntityManager(em).createQuery("SELECT l FROM EmployeeLeave l WHERE l.active IS FALSE AND (l.deleted IS FALSE OR l.deleted IS NULL) AND (l.established BETWEEN :establishedFrom AND :establishedTo) AND l.employee=:employee")
+        		.setParameter("establishedFrom",  establishedFrom.getTime())
+        		.setParameter("establishedTo",  establishedTo.getTime())
+        		.setParameter("employee", employee)
+        		.getResultList();
     }
     
      /**
@@ -200,6 +211,24 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
                 .createQuery(
                         "SELECT e from Employment e WHERE e.employee=:employee AND e.type=:type AND (e.deleted IS FALSE OR e.deleted IS NULL) ORDER BY e.established DESC")
                 .setParameter("employee", employee).setParameter("type", type).getResultList();
+        info("found totally '#0' employments for regular employee '#1'.", result.size(), employee);
+        return result;
+    }
+    
+    /**
+     * @param employee
+     * @param type
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public Collection<Employment> getAllEmployeeEmployments(Person employee) {
+        List<Employment> result;
+        debug("trying to featch all  employments for employee '#0'", employee);
+        result = entityManager
+                .createQuery(
+                        "SELECT e from Employment e WHERE e.employee=:employee AND (e.deleted IS FALSE OR e.deleted IS NULL) ORDER BY e.established DESC")
+                .setParameter("employee", employee).getResultList();
         info("found totally '#0' employments for regular employee '#1'.", result.size(), employee);
         return result;
     }
@@ -280,7 +309,8 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     public SchoolType[] getAvailableSchoolTypes() {
         return SchoolType.values();
     }
-
+    
+    
     public List<SchoolYear> getAvailableSchoolYears() {
         return getAvailableSchoolYears(null);
     }
@@ -320,6 +350,17 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
                 .createQuery(
                         "SELECT s FROM Disposal s WHERE s.active IS TRUE AND s.employee=:employee AND :dayOfInterest BETWEEN s.established AND s.dueTo ORDER BY s.insertedOn")
                 .setParameter("employee", employee).setParameter("dayOfInterest", dayOfIntereset).getResultList();
+        return result;
+    }
+    
+    @SuppressWarnings("unchecked")
+    @Transactional(TransactionPropagationType.REQUIRED)
+    public Collection<Employment> getEmployeeActiveEmployments(Person employee, SchoolYear schoolyear) {
+        List<Employment> result;
+        debug("trying to featch all active employments for employee '#0' during school year '#1'.", employee, schoolyear);
+        result = entityManager
+                .createQuery("SELECT e from Employment e WHERE e.employee=:employee AND e.active IS TRUE AND e.schoolYear=:schoolyear")
+                .setParameter("employee", employee).setParameter("schoolyear", schoolyear).getResultList();
         return result;
     }
     
@@ -558,12 +599,10 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
     
     public Collection<EmployeeLeave> getEmployeeLeaves(Person employee, Date established, Date dueTo, Collection<EmployeeLeaveType> ofTypeList) {
         Collection<EmployeeLeave> result = null;
-        info("searching employee leaves #0 from '#1' to '#2' of type '#3'", employee, established, dueTo, ofTypeList);
         result = entityManager
                 .createQuery(
                         "SELECT s from EmployeeLeave s WHERE (s.deleted IS FALSE OR s.deleted IS NULL) AND s.employee=:employee AND (s.established >= :established AND s.dueTo <= :dueTo AND s.employeeLeaveType IN (:typesList)) ORDER BY s.established DESC")
                 .setParameter("employee", employee).setParameter("established", established).setParameter("dueTo", dueTo).setParameter("typesList", ofTypeList).getResultList();
-        info("found '#4' leave(s) for employee '#0' from '#1' to '#2' of type '#3'", employee, established, dueTo, ofTypeList, result.size());
         return result;
     }
     
@@ -1617,37 +1656,4 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         return returnValue != null ? returnValue : new Long(0);
     } 
     
-//    @SuppressWarnings("unchecked")
-//    @Transactional(TransactionPropagationType.REQUIRED)
-//    public Collection<RankInfo> getCurrentRankInfosForActiveEmployees(Employee employee) {
-//        Collection<RankInfo> result = null;
-//        info("searching current rank infos for all active employees.");
-//        result = entityManager.createQuery(
-//            "select ri " + 
-//            "from Employee e, EmployeeInfo ei, RankInfo ri, Employment em" +
-//            " where ri.employeeInfo = ei and ei.employee = e" +
-//            " and em.employee = e" +
-//            " and ei.currentRankInfo = ri" +
-//            " and em.active IS TRUE and ei.employee=:employee").setParameter("employee", employee).getResultList();
-//        info("found totally '#0' current rank infos for active employees.", result.size());
-//        return result;
-//    }
-    
-    
-    @SuppressWarnings("unchecked")
-    @Transactional(TransactionPropagationType.REQUIRED)
-    public Collection<RankInfo> getCurrentRankInfosForActiveEmployees() {
-        Collection<RankInfo> result = null;
-        info("searching current rank infos for all active employees.");
-        result = entityManager.createQuery(
-            "select ri " + 
-            "from Employee e, EmployeeInfo ei, RankInfo ri, Employment em" +
-            " where ri.employeeInfo = ei and ei.employee = e" +
-            " and em.employee = e" +
-            " and ei.currentRankInfo = ri" +
-            " and em.active IS TRUE").getResultList();
-        info("found totally '#0' current rank infos for active employees.", result.size());
-        return result;
-    }
-
 }

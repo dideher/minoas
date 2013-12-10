@@ -32,7 +32,7 @@ public class CourseTypeManagement extends BaseDatabaseAwareSeamComponent {
 	private CourseTypeHome courseTypeHome;
 	
 	@In(required=true, create=true)
-	private CoreSearching coreSearcing;
+	private CoreSearching coreSearching;
 	
 	@Out(value="firstAssigmentsSource", required=true)
 	private Collection<Specialization> firstAssigmentsSource;
@@ -116,12 +116,12 @@ public class CourseTypeManagement extends BaseDatabaseAwareSeamComponent {
 	
 	@Factory(value="firstAssigmentsSource", scope=ScopeType.CONVERSATION)
 	public void constructFirstAssigmentsSource() {
-		setFirstAssigmentsSource(coreSearcing.getSpecializations(getEntityManager()));
+		setFirstAssigmentsSource(coreSearching.getSpecializations(getEntityManager()));
 	}
 	
 	@Factory(value="secondAssigmentsSource", scope=ScopeType.CONVERSATION)
 	public void constructSecondAssigmentsSource() {
-		setSecondAssigmentsSource(coreSearcing.getSpecializations(getEntityManager()));
+		setSecondAssigmentsSource(coreSearching.getSpecializations(getEntityManager()));
 	}
 	
 	

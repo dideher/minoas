@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RankInfo By Date" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6c7c83fb-4312-4a98-93c2-c3cea0b2423d">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="162"/>
+	<property name="ireport.y" value="137"/>
+	<style name="Crosstab Data Text" hAlign="Center"/>
+	<style name="normalText" fontName="DejaVu Serif" fontSize="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+	<style name="boldText" fontName="DejaVu Serif" fontSize="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+	<style name="headlineText" fontName="DejaVu Serif" fontSize="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+	<style name="bigHeadlineText" fontName="DejaVu Serif" fontSize="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+	<subDataset name="dataset1" uuid="ca038b20-a8ad-4277-b388-b30d4cd53bb9"/>
+	<parameter name="printDate" class="java.util.Date" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new java.util.Date()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="employeeForInformation" class="java.lang.String" isForPrompting="false">
+		<parameterDescription><![CDATA[The name of the employee which should be able to give information to the public]]></parameterDescription>
+		<defaultValueExpression><![CDATA["Γιώργος Ανδρεαδάκης"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="employeeForInformationTelephone" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["2810333771"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="signatureTitle" class="java.lang.String" isForPrompting="false">
+		<parameterDescription><![CDATA[The title above the signature]]></parameterDescription>
+		<defaultValueExpression><![CDATA["Ο Διευθυντής της Δ/νσης Εκπ/σης"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="signatureName" class="java.lang.String" isForPrompting="false">
+		<parameterDescription><![CDATA[The name bellow the signature]]></parameterDescription>
+		<defaultValueExpression><![CDATA["Μανουσάκης Γεώργιος"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="notificationList" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<field name="employeeSpecialization" class="java.lang.String"/>
+	<field name="employeeFirstName" class="java.lang.String"/>
+	<field name="employeeLastName" class="java.lang.String"/>
+	<field name="employeeFatherName" class="java.lang.String"/>
+	<field name="employeeSpecializationID" class="java.lang.String"/>
+	<field name="school" class="java.lang.String"/>
+	<field name="salaryGrade" class="java.lang.Integer"/>
+	<field name="lastSalaryGradeDate" class="java.util.Date"/>
+	<field name="rankString" class="java.lang.String"/>
+	<variable name="DATE_FORMATTER" class="java.text.DateFormat">
+		<initialValueExpression><![CDATA[new java.text.SimpleDateFormat("dd/MM/yyyy")]]></initialValueExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="406" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="8baa2ecd-6194-4a0e-b65e-a5550ade83ad" x="0" y="344" width="800" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true" pdfFontName="/fonts/arialb.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Αποφασίζουμε]]></text>
+			</staticText>
+			<image>
+				<reportElement uuid="1839eec5-b629-4fbf-b253-fca81b14ad62" x="0" y="0" width="90" height="90"/>
+				<imageExpression><![CDATA["/home/gand/Documents/Git_Repositories/minoas/gr.sch.ira.minoas/src/main/resources/reports/greekflagsima.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement uuid="5fff8727-39bb-4321-bd5d-92878983ab68" style="normalText" x="75" y="73" width="220" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[ΤΜΗΜΑ ΔΙΟΙΚΗΤΙΚΩΝ ΘΕΜΑΤΩΝ]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="b26802bc-a1c1-4ba7-accd-744ea9ca5105" style="normalText" x="80" y="93" width="318" height="68"/>
+				<textElement textAlignment="Left" markup="styled"/>
+				<textFieldExpression><![CDATA[": Μονοφατσίου 8<br/>" +
+": 712 01<br/>"+
+": "+$P{employeeForInformation}+"<br />"+
+": "+$P{employeeForInformationTelephone}+"<br />"+
+": "+"mail@dide.ira.sch.gr"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="ba020290-0d89-4080-a440-342a81c01544" style="normalText" x="0" y="182" width="199" height="15"/>
+				<textElement/>
+				<text><![CDATA[Έχοντας υπόψη :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e75e180c-6858-416d-9d5e-93fdbfeddaf6" style="bigHeadlineText" x="75" y="3" width="220" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[ΕΛΛΗΝΙΚΗ ΔΗΜΟΚΡΑΤΙΑ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7438132e-0414-40e3-9dd3-5868aba124fe" style="normalText" x="0" y="93" width="80" height="68"/>
+				<textElement textAlignment="Left"/>
+				<text><![CDATA[Ταχ. Διεύθυνση
+Ταχ. Κωδικός
+Πληροφορίες
+Τηλέφωνο
+E-mail]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c56d3b7b-f9ab-4408-9caa-32e09a07d6fa" style="normalText" x="75" y="33" width="220" height="40"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[ΠΕΡΙΦΕΡΕΙΑΚΗ Δ/ΝΣΗ Π/ΘΜΙΑΣ
+ΚΑΙ Δ/ΘΜΙΑΣ ΕΚΠ/ΣΗΣ ΚΡΗΤΗΣ
+Δ/ΝΣΗ ΔΕΥΤ/ΘΜΙΑΣ ΕΚΠ/ΣΗΣ Ν.ΗΡΑΚΛΕΙΟΥ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7027791a-955a-40f0-9473-d13090ec5a4c" style="headlineText" x="75" y="18" width="220" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[ΥΠΟΥΡΓΕΙΟ ΠΑΙΔΕΙΑΣ ΚΑΙ ΘΡΗΣΚΕΥΜΑΤΩΝ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="62752491-83df-40ad-909b-ad17d993cc9f" style="boldText" x="0" y="161" width="800" height="15"/>
+				<textElement>
+					<font isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[ΘΕΜΑ : Χορήγηση Μισθολογικών Κλιμακίων του ν.4024/2011.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3f3b3ec7-c663-4a43-a9d1-882866c06cae" style="bigHeadlineText" x="426" y="85" width="163" height="57"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="18" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[ΑΠΟΦΑΣΗ]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="f0c1e77c-0b4f-4141-b964-f9d49a36d164" style="normalText" x="571" y="50" width="155" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA["Ηράκλειο "+$V{DATE_FORMATTER}.format(new java.util.Date())]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="5ffc6c50-014f-4541-97f3-c4006043ffc7" style="normalText" x="571" y="70" width="155" height="12"/>
+				<textElement textAlignment="Left" markup="none"/>
+				<textFieldExpression><![CDATA["Αρθμ.Πρωτ.:"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="2ee84f25-d6c7-4cbb-8ede-74d70559bdca" style="normalText" x="0" y="363" width="800" height="39"/>
+				<textElement>
+					<font fontName="DejaVu Serif" isBold="false" pdfEncoding="Cp1252"/>
+				</textElement>
+				<text><![CDATA[Τη χορήγηση του επόμενου μισθολογικού κλιμακίου, του άρθρου 12 του ν.4024/2011, στο βαθμό που κατέχουν, σε μόνιμους εκπαιδευτικούς και διοικητικούς υπαλλήλους της Διεύθυνσης Δευτεροβάθμιας Εκπαίδευσης Ν. Ηρακλείου, επειδή στην αναφερόμενη ημερομηνία συμπλήρωσαν δύο ή τρία έτη στο προηγούμενο μισθολογικό κλιμάκιο:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="69ecf639-d76b-4804-b317-b0802f0cdf09" style="normalText" x="0" y="197" width="800" height="147"/>
+				<textElement markup="styled"/>
+				<textFieldExpression><![CDATA["1. Τις διατάξεις του Ν. 4024/2011, Κεφάλαιο Δεύτερο, «Συνταξιοδοτικές ρυθμίσεις, ενιαίο μισθολόγιο – βαθμολόγιο, εργασιακή εφεδρεία και άλλες διατάξεις εφαρμογής του μεσοπρόθεσμου πλαισίου δημοσιονομικής στρατηγικής 2012-2015» (ΦΕΚ 226/τ.Α΄/27-10-2011).<br/>"+
+"2. Το άρθρο 32, παρ. 3 του Ν. 4038/2012 «Επείγουσες ρυθμίσεις που αφορούν την εφαρμογή του μεσοπρόθεσμου πλαισίου δημοσιονομικής στρατηγικής 2012−2015» (ΦΕΚ 14/τ.Α΄/2-2-2012)<br/>"+
+"3. Τις διατάξεις του ν.1566/85, ν.2817/2000, ν.2986/2002, ν.3467/2006 και ν.3848/2010.<br/>"+
+"4. Τις Φ.11.1/9272/9-11-2011 «Διαπιστωτική πράξη κατάταξης σε βαθμούς του ν4024/2011», Φ.11.1/9739/18-11-2011 «Διαπιστωτική πράξη κατάταξης στα μισθολογικά κλιμάκια του ν.4024/2011», Φ.11.1/1794/6-2-2012 «Τροποποίηση των προηγουμένων πράξεων σε εφαρμογή του άρθρου 1, παρ. 7 του ν.4038/2012» της υπηρεσίας μας και την 138489/Η/2-12-2011 Διαπιστωτική πράξη κατάταξης υπαλλήλων στα μισθολογικά κλιμάκια του ν.4024/2011 της Διεύθυνσης Διοικητικού (Τμήμα Β΄) του Υπουργείο Παιδείας, Δια Βίου Μάθησης και Θρησκευμάτων.<br/>"+
+"5. Την αρ. οικ. 2/20433/0022/8/3/2012 εγκύκλιο του Υπουργείου Οικονομικών με θέμα «Κοινοποίηση μισθολογικών διατάξεων και πρόσθετες οδηγίες για την υλοποίηση των διατάξεων του ενιαίου μισθολογίου.<br/>"+
+"6. Την αριθ. Φ353.1/324/105657/Δ1/16-10-02 (καθορισμός των ειδικότερων καθηκόντων και αρμοδιοτήτων των Διευθυντών και Προϊσταμένων Γραφείων Δευτεροβάθμιας Εκπαίδευσης)<br/>"+
+"7. Τα στοιχεία των ατομικών προσωπικών μητρώων των εκπαιδευτικών και διοικητικών υπαλλήλων."]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="22" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="11ecafb1-7b12-49b9-a4d5-764c06317086" style="Crosstab Data Text" mode="Opaque" x="0" y="0" width="26" height="20" backcolor="#CCCCCC"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true" pdfFontName="/fonts/arialb.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Α/Α]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e3b570cd-fdb6-4094-9bc0-51cba6f40a35" style="Crosstab Data Text" mode="Opaque" x="28" y="0" width="126" height="20" backcolor="#CCCCCC"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true" pdfFontName="/fonts/arialb.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Επώνυμο]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6133b723-b346-438d-a730-cb39858fb039" style="Crosstab Data Text" mode="Opaque" x="330" y="0" width="39" height="20" backcolor="#CCCCCC"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true" pdfFontName="/fonts/arialb.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Κλάδος]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7527409a-9b9d-4b61-9e75-ff01026250e5" style="Crosstab Data Text" mode="Opaque" x="468" y="0" width="163" height="20" backcolor="#CCCCCC"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true" pdfFontName="/fonts/arialb.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Οργανική Θέση]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d4e12f77-0cd3-4aca-a6e4-492842b9afbe" style="Crosstab Data Text" mode="Opaque" x="371" y="0" width="95" height="20" backcolor="#CCCCCC"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true" pdfFontName="/fonts/arialb.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Ειδικότητα]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d265a867-d9df-4459-8bd7-46d838982c27" style="Crosstab Data Text" mode="Opaque" x="685" y="0" width="50" height="20" backcolor="#CCCCCC"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true" pdfFontName="/fonts/arialb.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Νέο Μ.Κ.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3717c568-882a-4d52-8da6-1ae0b1257906" style="Crosstab Data Text" mode="Opaque" x="633" y="0" width="50" height="20" backcolor="#CCCCCC"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true" pdfFontName="/fonts/arialb.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Βαθμός]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3f8cb6a3-b4b6-4b30-b21c-919ea9c01b62" style="Crosstab Data Text" mode="Opaque" x="737" y="0" width="65" height="20" backcolor="#CCCCCC"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true" pdfFontName="/fonts/arialb.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Ημ/νία Χορήγησης]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="57d65046-9646-4b49-8e1f-f409dbb1d0aa" positionType="Float" x="0" y="20" width="800" height="1" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true"/>
+				<graphicElement>
+					<pen lineWidth="1.5" lineStyle="Double"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement uuid="597c6eaf-6524-4a75-939f-6ceb3c24d7a3" style="Crosstab Data Text" mode="Opaque" x="156" y="0" width="85" height="20" backcolor="#CCCCCC"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true" pdfFontName="/fonts/arialb.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Όνομα]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cc7f81dc-8161-4ed9-a8b4-692cf01019fd" style="Crosstab Data Text" mode="Opaque" x="243" y="0" width="85" height="20" backcolor="#CCCCCC"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true" pdfFontName="/fonts/arialb.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Πατρώνυμο]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Immediate">
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement uuid="b89b217c-28a6-4c77-affc-d4d9772679e0" mode="Opaque" x="28" y="0" width="126" height="16" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left">
+					<font size="9" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{employeeLastName}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="d32bbfc5-6336-48d1-a14f-cb115d987cc0" mode="Opaque" x="371" y="0" width="95" height="16" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left">
+					<font size="9" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{employeeSpecialization}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="7f479831-ca50-4858-b30e-796cedfa758b" mode="Opaque" x="330" y="0" width="39" height="16" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center">
+					<font size="9" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{employeeSpecializationID}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement uuid="d1306a18-a308-4128-b7de-641f1ec4074c" mode="Opaque" x="468" y="0" width="163" height="16" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left">
+					<font size="9" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{school}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="e5b5a4e1-2594-40b1-9c15-c88cae141482" mode="Opaque" x="633" y="0" width="50" height="16" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center">
+					<font size="9" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{REPORT_PARAMETERS_MAP}.get($F{rankString})
+]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement uuid="43585977-fdd9-4425-8ed4-cec3603de0bd" mode="Opaque" x="685" y="0" width="50" height="16" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center">
+					<font size="9" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{salaryGrade}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement uuid="d25341a5-c9ff-4785-95e1-e1f740ae3f99" mode="Opaque" x="737" y="0" width="65" height="16" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center">
+					<font size="9" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{lastSalaryGradeDate}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement uuid="cf19e3bd-ab0f-4609-8496-187993248e85" mode="Opaque" x="0" y="0" width="26" height="16" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true" pdfFontName="/fonts/arialb.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement uuid="edc4f704-7f2a-4952-bcf4-241cfdd540c4" mode="Opaque" x="156" y="0" width="85" height="16" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left">
+					<font size="9" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{employeeFirstName}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement uuid="d8fac0a3-1aab-409b-b7d6-a0bfc8f647f8" mode="Opaque" x="243" y="0" width="85" height="16" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left">
+					<font size="9" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{employeeFatherName}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="227b019a-f8c0-401c-9af1-3eb5afbe5043" x="0" y="0" width="258" height="20"/>
+				<textElement>
+					<font pdfFontName="/fonts/arial.ttf" pdfEncoding="Cp1253" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Εκτύπωση απο τον Μίνωα - Ανδρεαδάκης Γιώργος]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement uuid="55174ff5-cd29-4844-bd40-a277da3ccb8c" x="258" y="1" width="97" height="18"/>
+				<textElement textAlignment="Right">
+					<font size="10" pdfFontName="/fonts/arial.ttf" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="a1011f81-ea5b-4c27-9507-4dcad1f7a5df" x="423" y="0" width="80" height="20"/>
+				<textElement textAlignment="Right">
+					<font pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Σελίδα "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="8b6f2d57-52a5-478f-a5fd-86bb658098ed" x="508" y="0" width="40" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="235" splitType="Immediate">
+			<textField>
+				<reportElement uuid="c4ecfede-fe8d-41c4-af63-89968143510d" style="boldText" x="548" y="93" width="178" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$P{signatureName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="03efe1ca-0b39-483a-9084-64e1c7349f04" style="normalText" x="41" y="113" width="184" height="98"/>
+				<textElement markup="styled">
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{notificationList}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="8f6c71e4-3f4c-47cc-8cf0-beb7bd28ef7d" style="normalText" x="101" y="0" width="77" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA["Ο Εισηγητής"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="7a5b8abe-67af-4e8f-884f-89d336beee60" style="normalText" x="310" y="0" width="141" height="38"/>
+				<textElement textAlignment="Center" markup="styled"/>
+				<textFieldExpression><![CDATA["Η Προϊσταμένη<br/>"+
+"Διοικητικών Θεμάτων"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="43ce4600-6ba4-421d-b36a-47fa4fa14fa5" style="boldText" x="481" y="0" width="313" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$P{signatureTitle}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="5904785f-d68d-4060-a74a-1fd7065871da" x="0" y="215" width="258" height="20"/>
+				<textElement>
+					<font pdfFontName="/fonts/arial.ttf" pdfEncoding="Cp1253" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Εκτύπωση απο τον Μίνωα - Ανδρεαδάκης Γιώργος]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="d9ffcb02-f1f0-491e-8788-88b212e2d736" x="423" y="215" width="80" height="20"/>
+				<textElement textAlignment="Right">
+					<font pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Σελίδα "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="f739ea7c-fc35-4300-8b03-98ce2e038e3d" x="508" y="215" width="40" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement uuid="7e9cfb9d-e948-4d29-a25f-0d04af451a32" x="258" y="216" width="97" height="18"/>
+				<textElement textAlignment="Right">
+					<font size="10" pdfFontName="/fonts/arial.ttf" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</lastPageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

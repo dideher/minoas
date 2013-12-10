@@ -1,9 +1,8 @@
 package gr.sch.ira.minoas.model.employement;
 
-import java.util.Date;
-
 import gr.sch.ira.minoas.model.BaseIDModel;
-import gr.sch.ira.minoas.model.employee.MaritalStatusType;
+
+import java.util.Date;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;

@@ -3,6 +3,7 @@ package gr.sch.ira.minoas.seam.components.async;
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.EmployeeType;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
+import gr.sch.ira.minoas.seam.components.RankInfoCalculation;
 import gr.sch.ira.minoas.seam.components.WorkExperienceCalculation;
 
 import java.util.Calendar;
@@ -26,14 +27,17 @@ import org.jboss.seam.async.QuartzTriggerHandle;
  * @author <a href="mailto:filippos@slavik.gr">Filippos Slavik</a>
  * @version $Id$
  */
-@Name("regularEmployeeServiceUpdaterProcessor")
+@Name("dailyEmployeeDataUpdaterProcessor")
 @Scope(ScopeType.APPLICATION)
 @AutoCreate
-public class RegularEmployeeServiceUpdaterProcessor extends BaseDatabaseAwareSeamComponent {
+public class DailyEmployeeDataUpdaterProcessor extends BaseDatabaseAwareSeamComponent {
 
 
     @In(required=true, create=true)
     private WorkExperienceCalculation workExperienceCalculation;
+    
+    @In(required=true, create=true)
+    private RankInfoCalculation rankInfoCalculation;
     
     /**
      * Comment for <code>serialVersionUID</code>
@@ -43,7 +47,7 @@ public class RegularEmployeeServiceUpdaterProcessor extends BaseDatabaseAwareSea
 	/**
 	 * 
 	 */
-	public RegularEmployeeServiceUpdaterProcessor() {
+	public DailyEmployeeDataUpdaterProcessor() {
 	}
 
 	@Asynchronous
@@ -60,19 +64,25 @@ public class RegularEmployeeServiceUpdaterProcessor extends BaseDatabaseAwareSea
 	    List<Integer> employeeIDs = getEntityManager().createQuery("SELECT e.id FROM Employee e INNER JOIN e.employeeInfo WHERE e.type=:employeeType AND e.active IS TRUE AND (e.serviceLastUpdated IS NULL or e.serviceLastUpdated<:lastUpdated)")
                 .setParameter("employeeType", EmployeeType.REGULAR).setParameter("lastUpdated", cal.getTime()).getResultList();
 	    
-	   info("found totally '#0' active regular employees that we will update.", employeeIDs.size());
+	   info("found totally '#0' active regular employees whose work experience and RankInfo we will update.", employeeIDs.size());
 	    for(Integer employeeID : employeeIDs) {
 	        Employee employee = getEntityManager().find(Employee.class, employeeID);
 	        try {
 	            workExperienceCalculation.updateEmployeeExperience(getEntityManager().find(Employee.class, employeeID));
-	            employee.setServiceLastUpdated(new Date());
-	            if(count++>50) {
-	                info("updated totally #0 employees, bailing out.", count);
-	                break;
-	            }
+	            
 	        } catch(Exception ex) {
 	            error(String.format("failed to update regular employee '%s' service due to an exception.", employee), ex);
 	        }
+	        
+	        
+	        //	Try to re-calculate the RankInfo for this employee. Maybe he needs to change Rank or SalaryGrade.
+	       rankInfoCalculation.recalculateRankInfo(employee);
+	        
+	        employee.setServiceLastUpdated(new Date());
+            if(count++>50) {
+                info("updated work experience and RankInfo calculations for #0 employees, bailing out.", count);
+                break;
+            }	        
 	        
 	    }
 	    getEntityManager().flush();

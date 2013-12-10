@@ -24,7 +24,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -55,16 +54,33 @@ public class Employment extends BaseIDDeleteAwareModel {
 	private Boolean active;
 	
 	@Basic
-	@Column(name="HOME_BASED", nullable = true)
-	private Boolean homeBased = Boolean.FALSE;
-
-	@OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
-	@JoinColumn(name = "NONREGULAR_EMPLOYMENT_INFO_ID", nullable = true)
-	private NonRegularEmploymentInfo nonRegularEmploymentInfo;
+	@Column(name = "COMMENTS", nullable = true)
+	private String comments;
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
 	@JoinColumn(name = "EMPLOYEE_ID", nullable = false)
 	private Employee employee;
+
+	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.LAZY, mappedBy="employment")
+    private Collection<TeachingHourCDR>employmentCDRs = new ArrayList<TeachingHourCDR>();
+
+	/**
+	 * Entry into service Act (Πράξη ανάληψης υπηρεσίας)
+	 * Πράξη ανάληψης στην Β/θμια στην περίπτωση Αναπληρωτή
+	 * Πράξη ανάληψης στο σχολείο στην περίπτωση Ωρομισθίου
+	 */
+	@Basic
+	@Column(name = "ENTRY_INTO_SERVICE_ACT", length = 5)
+	private String entryIntoServiceAct;
+
+	/**
+	 * Entry into service date (Ημερομηνία ανάληψης υπηρεσίας)
+	 * Πράξη ανάληψης στην Β/θμια στην περίπτωση Αναπληρωτή
+	 * Πράξη ανάληψης στο σχολείο στην περίπτωση Ωρομισθίου
+	 */
+	@Basic
+	@Column(name = "ENTRY_INTO_SERVICE_DATE")
+	private Date entryIntoServiceDate;
 
 	@Basic
 	@Column(name = "ESTABLISHED_DATE", nullable = true)
@@ -76,8 +92,16 @@ public class Employment extends BaseIDDeleteAwareModel {
 	private Integer finalWorkingHours;
 
 	@Basic
+	@Column(name="HOME_BASED", nullable = true)
+	private Boolean homeBased = Boolean.FALSE;
+
+	@Basic
 	@Column(name = "MANDATORY_WORK_HRS", nullable = false)
 	private Integer mandatoryWorkingHours;
+
+	@OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
+	@JoinColumn(name = "NONREGULAR_EMPLOYMENT_INFO_ID", nullable = true)
+	private NonRegularEmploymentInfo nonRegularEmploymentInfo;
 
 	@OneToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name = "SCHOOL_ID", nullable = false)
@@ -109,50 +133,25 @@ public class Employment extends BaseIDDeleteAwareModel {
 	@Basic
 	@Column(name = "IS_TEMPORAR", nullable = true)
 	private Boolean temporar;
-
+	
 	@Basic
 	@Column(name = "TERMINATED_DATE", nullable = true)
 	@Temporal(TemporalType.DATE)
 	private Date terminated;
 
+	
 	@Enumerated(EnumType.STRING)
 	@Column(name = "EMPLOYMENT_TYPE", nullable = false, updatable = false)
 	private EmploymentType type;
-
+	
 	@Basic
 	@Column(name = "WORK_HRS_DECR", nullable = true)
 	private Integer workingHoursDecrement;
-
+	
+	
 	@Basic
 	@Column(name = "WORK_HRS_DECR_REASON", nullable = true)
 	private String workingHoursDecrementReason;
-	
-	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.LAZY, mappedBy="employment")
-    private Collection<TeachingHourCDR>employmentCDRs = new ArrayList<TeachingHourCDR>();
-
-	
-	/**
-	 * Entry into service Act (Πράξη ανάληψης υπηρεσίας)
-	 * Πράξη ανάληψης στην Β/θμια στην περίπτωση Αναπληρωτή
-	 * Πράξη ανάληψης στο σχολείο στην περίπτωση Ωρομισθίου
-	 */
-	@Basic
-	@Column(name = "ENTRY_INTO_SERVICE_ACT", length = 5)
-	private String entryIntoServiceAct;
-	
-	/**
-	 * Entry into service date (Ημερομηνία ανάληψης υπηρεσίας)
-	 * Πράξη ανάληψης στην Β/θμια στην περίπτωση Αναπληρωτή
-	 * Πράξη ανάληψης στο σχολείο στην περίπτωση Ωρομισθίου
-	 */
-	@Basic
-	@Column(name = "ENTRY_INTO_SERVICE_DATE")
-	private Date entryIntoServiceDate;
-	
-	
-	@Basic
-	@Column(name = "COMMENTS", nullable = true)
-	private String comments;
 	
 	
 	/**
@@ -160,6 +159,37 @@ public class Employment extends BaseIDDeleteAwareModel {
 	 */
 	public Employment() {
 		super();
+	}
+	
+	/**
+	 * 
+	 */
+	public Employment(Employment e) {
+		super();
+		if(e != null) {
+			this.setActive(e.getActive());
+			this.setComments(e.getComments());
+			this.setDeleted(e.getDeleted());
+			this.setDeletedBy(e.getDeletedBy());
+			this.setDeletedComment(e.getDeletedComment());
+			this.setDeletedOn(e.getDeletedOn());
+			this.setEntryIntoServiceAct(e.getEntryIntoServiceAct());
+			this.setEntryIntoServiceDate(e.getEntryIntoServiceDate());
+			this.setEstablished(e.getEstablished());
+			this.setFinalWorkingHours(e.getFinalWorkingHours());
+			this.setHomeBased(e.getHomeBased());
+			this.setInsertedBy(e.getInsertedBy());
+			this.setInsertedOn(e.getInsertedOn());
+			this.setMandatoryWorkingHours(e.getMandatoryWorkingHours());
+			this.setSchool(e.getSchool());
+			this.setSchoolYear(e.getSchoolYear());
+			this.setSpecialization(e.getSpecialization());
+			this.setTemporar(e.getTemporar());
+			this.setTerminated(e.getTerminated());
+			this.setType(e.getType());
+			this.setWorkingHoursDecrement(e.getWorkingHoursDecrement());
+			this.setWorkingHoursDecrementReason(e.getWorkingHoursDecrementReason());
+		}
 	}
 
 	/**
@@ -170,10 +200,38 @@ public class Employment extends BaseIDDeleteAwareModel {
 	}
 
 	/**
+	 * @return the comments
+	 */
+	public String getComments() {
+		return comments;
+	}
+
+	/**
 	 * @return the employee
 	 */
 	public Employee getEmployee() {
 		return employee;
+	}
+
+	/**
+     * @return the employmentCDRs
+     */
+    public Collection<TeachingHourCDR> getEmploymentCDRs() {
+        return employmentCDRs;
+    }
+
+	/**
+	 * @return the entryIntoServiceAct
+	 */
+	public String getEntryIntoServiceAct() {
+		return entryIntoServiceAct;
+	}
+
+	/**
+	 * @return the entryIntoServiceDate
+	 */
+	public Date getEntryIntoServiceDate() {
+		return entryIntoServiceDate;
 	}
 
 	/**
@@ -191,10 +249,24 @@ public class Employment extends BaseIDDeleteAwareModel {
 	}
 
 	/**
+	 * @return the homeBased
+	 */
+	public Boolean getHomeBased() {
+		return homeBased;
+	}
+
+	/**
 	 * @return the mandatoryWorkingHours
 	 */
 	public Integer getMandatoryWorkingHours() {
 		return mandatoryWorkingHours;
+	}
+
+	/**
+	 * @return the nonRegularEmploymentInfo
+	 */
+	public NonRegularEmploymentInfo getNonRegularEmploymentInfo() {
+		return nonRegularEmploymentInfo;
 	}
 
 	/**
@@ -279,10 +351,38 @@ public class Employment extends BaseIDDeleteAwareModel {
 	}
 
 	/**
+	 * @param comments the comments to set
+	 */
+	public void setComments(String comments) {
+		this.comments = comments;
+	}
+
+	/**
 	 * @param employee the employee to set
 	 */
 	public void setEmployee(Employee employee) {
 		this.employee = employee;
+	}
+
+	/**
+     * @param employmentCDRs the employmentCDRs to set
+     */
+    public void setEmploymentCDRs(Collection<TeachingHourCDR> employmentCDRs) {
+        this.employmentCDRs = employmentCDRs;
+    }
+
+	/**
+	 * @param entryIntoServiceAct the entryIntoServiceAct to set
+	 */
+	public void setEntryIntoServiceAct(String entryIntoServiceAct) {
+		this.entryIntoServiceAct = entryIntoServiceAct;
+	}
+
+	/**
+	 * @param entryIntoServiceDate the entryIntoServiceDate to set
+	 */
+	public void setEntryIntoServiceDate(Date entryIntoServiceDate) {
+		this.entryIntoServiceDate = entryIntoServiceDate;
 	}
 
 	/**
@@ -300,10 +400,25 @@ public class Employment extends BaseIDDeleteAwareModel {
 	}
 
 	/**
+	 * @param homeBased the homeBased to set
+	 */
+	public void setHomeBased(Boolean homeBased) {
+		this.homeBased = homeBased;
+	}
+
+	/**
 	 * @param mandatoryWorkingHours the mandatoryWorkingHours to set
 	 */
 	public void setMandatoryWorkingHours(Integer mandatoryWorkingHours) {
 		this.mandatoryWorkingHours = mandatoryWorkingHours;
+	}
+
+	/**
+	 * @param nonRegularEmploymentInfo the nonRegularEmploymentInfo to set
+	 */
+	public void setNonRegularEmploymentInfo(
+			NonRegularEmploymentInfo nonRegularEmploymentInfo) {
+		this.nonRegularEmploymentInfo = nonRegularEmploymentInfo;
 	}
 
 	/**
@@ -320,17 +435,19 @@ public class Employment extends BaseIDDeleteAwareModel {
 		this.schoolYear = schoolYear;
 	}
 
-	public void setSecondment(Secondment secondment) {
+   
+    public void setSecondment(Secondment secondment) {
 		this.secondment = secondment;
 	}
 
-	/**
+    /**
 	 * @param serviceAllocation the serviceAllocation to set
 	 */
 	public void setServiceAllocation(ServiceAllocation serviceAllocation) {
 		this.serviceAllocation = serviceAllocation;
 	}
 
+    
 	/**
 	 * @param specialization the specialization to set
 	 */
@@ -344,7 +461,7 @@ public class Employment extends BaseIDDeleteAwareModel {
 	public void setSupersededBy(Employment supersededBy) {
 		this.supersededBy = supersededBy;
 	}
-
+	
 	/**
 	 * @param temporar the temporar to set
 	 */
@@ -393,93 +510,6 @@ public class Employment extends BaseIDDeleteAwareModel {
 		sb.append(getSchool());
 		sb.append(" ]");
 		return sb.toString();
-	}
-
-	/**
-	 * @return the homeBased
-	 */
-	public Boolean getHomeBased() {
-		return homeBased;
-	}
-
-	/**
-	 * @param homeBased the homeBased to set
-	 */
-	public void setHomeBased(Boolean homeBased) {
-		this.homeBased = homeBased;
-	}
-
-   
-    /**
-     * @return the employmentCDRs
-     */
-    public Collection<TeachingHourCDR> getEmploymentCDRs() {
-        return employmentCDRs;
-    }
-
-    /**
-     * @param employmentCDRs the employmentCDRs to set
-     */
-    public void setEmploymentCDRs(Collection<TeachingHourCDR> employmentCDRs) {
-        this.employmentCDRs = employmentCDRs;
-    }
-
-    
-	/**
-	 * @return the entryIntoServiceDate
-	 */
-	public Date getEntryIntoServiceDate() {
-		return entryIntoServiceDate;
-	}
-
-	/**
-	 * @param entryIntoServiceDate the entryIntoServiceDate to set
-	 */
-	public void setEntryIntoServiceDate(Date entryIntoServiceDate) {
-		this.entryIntoServiceDate = entryIntoServiceDate;
-	}
-	
-	/**
-	 * @return the entryIntoServiceAct
-	 */
-	public String getEntryIntoServiceAct() {
-		return entryIntoServiceAct;
-	}
-
-	/**
-	 * @param entryIntoServiceAct the entryIntoServiceAct to set
-	 */
-	public void setEntryIntoServiceAct(String entryIntoServiceAct) {
-		this.entryIntoServiceAct = entryIntoServiceAct;
-	}
-
-	/**
-	 * @return the comments
-	 */
-	public String getComments() {
-		return comments;
-	}
-
-	/**
-	 * @param comments the comments to set
-	 */
-	public void setComments(String comments) {
-		this.comments = comments;
-	}
-
-	/**
-	 * @return the nonRegularEmploymentInfo
-	 */
-	public NonRegularEmploymentInfo getNonRegularEmploymentInfo() {
-		return nonRegularEmploymentInfo;
-	}
-
-	/**
-	 * @param nonRegularEmploymentInfo the nonRegularEmploymentInfo to set
-	 */
-	public void setNonRegularEmploymentInfo(
-			NonRegularEmploymentInfo nonRegularEmploymentInfo) {
-		this.nonRegularEmploymentInfo = nonRegularEmploymentInfo;
 	}
 
 }

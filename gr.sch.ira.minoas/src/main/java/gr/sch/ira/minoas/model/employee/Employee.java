@@ -57,14 +57,6 @@ public class Employee extends Person {
 	@Column(name = "IS_ACTIVE", nullable = true)
 	private Boolean active;
 
-	@Basic
-	@Column(name = "BIG_FAMILY", nullable = true)
-	private Boolean bigFamily = Boolean.FALSE;
-
-	@Basic
-	@Column(name = "COMMENT", nullable = true, length = 256)
-	private String comment;
-
 	@OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
 	@JoinColumn(name = "CURRENT_EMPLOYMENT_ID", nullable = true)
 	private Employment currentEmployment;
@@ -73,25 +65,22 @@ public class Employee extends Person {
 	@JoinColumn(name = "PYSDE_ID", nullable = false, updatable = true)
 	private PYSDE currentPYSDE;
 
-	@OneToOne(mappedBy="employee")
-	private EmployeeInfo employeeInfo;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", cascade = { CascadeType.ALL })
+	private Collection<Disposal> disposals = new ArrayList<Disposal>();
 	
-	@OneToOne(optional = true, fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
-	@JoinColumn(name = "REGULAR_EMPLOYMEE_INFO_ID", nullable = true)
-	private RegularEmployeeInfo regularEmployeeInfo;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "EDUCATIONAL_LEVEL_TYPE", length = 2, nullable = true)
+	private EducationalLevelType educationalLevelType;
+	
+	@OneToOne(mappedBy="employee", fetch=FetchType.LAZY, cascade = {CascadeType.ALL})
+	private EmployeeInfo employeeInfo;
 	
 	@OneToMany(mappedBy = "employee", fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
 	private Set<Employment> employments;
 	
-	@OneToMany(fetch=FetchType.LAZY,cascade={CascadeType.ALL}, mappedBy="employee")
-	private Collection<OutstandingImprovement> οutstandingImprovement =  new ArrayList<OutstandingImprovement>();
+	@OneToOne(fetch=FetchType.LAZY, cascade={CascadeType.ALL}, mappedBy="employee")
+	private EmployeeExclusion exclusion;
 	
-	@OneToMany(fetch=FetchType.LAZY,cascade={CascadeType.ALL}, mappedBy="employee")
-	private Collection<PermanentTransfer> permanentTransfer =  new ArrayList<PermanentTransfer>();
-	
-	@OneToMany(fetch=FetchType.LAZY,cascade={CascadeType.ALL}, mappedBy="employee")
-	private Collection<WorkExperience> workExperience =  new ArrayList<WorkExperience>();
-
 	/**
 	* Each employee have a specialization, which is actually the last employment's 
 	* specialization.
@@ -112,54 +101,20 @@ public class Employee extends Person {
 	@Column(name = "LEGACY_CODE", nullable = true, updatable = false, length = 10)
 	private String legacyCode;
 
+	@OneToMany(fetch=FetchType.LAZY,cascade={CascadeType.ALL}, mappedBy="employee")
+	private Collection<PermanentTransfer> permanentTransfer =  new ArrayList<PermanentTransfer>();
 
 	
+	@OneToOne(optional = true, fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
+	@JoinColumn(name = "REGULAR_EMPLOYMEE_INFO_ID", nullable = true)
+	private RegularEmployeeInfo regularEmployeeInfo;
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", cascade = { CascadeType.ALL })
 	private Collection<Secondment> secondments = new ArrayList<Secondment>();
-
+	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", cascade = { CascadeType.ALL })
 	private Collection<ServiceAllocation> serviceAllocations = new ArrayList<ServiceAllocation>();
-	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", cascade = { CascadeType.ALL })
-	private Collection<Disposal> disposals = new ArrayList<Disposal>();
 
-	@Basic
-	@Column(name = "SPECIAL_CATEGORY", nullable = true)
-	private Boolean specialCategory = Boolean.FALSE;
-
-	@Enumerated(EnumType.STRING)
-	@Column(name = "EMPLOYEE_TYPE", nullable = false, updatable = false)
-	private EmployeeType type;
-	
-	@Enumerated(EnumType.STRING)
-	@Column(name = "EDUCATIONAL_LEVEL_TYPE", length = 2, nullable = true)
-	private EducationalLevelType educationalLevelType;
-	
-	/**
-     * Οικογενειακή Κατάσταση 
-     */
-	@Enumerated(EnumType.STRING)
-	@Column(name = "MARITAL_STATUS", length = 30, nullable = true)
-	private MaritalStatusType maritalType;
-	
-	/**
-     * Αριθμός παιδιών 
-     */
-	@Basic
-    @Column(name = "NUMBER_OF_CHILDREN", nullable = true)
-	private Integer numberOfChildren;
-	
-	/**
-     * Αριθμός Μητρώου ΙΚΑ 
-     * Μήκος: 7 χαρακτήρες
-     */
-    @Basic(fetch=FetchType.LAZY)
-    @Column(name="IKA_ID", nullable=true, length=10)
-    private String ikaId;
-	
-	@OneToOne(fetch=FetchType.LAZY, cascade={CascadeType.ALL}, mappedBy="employee")
-	private EmployeeExclusion exclusion;
-	
 	/**
 	 * The date at which the system has last time updated the employee's service time (work experience, 
 	 * mandatory work hours, etc)
@@ -169,6 +124,10 @@ public class Employee extends Person {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date serviceLastUpdated = null;
 
+	@Basic
+	@Column(name = "SPECIAL_CATEGORY", nullable = true)
+	private Boolean specialCategory = Boolean.FALSE;
+	
 	/**
      * The date at which the employee has been terminated
      */
@@ -176,12 +135,6 @@ public class Employee extends Person {
     @Column(name="TERMINATION_DATE", nullable=true)
     @Temporal(TemporalType.TIMESTAMP)
 	private Date terminationDate = null;
-	
-	
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="TERMINATION_TYPE_ID", nullable=true)
-    private EmployeeTerminationReason terminationReason = null;
-	
 	
 	/**
      * An optional comment giving more information about the reason 
@@ -191,6 +144,22 @@ public class Employee extends Person {
     @Column(name="TERMINATION_COMMENT", nullable=true, length=250)
     private String terminationOptionalComment;
 	
+	@ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="TERMINATION_TYPE_ID", nullable=true)
+    private EmployeeTerminationReason terminationReason = null;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "EMPLOYEE_TYPE", nullable = false, updatable = false)
+	private EmployeeType type;
+	
+	
+    @OneToMany(fetch=FetchType.LAZY,cascade={CascadeType.ALL}, mappedBy="employee")
+	private Collection<WorkExperience> workExperience =  new ArrayList<WorkExperience>();
+	
+	
+	@OneToMany(fetch=FetchType.LAZY,cascade={CascadeType.ALL}, mappedBy="employee")
+	private Collection<OutstandingImprovement> οutstandingImprovement =  new ArrayList<OutstandingImprovement>();
+	
 	/**
 	 * 
 	 */
@@ -198,14 +167,23 @@ public class Employee extends Person {
 		super();
 	}
 
-//	public Leave addLeave(Leave leave) {
-//		if (!getLeaves().contains(leave)) {
-//			getLeaves().add(leave);
-//			leave.setEmployee(this);
-//		}
-//		return leave;
-//	}
-
+	/**
+	 * Constructor to be used when cloning an Employee. Note, the cloning is simple and no
+	 * complex referenced beans are cloned as well.
+	 * @param e
+	 */
+	public Employee(Employee e) {
+		super(e);
+		this.setActive(e.getActive());
+		this.setCurrentPYSDE(e.getCurrentPYSDE());
+		this.setLastSpecialization(e.getLastSpecialization());
+		this.setEducationalLevelType(e.getEducationalLevelType());
+		this.setTerminationDate(e.getTerminationDate());
+		this.setTerminationOptionalComment(e.getTerminationOptionalComment());
+		this.setTerminationReason(e.getTerminationReason());
+		this.setType(e.getType());
+	}
+	
 	public Secondment addSecondment(Secondment secondment) {
 		if (!getSecondments().contains(secondment)) {
 			getSecondments().add(secondment);
@@ -229,19 +207,7 @@ public class Employee extends Person {
 		return active;
 	}
 
-	/**
-	 * @return the bigFamily
-	 */
-	public Boolean getBigFamily() {
-		return bigFamily;
-	}
-
-	/**
-	 * @return the comment
-	 */
-	public String getComment() {
-		return comment;
-	}
+	
 
 	/**
 	 * @return the currentEmployment
@@ -258,10 +224,38 @@ public class Employee extends Person {
 	}
 
 	/**
+	 * @return the disposals
+	 */
+	protected Collection<Disposal> getDisposals() {
+		return disposals;
+	}
+
+	/**
+	 * @return the educationalLevelType
+	 */
+	public EducationalLevelType getEducationalLevelType() {
+		return educationalLevelType;
+	}
+
+	/**
+	 * @return the employeeInfo
+	 */
+	public EmployeeInfo getEmployeeInfo() {
+		return employeeInfo;
+	}
+
+	/**
 	 * @return the employments
 	 */
 	public Set<Employment> getEmployments() {
 		return employments;
+	}
+
+	/**
+	 * @return the exclusion
+	 */
+	public EmployeeExclusion getExclusion() {
+		return exclusion;
 	}
 
 	/**
@@ -293,12 +287,46 @@ public class Employee extends Person {
 	}
 
 	/**
+	 * @return the permanentTransfer
+	 */
+	public Collection<PermanentTransfer> getPermanentTransfer() {
+		return permanentTransfer;
+	}
+
+	/**
 	 * @return the regularDetail
 	 */
 	public RegularEmployeeInfo getRegularDetail() {
 		return regularEmployeeInfo;
 	}
 
+	/**
+	 * @return the regularEmployeeInfo
+	 */
+	public RegularEmployeeInfo getRegularEmployeeInfo() {
+		return regularEmployeeInfo;
+	}
+
+	/**
+	 * Returns, if possible, the employees regular employment school title. This
+	 * operation can be called safely.
+	 * 
+	 * @return The emplouyee's regular employment school title or null
+	 */
+	public String getRegularSchoolTitle() {
+		if(isRegularEmployee()) {
+			Employment em = getCurrentEmployment();
+			if(em != null) {
+				try {
+					return em.getSchool().getTitle();
+				} catch(Exception ex) {
+					return null;
+				}
+			} else return null;
+		} else return null;
+	}
+
+	
 	/**
 	 * @return the secondments
 	 */
@@ -314,11 +342,39 @@ public class Employee extends Person {
 	}
 
 	/**
+     * @return the serviceLastUpdated
+     */
+    public Date getServiceLastUpdated() {
+        return serviceLastUpdated;
+    }
+
+	/**
 	 * @return the specialCategory
 	 */
 	public Boolean getSpecialCategory() {
 		return specialCategory;
 	}
+
+	/**
+     * @return the terminationDate
+     */
+    public Date getTerminationDate() {
+        return terminationDate;
+    }
+
+	/**
+     * @return the terminationOptionalComment
+     */
+    public String getTerminationOptionalComment() {
+        return terminationOptionalComment;
+    }
+
+	/**
+     * @return the terminationReason
+     */
+    public EmployeeTerminationReason getTerminationReason() {
+        return terminationReason;
+    }
 
 	/**
 	 * @return the type
@@ -328,17 +384,33 @@ public class Employee extends Person {
 	}
 
 	/**
-	 * @return the educationalLevelType
-	 */
-	public EducationalLevelType getEducationalLevelType() {
-		return educationalLevelType;
-	}
+     * @return the workExperience
+     */
+    public Collection<WorkExperience> getWorkExperience() {
+        return workExperience;
+    }
 
 	/**
-	 * @param educationalLevelType the educationalLevelType to set
+	 * @return the οutstandingImprovement
 	 */
-	public void setEducationalLevelType(EducationalLevelType educationalLevelType) {
-		this.educationalLevelType = educationalLevelType;
+	public Collection<OutstandingImprovement> getΟutstandingImprovement() {
+		return οutstandingImprovement;
+	}
+
+	public boolean isDeputyEmployee() {
+        return type==EmployeeType.DEPUTY;
+    }
+
+	public boolean isHourlyPaidEmployee() {
+        return type==EmployeeType.HOURLYPAID;
+    }
+
+	public boolean isRegularEmployee() {
+        return type==EmployeeType.REGULAR;
+    }
+	
+	public boolean isAdministrative() {
+		return type==EmployeeType.ADMINISTRATIVE;
 	}
 
 	/**
@@ -346,20 +418,6 @@ public class Employee extends Person {
 	 */
 	public void setActive(Boolean active) {
 		this.active = active;
-	}
-
-	/**
-	 * @param bigFamily the bigFamily to set
-	 */
-	public void setBigFamily(Boolean bigFamily) {
-		this.bigFamily = bigFamily;
-	}
-
-	/**
-	 * @param comment the comment to set
-	 */
-	public void setComment(String comment) {
-		this.comment = comment;
 	}
 
 	/**
@@ -377,10 +435,38 @@ public class Employee extends Person {
 	}
 
 	/**
+	 * @param disposals the disposals to set
+	 */
+	protected void setDisposals(Collection<Disposal> disposals) {
+		this.disposals = disposals;
+	}
+
+	/**
+	 * @param educationalLevelType the educationalLevelType to set
+	 */
+	public void setEducationalLevelType(EducationalLevelType educationalLevelType) {
+		this.educationalLevelType = educationalLevelType;
+	}
+
+    /**
+	 * @param employeeInfo the employeeInfo to set
+	 */
+	public void setEmployeeInfo(EmployeeInfo employeeInfo) {
+		this.employeeInfo = employeeInfo;
+	}
+
+    /**
 	 * @param employments the employments to set
 	 */
 	public void setEmployments(Set<Employment> employments) {
 		this.employments = employments;
+	}
+    
+	/**
+	 * @param exclusion the exclusion to set
+	 */
+	public void setExclusion(EmployeeExclusion exclusion) {
+		this.exclusion = exclusion;
 	}
 
 	/**
@@ -412,10 +498,24 @@ public class Employee extends Person {
 	}
 
 	/**
+	 * @param permanentTransfer the permanentTransfer to set
+	 */
+	public void setPermanentTransfer(Collection<PermanentTransfer> permanentTransfer) {
+		this.permanentTransfer = permanentTransfer;
+	}
+	
+    /**
 	 * @param regularDetail the regularDetail to set
 	 */
 	public void setRegularDetail(RegularEmployeeInfo regularDetail) {
 		this.regularEmployeeInfo = regularDetail;
+	}
+
+	/**
+	 * @param regularEmployeeInfo the regularEmployeeInfo to set
+	 */
+	public void setRegularEmployeeInfo(RegularEmployeeInfo regularEmployeeInfo) {
+		this.regularEmployeeInfo = regularEmployeeInfo;
 	}
 
 	/**
@@ -424,29 +524,72 @@ public class Employee extends Person {
 	public void setSecondments(Collection<Secondment> secondments) {
 		this.secondments = secondments;
 	}
-
-	/**
+    
+    /**
 	 * @param serviceAllocations the serviceAllocations to set
 	 */
 	public void setServiceAllocations(Collection<ServiceAllocation> serviceAllocations) {
 		this.serviceAllocations = serviceAllocations;
 	}
+    
+    /**
+     * @param serviceLastUpdated the serviceLastUpdated to set
+     */
+    public void setServiceLastUpdated(Date serviceLastUpdated) {
+        this.serviceLastUpdated = serviceLastUpdated;
+    }
 
-	/**
+    /**
 	 * @param specialCategory the specialCategory to set
 	 */
 	public void setSpecialCategory(Boolean specialCategory) {
 		this.specialCategory = specialCategory;
 	}
 
-	/**
+    /**
+     * @param terminationDate the terminationDate to set
+     */
+    public void setTerminationDate(Date terminationDate) {
+        this.terminationDate = terminationDate;
+    }
+
+    /**
+     * @param terminationOptionalComment the terminationOptionalComment to set
+     */
+    public void setTerminationOptionalComment(String terminationOptionalComment) {
+        this.terminationOptionalComment = terminationOptionalComment;
+    }
+
+    /**
+     * @param terminationReason the terminationReason to set
+     */
+    public void setTerminationReason(EmployeeTerminationReason terminationReason) {
+        this.terminationReason = terminationReason;
+    }
+
+    /**
 	 * @param type the type to set
 	 */
 	public void setType(EmployeeType type) {
 		this.type = type;
 	}
 
-	public String toPrettyString() {
+    /**
+     * @param workExperience the workExperience to set
+     */
+    public void setWorkExperience(Collection<WorkExperience> workExperience) {
+        this.workExperience = workExperience;
+    }
+
+    /**
+	 * @param οutstandingImprovement the οutstandingImprovement to set
+	 */
+	public void setΟutstandingImprovement(
+			Collection<OutstandingImprovement> οutstandingImprovement) {
+		this.οutstandingImprovement = οutstandingImprovement;
+	}
+
+    public String toPrettyString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append(getLastName());
 		sb.append(" ");
@@ -456,6 +599,9 @@ public class Employee extends Person {
 		return sb.toString();
 	}
 
+	
+	
+	
 	/**
 	 * @see java.lang.Object#toString()
 	 */
@@ -476,235 +622,6 @@ public class Employee extends Person {
 		sb.append(" )");
 		sb.append(" ]");
 		return sb.toString();
-	}
-
-	/**
-	 * @return the exclusion
-	 */
-	public EmployeeExclusion getExclusion() {
-		return exclusion;
-	}
-
-	/**
-	 * @param exclusion the exclusion to set
-	 */
-	public void setExclusion(EmployeeExclusion exclusion) {
-		this.exclusion = exclusion;
-	}
-
-	/**
-	 * @return the disposals
-	 */
-	protected Collection<Disposal> getDisposals() {
-		return disposals;
-	}
-
-	/**
-	 * @param disposals the disposals to set
-	 */
-	protected void setDisposals(Collection<Disposal> disposals) {
-		this.disposals = disposals;
-	}
-
-    /**
-     * @return the workExperience
-     */
-    public Collection<WorkExperience> getWorkExperience() {
-        return workExperience;
-    }
-
-    /**
-     * @param workExperience the workExperience to set
-     */
-    public void setWorkExperience(Collection<WorkExperience> workExperience) {
-        this.workExperience = workExperience;
-    }
-    
-	/**
-	 * @return the οutstandingImprovement
-	 */
-	public Collection<OutstandingImprovement> getΟutstandingImprovement() {
-		return οutstandingImprovement;
-	}
-
-	/**
-	 * @param οutstandingImprovement the οutstandingImprovement to set
-	 */
-	public void setΟutstandingImprovement(
-			Collection<OutstandingImprovement> οutstandingImprovement) {
-		this.οutstandingImprovement = οutstandingImprovement;
-	}
-
-	/**
-	 * @return the permanentTransfer
-	 */
-	public Collection<PermanentTransfer> getPermanentTransfer() {
-		return permanentTransfer;
-	}
-
-	/**
-	 * @param permanentTransfer the permanentTransfer to set
-	 */
-	public void setPermanentTransfer(Collection<PermanentTransfer> permanentTransfer) {
-		this.permanentTransfer = permanentTransfer;
-	}
-
-	/**
-	 * @return the employeeInfo
-	 */
-	public EmployeeInfo getEmployeeInfo() {
-		return employeeInfo;
-	}
-
-	/**
-	 * @param employeeInfo the employeeInfo to set
-	 */
-	public void setEmployeeInfo(EmployeeInfo employeeInfo) {
-		this.employeeInfo = employeeInfo;
-	}
-	
-    /**
-	 * @return the regularEmployeeInfo
-	 */
-	public RegularEmployeeInfo getRegularEmployeeInfo() {
-		return regularEmployeeInfo;
-	}
-
-	/**
-	 * @param regularEmployeeInfo the regularEmployeeInfo to set
-	 */
-	public void setRegularEmployeeInfo(RegularEmployeeInfo regularEmployeeInfo) {
-		this.regularEmployeeInfo = regularEmployeeInfo;
-	}
-
-	public boolean isRegularEmployee() {
-        return type==EmployeeType.REGULAR;
-    }
-    
-    public boolean isDeputyEmployee() {
-        return type==EmployeeType.DEPUTY;
-    }
-    
-    public boolean isHourlyPaidEmployee() {
-        return type==EmployeeType.HOURLYPAID;
-    }
-
-    /**
-     * @return the serviceLastUpdated
-     */
-    public Date getServiceLastUpdated() {
-        return serviceLastUpdated;
-    }
-
-    /**
-     * @param serviceLastUpdated the serviceLastUpdated to set
-     */
-    public void setServiceLastUpdated(Date serviceLastUpdated) {
-        this.serviceLastUpdated = serviceLastUpdated;
-    }
-
-    /**
-     * @return the terminationDate
-     */
-    public Date getTerminationDate() {
-        return terminationDate;
-    }
-
-    /**
-     * @param terminationDate the terminationDate to set
-     */
-    public void setTerminationDate(Date terminationDate) {
-        this.terminationDate = terminationDate;
-    }
-
-    /**
-     * @return the terminationReason
-     */
-    public EmployeeTerminationReason getTerminationReason() {
-        return terminationReason;
-    }
-
-    /**
-     * @param terminationReason the terminationReason to set
-     */
-    public void setTerminationReason(EmployeeTerminationReason terminationReason) {
-        this.terminationReason = terminationReason;
-    }
-
-    /**
-     * @return the terminationOptionalComment
-     */
-    public String getTerminationOptionalComment() {
-        return terminationOptionalComment;
-    }
-
-    /**
-     * @param terminationOptionalComment the terminationOptionalComment to set
-     */
-    public void setTerminationOptionalComment(String terminationOptionalComment) {
-        this.terminationOptionalComment = terminationOptionalComment;
-    }
-
-	/**
-	 * @return the maritalType
-	 */
-	public MaritalStatusType getMaritalType() {
-		return maritalType;
-	}
-
-	/**
-	 * @param maritalType the maritalType to set
-	 */
-	public void setMaritalType(MaritalStatusType maritalType) {
-		this.maritalType = maritalType;
-	}
-
-	/**
-	 * @return the numberOfChildren
-	 */
-	public Integer getNumberOfChildren() {
-		return numberOfChildren;
-	}
-
-	/**
-	 * @param numberOfChildren the numberOfChildren to set
-	 */
-	public void setNumberOfChildren(Integer numberOfChildren) {
-		this.numberOfChildren = numberOfChildren;
-	}
-
-	/**
-	 * @return the ikaId
-	 */
-	public String getIkaId() {
-		return ikaId;
-	}
-
-	/**
-	 * @param ikaId the ikaId to set
-	 */
-	public void setIkaId(String ikaId) {
-		this.ikaId = ikaId;
-	}
-	
-	
-	/**
-	 * Returns, if possible, the employees regular employment school title. This
-	 * operation can be called safely.
-	 * 
-	 * @return The emplouyee's regular employment school title or null
-	 */
-	public String getRegularSchoolTitle() {
-		if(isRegularEmployee()) {
-			Employment em = getCurrentEmployment();
-			if(em != null) {
-				try {
-					return em.getSchool().getTitle();
-				} catch(Exception ex) {
-					return null;
-				}
-			} else return null;
-		} else return null;
 	}
 	
 

@@ -2,7 +2,6 @@ package gr.sch.ira.minoas.model.employee;
 
 import gr.sch.ira.minoas.core.CoreUtils;
 import gr.sch.ira.minoas.model.BaseIDDeleteAwareModel;
-import gr.sch.ira.minoas.model.BaseIDModel;
 import gr.sch.ira.minoas.model.employement.EducationalLevelType;
 
 import java.util.Calendar;
@@ -21,8 +20,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.apache.commons.collections.set.CompositeSet.SetMutator;
-import org.apache.commons.lang.time.DateUtils;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -46,8 +43,6 @@ public class RankInfo extends BaseIDDeleteAwareModel {
 	/**
 	 * Join RankInfo with its previous RankInfo
 	 */
-	//@Basic
-	//@Column(name = "PREVIOUS_RANK_INFO_ID", nullable = true, updatable = true)
 	@OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
 	@JoinColumn(name = "PREVIOUS_RANK_INFO_ID", nullable = true)
 	private RankInfo previousRankInfo;
@@ -205,6 +200,7 @@ public class RankInfo extends BaseIDDeleteAwareModel {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "EDUCATIONAL_LEVEL", nullable = false, updatable = true)
 	private EducationalLevelType educationalLevel;
+	
 
 	/**
 	 * Comments (Σχόλια)
@@ -227,7 +223,7 @@ public class RankInfo extends BaseIDDeleteAwareModel {
 	public void setComments(String comments) {
 		this.comments = comments;
 	}
-
+	
 	/**
 	 * @param rank
 	 * @param salaryGrade
@@ -251,13 +247,12 @@ public class RankInfo extends BaseIDDeleteAwareModel {
 		this.rank = rankInfo.getRank();
 		this.salaryGrade = rankInfo.getSalaryGrade();
 		this.educationalLevel = rankInfo.getEducationalLevel();
-		//this.comments = rankInfo.getComments();
+		this.comments = rankInfo.getComments();
 		this.employeeInfo = rankInfo.getEmployeeInfo();
 		this.lastRankDate = rankInfo.getLastRankDate();
 		this.lastSalaryGradeDate = rankInfo.getLastSalaryGradeDate();
 		this.surplusTimeInRank = rankInfo.getSurplusTimeInRank();
 		this.surplusTimeInSalaryGrade = rankInfo.getSurplusTimeInSalaryGrade();
-
 	}
 
 	/**

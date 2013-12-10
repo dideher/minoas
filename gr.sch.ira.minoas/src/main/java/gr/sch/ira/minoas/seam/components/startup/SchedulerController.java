@@ -1,11 +1,10 @@
 package gr.sch.ira.minoas.seam.components.startup;
 
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
+import gr.sch.ira.minoas.seam.components.async.DailyEmployeeDataUpdaterProcessor;
 import gr.sch.ira.minoas.seam.components.async.DisposalCleanupProcessor;
 import gr.sch.ira.minoas.seam.components.async.LeaveActivactionProcessor;
 import gr.sch.ira.minoas.seam.components.async.LeaveCleanupProcessor;
-import gr.sch.ira.minoas.seam.components.async.RankInfoUpdaterProcessor;
-import gr.sch.ira.minoas.seam.components.async.RegularEmployeeServiceUpdaterProcessor;
 import gr.sch.ira.minoas.seam.components.async.SecondmentActivactionProcessor;
 import gr.sch.ira.minoas.seam.components.async.SecondmentCleanupProcessor;
 import gr.sch.ira.minoas.seam.components.async.ServiceAllocationCleanupProcessor;
@@ -73,11 +72,8 @@ public class SchedulerController extends BaseDatabaseAwareSeamComponent {
     private ServiceAllocationCleanupProcessor serviceAllocationCleanupProcessor;
     
     
-    @In(create=true, value="regularEmployeeServiceUpdaterProcessor")
-    private RegularEmployeeServiceUpdaterProcessor regularEmployeeServiceUpdaterProcessor;
-    
-    @In(create=true, value="rankInfoUpdaterProcessor")
-    private RankInfoUpdaterProcessor rankInfoUpdaterProcessor;
+    @In(create=true, value="dailyEmployeeDataUpdaterProcessor")
+    private DailyEmployeeDataUpdaterProcessor dailyEmployeeDataUpdaterProcessor;
     
     @In(create=true, value="basicUsageReport")
     private BasicUsageReport basicUsageReportProcessor;
@@ -90,8 +86,7 @@ public class SchedulerController extends BaseDatabaseAwareSeamComponent {
     private QuartzTriggerHandle secondmentActivationProcessorHandler;
     //private QuartzTriggerHandle serviceAllocationActivationProcessorHandler;
     //private QuartzTriggerHandle disposalActivationProcessorHandler;
-    private QuartzTriggerHandle regularEmployeeServiceUpdaterProcessorHandler;
-    private QuartzTriggerHandle rankInfoUpdaterProcessorHandler;
+    private QuartzTriggerHandle dailyEmployeeDataUpdaterProcessorHandler;
     private QuartzTriggerHandle basicUsageReportProcessorHandler;
     
     
@@ -148,14 +143,9 @@ public class SchedulerController extends BaseDatabaseAwareSeamComponent {
 	            info("scheduled #0", basicUsageReportProcessorHandler.getTrigger().getFullName());
 	        }
 	        
-	        if(regularEmployeeServiceUpdaterProcessor!=null) {
-	            regularEmployeeServiceUpdaterProcessorHandler = regularEmployeeServiceUpdaterProcessor.schedule(new Date(), REGULAR_EMPLOYEE_SERVICE_SYNC_INTERVAL, null);
-	            info("scheduled #0", regularEmployeeServiceUpdaterProcessorHandler.getTrigger().getFullName());
-	        }
-        
-	        if(rankInfoUpdaterProcessor!=null) {
-	        	rankInfoUpdaterProcessorHandler = rankInfoUpdaterProcessor.schedule(new Date(), RANK_INFO_SYNC_INTERVAL, null);
-	            info("scheduled #0", rankInfoUpdaterProcessorHandler.getTrigger().getFullName());
+	        if(dailyEmployeeDataUpdaterProcessor!=null) {
+	            dailyEmployeeDataUpdaterProcessorHandler = dailyEmployeeDataUpdaterProcessor.schedule(new Date(), REGULAR_EMPLOYEE_SERVICE_SYNC_INTERVAL, null);
+	            info("scheduled #0", dailyEmployeeDataUpdaterProcessorHandler.getTrigger().getFullName());
 	        }
         
         } catch(Exception ex) {

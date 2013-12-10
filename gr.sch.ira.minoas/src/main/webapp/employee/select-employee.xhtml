@@ -95,10 +95,9 @@
 										<h:outputText value="Τύπος Εκπαιδευτικού : " />
 									</ui:define>
 									<h:selectOneMenu value="#{employeeCriteria.type}">
-										<f:selectItem itemValue="#{null}" itemLabel="Όλοι Οι Tύποι" />
-										<s:enumItem enumValue="DEPUTY" itemLabel="Αναπληρωτής"></s:enumItem>
-										<s:enumItem enumValue="HOURLYPAID" itemLabel="Ωρομίσθιος"></s:enumItem>
-										<s:enumItem enumValue="REGULAR" itemLabel="Μόνιμος"></s:enumItem>
+										<s:selectItems hideNoSelectionLabel="true" var="_employeeType" noSelectionLabel="Όλοι Οι Tύποι"
+											value="#{employeeTypes}" label="#{messages[_employeeType.key]}" />
+										<s:convertEnum />
 									</h:selectOneMenu>
 								</s:decorate>
 

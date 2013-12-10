@@ -102,8 +102,7 @@ public class EmployeeInfo extends BaseIDModel {
 	/**
 	 * Rank Information (Στοιχεία Βαθμού και Μισθολογικού Κλιμακίου)
 	 */
-	@OneToMany(mappedBy="employeeInfo")
-	//private RankInfo rankInfo;
+	@OneToMany(mappedBy="employeeInfo", fetch=FetchType.LAZY, cascade={CascadeType.ALL})
 	private Collection<RankInfo> rankInfos = new ArrayList<RankInfo>();
 	
 	
@@ -171,8 +170,7 @@ public class EmployeeInfo extends BaseIDModel {
 		this.sumOfExperience = 0;
 		this.totalWorkService = 0;
 	}
-
-
+	
 	/**
 	 * @param employee
 	 * @param gogAppointmentNo
@@ -217,6 +215,33 @@ public class EmployeeInfo extends BaseIDModel {
 
 
 	/**
+	 * Constructor to be used when cloning an EmployeeInfo. Note, the cloning is simple and no
+	 * complex referenced beans are cloned as well.
+	 * @param i
+	 */
+	public EmployeeInfo(EmployeeInfo i) {
+		super();
+		if(i != null) {
+			this.setId(i.getId());
+			this.hasAMasterDegree = i.getHasAMasterDegree();
+			this.mscDate = i.getMscDate();
+			this.hasAPhD = i.getHasAPhD();
+			this.phdDate = i.getPhdDate();
+			this.isANatSchPubAdminGraduate = i.getIsANatSchPubAdminGraduate();
+			this.natSchPubAdminDate = i.getNatSchPubAdminDate();
+			this.sector = i.getSector();
+			this.sumOfEducationalExperience = i.getSumOfEducationalExperience();
+			this.sumOfTeachingExperience = i.getSumOfTeachingExperience();
+			this.sumOfExperience = i.getSumOfExperience();
+			this.totalWorkService = i.getTotalWorkService();
+			this.sumOfDaysDuringUnpaidLeaves = i.getSumOfDaysDuringUnpaidLeaves();
+			this.setInsertedBy(i.getInsertedBy());
+			this.setInsertedOn(i.getInsertedOn());
+		}
+	}
+
+
+	/**
 	 * @return the currentRankInfo
 	 */
 	public RankInfo getCurrentRankInfo() {
@@ -247,26 +272,12 @@ public class EmployeeInfo extends BaseIDModel {
 
 	
 	/**
-	 * @return the rankInfos
-	 */
-	public Collection<RankInfo> getNonDeletedRankInfos() {
-		Collection<RankInfo> nonDeletedRankInfos = new ArrayList<RankInfo>();
-		for (Iterator<RankInfo> iter = rankInfos.iterator(); iter.hasNext();) {
-			RankInfo rInfo = (RankInfo) iter.next();
-			if(rInfo!= null && (rInfo.getDeleted()== null || !rInfo.getDeleted())) {
-				nonDeletedRankInfos.add(rInfo);
-			}
-		}
-		return nonDeletedRankInfos;
-	}
-	
-
-	/**
 	 * @return the isANatSchPubAdminGraduate
 	 */
 	public Boolean getIsANatSchPubAdminGraduate() {
 		return isANatSchPubAdminGraduate;
 	}
+	
 
 	/**
 	 * @return the mscDate
@@ -280,6 +291,20 @@ public class EmployeeInfo extends BaseIDModel {
 	 */
 	public Date getNatSchPubAdminDate() {
 		return natSchPubAdminDate;
+	}
+
+	/**
+	 * @return the rankInfos
+	 */
+	public Collection<RankInfo> getNonDeletedRankInfos() {
+		Collection<RankInfo> nonDeletedRankInfos = new ArrayList<RankInfo>();
+		for (Iterator<RankInfo> iter = rankInfos.iterator(); iter.hasNext();) {
+			RankInfo rInfo = (RankInfo) iter.next();
+			if(rInfo!= null && (rInfo.getDeleted()== null || !rInfo.getDeleted())) {
+				nonDeletedRankInfos.add(rInfo);
+			}
+		}
+		return nonDeletedRankInfos;
 	}
 
 	/**

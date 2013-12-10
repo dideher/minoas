@@ -9,13 +9,11 @@ import gr.sch.ira.minoas.seam.components.WorkExperienceCalculation;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.ResourceBundle;
 
 import javax.faces.context.FacesContext;
 
 import org.apache.commons.lang.time.DateUtils;
-import org.jboss.seam.annotations.In;
 import org.jboss.seam.core.SeamResourceBundle;
 
 /**
@@ -348,6 +346,7 @@ public abstract class CoreUtils {
 		// Πάρε τον πλεονάζοντα χρόνο στον ΒΑΘΜΟ
 		Integer ExcessTimeInRank = (currentRankInfo.getSurplusTimeInRankUntilToday()+1) - unPaidDays;
 		RankInfo newRankInfo = new RankInfo(currentRankInfo); 
+		newRankInfo.setComments(null);
 		switch (newRankInfo.getEducationalLevel()) {
 			case UNIVERSITY_EDUCATION_LEVEL:
 				switch(newRankInfo.getRank()) {

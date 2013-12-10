@@ -86,7 +86,9 @@ public class EmploymentReport extends BaseReport {
 			parameters.put("EMPLOYMENT_SCHOOL_REGION_FILTER", employmentCriteria.getRegion() + " ΗΡΑΚΛΕΙΟΥ");
 		else
 			parameters.put("EMPLOYMENT_SCHOOL_REGION_FILTER", "Όλες οι Περιοχές");
-		parameters.put("EMPLOYMENT_SCHOOL_YEAR_FILTER", employmentCriteria.getSchoolYear().getDescription());
+		
+		if (employmentCriteria.getSchoolYear() != null)
+			parameters.put("EMPLOYMENT_SCHOOL_YEAR_FILTER", employmentCriteria.getSchoolYear().getDescription());
 
 		/* create the leave type helper */
 		for (EmployeeType employeeType : getCoreSearching().getEmployeeTypes()) {
@@ -99,6 +101,10 @@ public class EmploymentReport extends BaseReport {
 	public void generatePDFReport() throws Exception {
 		try {
 			Map<String, Object> parameters = constructReportParameters();
+			if(reportData == null || reportData.size() == 0)
+				throw new Exception("Πρέπει πρώτα να πραγματοποιήσετε κάποια αναζήτηση για να την εκτυπώσετε στην συνέχεια!");
+				//generateReport();
+			
 			JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(reportData);
 			byte[] bytes = null;
 			try {
