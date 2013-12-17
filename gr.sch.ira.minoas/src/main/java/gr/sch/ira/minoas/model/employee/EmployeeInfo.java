@@ -124,6 +124,19 @@ public class EmployeeInfo extends BaseIDModel {
 	@Column(name = "SUM_OF_UNPAID_LEAVES", nullable=true)
 	private Integer sumOfDaysDuringUnpaidLeaves;
 	
+	@Basic
+	@Column(name = "SUM_OF_UNPAID_LEAVES2", nullable=true)
+	private Integer sumOfDaysDuringUnpaidLeaves2;
+	
+	public Integer getSumOfDaysDuringUnpaidLeaves2() {
+		return sumOfDaysDuringUnpaidLeaves2;
+	}
+
+	public void setSumOfDaysDuringUnpaidLeaves2(Integer sumOfDaysDuringUnpaidLeaves2) {
+		this.sumOfDaysDuringUnpaidLeaves2 = sumOfDaysDuringUnpaidLeaves2;
+	}
+
+
 	/**
 	 * Sum of Educational Experience (Άθροισμα Εκπαιδευτικής Προϋπηρεσίας)
 	 */
