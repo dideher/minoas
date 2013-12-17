@@ -9,6 +9,7 @@ import gr.sch.ira.minoas.model.employee.RegularEmployeeInfo;
 import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 import gr.sch.ira.minoas.model.employement.Employment;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
@@ -279,8 +280,133 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
 			return null;
 	}
 
+	public Integer calculateEmployeeUnPaidDays2(Employee employee,
+			Date dateFrom, Date dateTo) {
+		
+		int totalDaysWithoutPayment = 0; // ημέρες άδειας χωρίς αποδοχές
+		
+		
+		List<String> legacyCodes = Arrays.asList("32", "33", "34", "44");
+		
+		// fetch all employees leave
+		Collection<EmployeeLeave> tempLeaves = coreSearching.getEmployeeLeaves2(
+				employee, dateFrom, dateTo);
+		
+		// filter all leaves with the codes we are interested in
+		Collection<EmployeeLeave> leaves = new ArrayList<EmployeeLeave>();
+		for (EmployeeLeave leave : tempLeaves) {
+			String legacyCode = leave.getEmployeeLeaveType().getLegacyCode();
+			if (legacyCodes.contains(legacyCode)) {
+				/* this is a leave which we need to take into account */
+				
+				// deatach the leave and adjust if needed
+				entityManager.detach(leave);
+				
+				if(leave.getDueTo().before(dateFrom) || leave.getEstablished().after(dateTo)) {
+					// leave ends before dateFrom or leave starts after dateTo
+					continue;
+				}
+				
+				
+				if(leave.getEstablished().before(dateFrom) && leave.getDueTo().after(dateFrom)) {
+					// leave starts before dateFrom but ends within our period of interest
+					leave.setEstablished(dateFrom);
+				}
+				
+				if(leave.getEstablished().before(dateTo) && leave.getDueTo().after(dateTo)) {
+					// leave starts before dateTo but ends out of our period
+					leave.setDueTo(dateTo);
+				}
+				
+				// we need to make adjustments here
+				leaves.add(leave);
+			}
+		}
+		
+		/*
+		 * Interate over the employee's leaves (of the given type) and construct
+		 * a hash with key the leave's year and value the sum of leave days (360
+		 * per year) during this year. Take extra care for leaves spanning
+		 * across several years.
+		 */
+		Map<Integer, Integer> daysOfLeavePerYearHash = new HashMap<Integer, Integer>();
+		for (EmployeeLeave leave : leaves) {
+			
+			
+			Calendar leaveStart = DateUtils.toCalendar(leave.getEstablished());
+			Calendar leaveStop = DateUtils.toCalendar(leave.getDueTo());
+			
+			int leaveYearStart = leaveStart.get(Calendar.YEAR);
+			int leaveYearStop = leaveStop.get(Calendar.YEAR);
+			
+			if (leaveYearStop - leaveYearStart == 0) {
+				// simple case, leave starts and ends within the year
+				Integer durationInYear = daysOfLeavePerYearHash.containsKey(leaveYearStart) ? daysOfLeavePerYearHash.get(leaveYearStart) : 0;
+				durationInYear += CoreUtils.datesDifferenceIn360DaysYear(leave.getEstablished(), leave.getDueTo(), true);
+				daysOfLeavePerYearHash.put(leaveYearStart, durationInYear);
+			} else {
+				// more complex case, leave spawns across years
+				Date tempLeaveStart = null;
+				Date tempLeaveEnd = null;
+				for(int yearIndex = leaveYearStart ; yearIndex <= leaveYearStop ; yearIndex++) {
+					if(yearIndex == leaveYearStart) {
+						// heading of leave
+						tempLeaveStart = leave.getEstablished();
+						
+						// set cal to last day of current year
+						Calendar tempCal = Calendar.getInstance();
+						tempCal.set(Calendar.DAY_OF_MONTH, 31);
+						tempCal.set(Calendar.MONTH, Calendar.DECEMBER);
+						tempCal.set(Calendar.YEAR, yearIndex);
+						tempLeaveEnd = tempCal.getTime();
+						
+					} else if(yearIndex == leaveYearStop) {
+						// trailing end of leave
+						tempLeaveEnd = leave.getDueTo();
+						
+						// set cal to first day of current year
+						Calendar tempCal = Calendar.getInstance();
+						tempCal.set(Calendar.DAY_OF_MONTH, 1);
+						tempCal.set(Calendar.MONTH, Calendar.JANUARY);
+						tempCal.set(Calendar.YEAR, yearIndex);
+						tempLeaveStart = tempCal.getTime();
+						
+					} else {
+						// full year
+						Calendar tempCal = Calendar.getInstance();
+						tempCal.set(Calendar.DAY_OF_MONTH, 1);
+						tempCal.set(Calendar.MONTH, Calendar.JANUARY);
+						tempCal.set(Calendar.YEAR, yearIndex);
+						tempLeaveStart = tempCal.getTime();
+						
+						tempCal.set(Calendar.DAY_OF_MONTH, 31);
+						tempCal.set(Calendar.MONTH, Calendar.DECEMBER);
+						tempCal.set(Calendar.YEAR, yearIndex);
+						tempLeaveEnd = tempCal.getTime();
+						
+					}
+					
+					// update days in hash
+					Integer durationInYear = daysOfLeavePerYearHash.containsKey(yearIndex) ? daysOfLeavePerYearHash.get(yearIndex) : 0;
+					durationInYear += CoreUtils.datesDifferenceIn360DaysYear(tempLeaveStart, tempLeaveEnd, true);
+					daysOfLeavePerYearHash.put(yearIndex, durationInYear);
+					
+				}
+			}
+		}
+		
+		for (Integer year : daysOfLeavePerYearHash.keySet()) {
+			Integer _duration = daysOfLeavePerYearHash.get(year);
+			totalDaysWithoutPayment += _duration > 30 ? _duration - 30 : 0;
+		}
+		System.err.println(daysOfLeavePerYearHash);
+		System.err.println(totalDaysWithoutPayment);
+		return totalDaysWithoutPayment;
+		
+	}
 	public Integer calculateEmployeeUnPaidDays(Employee employee,
 			Date dateFrom, Date dateTo) {
+		
 		List<String> legacyCodes = Arrays.asList("32", "33", "34", "44");
 
 		// Calendar cal = Calendar.getInstance();
@@ -308,17 +434,17 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
 			daysToTrim = 0;
 			String legacyCode = leave.getEmployeeLeaveType().getLegacyCode();
 			if (legacyCodes.contains(legacyCode)) {
-				// System.err.println(leave);
+				System.err.println(leave);
 				if (leave.getEstablished().before(dateFrom)) {
 					daysToTrim += CoreUtils.datesDifferenceIn360DaysYear(
 							leave.getEstablished(), dateFrom);
-					//System.err.println(daysToTrim);
+					System.err.println(daysToTrim);
 				}
 
 				if (leave.getDueTo().after(dateTo)) {
 					daysToTrim += CoreUtils.datesDifferenceIn360DaysYear(
 							dateTo, leave.getDueTo());
-					//System.err.println(daysToTrim);
+					System.err.println(daysToTrim);
 				}
 
 				Calendar leaveStart = Calendar.getInstance();
@@ -394,7 +520,7 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
 				}
 			}
 		}
-		// System.err.println(daysOfLeavePerYearHash);
+		System.err.println(daysOfLeavePerYearHash);
 		/*
 		 * at this point we have a Map with duration in days for each year. We
 		 * will iterate over the years and deduct 30 days for each year
@@ -404,8 +530,8 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
 			Integer _duration = daysOfLeavePerYearHash.get(year);
 			totalDaysWithoutPayment += _duration > 30 ? _duration - 30 : 0;
 		}
-		//System.err.println(daysOfLeavePerYearHash);
-		//System.err.println(totalDaysWithoutPayment);
+		System.err.println(daysOfLeavePerYearHash);
+		System.err.println(totalDaysWithoutPayment);
 		return totalDaysWithoutPayment - daysToTrim;
 	}
 
