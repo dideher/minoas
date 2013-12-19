@@ -79,7 +79,7 @@ public class DailyEmployeeDataUpdaterProcessor extends BaseDatabaseAwareSeamComp
 	       rankInfoCalculation.recalculateRankInfo(employee);
 	        
 	        employee.setServiceLastUpdated(new Date());
-            if(count++>50) {
+            if(count++>100) {
                 info("updated work experience and RankInfo calculations for #0 employees, bailing out.", count);
                 break;
             }	        
