@@ -311,27 +311,27 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
 			if (legacyCodes.contains(legacyCode)) {
 				/* this is a leave which we need to take into account */
 				
-				// deatach the leave and adjust if needed
-				entityManager.detach(leave);
+				EmployeeLeave deattachedLeave = new EmployeeLeave(leave);
 				
-				if(leave.getDueTo().before(dateFrom) || leave.getEstablished().after(dateTo)) {
+				
+				if(deattachedLeave.getDueTo().before(dateFrom) || deattachedLeave.getEstablished().after(dateTo)) {
 					// leave ends before dateFrom or leave starts after dateTo
 					continue;
 				}
 				
 				
-				if(leave.getEstablished().before(dateFrom) && leave.getDueTo().after(dateFrom)) {
+				if(deattachedLeave.getEstablished().before(dateFrom) && deattachedLeave.getDueTo().after(dateFrom)) {
 					// leave starts before dateFrom but ends within our period of interest
-					leave.setEstablished(dateFrom);
+					deattachedLeave.setEstablished(dateFrom);
 				}
 				
-				if(leave.getEstablished().before(dateTo) && leave.getDueTo().after(dateTo)) {
+				if(deattachedLeave.getEstablished().before(dateTo) && deattachedLeave.getDueTo().after(dateTo)) {
 					// leave starts before dateTo but ends out of our period
-					leave.setDueTo(dateTo);
+					deattachedLeave.setDueTo(dateTo);
 				}
 				
 				// we need to make adjustments here
-				leaves.add(leave);
+				leaves.add(deattachedLeave);
 			}
 		}
 		
@@ -447,6 +447,7 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
 			String legacyCode = leave.getEmployeeLeaveType().getLegacyCode();
 			if (legacyCodes.contains(legacyCode)) {
 				System.err.println(leave);
+				
 				if (leave.getEstablished().before(dateFrom)) {
 					daysToTrim += CoreUtils.datesDifferenceIn360DaysYear(
 							leave.getEstablished(), dateFrom);
