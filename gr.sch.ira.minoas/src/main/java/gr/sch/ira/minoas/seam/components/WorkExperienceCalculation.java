@@ -280,7 +280,7 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
 			return null;
 	}
 
-	public Integer calculateEmployeeUnPaidDays2(Employee employee,
+	public Integer calculateEmployeeUnPaidDays(Employee employee,
 			Date dateFrom, Date dateTo) {
 		
 		int totalDaysWithoutPayment = 0; // ημέρες άδειας χωρίς αποδοχές
@@ -404,137 +404,7 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
 		return totalDaysWithoutPayment;
 		
 	}
-	public Integer calculateEmployeeUnPaidDays(Employee employee,
-			Date dateFrom, Date dateTo) {
-		
-		List<String> legacyCodes = Arrays.asList("32", "33", "34", "44");
-
-		// Calendar cal = Calendar.getInstance();
-		// cal.set(Calendar.DAY_OF_MONTH, 01);
-		// cal.set(Calendar.MONTH, Calendar.NOVEMBER);
-		// cal.set(Calendar.YEAR, 2011);
-		//
-		// dateFrom = DateUtils.truncate(cal.getTime(), Calendar.DAY_OF_MONTH);
-
-		Collection<EmployeeLeave> leaves = coreSearching.getEmployeeLeaves2(
-				employee, dateFrom, dateTo);
-		
-		/*
-		 * Interate over the employee's leaves (of the given type) and construct
-		 * a hash with key the leave's year and value the sum of leave days (360
-		 * per year) during this year. Take extra care for leaves spanning
-		 * across several years.
-		 */
-		Map<Integer, Integer> daysOfLeavePerYearHash = new HashMap<Integer, Integer>();
-		int duration = 0;
-		int daysToTrim = 0; // we use the variable to store the number of days needed to trim from an leave (ie a leave which is due to in the past)
-		for (EmployeeLeave leave : leaves) {
-			
-			duration = 0;
-			daysToTrim = 0;
-			String legacyCode = leave.getEmployeeLeaveType().getLegacyCode();
-			if (legacyCodes.contains(legacyCode)) {
-				System.err.println(leave);
-				
-				if (leave.getEstablished().before(dateFrom)) {
-					daysToTrim += CoreUtils.datesDifferenceIn360DaysYear(
-							leave.getEstablished(), dateFrom);
-					System.err.println(daysToTrim);
-				}
-
-				if (leave.getDueTo().after(dateTo)) {
-					daysToTrim += CoreUtils.datesDifferenceIn360DaysYear(
-							dateTo, leave.getDueTo());
-					System.err.println(daysToTrim);
-				}
-
-				Calendar leaveStart = Calendar.getInstance();
-				leaveStart.setTime(leave.getEstablished());
-				Calendar leaveStop = Calendar.getInstance();
-				leaveStop.setTime(leave.getDueTo());
-				int leaveYearStart = leaveStart.get(Calendar.YEAR);
-				int leaveYearStop = leaveStop.get(Calendar.YEAR);
-				if (leaveYearStart != leaveYearStop) {
-					/* leave spans across years */
-					for (int yearIndex = leaveYearStart; yearIndex <= leaveYearStop; yearIndex++) {
-						Calendar tempLeaveStart = Calendar.getInstance();
-						Calendar tempLeaveStop = Calendar.getInstance();
-						if (leaveYearStart == yearIndex) {
-							/*
-							 * this is the section of the leave within the start
-							 * year
-							 */
-							tempLeaveStart.setTime(leave.getEstablished());
-							tempLeaveStop.set(Calendar.DAY_OF_MONTH, 31);
-							tempLeaveStop
-									.set(Calendar.MONTH, Calendar.DECEMBER);
-							tempLeaveStop.set(Calendar.YEAR, yearIndex);
-
-						} else if (leaveYearStop == yearIndex) {
-							/*
-							 * this is the section of the leave during the stop
-							 * year
-							 */
-							tempLeaveStart.set(Calendar.DAY_OF_MONTH, 1);
-							tempLeaveStart
-									.set(Calendar.MONTH, Calendar.JANUARY);
-							tempLeaveStart.set(Calendar.YEAR, yearIndex);
-							tempLeaveStop.setTime(leave.getDueTo());
-						} else {
-							/*
-							 * this is the section of the leave not during the
-							 * start or end year
-							 */
-							tempLeaveStart.set(Calendar.DAY_OF_MONTH, 1);
-							tempLeaveStart
-									.set(Calendar.MONTH, Calendar.JANUARY);
-							tempLeaveStart.set(Calendar.YEAR, yearIndex);
-							tempLeaveStop.set(Calendar.DAY_OF_MONTH, 31);
-							tempLeaveStop
-									.set(Calendar.MONTH, Calendar.DECEMBER);
-							tempLeaveStop.set(Calendar.YEAR, yearIndex);
-						}
-
-						duration = CoreUtils.datesDifferenceIn360DaysYear(
-								tempLeaveStart.getTime(),
-								tempLeaveStop.getTime(), true);
-						}
-
-				} else {
-					/* leave does not span across years */
-					duration = CoreUtils.datesDifferenceIn360DaysYear(
-							leaveStart.getTime(), leaveStop.getTime(), true);
-					
-				}
-				
-				/* from the duration of the leave, trim days if required */
-				duration = duration - daysToTrim;
-				
-				
-				Integer currentYearDuration = daysOfLeavePerYearHash
-						.get(leaveYearStart);
-				if (currentYearDuration == null) {
-					daysOfLeavePerYearHash.put(leaveYearStart, duration);
-				} else {
-					daysOfLeavePerYearHash.put(leaveYearStart,
-							currentYearDuration + duration);
-				}
-			}
-		}
-		System.err.println(daysOfLeavePerYearHash);
-		/*
-		 * at this point we have a Map with duration in days for each year. We
-		 * will iterate over the years and deduct 30 days for each year
-		 */
-		int totalDaysWithoutPayment = 0; // ημέρες άδειας χωρίς αποδοχές
-		for (Integer year : daysOfLeavePerYearHash.keySet()) {
-			Integer _duration = daysOfLeavePerYearHash.get(year);
-			totalDaysWithoutPayment += _duration > 30 ? _duration - 30 : 0;
-		}
-		System.err.println(daysOfLeavePerYearHash);
-		System.err.println(totalDaysWithoutPayment);
-		return totalDaysWithoutPayment - daysToTrim;
-	}
+	
 
 	/**
 	 * Calculates an employee's regular service
