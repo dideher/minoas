@@ -57,36 +57,34 @@ public class DailyEmployeeDataUpdaterProcessor extends BaseDatabaseAwareSeamComp
             @FinalExpiration Date endDate) {
 	    Date today = new Date();
 	    info("We will update regular employee's service as of today (#0)", today);
-	    int count = 0;
 	    Calendar cal = Calendar.getInstance();
 	    cal.add(Calendar.DAY_OF_MONTH, -1);
 	    
-	    List<Integer> employeeIDs = getEntityManager().createQuery("SELECT e.id FROM Employee e INNER JOIN e.employeeInfo WHERE e.type=:employeeType AND e.active IS TRUE AND (e.serviceLastUpdated IS NULL or e.serviceLastUpdated<:lastUpdated)")
-                .setParameter("employeeType", EmployeeType.REGULAR).setParameter("lastUpdated", cal.getTime()).getResultList();
+	    @SuppressWarnings("unchecked")
+		List<Integer> employeeIDs = getEntityManager().createQuery("SELECT e.id FROM Employee e INNER JOIN e.employeeInfo WHERE e.type=:employeeType AND e.active IS TRUE AND (e.serviceLastUpdated IS NULL or e.serviceLastUpdated<:lastUpdated)")
+                .setParameter("employeeType", EmployeeType.REGULAR).setParameter("lastUpdated", cal.getTime()).setMaxResults(100).getResultList();
 	    
 	   info("found totally '#0' active regular employees whose work experience and RankInfo we will update.", employeeIDs.size());
+	   int count = 0;
 	    for(Integer employeeID : employeeIDs) {
-	        Employee employee = getEntityManager().find(Employee.class, employeeID);
+	    	Employee employee = getEntityManager().find(Employee.class, employeeID);
 	        try {
 	            workExperienceCalculation.updateEmployeeExperience(getEntityManager().find(Employee.class, employeeID));
 	            
 	        } catch(Exception ex) {
 	            error(String.format("failed to update regular employee '%s' service due to an exception.", employee), ex);
+	            continue; 
 	        }
 	        
 	        
 	        //	Try to re-calculate the RankInfo for this employee. Maybe he needs to change Rank or SalaryGrade.
 	       rankInfoCalculation.recalculateRankInfo(employee);
 	        
-	        employee.setServiceLastUpdated(new Date());
-            if(count++>100) {
-                info("updated work experience and RankInfo calculations for #0 employees, bailing out.", count);
-                break;
-            }	        
-	        
-	    }
+	       employee.setServiceLastUpdated(new Date());
+	       count++;
+        }
 	    getEntityManager().flush();
-	    info("finished !");
+	    info(String.format("updated totally '%d' regular employees experience(s) and RankInfo(s) !", count));
 	    return null;
 	}
 }
