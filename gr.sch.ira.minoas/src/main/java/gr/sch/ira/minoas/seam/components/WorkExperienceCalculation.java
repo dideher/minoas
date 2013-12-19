@@ -64,18 +64,6 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
 		 * Συνολικός αριθμός ημερών σε άδεια ανεύ αποδοχών
 		 */
 		Integer totalUnpaidDays;
-		
-		/* temp and will be removed */
-		Integer totalUnpaidDays2;
-	
-
-		public Integer getTotalUnpaidDays2() {
-			return totalUnpaidDays2;
-		}
-
-		public void setTotalUnpaidDays2(Integer totalUnpaidDays2) {
-			this.totalUnpaidDays2 = totalUnpaidDays2;
-		}
 
 		public Integer getTotalUnpaidDays() {
 			return totalUnpaidDays;
@@ -580,12 +568,6 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
 		int totalDaysWithoutPayment = calculateEmployeeUnPaidDays(employee,
 				dateFrom, dateTo);
 		/* gh-75 - handle employee leaves */
-		
-		/* test - will be removed */
-		int totalDaysWithoutPayment2 = calculateEmployeeUnPaidDays2(employee,
-				dateFrom, dateTo);
-		/* test - will be removed */
-		
 
 		/* prepare the return value */
 		int totalServiceInDays = totalServiceRaw
@@ -596,9 +578,6 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
 		returnValue.setTotalServiceInDaysRaw(totalServiceRaw);
 		returnValue.setTotalPenaltyDays(totalPenaltyDays);
 		returnValue.setTotalUnpaidDays(totalDaysWithoutPayment);
-		/* temp - will be removed */
-		returnValue.setTotalUnpaidDays2(totalDaysWithoutPayment2);
-		/* temp - will be removed */
 		return returnValue;
 	}
 
@@ -621,11 +600,6 @@ public class WorkExperienceCalculation extends BaseDatabaseAwareSeamComponent {
 					.getTotalServiceInDays());
 			employeeInfo.setSumOfDaysDuringUnpaidLeaves(serviceHelper
 					.getTotalUnpaidDays());
-			/* temp - will be removed */
-			employeeInfo.setSumOfDaysDuringUnpaidLeaves2(serviceHelper
-					.getTotalUnpaidDays2());
-			/* temp - will be removed */
-			
 
 			/* handle working hours */
 			Employment currentEmployment = employee.getCurrentEmployment();
