@@ -10,6 +10,7 @@ import gr.sch.ira.minoas.model.employement.Employment;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
 import gr.sch.ira.minoas.seam.components.CoreSearching;
 import gr.sch.ira.minoas.seam.components.RankInfoCalculation;
+import gr.sch.ira.minoas.seam.components.WorkExperienceCalculation;
 import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
 import gr.sch.ira.minoas.seam.components.home.EmployeeInfoHome;
 import gr.sch.ira.minoas.seam.components.home.RankInfoHome;
@@ -57,6 +58,10 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 	
 	@In(required=true, create=true)
 	private RankInfoCalculation rankInfoCalculation;
+	
+	@In(required=true, create=true)
+	private WorkExperienceCalculation workExperienceCalculation;
+	
 	
 	private Date totalWorkServiceCalculationDate;
 	private int totalCalculatedServiceInDays;
@@ -440,10 +445,16 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 			int totalWorkService = 0;
 			if (totalWorkServiceCalculationDate != null
 					&& regularEmployeeInfo.getAppointmentGOGDate() != null)
+
+				//	Calculate date difference in a 360 days year adding the sum of experience
 				totalWorkService = CoreUtils.datesDifferenceIn360DaysYear(
 						employment.getEntryIntoServiceDate(),
-						totalWorkServiceCalculationDate)
+						totalWorkServiceCalculationDate, true)
 						+ getSumOfExperience();
+
+				//	Subtract the number of unpaid days from that period.
+				totalWorkService -= workExperienceCalculation.calculateEmployeeUnPaidDays(employee, employment.getEntryIntoServiceDate(), totalWorkServiceCalculationDate);
+			
 			if (totalWorkService != 0)
 				setTotalCalculatedServiceInDays(totalWorkService);
 		} else if (employee.getType() == EmployeeType.DEPUTY || employee.getType() == EmployeeType.HOURLYPAID) {
