@@ -449,7 +449,7 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 				//	Calculate date difference in a 360 days year adding the sum of experience
 				totalWorkService = CoreUtils.datesDifferenceIn360DaysYear(
 						employment.getEntryIntoServiceDate(),
-						totalWorkServiceCalculationDate)
+						totalWorkServiceCalculationDate, true)
 						+ getSumOfExperience();
 
 				//	Subtract the number of unpaid days from that period.
