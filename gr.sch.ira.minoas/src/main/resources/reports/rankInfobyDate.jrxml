@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RankInfo By Date" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6c7c83fb-4312-4a98-93c2-c3cea0b2423d">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="32"/>
 	<style name="Crosstab Data Text" hAlign="Center"/>
 	<style name="normalText" fontName="DejaVu Serif" fontSize="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
 	<style name="boldText" fontName="DejaVu Serif" fontSize="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
@@ -59,7 +59,7 @@
 			</staticText>
 			<image>
 				<reportElement uuid="1839eec5-b629-4fbf-b253-fca81b14ad62" x="0" y="0" width="90" height="90"/>
-				<imageExpression><![CDATA["/home/gand/Documents/Git_Repositories/minoas/gr.sch.ira.minoas/src/main/resources/reports/greekflagsima.jpg"]]></imageExpression>
+				<imageExpression><![CDATA["reports/greekflagsima.jpg"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement uuid="5fff8727-39bb-4321-bd5d-92878983ab68" style="normalText" x="75" y="73" width="220" height="15"/>

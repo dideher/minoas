@@ -125,7 +125,7 @@ E-mail]]></text>
 			</textField>
 			<image>
 				<reportElement uuid="1839eec5-b629-4fbf-b253-fca81b14ad62" x="1" y="0" width="90" height="90"/>
-				<imageExpression><![CDATA["/home/gand/Documents/Git_Repositories/minoas/gr.sch.ira.minoas/src/main/resources/reports/greekflagsima.jpg"]]></imageExpression>
+				<imageExpression><![CDATA["reports/greekflagsima.jpg"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement uuid="5fff8727-39bb-4321-bd5d-92878983ab68" style="normalText" x="75" y="73" width="220" height="15"/>
