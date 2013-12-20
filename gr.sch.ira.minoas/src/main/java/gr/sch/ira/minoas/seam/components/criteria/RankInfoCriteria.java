@@ -39,8 +39,8 @@ public class RankInfoCriteria {
 		registryId = null;
 		lastName = null;
 		
-		effectiveRankDateFrom = DateUtils.truncate(DateUtils.addDays(new Date(System.currentTimeMillis()), -1), Calendar.DAY_OF_MONTH);
-		effectiveRankDateUntil = DateUtils.truncate(new Date(System.currentTimeMillis()), Calendar.DAY_OF_MONTH);
+		effectiveSalaryGradeDateFrom = DateUtils.truncate(DateUtils.addDays(new Date(System.currentTimeMillis()), -1), Calendar.DAY_OF_MONTH);
+		effectiveSalaryGradeDateUntil = DateUtils.truncate(new Date(System.currentTimeMillis()), Calendar.DAY_OF_MONTH);
 	}
 
 	

@@ -1,22 +1,14 @@
 package gr.sch.ira.minoas.seam.components.reports;
 
-import gr.sch.ira.minoas.model.core.Audit;
-import gr.sch.ira.minoas.model.employee.EmployeeType;
 import gr.sch.ira.minoas.model.employee.RankInfo;
 import gr.sch.ira.minoas.model.employee.RankType;
-import gr.sch.ira.minoas.model.employement.Employment;
-import gr.sch.ira.minoas.model.employement.Secondment;
 import gr.sch.ira.minoas.model.printout.PrintoutRecipients;
 import gr.sch.ira.minoas.model.printout.PrintoutSignatures;
 import gr.sch.ira.minoas.model.security.Principal;
 import gr.sch.ira.minoas.seam.components.criteria.RankInfoCriteria;
-import gr.sch.ira.minoas.seam.components.management.EmployeeLeavesManagement.PrintingHelper;
-import gr.sch.ira.minoas.seam.components.reports.resource.EmploymentReportItem;
 import gr.sch.ira.minoas.seam.components.reports.resource.RankInfoReportItem;
 
-import java.io.FileInputStream;
 import java.io.InputStream;
-import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -26,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.faces.model.SelectItem;
-import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -39,15 +30,10 @@ import org.apache.commons.lang.time.DateUtils;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Scope;
-import org.jboss.seam.annotations.TransactionPropagationType;
-import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.annotations.datamodel.DataModel;
 import org.jboss.seam.international.StatusMessage.Severity;
 import org.jboss.seam.security.Identity;
-
-import com.thoughtworks.xstream.persistence.FileStreamStrategy;
 
 @Name("rankInfosReport")
 @Scope(ScopeType.CONVERSATION)
@@ -66,6 +52,8 @@ public class RankInfosReport extends BaseReport {
 
 	@DataModel(value = "rankInfosReportData")
 	private List<RankInfoReportItem> rankInfosReportData;
+	
+	private Date issueDate;
 
 	
 	
@@ -193,6 +181,34 @@ public class RankInfosReport extends BaseReport {
 		}
 	}
 	
+	public void generatePersonalAnouncementPDF() throws Exception {
+		try {
+			Map<String, Object> parameters = constructReportParameters();
+			if(rankInfosReportData == null || rankInfosReportData.size() == 0)
+				throw new Exception("Πρέπει πρώτα να πραγματοποιήσετε κάποια αναζήτηση για να την εκτυπώσετε στην συνέχεια!");
+			JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(rankInfosReportData);
+			byte[] bytes = null;
+			try {
+				InputStream fis = this.getClass().getResourceAsStream("/reports/rankInfoPersonalAnnouncement.jasper");
+				bytes = JasperRunManager.runReportToPdf(fis, parameters, (JRDataSource) ds);
+			} catch (Throwable t) {
+				System.err.println(t);
+			}
+			HttpServletResponse response = (HttpServletResponse) getFacesContext().getExternalContext()
+					.getResponse();
+			response.setContentType("application/pdf");
+			response.addHeader("Content-Disposition", "attachment;filename=RankInfoPersonalAnouncement.pdf");
+			response.setContentLength(bytes.length);
+			ServletOutputStream servletOutputStream = response.getOutputStream();
+			servletOutputStream.write(bytes, 0, bytes.length);
+			servletOutputStream.flush();
+			servletOutputStream.close();
+			getFacesContext().responseComplete();
+		} catch (Exception ex) {
+			error("report generation has failed due to exception #0", ex, ex.getMessage());
+			getFacesMessages().add(Severity.ERROR, "Η παραγωγή των ειδοποιητηρίων απέτυχε, λόγω σφάλματος #0", ex.getMessage());
+		}
+	}
 	
 	protected Map<String, Object> constructReportParameters() {
 		Map<String, Object> parameters = new HashMap<String, Object>();
@@ -207,6 +223,8 @@ public class RankInfosReport extends BaseReport {
         parameters.put("signatureTitle", normalizeStringForXML(rankInfoPrintoutSignature.getSignatureTitle()));
         parameters.put("signatureName", normalizeStringForXML(rankInfoPrintoutSignature.getSignatureName()));
         
+        parameters.put("issueDate", getIssueDate());
+        
         StringBuffer sb = new StringBuffer();
         sb.append("<b>");
         int counter = 1;
@@ -219,7 +237,7 @@ public class RankInfosReport extends BaseReport {
         
         /* Add rank types into the parameters in order to display the appropriate rank in the report*/
 		for (RankType rankType : getCoreSearching().getRankTypes()) {
-			parameters.put(rankType.name(), getLocalizedMessage(rankType.getKey()));
+			parameters.put(rankType.name(), getLocalizedMessage(rankType.getKey()).substring(7));
 		}
 		return parameters;
 
@@ -235,7 +253,6 @@ public class RankInfosReport extends BaseReport {
             return EMPTY_STRING;
     }
     
-    /* this method is called when the user clicks the "print leave" */
     public void prepeareForRankInfoReportPrint() {
         Collection<SelectItem> list = new ArrayList<SelectItem>();
         for (PrintoutRecipients r : getCoreSearching().getPrintoutRecipients(getEntityManager())) {
@@ -247,6 +264,19 @@ public class RankInfosReport extends BaseReport {
         this.rankInfoPrintoutSignatureSource = getCoreSearching().getPrintoutSignatures(getEntityManager());
         
     }
+    
+    public void prepeareForRankInfoPersonalAnouncementPrint() {
+        Collection<SelectItem> list = new ArrayList<SelectItem>();
+        for (PrintoutRecipients r : getCoreSearching().getPrintoutRecipients(getEntityManager())) {
+            list.add(new SelectItem(r, r.getRecipientTitle()));
+        }
+
+        this.rankInfoPrintounRecipientListSource = new ArrayList<PrintoutRecipients>(getCoreSearching()
+                .getPrintoutRecipients(getEntityManager()));
+        this.rankInfoPrintoutSignatureSource = getCoreSearching().getPrintoutSignatures(getEntityManager());
+        
+    }
+    
 	
 	public RankInfoCriteria getRankInfoCriteria() {
 		return rankInfoCriteria;
@@ -336,6 +366,14 @@ public class RankInfosReport extends BaseReport {
 	public void setRankInfoPrintoutSignatureSource(
 			Collection<PrintoutSignatures> rankInfoPrintoutSignatureSource) {
 		this.rankInfoPrintoutSignatureSource = rankInfoPrintoutSignatureSource;
+	}
+
+	public Date getIssueDate() {
+		return issueDate;
+	}
+
+	public void setIssueDate(Date issueDate) {
+		this.issueDate = issueDate;
 	}
 
 	

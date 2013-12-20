@@ -116,6 +116,12 @@
 										reRender="printModalPanel" value="Εκτύπωση (PDF)" 
 										oncomplete="#{rich:component('printModalPanel')}.show()">
 									</a4j:commandButton>
+									
+									<a4j:commandButton id="printRankInfoPersonalAnnouncementsButton" immediate="true" 
+										action="#{rankInfosReport.prepeareForRankInfoPersonalAnouncementPrint()}" 
+										reRender="printPersonalAnouncementModalPanel" value="Εκτύπωση Ατομικών Κοινοπ/ρίων (PDF)" 
+										oncomplete="#{rich:component('printPersonalAnouncementModalPanel')}.show()">
+									</a4j:commandButton>
 
 									<s:button id="revertButton" value="Τέλος Εργασίας"
 										view="/home.xhtml" propagation="end" />
@@ -177,6 +183,19 @@
 							<ui:include src="/components/messages-component.xhtml" />
 								
 								<a4j:form id="printOutForm">
+								
+								
+								
+								<h:outputText value="Ημ/νία Έκδοσης:" />
+								<rich:calendar enableManualInput="true"
+										value="#{rankInfosReport.issueDate}" required="true"
+										inputSize="10" mode="ajax" locale="el_GR"
+										inputClass="fieldValueText" datePattern="dd/MM/yyyy">
+										<a4j:support event="onblur" bypassUpdates="true"
+											ajaxSingle="true" />
+								</rich:calendar>
+								
+								
 								
 							<h:panelGrid columns="1">
 								<h:panelGrid columns="2">
@@ -240,6 +259,109 @@
 			</a4j:region>
 		</rich:modalPanel>
 
+
+
+
+		<rich:modalPanel id="printPersonalAnouncementModalPanel" autosized="true">
+			<f:facet name="header">
+				<h:outputText value="Εκτύπωση Ατομικών Αποφάσεων Λήψης Βαθμών/ΜΚ Εκπαιδευτικού"
+					style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<h:graphicImage value="/img/modal/close.png" styleClass="hidelink"
+						width="18" height="18">
+						<rich:componentControl for="printPersonalAnouncementModalPanel" operation="hide"
+							event="onclick" />
+					</h:graphicImage>
+
+				</h:panelGroup>
+			</f:facet>
+			<a4j:region>
+				<h:panelGrid columns="1">
+					
+
+						<a4j:outputPanel id="printPersonalAnouncementModalPanelContent" layout="inline">
+
+							<ui:include src="/components/messages-component.xhtml" />
+								
+								<a4j:form id="personalAnouncementPrintOutForm">
+								
+								
+								
+
+								<h:outputText value="Ημ/νία Έκδοσης:" />
+								<rich:calendar enableManualInput="true"
+										value="#{rankInfosReport.issueDate}" required="true"
+										inputSize="10" mode="ajax" locale="el_GR"
+										inputClass="fieldValueText" datePattern="dd/MM/yyyy">
+										<a4j:support event="onblur" bypassUpdates="true"
+											ajaxSingle="true" />
+								</rich:calendar>
+								
+								
+								
+							<h:panelGrid columns="1">
+								<h:panelGrid columns="2">
+									<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+										<ui:define name="label">
+											<h:outputText value="Κοινοποίηση : " />
+										</ui:define>
+										<h:selectManyCheckbox
+											value="#{rankInfosReport.rankInfoPrintounRecipientList}"
+											layout="pageDirection" styleClass="fieldValueText">
+											<s:selectItems
+												value="#{rankInfosReport.rankInfoPrintounRecipientListSource}"
+												itemValue="${recipient}" var="recipient"
+												label="#{recipient.recipientTitle}" />
+											<s:convertEntity />
+										</h:selectManyCheckbox>
+
+									</s:decorate>
+
+									<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+										<ui:define name="label">
+											<h:outputText value="Υπογραφή από  : " />
+										</ui:define>
+
+										<h:selectOneMenu
+											value="#{rankInfosReport.rankInfoPrintoutSignature}">
+											<s:selectItems
+												value="#{rankInfosReport.rankInfoPrintoutSignatureSource}"
+												var="signature" label="#{signature.signatureShortAlias}" />
+											<s:convertEntity />
+										</h:selectOneMenu>
+
+									</s:decorate>
+
+								</h:panelGrid>
+
+								
+							</h:panelGrid>
+						
+						<h:panelGrid columns="6">
+							
+							<a4j:commandButton value="Εκτύπωση"
+								action="fakeAction" limitToList="true" 
+								data="#{facesContext.maximumSeverity.ordinal ge 2}"
+								oncomplete="if(data == false) { jQuery('#personalAnouncementPrintOutForm\\:printRankInfoPersonalAnouncementButton').click(); Richfaces.hideModalPanel('printPersonalAnouncementModalPanel');  }" 
+								reRender="printPersonalAnouncementModalPanelContent" />
+
+							<a4j:commandButton value="Επιστροφή .."
+								reRender="rankInfosReportTableInclude"
+								oncomplete="#{rich:component('printPersonalAnouncementModalPanel')}.hide();" />
+						</h:panelGrid>
+						
+						<!-- hidden button is programatically 'clicked'  -->
+							<h:commandButton value="Εκτύπωση (hidden)" target="_blank" style="display:none;" id="printRankInfoPersonalAnouncementButton"
+							action="#{rankInfosReport.generatePersonalAnouncementPDF()}" />
+						</a4j:form>
+						
+						</a4j:outputPanel>
+					
+				</h:panelGrid>
+			</a4j:region>
+		</rich:modalPanel>
 
 
 
