@@ -4,16 +4,22 @@ where ri.EMPLOYEE_INFO_ID = ei.ID and ei.EMPLOYEE_ID = e.ID
 and em.EMPLOYEE_ID = e.ID
 and ei.CURRENT_RANK_INFO_ID = ri.ID
 and em.IS_ACTIVE = 1
-and e.ID = 9360			// дойилопоукос
+and e.ID = 9360			// О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫
 
 
-select * from minoas.slavikos.EMPLOYEE where ID = 9360
-select * from minoas.slavikos.EMPLOYEE_INFO where EMPLOYEE_ID = 9360
-select * from minoas.slavikos.RANK_INFO where EMPLOYEE_INFO_ID = 11773
+select * from minoas.slavikos.EMPLOYEE where LAST_NAME = 'н▒н²н■н║н∙н▒н■н▒н н≈нё'
+select * from minoas.slavikos.EMPLOYEE where ID = 8879
+select * from minoas.slavikos.EMPLOYEE_INFO where EMPLOYEE_ID = 8879
+select * from minoas.slavikos.RANK_INFO where EMPLOYEE_INFO_ID = 10858
 
-select * from minoas.slavikos.EMPLOYEE where ID = 8850
-select * from minoas.slavikos.EMPLOYEE_INFO where ID = 11670
-select * from minoas.slavikos.RANK_INFO where EMPLOYEE_INFO_ID = 11670
+
+select * from minoas.slavikos.EMPLOYEE where LAST_NAME = 'нён╓н▒н°н▒н╓н▒н н≈нё'
+select * from minoas.slavikos.EMPLOYEE where ID = 8806
+select * from minoas.slavikos.EMPLOYEE_INFO where EMPLOYEE_ID = 8806
+select * from minoas.slavikos.RANK_INFO where EMPLOYEE_INFO_ID = 10825
+
+
+select * from EMPLOYEE_INFO where EMPLOYEE_ID = 6761
 
 
 delete minoas.slavikos.RANK_INFO where ID in (
@@ -53,8 +59,7 @@ and e.ID = 9360
 
 select * from minoas.slavikos.EMPLOYEE
 where IS_ACTIVE=1 and EMPLOYEE_TYPE = 'REGULAR'
-
-and LAST_NAME= 'амдяеадайгс'
+and LAST_NAME= 'О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫'
 select * from minoas.slavikos.EMPLOYEE where ID = 10746
 
 
