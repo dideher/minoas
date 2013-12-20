@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RankInfo By Date" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6c7c83fb-4312-4a98-93c2-c3cea0b2423d">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Crosstab Data Text" hAlign="Center"/>
+	<style name="normalText" fontName="DejaVu Serif" fontSize="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+	<style name="boldText" fontName="DejaVu Serif" fontSize="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+	<style name="headlineText" fontName="DejaVu Serif" fontSize="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+	<style name="bigHeadlineText" fontName="DejaVu Serif" fontSize="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+	<subDataset name="dataset1" uuid="ca038b20-a8ad-4277-b388-b30d4cd53bb9"/>
+	<parameter name="printDate" class="java.util.Date" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new java.util.Date()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="employeeForInformation" class="java.lang.String" isForPrompting="false">
+		<parameterDescription><![CDATA[The name of the employee which should be able to give information to the public]]></parameterDescription>
+		<defaultValueExpression><![CDATA["Γιώργος Ανδρεαδάκης"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="employeeForInformationTelephone" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["2810333771"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="signatureTitle" class="java.lang.String" isForPrompting="false">
+		<parameterDescription><![CDATA[The title above the signature]]></parameterDescription>
+		<defaultValueExpression><![CDATA["Ο Διευθυντής της Δ/νσης Εκπ/σης"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="signatureName" class="java.lang.String" isForPrompting="false">
+		<parameterDescription><![CDATA[The name bellow the signature]]></parameterDescription>
+		<defaultValueExpression><![CDATA["Μανουσάκης Γεώργιος"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="notificationList" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="issueDate" class="java.util.Date" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new java.util.Date()]]></defaultValueExpression>
+	</parameter>
+	<field name="employeeSpecialization" class="java.lang.String"/>
+	<field name="employeeFirstName" class="java.lang.String"/>
+	<field name="employeeLastName" class="java.lang.String"/>
+	<field name="employeeFatherName" class="java.lang.String"/>
+	<field name="employeeSpecializationID" class="java.lang.String"/>
+	<field name="school" class="java.lang.String"/>
+	<field name="salaryGrade" class="java.lang.Integer"/>
+	<field name="lastSalaryGradeDate" class="java.util.Date"/>
+	<field name="rankString" class="java.lang.String"/>
+	<variable name="DATE_FORMATTER" class="java.text.DateFormat">
+		<initialValueExpression><![CDATA[new java.text.SimpleDateFormat("dd/MM/yyyy")]]></initialValueExpression>
+	</variable>
+	<detail>
+		<band height="602" splitType="Immediate">
+			<textField>
+				<reportElement uuid="45f75a96-a79b-4cd4-bc98-7581e5950989" style="normalText" x="1" y="496" width="552" height="104"/>
+				<textElement textAlignment="Justified" markup="styled">
+					<paragraph lineSpacing="Double"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Χορηγούμε στον/στην "
++"<b>"+$F{employeeLastName}+" "+$F{employeeFirstName}+"</b> του <b>"+$F{employeeFatherName}+"</b>,"+
+" εκπαιδευτικό κλάδου "+$F{employeeSpecializationID}+" - "+$F{employeeSpecialization}+
+" του "+$F{school}+", από "+new SimpleDateFormat("dd/MM/yyyy").format($F{lastSalaryGradeDate})+" το μισθολογικό κλιμάκιο <b>"+$F{salaryGrade}+"</b> "+
+"του βαθμού <b>"+$P{REPORT_PARAMETERS_MAP}.get($F{rankString})+"</b> επειδή την ημερομηνία αυτή συμπλήρωσε 2 έτη υπηρεσίας στο προηγούμενο μισθολογικό κλιμάκιο του ιδίου βαθμού."]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="b26802bc-a1c1-4ba7-accd-744ea9ca5105" style="normalText" x="80" y="95" width="318" height="68"/>
+				<textElement textAlignment="Left" markup="styled"/>
+				<textFieldExpression><![CDATA[": Μονοφατσίου 8<br/>" +
+": 712 01<br/>"+
+": "+$P{employeeForInformation}+"<br />"+
+": "+$P{employeeForInformationTelephone}+"<br />"+
+": "+"mail@dide.ira.sch.gr"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="ba020290-0d89-4080-a440-342a81c01544" style="normalText" x="0" y="192" width="199" height="15"/>
+				<textElement/>
+				<text><![CDATA[Έχοντας υπόψη :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7438132e-0414-40e3-9dd3-5868aba124fe" style="normalText" x="0" y="95" width="80" height="68"/>
+				<textElement textAlignment="Left"/>
+				<text><![CDATA[Ταχ. Διεύθυνση
+Ταχ. Κωδικός
+Πληροφορίες
+Τηλέφωνο
+E-mail]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="62752491-83df-40ad-909b-ad17d993cc9f" style="boldText" x="0" y="164" width="554" height="15"/>
+				<textElement>
+					<font isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[ΘΕΜΑ : Χορήγηση Μισθολογικού Κλιμακίου του ν.4024/2011 σε μόνιμους υπαλλήλους.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3f3b3ec7-c663-4a43-a9d1-882866c06cae" style="bigHeadlineText" x="256" y="108" width="163" height="31"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="18" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[ΑΠΟΦΑΣΗ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="abf63dfe-b121-436c-85ba-e2505f682dc1" style="bigHeadlineText" x="256" y="139" width="163" height="18"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[(Απόσπασμα)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="8baa2ecd-6194-4a0e-b65e-a5550ade83ad" x="1" y="458" width="555" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true" pdfFontName="/fonts/arialb.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Αποφασίζουμε]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="69ecf639-d76b-4804-b317-b0802f0cdf09" style="normalText" x="0" y="224" width="555" height="212"/>
+				<textElement textAlignment="Justified" markup="styled">
+					<font fontName="DejaVu Serif"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA["1. Τις διατάξεις του Ν. 4024/2011, Κεφάλαιο Δεύτερο, «Συνταξιοδοτικές ρυθμίσεις, ενιαίο μισθολόγιο – βαθμολόγιο, εργασιακή εφεδρεία και άλλες διατάξεις εφαρμογής του μεσοπρόθεσμου πλαισίου δημοσιονομικής στρατηγικής 2012-2015» (ΦΕΚ 226/τ.Α΄/27-10-2011).<br/>"+
+"2. Το άρθρο 32, παρ. 3 του Ν. 4038/2012 «Επείγουσες ρυθμίσεις που αφορούν την εφαρμογή του μεσοπρόθεσμου πλαισίου δημοσιονομικής στρατηγικής 2012−2015» (ΦΕΚ 14/τ.Α΄/2-2-2012)<br/>"+
+"3. Τις διατάξεις του ν.1566/85, ν.2817/2000, ν.2986/2002, ν.3467/2006 και ν.3848/2010.<br/>"+
+"4. Τις Φ.11.1/9272/9-11-2011 «Διαπιστωτική πράξη κατάταξης σε βαθμούς του ν4024/2011», Φ.11.1/9739/18-11-2011 «Διαπιστωτική πράξη κατάταξης στα μισθολογικά κλιμάκια του ν.4024/2011», Φ.11.1/1794/6-2-2012 «Τροποποίηση των προηγουμένων πράξεων σε εφαρμογή του άρθρου 1, παρ. 7 του ν.4038/2012» της υπηρεσίας μας και την 138489/Η/2-12-2011 Διαπιστωτική πράξη κατάταξης υπαλλήλων στα μισθολογικά κλιμάκια του ν.4024/2011 της Διεύθυνσης Διοικητικού (Τμήμα Β΄) του Υ.Π.Δ.Μ.Θ.<br/>"+
+"5. Την αρ. οικ. 2/20433/0022/8/3/2012 εγκύκλιο του Υπουργείου Οικονομικών με θέμα «Κοινοποίηση μισθολογικών διατάξεων και πρόσθετες οδηγίες για την υλοποίηση των διατάξεων του ενιαίου μισθολογίου.<br/>"+
+"6. Την αριθ. Φ353.1/324/105657/Δ1/16-10-02 (καθορισμός των ειδικότερων καθηκόντων και αρμοδιοτήτων των Διευθυντών και Προϊσταμένων Γραφείων Δευτεροβάθμιας Εκπαίδευσης)<br/>"+
+"7. Τα στοιχεία των ατομικών προσωπικών μητρώων των εκπαιδευτικών και διοικητικών υπαλλήλων."]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement uuid="1839eec5-b629-4fbf-b253-fca81b14ad62" x="1" y="0" width="90" height="90"/>
+				<imageExpression><![CDATA["/home/gand/Documents/Git_Repositories/minoas/gr.sch.ira.minoas/src/main/resources/reports/greekflagsima.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement uuid="5fff8727-39bb-4321-bd5d-92878983ab68" style="normalText" x="75" y="73" width="220" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[ΤΜΗΜΑ ΔΙΟΙΚΗΤΙΚΩΝ ΘΕΜΑΤΩΝ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e75e180c-6858-416d-9d5e-93fdbfeddaf6" style="bigHeadlineText" x="75" y="3" width="220" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[ΕΛΛΗΝΙΚΗ ΔΗΜΟΚΡΑΤΙΑ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c56d3b7b-f9ab-4408-9caa-32e09a07d6fa" style="normalText" x="75" y="33" width="220" height="40"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[ΠΕΡΙΦΕΡΕΙΑΚΗ Δ/ΝΣΗ Π/ΘΜΙΑΣ
+ΚΑΙ Δ/ΘΜΙΑΣ ΕΚΠ/ΣΗΣ ΚΡΗΤΗΣ
+Δ/ΝΣΗ ΔΕΥΤ/ΘΜΙΑΣ ΕΚΠ/ΣΗΣ Ν.ΗΡΑΚΛΕΙΟΥ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7027791a-955a-40f0-9473-d13090ec5a4c" style="headlineText" x="75" y="18" width="220" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[ΥΠΟΥΡΓΕΙΟ ΠΑΙΔΕΙΑΣ ΚΑΙ ΘΡΗΣΚΕΥΜΑΤΩΝ]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="f0c1e77c-0b4f-4141-b964-f9d49a36d164" style="normalText" x="394" y="23" width="155" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA["Ηράκλειο, "+new SimpleDateFormat("dd/MM/yyyy").format($P{issueDate})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="5ffc6c50-014f-4541-97f3-c4006043ffc7" style="normalText" x="394" y="43" width="155" height="12"/>
+				<textElement textAlignment="Left" markup="none"/>
+				<textFieldExpression><![CDATA["Αρθμ.Πρωτ.:"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="200" splitType="Stretch">
+			<textField pattern="dd/MM/yyyy">
+				<reportElement uuid="55174ff5-cd29-4844-bd40-a277da3ccb8c" x="457" y="182" width="97" height="18"/>
+				<textElement textAlignment="Right">
+					<font size="10" pdfFontName="/fonts/arial.ttf" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="227b019a-f8c0-401c-9af1-3eb5afbe5043" x="0" y="182" width="258" height="18"/>
+				<textElement>
+					<font pdfFontName="/fonts/arial.ttf" pdfEncoding="Cp1253" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Εκτύπωση απο τον Μίνωα - Ανδρεαδάκης Γιώργος]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="c4ecfede-fe8d-41c4-af63-89968143510d" style="boldText" x="336" y="80" width="178" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$P{signatureName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="03efe1ca-0b39-483a-9084-64e1c7349f04" style="normalText" x="1" y="48" width="184" height="98"/>
+				<textElement markup="styled">
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{notificationList}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="43ce4600-6ba4-421d-b36a-47fa4fa14fa5" style="boldText" x="308" y="0" width="226" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$P{signatureTitle}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="7a5b8abe-67af-4e8f-884f-89d336beee60" style="normalText" x="153" y="0" width="141" height="38"/>
+				<textElement textAlignment="Center" markup="styled"/>
+				<textFieldExpression><![CDATA["Η Προϊσταμένη<br/>"+
+"Διοικητικών Θεμάτων"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="8a2f13aa-8477-4205-bc9d-c1d377ddf068" style="normalText" x="0" y="0" width="141" height="38"/>
+				<textElement textAlignment="Center" markup="styled"/>
+				<textFieldExpression><![CDATA["Ακριβές Απόσπασμα<br/>"+
+"της Δ/νσης Δ/θμιας Εκπ/σης Ηρακλείου"]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="200" splitType="Immediate">
+			<textField pattern="dd/MM/yyyy">
+				<reportElement uuid="86cb03bc-7dee-40b8-b386-5b22b78dc94b" x="459" y="182" width="97" height="18"/>
+				<textElement textAlignment="Right">
+					<font size="10" pdfFontName="/fonts/arial.ttf" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="a3e9029f-c367-4b65-a6fa-ff0c9df30866" x="1" y="182" width="258" height="18"/>
+				<textElement>
+					<font pdfFontName="/fonts/arial.ttf" pdfEncoding="Cp1253" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Εκτύπωση απο τον Μίνωα - Ανδρεαδάκης Γιώργος]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="4bb7aee5-c924-427a-9daa-de04363d0841" style="normalText" x="1" y="48" width="184" height="98"/>
+				<textElement markup="styled">
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{notificationList}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="80fd20be-5589-4b67-853c-ed276e32477d" style="normalText" x="154" y="0" width="141" height="38"/>
+				<textElement textAlignment="Center" markup="styled"/>
+				<textFieldExpression><![CDATA["Η Προϊσταμένη<br/>"+
+"Διοικητικών Θεμάτων"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="f5e60a39-a94d-42e5-8783-df420ac2e750" style="boldText" x="335" y="79" width="178" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$P{signatureName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="af910cdc-046f-48fb-a609-3e4aa750e88c" style="boldText" x="309" y="0" width="226" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$P{signatureTitle}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ab1c20d0-0e75-413b-a7a5-0c7a31975644" style="normalText" x="1" y="0" width="141" height="38"/>
+				<textElement textAlignment="Center" markup="styled"/>
+				<textFieldExpression><![CDATA["Ακριβές Απόσπασμα<br/>"+
+"της Δ/νσης Δ/θμιας Εκπ/σης Ηρακλείου"]]></textFieldExpression>
+			</textField>
+		</band>
+	</lastPageFooter>
+</jasperReport>

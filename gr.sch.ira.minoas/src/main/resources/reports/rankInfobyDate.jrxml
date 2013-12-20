@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RankInfo By Date" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6c7c83fb-4312-4a98-93c2-c3cea0b2423d">
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="162"/>
-	<property name="ireport.y" value="137"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<style name="Crosstab Data Text" hAlign="Center"/>
 	<style name="normalText" fontName="DejaVu Serif" fontSize="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
 	<style name="boldText" fontName="DejaVu Serif" fontSize="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
@@ -30,6 +30,9 @@
 	<parameter name="notificationList" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
 	</parameter>
+	<parameter name="issueDate" class="java.util.Date" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new java.util.Date()]]></defaultValueExpression>
+	</parameter>
 	<field name="employeeSpecialization" class="java.lang.String"/>
 	<field name="employeeFirstName" class="java.lang.String"/>
 	<field name="employeeLastName" class="java.lang.String"/>
@@ -46,9 +49,9 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="406" splitType="Stretch">
+		<band height="391" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="8baa2ecd-6194-4a0e-b65e-a5550ade83ad" x="0" y="344" width="800" height="20"/>
+				<reportElement uuid="8baa2ecd-6194-4a0e-b65e-a5550ade83ad" x="0" y="332" width="800" height="20"/>
 				<textElement textAlignment="Center">
 					<font size="14" isBold="true" pdfFontName="/fonts/arialb.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
@@ -64,7 +67,7 @@
 				<text><![CDATA[ΤΜΗΜΑ ΔΙΟΙΚΗΤΙΚΩΝ ΘΕΜΑΤΩΝ]]></text>
 			</staticText>
 			<textField>
-				<reportElement uuid="b26802bc-a1c1-4ba7-accd-744ea9ca5105" style="normalText" x="80" y="93" width="318" height="68"/>
+				<reportElement uuid="b26802bc-a1c1-4ba7-accd-744ea9ca5105" style="normalText" x="80" y="89" width="318" height="68"/>
 				<textElement textAlignment="Left" markup="styled"/>
 				<textFieldExpression><![CDATA[": Μονοφατσίου 8<br/>" +
 ": 712 01<br/>"+
@@ -73,7 +76,7 @@
 ": "+"mail@dide.ira.sch.gr"]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="ba020290-0d89-4080-a440-342a81c01544" style="normalText" x="0" y="182" width="199" height="15"/>
+				<reportElement uuid="ba020290-0d89-4080-a440-342a81c01544" style="normalText" x="0" y="172" width="199" height="15"/>
 				<textElement/>
 				<text><![CDATA[Έχοντας υπόψη :]]></text>
 			</staticText>
@@ -85,7 +88,7 @@
 				<text><![CDATA[ΕΛΛΗΝΙΚΗ ΔΗΜΟΚΡΑΤΙΑ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="7438132e-0414-40e3-9dd3-5868aba124fe" style="normalText" x="0" y="93" width="80" height="68"/>
+				<reportElement uuid="7438132e-0414-40e3-9dd3-5868aba124fe" style="normalText" x="0" y="89" width="80" height="68"/>
 				<textElement textAlignment="Left"/>
 				<text><![CDATA[Ταχ. Διεύθυνση
 Ταχ. Κωδικός
@@ -108,7 +111,7 @@ E-mail]]></text>
 				<text><![CDATA[ΥΠΟΥΡΓΕΙΟ ΠΑΙΔΕΙΑΣ ΚΑΙ ΘΡΗΣΚΕΥΜΑΤΩΝ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="62752491-83df-40ad-909b-ad17d993cc9f" style="boldText" x="0" y="161" width="800" height="15"/>
+				<reportElement uuid="62752491-83df-40ad-909b-ad17d993cc9f" style="boldText" x="0" y="156" width="800" height="15"/>
 				<textElement>
 					<font isUnderline="true"/>
 				</textElement>
@@ -124,7 +127,7 @@ E-mail]]></text>
 			<textField>
 				<reportElement uuid="f0c1e77c-0b4f-4141-b964-f9d49a36d164" style="normalText" x="571" y="50" width="155" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA["Ηράκλειο "+$V{DATE_FORMATTER}.format(new java.util.Date())]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Ηράκλειο, "+new SimpleDateFormat("dd/MM/yyyy").format($P{issueDate})]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement uuid="5ffc6c50-014f-4541-97f3-c4006043ffc7" style="normalText" x="571" y="70" width="155" height="12"/>
@@ -132,14 +135,14 @@ E-mail]]></text>
 				<textFieldExpression><![CDATA["Αρθμ.Πρωτ.:"]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="2ee84f25-d6c7-4cbb-8ede-74d70559bdca" style="normalText" x="0" y="363" width="800" height="39"/>
+				<reportElement uuid="2ee84f25-d6c7-4cbb-8ede-74d70559bdca" style="normalText" x="0" y="351" width="800" height="39"/>
 				<textElement>
 					<font fontName="DejaVu Serif" isBold="false" pdfEncoding="Cp1252"/>
 				</textElement>
 				<text><![CDATA[Τη χορήγηση του επόμενου μισθολογικού κλιμακίου, του άρθρου 12 του ν.4024/2011, στο βαθμό που κατέχουν, σε μόνιμους εκπαιδευτικούς και διοικητικούς υπαλλήλους της Διεύθυνσης Δευτεροβάθμιας Εκπαίδευσης Ν. Ηρακλείου, επειδή στην αναφερόμενη ημερομηνία συμπλήρωσαν δύο ή τρία έτη στο προηγούμενο μισθολογικό κλιμάκιο:]]></text>
 			</staticText>
 			<textField>
-				<reportElement uuid="69ecf639-d76b-4804-b317-b0802f0cdf09" style="normalText" x="0" y="197" width="800" height="147"/>
+				<reportElement uuid="69ecf639-d76b-4804-b317-b0802f0cdf09" style="normalText" x="0" y="186" width="800" height="147"/>
 				<textElement markup="styled"/>
 				<textFieldExpression><![CDATA["1. Τις διατάξεις του Ν. 4024/2011, Κεφάλαιο Δεύτερο, «Συνταξιοδοτικές ρυθμίσεις, ενιαίο μισθολόγιο – βαθμολόγιο, εργασιακή εφεδρεία και άλλες διατάξεις εφαρμογής του μεσοπρόθεσμου πλαισίου δημοσιονομικής στρατηγικής 2012-2015» (ΦΕΚ 226/τ.Α΄/27-10-2011).<br/>"+
 "2. Το άρθρο 32, παρ. 3 του Ν. 4038/2012 «Επείγουσες ρυθμίσεις που αφορούν την εφαρμογή του μεσοπρόθεσμου πλαισίου δημοσιονομικής στρατηγικής 2012−2015» (ΦΕΚ 14/τ.Α΄/2-2-2012)<br/>"+
@@ -235,7 +238,13 @@ E-mail]]></text>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="16" splitType="Immediate">
+		<band height="17" splitType="Immediate">
+			<line>
+				<reportElement uuid="2af98725-b0d4-4456-bbc7-76b6eecfbeb7" positionType="Float" x="0" y="16" width="799" height="1" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true"/>
+				<graphicElement>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+				</graphicElement>
+			</line>
 			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
 				<reportElement uuid="b89b217c-28a6-4c77-affc-d4d9772679e0" mode="Opaque" x="28" y="0" width="126" height="16" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left">
@@ -269,8 +278,7 @@ E-mail]]></text>
 				<textElement textAlignment="Center">
 					<font size="9" pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{REPORT_PARAMETERS_MAP}.get($F{rankString})
-]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{REPORT_PARAMETERS_MAP}.get($F{rankString})]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
 				<reportElement uuid="43585977-fdd9-4425-8ed4-cec3603de0bd" mode="Opaque" x="685" y="0" width="50" height="16" backcolor="#FFFFFF"/>
@@ -313,23 +321,23 @@ E-mail]]></text>
 		<band splitType="Stretch"/>
 	</columnFooter>
 	<pageFooter>
-		<band height="20" splitType="Stretch">
+		<band height="16" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="227b019a-f8c0-401c-9af1-3eb5afbe5043" x="0" y="0" width="258" height="20"/>
+				<reportElement uuid="227b019a-f8c0-401c-9af1-3eb5afbe5043" x="0" y="0" width="258" height="16"/>
 				<textElement>
 					<font pdfFontName="/fonts/arial.ttf" pdfEncoding="Cp1253" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Εκτύπωση απο τον Μίνωα - Ανδρεαδάκης Γιώργος]]></text>
 			</staticText>
 			<textField pattern="dd/MM/yyyy">
-				<reportElement uuid="55174ff5-cd29-4844-bd40-a277da3ccb8c" x="258" y="1" width="97" height="18"/>
+				<reportElement uuid="55174ff5-cd29-4844-bd40-a277da3ccb8c" x="258" y="0" width="97" height="16"/>
 				<textElement textAlignment="Right">
 					<font size="10" pdfFontName="/fonts/arial.ttf" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="a1011f81-ea5b-4c27-9507-4dcad1f7a5df" x="423" y="0" width="80" height="20"/>
+				<reportElement uuid="a1011f81-ea5b-4c27-9507-4dcad1f7a5df" x="423" y="0" width="80" height="16"/>
 				<textElement textAlignment="Right">
 					<font pdfFontName="/fonts/arial.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
