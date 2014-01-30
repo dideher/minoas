@@ -50,11 +50,14 @@ import gr.sch.ira.minoas.seam.components.criteria.DateSearchType;
 import gr.sch.ira.minoas.seam.components.criteria.SpecializationGroupSearchType;
 import gr.sch.ira.minoas.seam.components.criteria.SpecializationSearchType;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -606,6 +609,15 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
         return result;
     }
     
+    public Collection<EmployeeLeave> getEmployeeLeaves(Person employee, Collection<EmployeeLeaveType> ofTypeList) {
+        Collection<EmployeeLeave> result = null;
+        result = entityManager
+                .createQuery(
+                        "SELECT s from EmployeeLeave s WHERE (s.deleted IS FALSE OR s.deleted IS NULL) AND s.employee=:employee AND s.employeeLeaveType IN (:typesList)) ORDER BY s.established DESC")
+                .setParameter("employee", employee).setParameter("typesList", ofTypeList).getResultList();
+        return result;
+    }
+    
    public Collection<EmployeeLeaveType> getLeaveTypes(Collection<String> legacyCodes) {
        Collection<EmployeeLeaveType> result = null;
        result = entityManager
@@ -613,7 +625,8 @@ public class CoreSearching extends BaseDatabaseAwareSeamComponent {
                        "SELECT s from EmployeeLeaveType s WHERE s.legacyCode IN (:legacyCodes) ORDER BY s.legacyCode").setParameter("legacyCodes", legacyCodes).getResultList();
        return result; 
    }
-
+   
+	
 //    @Deprecated
 //    public Collection<Leave> getEmployeeFutureLeaves(Person employee, Date referenceDate) {
 //        Collection<Leave> result = null;

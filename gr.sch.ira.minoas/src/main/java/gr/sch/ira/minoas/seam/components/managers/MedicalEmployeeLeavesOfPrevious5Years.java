@@ -1,5 +1,6 @@
 package gr.sch.ira.minoas.seam.components.managers;
 
+import gr.sch.ira.minoas.core.CoreUtils;
 import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 import gr.sch.ira.minoas.model.employement.EmployeeLeaveType;
 import gr.sch.ira.minoas.seam.components.BaseDatabaseAwareSeamComponent;
@@ -9,6 +10,7 @@ import gr.sch.ira.minoas.seam.components.home.EmployeeHome;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Map;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.jboss.seam.ScopeType;
@@ -62,6 +64,12 @@ public class MedicalEmployeeLeavesOfPrevious5Years extends BaseDatabaseAwareSeam
         		// ignore
         	}
         }
+        Map<String, Integer> countDays = CoreUtils.countLeaveDaysWithinPeriod(startOfYear, endOfYear, getCoreSearching().getEmployeeLeaves(employeeHome.getInstance(), leaveTypes));
+        System.err.println(" ****************************************** ");
+        System.err.println(String.format(" * original count : '%d'", count));
+        System.err.println(String.format(" * calendarDays count : '%d'", countDays.get("calendarDays")));
+        System.err.println(String.format(" * calendar360Days count : '%d'", countDays.get("calendar360Days")));
+        
         this.medicalEmployeeLeavesOfPrevious5Years = count;
     }
    

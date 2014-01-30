@@ -445,18 +445,23 @@ public class EmployeeInfoManagement extends BaseDatabaseAwareSeamComponent {
 			int totalWorkService = 0;
 			if (totalWorkServiceCalculationDate != null
 					&& regularEmployeeInfo.getAppointmentGOGDate() != null)
-
-				//	Calculate date difference in a 360 days year adding the sum of experience
-				totalWorkService = CoreUtils.datesDifferenceIn360DaysYear(
-						employment.getEntryIntoServiceDate(),
-						totalWorkServiceCalculationDate, true)
-						+ getSumOfExperience();
-
-				//	Subtract the number of unpaid days from that period.
-				totalWorkService -= workExperienceCalculation.calculateEmployeeUnPaidDays(employee, employment.getEntryIntoServiceDate(), totalWorkServiceCalculationDate);
-			
-			if (totalWorkService != 0)
-				setTotalCalculatedServiceInDays(totalWorkService);
+				Date firstDayOfWork = workExperienceCalculation.computeEmployeeFirstDayOfRegularWork(employee);
+				if(firstDayOfWork != null) {
+					//	Calculate date difference in a 360 days year adding the sum of experience
+					totalWorkService = CoreUtils.datesDifferenceIn360DaysYear(
+							employment.getEntryIntoServiceDate(),
+							totalWorkServiceCalculationDate, true)
+							+ getSumOfExperience();
+		
+					//	Subtract the number of unpaid days from that period.
+					totalWorkService -= workExperienceCalculation.calculateEmployeeUnPaidDays(employee, employment.getEntryIntoServiceDate(), totalWorkServiceCalculationDate);
+				
+					if (totalWorkService != 0)
+						setTotalCalculatedServiceInDays(totalWorkService);
+				} else {
+					// we failed to determine the first day of work
+					facesMessages.add(Severity.ERROR, String.format("Δεν ήταν δυνατό να υπολογισθεί η πρώτη ημέρα εργασίας."));
+				}
 		} else if (employee.getType() == EmployeeType.DEPUTY || employee.getType() == EmployeeType.HOURLYPAID) {
 			
 			

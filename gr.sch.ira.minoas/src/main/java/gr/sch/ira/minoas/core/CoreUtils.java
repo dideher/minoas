@@ -5,10 +5,14 @@ package gr.sch.ira.minoas.core;
 
 import gr.sch.ira.minoas.model.employee.Employee;
 import gr.sch.ira.minoas.model.employee.RankInfo;
+import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 import gr.sch.ira.minoas.seam.components.WorkExperienceCalculation;
 
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import javax.faces.context.FacesContext;
@@ -818,6 +822,52 @@ public abstract class CoreUtils {
 		else
 			return newRankInfo;
 	}
+	
+	/**
+	 * Return a count of days (calendar and calendar based on 360) of leaves bounded by a date period. More
+	 * info @ https://github.com/dideher/minoas/issues/195
+	 * 
+	 * @param dateFrom date from
+	 * @param dateTo date to 
+	 * @param leaves collection of leaves
+	 * @return a Map containing two integer values with keys 'calendarDays' and 'calendar360Days'
+	 */
+	public static Map<String, Integer> countLeaveDaysWithinPeriod(Date dateFrom, Date dateTo,
+			final Collection<EmployeeLeave> leaves) {
+		int calendarDays = 0;
+		int calendar360Days = 0;
+		for (EmployeeLeave leave : leaves) {
+			
+			EmployeeLeave deattachedLeave = new EmployeeLeave(leave);
+
+			if (deattachedLeave.getDueTo().before(dateFrom)
+					|| deattachedLeave.getEstablished().after(dateTo)) {
+				// leave ends before dateFrom or leave starts after dateTo
+				continue;
+			}
+
+			if (deattachedLeave.getEstablished().before(dateFrom)
+					&& deattachedLeave.getDueTo().after(dateFrom)) {
+				// leave starts before dateFrom but ends within our period of
+				// interest
+				deattachedLeave.setEstablished(dateFrom);
+			}
+
+			if (deattachedLeave.getEstablished().before(dateTo)
+					&& deattachedLeave.getDueTo().after(dateTo)) {
+				// leave starts before dateTo but ends out of our period
+				deattachedLeave.setDueTo(dateTo);
+			}
+			calendarDays += CoreUtils.getDatesDifference(deattachedLeave.getEstablished(), deattachedLeave.getDueTo());
+			calendar360Days += CoreUtils.datesDifferenceIn360DaysYear(deattachedLeave.getEstablished(), deattachedLeave.getDueTo(), true);
+		}
+		
+		Map<String, Integer> returnValue = new HashMap<String, Integer>();
+		returnValue.put("calendarDays", calendarDays);
+		returnValue.put("calendar360Days", calendar360Days);
+		return returnValue;
+	}
+
 
 
 }
