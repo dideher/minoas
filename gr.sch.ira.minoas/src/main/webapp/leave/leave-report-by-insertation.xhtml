@@ -1,0 +1,287 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+
+<ui:composition template="/layout/simple-beauty-template.xhtml">
+	<ui:define name="body">
+
+		<s:div styleClass="well well-small">
+			<h:form id="searchForm" styleClass="form-inline">
+
+				<p>
+				<h3>Αναζήτηση Αδειών Ανά Ημέρα Καταχώρησης</h3>
+				</p>
+
+				<h:panelGrid columns="4">
+
+					<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+						<ui:define name="label">
+							<h:outputText value="Απο" />
+						</ui:define>
+						<rich:calendar enableManualInput="true"
+							value="#{leaveSearch.insertionDateStart}" required="true"
+							inputSize="10" mode="ajax" locale="el_GR"
+							inputClass="fieldValueText" datePattern="dd/MM/yyyy">
+							<a4j:support event="onblur"
+								reRender="schoolSearchResultOutputPanel"
+								action="#{leaveSearch.find()}" ignoreDupResponses="true" />
+						</rich:calendar>
+					</s:decorate>
+
+					<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+						<ui:define name="label">
+							<h:outputText value="Εως" />
+						</ui:define>
+						<rich:calendar enableManualInput="true"
+							value="#{leaveSearch.insertionDateEnd}" required="true"
+							inputSize="10" mode="ajax" locale="el_GR"
+							inputClass="fieldValueText" datePattern="dd/MM/yyyy">
+							<a4j:support event="onblur"
+								reRender="schoolSearchResultOutputPanel"
+								action="#{leaveSearch.find()}" ignoreDupResponses="true" />
+						</rich:calendar>
+					</s:decorate>
+
+					<s:decorate template="/layout/newDoubleLineEdit.xhtml">
+						<ui:define name="label">
+							<h:outputText value="Τύπος Άδειας" />
+						</ui:define>
+						<h:panelGrid>
+							<h:panelGroup>
+								<h:inputText id="employeeLeaveTypeCodeTextField"
+									value="#{leaveSearch.legacyLeaveCode}" size="3" maxlength="7"
+									styleClass="fieldValueText" required="false">
+									<rich:suggestionbox width="400" id="leaveTypeSuggestionbox"
+										suggestionAction="#{employeeLeaveTypeSuggester.suggest}"
+										var="_leaveType" ajaxSingle="true"
+										for="employeeLeaveTypeCodeTextField"
+										fetchValue="#{_leaveType.legacyCode}">
+										<rich:column>
+											<h:outputText value="#{_leaveType.legacyCode}" />
+										</rich:column>
+										<rich:column>
+											<h:outputText value="#{_leaveType.description}" />
+										</rich:column>
+										<rich:column>
+											<h:outputText
+												value="#{messages[_leaveType.suitableForEmployeeType.key]}" />
+										</rich:column>
+										<a4j:support ajaxSingle="true" event="onselect"
+											reRender="leaveTypeDescriptionDiv">
+											<f:setPropertyActionListener value="#{_leaveType.legacyCode}"
+												target="#{leaveSearch.legacyLeaveCode}" />
+										</a4j:support>
+
+									</rich:suggestionbox>
+								</h:inputText>
+								<h:graphicImage value="/img/icons/arrowDown.jpg" height="16"
+									width="16"
+									onclick="#{rich:component('leaveTypeSuggestionbox')}.callSuggestion(true)"
+									alt="" />
+							</h:panelGroup>
+							<h:panelGroup>
+								<s:div id="leaveTypeDescriptionDiv">
+									<h:outputText
+										value="#{employeeLeaveCriteria.employeeLeaveType.description}"
+										styleClass="fieldValueText"
+										rendered="#{employeeLeaveCriteria.employeeLeaveType ne null}" />
+									<h:outputText value="Άγνωστος Κωδικός Άδειας"
+										styleClass="fieldValueText"
+										rendered="#{employeeLeaveCriteria.employeeLeaveType eq null}" />
+								</s:div>
+							</h:panelGroup>
+						</h:panelGrid>
+					</s:decorate>
+					
+					<s:decorate template="/layout/doubleLineEdit.xhtml">
+								<ui:define name="label">
+									<h:outputText value="Ταξινόμιση Κατά" />
+								</ui:define>
+
+								<h:selectOneMenu value="#{leaveSearch.orderBy}">
+									<f:selectItem itemLabel="Ημ/νια Εισαγωγής" itemValue="date" />
+									<f:selectItem itemLabel="Ονοματεπώνυμο " itemValue="name" />
+								</h:selectOneMenu>
+							</s:decorate>
+
+				</h:panelGrid>
+
+				<s:div styleClass="form-actions">
+					<a4j:commandButton styleClass="btn btn-primary" value="Αναζήτηση"
+						action="#{leaveSearch.find()}" eventsQueue="schoolSearch"
+						reRender="schoolSearchResultOutputPanel" limitToList="true"
+						ignoreDupResponses="true">
+						<s:defaultAction />
+					</a4j:commandButton>
+
+					<a4j:commandButton styleClass="btn btn-default" value="Καθαρισμός"
+						action="#{leaveSearch.reset()}" eventsQueue="schoolSearch"
+						reRender="schoolSearchResultOutputPanel" limitToList="true"
+						ignoreDupResponses="true" />
+
+				</s:div>
+			</h:form>
+		</s:div>
+
+
+
+		<h:form id="searchResult">
+
+			<a4j:outputPanel id="schoolSearchResultOutputPanel">
+
+				<s:div styleClass="alert"
+					rendered="#{leavesSearchResult != null and leavesSearchResult.rowCount==0}">
+					<strong>Προσοχή !</strong>
+					<p>Δεν βρέθηκαν άδειες με τις ημερομηνίες καταχώρησεις που
+						δηλώσατε</p>
+				</s:div>
+
+				<s:div styleClass="well1 well-small1"
+					rendered="#{leavesSearchResult != null and leavesSearchResult.rowCount gt 0}">
+
+					<h2>Αποτελέσματα Αναζήτησης</h2>
+					<h:dataTable id="table1" value="#{leavesSearchResult}" var="leave"
+						styleClass="table table-hover table-striped table-condensed">
+						<f:facet name="header">
+							<h:outputText class="info" value="Λίστα Αδειών" />
+						</f:facet>
+
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="AM" />
+							</f:facet>
+							<h:outputText value="${leave.employeeCode}" styleClass="small" />
+						</h:column>
+
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Σχολείο Οργανικής" />
+							</f:facet>
+							<h:outputText value="${leave.employeeEmploymentUnitTitle}" />
+						</h:column>
+
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Επώνυμο" />
+							</f:facet>
+							<h:outputText value="${leave.employeeLastName}" />
+						</h:column>
+
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Όνομα" />
+							</f:facet>
+							<h:outputText value="${leave.employeeFirstName}" />
+						</h:column>
+
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Όνομα Πατρός" />
+							</f:facet>
+							<h:outputText value="${leave.employeeFatherName}" />
+						</h:column>
+
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Ειδ." />
+							</f:facet>
+							<h:outputText value="${leave.employeeSpecializationID}" />
+						</h:column>
+
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Τύπος" />
+							</f:facet>
+							<h:outputText value="(${leave.leaveTypeKey}) ${leave.leaveType}" />
+						</h:column>
+
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Ημ." />
+							</f:facet>
+							<h:outputText value="${leave.leaveEffectiveDuration}" />
+						</h:column>
+
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Έναρξη" />
+							</f:facet>
+
+							<h:outputText value="${leave.establishedIn}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</h:column>
+
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Λήξη" />
+							</f:facet>
+
+							<h:outputText value="${leave.dueTo}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</h:column>
+
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Σχόλιο" />
+							</f:facet>
+
+							<h:outputText value="${leave.comment}" />
+						</h:column>
+
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Ημ/νια Καταχ." />
+							</f:facet>
+
+							<h:outputText value="${leave.insertedOn}">
+								<f:convertDateTime pattern="dd/MM/yyyy HH:mm"
+									timeZone="Europe/Athens" />
+							</h:outputText>
+						</h:column>
+
+
+					</h:dataTable>
+
+					<s:div>
+						<ul class="pager">
+							<li class="previous"><a4j:commandLink value="Προηγούμενη"
+									action="#{leaveSearch.previousPage}"
+									rendered="#{leaveSearch.previousPageAvailable}"
+									ignoreDupResponses="true" eventsQueue="schoolSearch"
+									reRender="schoolSearchResultOutputPanel" /></li>
+
+							<li class="next"><a4j:commandLink value="Επόμενη"
+									action="#{leaveSearch.nextPage}"
+									rendered="#{leaveSearch.nextPageAvailable}"
+									ignoreDupResponses="true" eventsQueue="schoolSearch"
+									reRender="schoolSearchResultOutputPanel" /></li>
+						</ul>
+					</s:div>
+
+				</s:div>
+
+
+
+
+			</a4j:outputPanel>
+		</h:form>
+
+
+
+
+
+
+	</ui:define>
+</ui:composition>
+</html>

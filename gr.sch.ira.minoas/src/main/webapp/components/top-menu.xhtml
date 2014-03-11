@@ -125,6 +125,14 @@
 								<f:param name="leaves_report_by_endingleaves_from" value="/home" />
 							</s:link>
 						</rich:menuItem>
+						<rich:menuSeparator />
+						<rich:menuItem submitMode="none"
+							rendered="#{(s:hasRole('ADMIN') or s:hasRole('VIEW_LEAVE'))}">
+							<s:link value="Άδειες ανά ημ/νια εισαγωγής" 
+								view="/leave/leave-report-by-insertation.xhtml">
+								<f:param name="leave-report-by-insertation_from" value="/home" />
+							</s:link>
+						</rich:menuItem>
 					</rich:menuGroup>
 				</rich:menuGroup>
 				

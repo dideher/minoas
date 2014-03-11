@@ -5,6 +5,7 @@ import gr.sch.ira.minoas.model.employement.EmployeeLeave;
 import java.util.Date;
 
 public class LeaveReportItem extends EmployeeReportItem {
+	
 	private String comment;
 
 	private Date dueTo;
@@ -18,7 +19,7 @@ public class LeaveReportItem extends EmployeeReportItem {
 	private String regularUnit;
 	
 	private Integer leaveEffectiveDuration;
-
+	
 	public LeaveReportItem() {
 		super();
 	}
@@ -33,6 +34,7 @@ public class LeaveReportItem extends EmployeeReportItem {
 		this.leaveType = leave.getEmployeeLeaveType().getDescription();
 		this.leaveTypeKey = leave.getEmployeeLeaveType().getLegacyCode();
 		this.leaveEffectiveDuration = leave.getEffectiveNumberOfDays();
+		setInsertedOn(leave.getInsertedOn());
 	}
 
 	public String getComment() {

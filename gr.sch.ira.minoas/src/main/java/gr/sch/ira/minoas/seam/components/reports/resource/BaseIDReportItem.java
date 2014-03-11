@@ -1,10 +1,14 @@
 package gr.sch.ira.minoas.seam.components.reports.resource;
 
+import java.util.Date;
+
 import gr.sch.ira.minoas.model.BaseIDModel;
 
 public abstract class BaseIDReportItem {
 
 	private Integer id;
+	
+	private Date insertedOn;
 
 	public BaseIDReportItem() {
 	}
@@ -13,6 +17,7 @@ public abstract class BaseIDReportItem {
 		this();
 		if (entity != null) {
 			setId(entity.getId());
+			setInsertedOn(entity.getInsertedOn());
 		}
 	}
 
@@ -28,6 +33,14 @@ public abstract class BaseIDReportItem {
 	 */
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public Date getInsertedOn() {
+		return insertedOn;
+	}
+
+	public void setInsertedOn(Date insertedOn) {
+		this.insertedOn = insertedOn;
 	}
 
 }

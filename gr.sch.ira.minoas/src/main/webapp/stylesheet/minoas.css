@@ -2080,6 +2080,7 @@ table {
   padding: 8px;
   line-height: 20px;
   text-align: left;
+  font-size: 12px;
   vertical-align: top;
   border-top: 1px solid #dddddd;
 }
